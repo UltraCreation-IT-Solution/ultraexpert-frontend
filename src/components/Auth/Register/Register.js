@@ -4,7 +4,11 @@ import Pdetail from "./Pdetail";
 import OtherInfo from "./Odetail";
 import { Link } from "react-router-dom";
 import backpng from "../../../assets/images/back_icon.png";
-import { loginSchema } from "../../../Validations/SignUpValidations";
+import {
+  pDetailSchema,
+  sDetailSchema,
+  oDetailSchema,
+} from "../../../Validations/SignUpValidations";
 
 function Demo() {
   const [page, setPage] = useState(0);
@@ -18,34 +22,84 @@ function Demo() {
     referedBy: "",
     mobileNo: "",
   });
-  const signUpVerify = async () => {
-    loginSchema
-      .validate(formData, { abortEarly: false })
+  const pDeatilVerify = async () => {
+    const data = { firstName: formData.firstName, lastName: formData.lastName };
+    pDetailSchema
+      .validate(data, { abortEarly: false })
       .then((responseData) => {
         console.log("no validation errors");
         console.log(responseData); // responseData is the data after validation
         setError("");
+        setPage(page + 1);
       })
       .catch((err) => {
         setError(err.errors[0]);
         console.log(err.errors);
       });
   };
-  const NextBtnHandler = () => {
-    setPage(page + 1);
+  const sDeatilVerify = async () => {
+    const data = {
+      email: formData.email,
+      password: formData.password,
+      confirmPassword: formData.confirmPassword,
+    };
+    sDetailSchema
+      .validate(data, { abortEarly: false })
+      .then((responseData) => {
+        console.log("no validation errors");
+        console.log(responseData); // responseData is the data after validation
+        setError("");
+        setPage(page + 1);
+      })
+      .catch((err) => {
+        setError(err.errors[0]);
+        console.log(err.errors);
+      });
   };
-  const SubmitBtnHandler = () => {
-    alert("FORM SUBMITTED");
-    signUpVerify();
+  const oDeatilVerify = async () => {
+    const data = {
+      referedBy: formData.referedBy,
+      mobileNo: formData.mobileNo,
+    };
+    oDetailSchema
+      .validate(data, { abortEarly: false })
+      .then((responseData) => {
+        console.log("no validation errors");
+        console.log(responseData); // responseData is the data after validation
+        setError("");
+        alert("Successfully Registered");
+      })
+      .catch((err) => {
+        setError(err.errors[0]);
+        console.log(err.errors);
+      });
   };
 
   const PageDisplay = () => {
     if (page === 0) {
-      return <Pdetail formData={formData} setFormData={setFormData} />;
+      return (
+        <Pdetail
+          formData={formData}
+          setFormData={setFormData}
+          handleError={setError}
+        />
+      );
     } else if (page === 1) {
-      return <SignUpInfo formData={formData} setFormData={setFormData} />;
+      return (
+        <SignUpInfo
+          formData={formData}
+          setFormData={setFormData}
+          handleError={setError}
+        />
+      );
     } else {
-      return <OtherInfo formData={formData} setFormData={setFormData} />;
+      return (
+        <OtherInfo
+          formData={formData}
+          setFormData={setFormData}
+          handleError={setError}
+        />
+      );
     }
   };
 
@@ -69,19 +123,20 @@ function Demo() {
           {page !== 2 ? (
             <div
               className="absolute top-[420px] left-[584px] rounded-8xs bg-red-500 shadow-[0px_1px_4px_rgba(0,_0,_0,_0.25)] w-[229px] h-[63px] overflow-hidden text-5xl text-white"
-              onClick={NextBtnHandler}
+              onClick={page === 0 ? pDeatilVerify : sDeatilVerify}
             >
               <b className="absolute top-[calc(50%_-_14.5px)] left-[calc(50%_-_29.5px)]">
                 Next
               </b>
             </div>
           ) : (
-            <input
-              type="submit"
+            <button
               value={"Submit"}
               className="absolute top-[410px] left-[584px] rounded-8xs bg-red-500 shadow-[0px_1px_4px_rgba(0,_0,_0,_0.25)] w-[229px] h-[63px] overflow-hidden text-5xl text-white"
-              onClick={SubmitBtnHandler}
-            ></input>
+              onClick={oDeatilVerify}
+            >
+              <b> Submit</b>
+            </button>
           )}
           <Link
             to={"/login"}

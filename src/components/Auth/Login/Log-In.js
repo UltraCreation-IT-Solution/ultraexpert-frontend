@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import { signUpSchema } from "../../../Validations/SignUpValidations";
+import { LoginSchema } from "../../../Validations/SignUpValidations";
 
 const LogIn = () => {
   const [email, setEmail] = useState("Email");
@@ -29,11 +29,11 @@ const LogIn = () => {
         password: event.target[1].value,
       };
     }
-    signUpSchema
-      .validate(data, { abortEarly: false })
+    LoginSchema.validate(data, { abortEarly: false })
       .then((responseData) => {
         // console.log("no validation errors");
         // console.log(responseData);    // responseData is the data after validation
+        setError("");
       })
       .catch((err) => {
         setError(err.errors[0]);
@@ -66,14 +66,20 @@ const LogIn = () => {
             <input
               placeholder={mobileNo}
               name="mobileNo"
-              onChange={(e) => setMobileNo(e.target.value)}
+              onChange={(e) => {
+                setMobileNo(e.target.value);
+                setError("");
+              }}
               type="number"
               className="absolute top-[175.3px] left-[583.3px] rounded-sm box-border w-[371.4px] h-[53.4px] overflow-hidden border-[0.7px] border-solid border-darkslategray text-lg text-gray-400 pl-3"
             ></input>
           ) : (
             <input
               placeholder={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setError("");
+              }}
               type="text"
               name="email"
               className="absolute top-[175.3px] left-[583.3px] rounded-sm box-border w-[371.4px] h-[53.4px] overflow-hidden border-[0.7px] border-solid border-darkslategray text-lg text-gray-400 pl-3"
@@ -85,7 +91,10 @@ const LogIn = () => {
                 type="password"
                 name="password"
                 placeholder={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError("");
+                }}
                 className="absolute top-[250.3px] left-[583.3px] rounded-sm box-border w-[371.4px] h-[53.4px] overflow-hidden border-[0.7px] border-solid border-darkslategray text-lg text-gray-400 pl-3 pr-3"
               ></input>
               {error.length > 0 ? (
