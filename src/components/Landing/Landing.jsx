@@ -2,12 +2,24 @@ import React from "react";
 import Marquee from "react-fast-marquee";
 import { FaSearch } from "react-icons/fa";
 import logo from "../../assets/images/logo.jpg";
+import { GrFormNextLink } from "react-icons/gr";
+import { CiStar } from "react-icons/ci";
+import { topExpertsBar, landingImgRow } from "../../constant";
+import { Link } from "react-router-dom";
 
 export const ServiceCategory = () => {
   return (
     <div className="overflow-hidden mt-[3vh]">
-      <div className="relative ml-[160px] text-[32px] font-semibold text-left">
-        Browse by category
+      <div className="ml-[160px] w-[1100px] mb-[-40px] flex flex-row items-end justify-between">
+        <h3 className="relative font-semibold text-[28px]">
+          Browse service by Category
+        </h3>
+        <div className="flex flex-row items-center justify-center gap-[5px] mb-[2.5%] text-base text-gray-400">
+          <div className="relative font-medium text-[20px]">
+            see all services
+          </div>
+          <GrFormNextLink className="relative w-6 h-6 overflow-hidden shrink-0 object-cover" />
+        </div>
       </div>
       <div className="flex ml-[160px] gap-4">
         <div className="relative  mt-[58px] w-[540px] h-[548px] flex flex-row gap-4 text-5xl">
@@ -53,53 +65,55 @@ export const ServiceCategory = () => {
           </div>
         </div>
       </div>
-      <div className=" flex ml-[160px] mt-[40px] justify-between text-[32px] font-semibold ">
-        <div className="bg-black w-[75%] h-0.5"></div>
-        <button className="absolute mt-[-20px] right-[160px] bg-white z-30 p-3 rounded-lg border-black border bg-cover bg-no-repeat bg-[top]">
-          See All Services
-        </button>
+    </div>
+  );
+};
+export const TopExperts = () => {
+  return (
+    <div className="absolute top-[1440px] -mt-20 left-[-1px] bg-[#F5E1DA] w-full h-[480px] overflow-hidden">
+      <div className="absolute top-[44px] w-[1120px] left-[160px] flex flex-row items-end justify-between">
+        <h3 className="relative font-semibold text-[28px]">Top experts</h3>
+        <div className="flex flex-row items-center justify-center gap-[5px] mb-[2.5%] text-base text-gray-400">
+          <div className="relative font-medium text-[20px]">
+            see all our experts
+          </div>
+          <GrFormNextLink className="relative w-6 h-6 overflow-hidden shrink-0 object-cover" />
+        </div>
+      </div>
+
+      <div className="absolute top-[150px] left-[160px] rounded-3xs flex items-center justify-around gap-8 w-[1120px] h-[320px] -mt-16">
+        {topExpertsBar.map((item, index) => {
+          return (
+            <div
+              key={index}
+              className="mt-28 rounded-3xl bg-white w-[320px] h-[180px]"
+            >
+              <div className=" flex flex-col">
+                <img
+                  className="absolute bg-blue-400 w-44 ml-[72px] rounded-3xl  mt-[-60px] h-32"
+                  src={item.image}
+                />
+                <h4 className="text-center mt-20 tracking-wide font-montserrat  font-semibold text-lg">
+                  {item.name}
+                </h4>
+                <h5 className="text-center -mt-3 tracking-wide font-montserrat text-gray-500  font-semibold text-sm">
+                  {item.designation}
+                </h5>
+                <div className="flex flex-row items-center justify-center -ml-3 gap-1 -mt-4">
+                  <CiStar className="relative w-6 h-6 overflow-hidden shrink-0 object-cover" />
+                  <div className=" font-medium mt-1  text-gray-400">
+                    {item.rating}/5
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 };
 const Landing = () => {
-  const row1 = [
-    "https://images.unsplash.com/photo-1662837088181-e721d3db52bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHRlY2huaWNhbCUyMHNlcnZpY2VzfGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1523655223303-4e9ef5234587?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1662837088181-e721d3db52bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHRlY2huaWNhbCUyMHNlcnZpY2VzfGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1523655223303-4e9ef5234587?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1662837088181-e721d3db52bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHRlY2huaWNhbCUyMHNlcnZpY2VzfGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1523655223303-4e9ef5234587?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1662837088181-e721d3db52bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHRlY2huaWNhbCUyMHNlcnZpY2VzfGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1523655223303-4e9ef5234587?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-  ];
-  const row2 = [
-    "https://images.unsplash.com/photo-1662837088181-e721d3db52bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHRlY2huaWNhbCUyMHNlcnZpY2VzfGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1523655223303-4e9ef5234587?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1662837088181-e721d3db52bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHRlY2huaWNhbCUyMHNlcnZpY2VzfGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1523655223303-4e9ef5234587?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1662837088181-e721d3db52bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHRlY2huaWNhbCUyMHNlcnZpY2VzfGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1523655223303-4e9ef5234587?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1662837088181-e721d3db52bf?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHRlY2huaWNhbCUyMHNlcnZpY2VzfGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-    "https://images.unsplash.com/photo-1523655223303-4e9ef5234587?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGVjaG5pY2FsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D",
-  ];
-
   return (
     <>
       <div className=" bg-white w-[100vw] h-[60px] overflow-hidden flex flex-row items-center justify-between py-0 px-[20px] box-border  text-[30px]">
@@ -114,11 +128,23 @@ const Landing = () => {
             ultraXpert
           </h2>
         </div>
-        <div className="flex flex-row items-center justify-center gap-[3.5vw] text-base text-[20px] mr-6">
+        <div className="flex flex-row items-center justify-center gap-[3.5vw] text-[20px] mr-6">
           <div className="relative font-medium">Services</div>
           <div className="relative font-medium">Experts</div>
           <div className="relative font-medium">Blog</div>
           <div className="relative font-medium">Contact Us</div>
+          <Link
+            to={"/register"}
+            className="relative font-medium no-underline text-black"
+          >
+            Sign Up
+          </Link>
+          <Link
+            to={"/login"}
+            className="relative font-medium no-underline text-black"
+          >
+            Log In
+          </Link>
         </div>
       </div>
       <div className=" absolute w-[60vw] h-[67.8vh] mt-[8px] bg-gradient-to-r from-black to-transparent z-10 text-white blend">
@@ -136,7 +162,7 @@ const Landing = () => {
       </div>
       <div className="w-[100vw] h-auto overflow-hidden">
         <Marquee className="m-2" speed={60}>
-          {row1.map((item, index) => (
+          {landingImgRow.map((item, index) => (
             <img
               className="w-40 h-40 mr-[10px] rounded-2xl"
               key={index}
@@ -147,7 +173,7 @@ const Landing = () => {
         </Marquee>
 
         <Marquee className="m-2" speed={60} direction="right">
-          {row2.map((item, index) => (
+          {landingImgRow.map((item, index) => (
             <img
               className="w-40 h-40 mr-[10px] rounded-2xl"
               key={index}
@@ -157,7 +183,7 @@ const Landing = () => {
           ))}
         </Marquee>
         <Marquee className="m-2" speed={60}>
-          {row1.map((item, index) => (
+          {landingImgRow.map((item, index) => (
             <img
               className="w-40 h-40 mr-[10px] rounded-2xl"
               key={index}
@@ -168,6 +194,7 @@ const Landing = () => {
         </Marquee>
       </div>
       <ServiceCategory />
+      <TopExperts />
     </>
   );
 };
