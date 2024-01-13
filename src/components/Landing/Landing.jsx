@@ -1,12 +1,82 @@
 import React, { useState } from "react";
-import Marquee from "react-fast-marquee";
-import { FaSearch } from "react-icons/fa";
-import logo from "../../assets/images/logo.jpg";
 import { GrFormNextLink } from "react-icons/gr";
 import { CiStar } from "react-icons/ci";
-import { topExpertsBar, landingImgRow } from "../../constant";
+import Footer from "../Boundary/Footer";
+import Navbar from "../Boundary/Navbar";
+import HeroSection from "../Boundary/HeroSection";
+import photography from "../../assets/images/photography.png";
+import ai from "../../assets/images/ai.png";
+import design from "../../assets/images/design.png";
+import seo from "../../assets/images/seoService.png";
+import browseicon from "../../assets/images/icon.png";
+import businesss from "../../assets/images/business.png";
+import videoAnim from "../../assets/images/videoAnimation.png";
+import Writting from "../../assets/images/writingTranslation.png";
+import webdesignservice from "../../assets/images/webDesignService.png";
+import musicAudio from "../../assets/images/musicAudio.png";
 import { Link } from "react-router-dom";
-import { FaLinkedin, FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
+
+export const ServiceCategory1 = () => {
+  return (
+    <div className="relative flex flex-row gap-4 overflow-hidden mt-[3vh] px-36 py-[10vh] w-full h-[100vh] ">
+      <div className="w-2/4 flex flex-col gap-4 h-full ">
+        <div className="w-full h-[40%]  flex flex-row gap-4">
+          <div className="w-1/2 h-full  flex flex-col overflow-hidden">
+            <img src={browseicon} className="w-2/5 h-2/5 object-fill" />
+            <h1 className="shrink-0">Browse services by category</h1>
+          </div>
+          <div className="w-1/2 h-full  overflow-hidden">
+            <img src={photography} className="w-full h-full object-fill" />
+          </div>
+        </div>
+        <div className="w-full h-[40%]  flex flex-row gap-4">
+          <div className="w-1/4 h-full  overflow-hidden">
+            <img src={ai} className="w-full h-full object-fill" />
+          </div>
+          <div className="w-3/4 h-full  overflow-hidden">
+            <img src={design} className="w-full h-full object-fill" />
+          </div>
+        </div>
+        <div className="w-full h-[20%]  flex flex-row gap-4">
+          <div className="w-1/2 h-full  py-2">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque,
+            harum
+          </div>
+          <div className="w-1/2 h-full  overflow-hidden">
+            <img src={seo} className="w-full h-full object-fill" />
+          </div>
+        </div>
+      </div>
+      <div className="w-1/4 h-full  flex flex-col gap-4">
+        <div className="w-full h-2/5  overflow-hidden">
+          <img src={businesss} className="w-full h-full object-fill" />
+        </div>
+        <div className="w-full h-2/5  overflow-hidden">
+          <img src={videoAnim} className="w-full h-full object-fill" />
+        </div>
+        <div className="w-full h-1/5  overflow-hidden">
+          <img src={Writting} className="w-full h-full object-fill" />
+        </div>
+      </div>
+      <div className="w-1/4 h-full  flex flex-col gap-4">
+        <div className="w-full h-1/5  overflow-hidden pl-[9vw]">
+          <Link to="/services" className="decoration-transparent">
+            <div className=" py-2 px-4 bg-black w-36 items-center text-center  text-white font-semibold rounded-md flex ">
+              See More
+              <GrFormNextLink className=" w-6 h-6" />
+            </div>
+          </Link>
+        </div>
+        <div className="w-full h-2/5  overflow-hidden">
+          <img src={webdesignservice} className="w-full h-full object-fill" />
+        </div>
+        <div className="w-full h-2/5  overflow-hidden">
+          <img src={musicAudio} className="w-full h-full object-fill" />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const ServiceCategory = () => {
   return (
@@ -77,7 +147,7 @@ export const ServiceCategory = () => {
 export const TopExperts1 = () => {
   const [activeNo, setActiveNo] = useState(0);
   return (
-    <div className="absolute top-[1280px] flex flex-col gap-16 w-full items-start mx-0">
+    <div className="absolute top-[1480px] flex flex-col gap-16 w-full items-start mx-0">
       <div
         id="Line"
         className="border-solid w-full h-0 border-t-0 border-black/70"
@@ -477,60 +547,6 @@ export const Blogs = () => {
     </div>
   );
 };
-export const Footer = () => {
-  return (
-    <div className="absolute top-[5380px] bg-black flex flex-col justify-between w-full h-[520px] items-start pt-12  pl-16">
-      <div className="flex flex-row h-16 gap-10 w-1/3 items-start">
-        <div className="text-[44px] font-extrabold font-montserrat text-white">
-          ultraXpert
-        </div>
-        <div className="text-white font-normal mt-3">
-          think creative,
-          <br /> do effective
-        </div>
-      </div>
-      <div className="flex flex-row justify-between text-[18px] w-full items-start pb-14">
-        <div className="flex flex-col justify-between w-20 h-48 items-start">
-          <div className="text-xl text-white">Home</div>
-          <div className="text-xl text-white">Services</div>
-          <div className="text-xl text-white">Experts</div>
-          <div className="text-xl text-white">Blog</div>
-          <div id="About" className="text-xl text-white">
-            About
-          </div>
-        </div>
-        <div className="flex flex-col w-3/4 h-full  justify-between">
-          <div className="flex justify-center w-full h-full gap-40 pr-32">
-            <div className="flex flex-col border-t border-solid border-white w-2/3 h-28 justify-between pt-8">
-              <div className="text-[22px] font-semibold text-white">Email</div>
-              <div className="text-[18px] font-extralight text-white">
-                Bhaveshbhanusalip884@gmail.com
-              </div>
-            </div>
-            <div className="flex flex-col border-t border-solid border-white w-2/3 h-28 justify-between pt-8">
-              <div className="text-[22px] font-semibold text-white">
-                Contact
-              </div>
-              <div className="text-[18px] font-extralight text-white">
-                1234567890
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col border-t border-solid border-white w-[36%] h-40 justify-between pt-8 ">
-            <div className="text-[22px] font-semibold text-white">Follow</div>
-            <div className="flex flex-row gap-8 text-white">
-              <FaLinkedin className="text-[24px]" />
-              <FaFacebook className="text-[24px]" />
-              <FaInstagram className="text-[24px]" />
-              <FaTwitter className="text-[24px]" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 export const Try = () => {
   return (
     <div
@@ -672,84 +688,10 @@ export const Try = () => {
 const Landing = () => {
   return (
     <>
-      <div className=" bg-white w-[100vw] h-[60px] overflow-hidden flex flex-row items-center justify-between py-0 px-[20px] box-border  text-[30px] font-montserrat">
-        <div className="flex ml-[-20px]">
-          <img
-            src={logo}
-            className="w-[100px] h-[70px] mt-2"
-            alt="logo hai bhai
-          "
-          />
-          <h2 className="ml-[-10px] mt-6 relative text-inherit font-extrabold font-inherit">
-            ultraXpert
-          </h2>
-        </div>
-        <div className="flex flex-row items-center justify-center gap-[3.5vw] text-[20px] mr-6">
-          <div className="relative font-medium">Services</div>
-          <div className="relative font-medium">Experts</div>
-          <div className="relative font-medium">Blog</div>
-          <div className="relative font-medium">Contact Us</div>
-          <Link
-            to={"/register"}
-            className="relative font-medium no-underline text-black"
-          >
-            Sign Up
-          </Link>
-          <Link
-            to={"/login"}
-            className="relative font-medium no-underline text-black"
-          >
-            Log In
-          </Link>
-        </div>
-      </div>
-      <div className=" absolute w-[60vw] h-[67.8vh] mt-[8px] bg-gradient-to-r from-black to-transparent z-10 text-white blend">
-        <h1 className="w-[340px] text-start text-[50px] font-bold mt-[20vh] ml-12 break-words">
-          Think creative, Do effective
-        </h1>
-        <div>
-          <input
-            className="w-[35vw] h-[40px]  ml-12 rounded-md pl-4"
-            type="text"
-            placeholder="Search for services"
-          />
-          <FaSearch className="absolute text-black mt-[12px] ml-[-3vw] text-[20px]" />
-        </div>
-      </div>
-      <div className="w-[100vw] h-auto overflow-hidden">
-        <Marquee className="m-2" speed={60}>
-          {landingImgRow.map((item, index) => (
-            <img
-              className="w-40 h-40 mr-[10px] rounded-2xl"
-              key={index}
-              src={item}
-              alt="image"
-            />
-          ))}
-        </Marquee>
-
-        <Marquee className="m-2" speed={60} direction="right">
-          {landingImgRow.map((item, index) => (
-            <img
-              className="w-40 h-40 mr-[10px] rounded-2xl"
-              key={index}
-              src={item}
-              alt="image"
-            />
-          ))}
-        </Marquee>
-        <Marquee className="m-2" speed={60}>
-          {landingImgRow.map((item, index) => (
-            <img
-              className="w-40 h-40 mr-[10px] rounded-2xl"
-              key={index}
-              src={item}
-              alt="image"
-            />
-          ))}
-        </Marquee>
-      </div>
-      <ServiceCategory />
+      <Navbar />
+      <HeroSection />
+      <ServiceCategory1 />
+      {/* <ServiceCategory /> */}
       <TopExperts1 />
       <AboutUs />
       <Story />
