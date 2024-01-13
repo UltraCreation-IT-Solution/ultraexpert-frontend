@@ -22,7 +22,7 @@ export const ServiceCategory1 = () => {
       <div className="w-2/4 flex flex-col gap-4 h-full ">
         <div className="w-full h-[40%]  flex flex-row gap-4">
           <div className="w-1/2 h-full  flex flex-col overflow-hidden">
-            <img src={browseicon} className="w-2/5 h-2/5 object-fill" />
+            <img src={browseicon} className="w-1/4 h-1/4 object-fill" />
             <h1 className="shrink-0">Browse services by category</h1>
           </div>
           <div className="w-1/2 h-full  overflow-hidden">
@@ -147,7 +147,7 @@ export const ServiceCategory = () => {
 export const TopExperts1 = () => {
   const [activeNo, setActiveNo] = useState(0);
   return (
-    <div className="absolute top-[1480px] flex flex-col gap-16 w-full items-start mx-0">
+    <div className="absolute top-[1780px] flex flex-col gap-16 w-full items-start mx-0">
       <div
         id="Line"
         className="border-solid w-full h-0 border-t-0 border-black/70"
