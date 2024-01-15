@@ -16,14 +16,16 @@ import webdesignservice from "../../assets/images/webDesignService.png";
 import musicAudio from "../../assets/images/musicAudio.png";
 import { Link } from "react-router-dom";
 
-export const ServiceCategory1 = () => {
+export const ServiceCategory = () => {
   return (
-    <div className="relative flex flex-row gap-4 overflow-hidden mt-[3vh] px-36 py-[10vh] w-full h-[100vh] ">
+    <div className="relative flex flex-row gap-4 overflow-hidden mt-[3vh] px-[12vw] py-[10vh] w-full h-[100vh] ">
       <div className="w-2/4 flex flex-col gap-4 h-full ">
         <div className="w-full h-[40%]  flex flex-row gap-4">
           <div className="w-1/2 h-full  flex flex-col overflow-hidden">
             <img src={browseicon} className="w-1/4 h-1/4 object-fill" />
-            <h1 className="shrink-0">Browse services by category</h1>
+            <h1 className="shrink-0 w-[13vw] text-[2.2vw]">
+              Browse services by category
+            </h1>
           </div>
           <div className="w-1/2 h-full  overflow-hidden">
             <img src={photography} className="w-full h-full object-fill" />
@@ -38,7 +40,7 @@ export const ServiceCategory1 = () => {
           </div>
         </div>
         <div className="w-full h-[20%]  flex flex-row gap-4">
-          <div className="w-1/2 h-full  py-2">
+          <div className="w-1/2 h-full  py-2 text-[1.2vw]">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque,
             harum
           </div>
@@ -59,7 +61,7 @@ export const ServiceCategory1 = () => {
         </div>
       </div>
       <div className="w-1/4 h-full  flex flex-col gap-4">
-        <div className="w-full h-1/5  overflow-hidden pl-[9vw]">
+        <div className="w-full h-1/5  overflow-hidden  flex justify-end">
           <Link to="/services" className="decoration-transparent">
             <div className=" py-2 px-4 bg-black w-36 items-center text-center  text-white font-semibold rounded-md flex ">
               See More
@@ -77,163 +79,129 @@ export const ServiceCategory1 = () => {
     </div>
   );
 };
-
-export const ServiceCategory = () => {
-  return (
-    <div className="overflow-hidden mt-[3vh]">
-      <div className="ml-[160px] w-[1100px] mb-[-40px] flex flex-row items-end justify-between">
-        <h3 className="relative font-semibold text-[28px]">
-          Browse service by Category
-        </h3>
-        <div className="flex flex-row items-center justify-center gap-[5px] mb-[2.5%] text-base text-gray-400">
-          <div className="relative font-medium text-[20px]">
-            see all services
-          </div>
-          <GrFormNextLink className="relative w-6 h-6 overflow-hidden shrink-0 object-cover" />
-        </div>
-      </div>
-      <div className="flex ml-[160px] gap-4">
-        <div className="relative  mt-[58px] w-[540px] h-[548px] flex flex-row gap-4 text-5xl">
-          <div className="flex flex-col gap-4">
-            <div className="relative w-[262px] h-[262px] overflow-hidden  bg-cover bg-no-repeat bg-[top] bg-[url('https://plus.unsplash.com/premium_photo-1678565869434-c81195861939?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZGV2ZWxvcGVyfGVufDB8fDB8fHww')] rounded-md ">
-              <h3 className="absolute text-white backdrop-brightness-[50%] pt-[50%] w-full h-[262px] mt-[0px] text-center">
-                Development & IT
-              </h3>
-            </div>
-            <div className="relative w-[262px] h-[262px] overflow-hidden shrink-0 bg-[url('https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z3JhcGhpYyUyMGFuZCUyMGRlc2lnbnxlbnwwfHwwfHx8MA%3D%3D')] bg-cover bg-no-repeat bg-[top] rounded-md">
-              <h3 className="absolute text-white backdrop-brightness-[50%] pt-[50%] w-full h-[262px] mt-[0px] text-center">
-                Graphics & Design
-              </h3>
-            </div>
-          </div>
-          <div>
-            <div className="relative w-[262px] h-[540px] overflow-hidden shrink-0 bg-[url('https://images.unsplash.com/photo-1575089976121-8ed7b2a54265?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGRldmVsb3BlcnxlbnwwfHwwfHx8MA%3D%3D')] bg-cover bg-no-repeat bg-[top] rounded-md">
-              <h3 className="absolute text-white backdrop-brightness-[50%] pt-[100%] w-full h-full mt-[0px] text-center">
-                Business
-              </h3>
-            </div>
-          </div>
-        </div>
-        <div className="relative gap-4  mt-[58px] w-[540px] h-[548px] flex flex-col text-5xl">
-          <div className="flex flex-row gap-4">
-            <div className="relative w-[262px] h-[262px] overflow-hidden shrink-0 bg-[url('https://plus.unsplash.com/premium_photo-1661281211902-b43da36ba1f7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Z3JhcGhpYyUyMGFuZCUyMGRlc2lnbnxlbnwwfHwwfHx8MA%3D%3D')] bg-cover bg-no-repeat bg-[top] rounded-md">
-              <h3 className="absolute text-white backdrop-brightness-[50%] pt-[50%] w-full h-[262px] mt-[0px] text-center">
-                Marketing
-              </h3>
-            </div>
-            <div className="relative w-[262px] h-[262px] overflow-hidden shrink-0 bg-[url('https://plus.unsplash.com/premium_photo-1664301808897-96e1732dfafe?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YWklMjBzZXJ2aWNlc3xlbnwwfHwwfHx8MA%3D%3D')] bg-cover bg-no-repeat bg-[top] rounded-md">
-              <h3 className="absolute text-white backdrop-brightness-[50%] pt-[50%] w-full h-[262px] mt-[0px] text-center">
-                AI Services
-              </h3>
-            </div>
-          </div>
-          <div>
-            <div className="relative w-[540px] h-[262px] overflow-hidden shrink-0 bg-[url('https://images.unsplash.com/photo-1589901507248-a8fb564e3641?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8d3JpdHRpbmclMjBhbmQlMjB0cmFuc2xhdGlvbnN8ZW58MHx8MHx8fDA%3D')] bg-cover bg-no-repeat bg-[top] rounded-md">
-              <h3 className="absolute text-white backdrop-brightness-[50%] pt-[30%] w-full h-full mt-[0px] text-center">
-                Writting & Translation
-              </h3>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        id="Line1"
-        className="border-solid w-full mt-12 border-t border-black/70"
-      />
-    </div>
-  );
-};
-
-export const TopExperts1 = () => {
+export const TopExperts = () => {
   const [activeNo, setActiveNo] = useState(0);
   return (
-    <div className="absolute top-[1780px] flex flex-col gap-16 w-full items-start mx-0">
-      <div
-        id="Line"
-        className="border-solid w-full h-0 border-t-0 border-black/70"
-      />
-      <div className="shadow-[0px_2px_10px_0px_rgba(0,_0,_0,_0.15)] bg-[#f5e1da] flex flex-row justify-between w-full items-start mb-1  pt-20 px-40">
-        <div className="text-[64px] font-extrabold mt-32 w-[20%]">
-          Meet our experts.
+    <div className="relative w-full h-[90vh] bg-[#F2F2F2] px-[12vw] overflow-hidden">
+      <Link className="text-[#C5C3C3] text-[96px] font-bold flex justify-end decoration-transparent">
+        <span className="text-[18px] text-black flex items-end py-5 px-4 underline">
+          see more
+        </span>
+        EXPERTS
+      </Link>
+      <div className="flex flex-row mb-20 gap-8 w-full items-start mt-4">
+        <div
+          onMouseOver={() => setActiveNo(0)}
+          onMouseLeave={() => setActiveNo(0)}
+          className={`${
+            activeNo === 0 ? "active" : ""
+          } expertDiv relative flex flex-col gap-4 w-1/2 h-[65vh] items-start bg-[url('https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
+        >
+          <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
+            <h2>Web Developer</h2>
+            {activeNo === 0 ? (
+              <div>
+                <h3 className="absolute right-4 text-[20px] bottom-6">
+                  Bhavesh Bhanusali
+                </h3>
+                <h3 className="absolute right-4 text-[16px] bottom-0">
+                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                </h3>
+              </div>
+            ) : null}
+          </div>
         </div>
-        <div className="flex flex-row mb-20 gap-5 w-2/3 items-start">
-          <div
-            onMouseOver={() => setActiveNo(0)}
-            onMouseLeave={() => setActiveNo(0)}
-            className={`${
-              activeNo === 0 ? "active" : ""
-            } expertDiv relative flex flex-col gap-4 w-1/2 h-96 items-start bg-[url('https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
-          >
-            <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
-              <h2>Web Developer</h2>
-              {activeNo === 0 ? (
-                <div>
-                  <h3 className="absolute right-4 text-[20px] bottom-6">
-                    Bhavesh Bhanusali
-                  </h3>
-                  <h3 className="absolute right-4 text-[16px] bottom-0">
-                    <CiStar className="-mb-[2px]" /> 4.9 /5
-                  </h3>
-                </div>
-              ) : null}
-            </div>
+        <div
+          onMouseOver={() => setActiveNo(1)}
+          onMouseLeave={() => setActiveNo(0)}
+          className={`${
+            activeNo === 1 ? "active" : ""
+          } expertDiv w-1/2 h-[65vh] bg-[url('https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
+        >
+          <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
+            <h2>Web Developer</h2>
+            {activeNo === 1 ? (
+              <div>
+                <h3 className="absolute right-4 text-[20px] bottom-6">
+                  Bhavesh Bhanusali
+                </h3>
+                <h3 className="absolute right-4 text-[16px] bottom-0">
+                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                </h3>
+              </div>
+            ) : null}
           </div>
-          <div
-            onMouseOver={() => setActiveNo(1)}
-            onMouseLeave={() => setActiveNo(0)}
-            className={`${
-              activeNo === 1 ? "active" : ""
-            } expertDiv w-1/2 h-96 bg-[url('https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
-          >
-            <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
-              <h2>Web Developer</h2>
-              {activeNo === 1 ? (
-                <div>
-                  <h3 className="absolute right-4 text-[20px] bottom-6">
-                    Bhavesh Bhanusali
-                  </h3>
-                  <h3 className="absolute right-4 text-[16px] bottom-0">
-                    <CiStar className="-mb-[2px]" /> 4.9 /5
-                  </h3>
-                </div>
-              ) : null}
-            </div>
+        </div>
+        <div
+          onMouseOver={() => setActiveNo(2)}
+          onMouseLeave={() => setActiveNo(0)}
+          className={`${
+            activeNo === 2 ? "active" : ""
+          } expertDiv relative flex flex-col gap-4 w-1/2 h-[65vh] items-start bg-[url('https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww')] bg-center`}
+        >
+          <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
+            <h2>Web Developer</h2>
+            {activeNo === 2 ? (
+              <div>
+                <h3 className="absolute right-4 text-[20px] bottom-6">
+                  Bhavesh Bhanusali
+                </h3>
+                <h3 className="absolute right-4 text-[16px] bottom-0">
+                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                </h3>
+              </div>
+            ) : null}
           </div>
-          <div
-            onMouseOver={() => setActiveNo(2)}
-            onMouseLeave={() => setActiveNo(0)}
-            className={`${
-              activeNo === 2 ? "active" : ""
-            } expertDiv relative flex flex-col gap-4 w-1/2 h-96 items-start bg-[url('https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww')] bg-center`}
-          >
-            <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
-              <h2>Web Developer</h2>
-              {activeNo === 2 ? (
-                <div>
-                  <h3 className="absolute right-4 text-[20px] bottom-6">
-                    Bhavesh Bhanusali
-                  </h3>
-                  <h3 className="absolute right-4 text-[16px] bottom-0">
-                    <CiStar className="-mb-[2px]" /> 4.9 /5
-                  </h3>
-                </div>
-              ) : null}
-            </div>
+        </div>
+        <div
+          onMouseOver={() => setActiveNo(3)}
+          onMouseLeave={() => setActiveNo(0)}
+          className={`${
+            activeNo === 3 ? "active" : ""
+          } expertDiv relative flex flex-col gap-4 w-1/2 h-[65vh] items-start bg-[url('https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-center bg-cover`}
+        >
+          <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
+            <h2>Web Developer</h2>
+            {activeNo === 3 ? (
+              <div>
+                <h3 className="absolute right-4 text-[20px] bottom-6">
+                  Bhavesh Bhanusali
+                </h3>
+                <h3 className="absolute right-4 text-[16px] bottom-0">
+                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                </h3>
+              </div>
+            ) : null}
           </div>
-
-          {console.log(activeNo)}
+        </div>
+        <div
+          onMouseOver={() => setActiveNo(4)}
+          onMouseLeave={() => setActiveNo(0)}
+          className={`${
+            activeNo === 4 ? "active" : ""
+          } expertDiv relative flex flex-col gap-4 w-1/2 h-[65vh] items-start bg-[url('https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D')] bg-center bg-cover`}
+        >
+          <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
+            <h2>Web Developer</h2>
+            {activeNo === 4 ? (
+              <div>
+                <h3 className="absolute right-4 text-[20px] bottom-6">
+                  Bhavesh Bhanusali
+                </h3>
+                <h3 className="absolute right-4 text-[16px] bottom-0">
+                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                </h3>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
-      <div
-        id="Line1"
-        className="border-solid w-full h-0 border-t border-black/70"
-      />
     </div>
   );
 };
 export const AboutUs = () => {
   return (
-    <div className="absolute top-[2040px] w-full h-[150vh]  pt-24">
+    <div className="absolute top-[2340px] w-full h-[150vh]  pt-24">
       <div className="absolute   w-full h-[480px] flex flex-row items-center justify-between">
         <div className="absolute left-[160px] top-1/4">
           <h3 className="relative w-[60%] text-gray-700 font-bold text-[48px]">
@@ -690,9 +658,8 @@ const Landing = () => {
     <>
       <Navbar />
       <HeroSection />
-      <ServiceCategory1 />
-      {/* <ServiceCategory /> */}
-      <TopExperts1 />
+      <ServiceCategory />
+      <TopExperts />
       <AboutUs />
       <Story />
       <Testimonial />

@@ -44,7 +44,7 @@ input[type="number"]::-webkit-outer-spin-button {
   );
 }
 .active {
-  @apply mx-1 transform transition-all duration-500 ease-in-out w-[680px] h-[fullpx];
+  @apply mx-1 transform transition-all duration-500 ease-in-out w-[150%] h-[65vh];
 }
 .expertDiv h2 {
   padding: 12px;
