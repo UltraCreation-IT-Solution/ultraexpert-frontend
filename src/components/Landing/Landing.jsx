@@ -18,12 +18,15 @@ import { Link } from "react-router-dom";
 
 export const ServiceCategory = () => {
   return (
-    <div className="relative flex flex-row gap-4 overflow-hidden mt-[3vh] px-[12vw] py-[10vh] w-full h-[100vh] ">
-      <div className="w-2/4 flex flex-col gap-4 h-full ">
-        <div className="w-full h-[40%]  flex flex-row gap-4">
-          <div className="w-1/2 h-full  flex flex-col overflow-hidden">
-            <img src={browseicon} className="w-1/4 h-1/4 object-fill" />
-            <h1 className="shrink-0 w-[13vw] text-[2.2vw]">
+    <div className="relative flex flex-col md:flex-row gap-4 overflow-hidden mt-[3vh] px-[12vw] py-[10vh] w-full min-h-[100vh]">
+      <div className="w-full md:w-2/4 flex flex-row md:flex-col gap-4 h-full flex-wrap ">
+        <div className="w-full h-2/5  flex flex-row gap-4 ">
+          <div className="w-full md:w-1/2 h-full  flex flex-row md:flex-col gap-6 md:gap-2 overflow-hidden">
+            <img
+              src={browseicon}
+              className="w-2/5 md:w-2/6 h-1/4 object-fill"
+            />
+            <h1 className="shrink-0 w-[16vw] md:w-[13vw] text-[3.4vw] mt-0 md:mt-5 md:text-[2.2vw] font-extrabold underline md:no-underline">
               Browse services by category
             </h1>
           </div>
@@ -31,8 +34,8 @@ export const ServiceCategory = () => {
             <img src={photography} className="w-full h-full object-fill" />
           </div>
         </div>
-        <div className="w-full h-[40%]  flex flex-row gap-4">
-          <div className="w-1/4 h-full  overflow-hidden">
+        <div className="w-full h-2/5  flex flex-row gap-4">
+          <div className="w-2/5 h-full  overflow-hidden">
             <img src={ai} className="w-full h-full object-fill" />
           </div>
           <div className="w-3/4 h-full  overflow-hidden">
@@ -40,7 +43,7 @@ export const ServiceCategory = () => {
           </div>
         </div>
         <div className="w-full h-[20%]  flex flex-row gap-4">
-          <div className="w-1/2 h-full  py-2 text-[1.2vw]">
+          <div className="w-1/2 h-full  py-2 text-[2.2vw] md:text-[1.2vw]">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque,
             harum
           </div>
@@ -49,22 +52,22 @@ export const ServiceCategory = () => {
           </div>
         </div>
       </div>
-      <div className="w-1/4 h-full  flex flex-col gap-4">
+      <div className="w-full md:w-1/4 h-full  flex flex-row md:flex-col gap-4">
         <div className="w-full h-2/5  overflow-hidden">
           <img src={businesss} className="w-full h-full object-fill" />
         </div>
         <div className="w-full h-2/5  overflow-hidden">
           <img src={videoAnim} className="w-full h-full object-fill" />
         </div>
-        <div className="w-full h-1/5  overflow-hidden">
+        <div className="w-full md:h-1/5  overflow-hidden">
           <img src={Writting} className="w-full h-full object-fill" />
         </div>
       </div>
-      <div className="w-1/4 h-full  flex flex-col gap-4">
-        <div className="w-full h-1/5  overflow-hidden  flex justify-end">
+      <div className="w-full md:w-1/4 h-full  flex flex-row md:flex-col gap-4">
+        <div className="w-full h-1/5  overflow-hidden flex justify-start md:justify-end">
           <Link to="/services" className="decoration-transparent">
-            <div className=" py-2 px-4 bg-black w-36 items-center text-center  text-white font-semibold rounded-md flex ">
-              See More
+            <div className="my-[10vw] md:my-0 py-2 px-4 bg-black w-[18vw] md:w-[10vw] items-center text-center  text-white font-semibold rounded-md flex text-[1.8vw] md:text-[1.2vw]">
+              <span className="md:no-underline underline">See More</span>
               <GrFormNextLink className=" w-6 h-6" />
             </div>
           </Link>
@@ -83,8 +86,11 @@ export const TopExperts = () => {
   const [activeNo, setActiveNo] = useState(0);
   return (
     <div className="relative w-full h-[90vh] bg-[#F2F2F2] px-[12vw] overflow-hidden">
-      <Link className="text-[#C5C3C3] text-[96px] font-bold flex justify-end decoration-transparent">
-        <span className="text-[18px] text-black flex items-end py-5 px-4 underline">
+      <Link
+        to={"/experts"}
+        className="text-[#C5C3C3] text-[6.5vw] font-bold flex justify-end decoration-transparent"
+      >
+        <span className="text-[18px] text-black flex items-end py-[1.5vw] px-4 underline">
           see more
         </span>
         EXPERTS
@@ -199,211 +205,30 @@ export const TopExperts = () => {
     </div>
   );
 };
-export const AboutUs = () => {
+export const AboutUX = () => {
   return (
-    <div className="absolute top-[2340px] w-full h-[150vh]  pt-24">
-      <div className="absolute   w-full h-[480px] flex flex-row items-center justify-between">
-        <div className="absolute left-[160px] top-1/4">
-          <h3 className="relative w-[60%] text-gray-700 font-bold text-[48px]">
-            Helping millions grow better.
-          </h3>
-        </div>
-        <div className="aboutintro absolute top-[0px] right-[120px] bg-[url('https://th.bing.com/th/id/OIP.6e2phQdWp54u2-ropKJNyAHaE2?w=228&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7')] bg-cover bg-no-repeat w-[640px] h-[440px]"></div>
-      </div>
-      <div className="absolute top-[540px] left-[160px] w-full h-[40%] flex flex-row items-center gap-24 overflow-hidden">
-        <div className="aboutMsg mt-24 w-[30%] bg-[url('https://images.unsplash.com/photo-1521316730702-829a8e30dfd0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8b3VyJTIwbWlzc2lvbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center bg-cover h-[65%] "></div>
-        <div className="w-[65%] h-[110%] flex flex-col  ">
-          <h3 className="relative w-[65%] text-gray-700 font-bold text-[48px] text-center ">
+    <div className="relative w-full min-h-auto py-[4vw] ">
+      <div className="flex w-full h-auto py-18 px-32 gap-8 items-center sm:flex-wrap md:flex-nowrap">
+        <h3 className="relative w-1/3 text-gray-700 font-extrabold text-[3.2vw]">
+          Helping millions grow better.
+        </h3>
+        <div className="aboutMsg mt-24 w-1/3 h-[25vw] bg-[url('https://images.unsplash.com/photo-1521316730702-829a8e30dfd0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8b3VyJTIwbWlzc2lvbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center bg-cover z-20 "></div>
+        <div className="w-1/3 h-auto flex flex-col  ">
+          <h3 className="relative w-full text-gray-700 font-bold text-[2vw] text-center ">
             Our mission
           </h3>
-          <p className="relative -mt-2 w-2/3 text-gray-700 font-normal text-justify text-[20px]">
+          <p className="relative  w-full text-gray-700 font-normal text-justify text-[1.25vw]">
             At UltraCreation, our mission is to transcend conventional
             boundaries and empower businesses with cutting-edge technological
             solutions. We are dedicated to being the catalyst for our clients'
             digital transformation, facilitating seamless connectivity, and
             maximizing their potential in the ever-evolving digital landscape.
-            We have an unwavering commitment to excellence in every aspect of
-            our work.
-            <br />
-            <br /> From conceptualization to deployment, we strive for
-            perfection, ensuring our clients receive the highest quality
-            products and services. Building trust is paramount. We maintain
-            transparency in our processes, fostering open communication and
-            ensuring our clients are well-informed at every stage of their
-            project.
           </p>
-          <div className="flex flex-row items-center ml-20 justify-center gap-[5px] text-base text-gray-400">
-            <div className="relative font-medium text-[20px]">
-              see all our experts
+          <div className="flex flex-row items-center ml-20 justify-end gap-[5px] text-base text-gray-400">
+            <div className="relative font-medium text-[1.25vw] underline">
+              Visit for more
             </div>
             <GrFormNextLink className="relative w-6 h-6 overflow-hidden shrink-0 object-cover" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-export const Testimonial = () => {
-  return (
-    <div className="absolute top-[3720px] left-[calc(50%-718px)] rounded-t-xl rounded-b-none w-[1435px] h-[680px] overflow-hidden flex flex-col items-center justify-start  box-border bg-[url('https://images.unsplash.com/photo-1664575602276-acd073f104c1?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-no-repeat bg-[top] text-[36px] text-white ">
-      <div className="w-full h-full backdrop-brightness-[60%] py-14 px-6 rounded-t-xl rounded-b-none overflow-hidden flex flex-col items-center justify-start  box-border">
-        <div className="flex flex-col items-center -mt-8 h-40 justify-start gap-6">
-          <div className="relative font-semibold">Testimonials</div>
-          <div className="rounded-xl w-full h-10 overflow-hidden shrink-0 flex flex-row items-center justify-center py-6 px-6 box-border text-base bg-[#F06292] ">
-            <div>See all testimonials</div>
-            <GrFormNextLink className="ml-2 mt-1" />
-          </div>
-        </div>
-        <div className="relative w-full h-full flex flex-row items-center justify-between gap-8">
-          <div className="absolute w-full h-full flex flex-row items-center justify-center overflow-hidden">
-            <div className="relative w-1/2  h-[500px] rounded-xl overflow-hidden flex flex-col items-start justify-start gap-6 py-8 px-6 box-border">
-              <div className="relative w-full h-[65%]  flex flex-row items-start justify-start gap-8">
-                <div className="relative w-1/2 h-full bg-white text-black flex flex-col items-start justify-start rounded-md">
-                  <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
-                    <img
-                      className="w-14 h-14 rounded-full"
-                      src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                      alt=""
-                    />
-                    <div className="relative text-[28px] font-normal py-3">
-                      John Doe
-                    </div>
-                  </div>
-                  <div className="relative w-full h-[60%] text-[14px] items-start justify-start overflow-hidden px-4 py-2 text-justify">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                    fugiat facere voluptatibus quaerat.
-                  </div>
-                </div>
-                <div className="relative w-1/2 h-full bg-[#D9D9D9] text-black flex flex-col items-start justify-start rounded-md">
-                  <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
-                    <img
-                      className="w-14 h-14 rounded-full"
-                      src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                      alt=""
-                    />
-                    <div className="relative text-[28px] font-normal py-3">
-                      John Doe
-                    </div>
-                  </div>
-                  <div className="relative w-full h-[60%] text-[14px] items-start justify-start overflow-hidden px-4 py-2 text-justify">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                    fugiat facere voluptatibus quaerat.
-                  </div>
-                </div>
-              </div>
-              <div className="relative w-full h-[80%] flex flex-col items-start justify-start gap-8">
-                <div className="relative w-full h-1/2 bg-[#F5E1DA] text-black flex flex-row items-start justify-start rounded-md">
-                  <div className="relative w-[40%] h-full border-r border-black border-solid flex flex-row items-start justify-start gap-4 overflow-hidden">
-                    <img
-                      className="w-16 h-16 rounded-full mt-3 ml-3 shrink-0"
-                      src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                      alt=""
-                    />
-                    <div className="relative text-[24px] font-normal py-[12%]">
-                      John Doe
-                    </div>
-                  </div>
-                  <div className="relative w-[60%] h-full text-[14px] items-start justify-start overflow-hidden px-4 py-4 text-justify">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                    fugiat facere voluptatibus quaerat.
-                  </div>
-                </div>
-                <div className="relative w-full h-1/2 bg-[#D9D9D9] text-black flex flex-row items-start justify-start rounded-md">
-                  <div className="relative w-[40%] h-full border-r border-black border-solid flex flex-row items-start justify-start gap-4 overflow-hidden">
-                    <img
-                      className="w-16 h-16 rounded-full mt-3 ml-3 shrink-0"
-                      src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                      alt=""
-                    />
-                    <div className="relative text-[24px] font-normal py-[12%]">
-                      John Doe
-                    </div>
-                  </div>
-                  <div className="relative w-[60%] h-full text-[14px] items-start justify-start overflow-hidden px-4 py-4 text-justify">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                    fugiat facere voluptatibus quaerat.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="relative w-1/2  h-[500px] rounded-xl overflow-hidden flex flex-col items-start justify-start gap-6 py-8 px-6 box-border">
-              <div className="relative w-full h-[65%]  flex flex-row items-start justify-start gap-8">
-                <div className="relative w-1/2 h-full bg-white text-black flex flex-col items-start justify-start rounded-md">
-                  <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
-                    <img
-                      className="w-14 h-14 rounded-full"
-                      src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                      alt=""
-                    />
-                    <div className="relative text-[28px] font-normal py-3">
-                      John Doe
-                    </div>
-                  </div>
-                  <div className="relative w-full h-[60%] text-[14px] items-start justify-start overflow-hidden px-4 py-2 text-justify">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                    fugiat facere voluptatibus quaerat.
-                  </div>
-                </div>
-                <div className="relative w-1/2 h-full bg-[#D9D9D9] text-black flex flex-col items-start justify-start rounded-md">
-                  <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
-                    <img
-                      className="w-14 h-14 rounded-full"
-                      src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                      alt=""
-                    />
-                    <div className="relative text-[28px] font-normal py-3">
-                      John Doe
-                    </div>
-                  </div>
-                  <div className="relative w-full h-[60%] text-[14px] items-start justify-start overflow-hidden px-4 py-2 text-justify">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                    fugiat facere voluptatibus quaerat.
-                  </div>
-                </div>
-              </div>
-              <div className="relative w-full h-[80%] flex flex-col items-start justify-start gap-8">
-                <div className="relative w-full h-1/2 bg-[#F5E1DA] text-black flex flex-row items-start justify-start rounded-md">
-                  <div className="relative w-[40%] h-full border-r border-black border-solid flex flex-row items-start justify-start gap-4 overflow-hidden">
-                    <img
-                      className="w-16 h-16 rounded-full mt-3 ml-3 shrink-0"
-                      src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                      alt=""
-                    />
-                    <div className="relative text-[24px] font-normal py-[12%]">
-                      John Doe
-                    </div>
-                  </div>
-                  <div className="relative w-[60%] h-full text-[14px] items-start justify-start overflow-hidden px-4 py-4 text-justify">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                    fugiat facere voluptatibus quaerat.
-                  </div>
-                </div>
-                <div className="relative w-full h-1/2 bg-[#D9D9D9] text-black flex flex-row items-start justify-start rounded-md">
-                  <div className="relative w-[40%] h-full border-r border-black border-solid flex flex-row items-start justify-start gap-4 overflow-hidden">
-                    <img
-                      className="w-16 h-16 rounded-full mt-3 ml-3 shrink-0"
-                      src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                      alt=""
-                    />
-                    <div className="relative text-[24px] font-normal py-[12%]">
-                      John Doe
-                    </div>
-                  </div>
-                  <div className="relative w-[60%] h-full text-[14px] items-start justify-start overflow-hidden px-4 py-4 text-justify">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                    fugiat facere voluptatibus quaerat.
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -413,30 +238,199 @@ export const Testimonial = () => {
 export const Story = () => {
   return (
     <>
-      <div className="absolute top-[3120px] overflow-hidden bg-[#f5f5f5] flex flex-row justify-between ml-1 pl-32 w-full items-start">
+      <div className="relative overflow-hidden bg-[#f5f5f5] flex flex-row justify-between pl-32 w-full items-start flex-wrap">
         <div className="flex flex-col mt-24 gap-6 w-2/5 items-start">
-          <div className="text-[60px] font-extrabold  mb-0">
+          <div className="text-[3.6vw] font-extrabold  mb-0">
             Think creative,
             <br />
             Do effective
           </div>
-          <div className="text-[20px] text-justify w-full">
+          <div className="text-[1.25vw] text-justify w-full">
             UltraCreation, setting new standards in the digital landscape. As
             their journey unfolded, challenges were met with expertise, and each
             project became a testament to the relentless pursuit of excellence.
           </div>
-          <div className="text-5xl font-bold">Read the full story</div>
+          <div className="text-[1.5vw] font-bold">Read the full story</div>
         </div>
         <div className="relative flex flex-row pt-10 w-1/2 items-start">
-          <div className="w-2/3 h-[491px] bg-[#ffbbbb] absolute top-0 left-[204.42578125px]" />
+          <div className="w-2/3 h-full bg-[#ffbbbb] absolute top-0 left-[15vw]" />
           <img
             src="https://file.rendit.io/n/f6PZQtoglij80koDqTim.png"
             alt="Frame11"
-            className="relative mb-10"
+            className="relative mb-10 w-[25vw]"
           />
         </div>
       </div>
     </>
+  );
+};
+export const Testimonial = () => {
+  return (
+    <div className="w-full h-full px-1">
+      <div className="mt-[5vw] relative rounded-t-xl rounded-b-none w-full h-[680px] overflow-hidden flex flex-col items-center justify-start  box-border bg-[url('https://images.unsplash.com/photo-1664575602276-acd073f104c1?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-no-repeat bg-[top] text-[36px] text-white ">
+        <div className="w-full h-full backdrop-brightness-[60%] py-14 px-6 rounded-t-xl rounded-b-none overflow-hidden flex flex-col items-center justify-start  box-border">
+          <div className="flex flex-col items-center -mt-8 h-40 justify-start gap-6">
+            <div className="relative font-semibold">Testimonials</div>
+            <div className="rounded-xl w-full h-10 overflow-hidden shrink-0 flex flex-row items-center justify-center py-6 px-6 box-border text-base bg-[#F06292] ">
+              <div>See all testimonials</div>
+              <GrFormNextLink className="ml-2 mt-1" />
+            </div>
+          </div>
+          <div className="relative w-full h-full flex flex-row items-center justify-between gap-8">
+            <div className="absolute w-full h-full flex flex-row items-center justify-center overflow-hidden">
+              <div className="relative w-1/2  h-[500px] rounded-xl overflow-hidden flex flex-col items-start justify-start gap-6 py-8 px-6 box-border">
+                <div className="relative w-full h-[65%]  flex flex-row items-start justify-start gap-8">
+                  <div className="relative w-1/2 h-full bg-white text-black flex flex-col items-start justify-start rounded-md">
+                    <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
+                      <img
+                        className="w-14 h-14 rounded-full"
+                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
+                        alt=""
+                      />
+                      <div className="relative text-[28px] font-normal py-3">
+                        John Doe
+                      </div>
+                    </div>
+                    <div className="relative w-full h-[60%] text-[14px] items-start justify-start overflow-hidden px-4 py-2 text-justify">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
+                      fugiat facere voluptatibus quaerat.
+                    </div>
+                  </div>
+                  <div className="relative w-1/2 h-full bg-[#D9D9D9] text-black flex flex-col items-start justify-start rounded-md">
+                    <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
+                      <img
+                        className="w-14 h-14 rounded-full"
+                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
+                        alt=""
+                      />
+                      <div className="relative text-[28px] font-normal py-3">
+                        John Doe
+                      </div>
+                    </div>
+                    <div className="relative w-full h-[60%] text-[14px] items-start justify-start overflow-hidden px-4 py-2 text-justify">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
+                      fugiat facere voluptatibus quaerat.
+                    </div>
+                  </div>
+                </div>
+                <div className="relative w-full h-[80%] flex flex-col items-start justify-start gap-8">
+                  <div className="relative w-full h-1/2 bg-[#F5E1DA] text-black flex flex-row items-start justify-start rounded-md">
+                    <div className="relative w-[40%] h-full border-r border-black border-solid flex flex-row items-start justify-start gap-4 overflow-hidden">
+                      <img
+                        className="w-16 h-16 rounded-full mt-3 ml-3 shrink-0"
+                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
+                        alt=""
+                      />
+                      <div className="relative text-[24px] font-normal py-[12%]">
+                        John Doe
+                      </div>
+                    </div>
+                    <div className="relative w-[60%] h-full text-[14px] items-start justify-start overflow-hidden px-4 py-4 text-justify">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
+                      fugiat facere voluptatibus quaerat.
+                    </div>
+                  </div>
+                  <div className="relative w-full h-1/2 bg-[#D9D9D9] text-black flex flex-row items-start justify-start rounded-md">
+                    <div className="relative w-[40%] h-full border-r border-black border-solid flex flex-row items-start justify-start gap-4 overflow-hidden">
+                      <img
+                        className="w-16 h-16 rounded-full mt-3 ml-3 shrink-0"
+                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
+                        alt=""
+                      />
+                      <div className="relative text-[24px] font-normal py-[12%]">
+                        John Doe
+                      </div>
+                    </div>
+                    <div className="relative w-[60%] h-full text-[14px] items-start justify-start overflow-hidden px-4 py-4 text-justify">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
+                      fugiat facere voluptatibus quaerat.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="relative w-1/2  h-[500px] rounded-xl overflow-hidden flex flex-col items-start justify-start gap-6 py-8 px-6 box-border">
+                <div className="relative w-full h-[65%]  flex flex-row items-start justify-start gap-8">
+                  <div className="relative w-1/2 h-full bg-white text-black flex flex-col items-start justify-start rounded-md">
+                    <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
+                      <img
+                        className="w-14 h-14 rounded-full"
+                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
+                        alt=""
+                      />
+                      <div className="relative text-[28px] font-normal py-3">
+                        John Doe
+                      </div>
+                    </div>
+                    <div className="relative w-full h-[60%] text-[14px] items-start justify-start overflow-hidden px-4 py-2 text-justify">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
+                      fugiat facere voluptatibus quaerat.
+                    </div>
+                  </div>
+                  <div className="relative w-1/2 h-full bg-[#D9D9D9] text-black flex flex-col items-start justify-start rounded-md">
+                    <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
+                      <img
+                        className="w-14 h-14 rounded-full"
+                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
+                        alt=""
+                      />
+                      <div className="relative text-[28px] font-normal py-3">
+                        John Doe
+                      </div>
+                    </div>
+                    <div className="relative w-full h-[60%] text-[14px] items-start justify-start overflow-hidden px-4 py-2 text-justify">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
+                      fugiat facere voluptatibus quaerat.
+                    </div>
+                  </div>
+                </div>
+                <div className="relative w-full h-[80%] flex flex-col items-start justify-start gap-8">
+                  <div className="relative w-full h-1/2 bg-[#F5E1DA] text-black flex flex-row items-start justify-start rounded-md">
+                    <div className="relative w-[40%] h-full border-r border-black border-solid flex flex-row items-start justify-start gap-4 overflow-hidden">
+                      <img
+                        className="w-16 h-16 rounded-full mt-3 ml-3 shrink-0"
+                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
+                        alt=""
+                      />
+                      <div className="relative text-[24px] font-normal py-[12%]">
+                        John Doe
+                      </div>
+                    </div>
+                    <div className="relative w-[60%] h-full text-[14px] items-start justify-start overflow-hidden px-4 py-4 text-justify">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
+                      fugiat facere voluptatibus quaerat.
+                    </div>
+                  </div>
+                  <div className="relative w-full h-1/2 bg-[#D9D9D9] text-black flex flex-row items-start justify-start rounded-md">
+                    <div className="relative w-[40%] h-full border-r border-black border-solid flex flex-row items-start justify-start gap-4 overflow-hidden">
+                      <img
+                        className="w-16 h-16 rounded-full mt-3 ml-3 shrink-0"
+                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
+                        alt=""
+                      />
+                      <div className="relative text-[24px] font-normal py-[12%]">
+                        John Doe
+                      </div>
+                    </div>
+                    <div className="relative w-[60%] h-full text-[14px] items-start justify-start overflow-hidden px-4 py-4 text-justify">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
+                      fugiat facere voluptatibus quaerat.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 export const Blogs = () => {
@@ -660,7 +654,7 @@ const Landing = () => {
       <HeroSection />
       <ServiceCategory />
       <TopExperts />
-      <AboutUs />
+      <AboutUX />
       <Story />
       <Testimonial />
       <Blogs />

@@ -6,20 +6,21 @@ import { landingImgRow1, landingImgRow2 } from "../../constant";
 const HeroSection = () => {
   const [search, setSearch] = useState("");
   return (
-    <div className="relative w-full h-[90vh] overflow-hidden">
+    <div className="relative mt-[80px] w-full h-[90vh] overflow-hidden">
       <div className="-mt-10 overflow-hidden">
         <h1 className="w-[45vw] text-center text-[6vw] leading-[1.1] overflow-hidden tracking-normal  font-sans font-[900] break-words ml-[50%] translate-x-[-50%]">
-          Think creative, Do effective
+          Think creative,
+          <br /> Do effective
         </h1>
         <div className="-mt-5">
           <input
-            className="w-[32vw] h-[40px] bg-[#ECECEC] rounded-md pl-4 ml-[50%] translate-x-[-50%] text-[16px]"
+            className="w-[32vw] h-[40px] bg-[#ECECEC] rounded-md pl-4 ml-[50%] translate-x-[-50%] text-[1.15vw]"
             type="text"
             placeholder="Search for any services"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <FaSearch className="absolute text-black right-[35vw]  mt-[12px] font-thin  text-[20px]" />
+          <FaSearch className="absolute text-black right-[35vw]  mt-[12px] font-thin  text-[1.25vw]" />
         </div>
       </div>
       <div className="w-[100vw] mt-8 h-auto overflow-hidden">
