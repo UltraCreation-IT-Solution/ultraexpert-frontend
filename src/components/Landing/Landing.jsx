@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 
 export const ServiceCategory = () => {
   return (
-    <div className="relative flex flex-col md:flex-row gap-4 overflow-hidden mt-[3vh] px-[12vw] py-[10vh] w-full min-h-[100vh]">
+    <div className="relative flex flex-col md:flex-row gap-4 overflow-hidden mt-[3vh] px-[6vw] md:px-[12vw] py-[10vh] w-full min-h-[100vh]">
       <div className="w-full md:w-2/4 flex flex-row md:flex-col gap-4 h-full flex-wrap ">
         <div className="w-full h-2/5  flex flex-row gap-4 ">
           <div className="w-full md:w-1/2 h-full  flex flex-row md:flex-col gap-6 md:gap-2 overflow-hidden">
@@ -85,33 +85,39 @@ export const ServiceCategory = () => {
 export const TopExperts = () => {
   const [activeNo, setActiveNo] = useState(0);
   return (
-    <div className="relative w-full h-[90vh] bg-[#F2F2F2] px-[12vw] overflow-hidden">
+    <div className="relative w-full h-auto bg-[#F2F2F2] px-[6vw] md:px-[12vw] overflow-hidden pt-[2vw]">
       <Link
         to={"/experts"}
-        className="text-[#C5C3C3] text-[6.5vw] font-bold flex justify-end decoration-transparent"
+        className="text-[#C5C3C3] text-[7.5vw] md:text-[6.5vw] font-bold flex justify-end decoration-transparent"
       >
         <span className="text-[18px] text-black flex items-end py-[1.5vw] px-4 underline">
           see more
         </span>
         EXPERTS
       </Link>
-      <div className="flex flex-row mb-20 gap-8 w-full items-start mt-4">
+      <div className="flex flex-row mb-20 gap-5 md:gap-8 w-full  mt-4">
         <div
           onMouseOver={() => setActiveNo(0)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 0 ? "active" : ""
-          } expertDiv relative flex flex-col gap-4 w-1/2 h-[65vh] items-start bg-[url('https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
+            activeNo === 0 ? "active" : "w-1/2 h-[40vh] md:h-[65vh]"
+          } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
             {activeNo === 0 ? (
-              <div>
-                <h3 className="absolute right-4 text-[20px] bottom-6">
+              <div className=" absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[2vw] md:text-[1.5vw]">
                   Bhavesh Bhanusali
                 </h3>
-                <h3 className="absolute right-4 text-[16px] bottom-0">
-                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                <h3 className=" justify-end text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[2vw] md:text-[1.4vw]" /> 4.9 /5
+                </h3>
+                <h3 className="flex items-center justify-end mt-2 md:mt-4">
+                  <span className="underline text-[1.4vw]  md:text-[1.1vw]">
+                    See More
+                  </span>{" "}
+                  <GrFormNextLink className="text-[1.8vw] md:text-[1.4vw] mt-1" />
                 </h3>
               </div>
             ) : null}
@@ -121,18 +127,24 @@ export const TopExperts = () => {
           onMouseOver={() => setActiveNo(1)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 1 ? "active" : ""
-          } expertDiv w-1/2 h-[65vh] bg-[url('https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
+            activeNo === 1 ? "active" : "w-1/2 h-[40vh] md:h-[65vh]"
+          } expertDiv bg-[url('https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
             {activeNo === 1 ? (
-              <div>
-                <h3 className="absolute right-4 text-[20px] bottom-6">
+              <div className=" absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[2vw] md:text-[1.5vw]">
                   Bhavesh Bhanusali
                 </h3>
-                <h3 className="absolute right-4 text-[16px] bottom-0">
-                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                <h3 className=" justify-end text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[2vw] md:text-[1.4vw]" /> 4.9 /5
+                </h3>
+                <h3 className="flex items-center justify-end mt-2 md:mt-4">
+                  <span className="underline text-[1.4vw]  md:text-[1.1vw]">
+                    See More
+                  </span>{" "}
+                  <GrFormNextLink className="text-[1.8vw] md:text-[1.4vw] mt-1" />
                 </h3>
               </div>
             ) : null}
@@ -142,18 +154,24 @@ export const TopExperts = () => {
           onMouseOver={() => setActiveNo(2)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 2 ? "active" : ""
-          } expertDiv relative flex flex-col gap-4 w-1/2 h-[65vh] items-start bg-[url('https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww')] bg-center`}
+            activeNo === 2 ? "active" : "w-1/2 h-[40vh] md:h-[65vh]"
+          } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww')] bg-center`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
             {activeNo === 2 ? (
-              <div>
-                <h3 className="absolute right-4 text-[20px] bottom-6">
+              <div className=" absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[2vw] md:text-[1.5vw]">
                   Bhavesh Bhanusali
                 </h3>
-                <h3 className="absolute right-4 text-[16px] bottom-0">
-                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                <h3 className=" justify-end text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[2vw] md:text-[1.4vw]" /> 4.9 /5
+                </h3>
+                <h3 className="flex items-center justify-end mt-2 md:mt-4">
+                  <span className="underline text-[1.4vw]  md:text-[1.1vw]">
+                    See More
+                  </span>{" "}
+                  <GrFormNextLink className="text-[1.8vw] md:text-[1.4vw] mt-1" />
                 </h3>
               </div>
             ) : null}
@@ -163,18 +181,20 @@ export const TopExperts = () => {
           onMouseOver={() => setActiveNo(3)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 3 ? "active" : ""
-          } expertDiv relative flex flex-col gap-4 w-1/2 h-[65vh] items-start bg-[url('https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-center bg-cover`}
+            activeNo === 3 ? "active" : "w-1/2 h-[40vh] md:h-[65vh]"
+          } expertDiv relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-center bg-cover hidden md:flex`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
             {activeNo === 3 ? (
-              <div>
-                <h3 className="absolute right-4 text-[20px] bottom-6">
-                  Bhavesh Bhanusali
+              <div className=" absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[1.5vw]">Bhavesh Bhanusali</h3>
+                <h3 className=" justify-end text-[1.2vw] flex gap-1 items-center -my-3">
+                  <CiStar className="text-[1.4vw]" /> 4.9 /5
                 </h3>
-                <h3 className="absolute right-4 text-[16px] bottom-0">
-                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                <h3 className="flex items-center justify-end">
+                  <span className="underline  text-[1.1vw]">See More</span>{" "}
+                  <GrFormNextLink className="text-[1.4vw] mt-1" />
                 </h3>
               </div>
             ) : null}
@@ -184,18 +204,20 @@ export const TopExperts = () => {
           onMouseOver={() => setActiveNo(4)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 4 ? "active" : ""
-          } expertDiv relative flex flex-col gap-4 w-1/2 h-[65vh] items-start bg-[url('https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D')] bg-center bg-cover`}
+            activeNo === 4 ? "active" : "w-1/2 h-[40vh] md:h-[65vh] "
+          } expertDiv relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D')] bg-center bg-cover hidden md:flex`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
             {activeNo === 4 ? (
-              <div>
-                <h3 className="absolute right-4 text-[20px] bottom-6">
-                  Bhavesh Bhanusali
+              <div className=" absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[1.5vw]">Bhavesh Bhanusali</h3>
+                <h3 className=" justify-end text-[1.2vw] flex gap-1 items-center -my-3">
+                  <CiStar className="text-[1.4vw]" /> 4.9 /5
                 </h3>
-                <h3 className="absolute right-4 text-[16px] bottom-0">
-                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                <h3 className="flex items-center justify-end">
+                  <span className="underline  text-[1.1vw]">See More</span>{" "}
+                  <GrFormNextLink className="text-[1.4vw] mt-1" />
                 </h3>
               </div>
             ) : null}
@@ -207,7 +229,7 @@ export const TopExperts = () => {
 };
 export const AboutUX = () => {
   return (
-    <div className="relative w-full min-h-auto py-[4vw] ">
+    <div className="relative w-full min-h-auto py-[4vw]">
       <div className="flex w-full h-auto py-18 px-32 gap-8 items-center sm:flex-wrap md:flex-nowrap">
         <h3 className="relative w-1/3 text-gray-700 font-extrabold text-[3.2vw]">
           Helping millions grow better.
@@ -266,7 +288,7 @@ export const Story = () => {
 };
 export const Testimonial = () => {
   return (
-    <div className="w-full h-full px-1">
+    <div className="relative w-full h-full px-1">
       <div className="mt-[5vw] relative rounded-t-xl rounded-b-none w-full h-[680px] overflow-hidden flex flex-col items-center justify-start  box-border bg-[url('https://images.unsplash.com/photo-1664575602276-acd073f104c1?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-no-repeat bg-[top] text-[36px] text-white ">
         <div className="w-full h-full backdrop-brightness-[60%] py-14 px-6 rounded-t-xl rounded-b-none overflow-hidden flex flex-col items-center justify-start  box-border">
           <div className="flex flex-col items-center -mt-8 h-40 justify-start gap-6">
@@ -278,7 +300,7 @@ export const Testimonial = () => {
           </div>
           <div className="relative w-full h-full flex flex-row items-center justify-between gap-8">
             <div className="absolute w-full h-full flex flex-row items-center justify-center overflow-hidden">
-              <div className="relative w-1/2  h-[500px] rounded-xl overflow-hidden flex flex-col items-start justify-start gap-6 py-8 px-6 box-border">
+              <div className="relative w-full md:w-1/2  h-[500px] rounded-xl overflow-hidden flex flex-col items-start justify-start gap-6 py-8 px-6 box-border">
                 <div className="relative w-full h-[65%]  flex flex-row items-start justify-start gap-8">
                   <div className="relative w-1/2 h-full bg-white text-black flex flex-col items-start justify-start rounded-md">
                     <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
@@ -352,7 +374,7 @@ export const Testimonial = () => {
                   </div>
                 </div>
               </div>
-              <div className="relative w-1/2  h-[500px] rounded-xl overflow-hidden flex flex-col items-start justify-start gap-6 py-8 px-6 box-border">
+              <div className="relative w-1/2  h-[500px] rounded-xl overflow-hidden  flex-col items-start justify-start gap-6 py-8 px-6 box-border hidden md:flex">
                 <div className="relative w-full h-[65%]  flex flex-row items-start justify-start gap-8">
                   <div className="relative w-1/2 h-full bg-white text-black flex flex-col items-start justify-start rounded-md">
                     <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
