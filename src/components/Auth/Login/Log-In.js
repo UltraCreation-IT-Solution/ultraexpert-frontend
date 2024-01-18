@@ -13,7 +13,7 @@ const LogIn = () => {
   if (!email) setEmail("Email");
   if (!password) setPassword("Password");
   if (!mobileNo) setMobileNo("Enter Your Mobile No.");
-  const onFrameContainer3Click = useCallback(() => {
+  const onRegisterClick = useCallback(() => {
     // Please sync "Wireframe - 4" to the project
   }, []);
 
@@ -41,7 +41,8 @@ const LogIn = () => {
       });
   };
 
-  const onLoginWithMobileClick = () => {
+  const onLoginWithMobileClick = (e) => {
+    e.preventDefault();
     setLoginWithOtp(!loginWithOtp);
     if (loginWithOtp) setLoginText("Login with OTP");
     else setLoginText("Login with Email");
@@ -50,11 +51,11 @@ const LogIn = () => {
   return (
     <div className="relative bg-white w-[100vw] h-[100vh] overflow-hidden text-left text-lg text-gray-100 font-montserrat">
       <div
-        className="absolute top-[calc(50%_-_332px)] left-[calc(50%_-_506px)] bg-white shadow-[1px_1px_4px_rgba(0,_0,_0,_0.15)] box-border w-[1012px] h-[665px] overflow-hidden border-[0.3px]
+        className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-white shadow-2xl drop-shadow-2xl box-border w-[1012px] h-[665px] overflow-hidden border-[0.3px]
        border-solid border-black scale-[0.8]"
       >
         <img
-          className="absolute top-[calc(50%_-_332.5px)] left-[0px] w-[506px] h-[665px] overflow-hidden object-cover"
+          className="hidden  md:block left-[0px] w-[35vw] h-[100vh] overflow-hidden object-cover"
           alt=""
           src="/frame-19@2x.png"
         />
@@ -114,8 +115,8 @@ const LogIn = () => {
         </form>
         <Link
           to={"/register"}
-          className="absolute top-[560px] left-[584px] rounded-8xs bg-red-500 shadow-[0px_1px_4px_rgba(0,_0,_0,_0.25)] w-[229px] h-[63px] overflow-hidden cursor-pointer text-5xl text-white"
-          onClick={onFrameContainer3Click}
+          className="absolute top-[560px] left-[584px] rounded-8xs bg-red-400 hover:bg-red-500 shadow-[0px_1px_4px_rgba(0,_0,_0,_0.25)] w-[229px] h-[63px] overflow-hidden cursor-pointer text-5xl text-white"
+          onClick={onRegisterClick}
         >
           <b className="absolute top-[calc(50%_-_14.5px)] left-[calc(50%_-_47.5px)]">
             Sign up
