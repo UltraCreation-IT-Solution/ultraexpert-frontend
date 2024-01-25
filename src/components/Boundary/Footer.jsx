@@ -1,44 +1,53 @@
 import { FaLinkedin, FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
 import React from "react";
 
-export const Footer = () => {
+const Footer = () => {
   return (
-    <div className="relative w-full h-auto bg-[#F2F2F2] mt-[3vw] px-[8vw] py-[2vw] ">
-      <div className="flex text-[#C5C3C3] text-[8vw] w-full font-bold text-center justify-between  items-center ">
-        UltraXpert
-        <span className="text-black text-[1.4vw] text-right">
-          Think Creative, Do Effective
-        </span>
+    <div className="absolute top-[5380px] bg-black flex flex-col justify-between w-full h-[520px] items-start pt-12  pl-16">
+      <div className="flex flex-row h-16 gap-10 w-1/3 items-start">
+        <div className="text-[44px] font-extrabold font-montserrat text-white">
+          ultraXpert
+        </div>
+        <div className="text-white font-normal mt-3">
+          think creative,
+          <br /> do effective
+        </div>
       </div>
-      <div className="flex flex-col md:flex-row mt-[1.8vw] md:justify-between">
-        <div className="w-11/12 md:w-1/2 mb-[2vw] md:mb-0  md:px-4 font-medium text-[1.8vw] md:text-[1.2vw] text-justify">
-          At UltraCreation, our mission is to transcend conventional boundaries
-          and empower businesses with cutting-edge technological solutions. We
-          are dedicated to being the catalyst for our clients' digital
-          transformation, facilitating seamless connectivity, and maximizing
-          their potential in the ever-evolving digital landscape.
-          <div className="mt-[1.4vw] font-bold text-[2.2vw]">
-            Helping Millions, Grow Better
+      <div className="flex flex-row justify-between text-[18px] w-full items-start pb-14">
+        <div className="flex flex-col justify-between w-20 h-48 items-start">
+          <div className="text-xl text-white">Home</div>
+          <div className="text-xl text-white">Services</div>
+          <div className="text-xl text-white">Experts</div>
+          <div className="text-xl text-white">Blog</div>
+          <div id="About" className="text-xl text-white">
+            About
           </div>
         </div>
-        <div className=" w-2/3 md:w-1/2 flex justify-between md:justify-normal md:gap-8">
-          <div className="w-1/3 list-none flex flex-col gap-4 font-medium text-[1.8vw] md:text-[1.2vw] ml-[-2vw] md:ml-[6vw] overflow-hidden">
-            <li className="underline  pl-5 hover:scale-105">Home</li>
-            <li className="underline pl-5 hover:scale-105">Experts</li>
-            <li className="underline pl-5 hover:scale-105">Blog</li>
-            <li className="underline pl-5 hover:scale-105">About</li>
-            <li className="underline pl-5 hover:scale-105">Service</li>
+        <div className="flex flex-col w-3/4 h-full  justify-between">
+          <div className="flex justify-center w-full h-full gap-40 pr-32">
+            <div className="flex flex-col border-t border-solid border-white w-2/3 h-28 justify-between pt-8">
+              <div className="text-[22px] font-semibold text-white">Email</div>
+              <div className="text-[18px] font-extralight text-white">
+                Bhaveshbhanusalip884@gmail.com
+              </div>
+            </div>
+            <div className="flex flex-col border-t border-solid border-white w-2/3 h-28 justify-between pt-8">
+              <div className="text-[22px] font-semibold text-white">
+                Contact
+              </div>
+              <div className="text-[18px] font-extralight text-white">
+                1234567890
+              </div>
+            </div>
           </div>
-          <div className="w-2/3 ml-[-6vw] flex flex-col justify-between text-[1.8vw] md:text-[1.2vw]">
-            <div className="w-full border-t-2 border-black border-solid pt-2">
-              <b>Email:</b> <br /> Bhaveshbhanusali1@gmail.com
-            </div>
-            <div className="w-full border-t-2 border-black border-solid pt-2">
-              <b>Contact:</b> <br /> 1234567890
-            </div>
-            <div className="w-full border-t-2 border-black border-solid pt-2">
-              <b>Follow:</b> <br /> <FaLinkedin /> <FaFacebook />{" "}
-              <FaInstagram /> <FaTwitter />
+
+          <div className="flex flex-col border-t border-solid border-white w-[36%] h-40 justify-between pt-8 ">
+            <div className="text-[22px] font-semibold text-white">Follow</div>
+            <div className="flex flex-row gap-8 text-white">
+              <FaLinkedin className="text-[24px]" />
+              <FaFacebook className="text-[24px]" />
+              <FaInstagram className="text-[24px]" />
+              <FaTwitter className="text-[24px]" />
             </div>
           </div>
         </div>
