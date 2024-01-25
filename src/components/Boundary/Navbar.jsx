@@ -11,14 +11,17 @@ const Navbar = () => {
         showNav ? "h-[60vh]" : null
       } overflow-hidden flex flex-col md:flex-row items-center justify-between px-[20px] box-border font-montserrat text-[24px]`}
     >
-      <div
-        className={`${showNav ? "mt-6" : null} flex ml-[-20px] mt-4 md:mt-0 `}
+      <Link
+        to={"/"}
+        className={`${
+          showNav ? "mt-6" : null
+        } flex ml-[-20px] mt-4 md:mt-0 decoration-transparent `}
       >
         <img src={logo} className="w-[80px] h-[60px] " alt="logo" />
         <h2 className="ml-[-10px] my-4 relative text-inherit font-extrabold font-montserrat">
           UltraXpert
         </h2>
-      </div>
+      </Link>
       <div>
         <nav
           className={`flex ${
@@ -27,7 +30,12 @@ const Navbar = () => {
               : "hidden flex-row gap-[3.5vw]"
           } items-center font-montserrat justify-center h-auto  mr-6 text-[16px]  md:flex`}
         >
-          <div className="relative font-medium">Services</div>
+          <Link
+            to={"/services"}
+            className="relative font-medium decoration-transparent text-black"
+          >
+            Services
+          </Link>
           <Link
             to={"experts"}
             className="relative font-medium decoration-transparent text-black"
