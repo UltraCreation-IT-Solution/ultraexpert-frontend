@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="responsive my-[3vw] bg-black flex flex-col justify-between w-full h-[520px] items-start pt-12  pl-16">
+    <div className="absolute top-[5380px] bg-black flex flex-col justify-between w-full h-[520px] items-start pt-12  pl-16">
       <div className="flex flex-row h-16 gap-10 w-1/3 items-start">
         <div className="text-[44px] font-extrabold font-montserrat text-white">
           ultraXpert

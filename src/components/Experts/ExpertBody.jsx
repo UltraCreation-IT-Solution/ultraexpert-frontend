@@ -7,6 +7,41 @@ import { categories } from "../../constant";
 import { Link } from "react-router-dom";
 import { TopExperts } from "../Landing/Landing";
 
+let items = 20;
+const ExpertCategories = () => {
+  const [allCategories, setAllCategories] = useState(false);
+  return (
+    <>
+      <div className="px-4 py-2">
+        <h1
+          className="text-gray-600 cursor-pointer hover:underline flex items-center"
+          onClick={() =>
+            allCategories ? setAllCategories(false) : setAllCategories(true)
+          }
+        >
+          Browse all categories <IoIosArrowRoundForward size={40} />
+        </h1>
+        <div className="mt-5 flex flex-wrap gap-6">
+          {allCategories
+            ? categories.map((category, index) => (
+                <div className="bg-slate-100 px-3 py-2 rounded-2xl cursor-pointer">
+                  {category}
+                </div>
+              ))
+            : categories.map(
+                (category, index) =>
+                  index < items && (
+                    <div className="bg-slate-100 px-3 py-2 rounded-2xl cursor-pointer">
+                      {category}
+                    </div>
+                  )
+              )}
+        </div>
+      </div>
+    </>
+  );
+};
+
 export const TopThreeExperts = () => {
   const [activeNo, setActiveNo] = useState(0);
   return (
@@ -136,6 +171,8 @@ export const ExpertList = ({ items = 10 }) => {
 const ExpertBody = () => {
   return (
     <>
+      <ExpertCategories />
+      <TopExperts />
       <ExpertList items={20} />
     </>
   );

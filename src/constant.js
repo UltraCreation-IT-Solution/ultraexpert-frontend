@@ -115,23 +115,3 @@ export const categories = [
   "Firebase",
   "Typescript",
 ];
-export const searchCategories = [
-  "App",
-  "Web Development",
-  "Development",
-  "HTML",
-  "CSS",
-  "JavaScript",
-  "ReactJS",
-  "Redux",
-  "Angular",
-  "Vue",
-  "Flutter",
-  "React Native",
-  "NextJS",
-  "NodeJS",
-  "ExpressJS",
-  "MongoDB",
-  "Firebase",
-  "Typescript",
-];
