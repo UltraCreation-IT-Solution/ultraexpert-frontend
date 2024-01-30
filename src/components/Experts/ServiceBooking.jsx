@@ -3,34 +3,34 @@ import Navbar from "../Boundary/Navbar";
 import { Link } from "react-router-dom";
 const ServiceBooking = () => {
   return (
-    <div>
+    <div className=" w-[85%] h-[100vh] m-auto md:flex md:justify-center md:items-center">
       <Navbar />
 
-      <div className="flex items-center justify-around m-auto w-[85%] mt-[80px] py-[2vw]">
-        <div className="w-[35%] flex flex-col items-center">
-          <div className="text-[3vw] font-extrabold text-center">
+      <div className="md:flex items-center justify-around  mt-[80px] py-[2vw]">
+        <div className="w-full md:w-[35%] flex flex-col items-center">
+          <div className="text-[7.5vw] sm:text-[6vw] md:text-[3vw] font-extrabold text-center">
             Confirm Your Booking!
           </div>
-          <p className="text-gray-700 my-[2.3vw] text-center">
+          <p className="text-gray-700 my-[2.3vw] text-center text-[3.5vw] sm:text-[2.6vw] md:text-[1.6vw]">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
             laborum dolores nulla, iste perferendis accusantium, fugiat
             architecto molestiae itaque fugit, voluptatibus officia doloribus.
           </p>
           <div className="flex gap-[.5vw]">
             <Link to="">
-              <button className="px-[2vw] py-[0.5vw] text-white bg-black rounded-lg text-[2.4vw] md:text-[1.2vw]">
+              <button className="px-[2.7vw] py-[1vw] md:px-[2vw] md:py-[0.6vw] text-white bg-black rounded-sm sm:rounded-lg text-[2.2vw] md:text-[1vw]">
                 View service
               </button>
             </Link>
             <Link to="">
-              <button className="px-[2vw] py-[0.5vw] text-black bg-white border font-semibold rounded-lg text-[2.4vw] md:text-[1.2vw]">
+              <button className="px-[2.7vw] py-[1vw] md:px-[2vw] md:py-[0.6vw] text-black bg-white border font-semibold rounded-sm sm:rounded-lg text-[2.2vw] md:text-[1vw]">
                 Back to services
               </button>
             </Link>
           </div>
         </div>
 
-        <div className="w-[40%] bg-[#F2F2F2] py-[1.5vw] px-[2vw]">
+        <div className="w-full md:w-[40%] bg-[#F2F2F2] py-[1.5vw] px-[2vw]">
 
             <div className="text-[1.5vw] font-bold ">
               Review Details
