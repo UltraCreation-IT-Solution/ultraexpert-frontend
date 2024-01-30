@@ -19,7 +19,7 @@ import { motion } from "framer-motion";
 
 export const ServiceCategory = () => {
   return (
-    <div className="relative flex flex-col md:flex-row gap-4 overflow-hidden mt-[3vh] px-[6vw] md:px-[12vw] py-[10vh] w-full min-h-[100vh]">
+    <div className="relative flex flex-col md:flex-row gap-4 overflow-hidden  px-[6vw] md:px-[11vw] pt-[10vh] w-full min-h-[100vh] mb-[3vw] md:mb-[1vw] lg:mb-[5vw]">
       <div className="w-full md:w-2/4 flex flex-row md:flex-col gap-4 h-full flex-wrap ">
         <div className="w-full h-2/5  flex flex-row gap-4 ">
           <div className="w-full md:w-1/2 h-full  flex flex-row md:flex-col gap-6 md:gap-2 overflow-hidden">
@@ -95,93 +95,144 @@ export const TopExperts = () => {
       >
         EXPERTS
       </Link>
-      <div className="flex flex-row mb-[12.5vw] sm:mb-[10vw] md:mb-[5vw] gap-5 md:gap-8 w-full  mt-4 ">
+      <div className="flex flex-col sm:flex-row mb-[12.5vw] sm:mb-[10vw] md:mb-[5vw] gap-5 md:gap-8 w-full  mt-4 ">
         <div
           onMouseOver={() => setActiveNo(0)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 0 ? "active" : "w-1/2 h-[36vh] md:h-[65vh]"
+            activeNo === 0 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh]"
           } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
         >
-          <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
+          <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[60%] ">
             <h2>Web Developer</h2>
             {activeNo === 0 ? (
               <div className=" absolute right-4 justify-start  bottom-0">
-                <h3 className=" justify-end text-[2vw] md:text-[1.5vw]">
+                <h3 className=" justify-end text-[3.8vw] sm:text-[2vw] md:text-[1.5vw]">
                   Bhavesh Bhanusali
                 </h3>
-                <h3 className=" justify-end text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
-                  <CiStar className="text-[2vw] md:text-[1.4vw]" /> 4.9 /5
+                <h3 className=" justify-end text-[2.6vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[3.2vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
+                  4.9 /5
                 </h3>
                 <h3 className="flex items-center justify-end mt-2 md:mt-4">
-                  <span className="underline text-[1.4vw]  md:text-[1.1vw]">
+                  <span className="underline text-[2.4vw] sm:text-[1.4vw]  md:text-[1.1vw]">
                     See More
                   </span>{" "}
-                  <GrFormNextLink className="text-[1.8vw] md:text-[1.4vw] mt-1" />
+                  <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
                 </h3>
               </div>
-            ) : null}
+            ) : (
+              <div className="sm:invisible absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[3.8vw] sm:text-[2vw] md:text-[1.5vw]">
+                  Bhavesh Bhanusali
+                </h3>
+                <h3 className=" justify-end text-[2.6vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[3.2vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
+                  4.9 /5
+                </h3>
+                <h3 className="flex items-center justify-end mt-2 md:mt-4">
+                  <span className="underline text-[2.4vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    See More
+                  </span>{" "}
+                  <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
+                </h3>
+              </div>
+            )}
           </div>
         </div>
         <div
           onMouseOver={() => setActiveNo(1)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 1 ? "active" : "w-1/2 h-[36vh] md:h-[65vh]"
+            activeNo === 1 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh]"
           } expertDiv bg-[url('https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
             {activeNo === 1 ? (
               <div className=" absolute right-4 justify-start  bottom-0">
-                <h3 className=" justify-end text-[2vw] md:text-[1.5vw]">
+                <h3 className=" justify-end text-[3.8vw] sm:text-[2vw] md:text-[1.5vw]">
                   Bhavesh Bhanusali
                 </h3>
-                <h3 className=" justify-end text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
-                  <CiStar className="text-[2vw] md:text-[1.4vw]" /> 4.9 /5
+                <h3 className=" justify-end text-[2.6vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[3.2vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
+                  4.9 /5
                 </h3>
                 <h3 className="flex items-center justify-end mt-2 md:mt-4">
-                  <span className="underline text-[1.4vw]  md:text-[1.1vw]">
+                  <span className="underline text-[2.4vw] sm:text-[1.4vw]  md:text-[1.1vw]">
                     See More
                   </span>{" "}
-                  <GrFormNextLink className="text-[1.8vw] md:text-[1.4vw] mt-1" />
+                  <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
                 </h3>
               </div>
-            ) : null}
+            ) : (
+              <div className="sm:invisible absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[3.8vw] sm:text-[2vw] md:text-[1.5vw]">
+                  Bhavesh Bhanusali
+                </h3>
+                <h3 className=" justify-end text-[2.6vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[3.2vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
+                  4.9 /5
+                </h3>
+                <h3 className="flex items-center justify-end mt-2 md:mt-4">
+                  <span className="underline text-[2.4vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    See More
+                  </span>{" "}
+                  <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
+                </h3>
+              </div>
+            )}
           </div>
         </div>
         <div
           onMouseOver={() => setActiveNo(2)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 2 ? "active" : "w-1/2 h-[36vh] md:h-[65vh]"
+            activeNo === 2 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh]"
           } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww')] bg-center`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
             {activeNo === 2 ? (
               <div className=" absolute right-4 justify-start  bottom-0">
-                <h3 className=" justify-end text-[2vw] md:text-[1.5vw]">
+                <h3 className=" justify-end text-[3.8vw] sm:text-[2vw] md:text-[1.5vw]">
                   Bhavesh Bhanusali
                 </h3>
-                <h3 className=" justify-end text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
-                  <CiStar className="text-[2vw] md:text-[1.4vw]" /> 4.9 /5
+                <h3 className=" justify-end text-[2.6vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[3.2vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
+                  4.9 /5
                 </h3>
                 <h3 className="flex items-center justify-end mt-2 md:mt-4">
-                  <span className="underline text-[1.4vw]  md:text-[1.1vw]">
+                  <span className="underline text-[2.4vw] sm:text-[1.4vw]  md:text-[1.1vw]">
                     See More
                   </span>{" "}
-                  <GrFormNextLink className="text-[1.8vw] md:text-[1.4vw] mt-1" />
+                  <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
                 </h3>
               </div>
-            ) : null}
+            ) : (
+              <div className="sm:invisible absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[3.8vw] sm:text-[2vw] md:text-[1.5vw]">
+                  Bhavesh Bhanusali
+                </h3>
+                <h3 className=" justify-end text-[2.6vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[3.2vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
+                  4.9 /5
+                </h3>
+                <h3 className="flex items-center justify-end mt-2 md:mt-4">
+                  <span className="underline text-[2.4vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    See More
+                  </span>{" "}
+                  <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
+                </h3>
+              </div>
+            )}
           </div>
         </div>
         <div
           onMouseOver={() => setActiveNo(3)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 3 ? "active" : "w-1/2 h-[36vh] md:h-[65vh]"
+            activeNo === 3 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh]"
           } expertDiv relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-center bg-cover hidden md:flex`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
@@ -204,7 +255,7 @@ export const TopExperts = () => {
           onMouseOver={() => setActiveNo(4)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 4 ? "active" : "w-1/2 h-[36vh] md:h-[65vh] "
+            activeNo === 4 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh] "
           } expertDiv relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D')] bg-center bg-cover hidden md:flex`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
@@ -224,8 +275,9 @@ export const TopExperts = () => {
           </div>
         </div>
       </div>
-      <div className="text-[2.4vw] md:text-[2vw] text-black flex items-cemter justify-end underline mt-[-10vw] sm:mt-[-8vw] md:mt-[-3vw]">
-        See More Experts <GrFormNextLink className="text-[1.4vw]" />
+      <div className="text-[2.4vw] md:text-[1.6vw] text-black flex items-cemter justify-end underline mt-[-10vw] sm:mt-[-8vw] md:mt-[-3vw]">
+        See More Experts
+        <GrFormNextLink className="mt-[0.5vw] text-[2vw] md:text-[1.4vw]" />
       </div>
     </div>
   );

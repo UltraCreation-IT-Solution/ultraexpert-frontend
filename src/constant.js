@@ -117,13 +117,12 @@ export const categories = [
 ];
 export const searchCategories = [
   "App",
-  "Web Development",
-  "Development",
   "HTML",
   "CSS",
   "JavaScript",
   "ReactJS",
   "Redux",
+  "Web Development",
   "Angular",
   "Vue",
   "Flutter",
@@ -134,6 +133,16 @@ export const searchCategories = [
   "MongoDB",
   "Firebase",
   "Typescript",
+  "DSA",
+  "c++",
+  "Java",
+  "Python",
+  "Cookie",
+  "Mongoose",
+  "Development",
+  "Product Photography",
+  "Video Editing",
+  "Creative Design",
 ];
 export const profileObj = [
   {
@@ -249,67 +258,183 @@ export const serviceObj = [
   {
     banner:
       "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design modern minimalist logo design",
+    title: "I will design a modern logo for your web application",
     price: "$10",
     rating: 4.9,
     reviews: 10,
+    expertName: "Bhavesh Bhanusali",
     delivery: "1 day",
     category: "Logo Design",
     logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
   },
   {
     banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/326810521/original/d27d67d8fa4834874144e3f4eab5dd718895e63b.png",
-    title: "I will design modern minimalist logo design",
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
     price: "$10",
     rating: 4.9,
     reviews: 10,
+    expertName: "Bhavesh Bhanusali",
     delivery: "1 day",
     category: "Logo Design",
     logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
   },
   {
     banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/345627053/original/ff537ea5746e353b0666bcb6ac4fed248bcea8eb.jpg",
-    title: "I will design modern minimalist logo design",
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
     price: "$10",
     rating: 4.9,
     reviews: 10,
+    expertName: "Bhavesh Bhanusali",
     delivery: "1 day",
     category: "Logo Design",
     logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
   },
   {
     banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/118205461/original/536704c465ca5279602f479b581e2c8d11bcb518.png",
-    title: "I will design modern minimalist logo design",
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
     price: "$10",
     rating: 4.9,
     reviews: 10,
+    expertName: "Bhavesh Bhanusali",
     delivery: "1 day",
     category: "Logo Design",
     logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
   },
   {
     banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/118205461/original/536704c465ca5279602f479b581e2c8d11bcb518.png",
-    title: "I will design modern minimalist logo design",
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
     price: "$10",
     rating: 4.9,
     reviews: 10,
+    expertName: "Bhavesh Bhanusali",
     delivery: "1 day",
     category: "Logo Design",
     logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
   },
   {
     banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/118205461/original/536704c465ca5279602f479b581e2c8d11bcb518.png",
-    title: "I will design modern minimalist logo design",
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
     price: "$10",
     rating: 4.9,
     reviews: 10,
+    expertName: "Bhavesh Bhanusali",
     delivery: "1 day",
     category: "Logo Design",
     logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+];
+export const blogObj = [
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
   },
 ];

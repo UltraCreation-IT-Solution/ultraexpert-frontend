@@ -10,6 +10,7 @@ import Register from "../src/components/Auth/Register/Register";
 import Landing from "./components/Landing/Landing";
 import Expert from "./components/Experts/Expert";
 import Service from "./components/Services/Service";
+import Blog from "./components/Blogs/Blogs/Blog";
 
 function App() {
   const action = useNavigationType();
@@ -30,6 +31,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/experts" element={<Expert />} />
         <Route path="/services" element={<Service />} />
+        <Route path="/blog" element={<Blog />} />
       </Routes>
     </>
   );
