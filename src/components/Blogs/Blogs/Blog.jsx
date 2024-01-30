@@ -6,6 +6,7 @@ import Footer from "../../Boundary/Footer";
 import { CiBookmark } from "react-icons/ci";
 import Headbg from "../../../assets/images/HeadBg.png";
 import Subheader from "../../../utilities/Subheader";
+import { Link } from "react-router-dom";
 
 const Blogs = () => {
   return (
@@ -34,9 +35,12 @@ const Blogs = () => {
                   </div>
                   <div className="text-[0.9vw] mb-[1vw]">{item.detail}</div>
                   <div className="w-full flex  text-white justify-between items-center">
-                    <div className="w-[90%] flex justify-center items-center bg-black text-center py-[0.5vw] font-semibold rounded-sm text-[1.12vw]">
+                    <Link
+                      to={"blogdetail"}
+                      className="w-[90%] flex justify-center items-center text-white bg-black text-center py-[0.5vw] font-semibold rounded-sm text-[1.12vw] decoration-transparent"
+                    >
                       Read More
-                    </div>
+                    </Link>
                     <CiBookmark className="w-[3.5vw] h-[3vw] text-black" />
                   </div>
                 </div>

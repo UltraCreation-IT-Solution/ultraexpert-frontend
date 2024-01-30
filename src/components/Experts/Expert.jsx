@@ -7,6 +7,7 @@ import { TopExperts } from "../Landing/Landing";
 import { profileObj } from "../../constant";
 import Subheader from "../../utilities/Subheader";
 import { FaRegHeart } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export const SearchByCategories = () => {
   const [width, setWidth] = useState(0);
@@ -77,9 +78,12 @@ export const ProfileCards = () => {
               {item.designation}
             </p>
             <p className="mb-[0.2vw]  mt-0 font-semibold">60 Meetings</p>
-            <div className=" w-full py-[0.8vw] rounded-lg bg-[#262626] text-white mt-0 mb-0">
+            <Link
+              to={"expertProfile"}
+              className=" w-full py-[0.8vw] rounded-lg bg-[#262626] text-white mt-0 mb-0 decoration-transparent"
+            >
               See profile
-            </div>
+            </Link>
           </div>
         </div>
       </div>
