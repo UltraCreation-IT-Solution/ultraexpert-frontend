@@ -16,6 +16,7 @@ import webdesignservice from "../../assets/images/webDesignService.png";
 import musicAudio from "../../assets/images/musicAudio.png";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import PreLoader from "../../subsitutes/PreLoader";
 
 export const ServiceCategory = () => {
   return (
@@ -543,6 +544,15 @@ export const Blog = () => {
   );
 };
 const Landing = () => {
+  const [preLoader, setPreLoder] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setPreLoder(false);
+    }, 2500);
+  }, []);
+  if (preLoader) {
+    return <PreLoader />;
+  }
   return (
     <>
       <Navbar />
