@@ -4,6 +4,8 @@ import Footer from "../Boundary/Footer";
 import { searchCategories, serviceObj } from "../../constant";
 import { motion } from "framer-motion";
 import { GrFormNextLink, GrStar } from "react-icons/gr";
+import { ServiceCategory } from "../Landing/Landing";
+import Subheader from "../../utilities/Subheader";
 
 const Service = () => {
   const [width, setWidth] = useState(0);
@@ -15,14 +17,17 @@ const Service = () => {
   return (
     <div>
       <Navbar />
-      <div className="w-full h-auto mt-[80px] px-[7vw] md:px-[10vw]">
-        <div className=" relative w-full shrink-0 h-auto text-[#262626] font-bold text-[2vw]">
+      <div className="mt-[90px] px-[7vw] sm:px-[10vw]">
+        <Subheader heading={"Services"} />
+      </div>
+      <div className="w-full h-auto px-[7vw] md:px-[10vw] mt-[3vw] ">
+        <div className=" relative w-full shrink-0 h-auto  text-[#262626] font-bold text-[4.2vw] sm:text-[3.5vw] md:text-[2vw]">
           Most Popular Services...
         </div>
         <motion.div
           ref={carosel}
           whileTap={{ cursor: "grabbing" }}
-          className="cursor-grab overflow-hidden w-full h-full flex flex-row py-2 mt-[-1vw] md:mt-0 "
+          className="cursor-grab overflow-hidden w-full h-full flex flex-row py-2  md:mt-0 "
         >
           <motion.div
             drag="x"
@@ -33,18 +38,18 @@ const Service = () => {
               return (
                 <motion.div
                   key={index}
-                  className=" text-black flex flex-col justify-center bg-white rounded-lg shadow-lg drop-shadow-xl my-[1vw] px-[1vw]"
+                  className=" text-black flex flex-col justify-center border-[#e1e1e1] border border-solid rounded-lg shadow-md font-bold my-[0.6vw] px-[1.2vw] md:px-[0.8vw]"
                 >
                   <div className="flex justify-center items-center ">
                     <img
-                      className="w-[3vw] h-[3vw] object-cover rounded-md mr-[1vw]"
+                      className="w-[5.5vw] h-[5.5vw] sm:w-[5vw] sm:h-[5vw] md:w-[4vw] md:h-[4vw] lg:w-[2vw] lg:h-[2vw] object-cover rounded-md mr-[1vw]"
                       src="https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png"
                       alt=""
                     />
-                    <h2 className="text-[1.4vw] font-semibold text-center py-[0.7vw] shrink-0">
+                    <h2 className="text-[2vw] sm:text-[1.85vw] md:text-[1.65vw] lg:text-[1.15vw] font-semibold text-center py-[0.5vw] shrink-0">
                       {item}
                     </h2>
-                    <div className="text-[1.6vw] mt-[0.5vw]">
+                    <div className="text-[2.4vw] sm:text-[2vw] md:text-[1.6vw] mt-[0.5vw]">
                       <GrFormNextLink />
                     </div>
                   </div>
@@ -53,46 +58,49 @@ const Service = () => {
             })}
           </motion.div>
         </motion.div>
-        <div className="font-bold text-[1.6vw] mt-[2vw] flex justify-between">
-          <span>Explore into Video & Editing </span>{" "}
-          <span className="text-[1.2vw] underline flex items-center">
-            See More{" "}
-            <span className="text-[1.4vw] mt-[0.6vw]">
-              <GrFormNextLink />
-            </span>
-          </span>
+      </div>
+      <ServiceCategory />
+      <div className="w-full px-[7vw] md:px-[10vw] mt-[-1vw] ">
+        <div className="font-bold text-[4vw] sm:text-[3.2vw] md:text-[1.8vw] mt-[2.4vw]">
+          <span>Explore into Video & Editing </span>
         </div>
-        <div className="flex gap-12 flex-wrap py-[2vw]">
+        <div className=" serviceContainer flex gap-[2.5vw] sm:gap-[1.6vw] md:gap-[1.2vw] py-[2vw]  mb-[2vw] overflow-x-scroll">
           {serviceObj.map((item, index) => {
             return (
               <div
                 key={index}
-                className="w-[24vw] h-[24vw] rounded-xl shadow-xl drop-shadow-xl"
+                className="min-w-[38vw] min-h-[32vw] sm:min-w-[26vw] sm:min-h-[24vw] md:min-w-[20vw] md:min-h-[18vw]  rounded-xl shadow-lg border border-solid border-[#dfdfdf] "
               >
-                <img
-                  className="w-full h-1/2 object-fill"
-                  src={item.banner}
-                  alt=""
-                />
-                <div className="flex justify-between items-center mt-[0.8vw]">
-                  <div className="flex w-full px-[1vw] items-center gap-[0.8vw]">
+                <div className="relative w-full h-[50%] md:h-[48%] flex items-end justify-center">
+                  <img
+                    className="absolute w-full h-full object-center"
+                    src={item.banner}
+                    alt=""
+                  />
+                  <div className="relative py-[0.2vw] w-full z-10 bg-white/30 text-center text-[#ffffff] font-semibold text-[2vw] sm:text-[1.6vw] md:text-[1.12vw]">
+                    <span className="font-bold">Expert: </span>
+                    {item.expertName}
+                  </div>
+                </div>
+                <div className="flex justify-between px-[0.6vw] items-center mt-[1vw] md:mt-[0.8vw]">
+                  <div className="flex w-full px-[1vw] items-center gap-[0.3vw]">
                     <img
                       src={item.logo}
-                      className="w-[3vw] h-[3vw] rounded-full object-cover object-center"
+                      className="w-[3.6vw] h-[3.6vw] sm:w-[2.4vw] sm:h-[2.4vw] md:w-[1.8vw] md:h-[1.8vw] lg:w-[2vw] lg:h-[2vw] rounded-full object-cover object-center"
                       alt=""
                     />
-                    <div className="font-bold text-[1.2vw]">
+                    <div className="font-bold text-[2.2vw] sm:text-[1.6vw] md:text-[1.2vw]">
                       {item.category}
                     </div>
                   </div>
-                  <div className="text-[1.4vw] font-bold px-[1vw]">
+                  <div className="text-[2.2vw] sm:text-[1.6vw] md:text-[1.2vw] font-bold px-[1vw]">
                     {item.price}
                   </div>
                 </div>
-                <div className="text-[1.15vw] font-light px-[1vw] shrink-0  mt-[0.8vw]">
+                <div className="text-[2vw] sm:text-[1.45vw] md:text-[1.05vw] text-justify tracking-tight font-light px-[1.6vw] sm:px-[1vw] shrink-0 mt-[1.25vw] md:mt-[1.1vw]">
                   {item.title}
                 </div>
-                <div className="flex justify-between px-[1vw] mt-[1vw]">
+                <div className="flex justify-between px-[1.6vw] sm:px-[1vw] mt-[1.05vw] md:mt-[0.6vw] text-[2.15vw] sm:text-[1.45vw] md:text-[1.05vw]">
                   <div className="flex items-center">
                     {item.rating} <GrStar />
                   </div>
@@ -105,46 +113,46 @@ const Service = () => {
             );
           })}
         </div>
-        <div className="font-bold text-[1.6vw] mt-[2vw] flex justify-between">
-          <span>Explore into Video & Editing </span>{" "}
-          <span className="text-[1.2vw] underline flex items-center">
-            See More{" "}
-            <span className="text-[1.4vw] mt-[0.6vw]">
-              <GrFormNextLink />
-            </span>
-          </span>
+        <div className="font-bold text-[4vw] sm:text-[3.2vw] md:text-[1.8vw] mt-[2.4vw]">
+          <span>Explore into Video & Editing </span>
         </div>
-        <div className="flex gap-12 flex-wrap py-[2vw]">
+        <div className=" serviceContainer flex gap-[2.5vw] sm:gap-[1.6vw] md:gap-[1.2vw] py-[2vw]  mb-[2vw] overflow-x-scroll">
           {serviceObj.map((item, index) => {
             return (
               <div
                 key={index}
-                className="w-[24vw] h-[24vw] rounded-xl shadow-xl drop-shadow-xl"
+                className="min-w-[38vw] min-h-[32vw] sm:min-w-[26vw] sm:min-h-[24vw] md:min-w-[20vw] md:min-h-[18vw]  rounded-xl shadow-lg border border-solid border-[#dfdfdf] "
               >
-                <img
-                  className="w-full h-1/2 object-fill"
-                  src={item.banner}
-                  alt=""
-                />
-                <div className="flex justify-between items-center mt-[0.8vw]">
-                  <div className="flex w-full px-[1vw] items-center gap-[0.8vw]">
+                <div className="relative w-full h-[50%] md:h-[48%] flex items-end justify-center">
+                  <img
+                    className="absolute w-full h-full object-center"
+                    src={item.banner}
+                    alt=""
+                  />
+                  <div className="relative py-[0.2vw] w-full z-10 bg-white/30 text-center text-[#ffffff] font-semibold text-[2vw] sm:text-[1.6vw] md:text-[1.12vw]">
+                    <span className="font-bold">Expert: </span>
+                    {item.expertName}
+                  </div>
+                </div>
+                <div className="flex justify-between px-[0.6vw] items-center mt-[1vw] md:mt-[0.8vw]">
+                  <div className="flex w-full px-[1vw] items-center gap-[0.3vw]">
                     <img
                       src={item.logo}
-                      className="w-[3vw] h-[3vw] rounded-full object-cover object-center"
+                      className="w-[3.6vw] h-[3.6vw] sm:w-[2.4vw] sm:h-[2.4vw] md:w-[1.8vw] md:h-[1.8vw] lg:w-[2vw] lg:h-[2vw] rounded-full object-cover object-center"
                       alt=""
                     />
-                    <div className="font-bold text-[1.2vw]">
+                    <div className="font-bold text-[2.2vw] sm:text-[1.6vw] md:text-[1.2vw]">
                       {item.category}
                     </div>
                   </div>
-                  <div className="text-[1.4vw] font-bold px-[1vw]">
+                  <div className="text-[2.2vw] sm:text-[1.6vw] md:text-[1.2vw] font-bold px-[1vw]">
                     {item.price}
                   </div>
                 </div>
-                <div className="text-[1.15vw] font-light px-[1vw] shrink-0  mt-[0.8vw]">
+                <div className="text-[2vw] sm:text-[1.45vw] md:text-[1.05vw] text-justify tracking-tight font-light px-[1.6vw] sm:px-[1vw] shrink-0 mt-[1.25vw] md:mt-[1.1vw]">
                   {item.title}
                 </div>
-                <div className="flex justify-between px-[1vw] mt-[1vw]">
+                <div className="flex justify-between px-[1.6vw] sm:px-[1vw] mt-[1.05vw] md:mt-[0.6vw] text-[2.15vw] sm:text-[1.45vw] md:text-[1.05vw]">
                   <div className="flex items-center">
                     {item.rating} <GrStar />
                   </div>
@@ -157,46 +165,202 @@ const Service = () => {
             );
           })}
         </div>
-        <div className="font-bold text-[1.6vw] mt-[2vw] flex justify-between">
-          <span>Explore into Video & Editing </span>{" "}
-          <span className="text-[1.2vw] underline flex items-center">
-            See More{" "}
-            <span className="text-[1.4vw] mt-[0.6vw]">
-              <GrFormNextLink />
-            </span>
-          </span>
+        <div className="font-bold text-[4vw] sm:text-[3.2vw] md:text-[1.8vw] mt-[2.4vw]">
+          <span>Explore into Video & Editing </span>
         </div>
-        <div className="flex gap-12 flex-wrap py-[2vw]">
+        <div className=" serviceContainer flex gap-[2.5vw] sm:gap-[1.6vw] md:gap-[1.2vw] py-[2vw]  mb-[2vw] overflow-x-scroll">
           {serviceObj.map((item, index) => {
             return (
               <div
                 key={index}
-                className="w-[24vw] h-[24vw] rounded-xl shadow-xl drop-shadow-xl"
+                className="min-w-[38vw] min-h-[32vw] sm:min-w-[26vw] sm:min-h-[24vw] md:min-w-[20vw] md:min-h-[18vw]  rounded-xl shadow-lg border border-solid border-[#dfdfdf] "
               >
-                <img
-                  className="w-full h-1/2 object-fill"
-                  src={item.banner}
-                  alt=""
-                />
-                <div className="flex justify-between items-center mt-[0.8vw]">
-                  <div className="flex w-full px-[1vw] items-center gap-[0.8vw]">
+                <div className="relative w-full h-[50%] md:h-[48%] flex items-end justify-center">
+                  <img
+                    className="absolute w-full h-full object-center"
+                    src={item.banner}
+                    alt=""
+                  />
+                  <div className="relative py-[0.2vw] w-full z-10 bg-white/30 text-center text-[#ffffff] font-semibold text-[2vw] sm:text-[1.6vw] md:text-[1.12vw]">
+                    <span className="font-bold">Expert: </span>
+                    {item.expertName}
+                  </div>
+                </div>
+                <div className="flex justify-between px-[0.6vw] items-center mt-[1vw] md:mt-[0.8vw]">
+                  <div className="flex w-full px-[1vw] items-center gap-[0.3vw]">
                     <img
                       src={item.logo}
-                      className="w-[3vw] h-[3vw] rounded-full object-cover object-center"
+                      className="w-[3.6vw] h-[3.6vw] sm:w-[2.4vw] sm:h-[2.4vw] md:w-[1.8vw] md:h-[1.8vw] lg:w-[2vw] lg:h-[2vw] rounded-full object-cover object-center"
                       alt=""
                     />
-                    <div className="font-bold text-[1.2vw]">
+                    <div className="font-bold text-[2.2vw] sm:text-[1.6vw] md:text-[1.2vw]">
                       {item.category}
                     </div>
                   </div>
-                  <div className="text-[1.4vw] font-bold px-[1vw]">
+                  <div className="text-[2.2vw] sm:text-[1.6vw] md:text-[1.2vw] font-bold px-[1vw]">
                     {item.price}
                   </div>
                 </div>
-                <div className="text-[1.15vw] font-light px-[1vw] shrink-0  mt-[0.8vw]">
+                <div className="text-[2vw] sm:text-[1.45vw] md:text-[1.05vw] text-justify tracking-tight font-light px-[1.6vw] sm:px-[1vw] shrink-0 mt-[1.25vw] md:mt-[1.1vw]">
                   {item.title}
                 </div>
-                <div className="flex justify-between px-[1vw] mt-[1vw]">
+                <div className="flex justify-between px-[1.6vw] sm:px-[1vw] mt-[1.05vw] md:mt-[0.6vw] text-[2.15vw] sm:text-[1.45vw] md:text-[1.05vw]">
+                  <div className="flex items-center">
+                    {item.rating} <GrStar />
+                  </div>
+                  <div className="text-[#262626]">
+                    <span className="font-bold">Reviews : </span>
+                    {item.reviews}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="font-bold text-[4vw] sm:text-[3.2vw] md:text-[1.8vw] mt-[2.4vw]">
+          <span>Explore into Video & Editing </span>
+        </div>
+        <div className=" serviceContainer flex gap-[2.5vw] sm:gap-[1.6vw] md:gap-[1.2vw] py-[2vw]  mb-[2vw] overflow-x-scroll">
+          {serviceObj.map((item, index) => {
+            return (
+              <div
+                key={index}
+                className="min-w-[38vw] min-h-[32vw] sm:min-w-[26vw] sm:min-h-[24vw] md:min-w-[20vw] md:min-h-[18vw]  rounded-xl shadow-lg border border-solid border-[#dfdfdf] "
+              >
+                <div className="relative w-full h-[50%] md:h-[48%] flex items-end justify-center">
+                  <img
+                    className="absolute w-full h-full object-center"
+                    src={item.banner}
+                    alt=""
+                  />
+                  <div className="relative py-[0.2vw] w-full z-10 bg-white/30 text-center text-[#ffffff] font-semibold text-[2vw] sm:text-[1.6vw] md:text-[1.12vw]">
+                    <span className="font-bold">Expert: </span>
+                    {item.expertName}
+                  </div>
+                </div>
+                <div className="flex justify-between px-[0.6vw] items-center mt-[1vw] md:mt-[0.8vw]">
+                  <div className="flex w-full px-[1vw] items-center gap-[0.3vw]">
+                    <img
+                      src={item.logo}
+                      className="w-[3.6vw] h-[3.6vw] sm:w-[2.4vw] sm:h-[2.4vw] md:w-[1.8vw] md:h-[1.8vw] lg:w-[2vw] lg:h-[2vw] rounded-full object-cover object-center"
+                      alt=""
+                    />
+                    <div className="font-bold text-[2.2vw] sm:text-[1.6vw] md:text-[1.2vw]">
+                      {item.category}
+                    </div>
+                  </div>
+                  <div className="text-[2.2vw] sm:text-[1.6vw] md:text-[1.2vw] font-bold px-[1vw]">
+                    {item.price}
+                  </div>
+                </div>
+                <div className="text-[2vw] sm:text-[1.45vw] md:text-[1.05vw] text-justify tracking-tight font-light px-[1.6vw] sm:px-[1vw] shrink-0 mt-[1.25vw] md:mt-[1.1vw]">
+                  {item.title}
+                </div>
+                <div className="flex justify-between px-[1.6vw] sm:px-[1vw] mt-[1.05vw] md:mt-[0.6vw] text-[2.15vw] sm:text-[1.45vw] md:text-[1.05vw]">
+                  <div className="flex items-center">
+                    {item.rating} <GrStar />
+                  </div>
+                  <div className="text-[#262626]">
+                    <span className="font-bold">Reviews : </span>
+                    {item.reviews}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="font-bold text-[4vw] sm:text-[3.2vw] md:text-[1.8vw] mt-[2.4vw]">
+          <span>Explore into Video & Editing </span>
+        </div>
+        <div className=" serviceContainer flex gap-[2.5vw] sm:gap-[1.6vw] md:gap-[1.2vw] py-[2vw]  mb-[2vw] overflow-x-scroll">
+          {serviceObj.map((item, index) => {
+            return (
+              <div
+                key={index}
+                className="min-w-[38vw] min-h-[32vw] sm:min-w-[26vw] sm:min-h-[24vw] md:min-w-[20vw] md:min-h-[18vw]  rounded-xl shadow-lg border border-solid border-[#dfdfdf] "
+              >
+                <div className="relative w-full h-[50%] md:h-[48%] flex items-end justify-center">
+                  <img
+                    className="absolute w-full h-full object-center"
+                    src={item.banner}
+                    alt=""
+                  />
+                  <div className="relative py-[0.2vw] w-full z-10 bg-white/30 text-center text-[#ffffff] font-semibold text-[2vw] sm:text-[1.6vw] md:text-[1.12vw]">
+                    <span className="font-bold">Expert: </span>
+                    {item.expertName}
+                  </div>
+                </div>
+                <div className="flex justify-between px-[0.6vw] items-center mt-[1vw] md:mt-[0.8vw]">
+                  <div className="flex w-full px-[1vw] items-center gap-[0.3vw]">
+                    <img
+                      src={item.logo}
+                      className="w-[3.6vw] h-[3.6vw] sm:w-[2.4vw] sm:h-[2.4vw] md:w-[1.8vw] md:h-[1.8vw] lg:w-[2vw] lg:h-[2vw] rounded-full object-cover object-center"
+                      alt=""
+                    />
+                    <div className="font-bold text-[2.2vw] sm:text-[1.6vw] md:text-[1.2vw]">
+                      {item.category}
+                    </div>
+                  </div>
+                  <div className="text-[2.2vw] sm:text-[1.6vw] md:text-[1.2vw] font-bold px-[1vw]">
+                    {item.price}
+                  </div>
+                </div>
+                <div className="text-[2vw] sm:text-[1.45vw] md:text-[1.05vw] text-justify tracking-tight font-light px-[1.6vw] sm:px-[1vw] shrink-0 mt-[1.25vw] md:mt-[1.1vw]">
+                  {item.title}
+                </div>
+                <div className="flex justify-between px-[1.6vw] sm:px-[1vw] mt-[1.05vw] md:mt-[0.6vw] text-[2.15vw] sm:text-[1.45vw] md:text-[1.05vw]">
+                  <div className="flex items-center">
+                    {item.rating} <GrStar />
+                  </div>
+                  <div className="text-[#262626]">
+                    <span className="font-bold">Reviews : </span>
+                    {item.reviews}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="font-bold text-[4vw] sm:text-[3.2vw] md:text-[1.8vw] mt-[2.4vw]">
+          <span>Explore into Video & Editing </span>
+        </div>
+        <div className=" serviceContainer flex gap-[2.5vw] sm:gap-[1.6vw] md:gap-[1.2vw] py-[2vw]  mb-[2vw] overflow-x-scroll">
+          {serviceObj.map((item, index) => {
+            return (
+              <div
+                key={index}
+                className="min-w-[38vw] min-h-[32vw] sm:min-w-[26vw] sm:min-h-[24vw] md:min-w-[20vw] md:min-h-[18vw]  rounded-xl shadow-lg border border-solid border-[#dfdfdf] "
+              >
+                <div className="relative w-full h-[50%] md:h-[48%] flex items-end justify-center">
+                  <img
+                    className="absolute w-full h-full object-center"
+                    src={item.banner}
+                    alt=""
+                  />
+                  <div className="relative py-[0.2vw] w-full z-10 bg-white/30 text-center text-[#ffffff] font-semibold text-[2vw] sm:text-[1.6vw] md:text-[1.12vw]">
+                    <span className="font-bold">Expert: </span>
+                    {item.expertName}
+                  </div>
+                </div>
+                <div className="flex justify-between px-[0.6vw] items-center mt-[1vw] md:mt-[0.8vw]">
+                  <div className="flex w-full px-[1vw] items-center gap-[0.3vw]">
+                    <img
+                      src={item.logo}
+                      className="w-[3.6vw] h-[3.6vw] sm:w-[2.4vw] sm:h-[2.4vw] md:w-[1.8vw] md:h-[1.8vw] lg:w-[2vw] lg:h-[2vw] rounded-full object-cover object-center"
+                      alt=""
+                    />
+                    <div className="font-bold text-[2.2vw] sm:text-[1.6vw] md:text-[1.2vw]">
+                      {item.category}
+                    </div>
+                  </div>
+                  <div className="text-[2.2vw] sm:text-[1.6vw] md:text-[1.2vw] font-bold px-[1vw]">
+                    {item.price}
+                  </div>
+                </div>
+                <div className="text-[2vw] sm:text-[1.45vw] md:text-[1.05vw] text-justify tracking-tight font-light px-[1.6vw] sm:px-[1vw] shrink-0 mt-[1.25vw] md:mt-[1.1vw]">
+                  {item.title}
+                </div>
+                <div className="flex justify-between px-[1.6vw] sm:px-[1vw] mt-[1.05vw] md:mt-[0.6vw] text-[2.15vw] sm:text-[1.45vw] md:text-[1.05vw]">
                   <div className="flex items-center">
                     {item.rating} <GrStar />
                   </div>

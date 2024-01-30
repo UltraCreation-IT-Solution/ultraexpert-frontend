@@ -37,12 +37,17 @@ const Navbar = () => {
             Services
           </Link>
           <Link
-            to={"experts"}
+            to={"/experts"}
             className="relative font-medium decoration-transparent text-black"
           >
             Experts
           </Link>
-          <div className="relative font-medium">Blog</div>
+          <Link
+            to={"/blog"}
+            className="relative font-medium decoration-transparent text-black"
+          >
+            Blog
+          </Link>
           <div className="relative font-medium">Contact Us</div>
           <Link
             to={"/login"}

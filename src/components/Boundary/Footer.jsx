@@ -22,21 +22,31 @@ export const Footer = () => {
           </div>
         </div>
         <div className=" w-2/3 md:w-1/2 flex justify-between md:justify-normal md:gap-8">
-          <div className="w-1/3 list-none flex flex-col gap-4 font-medium text-[1.8vw] md:text-[1.2vw] ml-[-2vw] md:ml-[6vw] overflow-hidden">
-            <li className="underline  pl-5 hover:scale-105">Home</li>
-            <li className="underline pl-5 hover:scale-105">Experts</li>
-            <li className="underline pl-5 hover:scale-105">Blog</li>
-            <li className="underline pl-5 hover:scale-105">About</li>
-            <li className="underline pl-5 hover:scale-105">Service</li>
+          <div className="w-1/3 list-none flex flex-col gap-[1.4vw] font-medium text-[1.8vw] md:text-[1.2vw] ml-[-2vw] md:ml-[6vw] overflow-hidden">
+            <li className="underline underline-offset-[3px]  pl-5 hover:scale-105">
+              Home
+            </li>
+            <li className="underline underline-offset-[3px] pl-5 hover:scale-105">
+              Experts
+            </li>
+            <li className="underline underline-offset-[3px] pl-5 hover:scale-105">
+              Blog
+            </li>
+            <li className="underline underline-offset-[3px] pl-5 hover:scale-105">
+              About
+            </li>
+            <li className="underline underline-offset-[3px] pl-5 hover:scale-105">
+              Service
+            </li>
           </div>
-          <div className="w-2/3 ml-[-6vw] flex flex-col justify-between text-[1.8vw] md:text-[1.2vw]">
-            <div className="w-full border-t-2 border-black border-solid pt-2">
+          <div className="w-2/3 ml-[-6vw] gap-[1.05vw] flex flex-col justify-between text-[1.8vw] md:text-[1.2vw]">
+            <div className="w-full border-t-2 border-[#d4d4d4] border-solid pt-[0.6vw]">
               <b>Email:</b> <br /> Bhaveshbhanusali1@gmail.com
             </div>
-            <div className="w-full border-t-2 border-black border-solid pt-2">
+            <div className="w-full border-t-2 border-[#d4d4d4] border-solid pt-[0.6vw]">
               <b>Contact:</b> <br /> 1234567890
             </div>
-            <div className="w-full border-t-2 border-black border-solid pt-2">
+            <div className="w-full border-t-2 border-[#d4d4d4] border-solid pt-[0.6vw]">
               <b>Follow:</b> <br /> <FaLinkedin /> <FaFacebook />{" "}
               <FaInstagram /> <FaTwitter />
             </div>
