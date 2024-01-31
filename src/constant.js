@@ -115,3 +115,326 @@ export const categories = [
   "Firebase",
   "Typescript",
 ];
+export const searchCategories = [
+  "App",
+  "HTML",
+  "CSS",
+  "JavaScript",
+  "ReactJS",
+  "Redux",
+  "Web Development",
+  "Angular",
+  "Vue",
+  "Flutter",
+  "React Native",
+  "NextJS",
+  "NodeJS",
+  "ExpressJS",
+  "MongoDB",
+  "Firebase",
+  "Typescript",
+  "DSA",
+  "c++",
+  "Java",
+  "Python",
+  "Cookie",
+  "Mongoose",
+  "Development",
+  "Product Photography",
+  "Video Editing",
+  "Creative Design",
+];
+export const profileObj = [
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1551500226-b50b653e33e8?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1621416953228-87ad15716483?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1551500226-b50b653e33e8?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1621416953228-87ad15716483?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1551500226-b50b653e33e8?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1621416953228-87ad15716483?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+  },
+];
+export const serviceObj = [
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+];
+export const blogObj = [
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+  },
+];
