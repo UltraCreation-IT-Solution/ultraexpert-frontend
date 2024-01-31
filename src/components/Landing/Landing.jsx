@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { GrFormNextLink } from "react-icons/gr";
 import { CiStar } from "react-icons/ci";
 import Footer from "../Boundary/Footer";
@@ -15,11 +15,12 @@ import Writting from "../../assets/images/writingTranslation.png";
 import webdesignservice from "../../assets/images/webDesignService.png";
 import musicAudio from "../../assets/images/musicAudio.png";
 import { Link } from "react-router-dom";
-import PreLoader from "../../substitutes/PreLoader";
+import { motion } from "framer-motion";
+import PreLoader from "../../subsitutes/PreLoader";
 
 export const ServiceCategory = () => {
   return (
-    <div className="relative flex flex-col md:flex-row gap-4 overflow-hidden mt-[3vh] px-[12vw] py-[10vh] w-full min-h-[100vh]">
+    <div className="relative flex flex-col md:flex-row gap-4 overflow-hidden  px-[6vw] md:px-[11vw] pt-[10vh] w-full min-h-[100vh] mb-[3vw] md:mb-[1vw] lg:mb-[5vw]">
       <div className="w-full md:w-2/4 flex flex-row md:flex-col gap-4 h-full flex-wrap ">
         <div className="w-full h-2/5  flex flex-row gap-4 ">
           <div className="w-full md:w-1/2 h-full  flex flex-row md:flex-col gap-6 md:gap-2 overflow-hidden">
@@ -67,9 +68,11 @@ export const ServiceCategory = () => {
       <div className="w-full md:w-1/4 h-full  flex flex-row md:flex-col gap-4">
         <div className="w-full h-1/5  overflow-hidden flex justify-start md:justify-end">
           <Link to="/services" className="decoration-transparent">
-            <div className="my-[10vw] md:my-0 py-2 px-4 bg-black w-[18vw] md:w-[10vw] items-center text-center  text-white font-semibold rounded-md flex text-[1.8vw] md:text-[1.2vw]">
-              <span className="md:no-underline underline">See More</span>
-              <GrFormNextLink className=" w-6 h-6" />
+            <div className="my-[10vw] md:my-0 py-2 px-2 sm:px-4 bg-black w-[18vw] md:w-[12vw] items-center  text-center text-white font-semibold rounded-md flex justify-center text-[1.8vw] md:text-[1.2vw]">
+              <span className="md:no-underline underline text-center shrink-0">
+                See More
+              </span>
+              <GrFormNextLink className="text-center w-[3vw] h-[3vw] md:w-[1.7vw]  md:h-[1.7vw]" />
             </div>
           </Link>
         </div>
@@ -86,96 +89,164 @@ export const ServiceCategory = () => {
 export const TopExperts = () => {
   const [activeNo, setActiveNo] = useState(0);
   return (
-    <div className="relative w-full h-[90vh] bg-[#F2F2F2] px-[12vw] overflow-hidden">
+    <div className="relative w-full h-auto py-[3vw] bg-[#F2F2F2] px-[6vw] md:px-[12vw] overflow-hidden">
       <Link
         to={"/experts"}
-        className="text-[#C5C3C3] text-[6.5vw] font-bold flex justify-end decoration-transparent"
+        className="text-[#C5C3C3] text-[7.5vw] md:text-[6.5vw] font-bold flex justify-end decoration-transparent"
       >
-        <span className="text-[18px] text-black flex items-end py-[1.5vw] px-4 underline">
-          see more
-        </span>
         EXPERTS
       </Link>
-      <div className="flex flex-row mb-20 gap-8 w-full items-start mt-4">
+      <div className="flex flex-col sm:flex-row mb-[12.5vw] sm:mb-[10vw] md:mb-[5vw] gap-5 md:gap-8 w-full  mt-4 ">
         <div
           onMouseOver={() => setActiveNo(0)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 0 ? "active" : ""
-          } expertDiv relative flex flex-col gap-4 w-1/2 h-[65vh] items-start bg-[url('https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
+            activeNo === 0 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh]"
+          } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
         >
-          <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
+          <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[60%] ">
             <h2>Web Developer</h2>
             {activeNo === 0 ? (
-              <div>
-                <h3 className="absolute right-4 text-[20px] bottom-6">
+              <div className=" absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[3.8vw] sm:text-[2vw] md:text-[1.5vw]">
                   Bhavesh Bhanusali
                 </h3>
-                <h3 className="absolute right-4 text-[16px] bottom-0">
-                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                <h3 className=" justify-end text-[2.6vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[3.2vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
+                  4.9 /5
+                </h3>
+                <h3 className="flex items-center justify-end mt-2 md:mt-4">
+                  <span className="underline text-[2.4vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    See More
+                  </span>{" "}
+                  <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
                 </h3>
               </div>
-            ) : null}
+            ) : (
+              <div className="sm:invisible absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[3.8vw] sm:text-[2vw] md:text-[1.5vw]">
+                  Bhavesh Bhanusali
+                </h3>
+                <h3 className=" justify-end text-[2.6vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[3.2vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
+                  4.9 /5
+                </h3>
+                <h3 className="flex items-center justify-end mt-2 md:mt-4">
+                  <span className="underline text-[2.4vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    See More
+                  </span>{" "}
+                  <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
+                </h3>
+              </div>
+            )}
           </div>
         </div>
         <div
           onMouseOver={() => setActiveNo(1)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 1 ? "active" : ""
-          } expertDiv w-1/2 h-[65vh] bg-[url('https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
+            activeNo === 1 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh]"
+          } expertDiv bg-[url('https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
             {activeNo === 1 ? (
-              <div>
-                <h3 className="absolute right-4 text-[20px] bottom-6">
+              <div className=" absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[3.8vw] sm:text-[2vw] md:text-[1.5vw]">
                   Bhavesh Bhanusali
                 </h3>
-                <h3 className="absolute right-4 text-[16px] bottom-0">
-                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                <h3 className=" justify-end text-[2.6vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[3.2vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
+                  4.9 /5
+                </h3>
+                <h3 className="flex items-center justify-end mt-2 md:mt-4">
+                  <span className="underline text-[2.4vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    See More
+                  </span>{" "}
+                  <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
                 </h3>
               </div>
-            ) : null}
+            ) : (
+              <div className="sm:invisible absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[3.8vw] sm:text-[2vw] md:text-[1.5vw]">
+                  Bhavesh Bhanusali
+                </h3>
+                <h3 className=" justify-end text-[2.6vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[3.2vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
+                  4.9 /5
+                </h3>
+                <h3 className="flex items-center justify-end mt-2 md:mt-4">
+                  <span className="underline text-[2.4vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    See More
+                  </span>{" "}
+                  <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
+                </h3>
+              </div>
+            )}
           </div>
         </div>
         <div
           onMouseOver={() => setActiveNo(2)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 2 ? "active" : ""
-          } expertDiv relative flex flex-col gap-4 w-1/2 h-[65vh] items-start bg-[url('https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww')] bg-center`}
+            activeNo === 2 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh]"
+          } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww')] bg-center`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
             {activeNo === 2 ? (
-              <div>
-                <h3 className="absolute right-4 text-[20px] bottom-6">
+              <div className=" absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[3.8vw] sm:text-[2vw] md:text-[1.5vw]">
                   Bhavesh Bhanusali
                 </h3>
-                <h3 className="absolute right-4 text-[16px] bottom-0">
-                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                <h3 className=" justify-end text-[2.6vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[3.2vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
+                  4.9 /5
+                </h3>
+                <h3 className="flex items-center justify-end mt-2 md:mt-4">
+                  <span className="underline text-[2.4vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    See More
+                  </span>{" "}
+                  <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
                 </h3>
               </div>
-            ) : null}
+            ) : (
+              <div className="sm:invisible absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[3.8vw] sm:text-[2vw] md:text-[1.5vw]">
+                  Bhavesh Bhanusali
+                </h3>
+                <h3 className=" justify-end text-[2.6vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
+                  <CiStar className="text-[3.2vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
+                  4.9 /5
+                </h3>
+                <h3 className="flex items-center justify-end mt-2 md:mt-4">
+                  <span className="underline text-[2.4vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    See More
+                  </span>{" "}
+                  <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
+                </h3>
+              </div>
+            )}
           </div>
         </div>
         <div
           onMouseOver={() => setActiveNo(3)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 3 ? "active" : ""
-          } expertDiv relative flex flex-col gap-4 w-1/2 h-[65vh] items-start bg-[url('https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-center bg-cover`}
+            activeNo === 3 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh]"
+          } expertDiv relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-center bg-cover hidden md:flex`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
             {activeNo === 3 ? (
-              <div>
-                <h3 className="absolute right-4 text-[20px] bottom-6">
-                  Bhavesh Bhanusali
+              <div className=" absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[1.5vw]">Bhavesh Bhanusali</h3>
+                <h3 className=" justify-end text-[1.2vw] flex gap-1 items-center -my-3">
+                  <CiStar className="text-[1.4vw]" /> 4.9 /5
                 </h3>
-                <h3 className="absolute right-4 text-[16px] bottom-0">
-                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                <h3 className="flex items-center justify-end">
+                  <span className="underline  text-[1.1vw]">See More</span>{" "}
+                  <GrFormNextLink className="text-[1.4vw] mt-1" />
                 </h3>
               </div>
             ) : null}
@@ -185,40 +256,46 @@ export const TopExperts = () => {
           onMouseOver={() => setActiveNo(4)}
           onMouseLeave={() => setActiveNo(0)}
           className={`${
-            activeNo === 4 ? "active" : ""
-          } expertDiv relative flex flex-col gap-4 w-1/2 h-[65vh] items-start bg-[url('https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D')] bg-center bg-cover`}
+            activeNo === 4 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh] "
+          } expertDiv relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D')] bg-center bg-cover hidden md:flex`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
             {activeNo === 4 ? (
-              <div>
-                <h3 className="absolute right-4 text-[20px] bottom-6">
-                  Bhavesh Bhanusali
+              <div className=" absolute right-4 justify-start  bottom-0">
+                <h3 className=" justify-end text-[1.5vw]">Bhavesh Bhanusali</h3>
+                <h3 className=" justify-end text-[1.2vw] flex gap-1 items-center -my-3">
+                  <CiStar className="text-[1.4vw]" /> 4.9 /5
                 </h3>
-                <h3 className="absolute right-4 text-[16px] bottom-0">
-                  <CiStar className="-mb-[2px]" /> 4.9 /5
+                <h3 className="flex items-center justify-end">
+                  <span className="underline  text-[1.1vw]">See More</span>{" "}
+                  <GrFormNextLink className="text-[1.4vw] mt-1" />
                 </h3>
               </div>
             ) : null}
           </div>
         </div>
       </div>
+      <div className="text-[2.4vw] md:text-[1.6vw] text-black flex items-cemter justify-end underline mt-[-10vw] sm:mt-[-8vw] md:mt-[-3vw]">
+        See More Experts
+        <GrFormNextLink className="mt-[0.5vw] text-[2vw] md:text-[1.4vw]" />
+      </div>
     </div>
   );
 };
 export const AboutUX = () => {
   return (
-    <div className="relative w-full min-h-auto py-[4vw] ">
-      <div className="flex w-full h-auto py-18 px-32 gap-8 items-center sm:flex-wrap md:flex-nowrap">
-        <h3 className="relative w-1/3 text-gray-700 font-extrabold text-[3.2vw]">
-          Helping millions grow better.
+    <div className="relative w-full min-h-auto py-[3vw] md:py-[5vw]">
+      <div className="mt-0 sm:-mt-10 flex py-[2vw] flex-col sm:flex-row  w-full h-auto px-[8vw] sm:px-[12vw] gap-0 sm:gap-8 items-center flex-nowrap">
+        <h3 className="relative w-full text-center sm:text-left sm:w-1/3 text-gray-700 font-extrabold text-[4vw] sm:text-[3vw]">
+          Helping millions grow better
         </h3>
-        <div className="aboutMsg mt-24 w-1/3 h-[25vw] bg-[url('https://images.unsplash.com/photo-1521316730702-829a8e30dfd0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8b3VyJTIwbWlzc2lvbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center bg-cover z-20 "></div>
-        <div className="w-1/3 h-auto flex flex-col  ">
-          <h3 className="relative w-full text-gray-700 font-bold text-[2vw] text-center ">
+        <div className="aboutMsg mt-0 sm:mt-24 w-[32vw] sm:w-[30vw] h-[25vw] bg-[url('https://images.unsplash.com/photo-1521316730702-829a8e30dfd0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8b3VyJTIwbWlzc2lvbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center bg-cover z-20 "></div>
+        <div className="w-2/3 sm:w-1/3 h-auto flex flex-col ">
+          <h3 className="relative w-full text-gray-700 font-bold text-[3.5vw] sm:text-[2vw] text-center ">
             Our mission
           </h3>
-          <p className="relative  w-full text-gray-700 font-normal text-justify text-[1.25vw]">
+          <p className="relative  w-full text-gray-700 font-normal text-justify text-[2vw] sm:text-[1.25vw]">
             At UltraCreation, our mission is to transcend conventional
             boundaries and empower businesses with cutting-edge technological
             solutions. We are dedicated to being the catalyst for our clients'
@@ -226,7 +303,7 @@ export const AboutUX = () => {
             maximizing their potential in the ever-evolving digital landscape.
           </p>
           <div className="flex flex-row items-center ml-20 justify-end gap-[5px] text-base text-gray-400">
-            <div className="relative font-medium text-[1.25vw] underline">
+            <div className="relative font-medium text-[1.8vw] sm:text-[1.25vw] underline">
               Visit for more
             </div>
             <GrFormNextLink className="relative w-6 h-6 overflow-hidden shrink-0 object-cover" />
@@ -239,8 +316,8 @@ export const AboutUX = () => {
 export const Story = () => {
   return (
     <>
-      <div className="relative overflow-hidden bg-[#f5f5f5] flex flex-row justify-between pl-32 w-full items-start flex-wrap">
-        <div className="flex flex-col mt-24 gap-6 w-2/5 items-start">
+      <div className="relative overflow-hidden bg-[#f5f5f5] flex flex-row justify-between pl-[8vw] md:pl-[12vw] w-full items-center flex-wrap">
+        <div className="flex flex-col gap-6 w-2/5 items-start">
           <div className="text-[3.6vw] font-extrabold  mb-0">
             Think creative,
             <br />
@@ -266,382 +343,200 @@ export const Story = () => {
   );
 };
 export const Testimonial = () => {
+  const [width, setWidth] = useState(0);
+  const carosel = useRef();
+  useEffect(() => {
+    setWidth(carosel.current.scrollWidth - carosel.current.offsetWidth);
+  }, []);
   return (
-    <div className="w-full h-full px-1">
-      <div className="mt-[5vw] relative rounded-t-xl rounded-b-none w-full h-[680px] overflow-hidden flex flex-col items-center justify-start  box-border bg-[url('https://images.unsplash.com/photo-1664575602276-acd073f104c1?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-no-repeat bg-[top] text-[36px] text-white ">
-        <div className="w-full h-full backdrop-brightness-[60%] py-14 px-6 rounded-t-xl rounded-b-none overflow-hidden flex flex-col items-center justify-start  box-border">
-          <div className="flex flex-col items-center -mt-8 h-40 justify-start gap-6">
-            <div className="relative font-semibold">Testimonials</div>
-            <div className="rounded-xl w-full h-10 overflow-hidden shrink-0 flex flex-row items-center justify-center py-6 px-6 box-border text-base bg-[#F06292] ">
-              <div>See all testimonials</div>
-              <GrFormNextLink className="ml-2 mt-1" />
-            </div>
-          </div>
-          <div className="relative w-full h-full flex flex-row items-center justify-between gap-8">
-            <div className="absolute w-full h-full flex flex-row items-center justify-center overflow-hidden">
-              <div className="relative w-1/2  h-[500px] rounded-xl overflow-hidden flex flex-col items-start justify-start gap-6 py-8 px-6 box-border">
-                <div className="relative w-full h-[65%]  flex flex-row items-start justify-start gap-8">
-                  <div className="relative w-1/2 h-full bg-white text-black flex flex-col items-start justify-start rounded-md">
-                    <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
-                      <img
-                        className="w-14 h-14 rounded-full"
-                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                        alt=""
-                      />
-                      <div className="relative text-[28px] font-normal py-3">
-                        John Doe
-                      </div>
-                    </div>
-                    <div className="relative w-full h-[60%] text-[14px] items-start justify-start overflow-hidden px-4 py-2 text-justify">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                      fugiat facere voluptatibus quaerat.
-                    </div>
-                  </div>
-                  <div className="relative w-1/2 h-full bg-[#D9D9D9] text-black flex flex-col items-start justify-start rounded-md">
-                    <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
-                      <img
-                        className="w-14 h-14 rounded-full"
-                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                        alt=""
-                      />
-                      <div className="relative text-[28px] font-normal py-3">
-                        John Doe
-                      </div>
-                    </div>
-                    <div className="relative w-full h-[60%] text-[14px] items-start justify-start overflow-hidden px-4 py-2 text-justify">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                      fugiat facere voluptatibus quaerat.
-                    </div>
-                  </div>
-                </div>
-                <div className="relative w-full h-[80%] flex flex-col items-start justify-start gap-8">
-                  <div className="relative w-full h-1/2 bg-[#F5E1DA] text-black flex flex-row items-start justify-start rounded-md">
-                    <div className="relative w-[40%] h-full border-r border-black border-solid flex flex-row items-start justify-start gap-4 overflow-hidden">
-                      <img
-                        className="w-16 h-16 rounded-full mt-3 ml-3 shrink-0"
-                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                        alt=""
-                      />
-                      <div className="relative text-[24px] font-normal py-[12%]">
-                        John Doe
-                      </div>
-                    </div>
-                    <div className="relative w-[60%] h-full text-[14px] items-start justify-start overflow-hidden px-4 py-4 text-justify">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                      fugiat facere voluptatibus quaerat.
-                    </div>
-                  </div>
-                  <div className="relative w-full h-1/2 bg-[#D9D9D9] text-black flex flex-row items-start justify-start rounded-md">
-                    <div className="relative w-[40%] h-full border-r border-black border-solid flex flex-row items-start justify-start gap-4 overflow-hidden">
-                      <img
-                        className="w-16 h-16 rounded-full mt-3 ml-3 shrink-0"
-                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                        alt=""
-                      />
-                      <div className="relative text-[24px] font-normal py-[12%]">
-                        John Doe
-                      </div>
-                    </div>
-                    <div className="relative w-[60%] h-full text-[14px] items-start justify-start overflow-hidden px-4 py-4 text-justify">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                      fugiat facere voluptatibus quaerat.
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="relative w-1/2  h-[500px] rounded-xl overflow-hidden flex flex-col items-start justify-start gap-6 py-8 px-6 box-border">
-                <div className="relative w-full h-[65%]  flex flex-row items-start justify-start gap-8">
-                  <div className="relative w-1/2 h-full bg-white text-black flex flex-col items-start justify-start rounded-md">
-                    <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
-                      <img
-                        className="w-14 h-14 rounded-full"
-                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                        alt=""
-                      />
-                      <div className="relative text-[28px] font-normal py-3">
-                        John Doe
-                      </div>
-                    </div>
-                    <div className="relative w-full h-[60%] text-[14px] items-start justify-start overflow-hidden px-4 py-2 text-justify">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                      fugiat facere voluptatibus quaerat.
-                    </div>
-                  </div>
-                  <div className="relative w-1/2 h-full bg-[#D9D9D9] text-black flex flex-col items-start justify-start rounded-md">
-                    <div className="relative w-full h-[calc(34%+10px)]  flex flex-row items-start justify-start gap-4 overflow-hidden px-4 py-1 border-b border-black border-solid">
-                      <img
-                        className="w-14 h-14 rounded-full"
-                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                        alt=""
-                      />
-                      <div className="relative text-[28px] font-normal py-3">
-                        John Doe
-                      </div>
-                    </div>
-                    <div className="relative w-full h-[60%] text-[14px] items-start justify-start overflow-hidden px-4 py-2 text-justify">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                      fugiat facere voluptatibus quaerat.
-                    </div>
-                  </div>
-                </div>
-                <div className="relative w-full h-[80%] flex flex-col items-start justify-start gap-8">
-                  <div className="relative w-full h-1/2 bg-[#F5E1DA] text-black flex flex-row items-start justify-start rounded-md">
-                    <div className="relative w-[40%] h-full border-r border-black border-solid flex flex-row items-start justify-start gap-4 overflow-hidden">
-                      <img
-                        className="w-16 h-16 rounded-full mt-3 ml-3 shrink-0"
-                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                        alt=""
-                      />
-                      <div className="relative text-[24px] font-normal py-[12%]">
-                        John Doe
-                      </div>
-                    </div>
-                    <div className="relative w-[60%] h-full text-[14px] items-start justify-start overflow-hidden px-4 py-4 text-justify">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                      fugiat facere voluptatibus quaerat.
-                    </div>
-                  </div>
-                  <div className="relative w-full h-1/2 bg-[#D9D9D9] text-black flex flex-row items-start justify-start rounded-md">
-                    <div className="relative w-[40%] h-full border-r border-black border-solid flex flex-row items-start justify-start gap-4 overflow-hidden">
-                      <img
-                        className="w-16 h-16 rounded-full mt-3 ml-3 shrink-0"
-                        src="https://images.unsplash.com/photo-1499952127939-9bbf5af6c51c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D"
-                        alt=""
-                      />
-                      <div className="relative text-[24px] font-normal py-[12%]">
-                        John Doe
-                      </div>
-                    </div>
-                    <div className="relative w-[60%] h-full text-[14px] items-start justify-start overflow-hidden px-4 py-4 text-justify">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Accusantium nam alias blanditiis. Saepe aperiam voluptatum
-                      fugiat facere voluptatibus quaerat.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="relative w-full h-auto flex flex-col border-y my-[3vw] border-solid  md:px-[12vw] px-[8vw] items-center pt-[2vw] pb-[4vw] ">
+      <div className="w-full h-full text-start  justify-between  flex flex-row">
+        <div className="">
+          <h3 className="text-[3.5vw] font-extralight mb-[-3.6vw]">
+            what our user <br /> thinks of
+          </h3>
+          <h1 className=" text-[4.4vw] font-sans font-extrabold tracking-wide">
+            UltraXperts
+          </h1>
         </div>
+        <span className="flex items-center justify-center underline text-[2vw] md:text-[1.2vw]">
+          See More <GrFormNextLink />
+        </span>
       </div>
-    </div>
-  );
-};
-export const Blogs = () => {
-  return (
-    <div className="absolute top-[4450px] flex flex-col gap-16 w-full items-start">
-      <div
-        id="Line2"
-        className="border-solid w-full h-0 border-t-0 border-black/70"
-      />
-      <div className="relative flex flex-row justify-end w-full items-start pt-16 px-20">
-        <div className="w-full h-[651px] bg-[#0b3846] absolute top-0 left-0 flex flex-row justify-between items-start pt-12 pl-12 pr-20">
-          <div className="flex flex-row mt-12 gap-12 w-3/5 items-start">
-            <img
-              src="https://file.rendit.io/n/3aqu3HTEbAu8CzxemORT.png"
-              alt="Frame5"
-            />
-            <div className="flex flex-col mt-2 gap-8 w-1/2 font-['Montserrat'] items-start">
-              <div className="text-5xl font-bold text-white ml-1 w-full">
-                Lorem ipsum dolor sit amet consectetur.
-              </div>
-              <div className="text-[15px] text-justify font-extralight text-white w-full font-['Montserrat']">
-                Lorem ipsum dolor sit amet consectetur. Maecenas imperdiet amet
-                ultricies orci vestibulum nullam tellus ullamcorper. Eget donec
-                consectetur amet potenti magna erat. Sit sed ipsum libero sem
-                dolor risus orci non...
-                <span className="text-xs font-light text-white/80">
-                  read more
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className=" right-24 flex flex-col gap-4 w-1/4 font-['Montserrat'] items-start">
-            <div className="text-right text-[40px] shrink-0 w-full font-bold text-white">
-              From our blog
-            </div>
-            <div className="flex flex-row ml-56 gap-1 w-3/5 items-start">
-              <div className="font-medium text-white/80 ">see more</div>
-              <img
-                src="https://file.rendit.io/n/Eyml8Mtxt0BOAgUerx6m.svg"
-                alt="Basilarrowrightoutline"
-                className="w-6"
-              />
-            </div>
-          </div>
-        </div>
-        <img
-          src="https://file.rendit.io/n/uWIMmUHfgiT0Prk9JCwO.png"
-          alt="Frame6"
-          className="w-[830px] h-[494px] absolute top-64 left-64 border-0"
-        />
-        <div
-          id="Line3"
-          className="border-solid border-r border-white w-px h-48 absolute top-24 left-[407px]"
-        />
-        <div className="bg-[#f06292] relative flex flex-row justify-end gap-5 w-2/5 items-start mt-[382px] mb-16 pt-6 px-6">
-          <div
-            id="Line4"
-            className="border-solid border-r border-white w-px h-48 mt-2 mb-6"
-          />
-          <div className="flex flex-col mt-6 gap-4 w-5/6 font-['Montserrat'] items-start">
-            <div className="text-5xl font-semibold text-white  w-full">
-              Lorem ipsum dolor sit amet consectetur.
-            </div>
-            <div className="text-[14px] text-justify text-white w-full font-['Montserrat']">
-              Lorem ipsum dolor sit amet consectetur. Maecenas imperdiet amet
-              ultricies orci vestibulum nullam tellus ullamcorper. Eget donec
-              consectetur amet potenti magna erat. Sit sed ipsum libero sem
-              dolor risus orci non...{" "}
-              <span className="text-xs font-light text-white/80">
-                read more
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-export const Try = () => {
-  return (
-    <div
-      id="LandingPageRoot"
-      className="bg-white flex flex-col justify-between pt-[1526px] w-full h-[5329px] font-['Montserrat'] items-start"
-    >
-      <div className="flex flex-col gap-16 w-full items-start mx-0">
-        <div
-          id="Line"
-          className="border-solid ml-px w-full h-0 border-t-0 border-black/70"
-        />
-        <div className="shadow-[0px_2px_10px_0px_rgba(0,_0,_0,_0.15)] bg-[#f5e1da] flex flex-row justify-between w-full items-start mb-1 ml-px pt-20 px-40">
-          <div className="text-6xl font-semibold mt-32 w-1/4">
-            Meet our experts.
-          </div>
-          <div className="flex flex-row mb-20 gap-5 w-2/3 items-start">
-            <img
-              src="https://file.rendit.io/n/bAE1mgXEBHROxG3Lrgcu.png"
-              alt="Frame1"
-            />
-            <img
-              src="https://file.rendit.io/n/Ny0jLS85Yhvtdsp0P4Wz.png"
-              alt="Frame2"
-            />
-            <img
-              src="https://file.rendit.io/n/CjFIOlTlIKhtswmEjYBA.png"
-              alt="Frame3"
-            />
-          </div>
-        </div>
-        <div
-          id="Line1"
-          className="border-solid w-full h-0 border-t-0 border-black/70"
-        />
-      </div>
-      <div className="flex flex-col ml-0 gap-[147px] w-full items-start">
-        <div className="flex flex-col mb-px gap-16 w-full items-start">
-          <div
-            id="Line2"
-            className="border-solid w-full h-0 border-t-0 border-black/70"
-          />
-          <div className="relative flex flex-row justify-end ml-1 w-full items-start pt-16 px-20">
-            <div className="w-full h-[651px] bg-[#0b3846] absolute top-0 left-0 flex flex-row justify-between items-start pt-12 pl-12 pr-20">
-              <div className="flex flex-row mt-12 gap-12 w-3/5 items-start">
-                <img
-                  src="https://file.rendit.io/n/3aqu3HTEbAu8CzxemORT.png"
-                  alt="Frame5"
-                />
-                <div className="flex flex-col mt-2 gap-6 w-1/2 font-['Montserrat'] items-start">
-                  <div className="text-2xl font-semibold text-white ml-1 w-full">
-                    Lorem ipsum dolor sit amet consectetur.
-                  </div>
-                  <div className="text-sm text-white w-full font-['Montserrat']">
-                    Lorem ipsum dolor sit amet consectetur. Maecenas imperdiet
-                    amet ultricies orci vestibulum nullam tellus ullamcorper.
-                    Eget donec consectetur amet potenti magna erat. Sit sed
-                    ipsum libero sem dolor risus orci non...{" "}
-                    <span className="text-xs font-light text-white/80">
-                      read more
-                    </span>
-                    <div> </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-4 w-1/5 font-['Montserrat'] items-start">
-                <div className="text-right text-4xl font-bold text-white">
-                  From our blog
-                </div>
-                <div className="flex flex-row ml-40 gap-1 w-2/5 items-start">
-                  <div className="font-medium text-white/80 mt-px">
-                    see more
-                  </div>
-                  <img
-                    src="https://file.rendit.io/n/Eyml8Mtxt0BOAgUerx6m.svg"
-                    alt="Basilarrowrightoutline"
-                    className="w-6"
-                  />
-                </div>
-              </div>
-            </div>
-            <img
-              src="https://file.rendit.io/n/uWIMmUHfgiT0Prk9JCwO.png"
-              alt="Frame6"
-              className="w-[830px] h-[494px] absolute top-64 left-64 border-0"
-            />
+      <motion.div
+        ref={carosel}
+        whileTap={{ cursor: "grabbing" }}
+        className="cursor-grab overflow-hidden w-full h-full flex flex-row"
+      >
+        <motion.div
+          drag="x"
+          dragConstraints={{ right: 0, left: -width }}
+          className="flex gap-3 md:gap-5 overflow-visible "
+        >
+          <motion.div className="w-[25vw] md:w-[23vw] h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
             <div
-              id="Line3"
-              className="border-solid border-r border-white w-px h-48 absolute top-24 left-[407px]"
-            />
-            <div className="bg-[#f06292] relative flex flex-row justify-end gap-5 w-2/5 items-start mt-[382px] mb-16 pt-6 px-6">
-              <div
-                id="Line4"
-                className="border-solid border-r border-white w-px h-48 mt-2 mb-6"
-              />
-              <div className="flex flex-col mt-6 gap-4 w-5/6 font-['Montserrat'] items-start">
-                <div className="text-2xl font-semibold text-white ml-1 w-full">
-                  Lorem ipsum dolor sit amet consectetur.
-                </div>
-                <div className="text-sm text-white w-full font-['Montserrat']">
-                  Lorem ipsum dolor sit amet consectetur. Maecenas imperdiet
-                  amet ultricies orci vestibulum nullam tellus ullamcorper. Eget
-                  donec consectetur amet potenti magna erat. Sit sed ipsum
-                  libero sem dolor risus orci non...{" "}
-                  <span className="text-xs font-light text-white/80">
-                    read more
-                  </span>
-                  <div> </div>
-                </div>
+              className={`w-full h-full object-cover bg-[#EA7794]   rounded-xl pointer-events-none border-white border flex flex-col`}
+            >
+              <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[0.8vw] px-[1.15vw]">
+                <img
+                  className="shrink-0 h-[5vw] w-[5vw] rounded-full object-cover border-white border-solid border-4"
+                  src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  alt=""
+                />
+                <h2 className="shrink-0 text-[1.4vw]">Bhavesh Bhanusali</h2>
+              </div>
+              <div className="w-full h-2/3 text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
+                nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
+                Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
+                consectetur adipisicing elit. Ducimus, sed.
               </div>
             </div>
+          </motion.div>
+          <motion.div className=" w-[25vw] md:w-[23vw] h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
+            <div
+              className={`w-full h-full object-cover bg-[#78A7EE]   rounded-xl pointer-events-none border-white border flex flex-col`}
+            >
+              <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[0.8vw] px-[1.15vw]">
+                <img
+                  className="shrink-0 h-[5vw] w-[5vw] rounded-full object-cover border-white border-solid border-4"
+                  src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  alt=""
+                />
+                <h2 className="shrink-0 text-[1.4vw]">Bhavesh Bhanusali</h2>
+              </div>
+              <div className="w-full h-2/3 text-[1.35vw] md:text-[1.2vw] flex items-start justify-start gap-2 px-[2vw]">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
+                nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
+                Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
+                consectetur adipisicing elit. Ducimus, sed.
+              </div>
+            </div>
+          </motion.div>
+          <motion.div className=" w-[25vw] md:w-[23vw] h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
+            <div
+              className={`w-full h-full object-cover bg-[#F66B3A]   rounded-xl pointer-events-none border-white border flex flex-col`}
+            >
+              <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[0.8vw] px-[1.15vw]">
+                <img
+                  className="shrink-0 h-[5vw] w-[5vw] rounded-full object-cover border-white border-solid border-4"
+                  src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  alt=""
+                />
+                <h2 className="shrink-0 text-[1.4vw]">Bhavesh Bhanusali</h2>
+              </div>
+              <div className="w-full h-2/3 text-[1.35vw] md:text-[1.2vw] flex items-start justify-start gap-2 px-[2vw]">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
+                nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
+                Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
+                consectetur adipisicing elit. Ducimus, sed.
+              </div>
+            </div>
+          </motion.div>
+          <motion.div className=" w-[25vw] md:w-[23vw] h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
+            <div
+              className={`w-full h-full object-cover bg-[#F1BE60]   rounded-xl pointer-events-none border-white border flex flex-col`}
+            >
+              <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[0.8vw] px-[1.15vw]">
+                <img
+                  className="shrink-0 h-[5vw] w-[5vw] rounded-full object-cover border-white border-solid border-4"
+                  src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  alt=""
+                />
+                <h2 className="shrink-0 text-[1.4vw]">Bhavesh Bhanusali</h2>
+              </div>
+              <div className="w-full h-2/3 text-[1.35vw] md:text-[1.2vw] flex items-start justify-start gap-2 px-[2vw]">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
+                nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
+                Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
+                consectetur adipisicing elit. Ducimus, sed.
+              </div>
+            </div>
+          </motion.div>
+          <motion.div className=" w-[25vw] md:w-[23vw] h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
+            <div
+              className={`w-full h-full object-cover bg-[#804EDA]   rounded-xl pointer-events-none border-white border flex flex-col`}
+            >
+              <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[0.8vw] px-[1.15vw]">
+                <img
+                  className="shrink-0 h-[5vw] w-[5vw] rounded-full object-cover border-white border-solid border-4"
+                  src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  alt=""
+                />
+                <h2 className="shrink-0 text-[1.4vw]">Bhavesh Bhanusali</h2>
+              </div>
+              <div className="w-full h-2/3 text-[1.35vw] md:text-[1.2vw] flex items-start justify-start gap-2 px-[2vw]">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
+                nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
+                Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
+                consectetur adipisicing elit. Ducimus, sed.
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+};
+export const Blog = () => {
+  return (
+    <div className="my-[3vw]">
+      <div className="relative w-full h-auto pb-[3vw] bg-[#F2F2F2] pl-[5vw] pr-[8vw]">
+        <div className="flex flex-row justify-between items-center w-full h-full">
+          <h1 className="text-[6vw] font-thin font-sans text-[#C5C3C3] uppercase">
+            Blog
+          </h1>
+          <span className="flex items-center underline text-[2vw]">
+            See More <GrFormNextLink />
+          </span>
+        </div>
+        <div className="flex w-full gap-8 items-start">
+          <img
+            className="w-[28vw] h-[36vw]"
+            src="https://images.pexels.com/photos/1762851/pexels-photo-1762851.jpeg?auto=compress&cs=tinysrgb&w=600"
+            alt=""
+          />
+          <div className="flex w-2/3 flex-col items-start justify-start">
+            <div className=" text-[4.4vw] font-sans  font-extrabold tracking-wide ">
+              A DESIGNER’S <br /> GUIDE TO BATTLE <br /> IMPOSTER <br />{" "}
+              SYNDROME
+            </div>
+            <p className="w-full md:w-11/12 text-[1.6vw] md:text-[1.2vw] mb-[-0.8vw]">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore
+              quis nostrum dignissimos eum, aliquid non nam, odit quidem
+              voluptate velit facilis quisquam corporis numquam fugit est
+              deleniti debitis qui id? Necessitatibus earum explicabo rem
+              obcaecati.
+            </p>
+            <p className="underline text-[1.5vw] font-medium">Read More</p>
           </div>
         </div>
-        <div className="overflow-hidden bg-[#f5f5f5] flex flex-row justify-between ml-1 pl-32 w-full items-start">
-          <div className="flex flex-col mt-24 gap-6 w-2/5 items-start">
-            <div className="text-6xl font-black mb-0">
-              Think creative,
-              <br />
-              Do effective
+      </div>
+      <div className="relative w-full h-auto pb-[3vw] bg-[#F2F2F2]  pl-[5vw] pr-[8vw]">
+        <div className="flex  flex-row-reverse justify-between items-center w-full h-full">
+          <h1 className="text-[6vw] font-thin font-sans text-[#C5C3C3] uppercase">
+            Blog
+          </h1>
+        </div>
+        <div className="flex flex-row-reverse w-full gap-8 items-start">
+          <img
+            className="w-[28vw] h-[36vw]"
+            src="https://images.pexels.com/photos/1762851/pexels-photo-1762851.jpeg?auto=compress&cs=tinysrgb&w=600"
+            alt=""
+          />
+          <div className="flex w-2/3 flex-col items-start justify-start">
+            <div className=" text-[4.4vw] font-sans  font-extrabold tracking-wide ">
+              A DESIGNER’S <br /> GUIDE TO BATTLE <br /> IMPOSTER <br />{" "}
+              SYNDROME
             </div>
-            <div className="text-xl w-full">
-              Lorem ipsum dolor sit amet consectetur. Lobortis suspendisse
-              ornare facilisis morbi. Tempor donec non pretium eleifend neque.
-            </div>
-            <div className="text-2xl font-medium">Read the full story</div>
-          </div>
-          <div className="relative flex flex-row pt-10 w-1/2 items-start">
-            <div className="w-2/3 h-[491px] bg-[#ffbbbb] absolute top-0 left-[204.42578125px]" />
-            <img
-              src="https://file.rendit.io/n/f6PZQtoglij80koDqTim.png"
-              alt="Frame11"
-              className="relative mb-10"
-            />
+            <p className="w-full md:w-11/12 text-[1.6vw] md:text-[1.2vw] mb-[-0.8vw]">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore
+              quis nostrum dignissimos eum, aliquid non nam, odit quidem
+              voluptate velit facilis quisquam corporis numquam fugit est
+              deleniti debitis qui id? Necessitatibus earum explicabo rem
+              obcaecati.
+            </p>
+            <p className="underline text-[1.5vw] font-medium">Read More</p>
           </div>
         </div>
       </div>
@@ -650,13 +545,13 @@ export const Try = () => {
 };
 const Landing = () => {
   const [preLoader, setPreLoder] = useState(true);
-  useEffect(()=>{
-    setTimeout(()=>{
-      setPreLoder(false)
-    },2500)
-  },[])
-  if(preLoader){
-    return <PreLoader/>
+  useEffect(() => {
+    setTimeout(() => {
+      setPreLoder(false);
+    }, 2500);
+  }, []);
+  if (preLoader) {
+    return <PreLoader />;
   }
   return (
     <>
@@ -666,8 +561,8 @@ const Landing = () => {
       <TopExperts />
       <AboutUX />
       <Story />
+      <Blog />
       <Testimonial />
-      <Blogs />
       <Footer />
     </>
   );

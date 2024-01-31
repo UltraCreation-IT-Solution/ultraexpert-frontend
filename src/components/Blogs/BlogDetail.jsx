@@ -13,9 +13,13 @@ export const CommentCard = () => {
           alt=""
         />
         <div>
-          <div className="md:text-[1.8vw] sm:text-[2vw] lg:text-[1.6vw] text-[2.5vw] font-semibold">Antony Squash</div>
+          <div className="md:text-[1.8vw] sm:text-[2vw] lg:text-[1.6vw] text-[2.5vw] font-semibold">
+            Antony Squash
+          </div>
           <div className="flex items-center my-4 gap-10 text-gray-400">
-            <div className="md:text-[1vw] sm:text-[1.5vw] lg:text-[1vw] text-[2vw]">1 month ago</div>
+            <div className="md:text-[1vw] sm:text-[1.5vw] lg:text-[1vw] text-[2vw]">
+              1 month ago
+            </div>
           </div>
           <p className="md:text-[1.3vw] sm:text-[1.5vw] lg:text-[1vw] text-[2.5vw] font-light">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid
@@ -36,7 +40,7 @@ const BlogDetails = () => {
       <Navbar />
       <div className="flex items-center justify-center">
         <div className="md:flex-col gap-6 mx-0 md:px-[2.5vw] py-[1vw] mt-[100px]">
-        <p className="mt-[2vw] text-[2.2vw] sm:text-[1.7vw] md:text-[1.5vw] lg:text-[0.8vw] flex items-center justify-center text-[#a7a6a6] font-montserrat">
+          <p className="mt-[2vw] text-[2.2vw] sm:text-[1.7vw] md:text-[1.5vw] lg:text-[0.8vw] flex items-center justify-center text-[#a7a6a6] font-montserrat">
             October 04,2023
           </p>
           <h1 className="text-[12vw] sm:text-[10vw] md:text-[4vw] mx-[0.5vw] shrink-0 text-center">
@@ -192,46 +196,48 @@ const BlogDetails = () => {
       <div className="border-b border-gray-300 border-solid mt-[2vw] pt-4 mx-[6.8vw]"></div>
       <div className="flex justify-between mt-[2vw] scrollbar">
         <div className="flex-row mx-[6.8vw] scrollbar">
-        <button className="flex bg-white hover:scale-105 duration-200">
-          <IoIosArrowBack
-            size={30}
-            className=""
-          />
-          <div>
-          <div className="flex">Previous Post</div>
-          <div className="flex">How to book an expert</div>
-          </div>
-          
-        </button>
+          <button className="flex bg-white hover:scale-105 duration-200">
+            <IoIosArrowBack size={30} className="" />
+            <div>
+              <div className="flex">Previous Post</div>
+              <div className="flex">How to book an expert</div>
+            </div>
+          </button>
         </div>
         <div className="flex-row mx-[6.8vw] scrollbar">
-        <button className="flex bg-white hover:scale-105 duration-200">
-          <div>
-          <div className="flex">Next Post</div>
-          <div className="flex">Use the platform effectively</div>
-          </div>
-          <IoIosArrowForward
-            size={30}
-            className=""
-          />
-          
-        </button>
+          <button className="flex bg-white hover:scale-105 duration-200">
+            <div>
+              <div className="flex">Next Post</div>
+              <div className="flex">Use the platform effectively</div>
+            </div>
+            <IoIosArrowForward size={30} className="" />
+          </button>
         </div>
       </div>
       <div className="border-b border-gray-300 border-solid mt-[2vw] pt-4 mx-[6.8vw]"></div>
       <div className="  h-[100vh] mx-[6.8vw] mt-[4vw]">
         <div className="font-bold text-[1.5vw]">
-          <p className="text-[4vw] sm:text-[3vw] md:text-[2vw]">Leave a comment</p>
+          <p className="text-[4vw] sm:text-[3vw] md:text-[2vw]">
+            Leave a comment
+          </p>
           <div className="flex">
-          <input type="text" placeholder="Write a comment here" className=" peer h-full w-full border-b border-gray-300 bg-transparent pt-4 pb-1.5 font-montserrat text-lg font-normal text-gray-300 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-900 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"/>
-          <button className="mx-2 p-[0.9vw] text-center rounded-xl bg-black text-white text-[0.8vw] cursor-pointer">Comment</button>
+            <input
+              type="text"
+              placeholder="Write a comment here"
+              className=" peer h-full w-full border-b border-gray-300 bg-transparent pt-4 pb-1.5 font-montserrat text-lg font-normal text-gray-300 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-900 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
+            />
+            <button className="mx-2 p-[0.9vw] text-center rounded-xl bg-black text-white text-[0.8vw] cursor-pointer">
+              Comment
+            </button>
           </div>
         </div>
         <CommentCard />
         <CommentCard />
         <CommentCard />
       </div>
-      <button className="mx-[6.8vw] sm:p-[1.5vw] md:p-[1.2vw] lg:p-[1vw] p-[2vw] text-center rounded-xl bg-black text-white sm:text-[1.5vw] md:text[1.5vw] lg:text-[1vw] text-[2vw] cursor-pointer">See More</button>
+      <button className="mx-[6.8vw] sm:p-[1.5vw] md:p-[1.2vw] lg:p-[1vw] p-[2vw] text-center rounded-xl bg-black text-white sm:text-[1.5vw] md:text[1.5vw] lg:text-[1vw] text-[2vw] cursor-pointer">
+        See More
+      </button>
       <Footer />
     </div>
   );

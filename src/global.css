@@ -32,30 +32,19 @@ input[type="number"]::-webkit-outer-spin-button {
   );
 }
 .active {
-  @apply mx-1 transform transition-all duration-500 ease-in-out w-[150%] h-[65vh];
+  @apply sm:mx-2 transform transition-all duration-500 ease-in-out w-full sm:w-[150%] h-[36vh] md:h-[65vh];
 }
 .expertDiv h2 {
-  position: absolute;
+  @apply text-[5vw] sm:text-[2.6vw] absolute w-auto block h-auto ml-[15px] bottom-[5%] sm:bottom-[3%] font-light;
   writing-mode: vertical-lr;
-  font-size: 2.6vw;
-  width: 2.5vw;
   rotate: 180deg;
-  display: block;
-  height: auto;
-  margin-left: 15px;
-  bottom: 3%;
-  font-weight: 300;
 }
 .active h2 {
-  bottom: 5%;
-  letter-spacing: 3px;
-  width: 3.8vw;
-  font-weight: 800;
+  @apply bottom-[7%] sm:bottom-[5%] tracking-[3px] w-auto font-extrabold;
 }
-
-.scrollbar::-webkit-scrollbar{
+.serviceContainer::-webkit-scrollbar {
   display: none;
 }
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   display: none;
 }

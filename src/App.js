@@ -5,15 +5,17 @@ import {
   useNavigationType,
   useLocation,
 } from "react-router-dom";
-import Error from "./substitutes/Error";
 import LogIn from "../src/components/Auth/Login/Log-In";
 import Register from "../src/components/Auth/Register/Register";
 import Landing from "./components/Landing/Landing";
 import Expert from "./components/Experts/Expert";
+import Service from "./components/Services/Service";
+import Blog from "./components/Blogs/Blogs/Blog";
 import ExpertProfile from "./components/Experts/ExpertProfile";
 import ServiceDescription from "./components/Experts/ServiceDescription";
 import ServiceBooking from "./components/Experts/ServiceBooking";
-import BlogDetails from "./components/Blogs/BlogDetails";
+import Error from "./subsitutes/Error";
+import BlogDetails from "./components/Blogs/BlogDetail";
 
 function App() {
   const action = useNavigationType();
@@ -29,12 +31,10 @@ function App() {
   return (
     <>
       <Routes>
-
-        <Route path="*" element={<Error />}/>
-        <Route path="/" element={<Landing />}/>
+        <Route path="*" element={<Error />} />
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/blogDetails" element={<BlogDetails/>} />
         <Route path="/experts" element={<Expert />} />
         <Route path="/experts/expertProfile" element={<ExpertProfile />} />
         <Route
@@ -45,6 +45,9 @@ function App() {
           path="/experts/expertProfile/booking"
           element={<ServiceBooking />}
         />
+        <Route path="/services" element={<Service />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/blogdetail" element={<BlogDetails />} />
       </Routes>
     </>
   );

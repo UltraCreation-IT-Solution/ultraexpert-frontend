@@ -9,7 +9,7 @@ import { FaUserGraduate } from "react-icons/fa6";
 import { GiAchievement } from "react-icons/gi";
 import { HiOfficeBuilding } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { ProjectsCarousel } from "../Utils/HelperComponents";
+import { ProjectsCarousel } from "../../utilities/HelperComponents";
 import Navbar from "../Boundary/Navbar";
 import Footer from "../Boundary/Footer";
 
@@ -231,11 +231,15 @@ export const EducationCard = () => {
         <FaUserGraduate />
       </div>
       <div>
-        <div className="text-[1.6vw] md:text-[1.2vw]">Lakshmi Narain College of Technology, Bhopal</div>
+        <div className="text-[1.6vw] md:text-[1.2vw]">
+          Lakshmi Narain College of Technology, Bhopal
+        </div>
         <div className="text-[1.3vw] md:text-[1vw] my-[0.3vw]">
           Bechelor of Engineering - Information Technology
         </div>
-        <div className="text-[1.3vw] md:text-[1vw] text-gray-400 ">2021-2025</div>
+        <div className="text-[1.3vw] md:text-[1vw] text-gray-400 ">
+          2021-2025
+        </div>
       </div>
     </div>
   );
@@ -248,9 +252,15 @@ export const WorkExperienceCard = () => {
         <HiOfficeBuilding />
       </div>
       <div>
-        <div className="text-[1.6vw] md:text-[1.2vw]">Ultracreation It Solution</div>
-        <div className="text-[1.3vw] md:text-[1vw] my-[0.3vw]">Software Developer</div>
-        <div className="text-[1.3vw] md:text-[1vw] text-gray-400 ">2023-2024</div>
+        <div className="text-[1.6vw] md:text-[1.2vw]">
+          Ultracreation It Solution
+        </div>
+        <div className="text-[1.3vw] md:text-[1vw] my-[0.3vw]">
+          Software Developer
+        </div>
+        <div className="text-[1.3vw] md:text-[1vw] text-gray-400 ">
+          2023-2024
+        </div>
       </div>
     </div>
   );
@@ -263,8 +273,12 @@ export const AchievementCard = () => {
         <GiAchievement />
       </div>
       <div>
-        <div className="text-[1.6vw] md:text-[1.2vw]">Winner of Smart India Hackethon</div>
-        <div className="text-[1.3vw] md:text-[1vw] text-gray-400 my-[0.3vw]">2024</div>
+        <div className="text-[1.6vw] md:text-[1.2vw]">
+          Winner of Smart India Hackethon
+        </div>
+        <div className="text-[1.3vw] md:text-[1vw] text-gray-400 my-[0.3vw]">
+          2024
+        </div>
       </div>
     </div>
   );
@@ -332,10 +346,9 @@ export const ExpertInfo = () => {
         </div>
       </div>
 
-      {/* ****Accordian starts from here**** */}
+      {/* ***Accordian starts from here*** */}
       <div className="md:w-[25%] px-[2.5vw] sticky top-[150px]">
         <div className="my-[2vw]">
-
           {/* This is Education accordian */}
           <div className="border-b border-solid border-slate-400 mb-[3vw] md:mb-[2vw]">
             <div
@@ -346,10 +359,9 @@ export const ExpertInfo = () => {
             >
               <div className="">Education</div>
               {!education ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
-              
             </div>
 
-            {education && temp===0 && (
+            {education && temp === 0 && (
               <div>
                 <EducationCard />
                 <EducationCard />
@@ -375,7 +387,7 @@ export const ExpertInfo = () => {
               )}
             </div>
 
-            {workExperience && temp===0 && (
+            {workExperience && temp === 0 && (
               <div>
                 <WorkExperienceCard />
                 <WorkExperienceCard />
@@ -395,7 +407,7 @@ export const ExpertInfo = () => {
               {!achievements ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
             </div>
 
-            {achievements && temp===0 && (
+            {achievements && temp === 0 && (
               <div>
                 <AchievementCard />
                 <AchievementCard />
@@ -417,7 +429,7 @@ const ExpertProfile = () => {
         <AboutExpert />
         <ExpertInfo />
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };
