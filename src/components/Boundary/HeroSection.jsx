@@ -12,16 +12,16 @@ const HeroSection = () => {
           Think Creative,
           <br /> Do Effective
         </h1>
-        <div className="md:-mt-5 flex justify-center items-center ml-[50%] translate-x-[-50%] ]">
+        <div className="md:-mt-5 flex justify-center items-center sm:ml-[50%] sm:translate-x-[-50%] ]">
           <input
-            className=" w-[52vw] h-[6vw] sm:w-[38vw] md:w-[30vw] sm:h-[4.5vw] md:h-[3.5vw] bg-[#ECECEC] rounded-md rounded-r-none pl-4 text-[2.25vw]  sm:text-[2vw] md:text-[1.15vw]"
+            className=" w-[80vw] h-[7vw] sm:w-[38vw] md:w-[30vw] sm:h-[4.5vw] md:h-[3.5vw] bg-[#ECECEC] rounded-md rounded-r-none pl-4 text-[2.4vw]  sm:text-[2vw] md:text-[1.15vw]"
             type="text"
             placeholder="Search for any services"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <div className="bg-[#ECECEC] w-[5vw] md:w-[3.5vw] rounded-l-none rounded-md h-[6vw] sm:h-[4.5vw] md:h-[3.5vw]  flex items-center">
-            <FaSearch className=" text-black bg-[#ECECEC] right-[32vw] md:right-[35vw] font-thin text-[2.2vw]  md:text-[1.25vw]" />
+          <div className="bg-[#ECECEC] w-[5vw] md:w-[3.5vw] rounded-l-none rounded-md h-[7vw] sm:h-[4.5vw] md:h-[3.5vw]  flex items-center">
+            <FaSearch className=" text-black bg-[#ECECEC] right-[32vw] md:right-[35vw]  text-[3vw]  md:text-[1.25vw]" />
           </div>
         </div>
       </div>
