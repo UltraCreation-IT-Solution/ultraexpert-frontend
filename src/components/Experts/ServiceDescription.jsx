@@ -1,12 +1,10 @@
 import React from "react";
 import { GiDuration } from "react-icons/gi";
 import { ProfileCardHorizontal } from "./ExpertProfile";
-import Navbar from "../Boundary/Navbar";
 import { Link } from "react-router-dom";
 const ServiceDescription = () => {
   return (
     <div className="">
-      <Navbar />
       <div className="w-[85%] m-auto mt-[80px] py-[2vw]">
         <div className="w-2/4">
           <ProfileCardHorizontal />

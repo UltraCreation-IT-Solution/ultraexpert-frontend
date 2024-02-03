@@ -10,8 +10,6 @@ import { GiAchievement } from "react-icons/gi";
 import { HiOfficeBuilding } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { ProjectsCarousel } from "../../utilities/HelperComponents";
-import Navbar from "../Boundary/Navbar";
-import Footer from "../Boundary/Footer";
 
 export const ProfileCardHorizontal = ({ width }) => {
   return (
@@ -424,12 +422,10 @@ export const ExpertInfo = () => {
 const ExpertProfile = () => {
   return (
     <div>
-      <Navbar />
       <div className=" mt-[80px]">
         <AboutExpert />
         <ExpertInfo />
       </div>
-      <Footer />
     </div>
   );
 };
