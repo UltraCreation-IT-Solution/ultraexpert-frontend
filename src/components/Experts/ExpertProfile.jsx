@@ -10,8 +10,6 @@ import { GiAchievement } from "react-icons/gi";
 import { HiOfficeBuilding } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { ProjectsCarousel } from "../../utilities/HelperComponents";
-import Navbar from "../Boundary/Navbar";
-import Footer from "../Boundary/Footer";
 
 export const ProfileCardHorizontal = ({ width }) => {
   return (
@@ -311,7 +309,7 @@ export const ExpertInfo = () => {
 
   return (
     <div className="md:flex">
-      <div className="md:w-[75%] px-[2.5vw] md:border-r border-solid border-slate-300">
+      <div className="md:w-[75%] px-[2.5vw] md:border-r border-solid border-slate-300 ">
         {/* Three buttons are present here */}
         <div className="flex items-center justify-around mt-[6vw] md:mt-[1.5vw] ">
           <div
@@ -424,12 +422,10 @@ export const ExpertInfo = () => {
 const ExpertProfile = () => {
   return (
     <div>
-      <Navbar />
       <div className=" mt-[80px]">
         <AboutExpert />
         <ExpertInfo />
       </div>
-      <Footer />
     </div>
   );
 };
