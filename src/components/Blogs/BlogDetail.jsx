@@ -1,5 +1,3 @@
-import Footer from "../Boundary/Footer";
-import Navbar from "../Boundary/Navbar";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 
@@ -37,7 +35,6 @@ export const CommentCard = () => {
 const BlogDetails = () => {
   return (
     <div className="w-[100%] h-100vh">
-      <Navbar />
       <div className="flex items-center justify-center">
         <div className="md:flex-col gap-6 mx-0 md:px-[2.5vw] py-[1vw] mt-[100px]">
           <p className="mt-[2vw] text-[2.2vw] sm:text-[1.7vw] md:text-[1.5vw] lg:text-[0.8vw] flex items-center justify-center text-[#a7a6a6] font-montserrat">
@@ -238,7 +235,6 @@ const BlogDetails = () => {
       <button className="mx-[6.8vw] sm:p-[1.5vw] md:p-[1.2vw] lg:p-[1vw] p-[2vw] text-center rounded-xl bg-black text-white sm:text-[1.5vw] md:text[1.5vw] lg:text-[1vw] text-[2vw] cursor-pointer">
         See More
       </button>
-      <Footer />
     </div>
   );
 };

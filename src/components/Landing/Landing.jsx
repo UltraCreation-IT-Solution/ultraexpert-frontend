@@ -1,8 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { GrFormNextLink } from "react-icons/gr";
 import { CiStar } from "react-icons/ci";
-import Footer from "../Boundary/Footer";
-import Navbar from "../Boundary/Navbar";
 import HeroSection from "../Boundary/HeroSection";
 import photography from "../../assets/images/photography.png";
 import ai from "../../assets/images/ai.png";
@@ -14,7 +12,7 @@ import videoAnim from "../../assets/images/videoAnimation.png";
 import Writting from "../../assets/images/writingTranslation.png";
 import webdesignservice from "../../assets/images/webDesignService.png";
 import musicAudio from "../../assets/images/musicAudio.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import PreLoader from "../../subsitutes/PreLoader";
 
@@ -87,12 +85,15 @@ export const ServiceCategory = () => {
   );
 };
 export const TopExperts = () => {
+  const location = useLocation().pathname;
   const [activeNo, setActiveNo] = useState(0);
   return (
     <div className="relative w-full h-auto py-[3vw] bg-[#F2F2F2] px-[6vw] md:px-[12vw] overflow-hidden">
       <Link
         to={"/experts"}
-        className="text-[#C5C3C3] text-[7.5vw] md:text-[6.5vw] font-bold flex justify-end decoration-transparent"
+        className={`${
+          location === "/experts" ? "hidden" : "block"
+        } text-[#C5C3C3] text-[7.5vw] md:text-[6.5vw] font-bold flex justify-end decoration-transparent`}
       >
         EXPERTS
       </Link>
@@ -276,10 +277,15 @@ export const TopExperts = () => {
           </div>
         </div>
       </div>
-      <div className="text-[2.4vw] md:text-[1.6vw] text-black flex items-cemter justify-end underline mt-[-10vw] sm:mt-[-8vw] md:mt-[-3vw]">
+      <Link
+        to={"/experts"}
+        className={`${
+          location === "/experts" ? "hidden" : "block"
+        } text-[2.4vw] md:text-[1.6vw] text-black flex items-cemter justify-end underline mt-[-10vw] sm:mt-[-8vw] md:mt-[-3vw]`}
+      >
         See More Experts
         <GrFormNextLink className="mt-[0.5vw] text-[2vw] md:text-[1.4vw]" />
-      </div>
+      </Link>
     </div>
   );
 };
@@ -345,11 +351,6 @@ export const Story = () => {
   );
 };
 export const Testimonial = () => {
-  const [width, setWidth] = useState(0);
-  const carosel = useRef();
-  useEffect(() => {
-    setWidth(carosel.current.scrollWidth - carosel.current.offsetWidth);
-  }, []);
   return (
     <div className="relative w-full h-auto flex flex-col border-y my-[5vw] sm:my-[3vw] border-solid  md:px-[12vw] px-[8vw] items-center pt-[3vw] sm:pt-[2vw] pb-[6vw] sm:pb-[4vw] ">
       <div className="w-full h-full text-start  justify-between  flex flex-row">
@@ -365,17 +366,9 @@ export const Testimonial = () => {
           See More <GrFormNextLink />
         </span>
       </div>
-      <motion.div
-        ref={carosel}
-        whileTap={{ cursor: "grabbing" }}
-        className="cursor-grab overflow-hidden w-full h-full flex flex-row"
-      >
-        <motion.div
-          drag="x"
-          dragConstraints={{ right: 0, left: -width }}
-          className="flex gap-[1.6vw] md:gap-[1.4vw] overflow-visible "
-        >
-          <motion.div className="w-[39vw] h-[42vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
+      <motion.div className=" overflow-scroll w-full h-full flex flex-row">
+        <motion.div className="flex gap-[4vw] md:gap-[1.4vw] overflow-visible ">
+          <motion.div className="w-[56vw] h-[40vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
             <div
               className={`w-full h-full object-cover bg-[#EA7794]   rounded-xl pointer-events-none border-white border flex flex-col`}
             >
@@ -385,11 +378,11 @@ export const Testimonial = () => {
                   src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
                   alt=""
                 />
-                <h2 className="shrink-0 text-[2.6vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
+                <h2 className="shrink-0 text-[3.65vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
                   Bhavesh Bhanusali
                 </h2>
               </div>
-              <div className="w-full h-2/3 text-[2.15vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
+              <div className="w-full h-2/3 text-[2.55vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
                 nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
                 Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
@@ -397,7 +390,7 @@ export const Testimonial = () => {
               </div>
             </div>
           </motion.div>
-          <motion.div className="w-[39vw] h-[42vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
+          <motion.div className="w-[56vw] h-[40vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
             <div
               className={`w-full h-full object-cover bg-[#78A7EE]  rounded-xl pointer-events-none border-white border flex flex-col`}
             >
@@ -407,11 +400,11 @@ export const Testimonial = () => {
                   src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
                   alt=""
                 />
-                <h2 className="shrink-0 text-[2.6vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
+                <h2 className="shrink-0 text-[3.65vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
                   Bhavesh Bhanusali
                 </h2>
               </div>
-              <div className="w-full h-2/3 text-[2.15vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
+              <div className="w-full h-2/3 text-[2.55vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
                 nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
                 Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
@@ -419,7 +412,7 @@ export const Testimonial = () => {
               </div>
             </div>
           </motion.div>
-          <motion.div className="w-[39vw] h-[42vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
+          <motion.div className="w-[56vw] h-[40vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
             <div
               className={`w-full h-full object-cover bg-[#F66B3A]   rounded-xl pointer-events-none border-white border flex flex-col`}
             >
@@ -429,11 +422,11 @@ export const Testimonial = () => {
                   src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
                   alt=""
                 />
-                <h2 className="shrink-0 text-[2.6vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
+                <h2 className="shrink-0 text-[3.65vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
                   Bhavesh Bhanusali
                 </h2>
               </div>
-              <div className="w-full h-2/3 text-[2.15vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
+              <div className="w-full h-2/3 text-[2.55vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
                 nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
                 Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
@@ -441,7 +434,7 @@ export const Testimonial = () => {
               </div>
             </div>
           </motion.div>
-          <motion.div className="w-[39vw] h-[42vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
+          <motion.div className="w-[56vw] h-[40vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
             <div
               className={`w-full h-full object-cover bg-[#F1BE60]   rounded-xl pointer-events-none border-white border flex flex-col`}
             >
@@ -451,11 +444,11 @@ export const Testimonial = () => {
                   src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
                   alt=""
                 />
-                <h2 className="shrink-0 text-[2.6vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
+                <h2 className="shrink-0 text-[3.65vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
                   Bhavesh Bhanusali
                 </h2>
               </div>
-              <div className="w-full h-2/3 text-[2.15vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
+              <div className="w-full h-2/3 text-[2.55vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
                 nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
                 Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
@@ -463,7 +456,7 @@ export const Testimonial = () => {
               </div>
             </div>
           </motion.div>
-          <motion.div className="w-[39vw] h-[42vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
+          <motion.div className="w-[56vw] h-[40vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
             <div
               className={`w-full h-full object-cover bg-[#804EDA]    rounded-xl pointer-events-none border-white border flex flex-col`}
             >
@@ -473,11 +466,11 @@ export const Testimonial = () => {
                   src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
                   alt=""
                 />
-                <h2 className="shrink-0 text-[2.6vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
+                <h2 className="shrink-0 text-[3.65vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
                   Bhavesh Bhanusali
                 </h2>
               </div>
-              <div className="w-full h-2/3 text-[2.15vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
+              <div className="w-full h-2/3 text-[2.55vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
                 nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
                 Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
@@ -485,7 +478,7 @@ export const Testimonial = () => {
               </div>
             </div>
           </motion.div>
-          <motion.div className="w-[39vw] h-[42vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
+          <motion.div className="w-[56vw] h-[40vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
             <div
               className={`w-full h-full object-cover bg-[#78A7EE]   rounded-xl pointer-events-none border-white border flex flex-col`}
             >
@@ -495,11 +488,11 @@ export const Testimonial = () => {
                   src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
                   alt=""
                 />
-                <h2 className="shrink-0 text-[2.6vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
+                <h2 className="shrink-0 text-[3.65vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
                   Bhavesh Bhanusali
                 </h2>
               </div>
-              <div className="w-full h-2/3 text-[2.15vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
+              <div className="w-full h-2/3 text-[2.55vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
                 nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
                 Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
@@ -507,7 +500,7 @@ export const Testimonial = () => {
               </div>
             </div>
           </motion.div>
-          <motion.div className="w-[39vw] h-[42vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
+          <motion.div className="w-[56vw] h-[40vw] sm:w-[25vw] md:w-[23vw] sm:h-[28vw] md:h-[25vw]  text-white flex flex-col justify-center">
             <div
               className={`w-full h-full object-cover bg-[#F66B3A]   rounded-xl pointer-events-none border-white border flex flex-col`}
             >
@@ -517,11 +510,11 @@ export const Testimonial = () => {
                   src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
                   alt=""
                 />
-                <h2 className="shrink-0 text-[2.6vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
+                <h2 className="shrink-0 text-[3.65vw] sm:text-[1.4vw] tracking-wide sm:tracking-normal">
                   Bhavesh Bhanusali
                 </h2>
               </div>
-              <div className="w-full h-2/3 text-[2.15vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
+              <div className="w-full h-2/3 text-[2.55vw] sm:text-[1.35vw] md:text-[1.2vw] flex items-start justify-start px-[2vw]">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
                 nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
                 Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
@@ -615,7 +608,6 @@ const Landing = () => {
   }
   return (
     <>
-      <Navbar />
       <HeroSection />
       <TopExperts />
       <ServiceCategory />
@@ -623,7 +615,6 @@ const Landing = () => {
       <Story />
       <Blog />
       <Testimonial />
-      <Footer />
     </>
   );
 };

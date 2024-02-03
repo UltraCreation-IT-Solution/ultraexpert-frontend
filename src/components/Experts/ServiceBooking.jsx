@@ -1,11 +1,8 @@
 import React from "react";
-import Navbar from "../Boundary/Navbar";
 import { Link } from "react-router-dom";
 const ServiceBooking = () => {
   return (
     <div className=" w-[85%] h-[100vh] m-auto md:flex md:justify-center md:items-center">
-      <Navbar />
-
       <div className="md:flex items-center justify-around  mt-[80px] py-[2vw]">
         <div className="w-full md:w-[35%] flex flex-col items-center">
           <div className="text-[7.5vw] sm:text-[6vw] md:text-[3vw] font-extrabold text-center">
