@@ -311,7 +311,7 @@ export const ExpertInfo = () => {
 
   return (
     <div className="md:flex">
-      <div className="md:w-[75%] px-[2.5vw] md:border-r border-solid border-slate-300 ">
+      <div className="md:w-[75%] px-[2.5vw] md:border-r border-solid border-slate-300">
         {/* Three buttons are present here */}
         <div className="flex items-center justify-around mt-[6vw] md:mt-[1.5vw] ">
           <div

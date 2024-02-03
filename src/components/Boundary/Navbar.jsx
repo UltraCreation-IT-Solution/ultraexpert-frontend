@@ -32,7 +32,7 @@ const Navbar = () => {
         >
           <Link
             to={"/services"}
-            className="relative font-medium decoration-transparent text-black"
+            className="relative font-medium decoration-transparent text-black "
           >
             Services
           </Link>
@@ -44,11 +44,11 @@ const Navbar = () => {
           </Link>
           <Link
             to={"/blog"}
-            className="relative font-medium decoration-transparent text-black"
+            className="relative font-medium decoration-transparent text-black "
           >
             Blog
           </Link>
-          <div className="relative font-medium">Contact Us</div>
+          <div className="relative font-medium ">Contact Us</div>
           <Link
             to={"/login"}
             className="relative bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"

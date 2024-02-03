@@ -37,7 +37,7 @@ const Blogs = () => {
                   <div className="w-full flex  text-white justify-between items-center">
                     <Link
                       to={"blogdetail"}
-                      className="w-[90%] flex justify-center items-center text-white bg-black text-center py-[0.5vw] font-semibold rounded-sm text-[1.12vw] decoration-transparent"
+                      className="w-[90%] flex justify-center items-center text-white bg-[#2A2A2A] text-center py-[0.5vw] font-semibold rounded-sm text-[1.12vw] decoration-transparent"
                     >
                       Read More
                     </Link>
@@ -53,7 +53,7 @@ const Blogs = () => {
             <input
               type="text"
               placeholder="Search Blogs"
-              className="w-[28vw] focus:border-none h-[3vw] bg-[#ECECEC] rounded-md rounded-r-none px-[1.2vw] shadow-md "
+              className="w-[28vw] outline-none h-[3vw] bg-[#ECECEC] rounded-md rounded-r-none px-[1.2vw] shadow-md "
             />
             <div className="w-[3vw] h-[3vw] bg-[#ECECEC] rounded-l-none flex items-center justify-center rounded-md">
               <FaSearch className="w-[1.2vw]" />
