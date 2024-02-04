@@ -9,18 +9,17 @@ export const ProjectsCarousel = () => {
   const data = [
     {
       src: "https://images.unsplash.com/photo-1542626991-cbc4e32524cc?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      info: "Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed?Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.",
+      info: "Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.",
       title: "Cloud Portal",
     },
     {
       src: "https://images.unsplash.com/photo-1541018939203-36eeab6d5721?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDR8fHByb2plY3RzfGVufDB8MHwwfHx8MA%3D%3D ",
-      info: "Lorem ipsum 2, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur",
+      info: "Lorem ipsum 2, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.",
       title: "UltraXpert",
     },
     {
       src: "https://images.unsplash.com/photo-1619506147448-b56ba8ee11d7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTR8fHByb2plY3RzfGVufDB8MHwwfHx8MA%3D%3D",
-      info: "Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur",
-      title: "Portfolio Website",
+      info: "Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Aliquid itaque ipsa quos corporis"
     },
     {
       src: "https://images.unsplash.com/photo-1518185104790-b1d745526575?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTE2fHxwcm9qZWN0c3xlbnwwfDB8MHx8fDA%3D",
@@ -71,7 +70,7 @@ export const ProjectsCarousel = () => {
           <p
             className={
               slider === idx
-                ? "flex w-[95%] m-auto mt-[1.5vw] text-justify text-[2vw] md:text-[1.1vw] font-montserrat"
+                ? "flex w-[95%] m-auto mt-[1.5vw] text-sm md:text-base font-montserrat"
                 : "hidden"
             }
           >

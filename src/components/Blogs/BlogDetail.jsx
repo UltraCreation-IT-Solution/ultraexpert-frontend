@@ -1,31 +1,45 @@
-import { IoIosArrowBack } from "react-icons/io";
-import { IoIosArrowForward } from "react-icons/io";
+import { PiCaretLeftLight } from "react-icons/pi";
+import { PiCaretRightLight } from "react-icons/pi";
+import { AiOutlineLike } from "react-icons/ai";
+import { AiOutlineDislike } from "react-icons/ai";
 
 export const CommentCard = () => {
+
   return (
-    <div className="mt-[5vw] my-10 pb-[1vw] border-b-[1px] border-black border-solid">
-      <div className="flex gap-5">
+    <div className="my-[3vw] md:my-[2vw] pb-[2vw] border-b-[1px] border-slate-400 border-solid">
+      <div className="flex gap-[2.5vw] sm:gap-[2vw]">
         <img
-          className="h-[3vw] w-[3vw] shrink-0 object-cover rounded-full"
+          className="h-[9vw] w-[9vw] sm:h-[8vh] sm:w-[8vw] md:h-[3.7vw] md:w-[3.7vw] shrink-0 object-cover rounded-full"
           src="https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt=""
         />
         <div>
-          <div className="md:text-[1.8vw] sm:text-[2vw] lg:text-[1.6vw] text-[2.5vw] font-semibold">
-            Antony Squash
-          </div>
-          <div className="flex items-center my-4 gap-10 text-gray-400">
-            <div className="md:text-[1vw] sm:text-[1.5vw] lg:text-[1vw] text-[2vw]">
+          <div className="flex items-center justify-between">
+            <div className="text-[3.2vw] sm:text-[2.8vw] md:text-xl font-semibold">
+              Antony Squash
+            </div>
+            <div className="text-[2.5vw] text-gray-600 sm:text-[2.3vw] md:text-sm font-semibold">
               1 month ago
             </div>
           </div>
-          <p className="md:text-[1.3vw] sm:text-[1.5vw] lg:text-[1vw] text-[2.5vw] font-light">
+          
+          <p className="text-[2.6vw] sm:text-[1.8vw] md:text-sm text-justify font-montserrat">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid
             beatae omnis, enim nesciunt vel id tempore veritatis ut ad, ipsum
             reprehenderit facilis sapiente ea voluptatibus, inventore eum non
             aspernatur labore quaerat similique assumenda at placeat. At
             voluptas dolorum quibusdam harum!
           </p>
+          <div className="flex items-center gap-[2.5vw]">
+            <div className="flex items-center gap-[0.5vw] text-[3vw] sm:text-[2vw] md:text-[1.2vw]">
+              <AiOutlineLike/>
+              <div>10</div>
+            </div>
+            <div className="flex items-center gap-[0.5vw] text-[3vw] sm:text-[2vw] md:text-[1.2vw]">
+              <AiOutlineDislike/>
+              <div>4</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -33,209 +47,154 @@ export const CommentCard = () => {
 };
 
 const BlogDetails = () => {
+  const array = ["Internship", "Communication skills", "Internship", "Growth"];
   return (
-    <div className="w-[100%] h-100vh">
-      <div className="flex items-center justify-center">
-        <div className="md:flex-col gap-6 mx-0 md:px-[2.5vw] py-[1vw] mt-[100px]">
-          <p className="mt-[2vw] text-[2.2vw] sm:text-[1.7vw] md:text-[1.5vw] lg:text-[0.8vw] flex items-center justify-center text-[#a7a6a6] font-montserrat">
-            October 04,2023
-          </p>
-          <h1 className="text-[12vw] sm:text-[10vw] md:text-[4vw] mx-[0.5vw] shrink-0 text-center">
-            Upgrade your skills with the help of our experts!
-          </h1>
-          <p className="flex text-[2vw] sm:text-[1.5vw] md:text-[1vw] lg:text-[0.9vw] items-center justify-center text-[#a7a6a6] font-montserrat">
-            Blog - By Bhavesh@bhanushali - 0 comments
-          </p>
-        </div>
-        <div className="border-l-2 border-solid border-slate-600"></div>
-      </div>
-      <div className="border-b border-gray-300 border-solid mb-10 mx-[45vw]"></div>
-      <div className="flex items-center justify-center">
-        <img
-          className="w-[85vw] h-[50vw]"
-          src="https://mummaslife.com/wp-content/uploads/2022/10/Thermosteel-Lunch-Box.jpeg"
-          alt=""
-        />
-      </div>
-      <p className="text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw] mx-[6.8vw] text-justify font-montserrat">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam amet
-        dolorum, alias dolor enim dolore, explicabo, dolorem fuga quod magni id
-        culpa dignissimos. Quasi ipsam, assumenda, dolorem nesciunt voluptatibus
-        sunt accusamus esse illum excepturi id accusantium, pariatur culpa
-        exercitationem ratione eius expedita! Debitis, doloribus sed eaque quod
-        commodi cumque error, incidunt quaerat temporibus sint facilis expedita.
-        Nulla nihil blanditiis porro debitis architecto amet sit harum, natus
-        ducimus quae? Deleniti natus molestias doloribus velit perspiciatis
-        harum omnis numquam cum quo. Ratione natus ipsam maiores blanditiis.
-        Alias commodi provident ipsum excepturi ex quaerat delectus, natus iste
-        optio id. Ab nemo at totam!
-      </p>
-      <p className="text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw] mx-[6.8vw] text-justify font-montserrat">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam amet
-        dolorum, alias dolor enim dolore, explicabo, dolorem fuga quod magni id
-        culpa dignissimos. Quasi ipsam, assumenda, dolorem nesciunt voluptatibus
-        sunt accusamus esse illum excepturi id accusantium, pariatur culpa
-        exercitationem ratione eius expedita! Debitis, doloribus sed eaque quod
-        commodi cumque error, incidunt quaerat temporibus sint facilis expedita.
-        Nulla nihil blanditiis porro debitis architecto amet sit harum, natus
-        ducimus quae? Deleniti natus molestias doloribus velit perspiciatis
-        harum omnis numquam cum quo. Ratione natus ipsam maiores blanditiis.
-        Alias commodi provident ipsum excepturi ex quaerat delectus, natus iste
-        optio id. Ab nemo at totam!
-      </p>
-      <div className="flex-col justify-center items-center mx-[6.8vw]">
-        <h2 className="font-bold text-[4.5vw] sm:text-[3vw] md:text-[3vw] lg:text-[2vw]">
-          How will these platform help you?
-        </h2>
-        <p className="text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw] text-justify font-montserrat">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos porro
-          error, tenetur quia exercitationem eveniet sed voluptas nulla quaerat,
-          non alias! Dolorem sapiente rem veniam facere? Optio corporis, eveniet
-          modi ratione quasi enim, rem ut, eius mollitia ducimus expedita velit
-          officiis in corrupti dignissimos maxime odit illum voluptatem
-          aspernatur repudiandae.
-        </p>
-        <p className="text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw] text-justify font-montserrat">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit libero
-          fugiat, consectetur corrupti voluptates accusantium aliquid officiis,
-          hic iste dignissimos voluptas quidem incidunt sequi! Delectus, cumque
-          voluptas debitis velit perspiciatis, ut iure earum repudiandae unde,
-          impedit ad atque enim doloremque possimus alias? Libero illum laborum
-          mollitia quas et, voluptate magni?
-        </p>
-        <h2 className="font-bold text-[4.5vw] sm:text-[3vw] md:text-[3vw] lg:text-[2vw] font-montserrat">
-          How will these platform help you?
-        </h2>
-        <p className="text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw] text-justify">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos porro
-          error, tenetur quia exercitationem eveniet sed voluptas nulla quaerat,
-          non alias! Dolorem sapiente rem veniam facere? Optio corporis, eveniet
-          modi ratione quasi enim, rem ut, eius mollitia ducimus expedita velit
-          officiis in corrupti dignissimos maxime odit illum voluptatem
-          aspernatur repudiandae.
-        </p>
-        <p className="text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw] text-justify font-montserrat">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit libero
-          fugiat, consectetur corrupti voluptates accusantium aliquid officiis,
-          hic iste dignissimos voluptas quidem incidunt sequi! Delectus, cumque
-          voluptas debitis velit perspiciatis, ut iure earum repudiandae unde,
-          impedit ad atque enim doloremque possimus alias? Libero illum laborum
-          mollitia quas et, voluptate magni?
-        </p>
-        <h2 className="font-bold text-[4.5vw] sm:text-[3vw] md:text-[3vw] lg:text-[2vw]">
-          How will these platform help you?
-        </h2>
-        <p className="text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw] text-justify font-montserrat">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos porro
-          error, tenetur quia exercitationem eveniet sed voluptas nulla quaerat,
-          non alias! Dolorem sapiente rem veniam facere? Optio corporis, eveniet
-          modi ratione quasi enim, rem ut, eius mollitia ducimus expedita velit
-          officiis in corrupti dignissimos maxime odit illum voluptatem
-          aspernatur repudiandae.
-        </p>
-        <p className="text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw] text-justify font-montserrat">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit libero
-          fugiat, consectetur corrupti voluptates accusantium aliquid officiis,
-          hic iste dignissimos voluptas quidem incidunt sequi! Delectus, cumque
-          voluptas debitis velit perspiciatis, ut iure earum repudiandae unde,
-          impedit ad atque enim doloremque possimus alias? Libero illum laborum
-          mollitia quas et, voluptate magni?
-        </p>
-        <h2 className="font-bold text-[4.5vw] sm:text-[3vw] md:text-[3vw] lg:text-[2vw]">
-          How will these platform help you?
-        </h2>
-        <p className="text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw] text-justify font-montserrat">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos porro
-          error, tenetur quia exercitationem eveniet sed voluptas nulla quaerat,
-          non alias! Dolorem sapiente rem veniam facere? Optio corporis, eveniet
-          modi ratione quasi enim, rem ut, eius mollitia ducimus expedita velit
-          officiis in corrupti dignissimos maxime odit illum voluptatem
-          aspernatur repudiandae.
-        </p>
-        <p className="text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw] text-justify font-montserrat">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit libero
-          fugiat, consectetur corrupti voluptates accusantium aliquid officiis,
-          hic iste dignissimos voluptas quidem incidunt sequi! Delectus, cumque
-          voluptas debitis velit perspiciatis, ut iure earum repudiandae unde,
-          impedit ad atque enim doloremque possimus alias? Libero illum laborum
-          mollitia quas et, voluptate magni?
-        </p>
-        <h2 className="font-bold text-[4.5vw] sm:text-[3vw] md:text-[3vw] lg:text-[2vw]">
-          How will these platform help you?
-        </h2>
-        <p className="text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw] text-justify font-montserrat">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos porro
-          error, tenetur quia exercitationem eveniet sed voluptas nulla quaerat,
-          non alias! Dolorem sapiente rem veniam facere? Optio corporis, eveniet
-          modi ratione quasi enim, rem ut, eius mollitia ducimus expedita velit
-          officiis in corrupti dignissimos maxime odit illum voluptatem
-          aspernatur repudiandae.
-        </p>
-        <p className="text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw] text-justify font-montserrat">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit libero
-          fugiat, consectetur corrupti voluptates accusantium aliquid officiis,
-          hic iste dignissimos voluptas quidem incidunt sequi! Delectus, cumque
-          voluptas debitis velit perspiciatis, ut iure earum repudiandae unde,
-          impedit ad atque enim doloremque possimus alias? Libero illum laborum
-          mollitia quas et, voluptate magni?
-        </p>
-        <p className="flex gap-2 text-[3vw] sm:text-[2vw] md:text-[1.2vw] lg:text-[1vw]">
-          Tags:{" "}
-          <button className="rounded-md cursor-pointer duration-200">
-            Lorem
-          </button>
-          <button className="rounded-md cursor-pointer">Lorem</button>
-          <button className="rounded-md cursor-pointer">Lorem</button>
-        </p>
-      </div>
-      <br />
-      <br />
-      <div className="border-b border-gray-300 border-solid mt-[2vw] pt-4 mx-[6.8vw]"></div>
-      <div className="flex justify-between mt-[2vw] scrollbar">
-        <div className="flex-row mx-[6.8vw] scrollbar">
-          <button className="flex bg-white hover:scale-105 duration-200">
-            <IoIosArrowBack size={30} className="" />
-            <div>
-              <div className="flex">Previous Post</div>
-              <div className="flex">How to book an expert</div>
-            </div>
-          </button>
-        </div>
-        <div className="flex-row mx-[6.8vw] scrollbar">
-          <button className="flex bg-white hover:scale-105 duration-200">
-            <div>
-              <div className="flex">Next Post</div>
-              <div className="flex">Use the platform effectively</div>
-            </div>
-            <IoIosArrowForward size={30} className="" />
-          </button>
-        </div>
-      </div>
-      <div className="border-b border-gray-300 border-solid mt-[2vw] pt-4 mx-[6.8vw]"></div>
-      <div className="  h-[100vh] mx-[6.8vw] mt-[4vw]">
-        <div className="font-bold text-[1.5vw]">
-          <p className="text-[4vw] sm:text-[3vw] md:text-[2vw]">
-            Leave a comment
-          </p>
-          <div className="flex">
-            <input
-              type="text"
-              placeholder="Write a comment here"
-              className=" peer h-full w-full border-b border-gray-300 bg-transparent pt-4 pb-1.5 font-montserrat text-lg font-normal text-gray-300 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-900 focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-            />
-            <button className="mx-2 p-[0.9vw] text-center rounded-xl bg-black text-white text-[0.8vw] cursor-pointer">
-              Comment
-            </button>
+    <>
+      <div className="px-[6vw] md:px-[10vw] mt-[110px] md:mt-[12vw]">
+        <div className="text-center">
+          <div className="text-xs md:text-sm text-gray-500">January 26, 2024</div>
+          <div className="text-4xl lg:text-5xl font-bold md:px-[7vw] my-5 md:my-4 tracking-wide">
+            How to get more clients as a freelancer on UltraXpert
+          </div>
+          <div className="text-xs md:text-sm text-gray-500">
+            Blog - By AntonySquash9@gmail.com
           </div>
         </div>
-        <CommentCard />
-        <CommentCard />
-        <CommentCard />
+
+        <div className="my-[3vw]">
+          <div>
+            <img
+              className="w-[100%] h-[45vw] object-cover"
+              src="https://plus.unsplash.com/premium_photo-1661604346220-5208d18cb34e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3Jvd3RoJTIwYnVzaW5lc3N8ZW58MHwwfDB8fHww"
+              alt=""
+            />
+            <div className="mt-4 md:mt-6 text-base md:text-lg text-[#2e2e2e]">
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam
+              amet dolorum, alias dolor enim dolore, explicabo, dolorem fuga
+              quod magni id culpa dignissimos. Quasi ipsam, assumenda, dolorem
+              nesciunt voluptatibus sunt accusamus esse illum excepturi id
+              accusantium, pariatur culpa exercitationem ratione eius expedita!
+              Debitis, doloribus sed eaque quod commodi cumque error, incidunt
+              quaerat temporibus sint facilis expedita. Nulla nihil blanditiis
+              porro debitis architecto amet sit harum, natus ducimus quae?
+              Deleniti natus molestias doloribus velit perspiciatis harum omnis
+              numquam cum quo. Ratione natus ipsam maiores blanditiis. Alias
+              commodi provident ipsum excepturi ex quaerat delectus, natus iste
+              optio id. Ab nemo at totam! Lorem, ipsum dolor sit amet
+              consectetur adipisicing elit. Numquam amet dolorum, alias dolor
+              enim dolore, explicabo, dolorem fuga quod magni id culpa
+              dignissimos. Quasi ipsam, assumenda, dolorem nesciunt voluptatibus
+              sunt accusamus esse illum excepturi id accusantium, pariatur culpa
+              exercitationem ratione eius expedita! Debitis, doloribus sed eaque
+              quod commodi cumque error, incidunt quaerat temporibus sint
+              facilis expedita.
+            </div>
+          </div>
+          <div className="mt-10 md:mt-8">
+            <div className="text-3xl md:text-4xl font-medium">
+              How will these platforms help you?
+            </div>
+            <div className="mt-3 md:mt-4 text-base md:text-lg text-[#2e2e2e]">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.laborum
+              mollitia quis aperiam eum, dignissimos illum animi, doloribus
+              blanditiis laudantium? Delectus, omnis commodi consequatur soluta
+              saepe, quisquam, mollitia sunt placeat dolores sapiente odit
+              officia laborum. Veniam illum rerum ratione laboriosam ut dicta
+              omnis harum eos.illum animi, doloribus blanditiis laudantium?
+              Delectus, omnis commodi consequatur soluta saepe, quisquam,
+              mollitia sunt placeat dolores sapiente odit officia laborum.
+              Veniam illum rerum ratione laboriosam ut dicta omnis harum
+              eosillum animi, doloribus blanditiis laudantium? Delectus, omnis
+              commodi consequatur soluta saepe, quisquam, mollitia sunt placeat
+              dolores sapiente odit officia laborum. Veniam illum rerum ratione
+              laboriosam ut dicta omnis harum eosillum animi, doloribus
+              blanditiis laudantium? Delectus, omnis commodi consequatur soluta
+              saepe, quisquam, mollitia sunt placeat dolores sapiente odit
+              officia laborum. Veniam illum rerum ratione laboriosam ut dicta
+              omnis harum eos
+            </div>
+          </div>
+          <div className="mt-10 md:mt-8">
+            <div className="text-3xl md:text-4xl font-medium">
+              How to increase your business?
+            </div>
+            <div className="mt-3 md:mt-4 text-base md:text-lg text-[#2e2e2e]">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.laborum
+              mollitia quis aperiam eum, dignissimos illum animi, doloribus
+              blanditiis laudantium? Delectus, omnis commodi consequatur soluta
+              saepe, quisquam, mollitia sunt placeat dolores sapiente odit
+              officia laborum. Veniam illum rerum ratione laboriosam ut dicta
+              omnis harum eos.illum animi, doloribus blanditiis laudantium?
+              Delectus, omnis commodi consequatur soluta saepe, quisquam,
+              mollitia sunt placeat dolores sapiente odit officia laborum.
+              Veniam illum rerum ratione laboriosam ut dicta omnis harum
+              eosillum animi, doloribus blanditiis laudantium? Delectus, omnis
+              commodi consequatur soluta saepe, quisquam, mollitia sunt placeat
+              dolores sapiente odit officia laborum. Veniam illum rerum ratione
+              laboriosam ut dicta omnis harum eosillum animi, doloribus
+              blanditiis laudantium? Delectus, omnis commodi consequatur soluta
+              saepe, quisquam, mollitia sunt placeat dolores sapiente odit
+              officia laborum. Veniam illum rerum ratione laboriosam ut dicta
+              omnis harum eos
+            </div>
+          </div>
+          
+          {/* <div className="flex items-center gap-3">
+            <div className="text-sm mt-8 text-gray-700">Tags : </div>
+            <div className="flex gap-[1vw] flex-wrap ">
+              {array.map((temp, idx) => (
+                <div
+                  key={idx}
+                  className="text-sm px-1 py-1 bg-gray-100/10 text-gray-700 rounded-sm md:rounded-md cursor-pointer"
+                >
+                  {temp}
+                </div>
+              ))}
+            </div>
+          </div> */}
+        </div>
+
+        <div className="flex justify-between border-t border-b border-solid border-slate-300 py-[2.5vw] mt-[10vw] md:mt-0 text-[2.2vw] md:text-base">
+          <div className="flex items-center gap-[1.5vw] md:gap-[1vw] cursor-pointer">
+            <div className="text-xs md:text-[2vw] xl:text-[1.5vw]">
+              <PiCaretLeftLight />
+            </div>
+            <div className="">
+              <div>Previous Post</div>
+              <div>How to Clean Stainess Steel</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-[1.5vw] md:gap-[1vw] cursor-pointer">
+            <div className="">
+              <div className="text-right">Next Post</div>
+              <div>How to Clean Stainess Steel</div>
+            </div>
+            <div className="text-xs md:text-[2vw] xl:text-[1.5vw]">
+              <PiCaretRightLight />
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-10 md:mt-20">
+          <div>
+            <div className="text-[2.5vw] md:text-[1.8vw] ">Leave a comment</div>
+            <input
+              type="text"
+              placeholder="Comment here"
+              className="w-[100%] bg-[#ECECEC] outline-none px-[1.5vw] py-[0.7vw] mt-[1.5vw] text-[2.1vw] md:text-[1vw] rounded-sm"
+            />
+            <button className="mt-[3vw] md:mt-[1.5vw] bg-[#2A2A2A] px-[3vw] py-[1.5vw] md:py-[0.7vw] text-[2.3vw] md:text-[1vw] text-white border rounded-sm cursor-pointer">
+              Post Comment
+            </button>
+          </div>
+          <div className="mt-[10vw] md:mt-[4vw]">
+            {[...Array(10)].map((temp, idx) => (
+              <CommentCard />
+            ))}
+          </div>
+        </div>
       </div>
-      <button className="mx-[6.8vw] sm:p-[1.5vw] md:p-[1.2vw] lg:p-[1vw] p-[2vw] text-center rounded-xl bg-black text-white sm:text-[1.5vw] md:text[1.5vw] lg:text-[1vw] text-[2vw] cursor-pointer">
-        See More
-      </button>
-    </div>
+    </>
   );
 };
 export default BlogDetails;
