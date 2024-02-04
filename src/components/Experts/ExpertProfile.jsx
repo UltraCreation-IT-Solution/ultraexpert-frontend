@@ -57,7 +57,7 @@ export const ProfileCardHorizontal = ({ width }) => {
 export const ExpertSummary = () => {
   return (
     <div className="">
-      <div className="text-[2.8vw] md:text-[1.5vw] font-semibold font-montserrat">
+      <div className="text-base md:text-2xl font-semibold font-montserrat">
         My projects
       </div>
       <ProjectsCarousel />
@@ -160,12 +160,6 @@ export const AboutExpert = () => {
     "Voice Over",
     "HTML",
     "CSS",
-    "React Native",
-    "Calculas",
-    "Voice Over",
-    "HTML",
-    "CSS",
-    "React Native",
   ];
 
   return (
@@ -173,10 +167,10 @@ export const AboutExpert = () => {
       <div className="md:w-[75%] px-[2.5vw] md:border-r border-solid border-slate-300">
         <ProfileCardHorizontal />
         <div className="mt-[4vw] md:mt-[2vw]">
-          <div className="text-[2.4vw] md:text-[1.2vw] font-semibold">
+          <div className="text-base md:text-lg lg:text-xl font-semibold">
             About me
           </div>
-          <div className="text-[2vw] md:text-[1vw] mt-[1.5vw] md:mt-[0.7vw] pb-[2vw] md:border-b border-solid border-slate-300">
+          <div className="text-sm md:text-base mt-[1.5vw] md:mt-[0.7vw] pb-[2vw] md:border-b border-solid border-slate-300">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Impedit
             cum ipsum tenetur facilis, nemo explicabo ea recusandae minus iste
             deleniti ipsam, autem repellendus aliquam, quidem nobis reiciendis
@@ -185,11 +179,11 @@ export const AboutExpert = () => {
         </div>
         <div />
       </div>
-      <div className="md:w-[25%] px-[2.5vw]">
-        <div className="text-[2.4vw] md:text-[1.2vw] font-semibold">Skills</div>
+      <div className="md:w-[25%] px-[2.5vw] mt-3 md:mt-0">
+        <div className="text-base md:text-lg lg:text-xl font-semibold">Skills</div>
         <div className="flex flex-wrap gap-[1vw] mt-[1vw]">
           {SkillArray.map((temp, idx) => (
-            <div className="px-[0.7vw] py-[0.5vw] text-[1.5vw] md:text-[0.8vw] border md:border-2 border-solid border-slate-200 font-semibold rounded-sm cursor-pointer">
+            <div className="px-2 py-1 text-xs md:text-sm border md:border-2 border-solid border-slate-200 font-semibold rounded-sm cursor-pointer">
               {temp}
             </div>
           ))}
@@ -229,13 +223,13 @@ export const EducationCard = () => {
         <FaUserGraduate />
       </div>
       <div>
-        <div className="text-[1.6vw] md:text-[1.2vw]">
+        <div className="text-[10px]">
           Lakshmi Narain College of Technology, Bhopal
         </div>
-        <div className="text-[1.3vw] md:text-[1vw] my-[0.3vw]">
+        <div className="text-[7px] my-[0.3vw]">
           Bechelor of Engineering - Information Technology
         </div>
-        <div className="text-[1.3vw] md:text-[1vw] text-gray-400 ">
+        <div className="text-[7px] text-gray-400 ">
           2021-2025
         </div>
       </div>
@@ -345,12 +339,12 @@ export const ExpertInfo = () => {
       </div>
 
       {/* ***Accordian starts from here*** */}
-      <div className="md:w-[25%] px-[2.5vw] sticky top-[150px]">
+      <div className="md:w-[25%] px-[2.5vw]">
         <div className="my-[2vw]">
           {/* This is Education accordian */}
           <div className="border-b border-solid border-slate-400 mb-[3vw] md:mb-[2vw]">
             <div
-              className="flex items-center justify-between text-[2.2vw] md:text-[1.3vw] py-[1vw] cursor-pointer font-montserrat font-semibold"
+              className="flex items-center justify-between text-sm md:text-lg lg:text-xl py-[1vw] cursor-pointer font-montserrat font-semibold"
               onClick={() =>
                 education ? setEducation(false) : setEducation(true)
               }
@@ -370,7 +364,7 @@ export const ExpertInfo = () => {
           {/* This is Work Experience accordian */}
           <div className="border-b border-solid border-slate-400 mb-[3vw] md:mb-[2vw]">
             <div
-              className="flex items-center justify-between text-[2.2vw] md:text-[1.3vw] py-[1vw] cursor-pointer font-montserrat font-semibold"
+              className="flex items-center justify-between text-sm md:text-lg lg:text-xl py-[1vw] cursor-pointer font-montserrat font-semibold"
               onClick={() =>
                 workExperience
                   ? setWorkExperience(false)
@@ -396,7 +390,7 @@ export const ExpertInfo = () => {
           {/* This is Achievements accordian */}
           <div className="border-b border-solid border-slate-400 mb-[3vw] md:mb-[2vw]">
             <div
-              className="flex items-center justify-between text-[2.2vw] md:text-[1.3vw] py-[1vw] cursor-pointer font-montserrat font-semibold"
+              className="flex items-center justify-between text-sm md:text-lg lg:text-xl py-[1vw] cursor-pointer font-montserrat font-semibold"
               onClick={() =>
                 achievements ? setAchievements(false) : setAchievements(true)
               }

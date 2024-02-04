@@ -5,7 +5,8 @@ import { TopExperts } from "../Landing/Landing";
 import { profileObj } from "../../constant";
 import Subheader from "../../utilities/Subheader";
 import { FaRegHeart } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
+
 
 export const SearchByCategories = () => {
   return (
@@ -64,7 +65,7 @@ export const ProfileCards = () => {
             </p>
             <p className="mb-[0.2vw]  mt-0 font-semibold">60 Meetings</p>
             <Link
-              to={"expertProfile"}
+              to={"expertprofile"}
               className=" w-full py-[0.8vw] rounded-lg bg-[#262626] text-white mt-0 mb-0 no-underline"
             >
               See profile
@@ -76,6 +77,7 @@ export const ProfileCards = () => {
   });
 };
 export const AllExperts = () => {
+  
   return (
     <div className="relative w-full h-auto py-[5vw] sm:py-[3vw] px-[6vw] md:px-[10vw] flex flex-col">
       <div className="flex w-full justify-between">
@@ -98,7 +100,9 @@ export const AllExperts = () => {
   );
 };
 const Expert = () => {
-  return (
+  const location =useLocation().pathname;
+  return(
+  (location==="/experts")?(
     <>
       <div className="mt-[80px] px-[8vw] md:px-[12vw]">
         <Subheader heading={"Experts"} />
@@ -106,7 +110,9 @@ const Expert = () => {
       </div>
       <TopExperts />
       <AllExperts />
+      
     </>
+  ):(<Outlet/>)
   );
 };
 
