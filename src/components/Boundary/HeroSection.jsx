@@ -6,9 +6,9 @@ import { landingImgRow1, landingImgRow2 } from "../../constant";
 const HeroSection = () => {
   const [search, setSearch] = useState("");
   return (
-    <div className="relative mt-[80px] w-full h-auto overflow-hidden mb-[3vw]">
+    <div className="relative mt-[80px] w-full h-auto overflow-hidden mb-[3vw] py-[0.6vw]">
       <div className="md:-mt-10 overflow-hidden">
-        <h1 className="w-[55vw] md:w-[45vw] text-center text-[7vw] md:text-[6vw] leading-[1.4] md:leading-[1.1] overflow-hidden tracking-normal  font-sans font-[900] break-words ml-[50%] translate-x-[-50%]">
+        <h1 className="w-[55vw] md:w-[45vw] text-center text-[7vw] md:text-[clamp(2.25rem,6.5vw,5.2rem)] leading-[1.4] md:leading-[1.1] overflow-hidden tracking-normal  font-sans font-[900] break-words ml-[50%] translate-x-[-50%]">
           Think Creative,
           <br /> Do Effective
         </h1>
