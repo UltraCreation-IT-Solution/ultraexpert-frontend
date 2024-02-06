@@ -11,7 +11,7 @@ import { HiOfficeBuilding } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { ProjectsCarousel } from "../../utilities/HelperComponents";
 
-export const ProfileCardHorizontal = ({ width }) => {
+export const ProfileCardBig = ({ width }) => {
   return (
     <div
       className={`w-[${
@@ -71,28 +71,31 @@ export const ExpertServices = () => {
   //   return <div className="text-[2.2vw] md:text-[1.4vw] font-semibold">No services provided by the expert yet!</div>
   // }
   return (
-    <div>
+    <div className="mb-10 lg:mb-0">
       {[...Array(15)].map((temp) => (
-        <div className="flex items-center justify-between py-[1vw] mb-[1.5vw] bg-white border-b border-solid border-slate-400">
-          <div className="flex items-center gap-[1vw]">
-            <RiFlowChart className="text-[3.7vw] md:text-[2.5vw]" />
-            <h1 className="text-[2.7vw] md:text-[1.4vw] font-semibold">
+        <div className="flex justify-between items-start md:items-center gap-2 py-4 md:py-[1vw] mb-[1.5vw] bg-white border-b border-solid border-slate-400">
+          <RiFlowChart className="mt-3 xs:mt-4 md:mt-0 text-xl lg:text-3xl" />
+          <div className="w-full md:flex items-center justify-between gap-[1vw]">
+              
+            <h1 className="text-base xs:text-xl lg:text-2xl font-semibold">
               Web & App development
             </h1>
+
+            <div className="flex items-center gap-[2.5vw] md:gap-[1vw]">
+              <Link to="service">
+                <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
+                  View
+                </button>
+              </Link>
+              <Link to="booking">
+                <button className="bg-[#2A2A2A]  px-6 py-1 md:px-[1.5vw] md:py-[0.3vw] text-sm md:text-base text-white font-semibold border rounded-sm sm:rounded-md">
+                  Book
+                </button>
+              </Link>
+            </div>
           </div>
-          <div className="flex items-center gap-[2.5vw] md:gap-[1vw]">
-            <Link to="service">
-              <button className="bg-white px-[1.5vw] py-[0.4vw] text-[2.2vw] md:text-[1.1vw] text-black font-semibold border rounded-sm sm:rounded-md">
-                View
-              </button>
-            </Link>
-            <Link to="booking">
-              <button className="bg-[#2A2A2A] px-[1.5vw] py-[0.5vw] text-[2.2vw] md:text-[1vw] text-white font-semibold border rounded-sm sm:rounded-md">
-                Book
-              </button>
-            </Link>
-            <CiBookmark className="text-[3.7vw] md:text-[2.5vw]" />
-          </div>
+          
+          <CiBookmark className="mt-3 xs:mt-4 md:mt-0 text-3xl md:text-3xl lg:text-4xl" />
         </div>
       ))}
     </div>
@@ -104,26 +107,26 @@ export const RatingCard = () => {
     <div className="my-[3vw] md:my-[2vw] pb-[1vw] border-b-[1px] border-slate-400 border-solid">
       <div className="flex gap-[2.5vw] sm:gap-[2vw]">
         <img
-          className="h-[9vw] w-[9vw] sm:h-[8vh] sm:w-[8vw] md:h-[3.5vw] md:w-[3.5vw] shrink-0 object-cover rounded-full"
+          className="h-12 w-12 sm:h-14 sm:w-14 xl:h-14 xl:w-14 shrink-0 object-cover rounded-full"
           src="https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt=""
         />
         <div>
-          <div className="text-[3.2vw] sm:text-[2.8vw] md:text-[1.5vw] font-semibold">
+          <div className="text-lg sm:text-xl font-semibold">
             Antony Squash
           </div>
           <div className="flex items-center mt-[2vw] md:mt-[0.9vw] gap-[5vw]">
-            <div className="flex gap-[0.5vw] items-center text-[2.8vw] sm:text-[2.1vw] md:text-[1.1vw]">
+            <div className="flex gap-[0.5vw] items-center text-xs sm:text-base">
               <div>
                 <MdStar color="#FF5E18" />
               </div>
               <div className="text-slate-600">4.9/5</div>
             </div>
-            <div className=" text-[2.8vw] sm:text-[2.1vw] md:text-[1.1vw] text-slate-400">
+            <div className=" text-xs sm:text-base text-slate-400">
               1 month ago
             </div>
           </div>
-          <p className="text-[2.4vw] sm:text-[1.8vw] md:text-[1vw] text-justify font-montserrat">
+          <p className="text-xs sm:text-base font-montserrat">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid
             beatae omnis, enim nesciunt vel id tempore veritatis ut ad, ipsum
             reprehenderit facilis sapiente ea voluptatibus, inventore eum non
@@ -138,12 +141,12 @@ export const RatingCard = () => {
 
 export const ExpertRatings = () => {
   return (
-    <div className="px-5">
+    <div className="px-5 mb-10 lg:mb-0">
       {[...Array(10)].map((temp, idx) => (
         <RatingCard />
       ))}
-      <button className="px-[1.8vw] py-[0.5vw] text-[2.2vw] md:text-[1.4vw] text-black font-semibold border-2 rounded-sm sm:rounded-md mx-1">
-        See more
+      <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
+        Show more
       </button>
     </div>
   );
@@ -163,14 +166,14 @@ export const AboutExpert = () => {
   ];
 
   return (
-    <div className="md:flex">
-      <div className="md:w-[75%] px-[2.5vw] md:border-r border-solid border-slate-300">
-        <ProfileCardHorizontal />
-        <div className="mt-[4vw] md:mt-[2vw]">
+    <div className="lg:flex">
+      <div className="lg:w-[75%] px-[2.5vw] lg:border-r border-solid border-slate-300">
+        <ProfileCardBig />
+        <div className="mt-4 md:mt-5">
           <div className="text-base md:text-lg lg:text-xl font-semibold">
             About me
           </div>
-          <div className="text-sm md:text-base mt-[1.5vw] md:mt-[0.7vw] pb-[2vw] md:border-b border-solid border-slate-300">
+          <div className="text-sm md:text-base mt-[1.5vw] md:mt-[0.7vw] pb-[2vw] lg:border-b border-solid border-slate-300">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Impedit
             cum ipsum tenetur facilis, nemo explicabo ea recusandae minus iste
             deleniti ipsam, autem repellendus aliquam, quidem nobis reiciendis
@@ -179,9 +182,9 @@ export const AboutExpert = () => {
         </div>
         <div />
       </div>
-      <div className="md:w-[25%] px-[2.5vw] mt-3 md:mt-0">
+      <div className="lg:w-[25%] px-[2.5vw] mt-2 md:mt-1 lg:mt-0">
         <div className="text-base md:text-lg lg:text-xl font-semibold">Skills</div>
-        <div className="flex flex-wrap gap-[1vw] mt-[1vw]">
+        <div className="flex flex-wrap gap-[1vw] mt-[3vw] md:mt-[0.7vw]">
           {SkillArray.map((temp, idx) => (
             <div className="px-2 py-1 text-xs md:text-sm border md:border-2 border-solid border-slate-200 font-semibold rounded-sm cursor-pointer">
               {temp}
@@ -205,9 +208,7 @@ export const Holder = ({ header, des }) => {
         <div>{hide ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}</div>
       </div>
       {!hide && des === "" && (
-        <div className="text-[2.2vw] md:text-[1vw] pb-[1vw] font-montserrat ">
-          No information provided by the expert!
-        </div>
+        <div className="text-xs xs:text-base pb-[1vw]">No information provided by the expert</div>
       )}
       {!hide && des !== "" && (
         <div className="pb-[1vw] font-montserrat text-[2.2vw] md:text-[1vw]"></div>
@@ -218,18 +219,18 @@ export const Holder = ({ header, des }) => {
 
 export const EducationCard = () => {
   return (
-    <div className="flex gap-[1vw] px-[1.5vw] md:px-0 my-[1.8vw]">
-      <div className="text-[2vw]">
+    <div className="flex items-center lg:items-start gap-3 px-[1.5vw] lg:px-0 my-[1.8vw]">
+      <div className="text-xl sm:text-3xl shrink-0 lg:mt-[0.6vw]">
         <FaUserGraduate />
       </div>
       <div>
-        <div className="text-[10px]">
+        <div className="text-xs xs:text-base">
           Lakshmi Narain College of Technology, Bhopal
         </div>
-        <div className="text-[7px] my-[0.3vw]">
+        <div className="text-[10px] xs:text-sm">
           Bechelor of Engineering - Information Technology
         </div>
-        <div className="text-[7px] text-gray-400 ">
+        <div className="text-[10px] xs:text-sm text-gray-400 ">
           2021-2025
         </div>
       </div>
@@ -239,18 +240,18 @@ export const EducationCard = () => {
 
 export const WorkExperienceCard = () => {
   return (
-    <div className="flex gap-[1vw] px-[1.5vw] md:px-0 my-[1.8vw]">
-      <div className="text-[2vw]">
+    <div className="flex items-center lg:items-start gap-3 px-[1.5vw] lg:px-0 my-[1.8vw]">
+      <div className="text-xl sm:text-4xl shrink-0 lg:mt-[0.6vw]">
         <HiOfficeBuilding />
       </div>
       <div>
-        <div className="text-[1.6vw] md:text-[1.2vw]">
+        <div className="text-xs xs:text-base">
           Ultracreation It Solution
         </div>
-        <div className="text-[1.3vw] md:text-[1vw] my-[0.3vw]">
+        <div className="text-[10px] xs:text-sm my-[0.3vw]">
           Software Developer
         </div>
-        <div className="text-[1.3vw] md:text-[1vw] text-gray-400 ">
+        <div className="text-[10px] xs:text-sm text-gray-400 ">
           2023-2024
         </div>
       </div>
@@ -260,15 +261,15 @@ export const WorkExperienceCard = () => {
 
 export const AchievementCard = () => {
   return (
-    <div className="flex gap-[1vw] px-[1.5vw] md:px-0 my-[1.8vw]">
-      <div className="text-[2vw]">
+    <div className="flex items-center lg:items-start gap-3 px-[1.5vw] lg:px-0 my-[1.8vw]">
+      <div className="text-xl sm:text-4xl items-center shrink-0 lg:mt-[0.6vw]">
         <GiAchievement />
       </div>
       <div>
-        <div className="text-[1.6vw] md:text-[1.2vw]">
+        <div className="text-xs xs:text-base">
           Winner of Smart India Hackethon
         </div>
-        <div className="text-[1.3vw] md:text-[1vw] text-gray-400 my-[0.3vw]">
+        <div className="text-[10px] xs:text-sm text-gray-400 my-[0.3vw]">
           2024
         </div>
       </div>
@@ -283,7 +284,6 @@ export const ExpertInfo = () => {
   const [education, setEducation] = useState(false);
   const [achievements, setAchievements] = useState(false);
   const [workExperience, setWorkExperience] = useState(false);
-  const [temp, setTemp] = useState(0);
 
   const MakeSummaryTrue = () => {
     setSummary(true);
@@ -302,8 +302,8 @@ export const ExpertInfo = () => {
   };
 
   return (
-    <div className="md:flex">
-      <div className="md:w-[75%] px-[2.5vw] md:border-r border-solid border-slate-300 ">
+    <div className="lg:flex">
+      <div className="lg:w-[75%] px-[2.5vw] lg:border-r border-solid border-slate-300 ">
         {/* Three buttons are present here */}
         <div className="flex items-center justify-around mt-[6vw] md:mt-[1.5vw] ">
           <div
@@ -331,20 +331,21 @@ export const ExpertInfo = () => {
             Ratings
           </div>
         </div>
-        <div className="mt-[3vw] ">
+        <div className="mt-[3vw]">
           {summary && <ExpertSummary />}
           {services && <ExpertServices />}
           {ratings && <ExpertRatings />}
         </div>
       </div>
 
-      {/* ***Accordian starts from here*** */}
-      <div className="md:w-[25%] px-[2.5vw]">
-        <div className="my-[2vw]">
+      {/*******Accordian starts from here*******/}
+      
+      {!services && !ratings && <div className="lg:w-[25%] px-[2.5vw] mt-4 md:mt-2 lg:mt-0">
+        <div className="">
           {/* This is Education accordian */}
-          <div className="border-b border-solid border-slate-400 mb-[3vw] md:mb-[2vw]">
+          <div className="border-b border-solid border-slate-400 mb-[5vw] md:mb-[2vw]">
             <div
-              className="flex items-center justify-between text-sm md:text-lg lg:text-xl py-[1vw] cursor-pointer font-montserrat font-semibold"
+              className="flex items-center justify-between text-base sm:text-base md:text-lg lg:text-xl py-[1vw] cursor-pointer font-montserrat font-semibold"
               onClick={() =>
                 education ? setEducation(false) : setEducation(true)
               }
@@ -352,8 +353,8 @@ export const ExpertInfo = () => {
               <div className="">Education</div>
               {!education ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
             </div>
-
-            {education && temp === 0 && (
+            
+            {education &&(
               <div>
                 <EducationCard />
                 <EducationCard />
@@ -362,9 +363,9 @@ export const ExpertInfo = () => {
           </div>
 
           {/* This is Work Experience accordian */}
-          <div className="border-b border-solid border-slate-400 mb-[3vw] md:mb-[2vw]">
+          <div className="border-b border-solid border-slate-400 mb-[5vw] md:mb-[2vw]">
             <div
-              className="flex items-center justify-between text-sm md:text-lg lg:text-xl py-[1vw] cursor-pointer font-montserrat font-semibold"
+              className="flex items-center justify-between text-sm sm:text-base md:text-lg lg:text-xl py-[1vw] cursor-pointer font-montserrat font-semibold"
               onClick={() =>
                 workExperience
                   ? setWorkExperience(false)
@@ -379,7 +380,7 @@ export const ExpertInfo = () => {
               )}
             </div>
 
-            {workExperience && temp === 0 && (
+            {workExperience &&(
               <div>
                 <WorkExperienceCard />
                 <WorkExperienceCard />
@@ -388,9 +389,9 @@ export const ExpertInfo = () => {
           </div>
 
           {/* This is Achievements accordian */}
-          <div className="border-b border-solid border-slate-400 mb-[3vw] md:mb-[2vw]">
+          <div className="border-b border-solid border-slate-400 mb-[5vw] md:mb-[2vw]">
             <div
-              className="flex items-center justify-between text-sm md:text-lg lg:text-xl py-[1vw] cursor-pointer font-montserrat font-semibold"
+              className="flex items-center justify-between text-sm sm:text-base md:text-lg lg:text-xl py-[1vw] cursor-pointer font-montserrat font-semibold"
               onClick={() =>
                 achievements ? setAchievements(false) : setAchievements(true)
               }
@@ -399,7 +400,7 @@ export const ExpertInfo = () => {
               {!achievements ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
             </div>
 
-            {achievements && temp === 0 && (
+            {achievements &&(
               <div>
                 <AchievementCard />
                 <AchievementCard />
@@ -407,7 +408,7 @@ export const ExpertInfo = () => {
             )}
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };
