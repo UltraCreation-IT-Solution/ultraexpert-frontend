@@ -5,8 +5,7 @@ import { TopExperts } from "../Landing/Landing";
 import { profileObj } from "../../constant";
 import Subheader from "../../utilities/Subheader";
 import { FaRegHeart } from "react-icons/fa";
-import { Link, Outlet, useLocation } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 
 export const SearchByCategories = () => {
   return (
@@ -77,7 +76,6 @@ export const ProfileCards = () => {
   });
 };
 export const AllExperts = () => {
-  
   return (
     <div className="relative w-full h-auto py-[5vw] sm:py-[3vw] px-[6vw] md:px-[10vw] flex flex-col">
       <div className="flex w-full justify-between">
@@ -99,10 +97,9 @@ export const AllExperts = () => {
     </div>
   );
 };
+
 const Expert = () => {
-  const location =useLocation().pathname;
-  return(
-  (location==="/experts")?(
+  return (
     <>
       <div className="mt-[80px] px-[8vw] md:px-[12vw]">
         <Subheader heading={"Experts"} />
@@ -110,9 +107,7 @@ const Expert = () => {
       </div>
       <TopExperts />
       <AllExperts />
-      
     </>
-  ):(<Outlet/>)
   );
 };
 
