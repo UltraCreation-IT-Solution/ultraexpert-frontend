@@ -22,7 +22,7 @@ const Navbar = () => {
         } flex ml-[-20px] mt-4 md:mt-0 decoration-transparent `}
       >
         <img src={logo} className="w-[80px] h-[60px] " alt="logo" />
-        <h2 className="ml-[-10px] my-4 relative text-inherit font-extrabold font-montserrat">
+        <h2 className="ml-[-10px] my-4 relative text-2xl text-blue-700 font-extrabold font-montserrat">
           UltraXpert
         </h2>
       </Link>
