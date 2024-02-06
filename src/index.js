@@ -69,18 +69,16 @@ const appRouter = createBrowserRouter([
           {
             path: "expertprofile",
             element: <ExpertProfile />,
-            children:[
-              {
-                path: "service",
-                element: <ServiceDescription />,
-              },
-              {
-                path: "booking",
-                element: <ServiceBooking />,
-              },
-            ]
           },
         ]
+      },
+      {
+        path: "experts/expertprofile/service",
+        element: <ServiceDescription />,
+      },
+      {
+        path: "experts/expertprofile/booking",
+        element: <ServiceBooking />,
       },
       {
         path: "/services",
