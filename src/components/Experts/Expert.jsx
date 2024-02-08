@@ -64,7 +64,7 @@ export const ProfileCards = () => {
             </p>
             <p className="mb-[0.2vw]  mt-0 font-semibold">60 Meetings</p>
             <Link
-              to={"expertProfile"}
+              to={"expertprofile"}
               className=" w-full py-[0.8vw] rounded-lg bg-[#262626] text-white mt-0 mb-0 no-underline"
             >
               See profile
@@ -97,6 +97,7 @@ export const AllExperts = () => {
     </div>
   );
 };
+
 const Expert = () => {
   return (
     <>

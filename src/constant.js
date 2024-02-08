@@ -512,3 +512,28 @@ export const recentBlog = [
       "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
   },
 ];
+
+
+export const serviceImgObject =[
+  {
+    image:"https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",        
+  },
+  {
+    image:"https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D"
+  },
+  {
+    image:"https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+];
+
+export const serviceSkills = [
+  "Web Development",
+  "ReactJs",
+  "Graphic Design",
+  "Javascript",
+  "Differential",
+  "Calculas",
+  "Voice Over",
+  "HTML",
+  "CSS",
+];

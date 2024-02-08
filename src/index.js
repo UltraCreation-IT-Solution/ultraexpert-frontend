@@ -64,19 +64,29 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/experts",
-        element: <Expert />,
-      },
-      {
-        path: "/experts/expertProfile",
-        element: <ExpertProfile />,
-      },
-      {
-        path: "/experts/expertProfile/service",
-        element: <ServiceDescription />,
-      },
-      {
-        path: "/experts/expertProfile/booking",
-        element: <ServiceBooking />,
+        children: [
+          {
+            path: "",
+            element: <Expert />,
+          },
+          {
+            path: "expertprofile",
+            children: [
+              {
+                path: "",
+                element: <ExpertProfile />,
+              },
+              {
+                path: "service",
+                element: <ServiceDescription />,
+              },
+              {
+                path: "booking",
+                element: <ServiceBooking />,
+              },
+            ],
+          },
+        ],
       },
       {
         path: "/services",
@@ -84,11 +94,16 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/blog",
-        element: <Blog />,
-      },
-      {
-        path: "/blog/blogdetail",
-        element: <BlogDetails />,
+        children: [
+          {
+            path: "",
+            element: <Blog />,
+          },
+          {
+            path: "blogdetail",
+            element: <BlogDetails />,
+          },
+        ],
       },
     ],
   },
