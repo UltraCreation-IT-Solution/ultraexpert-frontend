@@ -74,12 +74,12 @@ const Navbar = () => {
         </nav>
         <button
           onClick={() => setShowNav(!showNav)}
-          className="md:hidden absolute top-0 right-0 mr-6 mt-6 bg-black w-[28px] h-[28px] rounded-sm flex items-center justify-center"
+          className="md:hidden absolute top-0 right-0 mr-6 mt-6 bg-white rounded-sm flex items-center justify-center"
         >
           {showNav ? (
-            <FaTimes className="w-full h-full text-white" />
+            <FaTimes className="text-black text-[6vw] " />
           ) : (
-            <FaBars className="w-full h-full text-white" />
+            <FaBars className="text-[7vw] text-black" />
           )}
         </button>
       </div>
