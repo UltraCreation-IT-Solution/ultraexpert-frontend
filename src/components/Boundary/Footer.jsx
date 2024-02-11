@@ -3,10 +3,10 @@ import React from "react";
 
 export const Footer = () => {
   return (
-    <div className="relative w-full h-auto bg-[#F2F2F2] mt-[3vw] px-[8vw] py-[3vw] sm:py-[2vw]">
-      <div className="flex text-[#C5C3C3] text-[9vw] sm:text-[8vw] w-full font-bold text-center justify-between items-center ">
+    <div className="relative w-full h-auto bg-[#2A2A2A] mt-[3vw] px-[8vw] py-[3vw] sm:py-[2vw] text-white">
+      <div className="flex text-white text-[9vw] sm:text-[8vw] w-full font-bold text-center justify-between items-center ">
         UltraXpert
-        <span className="text-black text-xs xs:text-sm sm:text-base md:text-xl mt-[1vw] text-right">
+        <span className="text-white text-xs xs:text-sm sm:text-base md:text-xl mt-[1vw] text-right">
           Think Creative, <br /> Do Effective
         </span>
       </div>

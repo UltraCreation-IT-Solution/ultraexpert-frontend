@@ -103,7 +103,7 @@ export const TopExperts = () => {
           onMouseLeave={() => setActiveNo(0)}
           className={`${
             activeNo === 0 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh]"
-          } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D')] bg-center `}
+          } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D')] bg-center  rounded`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[60%] ">
             <h2>Web Developer</h2>
@@ -153,7 +153,7 @@ export const TopExperts = () => {
           onMouseLeave={() => setActiveNo(0)}
           className={`${
             activeNo === 1 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh]"
-          } expertDiv bg-[url('https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center`}
+          } expertDiv bg-[url('https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center rounded`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
@@ -203,7 +203,7 @@ export const TopExperts = () => {
           onMouseLeave={() => setActiveNo(0)}
           className={`${
             activeNo === 2 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh]"
-          } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww')] bg-center`}
+          } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww')] bg-center rounded`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
@@ -253,7 +253,7 @@ export const TopExperts = () => {
           onMouseLeave={() => setActiveNo(0)}
           className={`${
             activeNo === 3 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh]"
-          } expertDiv relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-center bg-cover hidden md:flex`}
+          } expertDiv rounded relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-center bg-cover hidden md:flex`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
@@ -284,7 +284,7 @@ export const TopExperts = () => {
           onMouseLeave={() => setActiveNo(0)}
           className={`${
             activeNo === 4 ? "active" : "w-full sm:w-1/2 h-[36vh] md:h-[65vh] "
-          } expertDiv relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D')] bg-center bg-cover hidden md:flex`}
+          } expertDiv rounded relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D')] bg-center bg-cover hidden md:flex`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
@@ -315,7 +315,7 @@ export const TopExperts = () => {
         to={"/experts"}
         className={`${
           location === "/experts" ? "hidden" : "block"
-        } text-[2.4vw] md:text-[1.6vw] text-black flex items-cemter justify-end underline mt-[-10vw] sm:mt-[-8vw] md:mt-[-3vw]`}
+        } text-[2.4vw] md:text-[1.6vw] text-black flex items-cemter justify-end no-underline mt-[-10vw] sm:mt-[-8vw] md:mt-[-3vw]`}
       >
         See More Experts
         <GrFormNextLink className="mt-[0.5vw] text-[2vw] md:text-[1.4vw]" />
@@ -323,36 +323,7 @@ export const TopExperts = () => {
     </div>
   );
 };
-export const AboutUX = () => {
-  return (
-    <div className="relative w-full min-h-auto py-[3vw] md:py-[5vw]">
-      <div className="mt-0 sm:-mt-10 flex py-[2vw] flex-col sm:flex-row  w-full h-auto px-[8vw] sm:px-[10vw] gap-0 sm:gap-8 items-center flex-nowrap">
-        <h3 className="relative w-full text-center sm:text-left sm:w-1/3 text-gray-700 font-extrabold text-[4.4vw] sm:text-[3vw]">
-          Helping millions grow better
-        </h3>
-        <div className="aboutMsg mt-0 sm:mt-24 w-[34vw] sm:w-[30vw] h-[28vw] bg-[url('https://images.unsplash.com/photo-1521316730702-829a8e30dfd0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8b3VyJTIwbWlzc2lvbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center bg-cover z-20 "></div>
-        <div className="w-full sm:w-1/3 h-auto flex flex-col ">
-          <h3 className="relative w-full text-gray-700 font-extrabold text-xl sm:text-2xl text-center ">
-            Our mission
-          </h3>
-          <p className="relative  w-full text-gray-700 font-normal text-justify text-[11px] leading-4 sm:text-[1.25vw] sm:leading-snug">
-            At UltraCreation, our mission is to transcend conventional and
-            empower businesses with cutting-edge technological solutions. We are
-            dedicated to being the catalyst for our clients' digital
-            transformation, facilitating seamless connectivity, and maximizing
-            their potential in the ever-evolving digital landscape.
-          </p>
-          <div className=" flex flex-row items-center justify-end gap-[5px] text-gray-400">
-            <div className="relative font-medium text-[2.4vw] sm:text-[1.12vw] underline">
-              Visit for more
-            </div>
-            <GrFormNextLink className="relative w-[3.6vw] h-[3.6vw] sm:w-[1.8vw] sm:h-[1.8vw] overflow-hidden shrink-0 object-cover" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+
 export const Story = () => {
   return (
     <>
@@ -396,7 +367,7 @@ export const Testimonial = () => {
             UltraXperts
           </h1>
         </div>
-        <span className="flex items-center justify-center underline text-xs xs:text-base sm:text-lg md:text-xl lg:text-2xl">
+        <span className="flex items-center justify-center no-underline text-xs xs:text-base sm:text-lg md:text-xl lg:text-2xl">
           See More <GrFormNextLink />
         </span>
       </div>
@@ -404,17 +375,20 @@ export const Testimonial = () => {
         <motion.div className="flex gap-[4vw] md:gap-[1.4vw] overflow-visible ">
           <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
             <div
-              className={`w-full h-full object-cover bg-[#EA7794]   rounded-xl pointer-events-none border-white border flex flex-col`}
+              className={`relative w-full h-full object-cover bg-[#EA7794]   rounded-xl pointer-events-none border-white border flex flex-col`}
             >
               <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw]">
                 <img
-                  className="shrink-0 w-[11vw] h-[11vw] sm:h-[6.5vw] sm:w-[6.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
+                  className="shrink-0 w-[11vw] h-[11vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
                   src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
                   alt=""
                 />
-                <h2 className="shrink-0 text-[4vw] sm:text-[2vw] tracking-wide sm:tracking-normal">
-                  Bhavesh Bhanusali
-                </h2>
+                <div>
+                  <h2 className="shrink-0 text-[4vw] sm:text-[2vw] tracking-wide sm:tracking-normal mb-0">
+                    Bhavesh Bhanusali
+                  </h2>
+                  <h4 className="mt-1 font-medium">12 Jan 2024</h4>
+                </div>
               </div>
               <div className="w-full h-2/3 text-[2.98vw] sm:text-[1.55vw] md:text-[1.45vw] flex items-start justify-start px-[2vw]">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
@@ -566,50 +540,49 @@ export const Blog = () => {
     <div className="my-[4vw] sm:my-[3vw]">
       <div className="relative w-full h-auto pb-[5vw] bg-[#F2F2F2] pl-[5vw] pr-[8vw]">
         <div className="flex flex-row justify-between items-center w-full h-full">
-          <h1 className="text-[8.5vw] sm:text-[6vw] font-thin font-sans text-[#C5C3C3] uppercase">
+          <h1 className="text-[8.5vw] sm:text-[10vw] sm:leading-none font-thin font-sans text-[#C5C3C3] uppercase">
             Blog
           </h1>
           <Link
             to={"blog"}
-            className="flex items-center underline text-black text-sm xs:text-base md:text-xl lg:text-2xl"
+            className="flex items-center no-underline text-black text-sm xs:text-base md:text-xl lg:text-2xl"
           >
             See More <GrFormNextLink />
           </Link>
         </div>
-        <div className="flex w-full gap-[2.4vw] items-start">
+        <div className="flex flex-col xs:flex-row w-full gap-[2.4vw] items-start">
           <img
-            className="w-[38vw] h-[60vw] xs:w-[40vw] xs:h-[50vw] sm:w-[28vw] sm:h-[36.5vw] md:h-[38vw] lg:h-[35vw] rounded-sm"
+            className=" w-full h-[35vw] xs:w-[40vw] xs:h-[50vw] sm:w-[28vw] sm:h-[36.5vw] md:h-[38vw] lg:h-[35vw] rounded-sm object-cover"
             src="https://images.pexels.com/photos/1762851/pexels-photo-1762851.jpeg?auto=compress&cs=tinysrgb&w=600"
             alt=""
           />
-          <div className="flex w-2/3 flex-col items-center xs:items-start justify-start">
+          <div className="flex w-full xs:w-2/3 flex-col items-center xs:items-start justify-start">
             <div className="text-[4.85vw] sm:text-[4.4vw] font-sans  font-extrabold tracking-wide text-center xs:text-left ">
-              A DESIGNER’S <br /> GUIDE TO BATTLE <br /> IMPOSTER <br />
-              SYNDROME
+              A DESIGNER’S GUIDE TO BATTLE IMPOSTER SYNDROME
             </div>
             <p className="w-full md:w-11/12 text-[9px] leading-[14px]  xs:text-[9.5px] xs:leading-[14px] md:text-xs lg:text-sm mb-[-0.8vw] text-center xs:text-left">
               You’ve always dreamt of being a designer and suddenly you find
               yourself actually doing it. Answering briefs, building your
               portfolio, even working in a studio. But yet, something doesn’t
               feel quite right. You can’t help but feel incredulous—waiting for
-              someone to catch you out and bring you back to reality.
+              someone to catch you out and bring you back to reality.{" "}
+              <Link
+                to={"blog/blogdetail"}
+                className="underline text-black mt-[1.8vw] text-[10px] xs:text-[11px] sm:text-xs md:text-base font-medium shrink-0"
+              >
+                Read More
+              </Link>
             </p>
-            <Link
-              to={"blog/blogdetail"}
-              className="underline text-black mt-[1.8vw] text-[10px] xs:text-[11px] sm:text-xs md:text-base font-medium"
-            >
-              Read More
-            </Link>
           </div>
         </div>
       </div>
-      <div className="relative w-full h-auto pb-[5vw] bg-[#F2F2F2] pl-[5vw] pr-[8vw]">
+      {/* <div className="relative w-full h-auto pb-[5vw] bg-[#F2F2F2] pl-[5vw] pr-[8vw]">
         <div className="flex flex-row-reverse justify-between items-center w-full h-full">
           <h1 className="text-[8.5vw] sm:text-[6vw] font-thin font-sans text-[#C5C3C3] uppercase">
             Blog
           </h1>
         </div>
-        <div className="flex w-full gap-[2.4vw] items-start">
+        <div className="flex flex-row-reverse w-full gap-[2.4vw] items-start">
           <img
             className="w-[38vw] h-[60vw] xs:w-[40vw] xs:h-[50vw] sm:w-[28vw] sm:h-[36.5vw] md:h-[38vw] lg:h-[35vw] rounded-sm"
             src="https://images.pexels.com/photos/1762851/pexels-photo-1762851.jpeg?auto=compress&cs=tinysrgb&w=600"
@@ -635,7 +608,7 @@ export const Blog = () => {
             </Link>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -656,7 +629,6 @@ const Landing = () => {
       <ServiceCategory />
       <Testimonial />
       <Blog />
-      <AboutUX />
       <Story />
     </>
   );
