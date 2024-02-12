@@ -21,6 +21,7 @@ import Error from "./subsitutes/Error";
 import BlogDetails from "./components/Blogs/BlogDetail";
 import Navbar from "./components/Boundary/Navbar";
 import Footer from "./components/Boundary/Footer";
+import { expertDetailsObj } from "./constant";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -77,11 +78,11 @@ const appRouter = createBrowserRouter([
                 element: <ExpertProfile />,
               },
               {
-                path: "service",
-                element: <ServiceDescription />,
+                path: "service/:id",
+                element: <ServiceDescription {...expertDetailsObj} />,
               },
               {
-                path: "booking",
+                path: "booking/:id",
                 element: <ServiceBooking />,
               },
             ],
