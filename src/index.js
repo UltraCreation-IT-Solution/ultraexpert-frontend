@@ -95,11 +95,16 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/blog",
-        element: <Blog />,
-      },
-      {
-        path: "/blog/blogdetail",
-        element: <BlogDetails />,
+        children: [
+          {
+            path: "",
+            element: <Blog />,
+          },
+          {
+            path: "blogdetail",
+            element: <BlogDetails />,
+          },
+        ],
       },
     ],
   },

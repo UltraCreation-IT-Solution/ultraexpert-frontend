@@ -259,150 +259,602 @@ export const profileObj = [
     meetings: "60 Meetings",
   },
 ];
-export const serviceObj = [
+export const serviceObjects = [
   {
-    banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design a modern logo for your web application",
-    price: "$10",
-    rating: 4.9,
-    reviews: 10,
-    expertName: "Bhavesh Bhanusali",
-    delivery: "1 day",
-    category: "Logo Design",
-    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+    category: "Video & Editing",
+    serviceArray: [
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+    ],
   },
   {
-    banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design a modern logo for your web application",
-    price: "$10",
-    rating: 4.9,
-    reviews: 10,
-    expertName: "Bhavesh Bhanusali",
-    delivery: "1 day",
-    category: "Logo Design",
-    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+    category: "Development & Tools",
+    serviceArray: [
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+    ],
   },
   {
-    banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design a modern logo for your web application",
-    price: "$10",
-    rating: 4.9,
-    reviews: 10,
-    expertName: "Bhavesh Bhanusali",
-    delivery: "1 day",
-    category: "Logo Design",
-    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+    category: "Graphic & Design",
+    serviceArray: [
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+    ],
   },
   {
-    banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design a modern logo for your web application",
-    price: "$10",
-    rating: 4.9,
-    reviews: 10,
-    expertName: "Bhavesh Bhanusali",
-    delivery: "1 day",
-    category: "Logo Design",
-    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
-  },
-  {
-    banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design a modern logo for your web application",
-    price: "$10",
-    rating: 4.9,
-    reviews: 10,
-    expertName: "Bhavesh Bhanusali",
-    delivery: "1 day",
-    category: "Logo Design",
-    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
-  },
-  {
-    banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design a modern logo for your web application",
-    price: "$10",
-    rating: 4.9,
-    reviews: 10,
-    expertName: "Bhavesh Bhanusali",
-    delivery: "1 day",
-    category: "Logo Design",
-    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
-  },
-  {
-    banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design a modern logo for your web application",
-    price: "$10",
-    rating: 4.9,
-    reviews: 10,
-    expertName: "Bhavesh Bhanusali",
-    delivery: "1 day",
-    category: "Logo Design",
-    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
-  },
-  {
-    banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design a modern logo for your web application",
-    price: "$10",
-    rating: 4.9,
-    reviews: 10,
-    expertName: "Bhavesh Bhanusali",
-    delivery: "1 day",
-    category: "Logo Design",
-    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
-  },
-  {
-    banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design a modern logo for your web application",
-    price: "$10",
-    rating: 4.9,
-    reviews: 10,
-    expertName: "Bhavesh Bhanusali",
-    delivery: "1 day",
-    category: "Logo Design",
-    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
-  },
-  {
-    banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design a modern logo for your web application",
-    price: "$10",
-    rating: 4.9,
-    reviews: 10,
-    expertName: "Bhavesh Bhanusali",
-    delivery: "1 day",
-    category: "Logo Design",
-    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
-  },
-  {
-    banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design a modern logo for your web application",
-    price: "$10",
-    rating: 4.9,
-    reviews: 10,
-    expertName: "Bhavesh Bhanusali",
-    delivery: "1 day",
-    category: "Logo Design",
-    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
-  },
-  {
-    banner:
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
-    title: "I will design a modern logo for your web application",
-    price: "$10",
-    rating: 4.9,
-    reviews: 10,
-    expertName: "Bhavesh Bhanusali",
-    delivery: "1 day",
-    category: "Logo Design",
-    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+    category: "Logos & Mockups",
+    serviceArray: [
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+      {
+        banner:
+          "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+        title: "I will design a modern logo for your web application",
+        price: "$10",
+        rating: 4.9,
+        reviews: 10,
+        expertName: "Bhavesh Bhanusali",
+        delivery: "1 day",
+        category: "Logo Design",
+        logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+      },
+    ],
   },
 ];
 export const blogObj = [
@@ -518,7 +970,6 @@ export const recentBlog = [
   },
 ];
 
-
 export const ProjectsCarousel = () => {
   const [slider, setSlider] = useState(0);
 
@@ -537,16 +988,25 @@ export const ProjectsCarousel = () => {
               {temp?.title}
             </div>
             <MdOutlineKeyboardArrowLeft
-              className={`absolute left-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] rounded-full ${slider === 0 ? ` border-slate-400 border-solid text-slate-400`: `border-white border-solid text-white`} bg-black/50 `}
-              onClick={() =>slider === 0 ? setSlider(0) :setSlider(slider - 1)
+              className={`absolute left-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] rounded-full ${
+                slider === 0
+                  ? ` border-slate-400 border-solid text-slate-400`
+                  : `border-white border-solid text-white`
+              } bg-black/50 `}
+              onClick={() =>
+                slider === 0 ? setSlider(0) : setSlider(slider - 1)
               }
             />
             <MdOutlineKeyboardArrowRight
-              className={`absolute right-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] ${slider === expertDetailsObj?.projects.length - 1  ? ` border-slate-400 border-solid text-slate-400`: `border-white border-solid text-white`} bg-black/50 rounded-full`}
+              className={`absolute right-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] ${
+                slider === expertDetailsObj?.projects.length - 1
+                  ? ` border-slate-400 border-solid text-slate-400`
+                  : `border-white border-solid text-white`
+              } bg-black/50 rounded-full`}
               onClick={() =>
-                slider === expertDetailsObj?.projects.length - 1 ?
-                   setSlider(expertDetailsObj?.projects.length - 1):setSlider(slider+1)
-                  
+                slider === expertDetailsObj?.projects.length - 1
+                  ? setSlider(expertDetailsObj?.projects.length - 1)
+                  : setSlider(slider + 1)
               }
             />
             <img
@@ -574,9 +1034,8 @@ export const ProjectsCarousel = () => {
   );
 };
 
-
 export const expertDetailsObj = {
-  id:1,
+  id: 1,
   personalDetails: {
     name: "Antony Phobes",
     img: "https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -599,29 +1058,37 @@ export const expertDetailsObj = {
     "HTML",
     "CSS",
   ],
-  projects:[
+  projects: [
     {
-      banner:"https://images.unsplash.com/photo-1542626991-cbc4e32524cc?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      description:"Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.",
-      title:"Cloud Portal",
+      banner:
+        "https://images.unsplash.com/photo-1542626991-cbc4e32524cc?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      description:
+        "Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.",
+      title: "Cloud Portal",
     },
     {
-      banner:"https://images.unsplash.com/photo-1541018939203-36eeab6d5721?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDR8fHByb2plY3RzfGVufDB8MHwwfHx8MA%3D%3D ",
-      description:"Lorem ipsum 2, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.",
-      title:"UltraXpert",
+      banner:
+        "https://images.unsplash.com/photo-1541018939203-36eeab6d5721?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDR8fHByb2plY3RzfGVufDB8MHwwfHx8MA%3D%3D ",
+      description:
+        "Lorem ipsum 2, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.",
+      title: "UltraXpert",
     },
     {
-      banner:"https://images.unsplash.com/photo-1619506147448-b56ba8ee11d7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTR8fHByb2plY3RzfGVufDB8MHwwfHx8MA%3D%3D",
-      description:"Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.",
-      title:"Clone",
+      banner:
+        "https://images.unsplash.com/photo-1619506147448-b56ba8ee11d7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTR8fHByb2plY3RzfGVufDB8MHwwfHx8MA%3D%3D",
+      description:
+        "Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.",
+      title: "Clone",
     },
     {
-      banner:"https://images.unsplash.com/photo-1518185104790-b1d745526575?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTE2fHxwcm9qZWN0c3xlbnwwfDB8MHx8fDA%3D",
-      description:"Lorem ipsum 4, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.",
-      title:"My Project 4",
+      banner:
+        "https://images.unsplash.com/photo-1518185104790-b1d745526575?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTE2fHxwcm9qZWN0c3xlbnwwfDB8MHx8fDA%3D",
+      description:
+        "Lorem ipsum 4, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.",
+      title: "My Project 4",
     },
   ],
-  education:[
+  education: [
     {
       instituteName: "Lakshmi Narain College of Technology, Bhopal",
       degreeName: "Bechelor of Engineering - Information Technology",
@@ -633,7 +1100,7 @@ export const expertDetailsObj = {
       duration: "2019-2023",
     },
   ],
-  workExperience:[
+  workExperience: [
     {
       companyName: "Ultracreation It Solution",
       position: "Software Developer",
@@ -645,7 +1112,7 @@ export const expertDetailsObj = {
       duration: "6 months",
     },
   ],
-  achievements:[
+  achievements: [
     {
       name: "Winner of Smart India Hackethon",
       year: "2023",
@@ -655,120 +1122,130 @@ export const expertDetailsObj = {
       year: "2022",
     },
   ],
-  services:[
-     {
-       title:"Web & App development",
-       id:1,
-       description:"Web & App development Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
-       banners:[
-         "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
-         "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
-         "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-       ],
-       price:"1200",
-     },
-     {
-       title:"Website design using figma",
-       id:2,
-       description:"Website design using figma Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
-       banners:[
-         "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
-         "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
-         "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-       ],
-       price:"1300",
-     },
-     {
-       title:"Getting started with popular web API's",
-       id:3,
-       description:"Getting started with popular web API's Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
-       banners:[
-         "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
-         "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
-         "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-       ],
-       price:"1400",
-     },
-     {
-       title:"Building web pages using Chat GPT 3.5",
-       id:4,
-       description:"Building web pages using Chat GPT 3.5 Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
-       banners:[
-         "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
-         "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
-         "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-       ],
-       price:"1500",
-     },
-     {
-       title:"Learn basics of Reactjs like state, prope, hooks and many more",
-       id:5,
-       description:"Learn basics of Reactjs like state, prope, hooks and many more Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
-       banners:[
-         "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
-         "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
-         "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-       ],
-       price:"1600",
-     },
-     {
-       title:"Website design using figma",
-       id:6,
-       description:"Website design using figma Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
-       banners:[
-         "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
-         "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
-         "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-       ],
-       price:"1700",
-     },
-     {
-       title:"Getting started with popular web API's",
-       id:7,
-       description:"Getting started with popular web API's Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
-       banners:[
-         "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
-         "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
-         "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-       ],
-       price:"1800",
-     },
-     {
-       title:"Building web pages using Chat GPT 3.5",
-       id:8,
-       description:"Building web pages using Chat GPT 3.5 Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
-       banners:[
-         "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
-         "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
-         "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-       ],
-       price:"1900",
-     },
-     {
-       title:"website design using figma",
-       id:9,
-       description:"website design using figma Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
-       banners:[
-         "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
-         "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
-         "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-       ],
-       price:"2000",
-     },
-     {
-       title:"website design using figma and other tools",
-       id:10,
-       description:"website design using figma and other tools Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
-       banners:[
-         "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
-         "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
-         "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-       ],
-       price:"2100",
-     },
-   ],
-  blogs:[],
-  ratings:[
+  services: [
+    {
+      title: "Web & App development",
+      id: 1,
+      description:
+        "Web & App development Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
+      banners: [
+        "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
+        "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
+        "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      ],
+      price: "1200",
+    },
+    {
+      title: "Website design using figma",
+      id: 2,
+      description:
+        "Website design using figma Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
+      banners: [
+        "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
+        "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
+        "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      ],
+      price: "1300",
+    },
+    {
+      title: "Getting started with popular web API's",
+      id: 3,
+      description:
+        "Getting started with popular web API's Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
+      banners: [
+        "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
+        "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
+        "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      ],
+      price: "1400",
+    },
+    {
+      title: "Building web pages using Chat GPT 3.5",
+      id: 4,
+      description:
+        "Building web pages using Chat GPT 3.5 Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
+      banners: [
+        "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
+        "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
+        "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      ],
+      price: "1500",
+    },
+    {
+      title: "Learn basics of Reactjs like state, prope, hooks and many more",
+      id: 5,
+      description:
+        "Learn basics of Reactjs like state, prope, hooks and many more Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
+      banners: [
+        "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
+        "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
+        "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      ],
+      price: "1600",
+    },
+    {
+      title: "Website design using figma",
+      id: 6,
+      description:
+        "Website design using figma Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
+      banners: [
+        "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
+        "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
+        "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      ],
+      price: "1700",
+    },
+    {
+      title: "Getting started with popular web API's",
+      id: 7,
+      description:
+        "Getting started with popular web API's Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
+      banners: [
+        "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
+        "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
+        "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      ],
+      price: "1800",
+    },
+    {
+      title: "Building web pages using Chat GPT 3.5",
+      id: 8,
+      description:
+        "Building web pages using Chat GPT 3.5 Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
+      banners: [
+        "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
+        "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
+        "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      ],
+      price: "1900",
+    },
+    {
+      title: "website design using figma",
+      id: 9,
+      description:
+        "website design using figma Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
+      banners: [
+        "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
+        "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
+        "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      ],
+      price: "2000",
+    },
+    {
+      title: "website design using figma and other tools",
+      id: 10,
+      description:
+        "website design using figma and other tools Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum velit culpa ipsam quia quaerat doloribus distinctio nesciunt ea, animi consectetur, dolorum temporibus quibusdam quo voluptas facilis debitis nisi autem cumque laudantium omnis dolore. Voluptates minima distinctio labore maiores ipsum! Dolores?",
+      banners: [
+        "https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8",
+        "https://images.unsplash.com/photo-1613479205646-c0dc1ee8511f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D",
+        "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      ],
+      price: "2100",
+    },
+  ],
+  blogs: [],
+  ratings: [
     {
       img: "https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       name: "Jhon Butter",
@@ -825,6 +1302,5 @@ export const expertDetailsObj = {
       comment:
         "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos",
     },
-  ]
-  
+  ],
 };
