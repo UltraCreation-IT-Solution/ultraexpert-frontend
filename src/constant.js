@@ -158,6 +158,11 @@ export const profileObj = [
       "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     designation: "Web Developer",
     meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
   },
   {
     name: "Bhavesh Bhanusali",
@@ -167,6 +172,11 @@ export const profileObj = [
       "https://images.unsplash.com/photo-1551500226-b50b653e33e8?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     designation: "Web Developer",
     meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
   },
   {
     name: "Bhavesh Bhanusali",
@@ -176,6 +186,11 @@ export const profileObj = [
       "https://images.unsplash.com/photo-1621416953228-87ad15716483?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     designation: "Web Developer",
     meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
   },
   {
     name: "Bhavesh Bhanusali",
@@ -185,6 +200,11 @@ export const profileObj = [
       "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     designation: "Web Developer",
     meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
   },
   {
     name: "Bhavesh Bhanusali",
@@ -194,6 +214,11 @@ export const profileObj = [
       "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     designation: "Web Developer",
     meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
   },
   {
     name: "Bhavesh Bhanusali",
@@ -203,6 +228,11 @@ export const profileObj = [
       "https://images.unsplash.com/photo-1551500226-b50b653e33e8?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     designation: "Web Developer",
     meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
   },
   {
     name: "Bhavesh Bhanusali",
@@ -212,6 +242,11 @@ export const profileObj = [
       "https://images.unsplash.com/photo-1621416953228-87ad15716483?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     designation: "Web Developer",
     meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
   },
   {
     name: "Bhavesh Bhanusali",
@@ -221,6 +256,11 @@ export const profileObj = [
       "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     designation: "Web Developer",
     meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
   },
   {
     name: "Bhavesh Bhanusali",
@@ -230,6 +270,11 @@ export const profileObj = [
       "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     designation: "Web Developer",
     meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
   },
   {
     name: "Bhavesh Bhanusali",
@@ -239,6 +284,11 @@ export const profileObj = [
       "https://images.unsplash.com/photo-1551500226-b50b653e33e8?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     designation: "Web Developer",
     meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
   },
   {
     name: "Bhavesh Bhanusali",
@@ -248,6 +298,11 @@ export const profileObj = [
       "https://images.unsplash.com/photo-1621416953228-87ad15716483?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     designation: "Web Developer",
     meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
   },
   {
     name: "Bhavesh Bhanusali",
@@ -257,6 +312,53 @@ export const profileObj = [
       "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     designation: "Web Developer",
     meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1551500226-b50b653e33e8?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1621416953228-87ad15716483?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
   },
 ];
 export const serviceObjects = [

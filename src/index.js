@@ -21,6 +21,7 @@ import Error from "./subsitutes/Error";
 import BlogDetails from "./components/Blogs/BlogDetail";
 import Navbar from "./components/Boundary/Navbar";
 import Footer from "./components/Boundary/Footer";
+import AllExperts from "./Test";
 import { expertDetailsObj } from "./constant";
 
 const Layout = () => {
@@ -105,6 +106,10 @@ const appRouter = createBrowserRouter([
             element: <BlogDetails />,
           },
         ],
+      },
+      {
+        path: "/test",
+        element: <AllExperts />,
       },
     ],
   },

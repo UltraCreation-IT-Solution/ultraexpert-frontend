@@ -1,9 +1,5 @@
-import React from "react";
-import { TopExperts } from "../Landing/Landing";
-import Subheader from "../../utilities/Subheader";
-import SearchByCategoriesSlider from "../../utilities/SearchByCategoriesSlider";
 import { Link } from "react-router-dom";
-import { profileObj } from "../../constant";
+import { profileObj } from "./constant";
 import {
   FaStar,
   FaTags,
@@ -85,7 +81,7 @@ const AllExperts = () => {
                   >
                     Visit Profile
                   </Link>
-                  <div className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2">
+                  <div className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded">
                     Follow Expert
                   </div>
                 </div>
@@ -108,17 +104,4 @@ const AllExperts = () => {
   );
 };
 
-const Expert = () => {
-  return (
-    <>
-      <div className="mt-[80px] px-[7vw] md:px-[10vw]">
-        <Subheader heading={"Experts"} />
-      </div>
-      <SearchByCategoriesSlider />
-      <TopExperts />
-      <AllExperts />
-    </>
-  );
-};
-
-export default Expert;
+export default AllExperts;
