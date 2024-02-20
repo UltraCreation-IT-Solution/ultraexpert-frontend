@@ -1,9 +1,5 @@
-import React from "react";
-import { TopExperts } from "../Landing/Landing";
-import Subheader from "../../utilities/Subheader";
-import SearchByCategoriesSlider from "../../utilities/SearchByCategoriesSlider";
 import { Link } from "react-router-dom";
-import { profileObj } from "../../constant";
+import { profileObj } from "./constant";
 import {
   FaStar,
   FaTags,
@@ -15,11 +11,9 @@ import {
 
 const AllExperts = () => {
   return (
-    <div className="mt-[40px] md:mt-[100px] relative w-full h-auto py-[5vw] sm:py-[3vw] px-[3vw] xs:px-[6vw] md:px-[10vw] flex flex-col">
+    <div className=" mt-[100px] relative w-full h-auto py-[5vw] sm:py-[3vw] px-[3vw] xs:px-[6vw] md:px-[10vw] flex flex-col">
       <div className="flex w-full justify-center sm:justify-between">
-        <div className="text-3xl md:text-4xl font-bold mb-[3vw] md:mb-[1.5vw]">
-          Experts
-        </div>
+        <div className="text-3xl md:text-4xl font-bold mb-[1.5vw]">Experts</div>
       </div>
       <div className="w-full flex flex-wrap gap-[3vw] md:gap-[2vw] pb-[2vw]  justify-center sm:justify-normal  items-center">
         {profileObj.map((item, index) => {
@@ -87,7 +81,7 @@ const AllExperts = () => {
                   >
                     Visit Profile
                   </Link>
-                  <div className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2">
+                  <div className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded">
                     Follow Expert
                   </div>
                 </div>
@@ -110,17 +104,4 @@ const AllExperts = () => {
   );
 };
 
-const Expert = () => {
-  return (
-    <>
-      <div className="mt-[80px] px-[7vw] md:px-[10vw]">
-        <Subheader heading={"Experts"} />
-      </div>
-      <SearchByCategoriesSlider />
-      <TopExperts />
-      <AllExperts />
-    </>
-  );
-};
-
-export default Expert;
+export default AllExperts;
