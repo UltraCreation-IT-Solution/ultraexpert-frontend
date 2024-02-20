@@ -15,9 +15,11 @@ import {
 
 const AllExperts = () => {
   return (
-    <div className=" mt-[100px] relative w-full h-auto py-[5vw] sm:py-[3vw] px-[3vw] xs:px-[6vw] md:px-[10vw] flex flex-col">
+    <div className="mt-[40px] md:mt-[100px] relative w-full h-auto py-[5vw] sm:py-[3vw] px-[3vw] xs:px-[6vw] md:px-[10vw] flex flex-col">
       <div className="flex w-full justify-center sm:justify-between">
-        <div className="text-3xl md:text-4xl font-bold mb-[1.5vw]">Experts</div>
+        <div className="text-3xl md:text-4xl font-bold mb-[3vw] md:mb-[1.5vw]">
+          Experts
+        </div>
       </div>
       <div className="w-full flex flex-wrap gap-[3vw] md:gap-[2vw] pb-[2vw]  justify-center sm:justify-normal  items-center">
         {profileObj.map((item, index) => {

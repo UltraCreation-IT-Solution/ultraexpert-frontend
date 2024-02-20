@@ -23,6 +23,7 @@ import Navbar from "./components/Boundary/Navbar";
 import Footer from "./components/Boundary/Footer";
 import AllExperts from "./Test";
 import { expertDetailsObj } from "./constant";
+import ExpertDashboard from "./components/Experts/ExpertDashboard";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -106,6 +107,10 @@ const appRouter = createBrowserRouter([
             element: <BlogDetails />,
           },
         ],
+      },
+      {
+        path: "/expertdashboard",
+        element: <ExpertDashboard />,
       },
       {
         path: "/test",
