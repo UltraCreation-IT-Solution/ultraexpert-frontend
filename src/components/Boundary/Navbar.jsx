@@ -77,9 +77,9 @@ const Navbar = () => {
           className="md:hidden absolute top-0 right-0 mr-6 mt-6 bg-white rounded-sm flex items-center justify-center"
         >
           {showNav ? (
-            <FaTimes className="text-black text-[6vw] " />
+            <FaTimes className="text-black text-2xl xs:text-3xl " />
           ) : (
-            <FaBars className="text-[7vw] text-black" />
+            <FaBars className="text-black text-2xl xs:text-3xl" />
           )}
         </button>
       </div>

@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 body {
-  @apply leading-[normal] m-0 font-montserrat;
+  @apply m-0 font-montserrat;
 }
 *,
 ::before,
@@ -14,32 +14,22 @@ body {
   @apply font-montserrat;
   box-sizing: border-box;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-.aboutMsg {
-  clip-path: polygon(
-    0% 0%,
-    100% 0%,
-    100% 75%,
-    75% 75%,
-    75% 100%,
-    50% 75%,
-    0% 75%
-  );
-}
-.active {
-  @apply sm:mx-2 transform transition-all duration-500 ease-in-out w-full sm:w-[150%] h-[36vh] md:h-[65vh];
+.activeExpert {
+  @apply sm:mx-2 transform transition-all duration-500 ease-in-out w-full sm:w-[150%] h-[36vh] md:h-[56vh] lg:h-[65vh];
 }
 .expertDiv h2 {
   @apply text-[5vw] sm:text-[2.6vw] absolute w-auto block h-auto ml-[15px] bottom-[5%] sm:bottom-[3%] font-light;
   writing-mode: vertical-lr;
   rotate: 180deg;
 }
-.active h2 {
+.activeExpert h2 {
   @apply bottom-[7%] sm:bottom-[5%] tracking-[3px] w-auto font-extrabold;
 }
 .serviceContainer::-webkit-scrollbar {
