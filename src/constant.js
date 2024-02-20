@@ -1152,7 +1152,7 @@ export const expertDetailsObj = {
   id: 1,
   personalDetails: {
     name: "Antony Phobes",
-    img: "https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    img: "https://images.unsplash.com/photo-1485217988980-11786ced9454?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzR8fHdvbWFufGVufDB8MHwwfHx8MA%3D%3D",
     designation: "UI/UX Designer",
     location: "Maharastra",
     country: "India",
