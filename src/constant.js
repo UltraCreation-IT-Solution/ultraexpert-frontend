@@ -372,6 +372,7 @@ export const expertDashInfo = {
   viewCount: 1567,
   followersCount: 730,
   blogcount: 28,
+  badgecount: 0,
 };
 export const serviceObjects = [
   {
