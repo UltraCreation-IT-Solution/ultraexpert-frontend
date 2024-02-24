@@ -64,6 +64,16 @@ const Navbar = () => {
           >
             Blog
           </Link>
+          <Link
+            to={"/expertdashboard"}
+            className={`${
+              location === "/blog"
+                ? "font-extrabold"
+                : "font-medium hover:underline hover:scale-105"
+            } relative no-underline text-black`}
+          >
+            Dashboard
+          </Link>
           <div className="relative font-medium">Contact Us</div>
           <Link
             to={"/login"}
