@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaEdit, FaTags, FaWallet } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { MdSpaceDashboard, MdInsertPageBreak } from "react-icons/md";
@@ -8,6 +8,7 @@ import {
 } from "react-icons/bs";
 import { IoEyeSharp, IoPersonAdd, IoSettings } from "react-icons/io5";
 import { RiPagesFill } from "react-icons/ri";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { expertDashInfo as expert } from "../../constant";
 import {
   ResponsiveContainer,
@@ -73,6 +74,25 @@ const data = [
 ];
 
 const ExpertDashboard = () => {
+  const [contributions, setContributions] = useState(true);
+  const [meetings, setMeetings] = useState(false);
+  const [blogs, setBlogs] = useState(false);
+
+  const HandleContributions = () => {
+    setContributions(true);
+    setMeetings(false);
+    setBlogs(false);
+  };
+  const HandleMeetings = () => {
+    setContributions(false);
+    setMeetings(true);
+    setBlogs(false);
+  };
+  const HandleBlogs = () => {
+    setContributions(false);
+    setMeetings(false);
+    setBlogs(true);
+  };
   return (
     <div className="mt-[85px] px-[7vw] w-full h-full flex gap-[1vw]">
       <section className="w-[32%] h-fit border border-[#c7c7c7] border-solid flex flex-col rounded-lg">
@@ -155,7 +175,7 @@ const ExpertDashboard = () => {
         </div>
       </section>
       <section className="w-[68%] h-full flex flex-col gap-[2vw]">
-        <div className="w-full flex   border border-[#c7c7c7] border-solid rounded-lg py-[1vw] shadow-md">
+        <div className="w-full flex border border-[#c7c7c7] border-solid rounded-lg py-[1vw] shadow-md">
           <div className="w-[70%]">
             <div className="text-[1.35vw] font-bold px-[2vw]">
               Average Ratings
@@ -226,10 +246,102 @@ const ExpertDashboard = () => {
         <div className="w-full h-[16vw] rounded-lg border border-[#c7c7c7] border-solid ">
           contribution graph
         </div>
-        <div></div>
+
+        <div className="border border-[#c7c7c7] border-solid rounded-lg px-5 py-4">
+          <div className="flex justify-around border-b border-solid border-[#c7c7c7] pb-2">
+            <div
+              className={`px-3 py-2 cursor-pointer font-semibold ${
+                contributions && `bg-[#ececec] rounded-sm`
+              }`}
+              onClick={() => HandleContributions()}
+            >
+              Recent Contributions
+            </div>
+            <div
+              className={`px-3 py-2 cursor-pointer font-semibold ${
+                meetings && `bg-[#ececec] rounded-sm`
+              }`}
+              onClick={() => HandleMeetings()}
+            >
+              Recent Meetings
+            </div>
+            <div
+              className={`px-3 py-2 cursor-pointer font-semibold ${
+                blogs && `bg-[#ececec] rounded-sm`
+              }`}
+              onClick={() => HandleBlogs()}
+            >
+              Recent Blogs
+            </div>
+          </div>
+          {contributions && (
+            <div>
+              {[...Array(5)].map((temp,idx) => (
+                <Contributioncard/>
+              ))}
+            </div>
+          )}
+          {meetings && 
+            <div>
+              {[
+                ...Array(5)].map((temp,idx) => 
+                  
+                    <div className={`px-3 py-4 my-3 rounded-md ${idx%2===0 ?`bg-[#ececec]`:`border border-[#c7c7c7] border-solid`}`}>
+                      <div className="text-base">Meeting Id: 11XXXXXXXXX</div>
+                      <div className="flex justify-between mt-3">
+                        <div className="text-sm">
+                          <div>Customer Name: XYZ</div>
+                          <div className="my-2">Service Price: XYZ</div>
+                          <div>Service Details: XYZ</div>
+                        </div>
+                        <div className="text-sm">
+                          <div>Time Stamp: X hours</div>
+                          <div className="my-2">Service Title: XYZ</div>
+                          <div>Date of Meeting: XYZ</div>
+                        </div>
+                      </div>
+                    </div>
+              )}
+            </div>
+          }
+        </div>
       </section>
     </div>
   );
 };
 
 export default ExpertDashboard;
+
+const Contributioncard = () => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <div
+        className="flex items-center justify-between px-3 py-4 my-3 rounded-md bg-[#ececec]"
+        onClick={() => (open ? setOpen(false) : setOpen(true))}
+      >
+        <div>ServiceName</div>
+        <div className="flex items-center gap-6">
+          <div>Date given</div>
+          <div>
+            {!open ?<IoIosArrowDown/>:<IoIosArrowUp/>}
+          </div>
+        </div>
+      </div>
+      {open && (
+        <div className=" px-3 py-4 border border-[#c7c7c7] border-solid rounded-md flex justify-between">
+          <div className="text-sm">
+            <div>Customer Name: XYZ </div>
+            <div className="my-2">Duration: x hours </div>
+            <div>Service price: XYZ </div>
+          </div>
+          <div className="text-sm">
+            <div>Service Provider: XYZ </div>
+            <div className="my-2">Service Title: x hours </div>
+            <div>Service Details: XYZ </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

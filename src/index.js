@@ -13,7 +13,7 @@ import Register from "../src/components/Auth/Register/Register";
 import Landing from "./components/Landing/Landing";
 import Expert from "./components/Experts/Expert";
 import Service from "./components/Services/Service";
-import Blog from "./components/Blogs/Blogs/Blog";
+import Blog, { BlogBody,SearchBlog } from "./components/Blogs/Blogs/Blog";
 import ExpertProfile from "./components/Experts/ExpertProfile";
 import ServiceDescription from "./components/Experts/ServiceDescription";
 import ServiceBooking from "./components/Experts/ServiceBooking";
@@ -102,6 +102,7 @@ const appRouter = createBrowserRouter([
             path: "",
             element: <Blog />,
           },
+          
           {
             path: "blogdetail",
             element: <BlogDetails />,
