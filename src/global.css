@@ -38,3 +38,23 @@ input[type="number"]::-webkit-outer-spin-button {
 ::-webkit-scrollbar {
   display: none;
 }
+/* Tailwind CSS classes for the heatmap */
+.color-empty {
+  fill: #ebedf0; /* Empty cell color */
+}
+
+.color-blue-0 {
+  fill: #cce4f6; /* Low contribution color */
+}
+
+.color-blue-1 {
+  fill: #87ceeb;
+}
+
+.color-blue-2 {
+  fill: #4da9f0;
+}
+
+.color-blue-3 {
+  fill: #007bff; /* High contribution color */
+}

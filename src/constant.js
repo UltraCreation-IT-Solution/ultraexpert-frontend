@@ -372,7 +372,132 @@ export const expertDashInfo = {
   viewCount: 1567,
   followersCount: 730,
   blogcount: 28,
-  badgecount: 0,
+  recentContributions: [
+    {
+      serviceName: "API testing using postman",
+      date: "22 May, 2024",
+      customerName: "Bhavesh Bhanusali",
+      serviceDuration: "x hours",
+      servicePrice: "450",
+    },
+    {
+      serviceName: "API testing using postman",
+      date: "22 May, 2024",
+      customerName: "Bhavesh Bhanusali",
+      serviceDuration: "x hours",
+      servicePrice: "450",
+    },
+    {
+      serviceName: "API testing using postman",
+      date: "22 May, 2024",
+      customerName: "Bhavesh Bhanusali",
+      serviceDuration: "x hours",
+      servicePrice: "450",
+    },
+    {
+      serviceName: "API testing using postman",
+      date: "22 May, 2024",
+      customerName: "Bhavesh Bhanusali",
+      serviceDuration: "x hours",
+      servicePrice: "450",
+    },
+    {
+      serviceName: "API testing using postman",
+      date: "22 May, 2024",
+      customerName: "Bhavesh Bhanusali",
+      serviceDuration: "x hours",
+      servicePrice: "450",
+    },
+  ],
+  recentMeetings: [
+    {
+      meetingId: "11xxxxxxxx",
+      customerName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      serviceDuration: "x hours",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+    {
+      meetingId: "11xxxxxxxx",
+      customerName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      serviceDuration: "x hours",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+    {
+      meetingId: "11xxxxxxxx",
+      customerName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      serviceDuration: "x hours",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+    {
+      meetingId: "11xxxxxxxx",
+      customerName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      serviceDuration: "x hours",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+    {
+      meetingId: "11xxxxxxxx",
+      customerName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      serviceDuration: "x hours",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+  ],
+  blogs: [
+    {
+      img: "https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmxvZ3N8ZW58MHwwfDB8fHww",
+      title:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus ornare suspendisse sed nisi lacus sed. ",
+      date: "22 May, 2024",
+      tags: ["Technology", "Development"],
+      views: "2K",
+      likes: "200",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmxvZ3N8ZW58MHwwfDB8fHww",
+      title:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus ornare suspendisse sed nisi lacus sed. ",
+      date: "22 May, 2024",
+      tags: ["Technology", "Development"],
+      views: "2K",
+      likes: "200",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmxvZ3N8ZW58MHwwfDB8fHww",
+      title:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus ornare suspendisse sed nisi lacus sed.",
+      date: "22 May, 2024",
+      tags: ["Technology", "Development"],
+      views: "2K",
+      likes: "200",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmxvZ3N8ZW58MHwwfDB8fHww",
+      title:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus ornare suspendisse sed nisi lacus sed. ",
+      date: "22 May, 2024",
+      tags: ["Technology", "Development"],
+      views: "2K",
+      likes: "200",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmxvZ3N8ZW58MHwwfDB8fHww",
+      title:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus ornare suspendisse sed nisi lacus sed.",
+      date: "22 May, 2024",
+      tags: ["Technology", "Development"],
+      views: "2K",
+      likes: "200",
+    },
+  ],
 };
 export const serviceObjects = [
   {
@@ -1084,7 +1209,433 @@ export const recentBlog = [
       "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
   },
 ];
-
+export const featuredBlogs = [
+  {
+    img: "https://images.unsplash.com/photo-1521649415036-659258dc424f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzZ8fHdvcmt8ZW58MHwxfDB8fHww",
+    title: "First featured blog",
+    author: "Bhavesh Bhanusali",
+    date: "May 15, 2024",
+    tags: ["Technology", "Movies"],
+  },
+  {
+    img: "https://images.unsplash.com/photo-1611532736570-dd6b097ecbb3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTR8fHdvcmt8ZW58MHwxfDB8fHww",
+    title: "Second featured blog",
+    author: "Bhavesh Bhanusali",
+    date: "May 15, 2024",
+    tags: ["Technology", "Movies"],
+  },
+  {
+    img: "https://images.unsplash.com/photo-1512279093314-5926a353720c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzJ8fHdvcmt8ZW58MHwxfDB8fHww",
+    title: "Third featured blog",
+    author: "Bhavesh Bhanusali",
+    date: "May 15, 2024",
+    tags: ["Technology", "Movies"],
+  },
+  {
+    img: "https://images.unsplash.com/photo-1665363243056-68fed2fef2a6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTh8fGJsb2dzfGVufDB8MXwwfHx8MA%3D%3D",
+    title: "Fourth featured blog",
+    author: "Bhavesh Bhanusali",
+    date: "May 15, 2024",
+    tags: ["Technology", "Movies"],
+  },
+  {
+    img: "https://plus.unsplash.com/premium_photo-1678567671234-388cf4fa0224?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmxvZ3xlbnwwfDF8MHx8fDA%3D",
+    title: "Fifth featured blog",
+    author: "Bhavesh Bhanusali",
+    date: "May 15, 2024",
+    tags: ["Technology", "Movies"],
+  },
+];
+export const hotTopics = [
+  {
+    topicName: "Sports",
+    img: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    topicName: "Science",
+    img: "https://images.unsplash.com/photo-1554475900-0a0350e3fc7b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c2NpZW5jZXxlbnwwfHwwfHx8MA%3D%3D",
+  },
+  {
+    topicName: "Entertainment",
+    img: "https://plus.unsplash.com/premium_photo-1682125528836-9f652947350f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDF8fGVudGVydGFpbm1lbnR8ZW58MHwxfDB8fHww",
+  },
+  {
+    topicName: "Politics",
+    img: "https://images.unsplash.com/photo-1523995462485-3d171b5c8fa9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8UG9saXRpY3N8ZW58MHwxfDB8fHww",
+  },
+  {
+    topicName: "World",
+    img: "https://images.unsplash.com/photo-1555005245-5c29a5faccb7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8V29ybGR8ZW58MHwxfDB8fHww",
+  },
+  {
+    topicName: "Startup",
+    img: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHN0YXJ0dXB8ZW58MHwxfDB8fHww",
+  },
+  {
+    topicName: "Movies",
+    img: "https://images.unsplash.com/photo-1584905066893-7d5c142ba4e1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8TW92aWVzfGVufDB8MXwwfHx8MA%3D%3D",
+  },
+  {
+    topicName: "Gadgets",
+    img: "https://images.unsplash.com/photo-1554116154-e733de92fe4b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGdhZGdldHN8ZW58MHwxfDB8fHww",
+  },
+  {
+    topicName: "Technology",
+    img: "https://plus.unsplash.com/premium_photo-1683120974913-1ef17fdec2a8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8dGVjaG5vbG9neXxlbnwwfDF8MHx8fDA%3D",
+  },
+];
+export const allBlogs = [
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Technology", "Movies"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Technology", "Movies"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Technology", "Sports"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Technology", "Sports"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Sports", "News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Sports", "News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Sports", "News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Technology", "News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Technology", "News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Technology", "News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Sports", "Technology", "News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Science", "News", "Sports"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Science", "News", "Sports"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Science", "News", "Sports"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Technology", "News", "Movies"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Technology", "News", "Movies"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Technology", "News", "Movies"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Movies", "News", "Science"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Movies", "News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Movies", "News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Movies", "News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Technology"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Sports"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Sports"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Sports"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Sports"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["News"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Movies"],
+  },
+  {
+    image:
+      "https://th.bing.com/th/id/OIP.UfFEtByJjLDvm8g4Y2HcEQHaGC?rs=1&pid=ImgDetMain",
+    name: "Bhavesh Bhanusali",
+    date: "24 May 2015",
+    head: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Movies"],
+  },
+];
 export const ProjectsCarousel = () => {
   const [slider, setSlider] = useState(0);
 
