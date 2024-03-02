@@ -1,24 +1,75 @@
 import React from "react";
 import { useState } from "react";
 import { MdStar, MdGroupAdd } from "react-icons/md";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { CiBookmark } from "react-icons/ci";
-import { RiFlowChart } from "react-icons/ri";
-import { IoLocationSharp, IoDiamondSharp } from "react-icons/io5";
+import { RiFlowChart,RiArrowRightSLine } from "react-icons/ri";
+import { IoLocationSharp, IoDiamondSharp, IoEyeSharp } from "react-icons/io5";
 import { FaUserGraduate, FaUserCheck } from "react-icons/fa6";
+import { FaTags} from "react-icons/fa";
 import { IoIosChatboxes } from "react-icons/io";
 import { GiAchievement } from "react-icons/gi";
 import { HiOfficeBuilding } from "react-icons/hi";
-import { BiLike } from "react-icons/bi";
+import { BiLike,BiSolidLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import { ProjectsCarousel } from "../../constant";
-import { expertDetailsObj } from "../../constant";
+import { expertDetailsObj, ProjectsCarousel,expertDashInfo } from "../../constant";
 
 export const ExpertSummary = () => {
   return (
     <div className="mt-3">
-      <div className="text-base md:text-2xl font-semibold font-montserrat">
+      {expertDetailsObj?.carrierJourney.length !== 0 && (
+        <>
+          <div className="border border-solid border-slate-300 rounded-md p-4 mb-6">
+            <div className="text-xl md:text-2xl font-semibold">
+              Carrer Journey
+            </div>
+            <div className="mt-6">
+              {expertDetailsObj?.carrierJourney?.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="relative flex flex-col md:flex-row md:items-center md:gap-10 py-6 md:py-0 border-t border-solid border-slate-200"
+                  >
+                    {/* 1st portion */}
+                    <div className="text-sm flex md:flex-col order-2 md:order-1 md:w-[150px] pt-2 md:py-5 md:text-right">
+                      {item.present ? (
+                        <>
+                        <div>Present</div>
+                        <div className="block md:hidden"> - </div>
+                        </>
+                      ) : (
+                        <>
+                        <div>
+                          {item?.endMonth}, {item?.endYear}
+                        </div>
+                        <div className="block md:hidden"> - </div>
+                        </>
+                      )}
+                      <div>
+                        {item?.startMonth}, {item?.startYear}
+                      </div>
+                    </div>
+                    {/* 2nd portion */}
+                    <div className="hidden md:block absolute left-[180px] h-5 w-5 rounded-full bg-slate-200"></div>
+
+                    {/* 3rd portion */}
+                    <div className="md:pl-10 flex flex-col order-1 md:order-2 md:border-l border-solid border-slate-200 md:py-5">
+                      <div className="text-base font-semibold">
+                        {item?.designation}
+                      </div>
+                      <div className="text-sm text-slate-500">
+                        {item?.companyName}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
+      <div className="text-xl md:text-2xl font-semibold font-montserrat">
         My projects
       </div>
       <ProjectsCarousel />
@@ -68,7 +119,7 @@ export const ExpertServices = () => {
   );
 };
 
-export const RatingCard = ({ img, name, rating, commentDate, comment }) => {
+export const RatingCard = ({ img, name, commentDate, comment }) => {
   return (
     <div className="my-[5vw] md:my-[2vw] pb-[1vw] border-b-[1px] border-slate-400 border-solid">
       <div className="flex gap-[2.5vw] sm:gap-[2vw]">
@@ -79,17 +130,10 @@ export const RatingCard = ({ img, name, rating, commentDate, comment }) => {
         />
         <div>
           <div className="text-lg sm:text-xl font-semibold">{name}</div>
-          <div className="flex items-center mt-[2vw] md:mt-[0.9vw] gap-[5vw]">
-            <div className="flex gap-[0.5vw] items-center text-xs sm:text-base">
-              <div>
-                <MdStar color="#FF5E18" />
-              </div>
-              <div className="text-slate-600">{rating}/5</div>
-            </div>
-            <div className=" text-xs sm:text-base text-slate-400">
-              {commentDate}
-            </div>
+          <div className="mt-[2vw] md:mt-[0.9vw] text-xs sm:text-base text-slate-400">
+            {commentDate}
           </div>
+
           <p className="text-xs sm:text-base font-montserrat">{comment}</p>
           <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
             <div className="flex items-center gap-1">
@@ -109,8 +153,156 @@ export const RatingCard = ({ img, name, rating, commentDate, comment }) => {
 
 export const ExpertRatings = () => {
   return (
-    <div className="px-5 mb-10 lg:mb-0">
+    <div className="px-1 xs:px-5 mb-10 lg:mb-0">
+      <div className="border-b border-solid border-slate-300 pb-10">
+        <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
+          50 reviews
+        </div>
+        <div className="mt-6 text-base md:text-lg">Rating Breakdown</div>
+        <div className="flex items-center gap-[4vw]">
+          <div className="w-80 text-base">
+            <div className="my-4 flex flex-col">
+              <div className="flex justify-between text-xs xs:text-sm md:text-base">
+                <div>Availability</div>
+                <div>
+                  <MdStar /> {expertDetailsObj?.ratingBreakdown?.availability}
+                </div>
+              </div>
+              <div className=" bg-red-100 rounded-full">
+                <div
+                  className="border-[3px] border-solid border-red-500 rounded-full"
+                  style={{
+                    width: `${
+                      (expertDetailsObj?.ratingBreakdown?.availability / 5) *
+                      100
+                    }%`,
+                  }}
+                ></div>
+              </div>
+            </div>
+            <div className="my-4 flex flex-col">
+              <div className="flex justify-between text-xs xs:text-sm md:text-base">
+                <div>Skills</div>
+                <div>
+                  <MdStar /> {expertDetailsObj?.ratingBreakdown?.skills}
+                </div>
+              </div>
+              <div className=" bg-blue-100 rounded-full">
+                <div
+                  className="border-[3px] border-solid border-blue-500 rounded-full"
+                  style={{
+                    width: `${
+                      (expertDetailsObj?.ratingBreakdown?.skills / 5) * 100
+                    }%`,
+                  }}
+                ></div>
+              </div>
+            </div>
+            <div className="my-4 flex flex-col ">
+              <div className="flex justify-between text-xs xs:text-sm md:text-base">
+                <div>Coorporation</div>
+                <div>
+                  <MdStar /> {expertDetailsObj?.ratingBreakdown?.coorporation}
+                </div>
+              </div>
+              <div className=" bg-purple-100 rounded-full">
+                <div
+                  className="border-[3px] border-solid border-purple-500 rounded-full"
+                  style={{
+                    width: `${
+                      (expertDetailsObj?.ratingBreakdown?.coorporation / 5) *
+                      100
+                    }%`,
+                  }}
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div className="w-80 text-base">
+            <div className="my-4 flex flex-col">
+              <div className="flex justify-between text-xs xs:text-sm md:text-base">
+                <div>Deadline</div>
+                <div>
+                  <MdStar /> {expertDetailsObj?.ratingBreakdown?.deadline}
+                </div>
+              </div>
+              <div className=" bg-red-100 rounded-full">
+                <div
+                  className="border-[3px] border-solid border-red-500 rounded-full"
+                  style={{
+                    width: `${
+                      (expertDetailsObj?.ratingBreakdown?.deadline / 5) * 100
+                    }%`,
+                  }}
+                ></div>
+              </div>
+            </div>
+            <div className="my-4 flex flex-col">
+              <div className="flex justify-between text-xs xs:text-sm md:text-base">
+                <div>Quality</div>
+                <div>
+                  <MdStar /> {expertDetailsObj?.ratingBreakdown?.quality}
+                </div>
+              </div>
+              <div className=" bg-blue-100 rounded-full">
+                <div
+                  className="border-[3px] border-solid border-blue-500 rounded-full"
+                  style={{
+                    width: `${
+                      (expertDetailsObj?.ratingBreakdown?.quality / 5) * 100
+                    }%`,
+                  }}
+                ></div>
+              </div>
+            </div>
+            <div className="my-4 flex flex-col ">
+              <div className="flex justify-between text-xs xs:text-sm md:text-base">
+                <div>Communication</div>
+                <div>
+                  <MdStar /> {expertDetailsObj?.ratingBreakdown?.communication}
+                </div>
+              </div>
+              <div className=" bg-purple-100 rounded-full">
+                <div
+                  className="border-[3px] border-solid border-purple-500 rounded-full"
+                  style={{
+                    width: `${
+                      (expertDetailsObj?.ratingBreakdown?.communication / 5) *
+                      100
+                    }%`,
+                  }}
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className=" mt-6">
+          <input
+            type="text"
+            placeholder="Write a comment"
+            className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
+          />
+          <button className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0">
+            Comment
+          </button>
+        </div>
+      </div>
       <div>
+        <div className="mt-8 mb-12 flex items-center justify-between">
+          <div className="text-xl md:text-2xl font-semibold ">Top Reviews</div>
+          <select
+            name="Sort by"
+            id=""
+            className="px-4 py-2 text-sm md:text-lg border border-solid border-slate-300 outline-none"
+          >
+            <option value="newest" className="text-xs md:text-sm px-4 py-2">
+              Newest
+            </option>
+            <option value="oldest" className="text-xs md:text-sm px-4 py-2">
+              Oldest
+            </option>
+          </select>
+        </div>
         {expertDetailsObj.ratings.map((temp, idx) => (
           <RatingCard key={idx} {...temp} />
         ))}
@@ -122,14 +314,44 @@ export const ExpertRatings = () => {
   );
 };
 
+export const ExpertBlogs = () => {
+  return(
+      <div>
+        {expertDashInfo?.blogs?.map((item, idx)=>
+          <div key={idx} className={`px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5 ${idx%2===0 ?`bg-[#ececec]`:`border border-[#c7c7c7] border-solid`}`}>
+            <div className="flex flex-col sm:flex-row items-center gap-5">
+
+            <img className="h-48 w-full object-cover sm:h-36 sm:w-40 rounded-md shrink-0" src={item?.img} alt="" />
+            <div className="text-[#575757]">
+              <div className="text-base font-semibold line-clamp-2 text-ellipsis">{item?.title}</div>
+              <div className="text-sm text-[#898888]">{item?.date}</div>
+              <div className="mt-3 text-xs flex items-center gap-2"><FaTags/>
+                <div className="flex items-center gap-2">{item?.tags.map((item)=> <div className="text-[10px] border border-solid border-slate-300 px-2 py-1 rounded-xl cursor-pointer">{item}</div> )}</div>
+              </div>
+              <div className="flex gap-[3vw] sm:gap-0 sm:flex-col">
+
+              <div className="mt-3 text-xs flex items-center gap-2"><IoEyeSharp/> {item?.views}</div>
+              <div className="mt-3 text-xs flex items-center gap-1 sm:gap-2"><BiSolidLike/> {item?.likes} likes </div>
+              </div>
+            </div>
+            </div>
+            <div className="hidden border border-solid border-slate-300 h-fit sm:flex items-center justify-center rounded-full text-4xl font-thin self-center shrink-0 cursor-pointer">
+              <RiArrowRightSLine/>
+            </div>
+          </div>
+        )}
+      </div>
+  )
+};
+
 export const AboutExpert = () => {
   return (
     <div className="">
       <div className=" px-[2.5vw] lg:border-r border-solid border-slate-300">
-        <div className="lg:p-3 sm:pb-6 lg:border border-solid sm:border-slate-300 sm:rounded-md sm:mb-4">
+        <div className="lg:p-3 sm:pb-6 border border-solid border-slate-300 sm:rounded-md sm:mb-4">
           <div className="relative pb-20">
             <img
-              className="h-32 md:h-40 w-full object-cover rounded-md"
+              className="h-32 md:h-40 w-full object-cover rounded-md p-1"
               src="https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt=""
             />
@@ -141,8 +363,8 @@ export const AboutExpert = () => {
           </div>
 
           <div className="ml-5 md:ml-10">
-            <div className="flex items-center justify-between">
-              <div className="text-2xl xs:text-3xl font-semibold">
+            <div className="flex items-center justify-between mr-1">
+              <div className="text-2xl md:text-3xl font-semibold">
                 {expertDetailsObj?.personalDetails?.name}
               </div>
               <div className="hidden md:flex gap-2">
@@ -153,22 +375,21 @@ export const AboutExpert = () => {
                   <div className="text-2xl text-[#565454]">
                     <IoIosChatboxes />
                   </div>
-
                   <div>Chat with me</div>
                 </button>
               </div>
             </div>
-            <div className="text-md xs:text-lg text-[#565454] mt-3">
+            <div className="text-base md:text-lg text-[#565454] mt-3">
               {expertDetailsObj?.personalDetails?.designation}
             </div>
-            <div className="md:w-[600px] text-md sm:text-base text-[#565454] mt-3">
+            <div className="md:w-[600px] text-sm sm:text-base text-[#565454] mt-3">
               Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime a
               quia deserunt aut unde inventore. Adipisci voluptate deleniti
               beatae rerum sapiente, vitae unde neque totam itaque nobis
               placeat. Veniam, quod?
             </div>
             <div className="flex flex-col mt-4">
-              <div className="flex items-center gap-2 xs:text-md text-xl font-semibold">
+              <div className="flex items-center gap-2 text-lg md:text-xl text-[#565454] font-semibold">
                 <IoDiamondSharp />
                 <div>Top skills</div>
               </div>
@@ -225,13 +446,13 @@ export const AboutExpert = () => {
           ))}
         </div>
         <div className="mt-8 md:mt-4">
-              <div className="text-base md:text-lg lg:text-xl font-semibold">
-                About me
-              </div>
-              <div className="text-sm md:text-base mt-[1.5vw] md:mt-[0.7vw] ">
-                {expertDetailsObj?.personalDetails?.aboutMe}
-              </div>
-            </div>
+          <div className="text-base md:text-lg lg:text-xl font-semibold">
+            About me
+          </div>
+          <div className="text-sm md:text-base mt-[1.5vw] md:mt-[0.7vw] ">
+            {expertDetailsObj?.personalDetails?.aboutMe}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -311,14 +532,14 @@ export const ExpertInfo = () => {
   const MakeBlogsTrue = () => {
     setSummary(false);
     setServices(false);
-    setRatings(true);
+    setRatings(false);
     setBlogs(true);
   };
 
   return (
     <div className="">
       <div className=" px-[2.5vw] lg:border-r border-solid border-slate-300 ">
-        {/* Three buttons are present here */}
+        {/* Four buttons are present here */}
         <div className="flex items-center justify-between gap-3 overflow-x-scroll md:justify-evenly mt-10 border-b border-solid border-slate-300 pb-3 ">
           <div
             className={` cursor-pointer  text-base sm:text-lg md:text-xl px-6 py-2 shrink-0 ${
@@ -375,7 +596,7 @@ export const ExpertInfo = () => {
             {/* This is Education accordian */}
             <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
               <div
-                className="flex items-center justify-between text-base sm:text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
+                className="flex items-center justify-between text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
                 onClick={() =>
                   education ? setEducation(false) : setEducation(true)
                 }
@@ -398,7 +619,7 @@ export const ExpertInfo = () => {
             {/* This is Work Experience accordian */}
             <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
               <div
-                className="flex items-center justify-between text-base sm:text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
+                className="flex items-center justify-between text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
                 onClick={() =>
                   workExperience
                     ? setWorkExperience(false)
@@ -428,7 +649,7 @@ export const ExpertInfo = () => {
             {/* This is Achievements accordian */}
             <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
               <div
-                className="flex items-center justify-between text-base sm:text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
+                className="flex items-center justify-between text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
                 onClick={() =>
                   achievements ? setAchievements(false) : setAchievements(true)
                 }
@@ -621,8 +842,7 @@ const ExpertProfile = () => {
           <ExpertInfo />
         </div>
         <div className="hidden lg:block w-[25%]">
-
-        <SideComponent />
+          <SideComponent />
         </div>
       </div>
     </div>
