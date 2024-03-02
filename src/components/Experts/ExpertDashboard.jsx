@@ -10,6 +10,7 @@ import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { IoEyeSharp, IoPersonAdd, IoSettings } from "react-icons/io5";
 import { RiPagesFill } from "react-icons/ri";
 import { expertDashInfo as expert } from "../../constant";
+import { ExpertBlogs } from "./ExpertProfile";
 import {
   ResponsiveContainer,
   ComposedChart,
