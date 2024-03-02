@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit, FaTags, FaWallet } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { MdSpaceDashboard, MdInsertPageBreak } from "react-icons/md";
@@ -9,10 +9,7 @@ import {
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { IoEyeSharp, IoPersonAdd, IoSettings } from "react-icons/io5";
 import { RiPagesFill } from "react-icons/ri";
-import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
-import { BiSolidLike } from "react-icons/bi";
 import { expertDashInfo as expert } from "../../constant";
-import { ExpertBlogs } from "./ExpertProfile";
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -176,9 +173,68 @@ const Contributioncard = ({
   );
 };
 const ExpertDashboard = () => {
+  const [a, seta] = useState(0);
+  const [b, setb] = useState(0);
+  const [c, setc] = useState(0);
+
+  useEffect(() => {
+    setTimeout(() => {
+      seta(
+        (dataPie[0].value /
+          (dataPie[0].value + dataPie[1].value + dataPie[2].value)) *
+          110
+      );
+      setb(
+        (dataPie[1].value /
+          (dataPie[1].value + dataPie[1].value + dataPie[2].value)) *
+          110
+      );
+      setc(
+        (dataPie[2].value /
+          (dataPie[2].value + dataPie[1].value + dataPie[2].value)) *
+          110
+      );
+    }, 500);
+  }, [a, b, c]);
+
+  const [contributions, setContributions] = useState(true);
+  const [meetings, setMeetings] = useState(false);
+  const [blogs, setBlogs] = useState(false);
+
+  const HandleContributions = () => {
+    setContributions(true);
+    setMeetings(false);
+    setBlogs(false);
+  };
+  const HandleMeetings = () => {
+    setContributions(false);
+    setMeetings(true);
+    setBlogs(false);
+  };
+  const HandleBlogs = () => {
+    setContributions(false);
+    setMeetings(false);
+    setBlogs(true);
+  };
+
+  //heatmap data
+  const values = generateRandomData();
+  const [updateDate, setUpdateDate] = useState("");
+  const [updateCount, setUpdateCount] = useState("");
+
+  const handleUpdate = () => {
+    const updatedValues = values.map((value) => {
+      if (value.date.toDateString() === updateDate) {
+        return { ...value, count: parseInt(updateCount) };
+      }
+      return value;
+    });
+    setValues(updatedValues);
+  };
+
   return (
     <div className="mt-[85px] px-[7vw] w-full h-full flex gap-[1vw]">
-      <section className="w-[32%] h-fit border border-[#c7c7c7] border-solid flex flex-col rounded-lg">
+      <section className="w-[32%] hidden md:flex h-fit border border-[#c7c7c7] border-solid  flex-col rounded-lg">
         <div className="w-full h-auto px-[0.8vw] py-[2vw] border-b-[0.01px] border-[#dcdcdc] border-solid">
           <div className="flex justify-between">
             <div className="flex gap-[0.75vw]">
@@ -257,10 +313,61 @@ const ExpertDashboard = () => {
           </ul>
         </div>
       </section>
-      <section className="w-[68%] h-full flex flex-col gap-[2vw]">
-        <div className="w-full flex   border border-[#c7c7c7] border-solid rounded-lg py-[1vw] shadow-md">
-          <div className="w-[70%]">
-            <div className="text-[1.35vw] font-bold px-[2vw]">
+      <section className=" w-full md:w-[68%] h-full flex flex-col gap-[4.5vw] xs:gap-[3vw] md:gap-[2vw]">
+        <div className="block md:hidden w-full h-auto px-[0.8vw] py-[4.5vw] xs:py-[3vw] border-b-[0.01px] border-[#dcdcdc] border-solid">
+          <div className="flex justify-between">
+            <div className="flex gap-[2.65vw] xs:gap-[2.25vw]">
+              <img
+                src={expert.profile}
+                className="w-[20vw] h-[20vw] xs:w-[14vw] xs:h-[14vw] sm:w-[12vw] sm:h-[12vw] rounded-lg obj"
+                alt="profileImg"
+              />
+              <div className="flex flex-col justify-between py-[0.2vw]">
+                <div className=" flex flex-col gap-[0.8vw] xs:gap-[0.5vw] ">
+                  <div className="font-bold text-[4vw] xs:text-[2.8vw] sm:text-[2.65vw]">
+                    {expert?.name}
+                  </div>
+                  <div className="font-medium text-[3.55vw] xs:text-[2.25vw] sm:text-[2vw] text-[#8F8F8F]">
+                    @{expert?.username}
+                  </div>
+                </div>
+                <div className="font-semibold text-[3.8vw] xs:text-[2.5vw] sm:text-[2.25vw] text-black/60">
+                  {expert?.designation}
+                </div>
+              </div>
+            </div>
+            <div className="text-[5vw] xs:text-[3.12vw] sm:text-[2.85vw]">
+              <FaEdit />
+            </div>
+          </div>
+          <div className="mt-[4vw] xs:mt-[2.25vw] w-full text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#525252]">
+            {expert.title}
+          </div>
+          <div className="mt-[3.65vw] xs:mt-[2vw] flex flex-col gap-[2.25vw] xs:gap-[1.65vw]">
+            <div className="flex gap-[1.85vw] items-center text-[3.45vw] xs:text-[2.25vw] sm:text-[2vw] text-[#515151]">
+              <FaLocationDot className="text-[4.45vw] xs:text-[2.9vw] sm:text-[2.65vw]" />
+              {expert?.location}
+            </div>
+            <div className="flex gap-[1.65vw] items-center text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#515151]">
+              <FaTags className="text-[4.45vw] xs:text-[2.9vw] sm:text-[2.65vw]" />
+              <div className="flex ">
+                {expert?.topSkills.map((item, idx) => {
+                  return (
+                    <div
+                      key={idx}
+                      className="px-[3vw] xs:px-[2.2vw] sm:px-[2.4vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] border border-[#cdcdcd] border-solid"
+                    >
+                      {item}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="w-full flex flex-col lg:flex-row border border-[#c7c7c7] border-solid rounded-lg py-[3vw] xs:py-[2vw] md:py-[1vw] shadow-md">
+          <div className=" w-[108%] xs:w-[104%] lg:w-[70%] overflow-hidden">
+            <div className="text-[3.45vw] xs:text-[2.65vw] md:text-[1.8vw] lg:text-[1.35vw] font-bold px-[2vw]">
               Average Ratings
             </div>
             <div className="w-full h-[38vw] xs:h-[28vw] md:h-[16vw] lg:h-[13vw] ml-[-10vw] xs:ml-[-7.65vw] sm:ml-[-6vw] md:ml-[-3.4vw] lg:ml-[-2.6vw] mt-[2vw] md:mt-[0.8vw] mb-[-1vw] text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw]">
@@ -482,38 +589,9 @@ const ExpertDashboard = () => {
           )}
           {blogs && <ExpertBlogs />}
         </div>
-        <div></div>
       </section>
     </div>
   );
 };
 
 export default ExpertDashboard;
-
-const Contributioncard = ({serviceName,date,customerName,serviceDuration,servicePrice}) => {
-  const [open, setOpen] = useState(false);
-  return (
-    <div>
-      <div
-        className="flex items-center justify-between gap-5 px-3 py-4 my-4 rounded-md bg-[#ececec] text-sm md:text-base font-semibold"
-        onClick={() => (open ? setOpen(false) : setOpen(true))}
-      >
-        <div className=" whitespace-nowrap overflow-hidden text-ellipsis w-[70%]">{serviceName}</div>
-        <div className="flex items-center gap-6">
-          <div>
-            {!open ?<IoIosArrowDown/>:<IoIosArrowUp/>}
-          </div>
-        </div>
-      </div>
-      {open && (
-        <div className=" px-3 py-4 border border-[#c7c7c7] border-solid rounded-md">
-          <div className="text-sm">
-            <div>Customer Name: {customerName} </div>
-            <div className="my-2">Duration: {serviceDuration} </div>
-            <div>Service price: ₹ {servicePrice} </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
