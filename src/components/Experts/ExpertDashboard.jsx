@@ -9,7 +9,9 @@ import {
 import { IoEyeSharp, IoPersonAdd, IoSettings } from "react-icons/io5";
 import { RiPagesFill } from "react-icons/ri";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import { BiSolidLike } from "react-icons/bi";
 import { expertDashInfo as expert } from "../../constant";
+import { ExpertBlogs } from "./ExpertProfile";
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -94,7 +96,7 @@ const ExpertDashboard = () => {
     setBlogs(true);
   };
   return (
-    <div className="mt-[85px] px-[7vw] w-full h-full flex gap-[1vw]">
+    <div className="mt-[85px] px-[7vw] w-full h-full md:flex gap-[1vw]">
       <section className="w-[32%] h-fit border border-[#c7c7c7] border-solid flex flex-col rounded-lg">
         <div className="w-full h-auto px-[0.8vw] py-[2vw] border-b-[0.01px] border-[#dcdcdc] border-solid">
           <div className="flex justify-between">
@@ -174,7 +176,7 @@ const ExpertDashboard = () => {
           </ul>
         </div>
       </section>
-      <section className="w-[68%] h-full flex flex-col gap-[2vw]">
+      <section className="md:w-[68%] h-full flex flex-col gap-[2vw]">
         <div className="w-full flex border border-[#c7c7c7] border-solid rounded-lg py-[1vw] shadow-md">
           <div className="w-[70%]">
             <div className="text-[1.35vw] font-bold px-[2vw]">
@@ -247,10 +249,10 @@ const ExpertDashboard = () => {
           contribution graph
         </div>
 
-        <div className="border border-[#c7c7c7] border-solid rounded-lg px-5 py-4">
-          <div className="flex justify-around border-b border-solid border-[#c7c7c7] pb-2">
+        <div className="border border-[#c7c7c7] border-solid rounded-lg px-5 py-4 ">
+          <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-4 mb-4 text-sm md:text-base overflow-x-scroll">
             <div
-              className={`px-3 py-2 cursor-pointer font-semibold ${
+              className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
                 contributions && `bg-[#ececec] rounded-sm`
               }`}
               onClick={() => HandleContributions()}
@@ -258,7 +260,7 @@ const ExpertDashboard = () => {
               Recent Contributions
             </div>
             <div
-              className={`px-3 py-2 cursor-pointer font-semibold ${
+              className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
                 meetings && `bg-[#ececec] rounded-sm`
               }`}
               onClick={() => HandleMeetings()}
@@ -266,7 +268,7 @@ const ExpertDashboard = () => {
               Recent Meetings
             </div>
             <div
-              className={`px-3 py-2 cursor-pointer font-semibold ${
+              className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
                 blogs && `bg-[#ececec] rounded-sm`
               }`}
               onClick={() => HandleBlogs()}
@@ -276,33 +278,35 @@ const ExpertDashboard = () => {
           </div>
           {contributions && (
             <div>
-              {[...Array(5)].map((temp,idx) => (
-                <Contributioncard/>
+              {expert?.recentContributions?.map((item,idx) => (
+                <Contributioncard key={idx} {...item}/>
               ))}
             </div>
           )}
           {meetings && 
             <div>
-              {[
-                ...Array(5)].map((temp,idx) => 
+              {expert?.recentMeetings?.map((item,idx) => 
                   
-                    <div className={`px-3 py-4 my-3 rounded-md ${idx%2===0 ?`bg-[#ececec]`:`border border-[#c7c7c7] border-solid`}`}>
-                      <div className="text-base">Meeting Id: 11XXXXXXXXX</div>
-                      <div className="flex justify-between mt-3">
+                    <div key={idx} className={`px-3 py-4 my-5 rounded-md ${idx%2===0 ?`bg-[#ececec]`:`border border-[#c7c7c7] border-solid`}`}>
+                      <div className="text-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis">{item?.serviceTitle}</div>
+                      <div className="sm:flex justify-between gap-5 mt-4">
                         <div className="text-sm">
-                          <div>Customer Name: XYZ</div>
-                          <div className="my-2">Service Price: XYZ</div>
+                          <div>Customer Name: {item?.customerName}</div>
+                          <div className="my-2">Service Price: {item?.servicePrice}</div>
                           <div>Service Details: XYZ</div>
                         </div>
-                        <div className="text-sm">
-                          <div>Time Stamp: X hours</div>
-                          <div className="my-2">Service Title: XYZ</div>
-                          <div>Date of Meeting: XYZ</div>
+                        <div className="text-sm mt-2 sm:mt-0">
+                          <div>Time Stamp: {item?.serviceDuration}</div>
+                          <div className="my-2">Meeting Id: {item?.meetingId}</div>
+                          <div>Date of Meeting: {item?.serviceDate}</div>
                         </div>
                       </div>
                     </div>
               )}
             </div>
+          }
+          {
+            blogs && <ExpertBlogs/>
           }
         </div>
       </section>
@@ -312,33 +316,27 @@ const ExpertDashboard = () => {
 
 export default ExpertDashboard;
 
-const Contributioncard = () => {
+const Contributioncard = ({serviceName,date,customerName,serviceDuration,servicePrice}) => {
   const [open, setOpen] = useState(false);
   return (
     <div>
       <div
-        className="flex items-center justify-between px-3 py-4 my-3 rounded-md bg-[#ececec]"
+        className="flex items-center justify-between gap-5 px-3 py-4 my-4 rounded-md bg-[#ececec] text-sm md:text-base font-semibold"
         onClick={() => (open ? setOpen(false) : setOpen(true))}
       >
-        <div>ServiceName</div>
+        <div className=" whitespace-nowrap overflow-hidden text-ellipsis w-[70%]">{serviceName}</div>
         <div className="flex items-center gap-6">
-          <div>Date given</div>
           <div>
             {!open ?<IoIosArrowDown/>:<IoIosArrowUp/>}
           </div>
         </div>
       </div>
       {open && (
-        <div className=" px-3 py-4 border border-[#c7c7c7] border-solid rounded-md flex justify-between">
+        <div className=" px-3 py-4 border border-[#c7c7c7] border-solid rounded-md">
           <div className="text-sm">
-            <div>Customer Name: XYZ </div>
-            <div className="my-2">Duration: x hours </div>
-            <div>Service price: XYZ </div>
-          </div>
-          <div className="text-sm">
-            <div>Service Provider: XYZ </div>
-            <div className="my-2">Service Title: x hours </div>
-            <div>Service Details: XYZ </div>
+            <div>Customer Name: {customerName} </div>
+            <div className="my-2">Duration: {serviceDuration} </div>
+            <div>Service price: ₹ {servicePrice} </div>
           </div>
         </div>
       )}

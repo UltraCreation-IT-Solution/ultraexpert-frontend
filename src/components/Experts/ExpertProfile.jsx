@@ -1,18 +1,19 @@
 import React from "react";
 import { useState } from "react";
 import { MdStar, MdGroupAdd } from "react-icons/md";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { CiBookmark } from "react-icons/ci";
-import { RiFlowChart } from "react-icons/ri";
-import { IoLocationSharp, IoDiamondSharp } from "react-icons/io5";
+import { RiFlowChart,RiArrowRightSLine } from "react-icons/ri";
+import { IoLocationSharp, IoDiamondSharp, IoEyeSharp } from "react-icons/io5";
 import { FaUserGraduate, FaUserCheck } from "react-icons/fa6";
+import { FaTags} from "react-icons/fa";
 import { IoIosChatboxes } from "react-icons/io";
 import { GiAchievement } from "react-icons/gi";
 import { HiOfficeBuilding } from "react-icons/hi";
-import { BiLike } from "react-icons/bi";
+import { BiLike,BiSolidLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import { expertDetailsObj, ProjectsCarousel } from "../../constant";
+import { expertDetailsObj, ProjectsCarousel,expertDashInfo } from "../../constant";
 
 export const ExpertSummary = () => {
   return (
@@ -313,6 +314,36 @@ export const ExpertRatings = () => {
   );
 };
 
+export const ExpertBlogs = () => {
+  return(
+      <div>
+        {expertDashInfo?.blogs?.map((item, idx)=>
+          <div key={idx} className={`px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5 ${idx%2===0 ?`bg-[#ececec]`:`border border-[#c7c7c7] border-solid`}`}>
+            <div className="flex flex-col sm:flex-row items-center gap-5">
+
+            <img className="h-48 w-full object-cover sm:h-36 sm:w-40 rounded-md shrink-0" src={item?.img} alt="" />
+            <div className="text-[#575757]">
+              <div className="text-base font-semibold line-clamp-2 text-ellipsis">{item?.title}</div>
+              <div className="text-sm text-[#898888]">{item?.date}</div>
+              <div className="mt-3 text-xs flex items-center gap-2"><FaTags/>
+                <div className="flex items-center gap-2">{item?.tags.map((item)=> <div className="text-[10px] border border-solid border-slate-300 px-2 py-1 rounded-xl cursor-pointer">{item}</div> )}</div>
+              </div>
+              <div className="flex gap-[3vw] sm:gap-0 sm:flex-col">
+
+              <div className="mt-3 text-xs flex items-center gap-2"><IoEyeSharp/> {item?.views}</div>
+              <div className="mt-3 text-xs flex items-center gap-1 sm:gap-2"><BiSolidLike/> {item?.likes} likes </div>
+              </div>
+            </div>
+            </div>
+            <div className="hidden border border-solid border-slate-300 h-fit sm:flex items-center justify-center rounded-full text-4xl font-thin self-center shrink-0 cursor-pointer">
+              <RiArrowRightSLine/>
+            </div>
+          </div>
+        )}
+      </div>
+  )
+};
+
 export const AboutExpert = () => {
   return (
     <div className="">
@@ -501,14 +532,14 @@ export const ExpertInfo = () => {
   const MakeBlogsTrue = () => {
     setSummary(false);
     setServices(false);
-    setRatings(true);
+    setRatings(false);
     setBlogs(true);
   };
 
   return (
     <div className="">
       <div className=" px-[2.5vw] lg:border-r border-solid border-slate-300 ">
-        {/* Three buttons are present here */}
+        {/* Four buttons are present here */}
         <div className="flex items-center justify-between gap-3 overflow-x-scroll md:justify-evenly mt-10 border-b border-solid border-slate-300 pb-3 ">
           <div
             className={` cursor-pointer  text-base sm:text-lg md:text-xl px-6 py-2 shrink-0 ${

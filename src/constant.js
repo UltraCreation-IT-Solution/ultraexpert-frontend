@@ -372,6 +372,127 @@ export const expertDashInfo = {
   viewCount: 1567,
   followersCount: 730,
   blogcount: 28,
+  recentContributions:[
+    {
+      serviceName:"API testing using postman",
+      date:"22 May, 2024",
+      customerName:"Bhavesh Bhanusali",
+      serviceDuration:"x hours",
+      servicePrice:"450",
+    },
+    {
+      serviceName:"API testing using postman",
+      date:"22 May, 2024",
+      customerName:"Bhavesh Bhanusali",
+      serviceDuration:"x hours",
+      servicePrice:"450",
+    },
+    {
+      serviceName:"API testing using postman",
+      date:"22 May, 2024",
+      customerName:"Bhavesh Bhanusali",
+      serviceDuration:"x hours",
+      servicePrice:"450",
+    },
+    {
+      serviceName:"API testing using postman",
+      date:"22 May, 2024",
+      customerName:"Bhavesh Bhanusali",
+      serviceDuration:"x hours",
+      servicePrice:"450",
+    },
+    {
+      serviceName:"API testing using postman",
+      date:"22 May, 2024",
+      customerName:"Bhavesh Bhanusali",
+      serviceDuration:"x hours",
+      servicePrice:"450",
+    },
+  ],
+  recentMeetings:[
+    {
+      meetingId:"11xxxxxxxx",
+      customerName:"Bhavesh Bhanusali",
+      servicePrice:"450",
+      serviceDuration:"x hours",
+      serviceTitle:"API integration using postman",
+      serviceDate:"22 May, 2024",
+    },
+    {
+      meetingId:"11xxxxxxxx",
+      customerName:"Bhavesh Bhanusali",
+      servicePrice:"450",
+      serviceDuration:"x hours",
+      serviceTitle:"API integration using postman",
+      serviceDate:"22 May, 2024",
+    },
+    {
+      meetingId:"11xxxxxxxx",
+      customerName:"Bhavesh Bhanusali",
+      servicePrice:"450",
+      serviceDuration:"x hours",
+      serviceTitle:"API integration using postman",
+      serviceDate:"22 May, 2024",
+    },
+    {
+      meetingId:"11xxxxxxxx",
+      customerName:"Bhavesh Bhanusali",
+      servicePrice:"450",
+      serviceDuration:"x hours",
+      serviceTitle:"API integration using postman",
+      serviceDate:"22 May, 2024",
+    },
+    {
+      meetingId:"11xxxxxxxx",
+      customerName:"Bhavesh Bhanusali",
+      servicePrice:"450",
+      serviceDuration:"x hours",
+      serviceTitle:"API integration using postman",
+      serviceDate:"22 May, 2024",
+    },
+  ],
+  blogs:[
+    {
+      img:"https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmxvZ3N8ZW58MHwwfDB8fHww",
+      title:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus ornare suspendisse sed nisi lacus sed. ",
+      date:"22 May, 2024",
+      tags:["Technology","Development"],
+      views:"2K",
+      likes:"200",
+    },
+    {
+      img:"https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmxvZ3N8ZW58MHwwfDB8fHww",
+      title:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus ornare suspendisse sed nisi lacus sed. ",
+      date:"22 May, 2024",
+      tags:["Technology","Development"],
+      views:"2K",
+      likes:"200",
+    },
+    {
+      img:"https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmxvZ3N8ZW58MHwwfDB8fHww",
+      title:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus ornare suspendisse sed nisi lacus sed.",
+      date:"22 May, 2024",
+      tags:["Technology","Development"],
+      views:"2K",
+      likes:"200",
+    },
+    {
+      img:"https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmxvZ3N8ZW58MHwwfDB8fHww",
+      title:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus ornare suspendisse sed nisi lacus sed. ",
+      date:"22 May, 2024",
+      tags:["Technology","Development"],
+      views:"2K",
+      likes:"200",
+    },
+    {
+      img:"https://images.unsplash.com/photo-1516414447565-b14be0adf13e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmxvZ3N8ZW58MHwwfDB8fHww",
+      title:"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Faucibus ornare suspendisse sed nisi lacus sed.",
+      date:"22 May, 2024",
+      tags:["Technology","Development"],
+      views:"2K",
+      likes:"200",
+    },
+  ]
 };
 export const serviceObjects = [
   {
@@ -1802,7 +1923,6 @@ export const expertDetailsObj = {
       price: "2100",
     },
   ],
-  blogs: [],
   ratings: [
     {
       img: "https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -1854,4 +1974,5 @@ export const expertDetailsObj = {
         "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos",
     },
   ],
+ 
 };

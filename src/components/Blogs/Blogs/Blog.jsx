@@ -196,8 +196,9 @@ const Blogs = () => {
   const [blogArray,setBlogArray]= useState(allBlogs);
   const SearchBlogs=(e)=>{
     setSearchText(e.target.value);
-    console.log(searchText)
-    setBlogArray(allBlogs.filter((item)=> item?.tags?.map((item)=>{item?.toLowerCase().includes(searchText.toLowerCase())})));
+    // console.log(searchText)
+    // setBlogArray(allBlogs.filter((item)=>item.tags.map((item2)=>console.log(item2))));
+    setBlogArray(allBlogs.map((item)=> item?.tags?.filter((item2)=>item2?.toLowerCase()?.includes(searchText.toLowerCase()))));
     console.log(blogArray)
   }
   return (
