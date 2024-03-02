@@ -62,7 +62,7 @@ const ServiceDescription = ({ services, skills }) => {
               <RiFlowChart />
               <div>{services[params?.id - 1]?.title}</div>
             </div>
-            <div className="flex items-center gap-6 overflow-x-scroll scroll mt-[2vw] ">
+            <div className="flex items-center gap-6 overflow-x-scroll mt-[2vw] ">
               {services[params?.id - 1]?.banners.map((temp, idx) => (
                 <img
                   key={idx}

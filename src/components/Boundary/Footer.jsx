@@ -62,7 +62,7 @@ const Footer = () => {
     <div className="px-[4vw] pt-[15vw] md:pt-24 pb-6 mt-10 text-[#E4E4E4] bg-[#2A2A2A]">
       <div className="flex-col md:flex md:flex-row md:gap-[5vw] xl:gap-[10vw]">
         <div className="w-full ">
-          <div className="text-4xl xs:text-5xl md:text-[5vw] text-[#F0F0F0] font-[900] font-sans">
+          <div className="text-4xl xs:text-5xl md:text-[5vw] text-[#F0F0F0] font-[900] font-sans overflow-hidden">
             Think Creative
             <br />
             Do Effective.
@@ -106,9 +106,9 @@ const Footer = () => {
                 <div className=" mt-5">Instagram</div>
                 <div className="mt-2">Linkedin</div>
                 <div className="mt-2">Twitter</div>
-                <div className="mt-2">+91 7000493d185</div>
+                <div className="mt-2">Phone</div>
                 <div className="mt-2 text-wrap break-words">
-                  bhavesh884p@gmail.com
+                  Email
                 </div>
               </div>
             </div>
@@ -143,7 +143,7 @@ const Footer = () => {
 
       <div className="border border-solid border-white my-10"></div>
       <div className="lg:flex items-center justify-between shrink-0">
-        <div className=" text-5xl md:text-[8vw] font-[900] font-sans tracking-normal text-[#F0F0F0]">
+        <div className="pb-3 text-5xl md:text-[8vw] font-[900] font-sans tracking-normal text-[#F0F0F0] overflow-hidden">
           ultraXpert
         </div>
         <div className="my-4 lg:my-0 text-base sm:text-lg">

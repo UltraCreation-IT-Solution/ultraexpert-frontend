@@ -9,7 +9,7 @@ const ServiceBooking = () => {
 
       <div className="lg:flex items-center justify-around mt-[80px]">
         <div className="w-full lg:w-[45%] py-5 mt-[4vw] lg:mt-0 flex flex-col items-center">
-          <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-center">
+          <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-center overflow-hidden pb-3">
             Confirm Your Booking!
           </div>
           <p className="text-gray-700 my-6 text-center text-sm md:text-base">

@@ -1,30 +1,65 @@
-import HeatmapComp from "./Heatmap";
+import React, { useState } from "react";
+import CalendarHeatmap from "react-calendar-heatmap";
+import "react-calendar-heatmap/dist/styles.css";
+import "./global.css";
+
+const generateRandomData = () => {
+  const today = new Date();
+  const yearAgo = new Date(new Date().setFullYear(today.getFullYear() - 1));
+  const values = [];
+
+  for (let d = new Date(yearAgo); d <= today; d.setDate(d.getDate() + 1)) {
+    values.push({
+      date: new Date(d),
+      count: Math.floor(Math.random() * 4),
+    });
+  }
+
+  return values;
+};
 
 const AllExperts = () => {
-  const yearlyData = generateYearlyData();
+  const values = generateRandomData();
+  const [updateDate, setUpdateDate] = useState("");
+  const [updateCount, setUpdateCount] = useState("");
 
-  // Function to generate data for the entire year
-  function generateYearlyData() {
-    const yearlyData = [];
-    for (let month = 1; month <= 12; month++) {
-      for (let day = 1; day <= getDaysInMonth(month, 2024); day++) {
-        const dayStr = day.toString().padStart(2, "0");
-        const monthStr = month.toString().padStart(2, "0");
-        const date = `2024-${monthStr}-${dayStr}`;
-        const count = Math.floor(Math.random() * 21); // Random count between 0 and 20
-        yearlyData.push({ day: dayStr, month: monthStr, count });
+  const handleUpdate = () => {
+    const updatedValues = values.map((value) => {
+      if (value.date.toDateString() === updateDate) {
+        return { ...value, count: parseInt(updateCount) };
       }
-    }
-    return yearlyData;
-  }
+      return value;
+    });
+    setValues(updatedValues);
+  };
 
-  // Function to get the number of days in a month
-  function getDaysInMonth(month, year) {
-    return new Date(year, month, 0).getDate();
-  }
   return (
-    <div className="App">
-      <HeatmapComp yearlyData={yearlyData} />
+    <div className="w-full py-8">
+      <h2 className="text-3xl font-semibold mb-4 text-blue-600">
+        Contribution Heatmap
+      </h2>
+      <div className="w-full">
+        <CalendarHeatmap
+          startDate={
+            new Date(new Date().setFullYear(new Date().getFullYear() - 1))
+          }
+          endDate={new Date()}
+          values={values}
+          classForValue={(value) => {
+            if (!value) {
+              return "color-empty";
+            }
+            return `color-blue-${value.count}`;
+          }}
+          tooltipDataAttrs={(value) => {
+            return {
+              "data-tip": `${value.date.toDateString()}: ${
+                value.count
+              } contributions`,
+            };
+          }}
+        />
+      </div>
     </div>
   );
 };

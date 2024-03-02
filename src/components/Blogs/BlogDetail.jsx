@@ -2,48 +2,7 @@ import { PiCaretLeftLight } from "react-icons/pi";
 import { PiCaretRightLight } from "react-icons/pi";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
-
-export const CommentCard = () => {
-  return (
-    <div className="my-[3vw] md:my-[2vw] pb-[2vw] border-b-[1px] border-slate-400 border-solid">
-      <div className="flex gap-[2.5vw] sm:gap-[2vw]">
-        <img
-          className="h-[10vw] w-[10vw] xs:h-[9vw] xs:w-[9vw] sm:h-[6vh] sm:w-[6vw] md:h-[3.7vw] md:w-[3.7vw] shrink-0 object-cover rounded-full"
-          src="https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt=""
-        />
-        <div>
-          <div className="flex items-center justify-between">
-            <div className="text-[3.2vw] sm:text-[2.8vw] md:text-xl font-semibold">
-              Antony Squash
-            </div>
-            <div className="text-[2.5vw] text-gray-600 sm:text-[2.3vw] md:text-sm font-semibold">
-              1 month ago
-            </div>
-          </div>
-
-          <p className="text-[2.6vw] sm:text-[1.8vw] md:text-sm text-justify font-montserrat">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid
-            beatae omnis, enim nesciunt vel id tempore veritatis ut ad, ipsum
-            reprehenderit facilis sapiente ea voluptatibus, inventore eum non
-            aspernatur labore quaerat similique assumenda at placeat. At
-            voluptas dolorum quibusdam harum!
-          </p>
-          <div className="flex items-center gap-[2.5vw]">
-            <div className="flex items-center gap-[0.5vw] text-xs xs:text-sm sm:text-base">
-              <AiOutlineLike />
-              <div>10</div>
-            </div>
-            <div className="flex items-center gap-[0.5vw] text-xs xs:text-sm sm:text-base">
-              <AiOutlineDislike />
-              <div>4</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+import { ExpertRatings } from "../Experts/ExpertProfile";
 
 const BlogDetails = () => {
   const array = ["Internship", "Communication skills", "Internship", "Growth"];
@@ -162,24 +121,12 @@ const BlogDetails = () => {
           </div>
         </div>
 
-        <div className="mt-10 md:mt-20">
-          <div>
-            <div className="text-base md:text-lg ">Leave a comment</div>
-            <input
-              type="text"
-              placeholder="Comment here"
-              className="w-[100%] bg-[#ECECEC] outline-none px-[1.5vw] py-[0.7vw] mt-[1.5vw] text-sm sm:text-base md:text-lg rounded-sm"
-            />
-            <button className="mt-[3vw] md:mt-[1.5vw] bg-[#2A2A2A] px-[3vw] py-[1.5vw] md:py-[0.7vw] text-sm sm:text-base md:text-lg text-white border rounded-sm cursor-pointer">
-              Post Comment
-            </button>
+        
+          <div className="mt-10 md:mt-20">
+
+          <ExpertRatings/>
           </div>
-          <div className="mt-[10vw] md:mt-[4vw]">
-            {[...Array(10)].map((temp, idx) => (
-              <CommentCard key={idx} />
-            ))}
-          </div>
-        </div>
+        
       </div>
     </>
   );
