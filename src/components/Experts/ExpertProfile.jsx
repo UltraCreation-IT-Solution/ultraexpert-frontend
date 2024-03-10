@@ -1,19 +1,22 @@
 import React from "react";
 import { useState } from "react";
 import { MdStar, MdGroupAdd } from "react-icons/md";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdOutlineKeyboardArrowRight } from "react-icons/md";
+import {
+  MdKeyboardArrowDown,
+  MdKeyboardArrowUp,
+  MdOutlineKeyboardArrowRight,
+} from "react-icons/md";
 import { CiBookmark } from "react-icons/ci";
-import { RiFlowChart,RiArrowRightSLine } from "react-icons/ri";
-import { IoLocationSharp, IoDiamondSharp, IoEyeSharp } from "react-icons/io5";
+import { RiFlowChart } from "react-icons/ri";
+import { IoDiamondSharp } from "react-icons/io5";
 import { FaUserGraduate, FaUserCheck } from "react-icons/fa6";
-import { FaTags} from "react-icons/fa";
 import { IoIosChatboxes } from "react-icons/io";
 import { GiAchievement } from "react-icons/gi";
 import { HiOfficeBuilding } from "react-icons/hi";
-import { BiLike,BiSolidLike } from "react-icons/bi";
+import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import { expertDetailsObj, ProjectsCarousel,expertDashInfo } from "../../constant";
+import { expertDetailsObj, ProjectsCarousel, BlogCard } from "../../constant";
 
 export const ExpertSummary = () => {
   return (
@@ -35,15 +38,15 @@ export const ExpertSummary = () => {
                     <div className="text-sm flex md:flex-col order-2 md:order-1 md:w-[150px] pt-2 md:py-5 md:text-right">
                       {item.present ? (
                         <>
-                        <div>Present</div>
-                        <div className="block md:hidden"> - </div>
+                          <div>Present</div>
+                          <div className="block md:hidden"> - </div>
                         </>
                       ) : (
                         <>
-                        <div>
-                          {item?.endMonth}, {item?.endYear}
-                        </div>
-                        <div className="block md:hidden"> - </div>
+                          <div>
+                            {item?.endMonth}, {item?.endYear}
+                          </div>
+                          <div className="block md:hidden"> - </div>
                         </>
                       )}
                       <div>
@@ -315,33 +318,13 @@ export const ExpertRatings = () => {
 };
 
 export const ExpertBlogs = () => {
-  return(
-      <div>
-        {expertDashInfo?.blogs?.map((item, idx)=>
-          <div key={idx} className={`px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5 ${idx%2===0 ?`bg-[#ececec]`:`border border-[#c7c7c7] border-solid`}`}>
-            <div className="flex flex-col sm:flex-row items-center gap-5">
-
-            <img className="h-48 w-full object-cover sm:h-36 sm:w-40 rounded-md shrink-0" src={item?.img} alt="" />
-            <div className="text-[#575757]">
-              <div className="text-base font-semibold line-clamp-2 text-ellipsis">{item?.title}</div>
-              <div className="text-sm text-[#898888]">{item?.date}</div>
-              <div className="mt-3 text-xs flex items-center gap-2"><FaTags/>
-                <div className="flex items-center gap-2">{item?.tags.map((item)=> <div className="text-[10px] border border-solid border-slate-300 px-2 py-1 rounded-xl cursor-pointer">{item}</div> )}</div>
-              </div>
-              <div className="flex gap-[3vw] sm:gap-0 sm:flex-col">
-
-              <div className="mt-3 text-xs flex items-center gap-2"><IoEyeSharp/> {item?.views}</div>
-              <div className="mt-3 text-xs flex items-center gap-1 sm:gap-2"><BiSolidLike/> {item?.likes} likes </div>
-              </div>
-            </div>
-            </div>
-            <div className="hidden border border-solid border-slate-300 h-fit sm:flex items-center justify-center rounded-full text-4xl font-thin self-center shrink-0 cursor-pointer">
-              <RiArrowRightSLine/>
-            </div>
-          </div>
-        )}
-      </div>
-  )
+  return (
+    <div>
+      {expertDetailsObj?.blogs?.map((item, idx) => (
+        <BlogCard key={idx} index={idx} items={item} />
+      ))}
+    </div>
+  );
 };
 
 export const AboutExpert = () => {
@@ -685,9 +668,9 @@ export const SideComponent = () => {
   const [services, setServices] = useState(false);
   const [ratings, setRatings] = useState(false);
   const [blogs, setBlogs] = useState(false);
-  const [education, setEducation] = useState(false);
-  const [achievements, setAchievements] = useState(false);
-  const [workExperience, setWorkExperience] = useState(false);
+  const [education, setEducation] = useState(true);
+  const [achievements, setAchievements] = useState(true);
+  const [workExperience, setWorkExperience] = useState(true);
 
   const MakeSummaryTrue = () => {
     setSummary(true);
@@ -730,6 +713,34 @@ export const SideComponent = () => {
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="my-10 mx-[2.5vw] px-2 py-6 border border-solid border-slate-300 rounded-lg">
+        <div className="pb-3">
+          Book a 1:1 trial with Antony
+        </div>
+        <div className="my-3 py-4 border-y border-solid border-slate-200">
+          <div>Available Dates</div>
+          <div className="flex gap-3 overflow-x-auto pt-3">
+            {[...Array(7)].map((item) => (
+              <div className="text-center border border-solid border-slate-300 px-3 py-6 shrink-0 shadow-sm rounded-md cursor-pointer hover:border-blue-400">
+                <div className="text-sm font-bold">19</div>
+                <div className="text-xs">MON</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <div>Available Slots</div>
+          <div className="flex gap-3 overflow-x-auto pt-3">
+            {[...Array(7)].map((item) => (
+              <div className="text-xs max-w-28 text-center border border-solid border-slate-300 hover:border-blue-400 py-3 px-6 shrink-0 shadow-sm rounded-md cursor-pointer">
+                7:00 AM
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="mt-6 bg-[#007AFF] text-white text-lg font-semibold text-center p-3 rounded-lg cursor-pointer">Book for 19th Mar</div>
       </div>
 
       {/*******Accordian starts from here*******/}

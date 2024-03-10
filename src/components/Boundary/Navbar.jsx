@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import logo from "../../assets/images/logo.jpg";
+import logo from "../../assets/images/logo.svg";
+import ultraXpert from "../../assets/images/ultraXpert.svg";
 import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 
@@ -11,21 +12,22 @@ const Navbar = () => {
   }, [location]);
   return (
     <div
-      className={`fixed z-50 shadow-sm top-0 left-0 bg-white w-[100vw]  ${
+      className={`fixed z-50 shadow-sm top-0 left-0 bg-white w-[100vw] ${
         showNav ? "h-[60vh]" : null
       } overflow-hidden flex flex-col md:flex-row items-center justify-between px-[20px] box-border font-montserrat text-[24px]`}
     >
+      <div className="self-start">  
+
       <Link
         to={"/"}
         className={`${
           showNav ? "mt-6" : null
-        } flex ml-[-20px] mt-4 md:mt-0 decoration-transparent `}
+        } flex gap-5 mt-4 md:mt-0 decoration-transparent `}
       >
-        <img src={logo} className="w-[80px] h-[60px] " alt="logo" />
-        <h2 className="ml-[-10px] my-4 relative text-2xl text-blue-700 font-extrabold font-montserrat">
-          UltraXpert
-        </h2>
+        <img src={logo} className="block sm:hidden w-[80px] h-[60px] " alt="logo" />
+        <img src={ultraXpert} className="hidden sm:block" alt="" />
       </Link>
+      </div>
       <div>
         <nav
           className={`flex ${
