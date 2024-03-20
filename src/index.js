@@ -8,12 +8,12 @@ import {
   useLocation,
 } from "react-router-dom";
 import "./global.css";
-import LogIn from "../src/components/Auth/Login/Log-In";
-import Register from "../src/components/Auth/Register/Register";
+import LogIn from "../src/components/Auth/Login.jsx";
+import SignUp from "../src/components/Auth/SignUp.jsx";
 import Landing from "./components/Landing/Landing";
 import Expert from "./components/Experts/Expert";
 import Service from "./components/Services/Service";
-import Blog, { BlogBody,SearchBlog } from "./components/Blogs/Blogs/Blog";
+import Blog, { BlogBody, SearchBlog } from "./components/Blogs/Blogs/Blog";
 import ExpertProfile from "./components/Experts/ExpertProfile";
 import ServiceDescription from "./components/Experts/ServiceDescription";
 import ServiceBooking from "./components/Experts/ServiceBooking";
@@ -23,7 +23,11 @@ import Navbar from "./components/Boundary/Navbar";
 import Footer from "./components/Boundary/Footer";
 import AllExperts from "./Test";
 import { expertDetailsObj } from "./constant";
-import ExpertDashboard, { Chats, Dashboard, Leaderboard } from "./components/Experts/ExpertDashboard";
+import ExpertDashboard, {
+  Chats,
+  Dashboard,
+  Leaderboard,
+} from "./components/Experts/ExpertDashboard";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -63,7 +67,7 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/register",
-        element: <Register />,
+        element: <SignUp />,
       },
       {
         path: "/experts",
@@ -102,7 +106,7 @@ const appRouter = createBrowserRouter([
             path: "",
             element: <Blog />,
           },
-          
+
           {
             path: "blogdetail",
             element: <BlogDetails />,
@@ -112,19 +116,19 @@ const appRouter = createBrowserRouter([
       {
         path: "/expertdashboard",
         element: <ExpertDashboard />,
-        children:[
+        children: [
           {
-            path:"",
-            element:<Dashboard/>
+            path: "",
+            element: <Dashboard />,
           },
           {
-            path:"chats",
-            element:<Chats/>,
+            path: "chats",
+            element: <Chats />,
           },
           {
-            path:"leaderboard",
-            element:<Leaderboard/>
-          }
+            path: "leaderboard",
+            element: <Leaderboard />,
+          },
         ],
       },
       {
