@@ -8,12 +8,14 @@ import {
   useLocation,
 } from "react-router-dom";
 import "./global.css";
-import LogIn from "../src/components/Auth/Login/Log-In";
-import Register from "../src/components/Auth/Register/Register";
+import Login from "./components/Auth/Login";
+import SignUp from "./components/Auth/SignUp";
+import LoginWithOTP from "./components/Auth/LoginWithOTP";
+import SentOTP from "./components/Auth/SentOTP";
 import Landing from "./components/Landing/Landing";
 import Expert from "./components/Experts/Expert";
 import Service from "./components/Services/Service";
-import Blog, { BlogBody,SearchBlog } from "./components/Blogs/Blogs/Blog";
+import Blog, { BlogBody, SearchBlog } from "./components/Blogs/Blogs/Blog";
 import ExpertProfile from "./components/Experts/ExpertProfile";
 import ServiceDescription from "./components/Experts/ServiceDescription";
 import ServiceBooking from "./components/Experts/ServiceBooking";
@@ -23,7 +25,13 @@ import Navbar from "./components/Boundary/Navbar";
 import Footer from "./components/Boundary/Footer";
 import AllExperts from "./Test";
 import { expertDetailsObj } from "./constant";
-import ExpertDashboard, { Chats, Dashboard, Leaderboard } from "./components/Experts/ExpertDashboard";
+import ExpertDashboard, {
+  Chats,
+  Dashboard,
+  Leaderboard,
+} from "./components/Experts/ExpertDashboard";
+import Update from "./components/Experts/EditDashboardProfile";
+import VerifySignUp from "./components/Auth/VerifySignUp";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -59,11 +67,23 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/login",
-        element: <LogIn />,
+        element: <Login />,
       },
       {
-        path: "/register",
-        element: <Register />,
+        path: "/signup",
+        element: <SignUp />,
+      },
+      {
+        path: "/loginiwthotp",
+        element: <LoginWithOTP />,
+      },
+      {
+        path: "/sentOTP",
+        element: <SentOTP />,
+      },
+      {
+        path: "/verifySignUp",
+        element: <VerifySignUp />,
       },
       {
         path: "/experts",
@@ -102,7 +122,7 @@ const appRouter = createBrowserRouter([
             path: "",
             element: <Blog />,
           },
-          
+
           {
             path: "blogdetail",
             element: <BlogDetails />,
@@ -112,24 +132,28 @@ const appRouter = createBrowserRouter([
       {
         path: "/expertdashboard",
         element: <ExpertDashboard />,
-        children:[
+        children: [
           {
-            path:"",
-            element:<Dashboard/>
+            path: "",
+            element: <Dashboard />,
           },
           {
-            path:"chats",
-            element:<Chats/>,
+            path: "chats",
+            element: <Chats />,
           },
           {
-            path:"leaderboard",
-            element:<Leaderboard/>
-          }
+            path: "leaderboard",
+            element: <Leaderboard />,
+          },
         ],
       },
       {
         path: "/test",
         element: <AllExperts />,
+      },
+      {
+        path: "editprofile",
+        element: <Update />,
       },
     ],
   },
