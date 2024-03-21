@@ -8,8 +8,10 @@ import {
   useLocation,
 } from "react-router-dom";
 import "./global.css";
-import LogIn from "../src/components/Auth/Login.jsx";
-import SignUp from "../src/components/Auth/SignUp.jsx";
+import Login from "./components/Auth/Login";
+import SignUp from "./components/Auth/SignUp";
+import LoginWithOTP from "./components/Auth/LoginWithOTP";
+import SentOTP from "./components/Auth/SentOTP";
 import Landing from "./components/Landing/Landing";
 import Expert from "./components/Experts/Expert";
 import Service from "./components/Services/Service";
@@ -28,6 +30,8 @@ import ExpertDashboard, {
   Dashboard,
   Leaderboard,
 } from "./components/Experts/ExpertDashboard";
+import Update from "./components/Experts/EditDashboardProfile";
+import VerifySignUp from "./components/Auth/VerifySignUp";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -63,11 +67,23 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/login",
-        element: <LogIn />,
+        element: <Login />,
       },
       {
-        path: "/register",
+        path: "/signup",
         element: <SignUp />,
+      },
+      {
+        path: "/loginiwthotp",
+        element: <LoginWithOTP />,
+      },
+      {
+        path: "/sentOTP",
+        element: <SentOTP />,
+      },
+      {
+        path: "/verifySignUp",
+        element: <VerifySignUp />,
       },
       {
         path: "/experts",
@@ -134,6 +150,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/test",
         element: <AllExperts />,
+      },
+      {
+        path: "editprofile",
+        element: <Update />,
       },
     ],
   },

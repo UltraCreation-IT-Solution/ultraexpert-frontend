@@ -10,15 +10,20 @@ import {
   BsFillPersonLinesFill,
   BsFillChatSquareTextFill,
 } from "react-icons/bs";
-import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowUp, IoIosArrowDown, IoMdSettings } from "react-icons/io";
 import {
   IoEyeSharp,
   IoPersonAdd,
   IoSettings,
   IoLocationOutline,
 } from "react-icons/io5";
-import { BsFillPatchCheckFill, BsGlobe } from "react-icons/bs";
+import {
+  BsFillPatchCheckFill,
+  BsGlobe,
+  BsThreeDotsVertical,
+} from "react-icons/bs";
 import { RiPagesFill } from "react-icons/ri";
+import { PiCrownFill } from "react-icons/pi";
 import { ExpertBlogs } from "./ExpertProfile";
 import { expertDashInfo as expert, leaderboardRanking } from "../../constant";
 import {
@@ -38,6 +43,7 @@ import {
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { Outlet, Link } from "react-router-dom";
+import Update from "./EditDashboardProfile";
 
 const generateRandomData = () => {
   const today = new Date();
@@ -524,26 +530,45 @@ export const Dashboard = () => {
 };
 
 export const Chats = () => {
+  const [chatDetail, setChatDetail] = useState(false);
   return (
-    <div className="w-full md:w-[68%]">
-      <div className="text-xl font-semibold">Chats</div>
-      <div className="mt-6">
-        {expert?.chats.map((item) => (
-          <div className="px-2 py-3 flex items-center gap-4 border border-solid border-slate-200">
-            <img
-              src={item?.img}
-              className="h-12 w-12 rounded-full object-cover shrink-0"
-              alt="img"
-            />
-            <div className="flex flex-col gap-2">
-              <div className="text-sm font-semibold">{item?.name}</div>
-              <div className="text-xs line-clamp-1 xs:w-[200px]">
-                {item?.comment}
+    <div className="w-full md:w-[68%] ">
+      <div className="flex items-center justify-between text-xl font-bold border-b border-solid border-slate-200 pb-3">
+        <div className="">Chats</div>
+        <div className="flex justify-center gap-3">
+          <IoMdSettings />
+          <BsThreeDotsVertical />
+        </div>
+      </div>
+      <div className="mt-6 flex gap-5">
+        <div className="w-full">
+          {expert?.chats.map((item) => (
+            <div
+              className="cursor-default px-2 py-3 flex items-center gap-4 border border-solid border-slate-200"
+              onClick={() =>
+                chatDetail ? setChatDetail(false) : setChatDetail(true)
+              }
+            >
+              <img
+                src={item?.img}
+                className="h-12 w-12 rounded-full object-cover shrink-0"
+                alt="img"
+              />
+              <div className="flex flex-col gap-2">
+                <div className="text-sm font-semibold">{item?.name}</div>
+                <div className="text-xs line-clamp-1 xs:w-[200px]">
+                  {item?.comment}
+                </div>
               </div>
+              <div className="ml-auto text-xs shrink-0">{item?.lastSeen}</div>
             </div>
-            <div className="ml-auto text-xs shrink-0">{item?.lastSeen}</div>
+          ))}
+        </div>
+        {chatDetail && (
+          <div className="w-[100%] bg-red-600">
+            <div>naman</div>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
@@ -567,7 +592,7 @@ export const Leaderboard = () => {
       </div>
       <div className="flex self-center gap-[10vw] bg-[#ececec] p-2 rounded-xl w-fit mt-10">
         <div
-          className={`px-3 py-2 text-base rounded-xl cursor-pointer ${
+          className={`px-3 py-2 text-center text-sm sm:text-base rounded-xl cursor-pointer ${
             weeklyLeaderboard ? "bg-[#bdb8b8]" : "bg-[#ececec]"
           }`}
           onClick={() => handleWeeklyLeaderboard()}
@@ -575,7 +600,7 @@ export const Leaderboard = () => {
           Weekly Leaderboard
         </div>
         <div
-          className={`px-3 py-2 text-base rounded-xl cursor-pointer ${
+          className={`px-3 py-2 text-center text-sm sm:text-base rounded-xl cursor-pointer ${
             monthlyLeaderboard ? "bg-[#bdb8b8]" : "bg-[#ececec]"
           }`}
           onClick={() => handleMonthlyLeaderboard()}
@@ -583,23 +608,23 @@ export const Leaderboard = () => {
           Monthly Leaderboard
         </div>
       </div>
-      <div className="flex items-center self-center gap-[6vw]">
-        <div className="text-base flex flex-col self-center gap-3 mt-10 border border-solid border-slate-300 rounded-xl px-[6vw] py-4">
-          <div className="">Current Week: 17-23 Mar</div>
-          <div className=" ">No. of participants: 30</div>
+      <div className="w-full flex items-center justify-evenly flex-wrap gap-2">
+        <div className="text-sm flex flex-col self-center gap-3 mt-10 border border-solid border-slate-300 rounded-xl px-[3vw] py-4 shrink-0">
+          <div>Current Week: 17-23 Mar</div>
+          <div>No. of participants: 30</div>
         </div>
-        <div className="flex flex-col items-center self-center gap-3 mt-10 border border-solid border-slate-300 rounded-xl px-[4vw] py-2">
-          <div>Your Ranking</div>
+        <div className="flex flex-col items-center self-center gap-3 mt-10 border border-solid border-slate-300 rounded-xl px-[vw] py-2 shrink-0">
+          <div className="text-base">Your Ranking</div>
           <div className="flex items-center">
-            <div className="flex flex-col items-center px-5 text-lg">
+            <div className="flex flex-col items-center px-5 text-sm">
               <MdOutlineStarBorderPurple500 />
               <div>19209</div>
             </div>
-            <div className="flex flex-col items-center px-5 text-lg">
+            <div className="flex flex-col items-center px-5 text-sm border-x border-solid border-slate-300">
               <BsGlobe />
               <div>12875</div>
             </div>
-            <div className="flex flex-col items-center px-5 text-lg">
+            <div className="flex flex-col items-center px-5 text-sm">
               <IoLocationOutline />
               <div>87678</div>
             </div>
@@ -608,71 +633,89 @@ export const Leaderboard = () => {
       </div>
 
       <div className="border border-solid border-slate-300 flex flex-col items-center justify-center rounded-xl mt-10 px-4">
-        <div className="relative flex h-[240px] items-end mt-14 bg-red-400">
-          <div className="w-36 min-h-36 max-h-36 bg-[#1E2237] text-white text-center rounded-l-xl">
+        <div className="relative flex h-[50vw] sm:h-[280px] items-end mt-12">
+          <div className="w-[25vw] min-h-[28vw] max-h-[28vw] sm:w-36 sm:min-h-36 sm:max-h-36 bg-[#1E2237] text-white text-center rounded-l-lg sm:rounded-l-xl">
             <img
               src="https://images.unsplash.com/photo-1611095973763-414019e72400?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fHdvcmt8ZW58MHwwfDB8fHww"
-              className="absolute top-12 left-8 h-20 w-20 rounded-full object-cover shrink-0 border-2 border-solid border-[#009BD6]"
+              className="absolute top-[12vw] left-[5vw] sm:top-20 sm:left-8 h-[15vw] w-[15vw] sm:h-20 sm:w-20 rounded-full object-cover shrink-0 border-2 border-solid border-[#009BD6]"
               alt=""
             />
-            <div className="bg-[#009BD6] w-6 h-6 rounded-md text-center text-xs rotate-45 absolute top-20 left-12">
-              2
+            <div className="bg-[#009BD6] w-[4vw] h-[4vw] sm:w-6 sm:h-6 rounded-md text-center text-[2vw] sm:text-xs rotate-45 absolute top-[24vw] left-[10.5vw] sm:top-36 sm:left-[3.8rem] flex items-center justify-center">
+              <div className="-rotate-45">2</div>
             </div>
-            <div className="text-sm text-white text-center font-semibold mt-10">
-              <div className="text-base">Jackson</div>
-              <div className="text-[#009BD6]">1847</div>
+            <div className="text-[2.7vw] sm:text-sm text-white text-center font-semibold mt-[8vw] sm:mt-10">
+              <div className="text-[3vw] sm:text-base">Jackson</div>
+              <div className="text-[#009BD6] my-[1.3vw] sm:my-0">1847</div>
               <div className="text-[#009BD6]">@username</div>
             </div>
           </div>
-          <div className="w-36 min-h-44 max-h-44 bg-[#252A40] text-white text-center rounded-t-xl">
+          <div className="w-[27vw] min-h-[33vw] max-h-[33vw] sm:w-36 sm:min-h-44 sm:max-h-44 bg-[#252A40] text-white text-center rounded-t-lg sm:rounded-t-xl">
+            <div className="text-[#FFAA00] absolute text-[6.5vw] sm:text-4xl top-0 left-[35vw] sm:top-0 sm:left-[12.6rem]">
+              <PiCrownFill />
+            </div>
             <img
               src="https://images.unsplash.com/photo-1513258496099-48168024aec0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTMwfHx3b3JrfGVufDB8MHwwfHx8MA%3D%3D"
-              className="absolute top-0 left-[170px] h-24 w-24 rounded-full object-cover shrink-0 border-2 border-solid border-[#FFAA00]"
+              className="absolute top-[6vw] left-[30vw] h-[17vw] w-[17vw] sm:top-8 sm:left-[170px] sm:h-24 sm:w-24 rounded-full object-cover shrink-0 border-2 border-solid border-[#FFAA00]"
               alt=""
             />
-            <div className="text-sm text-[#FFAA00] text-center font-semibold mt-10">
-              <div className="text-base text-white">Eiden</div>
-              <div>2430</div>
+            <div className="bg-[#FFAA00] w-[4vw] h-[4vw] sm:w-6 sm:h-6 rounded-md text-center text-[2vw] sm:text-xs rotate-45 absolute top-[20vw] left-[37vw] sm:top-28 sm:left-[12.8rem] flex items-center justify-center">
+              <div className="-rotate-45">1</div>
+            </div>
+            <div className="text-[2.7vw] sm:text-sm text-[#FFAA00] text-center font-semibold mt-[9vw] sm:mt-10">
+              <div className="text-[3vw] sm:text-base text-white">Eiden</div>
+              <div className="my-[1.3vw] sm:my-0">2430</div>
               <div className="text-[#FFAA00]">@username</div>
             </div>
           </div>
-          <div className="w-36 min-h-32 max-h-32 bg-[#1E2237] text-white text-center rounded-r-xl">
+          <div className="w-[25vw] min-h-[28vw] max-h-[28vw] sm:w-32 sm:min-h-32 sm:max-h-32 bg-[#1E2237] text-white text-center rounded-r-lg sm:rounded-r-xl">
             <img
               src="https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              className="absolute top-16 right-8 h-20 w-20 rounded-full object-cover shrink-0 border-2 border-solid border-[#00D95F]"
+              className="absolute top-[12vw] right-[5vw] sm:top-24 sm:right-8 h-[15vw] w-[15vw] sm:h-20 sm:w-20 rounded-full object-cover shrink-0 border-2 border-solid border-[#00D95F]"
               alt=""
             />
-            <div className="text-sm text-white font-semibold mt-10">
-              <div className="text-base">Jackson</div>
-              <div className="text-[#00D95F]">1847</div>
+            <div className="bg-[#00D95F] w-[4vw] h-[4vw] sm:w-6 sm:h-6 rounded-md text-center text-[2vw] sm:text-xs rotate-45 absolute top-[24vw] right-[10.5vw] sm:top-40 sm:right-[3.8rem] flex items-center justify-center">
+              <div className="-rotate-45">3</div>
+            </div>
+            <div className="text-[2.7vw] sm:text-sm text-white font-semibold mt-[8vw] sm:mt-10">
+              <div className="text-[3vw] sm:text-base">Jackson</div>
+              <div className="text-[#00D95F] my-[1.3vw] sm:my-0">1847</div>
               <div className="text-[#00D95F]">@username</div>
             </div>
           </div>
         </div>
 
         <div className="w-full">
-          <div className="flex justify-between mt-10 mb-5 border-b border-solid border-slate-200 pb-3">
+          <div className="flex justify-between mt-10 mb-5 border-b border-solid border-slate-200 pb-3 text-base sm:text-lg">
             <div className="flex items-center gap-[8vw]">
-              <div className="text-lg">Rank</div>
-              <div className="text-lg">Name</div>
+              <div>Rank</div>
+              <div>Name</div>
             </div>
-            <div className="text-lg">Score</div>
+            <div>Score</div>
           </div>
           <div>
             {leaderboardRanking.map((item, idx) => (
-              <div key={idx} className="flex items-center justify-between py-3">
+              <div
+                key={idx}
+                className="flex items-center justify-between gap-1 py-3"
+              >
                 <div className="flex items-center gap-[8vw]">
-                  <div className="">{item?.rank}</div>
-                  <div className="flex gap-8 items-center w-[300px] ">
+                  <div className="text-sm sm:text-base shrink-0">
+                    {item?.rank}
+                  </div>
+                  <div className="flex gap-3 sm:gap-6 items-center w-[300px] ">
                     <img
                       src={item?.img}
                       alt="img"
                       className="h-10 w-10 rounded-full object-cover shrink-0"
                     />
-                    <div>{item?.name}</div>
+                    <div className="text-sm sm:text-base shrink-0">
+                      {item?.name}
+                    </div>
                   </div>
                 </div>
-                <div>{item?.score}</div>
+                <div className="text-sm sm:text-base shrink-0">
+                  {item?.score}
+                </div>
               </div>
             ))}
           </div>
@@ -681,106 +724,130 @@ export const Leaderboard = () => {
     </div>
   );
 };
+
 const ExpertDashboard = () => {
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const handleShowEditProfile = () => {
+    setShowEditProfile(false);
+  };
+
   return (
-    <div className="mt-[85px] px-[7vw] w-full h-full flex gap-[1vw]">
-      <section className="w-[32%] hidden md:flex h-fit border border-[#c7c7c7] border-solid  flex-col rounded-lg">
-        <div className="w-full h-auto px-[0.8vw] py-[2vw] border-b-[0.01px] border-[#dcdcdc] border-solid">
-          <div className="flex justify-between">
-            <div className="flex gap-[0.75vw]">
-              <img
-                src={expert.profile}
-                className="w-[6.5vw] h-[6.5vw] rounded-lg"
-                alt="profileImg"
-              />
-              <div className="flex flex-col justify-between py-[0.2vw]">
-                <div className=" flex flex-col gap-[0.5vw] ">
-                  <div className="font-bold text-[1.4vw]">{expert?.name}</div>
-                  <div className="font-medium text-[1vw] text-[#8F8F8F]">
-                    @{expert?.username}
+    <div
+      className={`${
+        showEditProfile ? "overflow-y-hidden" : "overflow-y-auto"
+      } mt-[85px] px-[7vw] w-full h-full flex gap-[1vw]`}
+    >
+      {
+        <section
+          className={`w-[32%] hidden md:flex h-fit border border-[#c7c7c7] border-solid flex-col rounded-lg`}
+        >
+          <div className="w-full h-auto px-[0.8vw] py-[2vw] border-b-[0.01px] border-[#dcdcdc] border-solid">
+            <div className="flex justify-between">
+              <div className="flex gap-[0.75vw]">
+                <img
+                  src={expert.profile}
+                  className="w-[6.5vw] h-[6.5vw] rounded-lg"
+                  alt="profileImg"
+                />
+                <div className="flex flex-col justify-between py-[0.2vw]">
+                  <div className=" flex flex-col gap-[0.5vw] ">
+                    <div className="font-bold text-[1.4vw]">{expert?.name}</div>
+                    <div className="font-medium text-[1vw] text-[#8F8F8F]">
+                      @{expert?.username}
+                    </div>
+                  </div>
+                  <div className="font-semibold text-[1.3vw] text-black/60">
+                    {expert?.designation}
                   </div>
                 </div>
-                <div className="font-semibold text-[1.3vw] text-black/60">
-                  {expert?.designation}
+              </div>
+              <div className="py-[0.4vw] text-[1.25vw]">
+                <FaEdit
+                  onClick={() =>
+                    !showEditProfile ? setShowEditProfile(true) : null
+                  }
+                />
+              </div>
+            </div>
+            <div className=" mt-[1.6vw] w-full text-[1vw] text-[#525252]">
+              {expert.title}
+            </div>
+            <div className="mt-[1.25vw] flex flex-col gap-[1vw]">
+              <div className="flex gap-[1.25vw] items-center text-[1.25vw] text-[#515151]">
+                <FaLocationDot />
+                {expert?.location}
+              </div>
+              <div className="flex gap-[1.25vw] items-center text-[1.25vw] text-[#515151]">
+                <FaTags />
+                <div className="flex">
+                  {expert?.topSkills.map((item, idx) => {
+                    return (
+                      <div
+                        key={idx}
+                        className="px-[2.65vw] xs:px-[2.2vw] sm:px-[1.8vw] lg:px-[1vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] text-[2.85vw] xs:text-[2.25vw] sm:text-[1.45vw] lg:text-[1vw] border border-[#cdcdcd] border-solid"
+                      >
+                        {item}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
-            <div className="py-[0.4vw] text-[1.25vw]">
-              <FaEdit />
-            </div>
           </div>
-          <div className=" mt-[1.6vw] w-full text-[1vw] text-[#525252]">
-            {expert.title}
+          <div>
+            <ul className="p-0 mt-0 mb-0">
+              <Link to="">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                  <MdSpaceDashboard className="text-[1.65vw]" />
+                  Dashboard
+                </li>
+              </Link>
+              <Link to="leaderboard">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                  <FaMedal className="text-[1.65vw]" />
+                  Leaderboard
+                </li>
+              </Link>
+              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <FaWallet className="text-[1.55vw]" />
+                Wallet
+              </li>
+              <Link to="chats">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                  <BsFillChatSquareTextFill className="text-[1.55vw]" />
+                  Chat
+                </li>
+              </Link>
+              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <BsFillPatchCheckFill className="text-[1.55vw]" />
+                Get Certified
+              </li>
+              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <BsFillPersonLinesFill className="text-[1.55vw]" />
+                Go to Experts
+              </li>
+              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <MdInsertPageBreak className="text-[1.55vw]" />
+                My Blogs
+              </li>
+              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <IoSettings className="text-[1.55vw]" />
+                Settings
+              </li>
+            </ul>
           </div>
-          <div className="mt-[1.25vw] flex flex-col gap-[1vw]">
-            <div className="flex gap-[1.25vw] items-center text-[1.25vw] text-[#515151]">
-              <FaLocationDot />
-              {expert?.location}
-            </div>
-            <div className="flex gap-[1.25vw] items-center text-[1.25vw] text-[#515151]">
-              <FaTags />
-              <div className="flex">
-                {expert?.topSkills.map((item, idx) => {
-                  return (
-                    <div
-                      key={idx}
-                      className="px-[2.65vw] xs:px-[2.2vw] sm:px-[1.8vw] lg:px-[1vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] text-[2.85vw] xs:text-[2.25vw] sm:text-[1.45vw] lg:text-[1vw] border border-[#cdcdcd] border-solid"
-                    >
-                      {item}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <ul className="p-0 mt-0 mb-0">
-            <Link to="">
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-                <MdSpaceDashboard className="text-[1.65vw]" />
-                Dashboard
-              </li>
-            </Link>
-            <Link to="leaderboard">
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-                <FaMedal className="text-[1.65vw]" />
-                Leaderboard
-              </li>
-            </Link>
-            <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-              <FaWallet className="text-[1.55vw]" />
-              Wallet
-            </li>
-            <Link to="chats">
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-                <BsFillChatSquareTextFill className="text-[1.55vw]" />
-                Chat
-              </li>
-            </Link>
-            <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-              <BsFillPatchCheckFill className="text-[1.55vw]" />
-              Get Certified
-            </li>
-            <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-              <BsFillPersonLinesFill className="text-[1.55vw]" />
-              Go to Experts
-            </li>
-            <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-              <MdInsertPageBreak className="text-[1.55vw]" />
-              My Blogs
-            </li>
-            <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-              <IoSettings className="text-[1.55vw]" />
-              Settings
-            </li>
-          </ul>
-        </div>
-      </section>
+        </section>
+      }
       <Outlet>
         <Dashboard />
         <Chats />
       </Outlet>
+      {showEditProfile === true && (
+        <Update
+          profile={showEditProfile}
+          handleShowEditProfile={handleShowEditProfile}
+        />
+      )}
     </div>
   );
 };
