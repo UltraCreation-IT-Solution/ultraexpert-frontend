@@ -1,47 +1,73 @@
-import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import React, { useState } from "react";
 import userImage from "../../assets/images/image.png";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 
 const Login = () => {
-  const initialValues = {
+
+  const [userData, setUserData] = useState({
     email: "",
     password: "",
-  };
+  });
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
 
   const navigate = useNavigate();
 
-  const validationSchema = Yup.object({
-    email: Yup.string().email("Invalid email address").required("Required"),
-    password: Yup.string().required("Required"),
-  });
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}$/;
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = {};
+    if (
+      !emailRegex.test(userData.email) ||
+      !userData.email.trim() ||
+      !userData.email
+    ) {
+      newErrors.email = "Invalid email";
+      isValid = false;
+    }
+    if (
+      !userData.password ||
+      !passwordRegex.test(userData.password)
+    ) {
+      newErrors.password = "Invalid password";
+      isValid = false;
+    }
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleSubmit = async (e) => {
-    try {
-      const res = await axios.post(
-        "/login/",
-        {
-          email: e.email,
-          password: e.password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        const res = await axios.post(
+          "/login/",
+          {
+            email: userData.email,
+            password: userData.password,
           },
-        },
-        {
-          withCredentials: true,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        if (res.status === 200) {
+          console.log("Login successful");
+          console.log(res.data);
+          navigate("/");
         }
-      );
-      if (res.status === 200) {
-        console.log("Login successful");
-        console.log(res.data);
-        navigate("/");
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -57,80 +83,81 @@ const Login = () => {
     navigate("/signUp");
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData({
+      ...userData,
+      [name]: value,
+    });
+  };
+
+  const handleForgotPassword = () => {
+    navigate("/forgotPassword");
+  };
+
   return (
-    <div className="h-full mt-[100px] bg-white m-auto flex justify-center items-center">
+    <div className="md:min-h-screen mt-[40px] bg-white flex justify-center items-center">
       <div className="lg:max-w-[50vw] md:w-[75%] w-[90%] flex md:flex-row flex-col bg-white px-8 pb-8 rounded-xl shadow-md border border-solid border-[#a3a3a3]">
-        <div className="flex flex-col md:w-[50%] w-full">
-          <h1 className="text-4xl font-bold mb-8">Login</h1>
-          <Formik
-            method="POST"
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            <Form>
-              <div className="mb-6">
-                <label
-                  htmlFor="email"
-                  className="block mb-1 font-semibold text-lg"
-                >
-                  Email:
-                </label>
-                <Field
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Enter your email"
-                  className="border rounded-md p-2 w-full"
-                />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className="text-red-500"
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="password"
-                  className="block mb-1 font-semibold text-lg"
-                >
-                  Password:
-                </label>
-                <Field
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Enter your password"
-                  className="border rounded-md p-2 w-full"
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="text-red-500"
-                />
-              </div>
-              <div className="flex justify-between">
-                <p
-                  onClick={handleOTP}
-                  className="cursor-pointer text-xs text-[#272727] underline hover:text-blue-500 cursor pointer"
-                >
-                  Login with OTP ?
-                </p>
-                <p
-                  onClick={handleGoogleLink}
-                  className="text-xs text-[#272727] hover:text-blue-500 cursor pointer underline"
-                >
-                  Login with Google ?
-                </p>
-              </div>
-              <button
-                type="submit"
-                className="bg-[#272727] text-lg text-white cursor-pointer font-semibold mb-[1vw] py-2 px-4 rounded-md w-full"
+        <div className="flex flex-col md:w-[50%] w-full ">
+          <h1 className="text-4xl font-bold mb-8 text-[#3E5676]">Login</h1>
+          <form className="mb-2" onSubmit={handleSubmit}>
+
+              <label
+                htmlFor="email"
+                className="block mb-1 font-semibold text-lg"
               >
-                Login
-              </button>
-            </Form>
-          </Formik>
+                Email:
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Enter your email"
+                className="border rounded-sm p-2 w-full"
+                value={userData.email}
+                onChange={handleChange}
+              />
+              <p className="text-red-500">{errors.email}</p>
+
+              <label
+                htmlFor="password"
+                className="block mb-1 font-semibold text-lg"
+              >
+                Password:
+              </label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Enter your password"
+                className="border rounded-sm p-2 w-full"
+                value={userData.password}
+                onChange={handleChange}
+              />
+              <p className="text-red-500">{errors.password}</p>
+            <div className="flex justify-between">
+              <p
+                onClick={handleOTP}
+                className="cursor-pointer text-xs text-[#272727] underline hover:text-blue-500 cursor pointer"
+              >
+                Login with OTP ?
+              </p>
+              <p
+                onClick={handleGoogleLink}
+                className="text-xs text-[#272727] hover:text-blue-500 cursor pointer underline"
+              >
+                Login with Google ?
+              </p>
+            </div>
+            <button
+              type="submit"
+              className="bg-[#272727] text-lg text-white cursor-pointer font-semibold py-2 px-4 rounded-md w-full"
+            >
+              Login
+            </button>
+            <p onClick={handleForgotPassword} className="cursor-pointer text-xs underline">Forgot Password?</p>
+          </form>
+
           <p className="text-xs underline">Want to create an account?</p>
           <button
             onClick={handleSignUp}
