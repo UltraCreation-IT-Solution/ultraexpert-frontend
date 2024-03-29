@@ -265,7 +265,7 @@ const SignUp = () => {
   const mobileRegex = /^\d{10}$/;
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const otpRegex = /^\d{6}$/;
-  const passwordRegex = /^(?=.[a-z])(?=.[!@#$%^&*]).{8,}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}$/;
 
   return (
     <div className="md:min-h-screen mt-[40px] bg-white flex justify-center items-center">
