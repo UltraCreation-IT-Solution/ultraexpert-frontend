@@ -736,14 +736,20 @@ export const StickyComponent = () => {
                 <div className="flex gap-3 overflow-x-auto pt-3">
                   {[...Array(7)].map((item, index) => (
                     <div className="text-center border border-solid border-slate-300 px-3 py-6 shrink-0 shadow-sm rounded-md cursor-pointer hover:border-blue-400">
-                      <div className="text-sm font-bold" onClick={()=>{
-                        setCurrentDateClick(currentDateNumber + index);
-                        console.log(currentDateClick);
-                      }}>
+                      <div
+                        className="text-sm font-bold"
+                        onClick={() => {
+                          setCurrentDateClick(currentDateNumber + index);
+                          console.log(currentDateClick);
+                        }}
+                      >
                         {" "}
                         {currentDateNumber + index}{" "}
                       </div>
-                      <div className="text-xs"> {currentDayOfWeekAbbreviated} </div>
+                      <div className="text-xs">
+                        {" "}
+                        {currentDayOfWeekAbbreviated}{" "}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -751,8 +757,11 @@ export const StickyComponent = () => {
               <div>
                 <div>Available Slots</div>
                 <div className="flex gap-3 overflow-x-auto pt-3">
-                  {[...Array(7)].map((item,index) => (
-                    <div key={index} className="text-xs max-w-28 text-center border border-solid border-slate-300 hover:border-blue-400 py-3 px-6 shrink-0 shadow-sm rounded-md cursor-pointer">
+                  {[...Array(7)].map((item, index) => (
+                    <div
+                      key={index}
+                      className="text-xs max-w-28 text-center border border-solid border-slate-300 hover:border-blue-400 py-3 px-6 shrink-0 shadow-sm rounded-md cursor-pointer"
+                    >
                       7:00 AM
                     </div>
                   ))}
@@ -878,11 +887,11 @@ const ExpertProfile = () => {
   return (
     <div>
       <div className="lg:flex mt-[90px] md:mt-[80px]">
-        <div className="lg:w-[70%]">
+        <div className="lg:w-[70%] h-[88vh]">
           <AboutExpert />
           <ExpertInfo />
         </div>
-        <div className="hidden lg:block w-[30%] ">
+        <div className="hidden lg:block w-[30%]  h-[88vh] ">
           <StickyComponent />
         </div>
       </div>

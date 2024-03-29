@@ -11,7 +11,6 @@ import "./global.css";
 import Login from "./components/Auth/Login";
 import SignUp from "./components/Auth/SignUp";
 import LoginWithOTP from "./components/Auth/LoginWithOTP";
-import SentOTP from "./components/Auth/SentOTP";
 import Landing from "./components/Landing/Landing";
 import Expert from "./components/Experts/Expert";
 import Service from "./components/Services/Service";
@@ -31,7 +30,9 @@ import ExpertDashboard, {
   Leaderboard,
 } from "./components/Experts/ExpertDashboard";
 import Update from "./components/Experts/EditDashboardProfile";
-import VerifySignUp from "./components/Auth/VerifySignUp";
+import SignUpAs from "./components/Auth/SignUpAs";
+import SignUpAsExpert from "./components/Auth/SignUpAsExpert";
+import SignUpAsCustomer from "./components/Auth/SignUpAsCustomer";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -70,20 +71,29 @@ const appRouter = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/signup",
+        path: "/signUp",
         element: <SignUp />,
+      },
+      {
+        path: "/signUpAs",
+        children:[
+          {
+            path: "",
+            element:<SignUpAs/>
+          },
+          {
+            path: "expert",
+            element: <SignUpAsExpert/>
+          },
+          {
+            path:"customer",
+            element:<SignUpAsCustomer/>
+          }
+        ]
       },
       {
         path: "/loginiwthotp",
         element: <LoginWithOTP />,
-      },
-      {
-        path: "/sentOTP",
-        element: <SentOTP />,
-      },
-      {
-        path: "/verifySignUp",
-        element: <VerifySignUp />,
       },
       {
         path: "/experts",
