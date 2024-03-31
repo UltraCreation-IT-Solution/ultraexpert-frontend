@@ -33,6 +33,7 @@ import Update from "./components/Experts/EditDashboardProfile";
 import SignUpAs from "./components/Auth/SignUpAs";
 import SignUpAsExpert from "./components/Auth/SignUpAsExpert";
 import SignUpAsCustomer from "./components/Auth/SignUpAsCustomer";
+import ForgotPassword from "./components/Auth/ForgotPassword";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -69,6 +70,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/forgotPassword",
+        element: <ForgotPassword/>,
       },
       {
         path: "/signUp",
