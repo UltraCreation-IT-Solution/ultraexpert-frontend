@@ -37,7 +37,6 @@ const SignUp = () => {
     confirmPassword: "",
   });
 
-
   const handleFirstSubmit = (e) => {
     e.preventDefault();
     if (validateForm1()) {
@@ -87,26 +86,28 @@ const SignUp = () => {
 
   const onVerifyEmailHandler = async (e) => {
     e.preventDefault();
-    if (validateEmail()) {
-      try {
-        const response = await axios.get(
-          `/verify/?action=1&email=${secondStep.email}`
-        );
-        if (
-          response.data.status === 404 ||
-          response.data.status === 500 ||
-          response.data.status === 400 ||
-          !response.data
-        ) {
-          window.alert("Invalid Email");
-          return;
-        }
-        console.log(response.data);
-        nextStep();
-      } catch (error) {
-        console.log(error.message);
+    if(validateEmail()){
+
+    
+    try {
+      const response = await axios.get(
+        `/verify/?action=1&email=${secondStep.email}`
+      );
+      if (
+        response.data.status === 404 ||
+        response.data.status === 500 ||
+        response.data.status === 400 ||
+        !response.data
+      ) {
+        window.alert("Invalid Email");
+        return;
       }
+      console.log(response.data);
+      nextStep();
+    } catch (error) {
+      console.log(error.message);
     }
+  }
   };
 
   const validateEmail = () => {
@@ -133,7 +134,7 @@ const SignUp = () => {
   const handleOTPVerification = async (e) => {
     // console.log(initialValues3);
     e.preventDefault();
-    if(validateOTP()){
+    if (validateOTP()) {
       try {
         const response = await axios.get(
           `/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
@@ -156,19 +157,19 @@ const SignUp = () => {
     }
   };
 
-  const validateOTP = () =>{
+  const validateOTP = () => {
     let isValid = true;
     const newErrors = {
       otp: "",
-    } 
+    };
 
-    if(!thirdStep.otp.trim() || !otpRegex.test(thirdStep.otp)){
+    if (!thirdStep.otp.trim() || !otpRegex.test(thirdStep.otp)) {
       newErrors.otp = "Please enter a valid OTP";
       isValid = false;
     }
     setErrors(newErrors);
     return isValid;
-  }
+  };
 
   const handleChange3 = (e) => {
     const { name, value } = e.target;
@@ -181,8 +182,7 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(e);
-    if(validatePassword()){
-
+    if (validatePassword()) {
       try {
         const response = await axios.post(
           "/register/",
@@ -201,7 +201,7 @@ const SignUp = () => {
             },
           }
         );
-  
+
         const data = response.data;
         if (data.status === 404 || data.status === 400 || !data) {
           window.alert("Invalid Registration");
@@ -217,23 +217,27 @@ const SignUp = () => {
     }
   };
 
-  const validatePassword = () =>{
+  const validatePassword = () => {
     let isValid = true;
     const newErrors = {
       password: "",
       confirmPassword: "",
-    }
-    if(!userData.password || !userData.confirmPassword || !passwordRegex.test(userData.password)){
+    };
+    if (
+      !forthStep.password ||
+      !forthStep.confirmPassword ||
+      !passwordRegex.test(forthStep.password)
+    ) {
       newErrors.password = "Please enter a valid password";
       isValid = false;
     }
-    if(userData.password !== userData.confirmPassword){
+    if (forthStep.password !== forthStep.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
       isValid = false;
     }
     setErrors(newErrors);
     return isValid;
-  }
+  };
 
   const handleChange4 = (e) => {
     const { name, value } = e.target;
@@ -265,87 +269,84 @@ const SignUp = () => {
   const otpRegex = /^\d{6}$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}$/;
 
-
   return (
     <div className="md:min-h-screen mt-[40px] bg-white flex justify-center items-center">
       <div className="lg:max-w-[50vw] md:w-[75%] w-[90%] flex md:flex-row flex-col bg-white px-8 pb-8 rounded-xl shadow-md border border-solid border-[#a3a3a3]">
         <div className="flex flex-col md:w-[50%] w-full">
           {step === 1 && (
             <>
-              <h1 className="text-4xl font-bold mb-8 text-[#3E5676]">Sign Up</h1>
+              <h1 className="text-4xl font-bold mb-8 text-[#3E5676]">
+                Sign Up
+              </h1>
               <form className="h-auto" onSubmit={handleFirstSubmit}>
-                
-                  <label
-                    htmlFor="firstName"
-                    className="block mb-1 font-semibold text-lg"
-                  >
-                    First Name:
-                  </label>
-                  <input
-                    type="text"
-                    name="firstName"
-                    id="firstName"
-                    placeholder="Enter your first name"
-                    className="border rounded-sm p-2 w-full"
-                    value={firstStep.firstName}
-                    onChange={handleChange1}
-                  />
-                  <p className="text-red-500">{errors.firstName}</p>
-                
-                
-                  <label
-                    htmlFor="lastName"
-                    className="block mb-1 font-semibold text-lg"
-                  >
-                    Last Name:
-                  </label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    id="lastName"
-                    placeholder="Enter your last name"
-                    className="border rounded-sm p-2 w-full"
-                    value={firstStep.lastName}
-                    onChange={handleChange1}
-                  />
-                  <p className="text-red-500">{errors.lastName}</p>
-                
-                
-                  <label
-                    htmlFor="mobileNumber"
-                    className="block mb-1 font-semibold text-lg"
-                  >
-                    Mobile Number:
-                  </label>
-                  <input
-                    type="text"
-                    name="mobileNumber"
-                    id="mobileNumber"
-                    placeholder="Enter your mobile number"
-                    className="border rounded-sm p-2 w-full"
-                    value={firstStep.mobileNumber}
-                    onChange={handleChange1}
-                  />
-                  <p className="text-red-500">{errors.mobileNumber}</p>
-                
-                
-                  <label
-                    htmlFor="refBy"
-                    className="block mb-1 font-semibold text-lg"
-                  >
-                    Reffered By:
-                  </label>
-                  <input
-                    type="text"
-                    name="refBy"
-                    id="refBy"
-                    placeholder="Enter refference"
-                    className="border rounded-sm p-2 w-full"
-                    value={firstStep.refBy}
-                    onChange={handleChange1}
-                  />
-                  <p className="text-red-500">{errors.refBy}</p>
-                
+                <label
+                  htmlFor="firstName"
+                  className="block mb-1 font-semibold text-lg"
+                >
+                  First Name:
+                </label>
+                <input
+                  type="text"
+                  name="firstName"
+                  id="firstName"
+                  placeholder="Enter your first name"
+                  className="border rounded-sm p-2 w-full"
+                  value={firstStep.firstName}
+                  onChange={handleChange1}
+                />
+                <p className="text-red-500">{errors.firstName}</p>
+
+                <label
+                  htmlFor="lastName"
+                  className="block mb-1 font-semibold text-lg"
+                >
+                  Last Name:
+                </label>
+                <input
+                  type="text"
+                  name="lastName"
+                  id="lastName"
+                  placeholder="Enter your last name"
+                  className="border rounded-sm p-2 w-full"
+                  value={firstStep.lastName}
+                  onChange={handleChange1}
+                />
+                <p className="text-red-500">{errors.lastName}</p>
+
+                <label
+                  htmlFor="mobileNumber"
+                  className="block mb-1 font-semibold text-lg"
+                >
+                  Mobile Number:
+                </label>
+                <input
+                  type="text"
+                  name="mobileNumber"
+                  id="mobileNumber"
+                  placeholder="Enter your mobile number"
+                  className="border rounded-sm p-2 w-full"
+                  value={firstStep.mobileNumber}
+                  onChange={handleChange1}
+                />
+                <p className="text-red-500">{errors.mobileNumber}</p>
+
+                <label
+                  htmlFor="refBy"
+                  className="block mb-1 font-semibold text-lg"
+                >
+                  Reffered By:
+                </label>
+                <input
+                  type="text"
+                  name="refBy"
+                  id="refBy"
+                  placeholder="Enter refference"
+                  className="border rounded-sm p-2 w-full"
+                  value={firstStep.refBy}
+                  onChange={handleChange1}
+                />
+                <p className="text-red-500">{errors.refBy}</p>
+
                 <p
                   onClick={handleGoogleLink}
                   className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline"
@@ -365,26 +366,27 @@ const SignUp = () => {
 
           {step === 2 && (
             <>
-              <h1 className="text-4xl font-bold mb-8 text-[#3E5676]">Sign Up</h1>
+              <h1 className="text-4xl font-bold mb-8 text-[#3E5676]">
+                Sign Up
+              </h1>
               <form className="h-auto" onSubmit={onVerifyEmailHandler}>
-                
-                  <label
-                    htmlFor="email"
-                    className="block mb-1 font-semibold text-lg"
-                  >
-                    Email:
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="Enter your email"
-                    className="border rounded-sm p-2 w-full"
-                    value={secondStep.email}
-                    onChange={handleChange2}
-                  />
-                  <p className="text-red-500">{errors.email}</p>
-                
+                <label
+                  htmlFor="email"
+                  className="block mb-1 font-semibold text-lg"
+                >
+                  Email:
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="Enter your email"
+                  className="border rounded-sm p-2 w-full"
+                  value={secondStep.email}
+                  onChange={handleChange2}
+                />
+                <p className="text-red-500">{errors.email}</p>
+
                 <p
                   onClick={handleGoogleLink}
                   className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline"
@@ -409,7 +411,9 @@ const SignUp = () => {
           )}
           {step === 3 && (
             <>
-              <h1 className="text-4xl font-bold mb-8 text-[#3E5676]">Verify Email</h1>
+              <h1 className="text-4xl font-bold mb-8 text-[#3E5676]">
+                Verify Email
+              </h1>
               <form onSubmit={handleOTPVerification}>
                 <div className="mb-2">
                   <label
@@ -449,7 +453,6 @@ const SignUp = () => {
                 </button>
                 <button
                   type="submit"
-                  disabled={!isValid || !dirty || isSubmitting}
                   className="bg-[#272727] text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full"
                 >
                   Verify OTP
@@ -459,51 +462,53 @@ const SignUp = () => {
           )}
           {step === 4 && (
             <>
-            <h1 className="text-4xl font-bold mb-8 text-[#3E5676]">Complete Successful</h1>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-2">
-                <label
-                  htmlFor="password"
-                  className="block mb-1 font-semibold text-lg"
+              <h1 className="text-4xl font-bold mb-8 text-[#3E5676]">
+                Complete Successful
+              </h1>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-2">
+                  <label
+                    htmlFor="password"
+                    className="block mb-1 font-semibold text-lg"
+                  >
+                    Password:
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    className="border rounded-sm p-2 w-full"
+                    value={forthStep.password}
+                    onChange={handleChange4}
+                  />
+                  <p className="text-red-500">{errors.password}</p>
+                </div>
+                <div className="mb-2">
+                  <label
+                    htmlFor="confirmPassword"
+                    className="block mb-1 font-semibold text-lg"
+                  >
+                    Confirm Password:
+                  </label>
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    id="confirmPassword"
+                    placeholder="Enter your password"
+                    className="border rounded-sm p-2 w-full"
+                    value={forthStep.confirmPassword}
+                    onChange={handleChange4}
+                  />
+                  <p className="text-red-500">{errors.confirmPassword}</p>
+                </div>
+                <button
+                  type="submit"
+                  className="bg-[#272727] text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full"
                 >
-                  Password:
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Enter your password"
-                  className="border rounded-sm p-2 w-full"
-                  value={forthStep.password}
-                  onChange={handleChange4}
-                />
-                <p className="text-red-500">{errors.password}</p>
-              </div>
-              <div className="mb-2">
-                <label
-                  htmlFor="confirmPassword"
-                  className="block mb-1 font-semibold text-lg"
-                >
-                  Confirm Password:
-                </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  id="confirmPassword"
-                  placeholder="Enter your password"
-                  className="border rounded-sm p-2 w-full"
-                  value={forthStep.confirmPassword}
-                  onChange={handleChange4}
-                />
-                <p className="text-red-500">{errors.confirmPassword}</p>
-              </div>
-              <button
-                type="submit"
-                className="bg-[#272727] text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full"
-              >
-                Complete SignUp
-              </button>
-            </form>
+                  Complete SignUp
+                </button>
+              </form>
             </>
           )}
           <p className="text-xs underline">Already have an account?</p>
