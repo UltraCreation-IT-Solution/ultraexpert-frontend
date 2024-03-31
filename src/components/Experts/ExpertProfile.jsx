@@ -16,7 +16,7 @@ import { HiOfficeBuilding } from "react-icons/hi";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import { expertDetailsObj, ProjectsCarousel, BlogCard } from "../../constant";
+import { expertDetailsObj, ProjectsCarousel, BlogCard, ShowSchedule } from "../../constant";
 import { Sticky, StickyContainer } from "react-sticky";
 
 export const ExpertSummary = () => {
@@ -664,17 +664,7 @@ export const ExpertInfo = () => {
   );
 };
 
-export const StickyComponent = () => {
-  const currentDateString = new Date().toLocaleDateString("en-US", {
-    day: "numeric",
-  });
-  const currentDateNumber = parseInt(currentDateString, 10);
-
-  const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-  const currentDayOfWeekIndex = new Date().getDay();
-  const currentDayOfWeekAbbreviated = daysOfWeek[currentDayOfWeekIndex];
-
-  const [currentDateClick, setCurrentDateClick] = useState(currentDateNumber);
+export const SideComponent = () => {
   const [summary, setSummary] = useState(true);
   const [services, setServices] = useState(false);
   const [ratings, setRatings] = useState(false);
@@ -709,167 +699,124 @@ export const StickyComponent = () => {
   };
 
   return (
-    <StickyContainer>
-      <Sticky topOffset={500} bottomOffset={500}>
-        {({ style }) => (
-          <div style={style} className="sticky-sidebar ">
-            <div className="px-[2.5vw] mt-4 sm:mt-0">
-              <div className="text-base md:text-lg lg:text-xl font-semibold mt-5 lg:mt-0">
-                Skills
-              </div>
-              <div className="flex flex-wrap gap-2 md:gap-[1vw] mt-3 pb-1">
-                {expertDetailsObj.skills.map((item, index) => (
-                  <div
-                    key={index}
-                    className="px-2 py-1 text-xs md:text-sm border border-solid border-[#dedede] font-semibold rounded-sm cursor-pointer shadow-sm drop-shadow-sm"
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
+    <div className="sticky-sidebar ">
+      <div className="px-[2.5vw] mt-4 sm:mt-0">
+        <div className="text-base md:text-lg lg:text-xl font-semibold mt-5 lg:mt-0">
+          Skills
+        </div>
+        <div className="flex flex-wrap gap-2 md:gap-[1vw] mt-3 pb-1">
+          {expertDetailsObj.skills.map((item, index) => (
+            <div
+              key={index}
+              className="px-2 py-1 text-xs md:text-sm border border-solid border-[#dedede] font-semibold rounded-sm cursor-pointer shadow-sm drop-shadow-sm"
+            >
+              {item}
             </div>
+          ))}
+        </div>
+      </div>
 
-            <div className="my-10 mx-[2.5vw] px-2 py-6 border border-solid border-slate-300 rounded-lg">
-              <div className="pb-3">Book a 1:1 trial with Antony</div>
-              <div className="my-3 py-4 border-y border-solid border-slate-200">
-                <div>Available Dates</div>
-                <div className="flex gap-3 overflow-x-auto pt-3">
-                  {[...Array(7)].map((item, index) => (
-                    <div className="text-center border border-solid border-slate-300 px-3 py-6 shrink-0 shadow-sm rounded-md cursor-pointer hover:border-blue-400">
-                      <div className="text-sm font-bold" onClick={()=>{
-                        setCurrentDateClick(currentDateNumber + index);
-                        console.log(currentDateClick);
-                      }}>
-                        {" "}
-                        {currentDateNumber + index}{" "}
-                      </div>
-                      <div className="text-xs"> {currentDayOfWeekAbbreviated} </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <div>Available Slots</div>
-                <div className="flex gap-3 overflow-x-auto pt-3">
-                  {[...Array(7)].map((item,index) => (
-                    <div key={index} className="text-xs max-w-28 text-center border border-solid border-slate-300 hover:border-blue-400 py-3 px-6 shrink-0 shadow-sm rounded-md cursor-pointer">
-                      7:00 AM
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="mt-6 bg-[#007AFF] text-white text-lg font-semibold text-center p-3 rounded-lg cursor-pointer">
-                Book for {currentDateClick}th Mar
-              </div>
-            </div>
+      <div className="my-10 mx-[2.5vw] ">
+        <ShowSchedule/>
+      </div>
 
-            {/*******Accordian starts from here*******/}
-            {
+      {/*******Accordian starts from here*******/}
+      {
+        <div
+          className={`${
+            summary
+              ? ` px-[2.5vw] mt-6 lg:mt-10`
+              : `hidden lg:block px-[2.5vw] mt-6 lg:mt-0`
+          }`}
+        >
+          <div className="">
+            {/* This is Education accordian */}
+            <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
               <div
-                className={`${
-                  summary
-                    ? ` px-[2.5vw] mt-6 lg:mt-10`
-                    : `hidden lg:block px-[2.5vw] mt-6 lg:mt-0`
-                }`}
+                className="flex items-center justify-between text-base sm:text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
+                onClick={() =>
+                  education ? setEducation(false) : setEducation(true)
+                }
               >
-                <div className="">
-                  {/* This is Education accordian */}
-                  <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
-                    <div
-                      className="flex items-center justify-between text-base sm:text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
-                      onClick={() =>
-                        education ? setEducation(false) : setEducation(true)
-                      }
-                    >
-                      <div>Education</div>
-                      <div className="text-xl md:text-2xl">
-                        {!education ? (
-                          <MdKeyboardArrowDown />
-                        ) : (
-                          <MdKeyboardArrowUp />
-                        )}
-                      </div>
-                    </div>
-
-                    {education && expertDetailsObj.education.length === 0 && (
-                      <div className="text-xs xs:text-base pb-[1vw]">
-                        No information provided by the expert
-                      </div>
-                    )}
-                    {education &&
-                      expertDetailsObj.education.map((temp, idx) => (
-                        <EducationCard key={idx} {...temp} />
-                      ))}
-                  </div>
-
-                  {/* This is Work Experience accordian */}
-                  <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
-                    <div
-                      className="flex items-center justify-between text-base sm:text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
-                      onClick={() =>
-                        workExperience
-                          ? setWorkExperience(false)
-                          : setWorkExperience(true)
-                      }
-                    >
-                      <div>Work Experience</div>
-                      <div className="text-xl md:text-2xl">
-                        {!workExperience ? (
-                          <MdKeyboardArrowDown />
-                        ) : (
-                          <MdKeyboardArrowUp />
-                        )}
-                      </div>
-                    </div>
-                    {workExperience &&
-                      expertDetailsObj.workExperience.length === 0 && (
-                        <div className="text-xs xs:text-base pb-[1vw]">
-                          No information provided by the expert
-                        </div>
-                      )}
-                    {workExperience &&
-                      expertDetailsObj.workExperience.map((temp, idx) => (
-                        <WorkExperienceCard key={idx} {...temp} />
-                      ))}
-                  </div>
-
-                  {/* This is Achievements accordian */}
-                  <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
-                    <div
-                      className="flex items-center justify-between text-base sm:text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
-                      onClick={() =>
-                        achievements
-                          ? setAchievements(false)
-                          : setAchievements(true)
-                      }
-                    >
-                      <div>Achievements</div>
-                      <div className="text-xl md:text-2xl">
-                        {!achievements ? (
-                          <MdKeyboardArrowDown />
-                        ) : (
-                          <MdKeyboardArrowUp />
-                        )}
-                      </div>
-                    </div>
-                    {achievements &&
-                      expertDetailsObj.achievements.length === 0 && (
-                        <div className="text-xs xs:text-base pb-[1vw]">
-                          No information provided by the expert
-                        </div>
-                      )}
-                    {achievements &&
-                      expertDetailsObj.achievements.map((temp, idx) => (
-                        <AchievementCard key={idx} {...temp} />
-                      ))}
-                  </div>
+                <div>Education</div>
+                <div className="text-xl md:text-2xl">
+                  {!education ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
                 </div>
               </div>
-            }
+
+              {education && expertDetailsObj.education.length === 0 && (
+                <div className="text-xs xs:text-base pb-[1vw]">
+                  No information provided by the expert
+                </div>
+              )}
+              {education &&
+                expertDetailsObj.education.map((temp, idx) => (
+                  <EducationCard key={idx} {...temp} />
+                ))}
+            </div>
+
+            {/* This is Work Experience accordian */}
+            <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
+              <div
+                className="flex items-center justify-between text-base sm:text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
+                onClick={() =>
+                  workExperience
+                    ? setWorkExperience(false)
+                    : setWorkExperience(true)
+                }
+              >
+                <div>Work Experience</div>
+                <div className="text-xl md:text-2xl">
+                  {!workExperience ? (
+                    <MdKeyboardArrowDown />
+                  ) : (
+                    <MdKeyboardArrowUp />
+                  )}
+                </div>
+              </div>
+              {workExperience &&
+                expertDetailsObj.workExperience.length === 0 && (
+                  <div className="text-xs xs:text-base pb-[1vw]">
+                    No information provided by the expert
+                  </div>
+                )}
+              {workExperience &&
+                expertDetailsObj.workExperience.map((temp, idx) => (
+                  <WorkExperienceCard key={idx} {...temp} />
+                ))}
+            </div>
+
+            {/* This is Achievements accordian */}
+            <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
+              <div
+                className="flex items-center justify-between text-base sm:text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
+                onClick={() =>
+                  achievements ? setAchievements(false) : setAchievements(true)
+                }
+              >
+                <div>Achievements</div>
+                <div className="text-xl md:text-2xl">
+                  {!achievements ? (
+                    <MdKeyboardArrowDown />
+                  ) : (
+                    <MdKeyboardArrowUp />
+                  )}
+                </div>
+              </div>
+              {achievements && expertDetailsObj.achievements.length === 0 && (
+                <div className="text-xs xs:text-base pb-[1vw]">
+                  No information provided by the expert
+                </div>
+              )}
+              {achievements &&
+                expertDetailsObj.achievements.map((temp, idx) => (
+                  <AchievementCard key={idx} {...temp} />
+                ))}
+            </div>
           </div>
-        )}
-      </Sticky>
-    </StickyContainer>
+        </div>
+      }
+    </div>
   );
 };
 
@@ -882,8 +829,8 @@ const ExpertProfile = () => {
           <AboutExpert />
           <ExpertInfo />
         </div>
-        <div className="hidden lg:block w-[30%] ">
-          <StickyComponent />
+        <div className="hidden lg:block w-[30%]">
+          <SideComponent />
         </div>
       </div>
     </div>
