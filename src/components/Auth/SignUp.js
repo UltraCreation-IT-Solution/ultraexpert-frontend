@@ -222,14 +222,14 @@ const SignUp = () => {
       confirmPassword: "",
     };
     if (
-      !userData.password ||
-      !userData.confirmPassword ||
-      !passwordRegex.test(userData.password)
+      !forthStep.password ||
+      !forthStep.confirmPassword ||
+      !passwordRegex.test(forthStep.password)
     ) {
       newErrors.password = "Please enter a valid password";
       isValid = false;
     }
-    if (userData.password !== userData.confirmPassword) {
+    if (forthStep.password !== forthStep.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
       isValid = false;
     }
@@ -451,7 +451,6 @@ const SignUp = () => {
                 </button>
                 <button
                   type="submit"
-                  disabled={!isValid || !dirty || isSubmitting}
                   className="bg-[#272727] text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full"
                 >
                   Verify OTP
