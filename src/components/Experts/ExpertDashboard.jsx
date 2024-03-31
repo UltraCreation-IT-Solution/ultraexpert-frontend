@@ -29,11 +29,14 @@ import { expertDashInfo as expert, leaderboardRanking } from "../../constant";
 import {
   ResponsiveContainer,
   ComposedChart,
+  LineChart,
   Line,
   Area,
   Bar,
   XAxis,
   YAxis,
+  ReferenceLine,
+  Legend,
   CartesianGrid,
   Tooltip,
   PieChart,
@@ -59,6 +62,81 @@ const generateRandomData = () => {
 
   return values;
 };
+//linegrapgh data
+const userProfileData = [
+  {
+    name: "Jan",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Feb",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Mar",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Apr",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "May",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Jun",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Jul",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Aug",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Sep",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Oct",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Nov",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Dec",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+];
 
 const data = [
   {
@@ -219,21 +297,31 @@ export const Dashboard = () => {
   const [contributions, setContributions] = useState(true);
   const [meetings, setMeetings] = useState(false);
   const [blogs, setBlogs] = useState(false);
+  const [testimonials, setTestimonials] = useState(false);
 
   const HandleContributions = () => {
     setContributions(true);
     setMeetings(false);
     setBlogs(false);
+    setTestimonials(false);
   };
   const HandleMeetings = () => {
     setContributions(false);
     setMeetings(true);
     setBlogs(false);
+    setTestimonials(false);
   };
   const HandleBlogs = () => {
     setContributions(false);
     setMeetings(false);
     setBlogs(true);
+    setTestimonials(false);
+  };
+  const HandleTestimonials = () => {
+    setContributions(false);
+    setMeetings(false);
+    setBlogs(false);
+    setTestimonials(true);
   };
 
   //heatmap data
@@ -250,6 +338,80 @@ export const Dashboard = () => {
     });
     setValues(updatedValues);
   };
+  const userProfileData = [
+    {
+      month: "Jan",
+      views: 3962,
+      followers: 2289,
+      blogs: 3095,
+    },
+    {
+      month: "Feb",
+      views: 4527,
+      followers: 3429,
+      blogs: 2790,
+    },
+    {
+      month: "Mar",
+      views: 4669,
+      followers: 3209,
+      blogs: 2277,
+    },
+    {
+      month: "Apr",
+      views: 3211,
+      followers: 2321,
+      blogs: 2798,
+    },
+    {
+      month: "May",
+      views: 4578,
+      followers: 3243,
+      blogs: 3191,
+    },
+    {
+      month: "Jun",
+      views: 3506,
+      followers: 2834,
+      blogs: 3599,
+    },
+    {
+      month: "Jul",
+      views: 4623,
+      followers: 2397,
+      blogs: 3120,
+    },
+    {
+      month: "Aug",
+      views: 4251,
+      followers: 2856,
+      blogs: 2368,
+    },
+    {
+      month: "Sep",
+      views: 4713,
+      followers: 2623,
+      blogs: 2212,
+    },
+    {
+      month: "Oct",
+      views: 4138,
+      followers: 2310,
+      blogs: 3783,
+    },
+    {
+      month: "Nov",
+      views: 3801,
+      followers: 3492,
+      blogs: 3939,
+    },
+    {
+      month: "Dec",
+      views: 3365,
+      followers: 3053,
+      blogs: 3640,
+    },
+  ];
   return (
     <section className=" w-full md:w-[68%] h-full flex flex-col gap-[4.5vw] xs:gap-[3vw] md:gap-[2vw]">
       <div className="block md:hidden w-full h-auto px-[0.8vw] py-[4.5vw] xs:py-[3vw] border-b-[0.01px] border-[#dcdcdc] border-solid">
@@ -303,38 +465,45 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div className="w-full flex flex-col lg:flex-row border border-[#c7c7c7] border-solid rounded-lg py-[3vw] xs:py-[2vw] md:py-[1vw] shadow-md">
-        <div className=" w-[108%] xs:w-[104%] lg:w-[70%] overflow-hidden">
-          <div className="text-[3.45vw] xs:text-[2.65vw] md:text-[1.8vw] lg:text-[1.35vw] font-bold px-[2vw]">
-            Average Ratings
-          </div>
-          <div className="w-full h-[38vw] xs:h-[28vw] md:h-[16vw] lg:h-[13vw] ml-[-10vw] xs:ml-[-7.65vw] sm:ml-[-6vw] md:ml-[-3.4vw] lg:ml-[-2.6vw] mt-[2vw] md:mt-[0.8vw] mb-[-1vw] text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw]">
-            <ResponsiveContainer>
-              <ComposedChart data={data} className="overflow-hidden">
-                <CartesianGrid stroke="#629BF0" />
-                <XAxis
-                  className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                  dataKey="name"
-                  interval={0}
-                />
-                <YAxis
-                  className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                  dataKey={"avgRating"}
-                  interval={0}
-                />
-                <Tooltip />
-                <Area dataKey="avgRating" fill="#ececec" />
-                <Bar dataKey="avgRating" barSize={22} fill="#629BF0" />
-                <Line dataKey="avgRating" stroke="#5950C9" />
-              </ComposedChart>
-            </ResponsiveContainer>
-          </div>
+      <div className="w-full h-[36vw] xs:h-[28vw] md:h-[16vw] lg:h-[18vw]  text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] border border-[#c7c7c7] border-solid rounded-lg py-[3vw] xs:py-[2vw] md:py-[1vw] overflow-hidden">
+        <div className="text-[3.45vw] xs:text-[2.65vw] md:text-[1.8vw] lg:text-[1.35vw] font-bold px-[2vw]  pb-[0.4vw]">
+          Statistics
         </div>
-        <div className="w-[100%] lg:w-[30%] lg:border-l border-solid px-[2vw]">
-          <div className="text-[3.45vw] xs:text-[2.65vw] md:text-[1.8vw] lg:text-[1.35vw] font-bold">
-            Statistics
-          </div>
-          <div className="flex lg:flex-col justify-between lg:justify-evenly h-[80%] mt-[1.4vw] md:mt-[1vw] lg:mt-[0.2vw] text-[#575757] text-[2.65vw] xs:text-[1.8vw] md:text-[1.2vw] lg:text-[1vw] mb-[1vw] md:mb-[0.4vw] lg:mb-0">
+        <div className="w-full h-full flex flex-col md:flex-row justify-between overflow-hidden">
+          <ResponsiveContainer
+            className="-ml-[2vw] mb-[1vw] overflow-hidden"
+            width="75%"
+            height="90%"
+          >
+            <LineChart
+              className="overflow-hidden"
+              data={userProfileData}
+              margin={{
+                top: 20,
+                right: 50,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                dataKey="month"
+                interval={0}
+              />
+              <YAxis
+                className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                dataKey="views"
+                interval={0}
+              />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="views" stroke="#8884d8" />
+              <Line type="monotone" dataKey="followers" stroke="#82ca9d" />
+              <Line type="monotone" dataKey="blogs" stroke="#f2e426" />
+            </LineChart>
+          </ResponsiveContainer>
+          <div className="flex md:flex-col justify-between md:justify-around h-[80%] mt-[1.4vw] md:mt-[1vw] lg:mt-[0.2vw] text-[#575757] text-[2.65vw] xs:text-[1.8vw] md:text-[1.2vw] lg:text-[1vw] mb-[1vw] md:mb-[0.4vw] lg:mb-0 px-[2vw] md:border-l border-[#2e2e2e] border-solid">
             <div className="flex items-center gap-[1.2vw] ">
               <IoEyeSharp className="text-[#FF5E18] text-[3.65vw] xs:text-[2.65vw] md:text-[1.65vw] lg:text-[1.45vw]" />{" "}
               Views <span>{expert.viewCount}</span>
@@ -346,6 +515,36 @@ export const Dashboard = () => {
             <div className="flex items-center gap-[1.2vw]">
               <RiPagesFill className="text-[#EF0064] text-[3.65vw] xs:text-[2.65vw] md:text-[1.65vw] lg:text-[1.45vw]" />{" "}
               Blogs <span>{expert.viewCount}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full flex flex-col lg:flex-row border border-[#c7c7c7] border-solid rounded-lg py-[3vw] xs:py-[2vw] md:py-[1vw] shadow-md">
+        <div className=" w-[108%] xs:w-[100%]  overflow-hidden">
+          <div className="text-[3.45vw] xs:text-[2.65vw] md:text-[1.8vw] lg:text-[1.35vw] font-bold px-[2vw]">
+            Average Ratings
+          </div>
+          <div className="flex justify-between px-[1vw]">
+            <div className="w-[110%] h-[38vw] xs:h-[28vw] md:h-[16vw] lg:h-[14vw] ml-[-10vw] xs:ml-[-7.65vw] sm:ml-[-6vw] md:ml-[-3.4vw] lg:ml-[-2.6vw] mt-[2vw] md:mt-[0.8vw] mb-[-1vw] text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] overflow-hidden">
+              <ResponsiveContainer>
+                <ComposedChart data={data} className="overflow-hidden">
+                  <CartesianGrid stroke="#629BF0" />
+                  <XAxis
+                    className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                    dataKey="name"
+                    interval={0}
+                  />
+                  <YAxis
+                    className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                    dataKey={"avgRating"}
+                    interval={0}
+                  />
+                  <Tooltip />
+                  <Area dataKey="avgRating" fill="#ececec" />
+                  <Bar dataKey="avgRating" barSize={30} fill="#629BF0" />
+                  <Line dataKey="avgRating" stroke="#5950C9" />
+                </ComposedChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </div>
@@ -482,6 +681,14 @@ export const Dashboard = () => {
             onClick={() => HandleBlogs()}
           >
             Recent Blogs
+          </div>
+          <div
+            className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+              testimonials && `bg-[#ececec] rounded-sm`
+            }`}
+            onClick={() => HandleTestimonials()}
+          >
+            Testimonials
           </div>
         </div>
         {contributions && (
