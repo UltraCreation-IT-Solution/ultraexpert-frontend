@@ -298,6 +298,8 @@ export const Dashboard = () => {
   const [meetings, setMeetings] = useState(false);
   const [blogs, setBlogs] = useState(false);
   const [testimonials, setTestimonials] = useState(false);
+  const [avgRating, setAvgRating] = useState(true);
+  const [ratingDistribution, setRatingDistribution] = useState(false);
 
   const HandleContributions = () => {
     setContributions(true);
@@ -322,6 +324,14 @@ export const Dashboard = () => {
     setMeetings(false);
     setBlogs(false);
     setTestimonials(true);
+  };
+  const HandleAvgRating = () => {
+    setAvgRating(true);
+    setRatingDistribution(false);
+  };
+  const HandleRatingDistribution = () => {
+    setAvgRating(false);
+    setRatingDistribution(true);
   };
 
   //heatmap data
@@ -521,32 +531,94 @@ export const Dashboard = () => {
       </div>
       <div className="w-full flex flex-col lg:flex-row border border-[#c7c7c7] border-solid rounded-lg py-[3vw] xs:py-[2vw] md:py-[1vw] shadow-md">
         <div className=" w-[108%] xs:w-[100%]  overflow-hidden">
-          <div className="text-[3.45vw] xs:text-[2.65vw] md:text-[1.8vw] lg:text-[1.35vw] font-bold px-[2vw]">
-            Average Ratings
-          </div>
-          <div className="flex justify-between px-[1vw]">
-            <div className="w-[110%] h-[38vw] xs:h-[28vw] md:h-[16vw] lg:h-[14vw] ml-[-10vw] xs:ml-[-7.65vw] sm:ml-[-6vw] md:ml-[-3.4vw] lg:ml-[-2.6vw] mt-[2vw] md:mt-[0.8vw] mb-[-1vw] text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] overflow-hidden">
-              <ResponsiveContainer>
-                <ComposedChart data={data} className="overflow-hidden">
-                  <CartesianGrid stroke="#629BF0" />
-                  <XAxis
-                    className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                    dataKey="name"
-                    interval={0}
-                  />
-                  <YAxis
-                    className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                    dataKey={"avgRating"}
-                    interval={0}
-                  />
-                  <Tooltip />
-                  <Area dataKey="avgRating" fill="#ececec" />
-                  <Bar dataKey="avgRating" barSize={30} fill="#629BF0" />
-                  <Line dataKey="avgRating" stroke="#5950C9" />
-                </ComposedChart>
-              </ResponsiveContainer>
+          <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-4 mb-4 text-sm md:text-base overflow-x-scroll px-2">
+            <div
+              className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+                avgRating && `bg-[#ececec] rounded-sm`
+              }`}
+              onClick={() => HandleAvgRating()}
+            >
+              Average Rating
+            </div>
+            <div
+              className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+                ratingDistribution && `bg-[#ececec] rounded-sm`
+              }`}
+              onClick={() => HandleRatingDistribution()}
+            >
+              Rating Distribution
             </div>
           </div>
+          {avgRating && (
+            <div className="flex justify-between px-[1vw]">
+              <div className="w-[110%] h-[38vw] xs:h-[28vw] md:h-[16vw] lg:h-[14vw] ml-[-10vw] xs:ml-[-7.65vw] sm:ml-[-6vw] md:ml-[-3.4vw] lg:ml-[-2.6vw] mt-[2vw] md:mt-[0.8vw] mb-[-1vw] text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] overflow-hidden">
+                <ResponsiveContainer>
+                  <ComposedChart data={data} className="overflow-hidden">
+                    <CartesianGrid stroke="#629BF0" />
+                    <XAxis
+                      className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                      dataKey="name"
+                      interval={0}
+                    />
+                    <YAxis
+                      className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                      dataKey={"avgRating"}
+                      interval={0}
+                    />
+                    <Tooltip />
+                    <Area dataKey="avgRating" fill="#ececec" />
+                    <Bar dataKey="avgRating" barSize={30} fill="#629BF0" />
+                    <Line dataKey="avgRating" stroke="#5950C9" />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+          {ratingDistribution && (
+            <div className="flex w-full  justify-between items-center text-[3vw] xs:text-[1.6vw] md:text-[1.15vw] lg:text-[0.85vw] overflow-hidden">
+              <PieChart
+                width={200}
+                height={200}
+                className="mt-[-4.5vw] xs:mt-auto mb-[-6vw] xs:mb-auto overflow-hidden"
+              >
+                <Pie
+                  data={dataPie}
+                  cx="40%"
+                  cy="50%"
+                  labelLine={false}
+                  label={renderCustomizedLabel}
+                  outerRadius={75}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {dataPie.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+              <div className="w-3/5 md:w-1/2 z-30 text-[1.08vw]">
+                <div className=" flex flex-col text-[3vw] xs:text-[1.85vw] md:text-[1.15vw] lg:text-[1vw] gap-[3vw] xs:gap-[2.25vw] md:gap-[1.25vw] lg:gap-[1vw]">
+                  <div className="flex flex-col gap-[0.4vw]">
+                    <div className="">Successful Contributions</div>
+
+                    <ProgressBar percentage={a} color="bg-blue-500" />
+                  </div>
+                  <div className="flex flex-col gap-[0.4vw]">
+                    <div className="">Sucessful Meetings</div>
+                    <ProgressBar percentage={b} color="bg-green-500" />
+                  </div>
+                  <div className="flex flex-col gap-[0.4vw]">
+                    <div className="">Blogs</div>
+                    <ProgressBar percentage={c} color="bg-yellow-500" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <div className="w-full flex flex-col gap-[1vw] border border-[#c7c7c7] border-solid rounded-lg px-[1.8vw] py-[3vw] xs:py-[2vw] md:py-[1.25vw]">
