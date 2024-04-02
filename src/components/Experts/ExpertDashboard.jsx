@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import Update from "./EditDashboardProfile";
+import Instructions from "../GetCertified/Instructions";
 import { FaEdit, FaTags, FaWallet, FaMedal } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import {
@@ -46,7 +48,6 @@ import {
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { Outlet, Link } from "react-router-dom";
-import Update from "./EditDashboardProfile";
 
 const generateRandomData = () => {
   const today = new Date();
@@ -423,7 +424,7 @@ export const Dashboard = () => {
     },
   ];
   return (
-    <section className=" w-full md:w-[68%] h-full flex flex-col gap-[4.5vw] xs:gap-[3vw] md:gap-[2vw]">
+    <section className="w-full md:w-[68%] h-full flex flex-col gap-[4.5vw] xs:gap-[3vw] md:gap-[2vw]">
       <div className="block md:hidden w-full h-auto px-[0.8vw] py-[4.5vw] xs:py-[3vw] border-b-[0.01px] border-[#dcdcdc] border-solid">
         <div className="flex justify-between">
           <div className="flex gap-[2.65vw] xs:gap-[2.25vw]">
@@ -1009,6 +1010,10 @@ const ExpertDashboard = () => {
   const handleShowEditProfile = () => {
     setShowEditProfile(false);
   };
+  const [showInstructions, setShowInstructions] = useState(false);
+  const handleShowInstructions = () => {
+    setShowInstructions(false);
+  };
 
   return (
     <div
@@ -1097,7 +1102,10 @@ const ExpertDashboard = () => {
                   Chat
                 </li>
               </Link>
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+              <li
+                className="cursor-pointer flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]"
+                onClick={() => setShowInstructions(true)}
+              >
                 <BsFillPatchCheckFill className="text-[1.55vw]" />
                 Get Certified
               </li>
@@ -1122,10 +1130,10 @@ const ExpertDashboard = () => {
         <Chats />
       </Outlet>
       {showEditProfile === true && (
-        <Update
-          profile={showEditProfile}
-          handleShowEditProfile={handleShowEditProfile}
-        />
+        <Update handleShowEditProfile={handleShowEditProfile} />
+      )}
+      {showInstructions === true && (
+        <Instructions handleShowInstructions={handleShowInstructions} />
       )}
     </div>
   );
