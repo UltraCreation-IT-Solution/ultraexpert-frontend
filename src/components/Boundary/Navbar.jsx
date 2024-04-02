@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import logo from "../../assets/images/logo.svg";
 import ultraXpert from "../../assets/images/ultraXpert.svg";
 import { Link, useLocation } from "react-router-dom";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaRegHeart } from "react-icons/fa";
 
 const Navbar = () => {
   const location = useLocation().pathname;
@@ -39,6 +39,7 @@ const Navbar = () => {
               : "hidden flex-row gap-[3.5vw]"
           } items-center font-montserrat justify-center h-auto  mr-6 text-[16px]  md:flex`}
         >
+          <Link to="/favourites" ><FaRegHeart /></Link>
           <Link
             to={"/experts"}
             className={`${

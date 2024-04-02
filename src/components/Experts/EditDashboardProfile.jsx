@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import logo from "../../assets/images/photography.png"
 import { IoCloseOutline } from "react-icons/io5";
+import { FaRegEdit } from "react-icons/fa"
 
 const Pill = ({ text, onClick }) => {
   return (
-    <div className="bg-white px-2 py-1 text-gray-500 text-xs lg:text-sm " onClick={onClick}>
-      {text} &times;
-    </div>
+    <div className="bg-white px-2 py-1 text-gray-500 text-xs lg:text-sm flex items-center gap-2" >
+      {text} <span onClick={onClick} >x</span>
+    </div>  
   );
 };
 
@@ -75,7 +76,7 @@ const MultiSelect1 = () => {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-[100%] p-2 border border-solid rounded-lg mt-[0.5vw] mb-[1.5vw] md:mb-[0.5vw] font-normal text-xs md:text-sm"
+            className="w-[100%] p-2 border border-solid rounded-md mt-[0.5vw] mb-[1.5vw] md:mb-[0.5vw] font-normal text-xs md:text-sm "
             placeholder="Enter Your Skills"
           />
           {/* Search Suggestions */}
@@ -169,7 +170,7 @@ console.log(choosedOptions);
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-[100%] p-2 border border-solid rounded-lg mt-[0.5vw] mb-[1.5vw] md:mb-[0.5vw] font-normal text-xs md:text-sm"
+            className="w-[100%] p-2 border border-solid rounded-md mt-[0.5vw] mb-[1.5vw] md:mb-[0.5vw] font-normal text-xs md:text-sm"
             placeholder="Enter Your Skills"
           />
           {/* Search Suggestions */}
@@ -227,10 +228,10 @@ const Update = ({profile,handleShowEditProfile}) =>{
   // };
 
   return(
-    <div className="absolute top-0 left-0 z-50 flex items-center justify-center backdrop-blur-sm w-full pb-[2vw] overflow-hidden text-left text-lg text-black font-montserrat">
-      <div className="h-auto w-full md:w-[55%] rounded-2xl mt-[100px] bg-white shadow-xl">
+    <div className="absolute -top-20 left-0 z-50 flex items-start justify-center backdrop-contrast-50 backdrop-blur-sm w-full px-2 pb-[2vw] overflow-hidden text-left text-lg text-black font-montserrat" >
+      <div className="h-auto w-full md:w-[80vw] xl:w-[60%] rounded-2xl mt-[100px] bg-white shadow-xl">
         <div className="flex flex-col">
-            <div className="flex justify-between text-3xl md:text-4xl font-bold mx-auto md:m-0 px-8 py-2 md:py-5">
+            <div className="flex items-center justify-between text-xl md:text-2xl font-bold md:m-0 px-8 py-2 md:py-5">
                 <div>Edit Profile</div>
                 <IoCloseOutline onClick={handleShowEditProfile} />
             </div>
@@ -241,14 +242,14 @@ const Update = ({profile,handleShowEditProfile}) =>{
           className="md:flex">
             <div className="w-full md:w-[40%] py-2 px-5">
               <div className="flex flex-col items-center" > 
+              <div className="relative">
                 <img
                 className="h-[45vw] w-[45vw] sm:w-[25vw] sm:h-[25vw] md:w-[20vw] md:h-[20vw] lg:w-[10vw] lg:h-[10vw] rounded-lg"
                 src={logo}
                 alt=""
                 />
-                <button className="text-xs bg-white rounded-md cursor-pointer duration-200 md:mb-[1vw]">
-                  Change Picture
-                </button>
+                <FaRegEdit className="absolute right-0 bottom-0 text-2xl cursor-pointer drop-shadow-2xl shadow-2xl"/>
+              </div>
                 <div className="w-[80%] my-[5vw] md:my-[2vw] font-semibold text-lg md:text-xl text-slate-700">
                   Top Skills:
                   {isEditing ? (
@@ -272,7 +273,7 @@ const Update = ({profile,handleShowEditProfile}) =>{
                   {isEditing ? (
                     <MultiSelect2 />
                   ) : (
-                    <div className="flex flex-wrap md:flex-row w-[100%] gap-[1vw] sm:gap-2 mt-[0.5vw]">
+                    <div className="flex flex-wrap w-[100%] gap-[1vw] sm:gap-2 mt-[0.5vw]">
                       <button className="text-base cursor-pointer bg-white border self-start text-slate-700 shrink-0 rounded-md py-1 text-nowrap mb-1 hover:text-white hover:bg-black duration-200">
                         Logo Design
                       </button>
@@ -302,7 +303,7 @@ const Update = ({profile,handleShowEditProfile}) =>{
                     onChange={(e) => setName(e.target.value)}
                     type="text"
                     placeholder="Enter Your Name"
-                    className="flex border font-normal text-sm md:text-base text-gray-500 p-2 md:w-[25vw] rounded-lg mt-[0.5vw] w-[100%]"
+                    className="flex border font-normal text-sm md:text-base text-gray-500 p-2 md:w-[25vw] rounded-md mt-[0.5vw] w-[100%]"
                   />
                 ) : (
                   <div className="text-slate-700 md:w-[25vw] border border-solid border-gray-800 mt-[0.5vw] font-normal text-sm md:text-base p-2 rounded-lg">
@@ -318,7 +319,7 @@ const Update = ({profile,handleShowEditProfile}) =>{
                     onChange={(e) => setUserId(e.target.value)}
                     type="text"
                     placeholder="Enter Your User Id"
-                    className="flex border font-normal text-sm md:text-base text-gray-500 p-2 md:w-[25vw] rounded-lg mt-[0.5vw] w-[100%]"
+                    className="flex border font-normal text-sm md:text-base text-gray-500 p-2 md:w-[25vw] rounded-md mt-[0.5vw] w-[100%]"
                   />
                 ) : (
                   <div className="text-slate-700 md:w-[25vw] border border-solid border-gray-800 mt-[0.5vw] font-normal text-sm md:text-base p-2 rounded-lg">
@@ -334,7 +335,7 @@ const Update = ({profile,handleShowEditProfile}) =>{
                     onChange={(e) => setUserPost(e.target.value)}
                     type="text"
                     placeholder="Enter Your Designation"
-                    className="flex border font-normal text-sm md:text-base text-gray-500 p-2 md:w-[25vw] rounded-lg mt-[0.5vw] w-[100%]"
+                    className="flex border font-normal text-sm md:text-base text-gray-500 p-2 md:w-[25vw] rounded-md mt-[0.5vw] w-[100%]"
                   />
                 ) : (
                   <div className="text-slate-700 md:w-[25vw] border border-solid border-gray-800 font-normal mt-[0.5vw] text-sm md:text-base p-2 rounded-lg">
@@ -351,7 +352,7 @@ const Update = ({profile,handleShowEditProfile}) =>{
                         onChange={(e) => setCountry(e.target.value)}
                         name="country"
                         id="country"
-                        className="border text-gray-500 font-normal text-sm md:text-base rounded-lg p-2 w-[100%] lg:w-[12vw] mt-[0.5vw]"
+                        className="border text-gray-500 font-normal text-sm md:text-base rounded-md p-2 w-[100%] lg:w-[12vw] mt-[0.5vw]"
                       >
                         <option value="Afghanistan">Afghanistan</option>
                         <option value="Åland Islands">Åland Islands</option>
@@ -689,7 +690,7 @@ const Update = ({profile,handleShowEditProfile}) =>{
                         onChange={(e) => setLang(e.target.value)}
                         name="lang"
                         id="lang"
-                        className="border text-gray-500 font-normal text-sm md:text-base rounded-lg p-2 w-[100%] lg:w-[12vw] mt-[0.5vw]"
+                        className="border text-gray-500 font-normal text-sm md:text-base rounded-md p-2 w-[100%] lg:w-[12vw] mt-[0.5vw]"
                       >
                         <option value="AF">Afrikaans</option>
                         <option value="SQ">Albanian</option>
@@ -782,10 +783,10 @@ const Update = ({profile,handleShowEditProfile}) =>{
                     id="desc"
                     cols="10"
                     rows="5"
-                    className="rounded-lg font-normal text-sm md:text-base border h-auto md:w-[25vw] mt-[0.5vw] text-gray-500 px-[1vw] py-2"
+                    className="rounded-md font-normal text-sm md:text-base border h-auto md:w-[25vw] mt-[0.5vw] text-gray-500 px-[1vw] py-2"
                   ></textarea>
                 ) : (
-                  <div className="h-auto mt-[0.5vw] md:w-[25vw] text-slate-700 border border-solid border-gray-800 font-normal text-sm md:text-base p-2 rounded-lg ">
+                  <div className="h-auto mt-[0.5vw] md:w-[25vw] text-slate-700 border border-solid border-gray-800 font-normal text-sm md:text-base p-2 rounded-md ">
                     {desc}
                   </div>
                 )}
@@ -797,13 +798,13 @@ const Update = ({profile,handleShowEditProfile}) =>{
                     setIsEditing(false);
                   }}
                   type="submit"
-                  className="py-3 px-4 text-sm md:text-base bg-transparent border-2 border-solid border-red-500 rounded-lg text-red-500 font-semibold"
+                  className="py-3 px-4 text-sm md:text-base bg-transparent border border-solid border-[#2A2A2A] rounded-lg text-[#2A2A2A] font-semibold"
                 >
                   Discard Changes
                 </button>
                 <button
                   type="submit"
-                  className="py-3 px-6 text-sm md:text-base bg-green-400 rounded-lg text-white font-semibold"
+                  className="py-3 px-6 text-sm md:text-base bg-[#2A2A2A] rounded-lg text-white font-semibold"
                 >
                   {isEditing ? "Save" : "Edit"} Profile
                 </button>
