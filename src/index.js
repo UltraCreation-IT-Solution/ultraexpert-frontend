@@ -34,6 +34,9 @@ import SignUpAs from "./components/Auth/SignUpAs";
 import SignUpAsExpert from "./components/Auth/SignUpAsExpert";
 import SignUpAsCustomer from "./components/Auth/SignUpAsCustomer";
 import ForgotPassword from "./components/Auth/ForgotPassword";
+import EditProfileCustomer from "./components/Auth/EditProfileCustomer";
+import EditProfileExpert from "./components/Auth/EditProfileExpert";
+import CreateService from "./components/Experts/CreateService";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -101,6 +104,14 @@ const appRouter = createBrowserRouter([
         element: <LoginWithOTP />,
       },
       {
+        path: "/editprofilecustomer",
+        element: <EditProfileCustomer />,
+      },
+      {
+        path: "/editprofileexpert",
+        element: <EditProfileExpert />,
+      },
+      {
         path: "/experts",
         children: [
           {
@@ -129,6 +140,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/services",
         element: <Service />,
+      },
+      {
+        path: "/createService",
+        element: <CreateService />,
       },
       {
         path: "/blog",
