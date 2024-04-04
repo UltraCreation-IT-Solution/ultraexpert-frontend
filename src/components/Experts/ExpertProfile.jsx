@@ -18,7 +18,13 @@ import { BiDislike } from "react-icons/bi";
 import { BsBookmarkPlusFill, BsBookmarkDashFill } from "react-icons/bs";
 
 import { Link } from "react-router-dom";
-import { expertDetailsObj, ProjectsCarousel, BlogCardHorizontal, ShowSchedule } from "../../constant";
+import {
+  expertDetailsObj,
+  ProjectsCarousel,
+  BlogCard,
+  ShowSchedule,
+} from "../../constant";
+import { Sticky, StickyContainer } from "react-sticky";
 
 export const ExpertSummary = () => {
   return (
@@ -723,6 +729,10 @@ export const SideComponent = () => {
         </div>
       </div>
 
+      <div className="my-10 mx-[2.5vw] ">
+        <ShowSchedule />
+      </div>
+
       {/*******Accordian starts from here*******/}
       {
         <div
@@ -828,7 +838,7 @@ const ExpertProfile = () => {
   return (
     <div>
       <div className="lg:flex mt-[90px] md:mt-[80px]">
-        <div className="lg:w-[70%]">
+        <div className="lg:w-[70%] h-[88vh]">
           <AboutExpert />
           <ExpertInfo />
         </div>

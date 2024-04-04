@@ -16,17 +16,20 @@ const Navbar = () => {
         showNav ? "h-[60vh]" : null
       } overflow-hidden flex flex-col md:flex-row items-center justify-between px-[20px] box-border font-montserrat text-[24px]`}
     >
-      <div className="self-start">  
-
-      <Link
-        to={"/"}
-        className={`${
-          showNav ? "mt-6" : null
-        } flex gap-5 mt-4 md:mt-0 decoration-transparent `}
-      >
-        <img src={logo} className="block sm:hidden w-[80px] h-[60px] " alt="logo" />
-        <img src={ultraXpert} className="hidden sm:block" alt="" />
-      </Link>
+      <div className="self-start">
+        <Link
+          to={"/"}
+          className={`${
+            showNav ? "mt-6" : null
+          } flex gap-5 mt-4 md:mt-0 decoration-transparent `}
+        >
+          <img
+            src={logo}
+            className="block sm:hidden w-[80px] h-[60px] "
+            alt="logo"
+          />
+          <img src={ultraXpert} className="hidden sm:block" alt="" />
+        </Link>
       </div>
       <div>
         <nav
@@ -70,7 +73,7 @@ const Navbar = () => {
           <Link
             to={"/expertdashboard"}
             className={`${
-              location === "/blog"
+              location === "/expertdashboard"
                 ? "font-extrabold"
                 : "font-medium hover:underline hover:scale-105"
             } relative no-underline text-black`}

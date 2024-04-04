@@ -8,10 +8,16 @@ import {
   useLocation,
 } from "react-router-dom";
 import "./global.css";
-import LogIn from "../src/components/Auth/Login/Log-In";
-import Register from "../src/components/Auth/Register/Register";
+import Login from "./components/Auth/Login";
+import SignUp from "./components/Auth/SignUp";
+import LoginWithOTP from "./components/Auth/LoginWithOTP";
 import Landing from "./components/Landing/Landing";
-import Favourites, { AllFav, FavBlogs, FavExperts, FavServices } from "./components/Favourites/Favourites.jsx"
+import Favourites, {
+  AllFav,
+  FavBlogs,
+  FavExperts,
+  FavServices,
+} from "./components/Favourites/Favourites.jsx";
 import Expert from "./components/Experts/Expert";
 import Service from "./components/Services/Service";
 import Blog from "./components/Blogs/Blogs/Blog";
@@ -24,8 +30,19 @@ import Navbar from "./components/Boundary/Navbar";
 import Footer from "./components/Boundary/Footer";
 import Test from "./components/GetCertified/Test.jsx";
 import { expertDetailsObj } from "./constant";
-import ExpertDashboard, { Chats, Dashboard, Leaderboard } from "./components/Experts/ExpertDashboard";
+import ExpertDashboard, {
+  Chats,
+  Dashboard,
+  Leaderboard,
+} from "./components/Experts/ExpertDashboard";
 import Update from "./components/Experts/EditDashboardProfile";
+import SignUpAs from "./components/Auth/SignUpAs";
+import SignUpAsExpert from "./components/Auth/SignUpAsExpert";
+import SignUpAsCustomer from "./components/Auth/SignUpAsCustomer";
+import ForgotPassword from "./components/Auth/ForgotPassword";
+import EditProfileCustomer from "./components/Auth/EditProfileCustomer";
+import EditProfileExpert from "./components/Auth/EditProfileExpert";
+import CreateService from "./components/Experts/CreateService";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -61,11 +78,49 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/login",
-        element: <LogIn />,
+        element: <Login />,
       },
       {
-        path: "/register",
-        element: <Register />,
+        path: "/forgotPassword",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "/signUp",
+        element: <SignUp />,
+      },
+      {
+        path: "/signUpAs",
+        children: [
+          {
+            path: "",
+            element: <SignUpAs />,
+          },
+          {
+            path: "expert",
+            element: <SignUpAsExpert />,
+          },
+          {
+            path: "customer",
+            element: <SignUpAsCustomer />,
+          },
+        ],
+      },
+      {
+        path: "/forgotPassword",
+        element: <ForgotPassword />,
+      },
+
+      {
+        path: "/loginiwthotp",
+        element: <LoginWithOTP />,
+      },
+      {
+        path: "/editprofilecustomer",
+        element: <EditProfileCustomer />,
+      },
+      {
+        path: "/editprofileexpert",
+        element: <EditProfileExpert />,
       },
       {
         path: "/experts",
@@ -98,26 +153,30 @@ const appRouter = createBrowserRouter([
         element: <Service />,
       },
       {
-        path:"/favourites",
-        element:<Favourites/>,
-        children:[
+        path: "/createService",
+        element: <CreateService />,
+      },
+      {
+        path: "/favourites",
+        element: <Favourites />,
+        children: [
           {
-            path:"",
-            element:<AllFav/>,
+            path: "",
+            element: <AllFav />,
           },
           {
-            path:"favexperts",
-            element:<FavExperts/>,
+            path: "favexperts",
+            element: <FavExperts />,
           },
           {
-            path:"favservices",
-            element:<FavServices/>,
+            path: "favservices",
+            element: <FavServices />,
           },
           {
-            path:"favblogs",
-            element:<FavBlogs/>,
-          }
-        ]
+            path: "favblogs",
+            element: <FavBlogs />,
+          },
+        ],
       },
       {
         path: "/blog",
@@ -126,7 +185,7 @@ const appRouter = createBrowserRouter([
             path: "",
             element: <Blog />,
           },
-          
+
           {
             path: "blogdetail",
             element: <BlogDetails />,
@@ -136,29 +195,29 @@ const appRouter = createBrowserRouter([
       {
         path: "/expertdashboard",
         element: <ExpertDashboard />,
-        children:[
+        children: [
           {
-            path:"",
-            element:<Dashboard/>
+            path: "",
+            element: <Dashboard />,
           },
           {
-            path:"chats",
-            element:<Chats/>,
+            path: "chats",
+            element: <Chats />,
           },
           {
-            path:"leaderboard",
-            element:<Leaderboard/>
-          }
+            path: "leaderboard",
+            element: <Leaderboard />,
+          },
         ],
       },
       {
-       path:"/test",
-       element:<Test/> 
+        path: "/test",
+        element: <Test />,
       },
       {
-        path:"editprofile",
-        element:<Update/>
-      }
+        path: "editprofile",
+        element: <Update />,
+      },
     ],
   },
 ]);
