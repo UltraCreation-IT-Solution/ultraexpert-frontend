@@ -12,9 +12,15 @@ import Login from "./components/Auth/Login";
 import SignUp from "./components/Auth/SignUp";
 import LoginWithOTP from "./components/Auth/LoginWithOTP";
 import Landing from "./components/Landing/Landing";
+import Favourites, {
+  AllFav,
+  FavBlogs,
+  FavExperts,
+  FavServices,
+} from "./components/Favourites/Favourites.jsx";
 import Expert from "./components/Experts/Expert";
 import Service from "./components/Services/Service";
-import Blog, { BlogBody, SearchBlog } from "./components/Blogs/Blogs/Blog";
+import Blog from "./components/Blogs/Blogs/Blog";
 import ExpertProfile from "./components/Experts/ExpertProfile";
 import ServiceDescription from "./components/Experts/ServiceDescription";
 import ServiceBooking from "./components/Experts/ServiceBooking";
@@ -22,7 +28,7 @@ import Error from "./subsitutes/Error";
 import BlogDetails from "./components/Blogs/BlogDetail";
 import Navbar from "./components/Boundary/Navbar";
 import Footer from "./components/Boundary/Footer";
-import AllExperts from "./Test";
+import Test from "./components/GetCertified/Test.jsx";
 import { expertDetailsObj } from "./constant";
 import ExpertDashboard, {
   Chats,
@@ -76,7 +82,7 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/forgotPassword",
-        element: <ForgotPassword/>,
+        element: <ForgotPassword />,
       },
       {
         path: "/signUp",
@@ -84,21 +90,26 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/signUpAs",
-        children:[
+        children: [
           {
             path: "",
-            element:<SignUpAs/>
+            element: <SignUpAs />,
           },
           {
             path: "expert",
-            element: <SignUpAsExpert/>
+            element: <SignUpAsExpert />,
           },
           {
-            path:"customer",
-            element:<SignUpAsCustomer/>
-          }
-        ]
+            path: "customer",
+            element: <SignUpAsCustomer />,
+          },
+        ],
       },
+      {
+        path: "/forgotPassword",
+        element: <ForgotPassword />,
+      },
+
       {
         path: "/loginiwthotp",
         element: <LoginWithOTP />,
@@ -146,6 +157,28 @@ const appRouter = createBrowserRouter([
         element: <CreateService />,
       },
       {
+        path: "/favourites",
+        element: <Favourites />,
+        children: [
+          {
+            path: "",
+            element: <AllFav />,
+          },
+          {
+            path: "favexperts",
+            element: <FavExperts />,
+          },
+          {
+            path: "favservices",
+            element: <FavServices />,
+          },
+          {
+            path: "favblogs",
+            element: <FavBlogs />,
+          },
+        ],
+      },
+      {
         path: "/blog",
         children: [
           {
@@ -179,7 +212,7 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/test",
-        element: <AllExperts />,
+        element: <Test />,
       },
       {
         path: "editprofile",

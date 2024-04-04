@@ -48,20 +48,20 @@ const HeroSection = () => {
           ))}
         </Marquee>
       </div>
-      <div className="relative px-[6vw] md:px-[13vw] py-[6vw] ">
-        <div className="bg-[#E0C8FF] h-32 w-32 absolute top-[7vw] left-[3vw] rounded-full"></div>
-        <div className="bg-[#FC9D9D] h-14 w-14 absolute top-[14vw] left-[10vw] rounded-full"></div>
-        <div className="bg-[#FFF500] h-20 w-20 absolute top-[10vw] right-[9vw] rounded-full"></div>
-        <div className="text-5xl font-bold text-center overflow-hidden py-1">
+      <div className="relative px-[5vw] md:px-[11vw] py-[6vw] mt-20 sm:mt-[6vw] xl:mt-0 ">
+        <div className="bg-[#E0C8FF] h-12 w-12 sm:h-[7.1rem] sm:w-[7.1rem] lg:h-32 lg:w-32 absolute top-20 md:top-24 left-1 sm:left-5 lg:left-20 rounded-full"></div>
+        <div className="bg-[#FC9D9D] h-6 w-6 xs:h-11 xs:w-11 md:h-14 md:w-14 absolute top-32 sm:top-[11rem] md:top-48 left-12  sm:left-28 md:left-32 lg:left-48 rounded-full"></div>
+        <div className="bg-[#FFF500] h-10 w-10 sm:h-20 sm:w-20 absolute top-24 sm:top-[8vw] right-1 sm:right-[4vw] lg:right-[9vw] rounded-full"></div>
+        <div className="text-2xl xs:text-3xl md:text-5xl font-bold text-center overflow-hidden py-1">
           We are creating a<br />
           Consulting platform
         </div>
-        <div className="text-center text-2xl mt-5">
+        <div className="text-center text-base xs:text-xl md:text-2xl mt-3 md:mt-5">
           Consult & get mentored <br />
           by our experts
         </div>
-        <div className="flex items-center gap-10 my-10">
-          <div className="rounded-2xl bg-[#DAE9FF] p-5">
+        <div className="flex items-center justify-center flex-wrap gap-7 my-10">
+          <div className="w-full sm:max-w-[260px] lg:min-w-[22vw] lg:max-w-[24vw] rounded-2xl bg-[#DAE9FF] p-5 ">
             <div className="text-xl">01</div>
             <div className="my-3 text-2xl font-bold">Lorem</div>
             <div className="line-clamp-5 text-ellipsis">
@@ -72,7 +72,7 @@ const HeroSection = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-[#DAE9FF] p-5">
+          <div className="w-full sm:max-w-[260px] lg:min-w-[22vw] lg:max-w-[24vw] rounded-2xl bg-[#DAE9FF] p-5">
             <div className="text-xl">02</div>
             <div className="my-3 text-2xl font-bold">Lorem</div>
             <div className="line-clamp-5 text-ellipsis">
@@ -83,7 +83,7 @@ const HeroSection = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-[#DAE9FF] p-5">
+          <div className="w-full sm:max-w-[260px] lg:min-w-[22vw] lg:max-w-[24vw] rounded-2xl bg-[#DAE9FF] p-5">
             <div className="text-xl">03</div>
             <div className="my-3 text-2xl font-bold">Lorem</div>
             <div className="line-clamp-5 text-ellipsis">
@@ -94,8 +94,8 @@ const HeroSection = () => {
             </div>
           </div>
         </div>
-        <div className="bg-[#FDE1D8] rounded-2xl p-10">
-          <div className="font-bold text-2xl line-clamp-3 text-ellipsis">
+        <div className="bg-[#FDE1D8] rounded-2xl p-5 lg:p-10">
+          <div className="font-bold text-lg md:text-2xl line-clamp-3 text-ellipsis">
             Ashi Di is a phenomenal creative strategist and designer.... an
             absolute joy to work with - and the results are spectacular. Bhavesh
             Bhanusali President of AIC
@@ -106,22 +106,22 @@ const HeroSection = () => {
               src="https://images.unsplash.com/photo-1513258496099-48168024aec0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTMwfHx3b3JrfGVufDB8MHwwfHx8MA%3D%3D"
               alt=""
             />
-            <div className="">Bhavesh Bhanusali President of AIC</div>
+            <div className="text-base">Bhavesh Bhanusali President of AIC</div>
           </div>
         </div>
       </div>
 
-      <div className="relative px-[6vw] md:px-[13vw] py-[6vw] ">
-        <div className="bg-[#E9F2FF] h-44 w-44 absolute top-24 -left-20 rounded-full"></div>
-        <div className="bg-[#DFC7FF] h-20 w-20 absolute top-32 -right-5 rounded-full"></div>
-        <div className="bg-[#FFE1D3] h-40 w-40 absolute bottom-0 -right-20 rounded-full"></div>
-        <div className="text-5xl font-bold text-center overflow-hidden">What is it we do ?</div>
+      <div className="relative px-[5vw] md:px-[10vw] pb-[20vw] py-[10vw] lg:py-[6vw] my-20 lg:my-0">
+        <div className="bg-[#E9F2FF] h-36 w-36 md:h-44 md:w-44 absolute top-0 lg:top-24 -left-28 sm:-left-20 rounded-full"></div>
+        <div className="bg-[#DFC7FF] h-20 w-20 absolute top-6 lg:top-32 -right-14 sm:-right-5 rounded-full"></div>
+        <div className="bg-[#FFE1D3] h-32 w-32 md:h-40 md:w-40 absolute bottom-0 -right-24 sm:-right-20 rounded-full"></div>
+        <div className="text-[1.8rem] xs:text-4xl md:text-5xl font-bold text-center overflow-hidden">What is it we do?</div>
 
-        <div className="flex items-center gap-10 my-10">
-          <div className="relative rounded-2xl bg-[#DAE9FF] px-20 py-10">
-            <div className="absolute top-8 left-5 h-12 w-12 rounded-full bg-[#B276FF]"></div>
-            <div className="text-3xl font-bold shrink-0">Web Design</div>
-            <div className="mt-5 line-clamp-5 text-ellipsis shrink-0">
+        <div className="flex flex-wrap gap-[2vw] lg:gap-[1vw] mt-10">
+          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
+            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#B276FF]"></div>
+            <div className="text-xl md:text-2xl font-bold shrink-0">Web Design</div>
+            <div className="mt-5 line-clamp-5 text-ellipsis text-base">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Recusandae aut ut totam neque repellat accusantium ipsam itaque
               porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
@@ -129,34 +129,10 @@ const HeroSection = () => {
             </div>
           </div>
 
-          <div className="relative rounded-2xl bg-[#DAE9FF] px-20 py-10">
-            <div className="absolute top-8 left-5 h-12 w-12 rounded-full bg-[#75ACFF]"></div>
-            <div className="text-3xl font-bold shrink-0">Web Development</div>
-            <div className="mt-5 line-clamp-5 text-ellipsis shrink-0">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-10 my-10">
-          <div className="relative rounded-2xl bg-[#DAE9FF] px-20 py-10">
-            <div className="absolute top-8 left-5 h-12 w-12 rounded-full bg-[#FFA37B]"></div>
-            <div className="text-3xl font-bold shrink-0">Product Design</div>
-            <div className="mt-5 line-clamp-5 text-ellipsis shrink-0">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
-            </div>
-          </div>
-
-          <div className="relative rounded-2xl bg-[#DAE9FF] px-20 py-10">
-            <div className="absolute top-8 left-5 h-12 w-12 rounded-full bg-[#FFA6A6]"></div>
-            <div className="text-3xl font-bold shrink-0">Branding</div>
-            <div className="mt-5 line-clamp-5 text-ellipsis shrink-0">
+          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
+            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#75ACFF]"></div>
+            <div className="text-xl md:text-2xl font-bold shrink-0">Web Development</div>
+            <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
               Recusandae aut ut totam neque repellat accusantium ipsam itaque
               porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
@@ -164,10 +140,34 @@ const HeroSection = () => {
             </div>
           </div>
         </div>
-        <div className="bg-[#DAE9FF] rounded-2xl p-10 flex gap-5 items-center justify-between">
-          <div className="h-10 w-10 bg-[#795CFF] rounded-full"></div>
-          <div className="text-2xl font-bold">Extended design services</div>
-          <div className="ml-auto text-3xl cursor-pointer">
+
+        <div className="flex flex-wrap gap-[2vw] lg:gap-[1vw] my-5">
+          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
+            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#FFA37B]"></div>
+            <div className="text-xl md:text-2xl font-bold shrink-0">Product Design</div>
+            <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Recusandae aut ut totam neque repellat accusantium ipsam itaque
+              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
+              facilis quam saepe consectetur molestias?
+            </div>
+          </div>
+
+          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
+            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#FFA6A6]"></div>
+            <div className="text-xl md:text-2xl font-bold shrink-0">Branding</div>
+            <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Recusandae aut ut totam neque repellat accusantium ipsam itaque
+              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
+              facilis quam saepe consectetur molestias?
+            </div>
+          </div>
+        </div>
+        <div className="bg-[#DAE9FF] rounded-3xl pl-5 sm:pl-8 pr-5 py-10 flex gap-2 sm:gap-5 items-center justify-between ">
+          <div className="shrink-0 h-8 w-8 sm:h-10 sm:w-10 bg-[#795CFF] rounded-full"></div>
+          <div className="text-xl md:text-2xl font-bold">Extended design services</div>
+          <div className="ml-auto text-2xl md:text-3xl cursor-pointer shrink-0">
             <FaArrowRightLong />
           </div>
         </div>

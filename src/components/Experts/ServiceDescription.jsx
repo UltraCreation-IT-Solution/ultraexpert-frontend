@@ -1,17 +1,16 @@
 import React from "react";
-import { MdStar } from "react-icons/md";
 import { RiFlowChart } from "react-icons/ri";
-import { IoChatboxOutline } from "react-icons/io5";
 import { GoArrowLeft } from "react-icons/go";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import { CiSquarePlus } from "react-icons/ci";
 import { IoMdSend } from "react-icons/io";
-import { ProjectsCarousel } from "../../constant";
+import { FcVideoCall } from "react-icons/fc";
+import { ProjectsCarousel, ShowSchedule } from "../../constant";
 import { ExpertRatings } from "./ExpertProfile";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-export const ProfileCardSmall = () => {
+export const ServiceProfileCard = () => {
   return (
     <div
       className={`w-full px-3 py-5 bg-[#EDEDED] flex justify-between items-center shadow-sm drop-shadow-md rounded-md`}
@@ -24,17 +23,21 @@ export const ProfileCardSmall = () => {
         />
         <div className="flex flex-col">
           <div className="text-lg font-semibold">Antony Phobes</div>
-          <div className="text-xs">UI/UX Designer</div>
+          <div className="text-xs text-gray-600">UI/UX Designer</div>
         </div>
       </div>
 
       <div className="flex items-center gap-10">
-        <div className="text-base text-gray-600 cursor-pointer">Services</div>
+        <div className="text-base text-gray-600 cursor-pointer shrink-0">
+          Services
+        </div>
         <a href="#projects" className="decoration-transparent">
-          <div className="text-base text-gray-600 cursor-pointer">Projects</div>
+          <div className="text-base text-gray-600 cursor-pointer shrink-0">
+            Projects
+          </div>
         </a>
         <a href="#ratings" className="decoration-transparent">
-          <div className="text-base text-gray-600 cursor-pointer ">
+          <div className="text-base text-gray-600 cursor-pointer shrink-0">
             {" "}
             Ratings
           </div>
@@ -48,31 +51,33 @@ export const ProfileCardSmall = () => {
 };
 
 const ServiceDescription = ({ services, skills }) => {
+  const [currentDateClick, setCurrentDateClick] = useState("");
+
   const [showChat, setShowChat] = useState(false);
   const params = useParams();
   const { id } = params;
 
   return (
     <>
-      <div className="flex gap-[3vw] px-[6vw] mt-[100px]">
-        <div className="w-[75%] ">
-          <ProfileCardSmall />
-          <div className="h-auto mt-10">
-            <div className="text-3xl gap-4 font-semibold flex items-center mt-8">
-              <RiFlowChart />
+      <div className="lg:flex mt-[100px] ">
+        <div className="w-full lg:w-[70%] px-[2.5vw] border-r border-solid border-slate-300">
+          <ServiceProfileCard />
+          <div className="h-auto mt-5 md:mt-10">
+            <div className="text-xl md:text-3xl gap-4 font-semibold flex items-start my-5">
+              <RiFlowChart className="mt-1" />
               <div>{services[params?.id - 1]?.title}</div>
             </div>
-            <div className="flex items-center gap-6 overflow-x-scroll mt-[2vw] ">
+            <div className="flex items-center gap-6 overflow-x-scroll mt-[2vw] shadow-sm drop-shadow-md">
               {services[params?.id - 1]?.banners.map((temp, idx) => (
                 <img
                   key={idx}
-                  className="h-[20vw] w-[30vw] shrink-0 object-cover"
+                  className="h-[12rem] w-[17rem] lg:h-[17vw] lg:w-[24vw] shrink-0 object-cover"
                   src={temp}
                   alt=""
                 />
               ))}
             </div>
-            <div className="mt-[3vw] text-lg text-gray-600">
+            <div className="mt-[3vw] text-base xl:text-lg text-gray-500">
               <b className="text-black">Description: </b>
               {services[params?.id - 1]?.description}
             </div>
@@ -99,14 +104,22 @@ const ServiceDescription = ({ services, skills }) => {
                 <ProjectsCarousel />
               </div>
             </div>
-            <div id="ratings">
+            <div className="lg:hidden w-full">
+              <div className="my-8">
+                <ShowSchedule
+                  price={services[params?.id - 1]?.price}
+                  id={services[params?.id - 1]?.id}
+                />
+              </div>
+            </div>
+            <div id="ratings" className="mt-10">
               <ExpertRatings />
             </div>
           </div>
         </div>
 
-        <div className="w-[25%] flex flex-col items-center h-[500px]">
-          {!showChat && (
+        <div className="hidden lg:w-[30%] px-[2.5vw] lg:flex flex-col items-center">
+          {/* {!showChat && (
             <div className="px-6 py-5 h-fit rounded-2xl border-2 border-solid border-slate-300 sticky top-0">
               <div className="flex items-center gap-5 ">
                 <img
@@ -126,9 +139,9 @@ const ServiceDescription = ({ services, skills }) => {
                 </button>
               </div>
             </div>
-          )}
+          )}  */}
 
-          {showChat && (
+          {/* {showChat && (
             <div className="flex flex-col border border-solid border-slate-300 w-full">
               <div className="flex justify-between items-center border-b border-solid border-slate-300 p-2">
                 <div className="flex items-center gap-2">
@@ -160,14 +173,20 @@ const ServiceDescription = ({ services, skills }) => {
                 <IoMdSend className="text-3xl" />
               </div>
             </div>
-          )}
-          <div className="mt-[2vw] flex flex-col ">
+          )}  */}
+          {/* <div className="mt-[2vw] flex flex-col ">
             <div className="text-3xl font-semibold">
               Service Price: ₹{services[params?.id - 1]?.price}
             </div>
             <button className=" w-full mt-5 cursor-pointer bg-[#2A2A2A] px-6 py-1 md:px-[1.5vw] md:py-[0.5vw] text-lg text-white font-semibold border rounded-sm sm:rounded-md">
               Book Now
             </button>
+          </div> */}
+          <div className="mx-[2.5vw] w-full">
+            <ShowSchedule
+              price={services[params?.id - 1]?.price}
+              id={services[params?.id - 1]?.id}
+            />
           </div>
         </div>
       </div>

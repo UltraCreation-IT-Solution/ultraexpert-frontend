@@ -86,31 +86,26 @@ const SignUp = () => {
 
   const onVerifyEmailHandler = async (e) => {
     e.preventDefault();
-    if(validateEmail()){
-
-    
-    try {
-      const res = await fetch(`http://localhost:8000/verify/?action=1&email=${secondStep.email}`);
-      const json = await res.json();
-      console.log(json);
-      // const response = await axios.get(
-      //   `/verify/?action=1&email=${secondStep.email}`
-      // );
-      // if (
-      //   response.data.status === 404 ||
-      //   response.data.status === 500 ||
-      //   response.data.status === 400 ||
-      //   !response.data
-      // ) {
-      //   window.alert("Invalid Email");
-      //   return;
-      // }
-      // console.log(response.data);
-      nextStep();
-    } catch (error) {
-      console.log(error.message);
+    if (validateEmail()) {
+      try {
+        console.log(secondStep.email);
+        const res = await fetch(
+          `http://localhost:8000/verify/?action=1&email=${secondStep.email}`
+        );
+        const json = await res.json();
+        console.log(json);
+        // const response = await axios.get(
+        //   `/verify/?action=1&email=${secondStep.email}`
+        // );
+        if (!json) {
+          window.alert("Invalid Email");
+          return;
+        }
+        nextStep();
+      } catch (error) {
+        console.log(error.message);
+      }
     }
-  }
   };
 
   const validateEmail = () => {
@@ -127,6 +122,7 @@ const SignUp = () => {
   };
 
   const handleChange2 = (e) => {
+    e.preventDefault();
     const { name, value } = e.target;
     setSecondStep({
       ...secondStep,
@@ -139,23 +135,19 @@ const SignUp = () => {
     e.preventDefault();
     if (validateOTP()) {
       try {
-        const res = await fetch(`http://localhost:8000/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`);
+        const res = await fetch(
+          `http://localhost:8000/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
+        );
         const json = await res.json();
         console.log(json);
         // const response = await axios.get(
         //   `/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
         // );
         // const data = response.data;
-        // if (
-        //   data.status === 404 ||
-        //   data.status === 500 ||
-        //   data.status === 400 ||
-        //   !data
-        // ) {
-        //   window.alert("Invalid OTP");
-        //   return;
-        // }
-        // console.log(data);
+        if (!json) {
+          window.alert("Invalid OTP");
+          return;
+        }
         nextStep();
       } catch (error) {
         console.log(error.message);
@@ -205,7 +197,7 @@ const SignUp = () => {
             password2: forthStep.confirmPassword,
           }),
           credentials: "include",
-        })
+        });
         // const response = await axios.post(
         //   "/register/",
         //   {
@@ -224,27 +216,32 @@ const SignUp = () => {
         //   }
         // );
 
-        // const data = response.data;
         const json = await res.json();
         if (!json) {
           window.alert("Invalid Registration");
           console.log("Invalid Registration");
         } else {
           console.log(json);
-          try{
-            const res = await fetch("http://localhost:8000/login/",{
-              method:"POST",
-              headers:{
-                "Content-Type":"application/json"
+          try {
+            const response = await fetch("http://localhost:8000/login/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
               },
-              body:JSON.stringify({
-                email:secondStep.email,
-                password:forthStep.password
+              body: JSON.stringify({
+                email: secondStep.email,
+                password: forthStep.password,
               }),
-              credentials:"include"
+              credentials: "include",
             });
-          }catch(error){
-            console.error(error.message);
+            const json = await response.json();
+            if (!json) {
+              window.alert("Invalid Login Credentials");
+              return;
+            }
+            console.log(json);
+          } catch (error) {
+            console.error(error);
           }
           window.alert("Registration Successful");
           navigate("/signUpAs");
@@ -332,7 +329,9 @@ const SignUp = () => {
                   value={firstStep.firstName}
                   onChange={handleChange1}
                 />
-                <div className="text-red-500 mb-1 text-sm">{errors.firstName}</div>
+                <div className="text-red-500 mb-1 text-sm">
+                  {errors.firstName}
+                </div>
 
                 <label
                   htmlFor="lastName"
@@ -349,7 +348,9 @@ const SignUp = () => {
                   value={firstStep.lastName}
                   onChange={handleChange1}
                 />
-                <div className="text-red-500 mb-1 text-sm">{errors.lastName}</div>
+                <div className="text-red-500 mb-1 text-sm">
+                  {errors.lastName}
+                </div>
 
                 <label
                   htmlFor="mobileNumber"
@@ -366,7 +367,9 @@ const SignUp = () => {
                   value={firstStep.mobileNumber}
                   onChange={handleChange1}
                 />
-                <div className="text-red-500 mb-1 text-sm">{errors.mobileNumber}</div>
+                <div className="text-red-500 mb-1 text-sm">
+                  {errors.mobileNumber}
+                </div>
 
                 <label
                   htmlFor="refBy"
@@ -453,22 +456,22 @@ const SignUp = () => {
                 Verify Email
               </h1>
               <form onSubmit={handleOTPVerification}>
-                  <label
-                    htmlFor="otp"
-                    className="block mb-1 font-semibold text-base md:text-lg"
-                  >
-                    OTP:
-                  </label>
-                  <input
-                    type="text"
-                    name="otp"
-                    id="otp"
-                    placeholder="Enter OTP"
-                    className="border rounded-sm p-2 w-full mb-3"
-                    value={thirdStep.otp}
-                    onChange={handleChange3}
-                  />
-                  <div className="text-red-500 text-sm mb-1">{errors.otp}</div>
+                <label
+                  htmlFor="otp"
+                  className="block mb-1 font-semibold text-base md:text-lg"
+                >
+                  OTP:
+                </label>
+                <input
+                  type="text"
+                  name="otp"
+                  id="otp"
+                  placeholder="Enter OTP"
+                  className="border rounded-sm p-2 w-full mb-3"
+                  value={thirdStep.otp}
+                  onChange={handleChange3}
+                />
+                <div className="text-red-500 text-sm mb-1">{errors.otp}</div>
                 <div className="flex justify-between">
                   <p
                     onClick={handleGoogleLink}
@@ -502,38 +505,42 @@ const SignUp = () => {
                 Complete Successful
               </h1>
               <form onSubmit={handleSubmit}>
-                  <label
-                    htmlFor="password"
-                    className="block mb-1 font-semibold text-base md:text-lg"
-                  >
-                    Password:
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    className="border rounded-sm p-2 w-full mb-3"
-                    value={forthStep.password}
-                    onChange={handleChange4}
-                  />
-                  <div className="text-red-500 text-sm mb-1">{errors.password}</div>
-                  <label
-                    htmlFor="confirmPassword"
-                    className="block mb-1 font-semibold md:text-lg text-base"
-                  >
-                    Confirm Password:
-                  </label>
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    id="confirmPassword"
-                    placeholder="Enter your password"
-                    className="border rounded-sm p-2 w-full mb-3"
-                    value={forthStep.confirmPassword}
-                    onChange={handleChange4}
-                  />
-                  <div className="text-red-500 text-sm mb-1">{errors.confirmPassword}</div>
+                <label
+                  htmlFor="password"
+                  className="block mb-1 font-semibold text-base md:text-lg"
+                >
+                  Password:
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="Enter your password"
+                  className="border rounded-sm p-2 w-full mb-3"
+                  value={forthStep.password}
+                  onChange={handleChange4}
+                />
+                <div className="text-red-500 text-sm mb-1">
+                  {errors.password}
+                </div>
+                <label
+                  htmlFor="confirmPassword"
+                  className="block mb-1 font-semibold md:text-lg text-base"
+                >
+                  Confirm Password:
+                </label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  id="confirmPassword"
+                  placeholder="Enter your password"
+                  className="border rounded-sm p-2 w-full mb-3"
+                  value={forthStep.confirmPassword}
+                  onChange={handleChange4}
+                />
+                <div className="text-red-500 text-sm mb-1">
+                  {errors.confirmPassword}
+                </div>
                 <button
                   type="submit"
                   className="bg-[#272727] text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full"
@@ -552,10 +559,7 @@ const SignUp = () => {
           </button>
         </div>
         <div className="md:w-[50%] w-full flex items-center justify-center">
-          <img
-            src={userImage}
-            alt="userImage"
-          />
+          <img src={userImage} alt="userImage" />
         </div>
       </div>
     </div>
