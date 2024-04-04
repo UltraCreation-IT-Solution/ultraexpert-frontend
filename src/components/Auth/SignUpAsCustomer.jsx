@@ -11,31 +11,32 @@ const SignUpAsCustomer = () => {
     marginRight: 0,
   });
 
-  const [personalInfo,setPersonalInfo] = useState({
-    marital_status:"Single",
-    profession:"",
-    about_me:"",
+  const [personalInfo, setPersonalInfo] = useState({
+    marital_status: "Single",
+    profession: "",
+    about_me: "",
   });
 
-  const updatePersonalInfo = async(e) => {
+  const updatePersonalInfo = async (e) => {
     e.preventDefault();
-    try{
-      const res = await fetch("http://localhost:8000/customers/",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
+    try {
+      const res = await fetch("http://localhost:8000/customers/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        body:JSON.stringify({
-          marital_status:personalInfo.marital_status,
-          profession:personalInfo.profession,
-          about_me:personalInfo.about_me
+        body: JSON.stringify({
+          action: 1,
+          marital_status: personalInfo.marital_status,
+          profession: personalInfo.profession,
+          about_me: personalInfo.about_me,
         }),
-        credentials:"include",
+        credentials: "include",
       });
       const json = await res.json();
       console.log(json);
-      handleNext(e);
-    }catch(error){
+      handleNext();
+    } catch (error) {
       console.log(error.message);
     }
   };
@@ -61,17 +62,47 @@ const SignUpAsCustomer = () => {
   const navigate = useNavigate();
   const stepRef = useRef([]);
 
-  const handleNext = (e) => {
-    e.preventDefault();
+  const handleNext = () => {
     setIsComplete(true);
     setCurrStep((prevStep) => prevStep + 1);
     setIsComplete(false);
   };
-
-  const handleSubmit = (e) => {
+  const handlePrevious = (e) => {
     e.preventDefault();
     setIsComplete(true);
-    navigate("/");
+    setCurrStep((prevStep) => prevStep - 1);
+    setIsComplete(false);
+  };
+
+  const handleInterests = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:8000/customers/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: 2,
+          interest_list:selectedSkill
+        }),
+        credentials: "include",
+      });
+      const json = await res.json();
+      // const response =await axios.post(
+      //   "/customers/",
+      //   { action: 1, marital_status: "Single", about_me: "", profession: "" },
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+      console.log(json);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -102,11 +133,21 @@ const SignUpAsCustomer = () => {
                 className="flex flex-col items-center relative"
               >
                 <div
-                  className={`w-5 h-5 md:w-7 md:h-7 rounded-full bg-white flex items-center text-xs md:text-sm justify-center mb-1 z-10 border border-solid ${currStep >= index || isComplete? "text-[#3E5676] border-[#3E5676]" : "text-gray-400 border-gray-400"} `}
+                  className={`w-5 h-5 md:w-7 md:h-7 rounded-full bg-white flex items-center text-xs md:text-sm justify-center mb-1 z-10 border border-solid ${
+                    currStep >= index || isComplete
+                      ? "text-[#3E5676] border-[#3E5676]"
+                      : "text-gray-400 border-gray-400"
+                  } `}
                 >
                   {currStep > index || isComplete ? "✔" : index + 1}
                 </div>
-                <div className={`text-xs  ${currStep >= index ? "text-[#3E5676]" : "text-gray-400"}`}>{step.name}</div>
+                <div
+                  className={`text-xs  ${
+                    currStep >= index ? "text-[#3E5676]" : "text-gray-400"
+                  }`}
+                >
+                  {step.name}
+                </div>
               </div>
             ))}
             <div
@@ -127,7 +168,7 @@ const SignUpAsCustomer = () => {
           </div>
           <div className="h-[1px] w-full bg-gray-400 my-2"></div>
           {currStep === 0 && (
-            <form className="flex flex-col">
+            <form onSubmit={updatePersonalInfo} className="flex flex-col">
               <div className="flex flex-col text-center my-5 md:my-8">
                 <div className="text-3xl md:text-4xl font-bold text-[#3E5676]">
                   Sign Up as Customer
@@ -144,7 +185,12 @@ const SignUpAsCustomer = () => {
                   name="status"
                   id="status"
                   value={personalInfo.marital_status}
-                  onChange={(e)=>setPersonalInfo({ ...personalInfo, [e.target.name]: e.target.value })}
+                  onChange={(e) =>
+                    setPersonalInfo({
+                      ...personalInfo,
+                      marital_status: e.target.value,
+                    })
+                  }
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                 >
                   <option value="single">Single</option>
@@ -162,7 +208,12 @@ const SignUpAsCustomer = () => {
                   id="profession"
                   name="profession"
                   value={personalInfo.profession}
-                  onChange={(e)=>setPersonalInfo({ ...personalInfo, [e.target.name]: e.target.value })}
+                  onChange={(e) =>
+                    setPersonalInfo({
+                      ...personalInfo,
+                      profession: e.target.value,
+                    })
+                  }
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   placeholder="Profession"
                 />
@@ -170,17 +221,22 @@ const SignUpAsCustomer = () => {
                   About Me
                 </label>
                 <textarea
-                  required
                   type="text"
                   id="about"
                   name="about"
+                  onChange={(e) => {
+                    setPersonalInfo({
+                      ...personalInfo,
+                      [e.target.name]: e.target.value,
+                    });
+                  }}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                   placeholder="I want to learn css, html, python with django"
                 />
               </div>
               <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
                 <button
-                  onClick={updatePersonalInfo}
+                  type="submit"
                   className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
@@ -189,22 +245,25 @@ const SignUpAsCustomer = () => {
             </form>
           )}
           {currStep === 1 && (
-            <form className="flex flex-col">
+            <form onSubmit={handleInterests} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] my-5">
-                <label htmlFor="interests" className="text-base md:text-lg mb-1">
+                <label
+                  htmlFor="interests"
+                  className="text-base md:text-lg mb-1"
+                >
                   Interests
                 </label>
                 <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-3">
                     {selectedSkill.length > 0 ? (
                       selectedSkill.map((skill) => {
                         return (
-                          <button
+                          <div
                             key={skill}
-                            className="px-4 py-1 rounded-full bg-inherit border border-solid border-black"
+                            className="px-4 py-1 text-nowrap text-xs md:text-sm rounded-full bg-inherit border border-solid border-black"
                           >
                             {skill}
-                          </button>
+                          </div>
                         );
                       })
                     ) : (
@@ -218,16 +277,15 @@ const SignUpAsCustomer = () => {
                   <div className="flex flex-wrap justifty-around gap-3">
                     {interest.map((skill, ind) => {
                       return (
-                        <button
+                        <div
                           key={ind}
-                          onClick={(e) => {
-                            e.preventDefault();
+                          onClick={() => {
                             handleChange(skill.name);
                           }}
-                          className="cursor-pointer px-4 py-1 text-nowrap rounded-full bg-inherit border border-solid border-[#c7c7c7] text-[#8D8D8D] bg-[#E8E8E8] flex justify-center items-center overflow-visible"
+                          className="cursor-pointer px-4 py-1 text-nowrap text-xs md:text-sm rounded-full bg-inherit border border-solid border-[#c7c7c7] text-[#8D8D8D] bg-[#E8E8E8] flex justify-center items-center overflow-visible"
                         >
                           {skill.name}
-                        </button>
+                        </div>
                       );
                     })}
                   </div>
@@ -235,11 +293,15 @@ const SignUpAsCustomer = () => {
               </div>
               <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
                 <button
-                  onClick={()=>{setCurrStep((prev)=>prev-1)}}
+                  onClick={() => {
+                    setCurrStep((prev) => prev - 1);
+                  }}
                   className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-gray-500 rounded-md shadow-md"
-                >Previous</button>
+                >
+                  Previous
+                </button>
                 <button
-                  onClick={handleSubmit}
+                  type="submit"
                   className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md"
                 >
                   Submit

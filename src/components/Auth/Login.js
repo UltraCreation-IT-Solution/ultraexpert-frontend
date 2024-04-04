@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 
 const Login = () => {
-
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -30,10 +29,7 @@ const Login = () => {
       newErrors.email = "Invalid email";
       isValid = false;
     }
-    if (
-      !userData.password ||
-      !passwordRegex.test(userData.password)
-    ) {
+    if (!userData.password || !passwordRegex.test(userData.password)) {
       newErrors.password = "Invalid password";
       isValid = false;
     }
@@ -55,7 +51,7 @@ const Login = () => {
             password: userData.password,
           }),
           credentials: "include",
-        })
+        });
         // const res = await axios.post(
         //   "/login/",
         //   {
@@ -73,7 +69,7 @@ const Login = () => {
           navigate("/");
         }
       } catch (error) {
-        console.error(error);
+        console.error(error?.response?.data?.msg);
       }
     }
   };
@@ -106,41 +102,43 @@ const Login = () => {
     <div className="md:h-screen mt-[100px] bg-white">
       <div className="lg:w-[60%] md:w-[75%] sm:w-[85%] w-[95%] flex md:flex-row flex-col mx-auto bg-white px-8 pb-8 rounded-xl shadow-md border border-solid border-[#a3a3a3]">
         <div className="flex flex-col md:w-[50%] w-full ">
-          <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">Login</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">
+            Login
+          </h1>
           <form className="mb-2" onSubmit={handleSubmit}>
-              <label
-                htmlFor="email"
-                className="block mb-1 font-semibold text-base md:text-lg"
-              >
-                Email:
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter your email"
-                className="border rounded-sm p-2 w-full mb-3"
-                value={userData.email}
-                onChange={handleChange}
-              />
-              <div className="text-red-500 text-sm mb-1">{errors.email}</div>
+            <label
+              htmlFor="email"
+              className="block mb-1 font-semibold text-base md:text-lg"
+            >
+              Email:
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Enter your email"
+              className="border rounded-sm p-2 w-full mb-3"
+              value={userData.email}
+              onChange={handleChange}
+            />
+            <div className="text-red-500 text-sm mb-1">{errors.email}</div>
 
-              <label
-                htmlFor="password"
-                className="block mb-1 font-semibold text-base md:text-lg"
-              >
-                Password:
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Enter your password"
-                className="border rounded-sm p-2 w-full mb-3"
-                value={userData.password}
-                onChange={handleChange}
-              />
-              <div className="text-red-500 text-sm mb-1">{errors.password}</div>
+            <label
+              htmlFor="password"
+              className="block mb-1 font-semibold text-base md:text-lg"
+            >
+              Password:
+            </label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Enter your password"
+              className="border rounded-sm p-2 w-full mb-3"
+              value={userData.password}
+              onChange={handleChange}
+            />
+            <div className="text-red-500 text-sm mb-1">{errors.password}</div>
             <div className="flex justify-between">
               <p
                 onClick={handleOTP}
@@ -161,7 +159,12 @@ const Login = () => {
             >
               Login
             </button>
-            <p onClick={handleForgotPassword} className="cursor-pointer text-xs underline">Forgot Password?</p>
+            <p
+              onClick={handleForgotPassword}
+              className="cursor-pointer text-xs underline"
+            >
+              Forgot Password?
+            </p>
           </form>
 
           <p className="text-xs underline">Want to create an account?</p>
@@ -174,10 +177,7 @@ const Login = () => {
         </div>
 
         <div className="md:w-[50%] w-full flex items-center justify-center">
-          <img
-            src={userImage}
-            alt="userImage"
-          />
+          <img src={userImage} alt="userImage" />
         </div>
       </div>
     </div>

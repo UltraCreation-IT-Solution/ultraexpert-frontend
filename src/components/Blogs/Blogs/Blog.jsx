@@ -4,7 +4,7 @@ import {
   recentBlog,
   hotTopics,
   allBlogs,
-  BlogCard,
+  BlogCardHorizontal,
 } from "../../../constant";
 import { CiBookmark } from "react-icons/ci";
 import { Link } from "react-router-dom";
@@ -20,11 +20,11 @@ export const BlogBody = () => {
             return (
               <div
                 key={index}
-                className="shrink-0 w-full xs:w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
+                className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
               >
                 <img
-                  src={item.image}
-                  className="w-full h-[200px] object-cover  shrink-0 md:mb-[0.7vw]"
+                  src={item.img}
+                  className="w-full h-[200px] object-cover shrink-0 md:mb-[0.7vw]"
                   alt=""
                 />
                 <div className="px-[0.8vw] pt-2 md:pt-0">
@@ -33,7 +33,7 @@ export const BlogBody = () => {
                     <div>{item.date}</div>
                   </div>
                   <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
-                    {item.head}
+                    {item.title}
                   </div>
                   <div className="text-sm line-clamp-3 md:mb-[1vw]">
                     {item.detail}
@@ -64,10 +64,10 @@ export const BlogBody = () => {
             return (
               <div
                 key={index}
-                className="shrink-0 w-full xs:w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
+                className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
               >
                 <img
-                  src={item.image}
+                  src={item.img}
                   className="w-full h-[200px] object-cover  shrink-0 md:mb-[0.7vw]"
                   alt=""
                 />
@@ -77,7 +77,7 @@ export const BlogBody = () => {
                     <div>{item.date}</div>
                   </div>
                   <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
-                    {item.head}
+                    {item.title}
                   </div>
                   <div className="text-sm line-clamp-3 md:mb-[1vw]">
                     {item.detail}
@@ -123,7 +123,7 @@ export const BlogBody = () => {
         </div>
         <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
           {allBlogs.map((item, idx) => (
-            <BlogCard key={idx} index={idx} items={item} />
+            <BlogCardHorizontal key={idx} index={idx} items={item} />
           ))}
         </div>
       </div>
@@ -133,42 +133,10 @@ export const BlogBody = () => {
 export const SearchedBlog = ({ array }) => {
   console.log(array);
   return (
-    <div className="mt-10 flex flex-wrap justify-center gap-[2vw]">
-      {array.map((temp, index) => {
-        return (
-          <div
-            key={index}
-            className=" shrink-0 w-full h-[68vw] xs:w-[40vw] xs:h-[52vw] md:w-[24vw] md:h-[30vw] rounded-sm bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg mb-[4.5vw] xs:mb-[3vw] md:mb-0"
-          >
-            <img
-              src={temp.image}
-              className="w-full h-[65%] xs:h-1/2 mb-[1vw] md:mb-[0.7vw]"
-              alt=""
-            />
-            <div className="px-[0.8vw]">
-              <div className="flex mb-[1.5vw] justify-between font-semibold text-[2.4vw] xs:text-[2vw] md:text-[1.15vw] text-[#808080]">
-                <div>{temp.name}</div>
-                <div>{temp.date}</div>
-              </div>
-              <div className="font-bold text-[2.15vw]  xs:text-[1.85vw] md:text-[1.05vw] mb-[0.2vw]">
-                {temp.head}
-              </div>
-              <div className="text-[2vw] xs:text-[1.75vw] md:text-[0.9vw] mb-[1.6vw] md:mb-[1vw]">
-                {temp.detail}
-              </div>
-              <div className="w-full flex  text-white justify-between items-center">
-                <Link
-                  to={"blogdetail"}
-                  className="w-[92%] xs:w-[90%] flex justify-center items-center text-white bg-black text-center py-[1.2vw] xs:py-[1vw] md:py-[0.5vw] font-semibold rounded-sm text-[2.25vw] xs:text-[2vw] md:text-[1.12vw] decoration-transparent"
-                >
-                  Read More
-                </Link>
-                <CiBookmark className="w-[5vw] h-[4.5vw] xs:w-[4.5vw] xs:h-[4vw] md:w-[3.5vw] md:h-[3vw] text-black" />
-              </div>
-            </div>
-          </div>
-        );
-      })}
+    <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
+      {array.map((item, idx) => 
+        <BlogCardHorizontal key={idx} index={idx} items={item} />
+      )}
     </div>
   );
 };
@@ -181,9 +149,9 @@ const Blogs = () => {
     // console.log(searchText)
     // setBlogArray(allBlogs.filter((item)=>item.tags.map((item2)=>console.log(item2))));
     setBlogArray(
-      allBlogs.map((item) =>
-        item?.tags?.filter((item2) =>
-          item2?.toLowerCase()?.includes(searchText.toLowerCase())
+      allBlogs.filter((item) =>
+        item?.tags?.some((item2) =>
+        item2?.toLowerCase()?.includes(searchText.toLowerCase())
         )
       )
     );
@@ -219,7 +187,7 @@ const Blogs = () => {
                 {temp?.title}
               </div>
               <div className="my-2 md:my-4 text-xs md:text-base">
-                {temp?.author} | {temp?.date}
+                {temp?.name} | {temp?.date}
               </div>
               <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs md:text-base font-semibold cursor-pointer">
                 Read more
