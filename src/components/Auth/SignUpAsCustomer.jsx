@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../../axios";
 
-const CHECKOUT_STEPS = [
-  { name: "Personal Details" },
-  { name: "Skills" },
-];
+const CHECKOUT_STEPS = [{ name: "Personal Details" }, { name: "Skills" }];
 
 const SignUpAsCustomer = () => {
   const [currStep, setCurrStep] = useState(0);
@@ -12,6 +10,11 @@ const SignUpAsCustomer = () => {
   const [margin, setMargin] = useState({
     marginLeft: 0,
     marginRight: 0,
+  });
+  const [personalInfoForm, setPersonalInfoForm] = useState({
+    marital_status: "Single",
+    about_me: "",
+    profession: "",
   });
 
   const interest = [
@@ -35,10 +38,15 @@ const SignUpAsCustomer = () => {
   const navigate = useNavigate();
   const stepRef = useRef([]);
 
-  const handleNext = (e) => {
-    e.preventDefault();
+  const handleNext = () => {
     setIsComplete(true);
     setCurrStep((prevStep) => prevStep + 1);
+    setIsComplete(false);
+  };
+  const handlePrevious = (e) => {
+    e.preventDefault();
+    setIsComplete(true);
+    setCurrStep((prevStep) => prevStep - 1);
     setIsComplete(false);
   };
 
@@ -46,6 +54,39 @@ const SignUpAsCustomer = () => {
     e.preventDefault();
     setIsComplete(true);
     navigate("/");
+  };
+  const handlePersonalInfoSubmit = async (e) => {
+    e.preventDefault();
+    console.log(personalInfoForm);
+    try {
+      const res = await fetch("http://localhost:8000/customers/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: 1,
+          marital_status: personalInfoForm.marital_status,
+          about_me: personalInfoForm.about_me,
+          profession: personalInfoForm.profession,
+        }),
+        credentials: "include",
+      });
+      const json = await res.json();
+      // const response =await axios.post(
+      //   "/customers/",
+      //   { action: 1, marital_status: "Single", about_me: "", profession: "" },
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //   }
+      // );
+      console.log(json);
+      handleNext();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -125,6 +166,12 @@ const SignUpAsCustomer = () => {
                 <select
                   name="status"
                   id="status"
+                  onChange={(e) => {
+                    setPersonalInfoForm({
+                      ...personalInfoForm,
+                      marital_status: e.target.value,
+                    });
+                  }}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-s-md w-full mb-4"
                 >
                   <option value="single">Single</option>
@@ -138,6 +185,12 @@ const SignUpAsCustomer = () => {
                   type="text"
                   id="profession"
                   name="profession"
+                  onChange={(e) => {
+                    setPersonalInfoForm({
+                      ...personalInfoForm,
+                      profession: e.target.value,
+                    });
+                  }}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   placeholder="Profession"
                 />
@@ -149,13 +202,19 @@ const SignUpAsCustomer = () => {
                   type="text"
                   id="about"
                   name="about"
+                  onChange={(e) => {
+                    setPersonalInfoForm({
+                      ...personalInfoForm,
+                      about_me: e.target.value,
+                    });
+                  }}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                   placeholder="I want to learn css, html, python with django"
                 />
               </div>
               <div className="flex justify-end mx-20 mb-8">
                 <button
-                  onClick={handleNext}
+                  onClick={handlePersonalInfoSubmit}
                   className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
@@ -216,7 +275,13 @@ const SignUpAsCustomer = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-end mx-20 mb-8">
+              <div className="flex gap-2 justify-end mx-20 mb-8">
+                <button
+                  onClick={handlePrevious}
+                  className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                >
+                  Previous
+                </button>
                 <button
                   onClick={handleSubmit}
                   className=" cursor-pointer px-6 py-2 text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md"

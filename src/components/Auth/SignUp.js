@@ -88,19 +88,19 @@ const SignUp = () => {
     e.preventDefault();
     if (validateEmail()) {
       try {
-        const response = await axios.get(
-          `/verify/?action=1&email=${secondStep.email}`
+        console.log(secondStep.email);
+        const res = await fetch(
+          `http://localhost:8000/verify/?action=1&email=${secondStep.email}`
         );
-        if (
-          response.data.status === 404 ||
-          response.data.status === 500 ||
-          response.data.status === 400 ||
-          !response.data
-        ) {
+        const json = await res.json();
+        console.log(json);
+        // const response = await axios.get(
+        //   `/verify/?action=1&email=${secondStep.email}`
+        // );
+        if (!json) {
           window.alert("Invalid Email");
           return;
         }
-        console.log(response.data);
         nextStep();
       } catch (error) {
         console.log(error.message);
@@ -122,6 +122,7 @@ const SignUp = () => {
   };
 
   const handleChange2 = (e) => {
+    e.preventDefault();
     const { name, value } = e.target;
     setSecondStep({
       ...secondStep,
@@ -134,20 +135,19 @@ const SignUp = () => {
     e.preventDefault();
     if (validateOTP()) {
       try {
-        const response = await axios.get(
-          `/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
+        const res = await fetch(
+          `http://localhost:8000/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
         );
-        const data = response.data;
-        if (
-          data.status === 404 ||
-          data.status === 500 ||
-          data.status === 400 ||
-          !data
-        ) {
+        const json = await res.json();
+        console.log(json);
+        // const response = await axios.get(
+        //   `/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
+        // );
+        // const data = response.data;
+        if (!json) {
           window.alert("Invalid OTP");
           return;
         }
-        console.log(data);
         nextStep();
       } catch (error) {
         console.log(error.message);
@@ -182,9 +182,12 @@ const SignUp = () => {
     // console.log(e);
     if (validatePassword()) {
       try {
-        const response = await axios.post(
-          "/register/",
-          {
+        const res = await fetch("http://localhost:8000/register/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             first_name: firstStep.firstName,
             last_name: firstStep.lastName,
             mobile_number: firstStep.mobileNumber,
@@ -192,20 +195,54 @@ const SignUp = () => {
             email: secondStep.email,
             password1: forthStep.password,
             password2: forthStep.confirmPassword,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+          }),
+          credentials: "include",
+        });
+        // const response = await axios.post(
+        //   "/register/",
+        //   {
+        //     first_name: firstStep.firstName,
+        //     last_name: firstStep.lastName,
+        //     mobile_number: firstStep.mobileNumber,
+        //     reffered_by: firstStep.refBy,
+        //     email: secondStep.email,
+        //     password1: forthStep.password,
+        //     password2: forthStep.confirmPassword,
+        //   },
+        //   {
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //   }
+        // );
 
-        const data = response.data;
-        if (data.status === 404 || data.status === 400 || !data) {
+        const json = await res.json();
+        if (!json) {
           window.alert("Invalid Registration");
           console.log("Invalid Registration");
         } else {
-          console.log(data);
+          console.log(json);
+          try {
+            const response = await fetch("http://localhost:8000/login/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: secondStep.email,
+                password: forthStep.password,
+              }),
+              credentials: "include",
+            });
+            const json = await response.json();
+            if (!json) {
+              window.alert("Invalid Login Credentials");
+              return;
+            }
+            console.log(json);
+          } catch (error) {
+            console.error(error);
+          }
           window.alert("Registration Successful");
           navigate("/signUpAs");
         }

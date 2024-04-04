@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 
 const Login = () => {
-
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -30,10 +29,7 @@ const Login = () => {
       newErrors.email = "Invalid email";
       isValid = false;
     }
-    if (
-      !userData.password ||
-      !passwordRegex.test(userData.password)
-    ) {
+    if (!userData.password || !passwordRegex.test(userData.password)) {
       newErrors.password = "Invalid password";
       isValid = false;
     }
@@ -45,28 +41,37 @@ const Login = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const res = await axios.post(
-          "/login/",
-          {
+        const response = await fetch("http://localhost:8000/login/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             email: userData.email,
             password: userData.password,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
-          {
-            withCredentials: true,
-          }
-        );
-        if (res.status === 200) {
+          }),
+          credentials: "include",
+        });
+        // const res = await axios.post(
+        //   "/login/",
+        //   {
+        //     email: userData.email,
+        //     password: userData.password,
+        //   },
+        //   {
+        //     withCredentials: true,
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //   }
+        // );
+        if (response.status === 200) {
           console.log("Login successful");
-          console.log(res.data);
+          console.log(response.data);
           navigate("/");
         }
       } catch (error) {
-        console.error(error);
+        console.error(error?.response?.data?.msg);
       }
     }
   };
@@ -101,40 +106,36 @@ const Login = () => {
         <div className="flex flex-col md:w-[50%] w-full ">
           <h1 className="text-4xl font-bold mb-8 text-[#3E5676]">Login</h1>
           <form className="mb-2" onSubmit={handleSubmit}>
+            <label htmlFor="email" className="block mb-1 font-semibold text-lg">
+              Email:
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Enter your email"
+              className="border rounded-sm p-2 w-full"
+              value={userData.email}
+              onChange={handleChange}
+            />
+            <p className="text-red-500">{errors.email}</p>
 
-              <label
-                htmlFor="email"
-                className="block mb-1 font-semibold text-lg"
-              >
-                Email:
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter your email"
-                className="border rounded-sm p-2 w-full"
-                value={userData.email}
-                onChange={handleChange}
-              />
-              <p className="text-red-500">{errors.email}</p>
-
-              <label
-                htmlFor="password"
-                className="block mb-1 font-semibold text-lg"
-              >
-                Password:
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Enter your password"
-                className="border rounded-sm p-2 w-full"
-                value={userData.password}
-                onChange={handleChange}
-              />
-              <p className="text-red-500">{errors.password}</p>
+            <label
+              htmlFor="password"
+              className="block mb-1 font-semibold text-lg"
+            >
+              Password:
+            </label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Enter your password"
+              className="border rounded-sm p-2 w-full"
+              value={userData.password}
+              onChange={handleChange}
+            />
+            <p className="text-red-500">{errors.password}</p>
             <div className="flex justify-between">
               <p
                 onClick={handleOTP}
@@ -155,7 +156,12 @@ const Login = () => {
             >
               Login
             </button>
-            <p onClick={handleForgotPassword} className="cursor-pointer text-xs underline">Forgot Password?</p>
+            <p
+              onClick={handleForgotPassword}
+              className="cursor-pointer text-xs underline"
+            >
+              Forgot Password?
+            </p>
           </form>
 
           <p className="text-xs underline">Want to create an account?</p>
