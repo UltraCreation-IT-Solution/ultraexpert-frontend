@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 const CreateService = () => {
-
   const interest = [
     { id: 1, name: "Python" },
     { id: 2, name: "C++" },
@@ -20,6 +19,21 @@ const CreateService = () => {
     }
   };
 
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+    if (files.length > 4) {
+      setErrorMessage('Maximum of 4 files allowed!');
+      return;
+    }
+
+    // Clear previous error message
+    setErrorMessage('');
+
+    setSelectedFiles(Array.from(files)); // Convert FileList to array
+  };
 
   return (
     <div className="mt-[100px] bg-white h-screen">
@@ -90,10 +104,56 @@ const CreateService = () => {
               })}
             </div>
           </div>
-          <label htmlFor="uploadImages" className="text-lg mb-1">Upload Images (optional)</label>
-          <input type="file" multiple className="border border-solid border-slate-300 rounded-md px-4 py-2 mb-8"/>
+          <div className="flex flex-col items-center justify-center p-4 border border-gray-300 rounded-md">
+            <label
+              htmlFor="fileInput"
+              className="text-gray-700 cursor-pointer hover:text-blue-500"
+            >
+              {selectedFiles.length === 0 ? (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 16l4.586-4.586a2 2 0 0 1 2.828 0l11.172
+                 4.586a2 2 0 0 1 0 2.828L8.71 22a2 2 0 0 1-2.828-2.828z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 8l6.743 6.743a2 2 0 0 1-2.828 2.828L10 18a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2z"
+                    />
+                  </svg>
+                  <span className="ml-2">Select Images</span>
+                </>
+              ) : (
+                <span>{selectedFiles.length} files selected (Max: 4)</span>
+              )}
+            </label>
+            <input
+              id="fileInput"
+              type="file"
+              multiple
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            {errorMessage && (
+              <p className="text-red-500 mt-2">{errorMessage}</p>
+            )}
+          </div>
           <div className="flex justify-center mb-4">
-            <button className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md">Create</button>
+            <button className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md">
+              Create
+            </button>
           </div>
         </form>
       </div>

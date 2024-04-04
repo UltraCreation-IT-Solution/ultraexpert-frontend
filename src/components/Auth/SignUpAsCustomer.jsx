@@ -34,7 +34,7 @@ const SignUpAsCustomer = () => {
       });
       const json = await res.json();
       console.log(json);
-      handleNext(e);
+      handleNext();
     }catch(error){
       console.log(error.message);
     }
@@ -127,7 +127,7 @@ const SignUpAsCustomer = () => {
           </div>
           <div className="h-[1px] w-full bg-gray-400 my-2"></div>
           {currStep === 0 && (
-            <form className="flex flex-col">
+            <form onSubmit={updatePersonalInfo} className="flex flex-col">
               <div className="flex flex-col text-center my-5 md:my-8">
                 <div className="text-3xl md:text-4xl font-bold text-[#3E5676]">
                   Sign Up as Customer
@@ -170,17 +170,18 @@ const SignUpAsCustomer = () => {
                   About Me
                 </label>
                 <textarea
-                  required
                   type="text"
                   id="about"
                   name="about"
+                  value={personalInfo.about_me}
+                  onChange={(e)=>setPersonalInfo({ ...personalInfo, [e.target.name]: e.target.value })}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                   placeholder="I want to learn css, html, python with django"
                 />
               </div>
               <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
                 <button
-                  onClick={updatePersonalInfo}
+                  type="submit"
                   className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
