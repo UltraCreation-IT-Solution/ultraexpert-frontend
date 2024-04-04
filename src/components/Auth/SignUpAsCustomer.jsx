@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 
 const CHECKOUT_STEPS = [{ name: "Personal Details" }, { name: "Skills" }];
-const CHECKOUT_STEPS = [{ name: "Personal Details" }, { name: "Skills" }];
 
 const SignUpAsCustomer = () => {
   const [currStep, setCurrStep] = useState(0);

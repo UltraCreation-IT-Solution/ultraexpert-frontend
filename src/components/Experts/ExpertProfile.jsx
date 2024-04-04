@@ -24,7 +24,6 @@ import {
   BlogCard,
   ShowSchedule,
 } from "../../constant";
-import { Sticky, StickyContainer } from "react-sticky";
 
 export const ExpertSummary = () => {
   return (
