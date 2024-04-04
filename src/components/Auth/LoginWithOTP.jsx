@@ -59,19 +59,18 @@ const LoginWithOTP = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = await axios.get(`/login/?email=${userEmail.email}`);
-        const data = response.data;
+        const res = await fetch(`http://localhost:8000/login/?email=${userEmail.email}`);
+        const json = await res.json();
+        console.log(json);
+        // const response = await axios.get(`/login/?email=${userEmail.email}`);
+        // const data = response.data;
         if (
-          data.status === 404 ||
-          data.status === 500 ||
-          data.status === 400 ||
-          !data
+          !json
         ) {
           window.alert("Invalid OTP");
           return;
         }
-        console.log(data);
-        alert("OTP sent successfully to your mobile number");
+        alert("OTP sent successfully to your email address");
         nextStep();
       } catch (error) {
         console.log(error.message);
@@ -84,17 +83,26 @@ const LoginWithOTP = () => {
     setUserOtp({ ...userOtp, email: userEmail.email });
     if (validateForm2()) {
       try {
-        const response = await axios.post("/login/", {email:userEmail.email,otp:userOtp.otp}, {
+        const res = await fetch("http://localhost:8000/login/",{
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({email:userEmail.email,otp:userOtp.otp}),
         });
-        const data = response.data;
-        if (data.status === 404 || data.status === 500 || data.status === 400) {
+        // const response = await axios.post("/login/", {email:userEmail.email,otp:userOtp.otp}, {
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        // });
+        // const data = response.data;
+        const json = await res.json();
+        console.log(json);
+        if (!json) {
           window.alert("Invalid OTP");
           return;
         }
-        console.log(data);
+        // console.log(data);
         alert("Login Successfull!");
         navigate("/");
       } catch (error) {
@@ -116,18 +124,18 @@ const LoginWithOTP = () => {
   };
 
   return (
-    <div className="md:min-h-screen mt-[40px] bg-white flex justify-center items-center">
-      <div className="lg:max-w-[50vw] md:w-[75%] w-[90%] flex md:flex-row flex-col bg-white px-8 pb-8 rounded-xl shadow-md border border-solid border-[#a3a3a3]">
+    <div className="md:h-screen mt-[100px] bg-white">
+      <div className="lg:w-[60%] md:w-[75%] sm:w-[85%] w-[95%] flex md:flex-row flex-col mx-auto bg-white px-8 pb-8 rounded-xl shadow-md border border-solid border-[#a3a3a3]">
         {step === 1 && (
           <form
             onSubmit={handleSentOTP}
             className="flex flex-col md:w-[50%] w-full"
           >
-            <h1 className="text-4xl font-bold mb-8 text-[#3E5676]">Login With OTP</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">Login With OTP</h1>
 
               <label
                 htmlFor="email"
-                className="block text-lg font-semibold mb-1"
+                className="block text-base md:text-lg font-semibold mb-1"
               >
                 Enter your email address:
               </label>
@@ -136,14 +144,14 @@ const LoginWithOTP = () => {
                 id="email"
                 name="email"
                 placeholder="Enter your email address"
-                className="border rounded-sm p-2 w-full"
+                className="border rounded-sm p-2 w-full mb-3"
                 value={userEmail.email}
                 onChange={(e) =>
                   setUserEmail({ ...userEmail, email: e.target.value })
                 }
               />
             
-            <p className="text-red-500">{errors.email}</p>
+            <div className="text-red-500 text-sm mb-1">{errors.email}</div>
             <div className="flex justify-between">
               <p
                 onClick={handleLogin}
@@ -160,14 +168,14 @@ const LoginWithOTP = () => {
             </div>
             <button
               type="submit"
-              className="bg-[#272727] text-lg text-white cursor-pointer font-semibold mb-[1vw] py-2 px-4 rounded-md w-full"
+              className="bg-[#272727] text-base md:text-lg text-white cursor-pointer font-semibold mb-[1vw] py-2 px-4 rounded-md w-full"
             >
               Send OTP
             </button>
             <p className="text-xs underline">Want to create an account?</p>
             <button
               onClick={handleSignUp}
-              className="bg-white text-[#272727] w-full text-lg font-semibold px-4 py-2 cursor-pointer rounded-md border border-solid border-[#272727]"
+              className="bg-white text-[#272727] w-full text-base md:text-lg font-semibold px-4 py-2 cursor-pointer rounded-md border border-solid border-[#272727]"
             >
               Sign Up
             </button>
@@ -178,11 +186,11 @@ const LoginWithOTP = () => {
             onSubmit={handleOTPVerification}
             className="flex flex-col md:w-[50%] w-full"
           >
-            <h1 className="text-4xl font-bold mb-8">Login With OTP</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8">Login With OTP</h1>
             
               <label
                 htmlFor="email"
-                className="block text-lg font-semibold mb-1"
+                className="block text-base md:text-lg font-semibold mb-1"
               >
                 Enter your email address:
               </label>
@@ -191,15 +199,15 @@ const LoginWithOTP = () => {
                 id="email"
                 name="email"
                 placeholder="Enter your email address"
-                className="border rounded-md p-2 w-full"
+                className="border rounded-md p-2 w-full mb-3"
                 defaultValue={userEmail.email}
               />
             
-            <p className="text-red-500">{errors.email}</p>
+            <div className="text-red-500 text-sm mb-1">{errors.email}</div>
             
               <label
                 htmlFor="otp"
-                className="text-lg font-semibold mb-2"
+                className="text-base before:md:text-lg font-semibold mb-2"
               >
                 Enter OTP:
               </label>
@@ -208,11 +216,11 @@ const LoginWithOTP = () => {
                 id="otp"
                 name="otp"
                 placeholder="Enter OTP"
-                className="border rounded-md p-2 w-full"
+                className="border rounded-md p-2 w-full mb-3"
                 value={userOtp.otp}
                 onChange={(e) => setUserOtp({...userOtp, otp: e.target.value })}
               />
-              <p className="text-red-500">{errors.otp}</p>
+              <div className="text-red-500 text-sm mb-1">{errors.otp}</div>
             
             <div className="flex justify-between">
               <p
@@ -230,30 +238,29 @@ const LoginWithOTP = () => {
             </div>
             <button
               onClick={prevStep}
-              className="bg-gray-500 text-lg text-white cursor-pointer font-semibold py-2 px-4 mb-2 rounded-md w-full"
+              className="bg-gray-500 text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 mb-2 rounded-md w-full"
             >
               Previous
             </button>
             <button
               type="submit"
-              className="bg-[#272727] text-lg text-white cursor-pointer font-semibold mb-[1vw] py-2 px-4 rounded-md w-full"
+              className="bg-[#272727] text-base md:text-lg text-white cursor-pointer font-semibold mb-[1vw] py-2 px-4 rounded-md w-full"
             >
               Verify OTP
             </button>
             <p className="text-xs underline">Want to create an account?</p>
             <button
               onClick={handleSignUp}
-              className="bg-white text-[#272727] w-full text-lg font-semibold px-4 py-2 cursor-pointer rounded-md border border-solid border-[#272727]"
+              className="bg-white text-[#272727] w-full text-base md:text-lg font-semibold px-4 py-2 cursor-pointer rounded-md border border-solid border-[#272727]"
             >
               Sign Up
             </button>
           </form>
         )}
-        <div className="md:w-[50%] flex items-center justify-center">
+        <div className="md:w-[50%] w-full flex items-center justify-center">
           <img
             src={userImage}
             alt="userImage"
-            className="lg:w-[385px] lg:h-[300px] md:w-[300px] md:h-[220px] sm:w-[370px] sm:h-[250px] w-[300px] h-[220px]"
           />
         </div>
       </div>

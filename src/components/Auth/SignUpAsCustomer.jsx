@@ -11,6 +11,35 @@ const SignUpAsCustomer = () => {
     marginRight: 0,
   });
 
+  const [personalInfo,setPersonalInfo] = useState({
+    marital_status:"Single",
+    profession:"",
+    about_me:"",
+  });
+
+  const updatePersonalInfo = async(e) => {
+    e.preventDefault();
+    try{
+      const res = await fetch("http://localhost:8000/customers/",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify({
+          marital_status:personalInfo.marital_status,
+          profession:personalInfo.profession,
+          about_me:personalInfo.about_me
+        }),
+        credentials:"include",
+      });
+      const json = await res.json();
+      console.log(json);
+      handleNext(e);
+    }catch(error){
+      console.log(error.message);
+    }
+  };
+
   const interest = [
     { id: 1, name: "Python" },
     { id: 2, name: "C++" },
@@ -114,6 +143,8 @@ const SignUpAsCustomer = () => {
                 <select
                   name="status"
                   id="status"
+                  value={personalInfo.marital_status}
+                  onChange={(e)=>setPersonalInfo({ ...personalInfo, [e.target.name]: e.target.value })}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                 >
                   <option value="single">Single</option>
@@ -130,6 +161,8 @@ const SignUpAsCustomer = () => {
                   type="text"
                   id="profession"
                   name="profession"
+                  value={personalInfo.profession}
+                  onChange={(e)=>setPersonalInfo({ ...personalInfo, [e.target.name]: e.target.value })}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   placeholder="Profession"
                 />
@@ -147,7 +180,7 @@ const SignUpAsCustomer = () => {
               </div>
               <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
                 <button
-                  onClick={handleNext}
+                  onClick={updatePersonalInfo}
                   className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
