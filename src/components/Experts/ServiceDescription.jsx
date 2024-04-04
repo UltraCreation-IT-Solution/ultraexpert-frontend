@@ -1,13 +1,10 @@
 import React from "react";
-import { MdStar, MdMessage } from "react-icons/md";
 import { RiFlowChart } from "react-icons/ri";
-import { IoChatboxOutline } from "react-icons/io5";
 import { GoArrowLeft } from "react-icons/go";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import { CiSquarePlus } from "react-icons/ci";
 import { IoMdSend } from "react-icons/io";
-import { FcVideoCall, FcClock } from "react-icons/fc";
-import { FaPersonChalkboard } from "react-icons/fa6";
+import { FcVideoCall } from "react-icons/fc";
 import { ProjectsCarousel, ShowSchedule } from "../../constant";
 import { ExpertRatings } from "./ExpertProfile";
 import { useState } from "react";
@@ -31,9 +28,13 @@ export const ServiceProfileCard = () => {
       </div>
 
       <div className="flex items-center gap-10">
-        <div className="text-base text-gray-600 cursor-pointer shrink-0">Services</div>
+        <div className="text-base text-gray-600 cursor-pointer shrink-0">
+          Services
+        </div>
         <a href="#projects" className="decoration-transparent">
-          <div className="text-base text-gray-600 cursor-pointer shrink-0">Projects</div>
+          <div className="text-base text-gray-600 cursor-pointer shrink-0">
+            Projects
+          </div>
         </a>
         <a href="#ratings" className="decoration-transparent">
           <div className="text-base text-gray-600 cursor-pointer shrink-0">
@@ -50,7 +51,7 @@ export const ServiceProfileCard = () => {
 };
 
 const ServiceDescription = ({ services, skills }) => {
-  const [currentDateClick, setCurrentDateClick] = useState("")
+  const [currentDateClick, setCurrentDateClick] = useState("");
 
   const [showChat, setShowChat] = useState(false);
   const params = useParams();
@@ -63,7 +64,7 @@ const ServiceDescription = ({ services, skills }) => {
           <ServiceProfileCard />
           <div className="h-auto mt-5 md:mt-10">
             <div className="text-xl md:text-3xl gap-4 font-semibold flex items-start my-5">
-              <RiFlowChart className="mt-1"/>
+              <RiFlowChart className="mt-1" />
               <div>{services[params?.id - 1]?.title}</div>
             </div>
             <div className="flex items-center gap-6 overflow-x-scroll mt-[2vw] shadow-sm drop-shadow-md">
@@ -105,46 +106,10 @@ const ServiceDescription = ({ services, skills }) => {
             </div>
             <div className="lg:hidden w-full">
               <div className="my-8">
-              <ShowSchedule/>
-              </div>
-               
-              <div className="w-full px-2 py-6 border border-solid border-slate-300 rounded-lg">
-                <div className="pb-3 font-bold">
-                  Book a 1:1 trial with Antony
-                </div>
-                <div className="my-3 border-b border-solid border-slate-200"></div>
-                <div className="mt-3 text-3xl font-semibold ">₹ 12,500</div>
-                <div className="mt-6 border-2 border-solid border-black text-lg font-semibold text-center p-3 rounded-lg cursor-pointer">
-                  Buy the service
-                </div>
-                <div className="my-5 text-base text-gray-500">
-                  Every month of mentorship includes
-                </div>
-                <div className="text-sm flex items-center gap-2">
-                  <FcVideoCall className="text-xl" /> 1 session / week{" "}
-                  <span className="text-xs text-gray-500">(1:1 session)</span>{" "}
-                </div>
-                <div className="mt-2 text-sm flex items-center gap-2">
-                  <MdMessage className="text-xl text-blue-500" />
-                  Within 2 hours{" "}
-                  <span className="text-xs text-gray-500">
-                    (Chat support)
-                  </span>{" "}
-                </div>
-                <div className="mt-2 text-sm flex items-center gap-2">
-                  <FcClock className="text-xl" />
-                  Every 2 days{" "}
-                  <span className="text-xs text-gray-500">
-                    (Task & followup)
-                  </span>{" "}
-                </div>
-                <div className="mt-2 text-sm flex items-center gap-2">
-                  <FaPersonChalkboard className="text-xl" />
-                  Community lead{" "}
-                  <span className="text-xs text-gray-500">
-                    (Job referral)
-                  </span>{" "}
-                </div>
+                <ShowSchedule
+                  price={services[params?.id - 1]?.price}
+                  id={services[params?.id - 1]?.id}
+                />
               </div>
             </div>
             <div id="ratings" className="mt-10">
@@ -218,41 +183,10 @@ const ServiceDescription = ({ services, skills }) => {
             </button>
           </div> */}
           <div className="mx-[2.5vw] w-full">
-            <ShowSchedule/>
-          </div>
-          
-
-          <div className="mt-5 w-full mx-[2.5vw] px-2 py-6 border border-solid border-slate-300 rounded-lg">
-            <div className="pb-3 font-bold">Book a 1:1 trial with Antony</div>
-            <div className="my-3 border-b border-solid border-slate-200"></div>
-            <div className="mt-3 text-3xl font-semibold ">₹ 12,500</div>
-            <div className="mt-6 border-2 border-solid border-black text-lg font-semibold text-center p-3 rounded-lg cursor-pointer">
-              Buy the service
-            </div>
-            <div className="my-5 text-base text-gray-500">
-              Every month of mentorship includes
-            </div>
-            <div className="text-sm flex items-center gap-2">
-              <FcVideoCall className="text-xl" /> 1 session / week{" "}
-              <span className="text-xs text-gray-500">(1:1 session)</span>{" "}
-            </div>
-            <div className="mt-2 text-sm flex items-center gap-2">
-              <MdMessage className="text-xl text-blue-500" />
-              Within 2 hours{" "}
-              <span className="text-xs text-gray-500">(Chat support)</span>{" "}
-            </div>
-            <div className="mt-2 text-sm flex items-center gap-2">
-              <FcClock className="text-xl" />
-              Every 2 days{" "}
-              <span className="text-xs text-gray-500">
-                (Task & followup)
-              </span>{" "}
-            </div>
-            <div className="mt-2 text-sm flex items-center gap-2">
-              <FaPersonChalkboard className="text-xl" />
-              Community lead{" "}
-              <span className="text-xs text-gray-500">(Job referral)</span>{" "}
-            </div>
+            <ShowSchedule
+              price={services[params?.id - 1]?.price}
+              id={services[params?.id - 1]?.id}
+            />
           </div>
         </div>
       </div>

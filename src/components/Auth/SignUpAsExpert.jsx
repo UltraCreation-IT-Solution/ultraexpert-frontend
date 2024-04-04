@@ -6,7 +6,7 @@ const CHECKOUT_STEPS = [
   { name: "Education" },
   { name: "Skill Set" },
   { name: "Experience" },
-  { name: "Account Details"},
+  { name: "Account Details" },
 ];
 
 const SignUpAsExpert = () => {
@@ -42,8 +42,26 @@ const SignUpAsExpert = () => {
 
   const stepRef = useRef([]);
 
-  const handleNext1 = (e) => {
+  const [userData, setUserData] = useState({
+    gender: "",
+    level: "",
+    about_me: "",
+    profession: "",
+  });
+
+  const handleNext1 = async (e) => {
     e.preventDefault();
+    console.log(e);
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+    try {
+      const response = await axios.post("/experts/", {
+        gender: userData.gender,
+        level: userData.level,
+        about_me: userData.about_me,
+        profession: userData.profession,
+      });
+
+    } catch (error) {}
     setIsComplete(true);
     setCurrStep((prevStep) => prevStep + 1);
     setIsComplete(false);
@@ -84,34 +102,35 @@ const SignUpAsExpert = () => {
     return (currStep / (CHECKOUT_STEPS.length - 1)) * 100;
   };
 
-
   if (!CHECKOUT_STEPS.length) return <></>;
 
   return (
-    <div className="min-h-screen mt-[80px] bg-white">
-      <div className="w-[60%] border border-solid border-gray-300 mx-auto">
+    <div className="h-screen mt-[100px] bg-white">
+      <div className="w-[95%] md:w-[60%] border border-solid border-gray-300 mx-auto">
         <>
-          <div className="relative flex justify-between items-center my-5 mx-20">
+          <div className="relative flex justify-between items-center my-5 lg:mx-20">
             {CHECKOUT_STEPS.map((step, index) => (
               <div
                 key={step.name}
                 ref={(el) => (stepRef.current[index] = el)}
-                className={`flex flex-col items-center relative ${
-                  currStep > index || isComplete
-                    ? "text-[#3E5676]"
-                    : "text-gray-400"
-                } ${currStep === index ? "text-[#3E5676]" : ""}`}
+                className="flex flex-col items-center relative"
               >
                 <div
-                  className={`w-7 h-7 rounded-full bg-white flex items-center justify-center mb-1 z-10 border border-solid ${
-                    currStep > index || isComplete
-                      ? "border-[#3E5676]"
-                      : "border-gray-400"
+                  className={`w-5 h-5 md:w-7 md:h-7 rounded-full bg-white flex items-center text-xs md:text-sm justify-center mb-1 z-10 border border-solid ${
+                    currStep >= index || isComplete
+                      ? "text-[#3E5676] border-[#3E5676]"
+                      : "text-gray-400 border-gray-400"
                   } `}
                 >
                   {currStep > index || isComplete ? "✔" : index + 1}
                 </div>
-                <div className="text-xs">{step.name}</div>
+                <div
+                  className={`text-xs  ${
+                    currStep >= index ? "text-[#3E5676]" : "text-gray-400"
+                  }`}
+                >
+                  {step.name}
+                </div>
               </div>
             ))}
             <div
@@ -133,18 +152,21 @@ const SignUpAsExpert = () => {
           <div className="h-[1px] w-full bg-gray-400 my-2"></div>
           {currStep === 0 && (
             <form className="flex flex-col">
-              <div className="flex flex-col text-center my-8">
-                <div className="text-4xl font-bold text-[#3E5676]">
+              <div className="flex flex-col text-center mt-5 mb-8">
+                <div className="text-3xl md:text-4xl font-bold text-[#3E5676]">
                   Sign Up as Expert
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-xs md:text-sm text-gray-500">
                   Provide accurate information to ensure proper record-keeping.
                 </div>
               </div>
-              <div className="flex justify-center mx-auto flex-col w-[50%] mb-8">
+              <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
                 <div className="flex justify-around gap-5">
                   <div className="flex flex-col w-full">
-                    <label htmlFor="gender" className="text-lg mb-1">
+                    <label
+                      htmlFor="gender"
+                      className="text-base md:text-lg mb-1"
+                    >
                       Gender
                     </label>
                     <select
@@ -158,7 +180,10 @@ const SignUpAsExpert = () => {
                     </select>
                   </div>
                   <div className="flex flex-col w-full">
-                    <label htmlFor="level" className="text-lg mb-1">
+                    <label
+                      htmlFor="level"
+                      className="text-base md:text-lg mb-1"
+                    >
                       Level
                     </label>
                     <select
@@ -173,7 +198,10 @@ const SignUpAsExpert = () => {
                     </select>
                   </div>
                 </div>
-                <label htmlFor="profession" className="text-lg mb-1">
+                <label
+                  htmlFor="profession"
+                  className="text-base md:text-lg mb-1"
+                >
                   Profession
                 </label>
                 <input
@@ -184,7 +212,7 @@ const SignUpAsExpert = () => {
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   placeholder="Profession"
                 />
-                <label htmlFor="about" className="text-lg mb-1">
+                <label htmlFor="about" className="text-base md:text-lg mb-1">
                   About Me
                 </label>
                 <textarea
@@ -196,10 +224,10 @@ const SignUpAsExpert = () => {
                   placeholder="I want to learn css, html, python with django"
                 />
               </div>
-              <div className="flex justify-end mx-20 mb-8">
+              <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   onClick={handleNext1}
-                  className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
                 </button>
@@ -208,15 +236,7 @@ const SignUpAsExpert = () => {
           )}
           {currStep === 1 && (
             <form className="flex flex-col">
-              <div className="flex flex-col text-center my-8">
-                <div className="text-4xl font-bold text-[#3E5676]">
-                  Sign Up as Expert
-                </div>
-                <div className="text-sm text-gray-500">
-                  Provide accurate information to ensure proper record-keeping.
-                </div>
-              </div>
-              <div className="flex justify-center mx-auto flex-col w-[50%] mb-8">
+              <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
                 {educationForms.map((form, ind) => (
                   <>
                     <div key={form.id} className="flex justify-between">
@@ -233,7 +253,7 @@ const SignUpAsExpert = () => {
                     </div>
                     <label
                       htmlFor={`institute${form.id}`}
-                      className="text-lg mb-1"
+                      className="text-base md:text-lg mb-1"
                     >
                       Institute Name
                     </label>
@@ -248,7 +268,7 @@ const SignUpAsExpert = () => {
                       <div className="flex flex-col w-full">
                         <label
                           htmlFor={`type${form.id}`}
-                          className="text-lg mb-1"
+                          className="text-base md:text-lg mb-1"
                         >
                           Type
                         </label>
@@ -263,7 +283,7 @@ const SignUpAsExpert = () => {
                       <div className="flex flex-col w-full">
                         <label
                           htmlFor={`passing${form.id}`}
-                          className="text-lg mb-1"
+                          className="text-base md:text-lg mb-1"
                         >
                           Passing Year
                         </label>
@@ -285,7 +305,7 @@ const SignUpAsExpert = () => {
                       <div className="flex flex-col w-full">
                         <label
                           htmlFor={`city${form.id}`}
-                          className="text-lg mb-1"
+                          className="text-base md:text-lg mb-1"
                         >
                           City
                         </label>
@@ -300,7 +320,7 @@ const SignUpAsExpert = () => {
                       <div className="flex flex-col w-full">
                         <label
                           htmlFor={`state${form.id}`}
-                          className="text-lg mb-1"
+                          className="text-base md:text-lg mb-1"
                         >
                           State
                         </label>
@@ -355,7 +375,7 @@ const SignUpAsExpert = () => {
                       <div className="flex flex-col w-full">
                         <label
                           htmlFor={`country${form.id}`}
-                          className="text-lg mb-1"
+                          className="text-base md:text-lg mb-1"
                         >
                           Country
                         </label>
@@ -694,7 +714,7 @@ const SignUpAsExpert = () => {
                       <div className="flex flex-col w-full">
                         <label
                           htmlFor={`division${form.id}`}
-                          className="text-lg mb-1"
+                          className="text-base md:text-lg mb-1"
                         >
                           Division
                         </label>
@@ -713,235 +733,270 @@ const SignUpAsExpert = () => {
                   </>
                 ))}
               </div>
-              <div className="flex justify-end mx-20 mb-8">
+              <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
+                <button
+                  onClick={() => {
+                    setCurrStep((prev) => prev - 1);
+                  }}
+                  className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-gray-500 rounded-md shadow-md"
+                >
+                  Previous
+                </button>
                 <button
                   onClick={handleNext2}
-                  className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
                 </button>
               </div>
             </form>
           )}
-          {currStep===2 && (
+          {currStep === 2 && (
             <form className="flex flex-col">
-            <div className="flex flex-col text-center my-8">
-              <div className="text-4xl font-bold text-[#3E5676]">
-                Sign Up as Expert
-              </div>
-              <div className="text-sm text-gray-500">
-                Provide accurate information to ensure proper record-keeping.
-              </div>
-            </div>
-            <div className="flex justify-center mx-auto flex-col w-[50%] mb-8">
-              {skillForms.map((form, ind) => (
-                <>
-                  <div key={form.id} className="flex justify-between">
-                    <p className="font-bold text-lg">Skill {ind + 1}</p>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        addSkillForm();
-                      }}
-                      className="underline cursor-pointer text-gray-400 bg-inherit"
+              <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+                {skillForms.map((form, ind) => (
+                  <>
+                    <div key={form.id} className="flex justify-between">
+                      <p className="font-bold text-lg">Skill {ind + 1}</p>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          addSkillForm();
+                        }}
+                        className="underline cursor-pointer text-gray-400 bg-inherit"
+                      >
+                        + Add Skill
+                      </button>
+                    </div>
+                    <label
+                      htmlFor={`technology${form.id}`}
+                      className="text-base md:text-lg mb-1"
                     >
-                      + Add Skill
-                    </button>
-                  </div>
-                  <label htmlFor={`technology${form.id}`} className="text-lg mb-1">
-                    Technology Name
+                      Technology Name
+                    </label>
+                    <input
+                      type="text"
+                      id={`technology${form.id}`}
+                      name={`technology${form.id}`}
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                      placeholder="Institute Name"
+                    />
+                    <label
+                      htmlFor={`rating${form.id}`}
+                      className="text-base md:text-lg mb-1"
+                    >
+                      Rating
+                    </label>
+                    <input
+                      type="number"
+                      id={`rating${form.id}`}
+                      name={`rating${form.id}`}
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-[50%]"
+                      placeholder="1"
+                    />
+                  </>
+                ))}
+              </div>
+              <div className="flex justify-center md:justify-end gap-4 md:mx-20 mb-8">
+                <button
+                  onClick={() => {
+                    setCurrStep((prev) => prev - 1);
+                  }}
+                  className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-gray-500 rounded-md shadow-md"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={handleNext3}
+                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          )}
+          {currStep === 3 && (
+            <form className="flex flex-col">
+              <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+                {experienceForms.map((form, ind) => (
+                  <>
+                    <div key={form.id} className="flex justify-between">
+                      <p className="font-bold text-lg">Experience {ind + 1}</p>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          addExperienceForm();
+                        }}
+                        className="underline cursor-pointer text-gray-400 bg-inherit"
+                      >
+                        + Add Experience
+                      </button>
+                    </div>
+                    <label
+                      htmlFor={`company${form.id}`}
+                      className="text-base md:text-lg mb-1"
+                    >
+                      Company Name
+                    </label>
+                    <input
+                      type="text"
+                      id={`company${form.id}`}
+                      name={`company${form.id}`}
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                      placeholder="Company Name"
+                    />
+                    <div className="flex justify-around gap-5">
+                      <div className="flex flex-col w-full">
+                        <label
+                          htmlFor={`start${form.id}`}
+                          className="text-base md:text-lg mb-1"
+                        >
+                          Start Year
+                        </label>
+                        <select
+                          name={`start${form.id}`}
+                          id={`start${form.id}`}
+                          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                        >
+                          <option value="2021">2021</option>
+                          <option value="2022">2022</option>
+                          <option value="2023">2023</option>
+                          <option value="2024">2024</option>
+                          <option value="2025">2025</option>
+                          <option value="2026">2026</option>
+                        </select>
+                      </div>
+                      <div className="flex flex-col w-full">
+                        <label
+                          htmlFor={`end${form.id}`}
+                          className="text-base md:text-lg mb-1"
+                        >
+                          End Year
+                        </label>
+                        <select
+                          name={`end${form.id}`}
+                          id={`end${form.id}`}
+                          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                        >
+                          <option value="2021">2021</option>
+                          <option value="2022">2022</option>
+                          <option value="2023">2023</option>
+                          <option value="2024">2024</option>
+                          <option value="2025">2025</option>
+                          <option value="2026">2026</option>
+                        </select>
+                      </div>
+                    </div>
+                    <label
+                      htmlFor={`designtaion${form.id}`}
+                      className="text-base md:text-lg mb-1"
+                    >
+                      Designation
+                    </label>
+                    <input
+                      type="text"
+                      id={`designtaion${form.id}`}
+                      name={`designtaion${form.id}`}
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                      placeholder="Designtaion"
+                    />
+                  </>
+                ))}
+              </div>
+              <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
+                <button
+                  onClick={() => {
+                    setCurrStep((prev) => prev - 1);
+                  }}
+                  className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-gray-500 rounded-md shadow-md"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={handleNext4}
+                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          )}
+          {currStep === 4 && (
+            <form className="flex flex-col">
+              <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] my-5">
+                <div className="flex flex-col w-full">
+                  <label
+                    htmlFor="holderName"
+                    className="text-base md:text-lg mb-1"
+                  >
+                    Account Holder Name
                   </label>
                   <input
                     type="text"
-                    id={`technology${form.id}`}
-                    name={`technology${form.id}`}
+                    id="holderName"
+                    name="holderName"
+                    required
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                    placeholder="Institute Name"
+                    placeholder="Account Holder Name"
                   />
-                  <label htmlFor={`rating${form.id}`} className="text-lg mb-1">
-                    Rating
+                  <label
+                    htmlFor="bankName"
+                    className="text-base md:text-lg mb-1"
+                  >
+                    Bank Name
+                  </label>
+                  <input
+                    type="text"
+                    id="bankName"
+                    name="bankName"
+                    required
+                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                    placeholder="Bank Name"
+                  />
+                  <label
+                    htmlFor="accNumber"
+                    className="text-base md:text-lg mb-1"
+                  >
+                    Account Number
                   </label>
                   <input
                     type="number"
-                    id={`rating${form.id}`}
-                    name={`rating${form.id}`}
-                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-[50%]"
-                    placeholder="1"
+                    id="accNumber"
+                    name="accNumber"
+                    required
+                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                    placeholder="Account Number"
                   />
-                </>
-              ))}
-            </div>
-            <div className="flex justify-end mx-20 mb-8">
-                <button
-                  onClick={handleNext3}
-                  className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
-                >
-                  Next
-                </button>
-              </div>
-          </form>
-          )}
-          {currStep===3 && (
-            <form className="flex flex-col">
-            <div className="flex flex-col text-center my-8">
-              <div className="text-4xl font-bold text-[#3E5676]">
-                Sign Up as Expert
-              </div>
-              <div className="text-sm text-gray-500">
-                Provide accurate information to ensure proper record-keeping.
-              </div>
-            </div>
-            <div className="flex justify-center mx-auto flex-col w-[50%] mb-8">
-              {experienceForms.map((form, ind) => (
-                <>
-                  <div key={form.id} className="flex justify-between">
-                    <p className="font-bold text-lg">Experience {ind + 1}</p>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        addExperienceForm();
-                      }}
-                      className="underline cursor-pointer text-gray-400 bg-inherit"
-                    >
-                      + Add Experience
-                    </button>
-                  </div>
-                  <label htmlFor={`company${form.id}`} className="text-lg mb-1">
-                    Company Name
+                  <label htmlFor="ifsc" className="text-base md:text-lg mb-1">
+                    IFSC Code
                   </label>
                   <input
                     type="text"
-                    id={`company${form.id}`}
-                    name={`company${form.id}`}
+                    id="ifsc"
+                    name="ifsc"
+                    required
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                    placeholder="Company Name"
+                    placeholder="IFSC Code"
                   />
-                  <div className="flex justify-around gap-5">
-                    <div className="flex flex-col w-full">
-                      <label htmlFor={`start${form.id}`} className="text-lg mb-1">
-                        Start Year
-                      </label>
-                      <select
-                        name={`start${form.id}`}
-                        id={`start${form.id}`}
-                        className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      >
-                        <option value="2021">2021</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                      </select>
-                    </div>
-                    <div className="flex flex-col w-full">
-                      <label htmlFor={`end${form.id}`} className="text-lg mb-1">
-                        End Year
-                      </label>
-                      <select
-                        name={`end${form.id}`}
-                        id={`end${form.id}`}
-                        className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      >
-                        <option value="2021">2021</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                      </select>
-                    </div>
-                  </div>
-                  <label htmlFor={`designtaion${form.id}`} className="text-lg mb-1">
-                    Designation
-                  </label>
-                  <input
-                    type="text"
-                    id={`designtaion${form.id}`}
-                    name={`designtaion${form.id}`}
-                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                    placeholder="Designtaion"
-                  />
-                </>
-              ))}
-            </div>
-            <div className="flex justify-end mx-20 mb-8">
+                </div>
+              </div>
+              <div className="flex justify-center md:justify-end gap-4 md:mx-20 mb-8">
                 <button
-                  onClick={handleNext4}
-                  className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                  onClick={() => {
+                    setCurrStep((prev) => prev - 1);
+                  }}
+                  className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-gray-500 rounded-md shadow-md"
                 >
-                  Next
+                  Previous
                 </button>
-              </div>
-          </form>
-          )}
-          {currStep===4 && (
-            <form className="flex flex-col">
-            <div className="flex flex-col text-center my-8">
-              <div className="text-4xl font-bold text-[#3E5676]">
-                Sign Up as Expert
-              </div>
-              <div className="text-sm text-gray-500">
-                Provide accurate information to ensure proper record-keeping.
-              </div>
-            </div>
-            <div className="flex justify-center mx-auto flex-col w-[50%] mb-8">
-              <div className="flex flex-col w-full">
-                <label htmlFor="holderName" className="text-lg mb-1">
-                  Account Holder Name
-                </label>
-                <input
-                  type="text"
-                  id="holderName"
-                  name="holderName"
-                  required
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  placeholder="Account Holder Name"
-                />
-                <label htmlFor="bankName" className="text-lg mb-1">
-                  Bank Name
-                </label>
-                <input
-                  type="text"
-                  id="bankName"
-                  name="bankName"
-                  required
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  placeholder="Bank Name"
-                />
-                <label htmlFor="accNumber" className="text-lg mb-1">
-                  Account Number
-                </label>
-                <input
-                  type="number"
-                  id="accNumber"
-                  name="accNumber"
-                  required
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  placeholder="Account Number"
-                />
-                <label htmlFor="ifsc" className="text-lg mb-1">
-                  IFSC Code
-                </label>
-                <input
-                  type="text"
-                  id="ifsc"
-                  name="ifsc"
-                  required
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  placeholder="IFSC Code"
-                />
-              </div>
-            </div>
-            <div className="flex justify-end mx-20 mb-8">
                 <button
                   onClick={handleSubmit}
-                  className=" cursor-pointer px-6 py-2 text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md"
+                  className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md"
                 >
                   Submit
                 </button>
               </div>
-          </form>
+            </form>
           )}
         </>
       </div>

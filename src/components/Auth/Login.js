@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 
 const Login = () => {
-
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -30,10 +29,7 @@ const Login = () => {
       newErrors.email = "Invalid email";
       isValid = false;
     }
-    if (
-      !userData.password ||
-      !passwordRegex.test(userData.password)
-    ) {
+    if (!userData.password || !passwordRegex.test(userData.password)) {
       newErrors.password = "Invalid password";
       isValid = false;
     }
@@ -45,28 +41,35 @@ const Login = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const res = await axios.post(
-          "/login/",
-          {
+        const res = await fetch("http://localhost:8000/login/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             email: userData.email,
             password: userData.password,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
-          {
-            withCredentials: true,
-          }
-        );
+          }),
+          credentials: "include",
+        });
+        // const res = await axios.post(
+        //   "/login/",
+        //   {
+        //     email: userData.email,
+        //     password: userData.password,
+        //   },
+        //   {
+        //     withCredentials: true,
+        //   }
+        // );
+        const json = await res.json();
         if (res.status === 200) {
           console.log("Login successful");
-          console.log(res.data);
+          console.log(json);
           navigate("/");
         }
       } catch (error) {
-        console.error(error);
+        console.error(error?.response?.data?.msg);
       }
     }
   };
@@ -96,45 +99,46 @@ const Login = () => {
   };
 
   return (
-    <div className="md:min-h-screen mt-[40px] bg-white flex justify-center items-center">
-      <div className="lg:max-w-[50vw] md:w-[75%] w-[90%] flex md:flex-row flex-col bg-white px-8 pb-8 rounded-xl shadow-md border border-solid border-[#a3a3a3]">
+    <div className="md:h-screen mt-[100px] bg-white">
+      <div className="lg:w-[60%] md:w-[75%] sm:w-[85%] w-[95%] flex md:flex-row flex-col mx-auto bg-white px-8 pb-8 rounded-xl shadow-md border border-solid border-[#a3a3a3]">
         <div className="flex flex-col md:w-[50%] w-full ">
-          <h1 className="text-4xl font-bold mb-8 text-[#3E5676]">Login</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">
+            Login
+          </h1>
           <form className="mb-2" onSubmit={handleSubmit}>
+            <label
+              htmlFor="email"
+              className="block mb-1 font-semibold text-base md:text-lg"
+            >
+              Email:
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Enter your email"
+              className="border rounded-sm p-2 w-full mb-3"
+              value={userData.email}
+              onChange={handleChange}
+            />
+            <div className="text-red-500 text-sm mb-1">{errors.email}</div>
 
-              <label
-                htmlFor="email"
-                className="block mb-1 font-semibold text-lg"
-              >
-                Email:
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter your email"
-                className="border rounded-sm p-2 w-full"
-                value={userData.email}
-                onChange={handleChange}
-              />
-              <p className="text-red-500">{errors.email}</p>
-
-              <label
-                htmlFor="password"
-                className="block mb-1 font-semibold text-lg"
-              >
-                Password:
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Enter your password"
-                className="border rounded-sm p-2 w-full"
-                value={userData.password}
-                onChange={handleChange}
-              />
-              <p className="text-red-500">{errors.password}</p>
+            <label
+              htmlFor="password"
+              className="block mb-1 font-semibold text-base md:text-lg"
+            >
+              Password:
+            </label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Enter your password"
+              className="border rounded-sm p-2 w-full mb-3"
+              value={userData.password}
+              onChange={handleChange}
+            />
+            <div className="text-red-500 text-sm mb-1">{errors.password}</div>
             <div className="flex justify-between">
               <p
                 onClick={handleOTP}
@@ -151,28 +155,29 @@ const Login = () => {
             </div>
             <button
               type="submit"
-              className="bg-[#272727] text-lg text-white cursor-pointer font-semibold py-2 px-4 rounded-md w-full"
+              className="bg-[#272727] text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 rounded-md w-full"
             >
               Login
             </button>
-            <p onClick={handleForgotPassword} className="cursor-pointer text-xs underline">Forgot Password?</p>
+            <p
+              onClick={handleForgotPassword}
+              className="cursor-pointer text-xs underline"
+            >
+              Forgot Password?
+            </p>
           </form>
 
           <p className="text-xs underline">Want to create an account?</p>
           <button
             onClick={handleSignUp}
-            className="bg-white text-[#272727] w-full text-lg font-semibold px-4 py-2 cursor-pointer rounded-md border border-solid border-[#272727]"
+            className="bg-white text-[#272727] w-full text-base md:text-lg font-semibold px-4 py-2 cursor-pointer rounded-md border border-solid border-[#272727]"
           >
             Sign Up
           </button>
         </div>
 
-        <div className="md:w-[50%] flex items-center justify-center">
-          <img
-            src={userImage}
-            alt="userImage"
-            className="lg:w-[385px] lg:h-[300px] md:w-[300px] md:h-[220px] sm:w-[370px] sm:h-[250px] w-[300px] h-[220px]"
-          />
+        <div className="md:w-[50%] w-full flex items-center justify-center">
+          <img src={userImage} alt="userImage" />
         </div>
       </div>
     </div>
