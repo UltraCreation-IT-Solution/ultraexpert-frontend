@@ -4,7 +4,7 @@ import {
   recentBlog,
   hotTopics,
   allBlogs,
-  BlogCard,
+  BlogCardHorizontal,
 } from "../../../constant";
 import { CiBookmark } from "react-icons/ci";
 import { Link } from "react-router-dom";
@@ -20,11 +20,11 @@ export const BlogBody = () => {
             return (
               <div
                 key={index}
-                className="shrink-0 w-full xs:w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
+                className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
               >
                 <img
                   src={item.img}
-                  className="w-full h-[200px] object-cover  shrink-0 md:mb-[0.7vw]"
+                  className="w-full h-[200px] object-cover shrink-0 md:mb-[0.7vw]"
                   alt=""
                 />
                 <div className="px-[0.8vw] pt-2 md:pt-0">
@@ -64,7 +64,7 @@ export const BlogBody = () => {
             return (
               <div
                 key={index}
-                className="shrink-0 w-full xs:w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
+                className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
               >
                 <img
                   src={item.img}
@@ -123,7 +123,7 @@ export const BlogBody = () => {
         </div>
         <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
           {allBlogs.map((item, idx) => (
-            <BlogCard key={idx} index={idx} items={item} />
+            <BlogCardHorizontal key={idx} index={idx} items={item} />
           ))}
         </div>
       </div>
@@ -135,7 +135,7 @@ export const SearchedBlog = ({ array }) => {
   return (
     <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
       {array.map((item, idx) => 
-        <BlogCard key={idx} index={idx} items={item} />
+        <BlogCardHorizontal key={idx} index={idx} items={item} />
       )}
     </div>
   );

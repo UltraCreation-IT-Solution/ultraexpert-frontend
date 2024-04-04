@@ -9,15 +9,21 @@ import {
 import { CiBookmark } from "react-icons/ci";
 import { RiFlowChart } from "react-icons/ri";
 import { IoDiamondSharp } from "react-icons/io5";
-import { FaUserGraduate, FaUserCheck } from "react-icons/fa6";
+import { FaUserGraduate, FaUserCheck, FaBookmark} from "react-icons/fa6";
 import { IoIosChatboxes } from "react-icons/io";
 import { GiAchievement } from "react-icons/gi";
 import { HiOfficeBuilding } from "react-icons/hi";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
+import { BsBookmarkPlusFill, BsBookmarkDashFill } from "react-icons/bs";
+
 import { Link } from "react-router-dom";
-import { expertDetailsObj, ProjectsCarousel, BlogCard, ShowSchedule } from "../../constant";
-import { Sticky, StickyContainer } from "react-sticky";
+import {
+  expertDetailsObj,
+  ProjectsCarousel,
+  BlogCard,
+  ShowSchedule,
+} from "../../constant";
 
 export const ExpertSummary = () => {
   return (
@@ -80,7 +86,38 @@ export const ExpertSummary = () => {
     </div>
   );
 };
+export const ExpertProfileServiceCard = ({item}) => {
+  
+  const [saveService, setSaveService] = useState(false);
+  return(
+    <div
+         
+    className="flex justify-between items-start gap-2 py-4 md:py-[1vw] mb-[1.5vw] bg-white border-b border-solid border-slate-400"
+  >
+    <RiFlowChart className="mt-3 xs:mt-4 text-xl lg:text-3xl" />
+    <div className="w-full md:flex items-start justify-between gap-5">
+      <h1 className="text-base xs:text-xl lg:text-2xl font-semibold ">
+        {item?.title}
+      </h1>
 
+      <div className="mt-3 xs:mt-4 flex items-center gap-[2.5vw] md:gap-[1vw] shrink-0">
+        <Link to={"service/" + item?.id}>
+          <button className="bg-white px-8 py-1 md:px-[1.8vw] md:py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm cursor-pointer">
+            View
+          </button>
+        </Link>
+        {/* <Link to={"booking/" + temp?.id}>
+          <button className="bg-[#2A2A2A] px-6 py-1 md:px-[1.5vw] md:py-[0.3vw] text-sm md:text-base text-white font-semibold border rounded-sm sm:rounded-md cursor-pointer">
+            Book
+          </button>
+        </Link> */}
+      </div>
+    </div>
+    {!saveService ? <BsBookmarkPlusFill className="mt-3 xs:mt-4 text-3xl md:text-3xl lg:text-4xl cursor-pointer" onClick={() => setSaveService(true)} />: <BsBookmarkDashFill className="mt-3 xs:mt-4 text-3xl md:text-3xl lg:text-4xl cursor-pointer" onClick={()=>setSaveService(false)}/>}
+    
+  </div>
+  )
+}
 export const ExpertServices = () => {
   if (expertDetailsObj?.services.length === 0) {
     return (
@@ -91,33 +128,8 @@ export const ExpertServices = () => {
   }
   return (
     <div className="mb-10 lg:mb-0">
-      {expertDetailsObj.services.map((temp, idx) => (
-        <div
-          key={idx}
-          className="flex justify-between items-start gap-2 py-4 md:py-[1vw] mb-[1.5vw] bg-white border-b border-solid border-slate-400"
-        >
-          <RiFlowChart className="mt-3 xs:mt-4 text-xl lg:text-3xl" />
-          <div className="w-full md:flex items-start justify-between gap-5">
-            <h1 className="text-base xs:text-xl lg:text-2xl font-semibold ">
-              {temp?.title}
-            </h1>
-
-            <div className="mt-3 xs:mt-4 flex items-center gap-[2.5vw] md:gap-[1vw] shrink-0">
-              <Link to={"service/" + temp?.id}>
-                <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md cursor-pointer">
-                  View
-                </button>
-              </Link>
-              <Link to={"booking/" + temp?.id}>
-                <button className="bg-[#2A2A2A] px-6 py-1 md:px-[1.5vw] md:py-[0.3vw] text-sm md:text-base text-white font-semibold border rounded-sm sm:rounded-md cursor-pointer">
-                  Book
-                </button>
-              </Link>
-            </div>
-          </div>
-
-          <CiBookmark className="mt-3 xs:mt-4 text-3xl md:text-3xl lg:text-4xl" />
-        </div>
+      {expertDetailsObj.services.map((item, index) => (
+        <ExpertProfileServiceCard item={item} key={index} />
       ))}
     </div>
   );
@@ -322,7 +334,7 @@ export const ExpertBlogs = () => {
   return (
     <div>
       {expertDetailsObj?.blogs?.map((item, idx) => (
-        <BlogCard key={idx} index={idx} items={item} />
+        <BlogCardHorizontal key={idx} index={idx} items={item} />
       ))}
     </div>
   );
@@ -717,7 +729,7 @@ export const SideComponent = () => {
       </div>
 
       <div className="my-10 mx-[2.5vw] ">
-        <ShowSchedule/>
+        <ShowSchedule />
       </div>
 
       {/*******Accordian starts from here*******/}
@@ -825,7 +837,7 @@ const ExpertProfile = () => {
   return (
     <div>
       <div className="lg:flex mt-[90px] md:mt-[80px]">
-        <div className="lg:w-[70%]">
+        <div className="lg:w-[70%] h-[88vh]">
           <AboutExpert />
           <ExpertInfo />
         </div>

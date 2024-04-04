@@ -44,7 +44,7 @@ const Instructions = ({handleShowInstructions}) => {
                 9. Lorem ipsum dolor sit amet consectetur. Sed diam pharetra elementum tincidunt fringilla in. Nulla arcu sagittis nec nulla et sapien gravida.
                 </div>
             </div>
-            <div className="mt-5 bg-blue-500 hover:bg-blue-600 transition-all text-base text-white px-5 py-2 rounded-lg ml-auto cursor-pointers w-fit"
+            <div className="mt-5 bg-blue-500 hover:bg-blue-600 transition-all text-base text-white px-5 py-2 rounded-lg ml-auto cursor-pointers w-fit cursor-pointer"
             onClick={goToTest}>
                 Agree and Continue
             </div>
