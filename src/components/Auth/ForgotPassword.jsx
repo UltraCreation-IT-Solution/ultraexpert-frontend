@@ -31,19 +31,20 @@ const ForgotPassword = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = await axios.get(`/reset/?email=${userEmail.email}`);
+        const res = await fetch(`http://localhost:8000/reset/?email=${userEmail.email}`);
+        const json = await res.json();
+        console.log(json);
+        // const response = await axios.get(`/reset/?email=${userEmail.email}`);
 
         if (
-          response.data.status === 404 ||
-          response.data.status === 500 ||
-          response.data.status === 400
+          !json
         ) {
           window.alert("Invalid Email");
           return;
         }
 
-        console.log(response.data);
-        alert("OTP sent successfully to your email");
+        // console.log(response.data);
+        alert("OTP sent successfully to your email address.");
         setStep(2);
       } catch (error) {
         console.log(error.message);
@@ -67,30 +68,43 @@ const ForgotPassword = () => {
     e.preventDefault();
     if (validateForm2()) {
       try {
-        const response = await axios.post(
-          "/reset/",
-          {
+        const res = await fetch("http://localhost:8000/reset/",{
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             email: userEmail.email,
             otp: userOtp.otp,
             password: userOtp.password,
             password_confirm: userOtp.confirmPassword,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+          }),
+          credentials: "include",
+        });
+        const json = await res.json();
+        console.log(json);
+        // const response = await axios.post(
+        //   "/reset/",
+        //   {
+        //     email: userEmail.email,
+        //     otp: userOtp.otp,
+        //     password: userOtp.password,
+        //     password_confirm: userOtp.confirmPassword,
+        //   },
+        //   {
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //   }
+        // );
         if (
-          response.data.status === 404 ||
-          response.data.status === 500 ||
-          response.data.status === 400
+          !json
         ) {
           window.alert("Invalid OTP");
           return;
         }
 
-          console.log(response.data);
+          // console.log(response.data);
           alert("Password Reset Successfully");
           navigate("/login");
         } catch (error) {
@@ -127,17 +141,16 @@ const ForgotPassword = () => {
     };
 
     return (
-      <div className="md:min-h-screen mt-[40px] bg-white flex justify-center items-center">
-        <div className="lg:max-w-[50vw] md:w-[75%] w-[90%] flex md:flex-row flex-col bg-white px-8 pb-8 rounded-xl shadow-md border border-solid border-[#a3a3a3]">
+      <div className="md:h-screen mt-[100px] bg-white">
+        <div className="lg:w-[60%] md:w-[75%] sm:w-[85%] w-[90%] flex md:flex-row flex-col mx-auto bg-white px-8 pb-8 rounded-xl shadow-md border border-solid border-[#a3a3a3]">
           <div className="flex flex-col md:w-[50%] w-full">
-            <h1 className="text-4xl font-bold mb-8">Forgot Password</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8">Forgot Password</h1>
             {step === 1 && (
               <>
                 <form onSubmit={handleOtp}>
-                  <div className="mb-2">
                     <label
                       htmlFor="email"
-                      className="block text-lg font-semibold mb-1"
+                      className="block text-base md:text-lg font-semibold mb-1"
                     >
                       Enter your email address:
                     </label>
@@ -145,21 +158,20 @@ const ForgotPassword = () => {
                       type="email"
                       id="email"
                       name="email"
-                      placeholder="Enter your mobile number"
-                      className="border rounded-md p-2 w-full"
+                      placeholder="Enter your email address"
+                      className="border rounded-md p-2 w-full mb-3"
                       value={userEmail.email}
                       onChange={(e) =>
                         setUserEmail({ ...userEmail, email: e.target.value })
                       }
                     />
-                  </div>
-                  <p className="text-red-500">{errors.email}</p>
-                  <button type="submit" className="bg-[#272727] text-white w-full text-lg font-semibold px-4 py-2 cursor-pointer rounded-md">Send OTP</button>
+                  <div className="text-red-500 text-sm mb-1">{errors.email}</div>
+                  <button type="submit" className="bg-[#272727] text-white w-full text-base md:text-lg font-semibold px-4 py-2 cursor-pointer rounded-md">Send OTP</button>
                 </form>
                 <p className="text-xs underline">Want to create an account?</p>
                 <button
                   onClick={handleSignUp}
-                  className="bg-white text-[#272727] w-full text-lg font-semibold px-4 py-2 cursor-pointer rounded-md border border-solid border-[#272727]"
+                  className="bg-white text-[#272727] w-full text-base md:text-lg font-semibold px-4 py-2 cursor-pointer rounded-md border border-solid border-[#272727]"
                 >
                   Sign Up
                 </button>
@@ -168,10 +180,9 @@ const ForgotPassword = () => {
             {step === 2 && (
               <>
                 <form onSubmit={handleResetPassword}>
-                  <div className="mb-2">
                     <label
                       htmlFor="otp"
-                      className="block text-lg font-semibold mb-1"
+                      className="block text-base md:text-lg font-semibold mb-1"
                     >
                       Enter OTP:
                     </label>
@@ -180,18 +191,16 @@ const ForgotPassword = () => {
                       id="otp"
                       name="otp"
                       placeholder="Enter OTP"
-                      className="border rounded-md p-2 w-full"
+                      className="border rounded-md p-2 w-full mb-3"
                       value={userOtp.otp}
                       onChange={(e) =>
                         setUserOtp({ ...userOtp, otp: e.target.value })
                       }
                     />
-                    <p className="text-red-500">{errors.otp}</p>
-                  </div>
-                  <div className="mb-2">
+                    <div className="text-red-500 text-sm mb-1">{errors.otp}</div>
                     <label
                       htmlFor="password"
-                      className="block text-lg font-semibold mb-1"
+                      className="block text-base md:text-lg font-semibold mb-1"
                     >
                       Enter Password:
                     </label>
@@ -200,18 +209,16 @@ const ForgotPassword = () => {
                       id="password"
                       name="password"
                       placeholder="Enter Password"
-                      className="border rounded-md p-2 w-full"
+                      className="border rounded-md p-2 w-full mb-3"
                       value={userOtp.password}
                       onChange={(e) =>
                         setUserOtp({ ...userOtp, password: e.target.value })
                       }
                     />
-                    <p className="text-red-500">{errors.password}</p>
-                  </div>
-                  <div className="mb-2">
+                    <div className="text-red-500 text-sm mb-1">{errors.password}</div>
                     <label
                       htmlFor="confirmPassword"
-                      className="block text-lg font-semibold mb-1"
+                      className="block text-base md:text-lg font-semibold mb-1"
                     >
                       Enter OTP:
                     </label>
@@ -220,7 +227,7 @@ const ForgotPassword = () => {
                       id="confirmPassword"
                       name="confirmPassword"
                       placeholder="Confirm Password"
-                      className="border rounded-md p-2 w-full"
+                      className="border rounded-md p-2 w-full mb-3"
                       value={userOtp.confirmPassword}
                       onChange={(e) =>
                         setUserOtp({
@@ -229,9 +236,8 @@ const ForgotPassword = () => {
                         })
                       }
                     />
-                    <p className="text-red-500">{errors.confirmPassword}</p>
-                    <button type="submit" className="bg-[#272727] text-white w-full text-lg font-semibold px-4 py-2 cursor-pointer rounded-md">Submit</button>
-                  </div>
+                    <div className="text-red-500 text-sm mb-1">{errors.confirmPassword}</div>
+                    <button type="submit" className="bg-[#272727] text-white w-full text-base md:text-lg font-semibold px-4 py-2 cursor-pointer rounded-md">Submit</button>
                 </form>
                 <p className="text-xs underline">Want to create an account?</p>
                 <button
