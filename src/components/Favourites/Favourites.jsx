@@ -36,7 +36,7 @@ export const FavExpertCard = ({ item }) => {
           <FaStar />
           <div>{item?.ratings} </div>
         </div>
-        <Link to={"expertprofile"}>
+        <Link to={"expertprofile"} className="no-underline">
           <div className="mt-2 w-full bg-[#2A2A2A] text-sm md:text-base py-2 md:py-3 text-white rounded-md sm:rounded no-underline text-center ">
             Visit Profile
           </div>
@@ -204,28 +204,28 @@ const Favourites = () => {
           Sort by
         </div>
       </div>
-      <div className="mt-14 flex justify-center items-center overflow-x-scroll gap-10 md:gap-20 border-b border-solid border-slate-300 pb-8 drop-shadow-lg ">
-        <div className={`${location === "/favourites" ? "text-black":null} text-xl md:text-2xl font-bold shrink-0`}>
+      <div className="mt-14 flex items-center overflow-x-scroll gap-10 md:gap-16 border-b border-solid border-slate-300 pb-8 drop-shadow-lg "> 
+        <div className={`${location === "/favourites" ? "text-black underline":""} text-xl md:text-2xl font-bold shrink-0`}>
           <Link className="text-gray-500 no-underline" to="/favourites">
-            All{" "}
+            All
           </Link>
         </div>
 
-        <div className={`text-xl md:text-2xl font-bold shrink-0`}>
-          <Link className={`text-gray-500 no-underline ${location == "/favourites/favexperts" ? "text-black":"text-gray-500"} `} to="favexperts">
-            Experts{" "}
+        <div className={`${location === "/favourites/favexperts" ? "text-black underline":""} text-xl md:text-2xl font-bold shrink-0`}>
+          <Link className="text-gray-500 no-underline" to="/favourites/favexperts">
+            Experts
           </Link>
         </div>
 
-        <div className="text-xl md:text-2xl font-bold shrink-0">
-          <Link className="text-gray-500 no-underline" to="favservices">
-            Services{" "}
+        <div className={`${location === "/favourites/favservices" ? "text-black underline":""} text-xl md:text-2xl font-bold shrink-0`}>
+          <Link className="text-gray-500 no-underline" to="/favourites/favservices">
+            Services
           </Link>
         </div>
 
-        <div className="text-xl md:text-2xl font-bold shrink-0">
-          <Link className="text-gray-500 no-underline " to="favblogs">
-            Blogs{" "}
+        <div className={`${location === "/favourites/favblogs" ? "text-black underline":""} text-xl md:text-2xl font-bold shrink-0`}>
+          <Link className="text-gray-500 no-underline" to="/favourites/favblogs">
+            Blogs
           </Link>
         </div>
       </div>

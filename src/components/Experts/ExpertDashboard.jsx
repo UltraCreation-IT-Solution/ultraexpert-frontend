@@ -810,7 +810,7 @@ const ExpertDashboard = () => {
                   Chat
                 </li>
               </Link>
-              <li className="cursor-pointer flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]"   onClick={()=>setShowInstructions(true)}>
+              <li className="cursor-pointer flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]" onClick={()=>setShowInstructions(true)}>
                 <BsFillPatchCheckFill className="text-[1.55vw]" />
                 Get Certified
               </li>

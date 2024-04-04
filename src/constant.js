@@ -15,6 +15,7 @@ import { RiArrowRightSLine } from "react-icons/ri";
 import { IoEyeSharp } from "react-icons/io5";
 import { FaTags, FaPlus } from "react-icons/fa";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export const topExpertsBar = [
   {
@@ -1173,10 +1174,156 @@ export const serviceObjects = [
     ],
   },
 ];
+export const allServiceObject = [
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+  {
+    banner:
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/251441496/original/6db123e925e7791769834654de50d149f8b99c7b.jpeg",
+    title: "I will design a modern logo for your web application",
+    price: "$10",
+    rating: 4.9,
+    reviews: 10,
+    expertName: "Bhavesh Bhanusali",
+    delivery: "1 day",
+    category: "Logo Design",
+    logo: "https://fiverr-res.cloudinary.com/image/upload/f_auto,q_auto/v1/attachments/generic_asset/asset/97477f04af40de3aa1f8d6aa21f69725-1626179101614/Logo%20design_2x.png",
+  },
+];
+
 export const recentBlog = [
   {
-    img:
-      "https://images.unsplash.com/photo-1524006231331-78f794ebbbac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
+    img: "https://images.unsplash.com/photo-1524006231331-78f794ebbbac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
     name: "Bhavesh Bhanusali",
     title: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
     date: "24 May 2015",
@@ -1187,8 +1334,7 @@ export const recentBlog = [
     likes: "200",
   },
   {
-    img:
-      "https://plus.unsplash.com/premium_photo-1661265902815-162b20274c88?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
+    img: "https://plus.unsplash.com/premium_photo-1661265902815-162b20274c88?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
     name: "Bhavesh Bhanusali",
     title: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
     date: "24 May 2015",
@@ -1199,8 +1345,7 @@ export const recentBlog = [
     likes: "200",
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1657639034791-642d817dafbb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjM0fHxibG9ncyUyMGltYWdlc3xlbnwwfDB8MHx8fDA%3D",
+    img: "https://images.unsplash.com/photo-1657639034791-642d817dafbb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjM0fHxibG9ncyUyMGltYWdlc3xlbnwwfDB8MHx8fDA%3D",
     name: "Bhavesh Bhanusali",
     title: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
     date: "24 May 2015",
@@ -1211,8 +1356,7 @@ export const recentBlog = [
     likes: "200",
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1524006231331-78f794ebbbac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
+    img: "https://images.unsplash.com/photo-1524006231331-78f794ebbbac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
     name: "Bhavesh Bhanusali",
     title: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
     date: "24 May 2015",
@@ -1221,20 +1365,7 @@ export const recentBlog = [
     tags: ["Technology", "Movies"],
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1524006231331-78f794ebbbac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
-    name: "Bhavesh Bhanusali",
-    title: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
-    date: "24 May 2015",
-    detail:
-      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
-    tags: ["Technology", "Movies"],
-    views: "2K",
-    likes: "200",
-  },
-  {
-    img:
-      "https://images.unsplash.com/photo-1657639034791-642d817dafbb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjM0fHxibG9ncyUyMGltYWdlc3xlbnwwfDB8MHx8fDA%3D",
+    img: "https://images.unsplash.com/photo-1524006231331-78f794ebbbac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
     name: "Bhavesh Bhanusali",
     title: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
     date: "24 May 2015",
@@ -1245,8 +1376,18 @@ export const recentBlog = [
     likes: "200",
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1524006231331-78f794ebbbac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
+    img: "https://images.unsplash.com/photo-1657639034791-642d817dafbb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjM0fHxibG9ncyUyMGltYWdlc3xlbnwwfDB8MHx8fDA%3D",
+    name: "Bhavesh Bhanusali",
+    title: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
+    date: "24 May 2015",
+    detail:
+      "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos.",
+    tags: ["Technology", "Movies"],
+    views: "2K",
+    likes: "200",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1524006231331-78f794ebbbac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
     name: "Bhavesh Bhanusali",
     title: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
     date: "24 May 2015",
@@ -2268,8 +2409,7 @@ export const favServices = [
 
 export const favBlogs = [
   {
-    img:
-      "https://images.unsplash.com/photo-1524006231331-78f794ebbbac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
+    img: "https://images.unsplash.com/photo-1524006231331-78f794ebbbac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
     name: "Bhavesh Bhanusali",
     title: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
     date: "24 May 2015",
@@ -2280,8 +2420,7 @@ export const favBlogs = [
     likes: "200",
   },
   {
-    img:
-      "https://plus.unsplash.com/premium_photo-1661265902815-162b20274c88?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
+    img: "https://plus.unsplash.com/premium_photo-1661265902815-162b20274c88?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmxvZ3MlMjBpbWFnZXN8ZW58MHwwfDB8fHww",
     name: "Bhavesh Bhanusali",
     title: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
     date: "24 May 2015",
@@ -2292,8 +2431,7 @@ export const favBlogs = [
     likes: "200",
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1657639034791-642d817dafbb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjM0fHxibG9ncyUyMGltYWdlc3xlbnwwfDB8MHx8fDA%3D",
+    img: "https://images.unsplash.com/photo-1657639034791-642d817dafbb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjM0fHxibG9ncyUyMGltYWdlc3xlbnwwfDB8MHx8fDA%3D",
     name: "Bhavesh Bhanusali",
     title: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
     date: "24 May 2015",
@@ -2304,8 +2442,7 @@ export const favBlogs = [
     likes: "200",
   },
   {
-    img:
-      "https://images.unsplash.com/photo-1657639034791-642d817dafbb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjM0fHxibG9ncyUyMGltYWdlc3xlbnwwfDB8MHx8fDA%3D",
+    img: "https://images.unsplash.com/photo-1657639034791-642d817dafbb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjM0fHxibG9ncyUyMGltYWdlc3xlbnwwfDB8MHx8fDA%3D",
     name: "Bhavesh Bhanusali",
     title: "DESIGNER’S GUIDE, BATTLE IMPOSTER SYNDROME.",
     date: "24 May 2015",
@@ -2315,7 +2452,7 @@ export const favBlogs = [
     views: "2K",
     likes: "200",
   },
-]
+];
 
 export const ProjectsCarousel = () => {
   const [slider, setSlider] = useState(0);
@@ -2381,7 +2518,7 @@ export const ProjectsCarousel = () => {
   );
 };
 
-export const BlogCard = ({ index, items }) => {
+export const BlogCardHorizontal = ({ index, items }) => {
   return (
     <div
       className={`px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5 ${
@@ -2392,7 +2529,7 @@ export const BlogCard = ({ index, items }) => {
     >
       <div className="flex flex-col sm:flex-row items-center gap-5">
         <img
-          className="h-48 w-full object-cover sm:h-36 sm:w-40 rounded-md shrink-0"
+          className=" w-full h-48 object-cover sm:h-36 sm:w-40 rounded-md shrink-0 self-start"
           src={items?.img}
           alt=""
         />
@@ -2433,7 +2570,13 @@ export const BlogCard = ({ index, items }) => {
   );
 };
 
-export const ShowSchedule = () => {
+export const ShowSchedule = ({ price, id }) => {
+  const Nevigate = useNavigate();
+  console.log(id);
+  const goToServiceBooking = () => {
+    Nevigate("experts/expertprofile/booking/:" + id);
+  };
+  console.log(price);
   var monthNames = [
     "Jan",
     "Feb",
@@ -2449,47 +2592,61 @@ export const ShowSchedule = () => {
     "Dec",
   ];
   const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-  let today="";
-  let  nextDay="";
+  let today = "";
+  let nextDay = "";
   return (
     <div className="w-full px-2 py-6 border border-solid border-slate-300 rounded-lg">
-            <div className="pb-3 font-semibold">
-              Book a 1:1 trial with Antony
-            </div>
-            <div className="my-3 py-4 border-y border-solid border-slate-200">
-              <div>Available Dates</div>
-              <div className="flex gap-3 overflow-x-auto pt-3">
-                {[...Array(7)].map((item, index) => {
-                  today = new Date();
-                  nextDay = new Date(today);
-                  nextDay.setDate(today.getDate() + index);
-                  return (<div key={index}
-                    className="h-24 w-[5rem] text-center border border-solid border-slate-300 shrink-0 shadow-sm rounded-md cursor-pointer hover:border-blue-400"
-                    
-                  >
-                    <div className="text-xs mt-3 text-gray-500"> {dayNames[nextDay.getDay()]} </div>
-                    <div className="mt-2 text-base font-semibold"> {nextDay.getDate()} {monthNames[nextDay.getMonth()]} </div>
-                    <div className="mt-2 text-xs text-green-600 font-semibold"> 5 slots </div>
-                  </div>
-                  )})}
+      <div className="pb-3 font-semibold">Book a 1:1 meeting with Antony</div>
+      <div className="pt-3 border-t border-solid border-slate-200 mt-3 text-3xl font-semibold ">
+        ₹ {price}
+      </div>
+      <div className="my-3 py-4 border-y border-solid border-slate-200">
+        <div>Available Dates</div>
+        <div className="flex gap-3 overflow-x-auto pt-3">
+          {[...Array(7)].map((item, index) => {
+            today = new Date();
+            nextDay = new Date(today);
+            nextDay.setDate(today.getDate() + index);
+            return (
+              <div
+                key={index}
+                className="h-24 w-[5rem] text-center border border-solid border-slate-300 shrink-0 shadow-sm rounded-md cursor-pointer hover:border-blue-400"
+              >
+                <div className="text-xs mt-3 text-gray-500">
+                  {" "}
+                  {dayNames[nextDay.getDay()]}{" "}
+                </div>
+                <div className="mt-2 text-base font-semibold">
+                  {" "}
+                  {nextDay.getDate()} {monthNames[nextDay.getMonth()]}{" "}
+                </div>
+                <div className="mt-2 text-xs text-green-600 font-semibold">
+                  {" "}
+                  5 slots{" "}
+                </div>
               </div>
+            );
+          })}
+        </div>
+      </div>
+      <div>
+        <div>Available Slots</div>
+        <div className="flex gap-3 overflow-x-auto pt-3">
+          {[...Array(7)].map((item, index) => (
+            <div
+              key={index}
+              className="text-xs max-w-28 text-center border border-solid border-slate-300 hover:border-blue-400 py-3 px-6 shrink-0 shadow-sm rounded-md cursor-pointer"
+            >
+              7:00 AM
             </div>
-            <div>
-              <div>Available Slots</div>
-              <div className="flex gap-3 overflow-x-auto pt-3">
-                {[...Array(7)].map((item, index) => (
-                  <div
-                    key={index}
-                    className="text-xs max-w-28 text-center border border-solid border-slate-300 hover:border-blue-400 py-3 px-6 shrink-0 shadow-sm rounded-md cursor-pointer"
-                  >
-                    7:00 AM
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="mt-6 bg-[#007AFF] text-white text-lg font-semibold text-center p-3 rounded-lg cursor-pointer">
-              Book a slot
-            </div>
-          </div>
-  )
+          ))}
+        </div>
+      </div>
+      <Link to={`/experts/expertprofile/booking/${id}`} className="no-underline">
+        <div className="mt-6 bg-[#007AFF] text-white text-lg font-semibold text-center p-3 rounded-lg cursor-pointer no-underline">
+          Book a slot
+        </div>
+      </Link>
+    </div>
+  );
 };
