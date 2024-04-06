@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const EditProfileExpert = () => {
-
   const navigate = useNavigate();
 
   const [currStep, setCurrStep] = useState(0);
@@ -31,20 +30,174 @@ const EditProfileExpert = () => {
   const handleSubmit1 = () => {
     alert("Profile Updated Successfully!");
   };
-  const handleSubmit2 = () => {
-    alert("Profile Updated Successfully!");
+
+  const [personalInfo, setPersonalInfo] = useState({
+    gender: "Male",
+    level: "Basic",
+    profession: "",
+    about_me: "",
+  });
+  const handleSubmit2 = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8000/experts/update/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: 2,
+          level: personalInfo.level,
+          profession: personalInfo.profession,
+          about_me: personalInfo.about_me,
+        }),
+        credentials: "include",
+      });
+      const json = await response.json();
+      console.log(json);
+      alert("Profile Updated Successfully!");
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const handleSubmit3 = () => {
-    alert("Profile Updated Successfully!");
+
+  const [eduInfo, setEduInfo] = useState({
+    type: "",
+    institute_name: "",
+    city: "",
+    state_name: "Madhya Pradesh",
+    country: "India",
+    passing_year: "2020",
+    devision: "First",
+  });
+  const handleSubmit3 = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8000/experts/update/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: 3,
+          education_json: [
+            {
+              type: eduInfo.type,
+              institute_name: eduInfo.institute_name,
+              city: eduInfo.city,
+              state_name: eduInfo.state_name,
+              country: eduInfo.country,
+              passing_year: eduInfo.passing_year,
+              Devision: eduInfo.devision,
+            },
+          ],
+        }),
+        credentials: "include",
+      });
+      const json = await response.json();
+      console.log(json);
+      alert("Profile Updated Successfully!");
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const handleSubmit4 = () => {
-    alert("Profile Updated Successfully!");
+
+  const [selectedSkill, setSelectedSkill] = useState({
+    technology_name: "",
+    ratings: "",
+  });
+  const handleSubmit4 = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8000/experts/update/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: 4,
+          skill_json: [
+            {
+              technology_name: selectedSkill.technology_name,
+              ratings: selectedSkill.ratings,
+            },
+          ],
+        }),
+        credentials: "include",
+      });
+      const json = await response.json();
+      console.log(json);
+      alert("Profile Updated Successfully!");
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const handleSubmit5 = () => {
-    alert("Profile Updated Successfully!");
+
+  const [expInfo, setExpInfo] = useState({
+    company_name: "",
+    start_date: "",
+    end_date: "",
+    designation: "",
+  });
+  const handleSubmit5 = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8000/experts/update/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: 5,
+          experience_json: [
+            {
+              company_name: expInfo.company_name,
+              start_date: expInfo.start_date,
+              end_date: expInfo.end_date,
+              designation: expInfo.designation,
+            },
+          ],
+        }),
+        credentials: "include",
+      });
+      const json = await response.json();
+      console.log(json);
+      alert("Profile Updated Successfully!");
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const handleSubmit6 = () => {
-    alert("Profile Updated Successfully!");
+
+  const [accInfo, setAccInfo] = useState({
+    account_holder: "",
+    bank_name: "",
+    account_number: "",
+    ifsc_code: "",
+  })
+  const handleSubmit6 = async(e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8000/experts/update/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: 6,
+          account_holder: accInfo.account_holder,
+          bank_name: accInfo.bank_name,
+          account_number: accInfo.account_number,
+          ifsc_code: accInfo.ifsc_code,
+        }),
+        credentials: "include",
+      });
+      const json = await response.json();
+      console.log(json);
+      alert("Profile Updated Successfully!");
+    }
+    catch(error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -113,7 +266,7 @@ const EditProfileExpert = () => {
           </button>
         </div>
         {currStep === 0 && (
-          <form className="grow flex flex-col h-full">
+          <form onSubmit={handleSubmit1} className="grow flex flex-col h-full">
             <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
               <label htmlFor="name" className="text-lg mb-1">
                 Name
@@ -151,7 +304,7 @@ const EditProfileExpert = () => {
             </div>
             <div className="flex justify-end mx-20 mb-8">
               <button
-                onClick={handleSubmit1}
+                type="submit"
                 className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
               >
                 Submit
@@ -160,7 +313,7 @@ const EditProfileExpert = () => {
           </form>
         )}
         {currStep === 1 && (
-          <form className="grow flex flex-col h-full">
+          <form onSubmit={handleSubmit2} className="grow flex flex-col h-full">
             <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
               <div className="flex justify-around gap-5">
                 <div className="flex flex-col w-full">
@@ -170,6 +323,13 @@ const EditProfileExpert = () => {
                   <select
                     name="gender"
                     id="gender"
+                    value={personalInfo.gender}
+                    onChange={(e) => {
+                      setPersonalInfo({
+                        ...personalInfo,
+                        gender: e.target.value,
+                      });
+                    }}
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   >
                     <option value="male">Male</option>
@@ -184,6 +344,13 @@ const EditProfileExpert = () => {
                   <select
                     name="level"
                     id="level"
+                    value={personalInfo.level}
+                    onChange={(e) => {
+                      setPersonalInfo({
+                        ...personalInfo,
+                        level: e.target.value,
+                      });
+                    }}
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   >
                     <option value="basic">Basic</option>
@@ -201,6 +368,13 @@ const EditProfileExpert = () => {
                 id="profession"
                 name="profession"
                 required
+                value={personalInfo.profession}
+                onChange={(e) => {
+                  setPersonalInfo({
+                    ...personalInfo,
+                    profession: e.target.value,
+                  });
+                }}
                 className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                 placeholder="Profession"
               />
@@ -212,13 +386,19 @@ const EditProfileExpert = () => {
                 type="text"
                 id="about"
                 name="about"
+                onChange={(e) => {
+                  setPersonalInfo({
+                    ...personalInfo,
+                    about: e.target.value,
+                  });
+                }}
                 className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                 placeholder="I want to learn css, html, python with django"
               />
             </div>
             <div className="flex justify-end mx-20 mb-8">
               <button
-                onClick={handleSubmit2}
+                type="submit"
                 className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
               >
                 Submit
@@ -227,7 +407,10 @@ const EditProfileExpert = () => {
           </form>
         )}
         {currStep === 2 && (
-          <form className="grow h-full flex flex-col overflow-y-scroll">
+          <form
+            onSubmit={handleSubmit3}
+            className="grow h-full flex flex-col overflow-y-scroll"
+          >
             <div className="flex justify-center mx-auto flex-col w-[50%] my-8">
               {educationForms.map((form, ind) => (
                 <>
@@ -253,6 +436,16 @@ const EditProfileExpert = () => {
                     type="text"
                     id={`institute${form.id}`}
                     name={`institute${form.id}`}
+                    value={eduInfo.institute_name[ind]}
+                    onChange={(e) => {
+                      setEduInfo({
+                        ...eduInfo,
+                        institute_name: eduInfo.institute_name.map(
+                          (item, index) =>
+                            index === ind ? e.target.value : item
+                        ),
+                      });
+                    }}
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     placeholder="Institute Name"
                   />
@@ -268,6 +461,15 @@ const EditProfileExpert = () => {
                         type="text"
                         id={`type${form.id}`}
                         name={`type${form.id}`}
+                        value={eduInfo.type[ind]}
+                        onChange={(e) => {
+                          setEduInfo({
+                            ...eduInfo,
+                            type: eduInfo.type.map((item, index) =>
+                              index === ind ? e.target.value : item
+                            ),
+                          });
+                        }}
                         className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                         placeholder="Institute Name"
                       />
@@ -282,6 +484,16 @@ const EditProfileExpert = () => {
                       <select
                         name={`passing${form.id}`}
                         id={`passing${form.id}`}
+                        value={eduInfo.passing_year[ind]}
+                        onChange={(e) => {
+                          setEduInfo({
+                            ...eduInfo,
+                            passing_year: eduInfo.passing_year.map(
+                              (item, index) =>
+                                index === ind ? e.target.value : item
+                            ),
+                          });
+                        }}
                         className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       >
                         <option value="2021">2021</option>
@@ -305,6 +517,15 @@ const EditProfileExpert = () => {
                         type="text"
                         id={`city${form.id}`}
                         name={`city${form.id}`}
+                        value={eduInfo.city[ind]}
+                        onChange={(e) => {
+                          setEduInfo({
+                            ...eduInfo,
+                            city: eduInfo.city.map((item, index) =>
+                              index === ind ? e.target.value : item
+                            ),
+                          });
+                        }}
                         className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                         placeholder="City"
                       />
@@ -319,6 +540,15 @@ const EditProfileExpert = () => {
                       <select
                         id={`state${form.id}`}
                         name={`state${form.id}`}
+                        value={eduInfo.state[ind]}
+                        onChange={(e) => {
+                          setEduInfo({
+                            ...eduInfo,
+                            state: eduInfo.state.map((item, index) =>
+                              index === ind ? e.target.value : item
+                            ),
+                          });
+                        }}
                         className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       >
                         <option value="AN">Andaman and Nicobar Islands</option>
@@ -372,6 +602,15 @@ const EditProfileExpert = () => {
                       <select
                         name={`country${form.id}`}
                         id={`country${form.id}`}
+                        value={eduInfo.country[ind]}
+                        onChange={(e) => {
+                          setEduInfo({
+                            ...eduInfo,
+                            country: eduInfo.country.map((item, index) =>
+                              index === ind ? e.target.value : item
+                            ),
+                          });
+                        }}
                         className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       >
                         <option value="United States">United States</option>
@@ -707,6 +946,15 @@ const EditProfileExpert = () => {
                       <select
                         name={`division${form.id}`}
                         id={`division${form.id}`}
+                        value={eduInfo.devision}
+                        onChange={(e) => {
+                          setEduInfo({
+                            ...eduInfo,
+                            devision: eduInfo.devision.map((item, index) =>
+                              index === ind ? e.target.value : item
+                            ),
+                          });
+                        }}
                         className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       >
                         <option value="first">First</option>
@@ -721,7 +969,7 @@ const EditProfileExpert = () => {
             </div>
             <div className="flex justify-end mx-20 mb-8">
               <button
-                onClick={handleSubmit3}
+                type="submit"
                 className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
               >
                 Submit
@@ -730,7 +978,7 @@ const EditProfileExpert = () => {
           </form>
         )}
         {currStep === 3 && (
-          <form className="grow h-full flex flex-col">
+          <form onSubmit={handleSubmit4} className="grow h-full flex flex-col">
             <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
               {skillForms.map((form, ind) => (
                 <>
@@ -756,6 +1004,16 @@ const EditProfileExpert = () => {
                     type="text"
                     id={`technology${form.id}`}
                     name={`technology${form.id}`}
+                    value={selectedSkill.technology_name}
+                    onChange={(e) => {
+                      setSelectedSkill({
+                        ...selectedSkill,
+                        technology_name: selectedSkill.technology_name.map(
+                          (item, index) =>
+                            index === ind ? e.target.value : item
+                        ),
+                      });
+                    }}
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     placeholder="Institute Name"
                   />
@@ -766,6 +1024,15 @@ const EditProfileExpert = () => {
                     type="number"
                     id={`rating${form.id}`}
                     name={`rating${form.id}`}
+                    value={selectedSkill.ratings}
+                    onChange={(e) => {
+                      setSelectedSkill({
+                        ...selectedSkill,
+                        ratings: selectedSkill.ratings.map((item, index) =>
+                          index === ind ? e.target.value : item
+                        ),
+                      });
+                    }}
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-[50%]"
                     placeholder="1"
                   />
@@ -774,7 +1041,7 @@ const EditProfileExpert = () => {
             </div>
             <div className="flex justify-end mx-20 mb-8">
               <button
-                onClick={handleSubmit4}
+                type="submit"
                 className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
               >
                 Submit
@@ -783,7 +1050,7 @@ const EditProfileExpert = () => {
           </form>
         )}
         {currStep === 4 && (
-          <form className="flex flex-col grow h-full">
+          <form onSubmit={handleSubmit5} className="flex flex-col grow h-full">
             <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
               {experienceForms.map((form, ind) => (
                 <>
@@ -806,6 +1073,15 @@ const EditProfileExpert = () => {
                     type="text"
                     id={`company${form.id}`}
                     name={`company${form.id}`}
+                    value={expInfo.company_name}
+                    onChange={(e) => {
+                      setExpInfo({
+                        ...expInfo,
+                        company_name: expInfo.company_name.map((item, index) =>
+                          index === ind ? e.target.value : item
+                        ),
+                      });
+                    }}
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     placeholder="Company Name"
                   />
@@ -817,35 +1093,39 @@ const EditProfileExpert = () => {
                       >
                         Start Year
                       </label>
-                      <select
-                        name={`start${form.id}`}
+                      <input
+                        type="date"
                         id={`start${form.id}`}
-                        className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      >
-                        <option value="2021">2021</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                      </select>
+                        name={`start${form.id}`}
+                        value={expInfo.start_date[ind]}
+                        onChange={(e) =>
+                          setExpInfo({
+                            ...expInfo,
+                            start_date: expInfo.start_date.map((item, index) =>
+                              index === ind ? e.target.value : item
+                            ),
+                          })
+                        }
+                      />
                     </div>
                     <div className="flex flex-col w-full">
                       <label htmlFor={`end${form.id}`} className="text-lg mb-1">
                         End Year
                       </label>
-                      <select
-                        name={`end${form.id}`}
+                      <input
+                        type="date"
                         id={`end${form.id}`}
-                        className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      >
-                        <option value="2021">2021</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                      </select>
+                        name={`end${form.id}`}
+                        value={expInfo.end_date[ind]}
+                        onChange={(e) =>
+                          setExpInfo({
+                            ...expInfo,
+                            end_date: expInfo.end_date.map((item, index) =>
+                              index === ind ? e.target.value : item
+                            ),
+                          })
+                        }
+                      />
                     </div>
                   </div>
                   <label
@@ -858,6 +1138,15 @@ const EditProfileExpert = () => {
                     type="text"
                     id={`designtaion${form.id}`}
                     name={`designtaion${form.id}`}
+                    value={expInfo.designation[ind]}
+                    onChange={(e) =>
+                      setExpInfo({
+                        ...expInfo,
+                        designation: expInfo.designation.map((item, index) =>
+                          index === ind ? e.target.value : item
+                        ),
+                      })
+                    }
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     placeholder="Designtaion"
                   />
@@ -866,7 +1155,7 @@ const EditProfileExpert = () => {
             </div>
             <div className="flex justify-end mx-20 mb-8">
               <button
-                onClick={handleSubmit5}
+                type="submit"
                 className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
               >
                 Submit
@@ -875,7 +1164,7 @@ const EditProfileExpert = () => {
           </form>
         )}
         {currStep === 5 && (
-          <form className="flex flex-col grow h-full">
+          <form onSubmit={handleSubmit6} className="flex flex-col grow h-full">
             <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
               <div className="flex flex-col w-full">
                 <label htmlFor="holderName" className="text-lg mb-1">
@@ -886,6 +1175,8 @@ const EditProfileExpert = () => {
                   id="holderName"
                   name="holderName"
                   required
+                  value={accInfo.account_holder}
+                  onChange={(e)=>setAccInfo({account_holder:e.target.value})}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   placeholder="Account Holder Name"
                 />
@@ -897,6 +1188,8 @@ const EditProfileExpert = () => {
                   id="bankName"
                   name="bankName"
                   required
+                  value={accInfo.bank_name}
+                  onChange={(e)=>setAccInfo({bank_name:e.target.value})}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   placeholder="Bank Name"
                 />
@@ -908,6 +1201,8 @@ const EditProfileExpert = () => {
                   id="accNumber"
                   name="accNumber"
                   required
+                  value={accInfo.account_number}
+                  onChange={(e)=>setAccInfo({account_number:e.target.value})}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   placeholder="Account Number"
                 />
@@ -919,6 +1214,8 @@ const EditProfileExpert = () => {
                   id="ifsc"
                   name="ifsc"
                   required
+                  value={accInfo.ifsc_code}
+                  onChange={(e)=>setAccInfo({ifsc_code:e.target.value})}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   placeholder="IFSC Code"
                 />
@@ -926,7 +1223,7 @@ const EditProfileExpert = () => {
             </div>
             <div className="flex justify-end mx-20 mb-8">
               <button
-                onClick={handleSubmit6}
+                type="submit"
                 className=" cursor-pointer px-6 py-2 text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md"
               >
                 Submit

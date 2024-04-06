@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { BsUpload,BsX } from "react-icons/bs";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { FaIndianRupeeSign } from "react-icons/fa6";
 
 const CreateService = () => {
+
+  const navigate = useNavigate();
+
   const interest = [
     { id: 1, name: "Python" },
     { id: 2, name: "C++" },
@@ -61,14 +67,21 @@ const CreateService = () => {
     removeImage(index);
   };
 
+  const handleBack = () =>{
+    navigate("/services");
+  }
+
   return (
-    <div className="mt-[100px] bg-white h-screen">
+    <div className="mt-[100px] flex flex-col bg-white h-auto">
+      <div className="flex w-[60%] mx-auto">
+        <div onClick={()=>handleBack()} className="flex gap-2 text-lg font-bold cursor-pointer hover:bg-[#e2e2e2] py-2 px-1 rounded-md duration-200"><MdOutlineKeyboardBackspace size={25}/>Add a service</div>
+      </div>
       <div className="w-[60%] flex flex-col border border-solid border-slate-300 mx-auto items-center justify-center rounded-lg shadow-lg">
         <div className="text-4xl text-[#3E5676] font-bold my-4">
           Create a serivce
         </div>
         <u className="border border-[#d8d8d8] border-solid w-[90%] mb-8"></u>
-        <form className="w-[60%] flex flex-col mb-5">
+        <form onSubmit={(event) => event.preventDefault()} className="w-[60%] flex flex-col mb-5">
           <label htmlFor="title" className="text-lg mb-1">
             Service Title
           </label>
@@ -91,7 +104,7 @@ const CreateService = () => {
             className="border border-solid border-slate-300 rounded-md px-4 py-2 mb-4"
           />
           <label htmlFor="interests" className="text-lg mb-1">
-            Interests
+            Service Tags
           </label>
           <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
             <div className="flex flex-wrap gap-3">
@@ -113,7 +126,7 @@ const CreateService = () => {
               )}
             </div>
           </div>
-          <div className="border border-solid border-slate-200 px-4 py-2 rounded-md mb-4">
+          <div className="border border-solid border-slate-200 px-4 py-2 rounded-md mb-4 overflow-y-auto">
             <div className="flex flex-wrap gap-3">
               {interest.map((skill, ind) => {
                 return (
@@ -171,8 +184,21 @@ const CreateService = () => {
             )}
           </div>
           <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
+          <label htmlFor="price" className="text-lg mb-1">
+            Service Price
+          </label>
+          <div className="flex">
+            <div className="border border-solid border-slate-300 rounded-s-md p-2 mb-4"><FaIndianRupeeSign/></div>
+            <input
+              placeholder="Service Price"
+              type="number"
+              id="price"
+              name="price"
+              className="border border-solid border-slate-300 rounded-e-md px-4 py-2 mb-4 w-full"
+            />
+          </div>
           <div className="flex justify-center mb-4">
-            <button className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md">
+            <button type="submit" className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md">
               Create
             </button>
           </div>
