@@ -1150,11 +1150,11 @@ const SignUpAsExpert = () => {
                       type="text"
                       id={`designtaion${form.id}`}
                       name={`designtaion${form.id}`}
-                      value={expInfo.designtaion[ind]}
+                      value={expInfo.designation[ind]}
                       onChange={(e) =>
                         setExpInfo({
                           ...expInfo,
-                          designtaion: expInfo.designtaion.map((item, index) =>
+                          designtaion: expInfo.designation.map((item, index) =>
                             index === ind ? e.target.value : item
                           ),
                         })
