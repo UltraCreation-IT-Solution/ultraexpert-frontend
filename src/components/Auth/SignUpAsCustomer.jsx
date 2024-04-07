@@ -19,21 +19,22 @@ const SignUpAsCustomer = () => {
 
   const updatePersonalInfo = async (e) => {
     e.preventDefault();
+    const csrfToken = document.cookie;
+    console.log(csrfToken);
     try {
       const res = await fetch("http://localhost:8000/customers/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${csrfToken}`,
         },
         body: JSON.stringify({
-          action: 1,
           action: 1,
           marital_status: personalInfo.marital_status,
           profession: personalInfo.profession,
           about_me: personalInfo.about_me,
         }),
-        credentials: "same-origin",
+        credentials: "include",
       });
       const json = await res.json();
       console.log(json);
