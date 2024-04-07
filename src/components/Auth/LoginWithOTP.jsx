@@ -63,19 +63,9 @@ const LoginWithOTP = () => {
         // );
         // const json = await res.json();
         // console.log(json);
-        const response = await axios.get(`/login/?email=${userEmail.email}`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        });
+        const response = await axios.get(`/login/?email=${userEmail.email}`);
         const data = response.data;
-        if (data.status === 200) {
-          alert("OTP sent successfully to your email address");
-          nextStep();
-          return;
-        }
-        if (!data) {
+        if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid OTP");
           return;
         }
@@ -110,14 +100,13 @@ const LoginWithOTP = () => {
         const data = response.data;
         // const json = await res.json();
         // console.log(json);
-        if (res.status === 200) {
-          console.log("Login successful");
-          navigate("/");
-        }
-        if (!data) {
+        if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid OTP");
           return;
         }
+        alert("Login Successfull!");
+        navigate("/");
+        // console.log(data);
       } catch (error) {
         console.log(error.message);
       }

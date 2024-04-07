@@ -65,6 +65,8 @@ const Login = () => {
         // const json = await res.json();
         if (res.status === 200) {
           console.log("Login successful");
+          console.log(res);
+          localStorage.setItem("token", res.data.access_token);
           // console.log(json);
           navigate("/");
         }
