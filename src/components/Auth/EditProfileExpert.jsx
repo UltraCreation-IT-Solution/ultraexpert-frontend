@@ -40,21 +40,38 @@ const EditProfileExpert = () => {
   const handleSubmit2 = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/experts/update/", {
-        method: "POST",
+      // const response = await fetch("http://localhost:8000/experts/update/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 2,
+      //     level: personalInfo.level,
+      //     profession: personalInfo.profession,
+      //     about_me: personalInfo.about_me,
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = await response.json();
+      // console.log(json);
+      const response = await axios.post("/experts/update/", {
+        action: 2,
+        level: personalInfo.level,
+        profession: personalInfo.profession,
+        about_me: personalInfo.about_me,
+      },{
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          action: 2,
-          level: personalInfo.level,
-          profession: personalInfo.profession,
-          about_me: personalInfo.about_me,
-        }),
-        credentials: "include",
+        withCredentials: true,
       });
-      const json = await response.json();
-      console.log(json);
+      const data = response.data;
+      console.log(data);
+      if(!data || data.status===400 || data.status===401){
+        alert(data.message);
+        return;
+      }
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
@@ -73,29 +90,54 @@ const EditProfileExpert = () => {
   const handleSubmit3 = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/experts/update/", {
-        method: "POST",
+      // const response = await fetch("http://localhost:8000/experts/update/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 3,
+      //     education_json: [
+      //       {
+      //         type: eduInfo.type,
+      //         institute_name: eduInfo.institute_name,
+      //         city: eduInfo.city,
+      //         state_name: eduInfo.state_name,
+      //         country: eduInfo.country,
+      //         passing_year: eduInfo.passing_year,
+      //         Devision: eduInfo.devision,
+      //       },
+      //     ],
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = await response.json();
+      // console.log(json);
+      const response = await axios.post("/experts/update/", {
+        action: 3,
+        education_json: [
+          {
+            type: eduInfo.type,
+            institute_name: eduInfo.institute_name,
+            city: eduInfo.city,
+            state_name: eduInfo.state_name,
+            country: eduInfo.country,
+            passing_year: eduInfo.passing_year,
+            Devision: eduInfo.devision,
+          },
+        ],
+      },{
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          action: 3,
-          education_json: [
-            {
-              type: eduInfo.type,
-              institute_name: eduInfo.institute_name,
-              city: eduInfo.city,
-              state_name: eduInfo.state_name,
-              country: eduInfo.country,
-              passing_year: eduInfo.passing_year,
-              Devision: eduInfo.devision,
-            },
-          ],
-        }),
-        credentials: "include",
+        withCredentials: true,
       });
-      const json = await response.json();
-      console.log(json);
+      const data = response.data;
+      console.log(data);
+      if(!data || data.status===400 || data.status===401){
+        alert(data.message);
+        return;
+      }
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
@@ -109,24 +151,44 @@ const EditProfileExpert = () => {
   const handleSubmit4 = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/experts/update/", {
-        method: "POST",
+      // const response = await fetch("http://localhost:8000/experts/update/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 4,
+      //     skill_json: [
+      //       {
+      //         technology_name: selectedSkill.technology_name,
+      //         ratings: selectedSkill.ratings,
+      //       },
+      //     ],
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = await response.json();
+      // console.log(json);
+      const response = await axios.post("/experts/update/", {
+        action: 4,
+        skill_json: [
+          {
+            technology_name: selectedSkill.technology_name,
+            ratings: selectedSkill.ratings,
+          },
+        ],
+      },{
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          action: 4,
-          skill_json: [
-            {
-              technology_name: selectedSkill.technology_name,
-              ratings: selectedSkill.ratings,
-            },
-          ],
-        }),
-        credentials: "include",
+        withCredentials: true,
       });
-      const json = await response.json();
-      console.log(json);
+      const data = response.data;
+      console.log(data);
+      if(!data || data.status===400 || data.status===401){
+        alert(data.message);
+        return;
+      }
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
@@ -142,26 +204,48 @@ const EditProfileExpert = () => {
   const handleSubmit5 = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/experts/update/", {
-        method: "POST",
+      // const response = await fetch("http://localhost:8000/experts/update/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 5,
+      //     experience_json: [
+      //       {
+      //         company_name: expInfo.company_name,
+      //         start_date: expInfo.start_date,
+      //         end_date: expInfo.end_date,
+      //         designation: expInfo.designation,
+      //       },
+      //     ],
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = await response.json();
+      // console.log(json);
+      const response = await axios.post("/experts/update/", {
+        action: 5,
+        experience_json: [
+          {
+            company_name: expInfo.company_name,
+            start_date: expInfo.start_date,
+            end_date: expInfo.end_date,
+            designation: expInfo.designation,
+          },
+        ],
+      },{
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          action: 5,
-          experience_json: [
-            {
-              company_name: expInfo.company_name,
-              start_date: expInfo.start_date,
-              end_date: expInfo.end_date,
-              designation: expInfo.designation,
-            },
-          ],
-        }),
-        credentials: "include",
+        withCredentials: true,
       });
-      const json = await response.json();
-      console.log(json);
+      const data = response.data;
+      console.log(data);
+      if(!data || data.status===400 || data.status===401){
+        alert(data.message);
+        return;
+      }
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
@@ -177,22 +261,40 @@ const EditProfileExpert = () => {
   const handleSubmit6 = async(e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/experts/update/", {
-        method: "POST",
+      // const response = await fetch("http://localhost:8000/experts/update/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 6,
+      //     account_holder: accInfo.account_holder,
+      //     bank_name: accInfo.bank_name,
+      //     account_number: accInfo.account_number,
+      //     ifsc_code: accInfo.ifsc_code,
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = await response.json();
+      // console.log(json);
+      const response = await axios.post("/experts/update/", {
+        action: 6,
+        account_holder: accInfo.account_holder,
+        bank_name: accInfo.bank_name,
+        account_number: accInfo.account_number,
+        ifsc_code: accInfo.ifsc_code,
+      },{
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          action: 6,
-          account_holder: accInfo.account_holder,
-          bank_name: accInfo.bank_name,
-          account_number: accInfo.account_number,
-          ifsc_code: accInfo.ifsc_code,
-        }),
-        credentials: "include",
+        withCredentials: true,
       });
-      const json = await response.json();
-      console.log(json);
+      const data = response.data;
+      console.log(data);
+      if(!data || data.status===400 || data.status===401){
+        alert(data.message);
+        return;
+      }
       alert("Profile Updated Successfully!");
     }
     catch(error) {

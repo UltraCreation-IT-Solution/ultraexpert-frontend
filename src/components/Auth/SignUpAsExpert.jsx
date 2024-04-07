@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../../axios";
 
 const CHECKOUT_STEPS = [
   { name: "Personal Details" },
@@ -52,22 +53,42 @@ const SignUpAsExpert = () => {
   const handlePersonalInfo = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/experts/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      // const response = await fetch("http://localhost:8000/experts/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 1,
+      //     gender: personalInfo.gender,
+      //     level: personalInfo.level,
+      //     about_me: personalInfo.about_me,
+      //     profession: personalInfo.profession,
+      //   }),
+      //   credentials: "include",
+      // });
+      const response = await axios.post(
+        "/experts/",
+        {
           action: 1,
           gender: personalInfo.gender,
           level: personalInfo.level,
           about_me: personalInfo.about_me,
           profession: personalInfo.profession,
-        }),
-        credentials: "include",
-      });
-      const json = await response.json();
-      console.log(json);
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      const data = response.data;
+      console.log(data);
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -86,15 +107,34 @@ const SignUpAsExpert = () => {
     Devision: "First",
   });
 
-  const handleEducationForm = (e) => {
+  const handleEducationForm = async (e) => {
     e.preventDefault();
     try {
-      const response = fetch("http://localhost:8000/experts/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      // const response = fetch("http://localhost:8000/experts/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 2,
+      //     education_json: [
+      //       {
+      //         type: eduInfo.type,
+      //         institute_name: eduInfo.institute_name,
+      //         city: eduInfo.city,
+      //         state_name: eduInfo.state_name,
+      //         country: eduInfo.country,
+      //         passing_year: eduInfo.passing_year,
+      //         Devision: eduInfo.Devision,
+      //       },
+      //     ],
+      //   }),
+      //   credentials: "include",
+      // });
+
+      const response = await axios.post(
+        "/experts/",
+        {
           action: 2,
           education_json: [
             {
@@ -107,11 +147,20 @@ const SignUpAsExpert = () => {
               Devision: eduInfo.Devision,
             },
           ],
-        }),
-        credentials: "include",
-      });
-      const json = response.json();
-      console.log(json);
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      const data = response.data;
+      console.log(data);
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -125,15 +174,29 @@ const SignUpAsExpert = () => {
     ratings: "",
   });
 
-  const handleSkillForm = (e) => {
+  const handleSkillForm = async (e) => {
     e.preventDefault();
     try {
-      const response = fetch("http://localhost:8000/experts/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      // const response = fetch("http://localhost:8000/experts/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 3,
+      //     skill_json: [
+      //       {
+      //         technology_name: skillInfo.technology_name,
+      //         ratings: skillInfo.ratings,
+      //       },
+      //     ],
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = response.json();
+      const response = await axios.post(
+        "/experts/",
+        {
           action: 3,
           skill_json: [
             {
@@ -141,11 +204,20 @@ const SignUpAsExpert = () => {
               ratings: skillInfo.ratings,
             },
           ],
-        }),
-        credentials: "include",
-      });
-      const json = response.json();
-      console.log(json);
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      const data = response.data;
+      console.log(data);
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -157,19 +229,36 @@ const SignUpAsExpert = () => {
   const [expInfo, setExpInfo] = useState({
     company_name: "",
     start_date: "01-jan-2019",
-    end_date: "",
+    end_date: "01-jan-2019",
     designation: "",
   });
-  const handleExperienceForm = (e) => {
+  const handleExperienceForm = async (e) => {
     e.preventDefault();
     try {
-      const response = fetch("http://localhost:8000/experts/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          action: 4,
+      // const response = fetch("http://localhost:8000/experts/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 4,
+      //     experience_json: [
+      //       {
+      //         company_name: expInfo.company_name,
+      //         start_date: expInfo.start_date,
+      //         end_date: expInfo.end_date,
+      //         designation: expInfo.designation,
+      //       },
+      //     ],
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = response.json();
+      // console.log(json);
+      const response = await axios.post(
+        "/experts/",
+        {
+          action: 5,
           experience_json: [
             {
               company_name: expInfo.company_name,
@@ -178,11 +267,20 @@ const SignUpAsExpert = () => {
               designation: expInfo.designation,
             },
           ],
-        }),
-        credentials: "include",
-      });
-      const json = response.json();
-      console.log(json);
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      const data = response.data;
+      console.log(data);
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -198,25 +296,43 @@ const SignUpAsExpert = () => {
     ifsc_code: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     try {
-      const response = fetch("http://localhost:8000/experts/", {
-        method: "POST",
+      // const response = fetch("http://localhost:8000/experts/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 5,
+      //     account_holder: accInfo.account_holder,
+      //     bank_name: accInfo.bank_name,
+      //     account_number: accInfo.account_number,
+      //     ifsc_code: accInfo.ifsc_code,
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = response.json();
+      // console.log(json);
+      const response = await axios.post("/experts/", {
+        action: 5,
+        account_holder: accInfo.account_holder,
+        bank_name: accInfo.bank_name,
+        account_number: accInfo.account_number,
+        ifsc_code: accInfo.ifsc_code,
+      },{
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          action: 5,
-          account_holder: accInfo.account_holder,
-          bank_name: accInfo.bank_name,
-          account_number: accInfo.account_number,
-          ifsc_code: accInfo.ifsc_code,
-        }),
-        credentials: "include",
+        withCredentials: true,
       });
-      const json = response.json();
-      console.log(json);
+      const data = response.data;
+      console.log(data);
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
       setIsComplete(true);
       navigate("/");
     } catch (error) {
@@ -1004,8 +1120,9 @@ const SignUpAsExpert = () => {
                       onChange={(e) =>
                         setSkillInfo({
                           ...skillInfo,
-                          technology_name: skillInfo.technology_name.map((item, index) =>
-                            index === ind ? e.target.value : item
+                          technology_name: skillInfo.technology_name.map(
+                            (item, index) =>
+                              index === ind ? e.target.value : item
                           ),
                         })
                       }
@@ -1110,8 +1227,9 @@ const SignUpAsExpert = () => {
                           onChange={(e) =>
                             setExpInfo({
                               ...expInfo,
-                              start_date: expInfo.start_date.map((item, index) =>
-                                index === ind ? e.target.value : item
+                              start_date: expInfo.start_date.map(
+                                (item, index) =>
+                                  index === ind ? e.target.value : item
                               ),
                             })
                           }

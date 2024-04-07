@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../../axios";
 
 const EditProfileCustomer = () => {
   const navigate = useNavigate();
@@ -25,65 +26,105 @@ const EditProfileCustomer = () => {
   };
 
   const [generalInfo, setGeneralInfo] = useState({
-    name:"",
-    mobile_number:"",
-    email:""
-  })
+    name: "",
+    mobile_number: "",
+    email: "",
+  });
 
-  const handleSubmit1 = async(e) => {
+  const handleSubmit1 = async (e) => {
     e.preventDefault();
     alert("Profile Updated Successfully!");
   };
 
   const [personalInfo, setPersonalInfo] = useState({
-    gender:"Male",
+    gender: "Male",
     marital_status: "Single",
     profession: "",
     about_me: "",
   });
 
-  const handleSubmit2 = async(e) => {
+  const handleSubmit2 = async (e) => {
     e.preventDefault();
-    try{
-      const response =await fetch("http://localhost:8000/customers/",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
+    try {
+      // const response =await fetch("http://localhost:8000/customers/",{
+      //   method:"POST",
+      //   headers:{
+      //     "Content-Type":"application/json"
+      //   },
+      //   body:JSON.stringify({
+      //     action:1,
+      //     marital_status:personalInfo.marital_status,
+      //     profession:personalInfo.profession,
+      //     about_me:personalInfo.about_me
+      //   }),
+      //   credentials:"include"
+      // })
+      // const json = await response.json();
+      // console.log(json);
+      const response = await axios.post(
+        "/customers/",
+        {
+          action: 1,
+          marital_status: personalInfo.marital_status,
+          profession: personalInfo.profession,
+          about_me: personalInfo.about_me,
         },
-        body:JSON.stringify({
-          action:1,
-          marital_status:personalInfo.marital_status,
-          profession:personalInfo.profession,
-          about_me:personalInfo.about_me
-        }),
-        credentials:"include"
-      })
-      const json = await response.json();
-      console.log(json);
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      const data = response.data;
+      console.log(data);
+      if (!data || data.status === 400 || data.status === 401) {
+        alert(data.message);
+        return;
+      }
       alert("Profile Updated Successfully!");
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
   };
 
-  const handleSubmit3 = async(e) => {
+  const handleSubmit3 = async (e) => {
     e.preventDefault();
-    try{
-      const response =await fetch("http://localhost:8000/customers/",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
+    try {
+      // const response = await fetch("http://localhost:8000/customers/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 2,
+      //     interest_list: selectedSkill,
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = await response.json();
+      // console.log(json);
+      const response = await axios.post(
+        "/customers/",
+        {
+          action: 2,
+          interest_list: selectedSkill,
         },
-        body:JSON.stringify({
-          action:2,
-          interest_list:selectedSkill
-        }),
-        credentials:"include"
-      })
-      const json = await response.json();
-      console.log(json);
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      const data = response.data;
+      console.log(data);
+      if (!data || data.status === 400 || data.status === 401) {
+        alert(data.message);
+        return;
+      }
       alert("Profile Updated Successfully!");
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
   };
@@ -182,7 +223,12 @@ const EditProfileCustomer = () => {
                     name="gender"
                     id="gender"
                     value={personalInfo.gender}
-                    onChange={(e) =>setPersonalInfo({...personalInfo,gender:e.target.value})}
+                    onChange={(e) =>
+                      setPersonalInfo({
+                        ...personalInfo,
+                        gender: e.target.value,
+                      })
+                    }
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   >
                     <option value="male">Male</option>
@@ -198,7 +244,12 @@ const EditProfileCustomer = () => {
                     name="status"
                     id="status"
                     value={personalInfo.status}
-                    onChange={(e) =>setPersonalInfo({...personalInfo,status:e.target.value})}
+                    onChange={(e) =>
+                      setPersonalInfo({
+                        ...personalInfo,
+                        status: e.target.value,
+                      })
+                    }
                     className="border border-solid border-gray-300 px-2 py-2 rounded-s-md w-full mb-4"
                   >
                     <option value="single">Single</option>
@@ -215,7 +266,12 @@ const EditProfileCustomer = () => {
                 id="profession"
                 name="profession"
                 value={personalInfo.profession}
-                onChange={(e) =>setPersonalInfo({...personalInfo,profession:e.target.value})}
+                onChange={(e) =>
+                  setPersonalInfo({
+                    ...personalInfo,
+                    profession: e.target.value,
+                  })
+                }
                 className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                 placeholder="Profession"
               />
@@ -227,7 +283,9 @@ const EditProfileCustomer = () => {
                 type="text"
                 id="about"
                 name="about"
-                onChange={(e) =>setPersonalInfo({...personalInfo,about:e.target.value})}
+                onChange={(e) =>
+                  setPersonalInfo({ ...personalInfo, about: e.target.value })
+                }
                 className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                 placeholder="I want to learn css, html, python with django"
               />

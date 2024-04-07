@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "../../axios";
 const CHECKOUT_STEPS = [{ name: "Personal Details" }, { name: "Skills" }];
 
 const SignUpAsCustomer = () => {
@@ -19,22 +19,42 @@ const SignUpAsCustomer = () => {
 
   const updatePersonalInfo = async (e) => {
     e.preventDefault();
+    const csrfToken = document.cookie;
     try {
-      const res = await fetch("http://localhost:8000/customers/", {
-        method: "POST",
+      // const res = await fetch("http://localhost:8000/customers/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 1,
+      //     marital_status: personalInfo.marital_status,
+      //     profession: personalInfo.profession,
+      //     about_me: personalInfo.about_me,
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = await res.json();
+      // console.log(json);
+      
+
+      const response = await axios.post("/customers/", {
+        action: 1,
+        marital_status: personalInfo.marital_status,
+        profession: personalInfo.profession,
+        about_me: personalInfo.about_me,
+      },{
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${csrfToken}`,
         },
-        body: JSON.stringify({
-          action: 1,
-          marital_status: personalInfo.marital_status,
-          profession: personalInfo.profession,
-          about_me: personalInfo.about_me,
-        }),
-        credentials: "include",
+        withCredentials: true,
       });
-      const json = await res.json();
-      console.log(json);
+      const data = response.data;
+      if(!data){
+        console.log("Something went wrong");
+        return;
+      }
       handleNext();
     } catch (error) {
       console.log(error.message);
@@ -76,29 +96,36 @@ const SignUpAsCustomer = () => {
 
   const handleInterests = async (e) => {
     e.preventDefault();
+    const csrfToken = document.cookie;
     try {
-      const res = await fetch("http://localhost:8000/customers/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          action: 2,
-          interest_list:selectedSkill
-        }),
-        credentials: "include",
-      });
-      const json = await res.json();
-      // const response =await axios.post(
-      //   "/customers/",
-      //   { action: 1, marital_status: "Single", about_me: "", profession: "" },
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-      // );
-      console.log(json);
+      // const res = await fetch("http://localhost:8000/customers/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 2,
+      //     interest_list:selectedSkill
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = await res.json();
+      const response =await axios.post(
+        "/customers/",
+        { action: 1, marital_status: "Single", about_me: "", profession: "" },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      // console.log(json);
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      alert("Profile created successfully!");
       navigate("/");
     } catch (error) {
       console.log(error);
