@@ -58,14 +58,14 @@ const LoginWithOTP = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const res = await fetch(
-          `http://localhost:8000/login/?email=${userEmail.email}`
-        );
-        const json = await res.json();
-        console.log(json);
-        // const response = await axios.get(`/login/?email=${userEmail.email}`);
-        // const data = response.data;
-        if (!json) {
+        // const res = await fetch(
+        //   `http://localhost:8000/login/?email=${userEmail.email}`
+        // );
+        // const json = await res.json();
+        // console.log(json);
+        const response = await axios.get(`/login/?email=${userEmail.email}`);
+        const data = response.data;
+        if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid OTP");
           return;
         }
@@ -82,28 +82,33 @@ const LoginWithOTP = () => {
     setUserOtp({ ...userOtp, email: userEmail.email });
     if (validateForm2()) {
       try {
-        const res = await fetch("http://localhost:8000/login/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: userEmail.email, otp: userOtp.otp }),
-        });
-        // const response = await axios.post("/login/", {email:userEmail.email,otp:userOtp.otp}, {
+        // const res = await fetch("http://localhost:8000/login/", {
+        //   method: "POST",
         //   headers: {
         //     "Content-Type": "application/json",
         //   },
+        //   body: JSON.stringify({ email: userEmail.email, otp: userOtp.otp }),
         // });
-        // const data = response.data;
-        const json = await res.json();
-        console.log(json);
-        if (!json) {
+        const response = await axios.post(
+          "/login/",
+          { email: userEmail.email, otp: userOtp.otp },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
+        const data = response.data;
+        // const json = await res.json();
+        // console.log(json);
+        if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid OTP");
           return;
         }
-        // console.log(data);
         alert("Login Successfull!");
         navigate("/");
+        // console.log(data);
       } catch (error) {
         console.log(error.message);
       }

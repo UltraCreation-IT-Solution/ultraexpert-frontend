@@ -41,31 +41,33 @@ const Login = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const res = await fetch("http://localhost:8000/login/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: userData.email,
-            password: userData.password,
-          }),
-          credentials: "include",
-        });
-        // const res = await axios.post(
-        //   "/login/",
-        //   {
+        // const res = await fetch("http://localhost:8000/login/", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
         //     email: userData.email,
         //     password: userData.password,
-        //   },
-        //   {
-        //     withCredentials: true,
-        //   }
-        // );
-        const json = await res.json();
+        //   }),
+        //   credentials: "include",
+        // });
+        const res = await axios.post(
+          "/login/",
+          {
+            email: userData.email,
+            password: userData.password,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        // const json = await res.json();
         if (res.status === 200) {
           console.log("Login successful");
-          console.log(json);
+          console.log(res);
+          localStorage.setItem('token', res.data.access_token);
+          // console.log(json);
           navigate("/");
         }
       } catch (error) {
