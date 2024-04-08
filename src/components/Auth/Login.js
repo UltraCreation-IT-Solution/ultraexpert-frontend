@@ -39,6 +39,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (validateForm()) {
       try {
         // const res = await fetch("http://localhost:8000/login/", {
@@ -58,20 +59,25 @@ const Login = () => {
             email: userData.email,
             password: userData.password,
           },
+
           {
-            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
         );
         // const json = await res.json();
         if (res.status === 200) {
           console.log("Login successful");
+          document.cookie = `access_token=${res.data.access_token};  SameSite=Lax`;
+          document.cookie = `refresh_token=${res.data.refresh_token};  SameSite=Lax`;
+
           console.log(res);
-          localStorage.setItem("token", res.data.access_token);
           // console.log(json);
           navigate("/");
         }
       } catch (error) {
-        console.error(error?.response?.data?.msg);
+        console.error(error);
       }
     }
   };

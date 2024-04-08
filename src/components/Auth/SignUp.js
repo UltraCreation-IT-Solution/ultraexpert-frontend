@@ -199,6 +199,7 @@ const SignUp = () => {
         //   }),
         //   credentials: "include",
         // });
+
         const response = await axios.post(
           "/register/",
           {
@@ -214,7 +215,7 @@ const SignUp = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            withCredentials: true,
+            // withCredentials: true,
           }
         );
         const data = response.data;
@@ -237,24 +238,20 @@ const SignUp = () => {
             //   credentials: "include",
             // });
             // const json = await response.json();
-            const res = await axios.post(
-              "/login/",
-              {
-                email: secondStep.email,
-                password: forthStep.password,
-              },
-              {
-                withCredentials: true,
-              }
-            );
+            const res = await axios.post("/login/", {
+              email: secondStep.email,
+              password: forthStep.password,
+            });
             // const json = await res.json();
             const data = res.data;
-            if(!data || data.status === 400 || data.status === 401) {
+            document.cookie = `access_token=${res.data.access_token};  SameSite=Lax`;
+            document.cookie = `refresh_token=${res.data.refresh_token};  SameSite=Lax`;
+            if (!data || data.status === 400 || data.status === 401) {
               window.alert("Invalid Credentials");
               return;
             }
             window.alert("Registration Successful");
-            localStorage.setItem('token', res.data.access_token);
+            localStorage.setItem("token", res.data.access_token);
             navigate("/signUpAs");
           } catch (error) {
             console.error(error);

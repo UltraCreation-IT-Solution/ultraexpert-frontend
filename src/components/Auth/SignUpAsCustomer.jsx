@@ -19,7 +19,16 @@ const SignUpAsCustomer = () => {
 
   const updatePersonalInfo = async (e) => {
     e.preventDefault();
-    const csrfToken = document.cookie;
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+
+    console.log(jsonData);
+    // console.log(cookies.csrf_token);
     try {
       // const res = await fetch("http://localhost:8000/customers/", {
       //   method: "POST",
@@ -48,9 +57,9 @@ const SignUpAsCustomer = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${csrfToken}`,
+            Authorization: `Bearer ${jsonData.access_token}`,
+            // "X-CSRF-TOKEN": `${jsonData.csrf_token}`,
           },
-          withCredentials: true,
         }
       );
       const data = response.data;
@@ -58,6 +67,7 @@ const SignUpAsCustomer = () => {
         console.log("Something went wrong");
         return;
       }
+      console.log(data, personalInfo);
       handleNext();
     } catch (error) {
       console.log(error.message);
@@ -99,7 +109,13 @@ const SignUpAsCustomer = () => {
 
   const handleInterests = async (e) => {
     e.preventDefault();
-    const csrfToken = document.cookie;
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
     try {
       // const res = await fetch("http://localhost:8000/customers/", {
       //   method: "POST",
@@ -115,10 +131,12 @@ const SignUpAsCustomer = () => {
       // const json = await res.json();
       const response = await axios.post(
         "/customers/",
-        { action: 1, marital_status: "Single", about_me: "", profession: "" },
+        { action: 2, interest_list: selectedSkill },
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+            // "X-CSRF-TOKEN": `${jsonData.csrf_token}`,
           },
         }
       );
@@ -128,6 +146,7 @@ const SignUpAsCustomer = () => {
         console.log("Something went wrong");
         return;
       }
+      console.log(data, selectedSkill);
       alert("Profile created successfully!");
       navigate("/");
     } catch (error) {
