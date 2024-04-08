@@ -827,7 +827,7 @@ export const Dashboard = () => {
                     : `border border-[#c7c7c7] border-solid`
                 }`}
               >
-                <div className="text-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
+                <div className="text-base font-semibold line-clamp-2">
                   {item?.serviceTitle}
                 </div>
                 <div className="sm:flex justify-between gap-5 mt-4">
@@ -836,12 +836,12 @@ export const Dashboard = () => {
                     <div className="my-2">
                       Service Price: {item?.servicePrice}
                     </div>
-                    <div>Service Details: XYZ</div>
+                    <div className="my-2">Meeting Id: {item?.meetingId}</div>
                   </div>
                   <div className="text-sm mt-2 sm:mt-0">
-                    <div>Time Stamp: {item?.serviceDuration}</div>
-                    <div className="my-2">Meeting Id: {item?.meetingId}</div>
                     <div>Date of Meeting: {item?.serviceDate}</div>
+                    <div className="my-2">Start Time: {item?.startTime}</div>
+                    <div>End Time: {item?.startTime}</div>
                   </div>
                 </div>
               </div>

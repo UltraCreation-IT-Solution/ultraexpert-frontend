@@ -22,6 +22,7 @@ import {
   expertDetailsObj,
   ProjectsCarousel,
   BlogCard,
+  BlogCardHorizontal,
   ShowSchedule,
 } from "../../constant";
 
