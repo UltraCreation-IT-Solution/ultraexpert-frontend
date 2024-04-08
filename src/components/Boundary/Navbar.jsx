@@ -3,13 +3,69 @@ import logo from "../../assets/images/logo.svg";
 import ultraXpert from "../../assets/images/ultraXpert.svg";
 import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaTimes, FaRegHeart } from "react-icons/fa";
+import { IoIosNotificationsOutline } from "react-icons/io";
+
+const NotificationDropdown = ({ notifications, isOpen, toggleDropdown }) => {
+  if (!notifications) {
+    console.error("Notifications prop is missing or null.");
+    return null;
+  }
+
+  return (
+    <div className="relative">
+      <div
+        className="flex justify-center items-center p-2 focus:outline-none focus:ring focus:ring-blue-300 bg-inherit"
+        onClick={toggleDropdown}
+      >
+        <IoIosNotificationsOutline size={20} className="cursor-pointer" />
+        {notifications.length > 0 && (
+          <div className="h-4 w-4 bg-red-500 text-xs text-white rounded-full flex justify-center items-center absolute -top-0 -right-0">
+            {notifications.length}
+          </div>
+        )}
+      </div>
+      <div>
+      {isOpen && (
+        <div className="bg-white p-4 w-52 absolute z-10 right-0 shadow-lg">
+          {notifications.map((notification, index) => (
+            <div
+              key={index}
+              className="px-4 py-2 text-base text-gray-700 hover:bg-blue-200 rounded-lg duration-200"
+            >
+              {notification}
+            </div>
+          ))}
+        </div>
+      )}
+      </div>
+    </div>
+  );
+};
 
 const Navbar = () => {
   const location = useLocation().pathname;
   const [showNav, setShowNav] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const notifications = [
+    "Notification 1",
+    "Notification 2",
+    "Notification 3",
+    "Notification 4",
+    "Notification 5",
+    "Notification 6",
+  ];
   useEffect(() => {
     setShowNav(false);
   }, [location]);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+    if (!isOpen) {
+      console.log("open");
+    } else {
+      console.log("close");
+    }
+  };
   return (
     <div
       className={`fixed z-50 shadow-sm top-0 left-0 bg-white w-[100vw] ${
@@ -39,7 +95,14 @@ const Navbar = () => {
               : "hidden flex-row gap-[3.5vw]"
           } items-center font-montserrat justify-center h-auto  mr-6 text-[16px]  md:flex`}
         >
-          <Link to="/favourites" ><FaRegHeart /></Link>
+          <Link to="/favourites">
+            <FaRegHeart />
+          </Link>
+          <NotificationDropdown
+            notifications={notifications}
+            isOpen={isOpen}
+            toggleDropdown={toggleDropdown}
+          />
           <Link
             to={"/experts"}
             className={`${
