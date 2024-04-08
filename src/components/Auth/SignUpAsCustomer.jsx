@@ -19,7 +19,16 @@ const SignUpAsCustomer = () => {
 
   const updatePersonalInfo = async (e) => {
     e.preventDefault();
-    const csrfToken = document.cookie;
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+
+    console.log(jsonData);
+    // console.log(cookies.csrf_token);
     try {
       // const res = await fetch("http://localhost:8000/customers/", {
       //   method: "POST",
@@ -36,25 +45,29 @@ const SignUpAsCustomer = () => {
       // });
       // const json = await res.json();
       // console.log(json);
-      
 
-      const response = await axios.post("/customers/", {
-        action: 1,
-        marital_status: personalInfo.marital_status,
-        profession: personalInfo.profession,
-        about_me: personalInfo.about_me,
-      },{
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${csrfToken}`,
+      const response = await axios.post(
+        "/customers/",
+        {
+          action: 1,
+          marital_status: personalInfo.marital_status,
+          profession: personalInfo.profession,
+          about_me: personalInfo.about_me,
         },
-        withCredentials: true,
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+            // "X-CSRF-TOKEN": ${jsonData.csrf_token},
+          },
+        }
+      );
       const data = response.data;
-      if(!data){
+      if (!data) {
         console.log("Something went wrong");
         return;
       }
+      console.log(data, personalInfo);
       handleNext();
     } catch (error) {
       console.log(error.message);
@@ -96,7 +109,13 @@ const SignUpAsCustomer = () => {
 
   const handleInterests = async (e) => {
     e.preventDefault();
-    const csrfToken = document.cookie;
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
     try {
       // const res = await fetch("http://localhost:8000/customers/", {
       //   method: "POST",
@@ -110,12 +129,14 @@ const SignUpAsCustomer = () => {
       //   credentials: "include",
       // });
       // const json = await res.json();
-      const response =await axios.post(
+      const response = await axios.post(
         "/customers/",
-        { action: 1, marital_status: "Single", about_me: "", profession: "" },
+        { action: 2, interest_list: selectedSkill },
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+            // "X-CSRF-TOKEN": ${jsonData.csrf_token},
           },
         }
       );
@@ -125,6 +146,7 @@ const SignUpAsCustomer = () => {
         console.log("Something went wrong");
         return;
       }
+      console.log(data, selectedSkill);
       alert("Profile created successfully!");
       navigate("/");
     } catch (error) {
@@ -239,6 +261,7 @@ const SignUpAsCustomer = () => {
                     setPersonalInfo({
                       ...personalInfo,
                       profession: e.target.value,
+                      profession: e.target.value,
                     })
                   }
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
@@ -254,7 +277,7 @@ const SignUpAsCustomer = () => {
                   onChange={(e) => {
                     setPersonalInfo({
                       ...personalInfo,
-                      [e.target.name]: e.target.value,
+                      about_me: e.target.value,
                     });
                   }}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
