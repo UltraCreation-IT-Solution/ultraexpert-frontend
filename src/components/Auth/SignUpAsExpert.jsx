@@ -18,40 +18,27 @@ const SignUpAsExpert = () => {
     marginRight: 0,
   });
 
-  const [educationForms, setEducationForms] = useState([{ id: 1 }]);
-
-  const addEducationForm = () => {
-    const newId = educationForms.length + 1;
-    setEducationForms([...educationForms, { id: newId }]);
-  };
-
-  const [skillForms, setSkillForms] = useState([{ id: 1 }]);
-
-  const addSkillForm = () => {
-    const newId = skillForms.length + 1;
-    setSkillForms([...skillForms, { id: newId }]);
-  };
-
-  const [experienceForms, setExperienceForms] = useState([{ id: 1 }]);
-
-  const addExperienceForm = () => {
-    const newId = experienceForms.length + 1;
-    setExperienceForms([...experienceForms, { id: newId }]);
-  };
-
   const navigate = useNavigate();
 
   const stepRef = useRef([]);
 
   const [personalInfo, setPersonalInfo] = useState({
-    gender: "",
-    level: "",
+    gender: "Male",
+    level: "Basic",
     about_me: "",
     profession: "",
   });
 
   const handlePersonalInfo = async (e) => {
     e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+
     try {
       // const response = await fetch("http://localhost:8000/experts/", {
       //   method: "POST",
@@ -79,8 +66,8 @@ const SignUpAsExpert = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
           },
-          withCredentials: true,
         }
       );
       const data = response.data;
@@ -89,6 +76,7 @@ const SignUpAsExpert = () => {
         console.log("Something went wrong");
         return;
       }
+      console.log(data, personalInfo);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -97,18 +85,41 @@ const SignUpAsExpert = () => {
     }
   };
 
+  const [educationForms, setEducationForms] = useState([{ id: 1 }]);
+
+  const addEducationForm = () => {
+    const newId = educationForms.length + 1;
+    setEducationForms([...educationForms, { id: newId }]);
+    setEduInfo((prevEduInfo) => ({
+      ...prevEduInfo,
+      type: [...prevEduInfo.type, ""],
+      institute_name: [...prevEduInfo.institute_name, ""],
+      city: [...prevEduInfo.city, ""],
+      passing_year: [...prevEduInfo.passing_year, ""],
+      Devision: [...prevEduInfo.Devision, ""],
+    }));
+  };
+
   const [eduInfo, setEduInfo] = useState({
-    type: "",
-    institute_name: "",
-    city: "",
-    state_name: "Madhya Pradesh",
-    country: "India",
-    passing_year: "2020",
-    Devision: "First",
+    type: [],
+    institute_name: [],
+    city: [],
+    state_name: [],
+    country: ["India"],
+    passing_year: [],
+    Devision: ["First"],
   });
 
   const handleEducationForm = async (e) => {
     e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+
     try {
       // const response = fetch("http://localhost:8000/experts/", {
       //   method: "POST",
@@ -131,36 +142,36 @@ const SignUpAsExpert = () => {
       //   }),
       //   credentials: "include",
       // });
+      const educationData = educationForms.map((form, index) => ({
+        type: eduInfo.type[index],
+        institute_name: eduInfo.institute_name[index],
+        city: eduInfo.city[index],
+        state_name: eduInfo.state_name[index],
+        country: eduInfo.country[index],
+        passing_year: eduInfo.passing_year[index],
+        Devision: eduInfo.Devision[index],
+      }));
 
       const response = await axios.post(
         "/experts/",
         {
           action: 2,
-          education_json: [
-            {
-              type: eduInfo.type,
-              institute_name: eduInfo.institute_name,
-              city: eduInfo.city,
-              state_name: eduInfo.state_name,
-              country: eduInfo.country,
-              passing_year: eduInfo.passing_year,
-              Devision: eduInfo.Devision,
-            },
-          ],
+          education_json: educationData,
         },
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
           },
-          withCredentials: true,
         }
       );
+
       const data = response.data;
-      console.log(data);
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
         return;
       }
+      console.log(data, eduInfo);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -170,12 +181,31 @@ const SignUpAsExpert = () => {
   };
 
   const [skillInfo, setSkillInfo] = useState({
-    technology_name: "",
-    ratings: "",
+    technology_name: [],
+    ratings: [],
   });
+
+  const [skillForms, setSkillForms] = useState([{ id: 1 }]);
+
+  const addSkillForm = () => {
+    const newId = skillForms.length + 1;
+    setSkillForms([...skillForms, { id: newId }]);
+    setSkillInfo((prevSkillInfo) => ({
+      ...prevSkillInfo,
+      technology_name: [...prevSkillInfo.technology_name, ""],
+      ratings: [...prevSkillInfo.ratings, ""],
+    }));
+  };
 
   const handleSkillForm = async (e) => {
     e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
     try {
       // const response = fetch("http://localhost:8000/experts/", {
       //   method: "POST",
@@ -194,30 +224,29 @@ const SignUpAsExpert = () => {
       //   credentials: "include",
       // });
       // const json = response.json();
+      const skillData = skillForms.map((form, index) => ({
+        technology_name: skillInfo.technology_name[index],
+        ratings: skillInfo.ratings[index],
+      }));
       const response = await axios.post(
         "/experts/",
         {
           action: 3,
-          skill_json: [
-            {
-              technology_name: skillInfo.technology_name,
-              ratings: skillInfo.ratings,
-            },
-          ],
+          skill_json: skillData,
         },
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
           },
-          withCredentials: true,
         }
       );
       const data = response.data;
-      console.log(data);
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
         return;
       }
+      console.log(data, skillInfo);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -226,14 +255,36 @@ const SignUpAsExpert = () => {
     }
   };
 
+  const [experienceForms, setExperienceForms] = useState([{ id: 1 }]);
+
+  const addExperienceForm = () => {
+    const newId = experienceForms.length + 1;
+    setExperienceForms([...experienceForms, { id: newId }]);
+    setExpInfo((prevExpInfo) => ({
+      ...prevExpInfo,
+      company_name: [...prevExpInfo.company_name, ""],
+      start_date: [...prevExpInfo.start_date, ""],
+      end_date: [...prevExpInfo.end_date, ""],
+      designation: [...prevExpInfo.designation, ""],
+    }));
+  };
+
   const [expInfo, setExpInfo] = useState({
-    company_name: "",
-    start_date: "01-jan-2019",
-    end_date: "01-jan-2019",
-    designation: "",
+    company_name: [],
+    start_date: ["2019-jan-01"],
+    end_date: ["2019-jan-01"],
+    designation: [],
   });
+
   const handleExperienceForm = async (e) => {
     e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
     try {
       // const response = fetch("http://localhost:8000/experts/", {
       //   method: "POST",
@@ -255,32 +306,31 @@ const SignUpAsExpert = () => {
       // });
       // const json = response.json();
       // console.log(json);
+      const experienceData = experienceForms.map((form, index) => ({
+        company_name: expInfo.company_name[index],
+        start_date: expInfo.start_date[index],
+        end_date: expInfo.end_date[index],
+        designation: expInfo.designation[index],
+      }));
       const response = await axios.post(
         "/experts/",
         {
-          action: 5,
-          experience_json: [
-            {
-              company_name: expInfo.company_name,
-              start_date: expInfo.start_date,
-              end_date: expInfo.end_date,
-              designation: expInfo.designation,
-            },
-          ],
+          action: 4,
+          experience_json: experienceData
         },
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
           },
-          withCredentials: true,
         }
       );
       const data = response.data;
-      console.log(data);
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
         return;
       }
+      console.log(data,expInfo);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -296,8 +346,15 @@ const SignUpAsExpert = () => {
     ifsc_code: "",
   });
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
     try {
       // const response = fetch("http://localhost:8000/experts/", {
       //   method: "POST",
@@ -315,24 +372,28 @@ const SignUpAsExpert = () => {
       // });
       // const json = response.json();
       // console.log(json);
-      const response = await axios.post("/experts/", {
-        action: 5,
-        account_holder: accInfo.account_holder,
-        bank_name: accInfo.bank_name,
-        account_number: accInfo.account_number,
-        ifsc_code: accInfo.ifsc_code,
-      },{
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.post(
+        "/experts/",
+        {
+          action: 5,
+          account_holder: accInfo.account_holder,
+          bank_name: accInfo.bank_name,
+          account_number: accInfo.account_number,
+          ifsc_code: accInfo.ifsc_code,
         },
-        withCredentials: true,
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
       const data = response.data;
-      console.log(data);
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
         return;
       }
+      console.log(data,accInfo);
       setIsComplete(true);
       navigate("/");
     } catch (error) {
@@ -491,7 +552,10 @@ const SignUpAsExpert = () => {
                   id="about"
                   name="about"
                   onChange={(e) =>
-                    setPersonalInfo({ ...personalInfo, about: e.target.value })
+                    setPersonalInfo({
+                      ...personalInfo,
+                      about_me: e.target.value,
+                    })
                   }
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                   placeholder="I want to learn css, html, python with django"
@@ -535,15 +599,16 @@ const SignUpAsExpert = () => {
                       id={`institute${form.id}`}
                       name={`institute${form.id}`}
                       value={eduInfo.institute_name[ind]}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const updatedInstituteNames = [
+                          ...eduInfo.institute_name,
+                        ];
+                        updatedInstituteNames[ind] = e.target.value;
                         setEduInfo({
                           ...eduInfo,
-                          institute_name: eduInfo.institute_name.map(
-                            (item, index) =>
-                              index === ind ? e.target.value : item
-                          ),
-                        })
-                      }
+                          institute_name: updatedInstituteNames,
+                        });
+                      }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       placeholder="Institute Name"
                     />
@@ -560,14 +625,11 @@ const SignUpAsExpert = () => {
                           id={`type${form.id}`}
                           name={`type${form.id}`}
                           value={eduInfo.type[ind]}
-                          onChange={(e) =>
-                            setEduInfo({
-                              ...eduInfo,
-                              type: eduInfo.type.map((item, index) =>
-                                index === ind ? e.target.value : item
-                              ),
-                            })
-                          }
+                          onChange={(e) => {
+                            const updatedType = [...eduInfo.type];
+                            updatedType[ind] = e.target.value;
+                            setEduInfo({ ...eduInfo, type: updatedType });
+                          }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                           placeholder="Institute Name"
                         />
@@ -579,28 +641,24 @@ const SignUpAsExpert = () => {
                         >
                           Passing Year
                         </label>
-                        <select
-                          name={`passing${form.id}`}
+                        <input
+                          type="text"
                           id={`passing${form.id}`}
+                          name={`passing${form.id}`}
                           value={eduInfo.passing_year[ind]}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            const updatedPassingYear = [
+                              ...eduInfo.passing_year,
+                            ];
+                            updatedPassingYear[ind] = e.target.value;
                             setEduInfo({
                               ...eduInfo,
-                              passing_year: eduInfo.passing_year.map(
-                                (item, index) =>
-                                  index === ind ? e.target.value : item
-                              ),
-                            })
-                          }
+                              passing_year: updatedPassingYear,
+                            });
+                          }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                        >
-                          <option value="2021">2021</option>
-                          <option value="2022">2022</option>
-                          <option value="2023">2023</option>
-                          <option value="2024">2024</option>
-                          <option value="2025">2025</option>
-                          <option value="2026">2026</option>
-                        </select>
+                          placeholder="Institute Name"
+                        />
                       </div>
                     </div>
                     <div className="flex justify-around gap-5">
@@ -616,14 +674,11 @@ const SignUpAsExpert = () => {
                           id={`city${form.id}`}
                           name={`city${form.id}`}
                           value={eduInfo.city[ind]}
-                          onChange={(e) =>
-                            setEduInfo({
-                              ...eduInfo,
-                              city: eduInfo.city.map((item, index) =>
-                                index === ind ? e.target.value : item
-                              ),
-                            })
-                          }
+                          onChange={(e) => {
+                            const updatedCityName = [...eduInfo.city];
+                            updatedCityName[ind] = e.target.value;
+                            setEduInfo({ ...eduInfo, city: updatedCityName });
+                          }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                           placeholder="City"
                         />
@@ -635,60 +690,22 @@ const SignUpAsExpert = () => {
                         >
                           State
                         </label>
-                        <select
+                        <input
+                          type="text"
                           id={`state${form.id}`}
                           name={`state${form.id}`}
-                          value={eduInfo.state[ind]}
-                          onChange={(e) =>
+                          value={eduInfo.state_name[ind]}
+                          onChange={(e) => {
+                            const updatedStateName = [...eduInfo.state_name];
+                            updatedStateName[ind] = e.target.value;
                             setEduInfo({
                               ...eduInfo,
-                              state: eduInfo.state.map((item, index) =>
-                                index === ind ? e.target.value : item
-                              ),
-                            })
-                          }
+                              state_name: updatedStateName,
+                            });
+                          }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                        >
-                          <option value="MP">Madhya Pradesh</option>
-                          <option value="AN">
-                            Andaman and Nicobar Islands
-                          </option>
-                          <option value="AP">Andhra Pradesh</option>
-                          <option value="AR">Arunachal Pradesh</option>
-                          <option value="AS">Assam</option>
-                          <option value="BR">Bihar</option>
-                          <option value="CH">Chandigarh</option>
-                          <option value="CT">Chhattisgarh</option>
-                          <option value="DN">Dadra and Nagar Haveli</option>
-                          <option value="DD">Daman and Diu</option>
-                          <option value="DL">Delhi</option>
-                          <option value="GA">Goa</option>
-                          <option value="GJ">Gujarat</option>
-                          <option value="HR">Haryana</option>
-                          <option value="HP">Himachal Pradesh</option>
-                          <option value="JK">Jammu and Kashmir</option>
-                          <option value="JH">Jharkhand</option>
-                          <option value="KA">Karnataka</option>
-                          <option value="KL">Kerala</option>
-                          <option value="LA">Ladakh</option>
-                          <option value="LD">Lakshadweep</option>
-                          <option value="MH">Maharashtra</option>
-                          <option value="MN">Manipur</option>
-                          <option value="ML">Meghalaya</option>
-                          <option value="MZ">Mizoram</option>
-                          <option value="NL">Nagaland</option>
-                          <option value="OR">Odisha</option>
-                          <option value="PY">Puducherry</option>
-                          <option value="PB">Punjab</option>
-                          <option value="RJ">Rajasthan</option>
-                          <option value="SK">Sikkim</option>
-                          <option value="TN">Tamil Nadu</option>
-                          <option value="TG">Telangana</option>
-                          <option value="TR">Tripura</option>
-                          <option value="UP">Uttar Pradesh</option>
-                          <option value="UT">Uttarakhand</option>
-                          <option value="WB">West Bengal</option>
-                        </select>
+                          placeholder="State"
+                        />
                       </div>
                     </div>
                     <div className="flex justify-around gap-5">
@@ -703,14 +720,14 @@ const SignUpAsExpert = () => {
                           name={`country${form.id}`}
                           id={`country${form.id}`}
                           value={eduInfo.country[ind]}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            const updatedCountryNames = [...eduInfo.country];
+                            updatedCountryNames[ind] = e.target.value;
                             setEduInfo({
                               ...eduInfo,
-                              country: eduInfo.country.map((item, index) =>
-                                index === ind ? e.target.value : item
-                              ),
-                            })
-                          }
+                              country: updatedCountryNames,
+                            });
+                          }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                         >
                           <option value="India">India</option>
@@ -1051,14 +1068,14 @@ const SignUpAsExpert = () => {
                           name={`division${form.id}`}
                           id={`division${form.id}`}
                           value={eduInfo.Devision[ind]}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            const updatedDivisionNames = [...eduInfo.Devision];
+                            updatedDivisionNames[ind] = e.target.value;
                             setEduInfo({
                               ...eduInfo,
-                              Devision: eduInfo.Devision.map((item, index) =>
-                                index === ind ? e.target.value : item
-                              ),
-                            })
-                          }
+                              Devision: updatedDivisionNames,
+                            });
+                          }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                         >
                           <option value="first">First</option>
@@ -1117,15 +1134,14 @@ const SignUpAsExpert = () => {
                       id={`technology${form.id}`}
                       name={`technology${form.id}`}
                       value={skillInfo.technology_name[ind]}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const updatedTechNames = [...skillInfo.technology_name];
+                        updatedTechNames[ind] = e.target.value;
                         setSkillInfo({
                           ...skillInfo,
-                          technology_name: skillInfo.technology_name.map(
-                            (item, index) =>
-                              index === ind ? e.target.value : item
-                          ),
-                        })
-                      }
+                          technology_name: updatedTechNames,
+                        });
+                      }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       placeholder="Institute Name"
                     />
@@ -1140,14 +1156,14 @@ const SignUpAsExpert = () => {
                       id={`rating${form.id}`}
                       name={`rating${form.id}`}
                       value={skillInfo.ratings[ind]}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const updatedRatings = [...skillInfo.ratings];
+                        updatedRatings[ind] = e.target.value;
                         setSkillInfo({
                           ...skillInfo,
-                          ratings: skillInfo.ratings.map((item, index) =>
-                            index === ind ? e.target.value : item
-                          ),
-                        })
-                      }
+                          ratings: updatedRatings,
+                        });
+                      }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-[50%]"
                       placeholder="1"
                     />
@@ -1199,15 +1215,15 @@ const SignUpAsExpert = () => {
                       type="text"
                       id={`company${form.id}`}
                       name={`company${form.id}`}
-                      value={expInfo.company[ind]}
-                      onChange={(e) =>
+                      value={expInfo.company_name[ind]}
+                      onChange={(e) => {
+                        const updatedCompany = [...expInfo.company_name];
+                        updatedCompany[ind] = e.target.value;
                         setExpInfo({
                           ...expInfo,
-                          company: expInfo.company.map((item, index) =>
-                            index === ind ? e.target.value : item
-                          ),
-                        })
-                      }
+                          company_name: updatedCompany,
+                        });
+                      }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       placeholder="Company Name"
                     />
@@ -1224,15 +1240,14 @@ const SignUpAsExpert = () => {
                           id={`start${form.id}`}
                           name={`start${form.id}`}
                           value={expInfo.start_date[ind]}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            const updatedStartDate = [...expInfo.start_date];
+                            updatedStartDate[ind] = e.target.value;
                             setExpInfo({
                               ...expInfo,
-                              start_date: expInfo.start_date.map(
-                                (item, index) =>
-                                  index === ind ? e.target.value : item
-                              ),
-                            })
-                          }
+                              start_date: updatedStartDate,
+                            });
+                          }}
                         />
                       </div>
                       <div className="flex flex-col w-full">
@@ -1247,14 +1262,14 @@ const SignUpAsExpert = () => {
                           id={`start${form.id}`}
                           name={`start${form.id}`}
                           value={expInfo.end_date[ind]}
-                          onChange={(e) =>
-                            setExperienceForms({
+                          onChange={(e) => {
+                            const updatedEndDate = [...expInfo.end_date];
+                            updatedEndDate[ind] = e.target.value;
+                            setExpInfo({
                               ...expInfo,
-                              end_date: expInfo.end_date.map((item, index) =>
-                                index === ind ? e.target.value : item
-                              ),
-                            })
-                          }
+                              end_date: updatedEndDate,
+                            });
+                          }}
                         />
                       </div>
                     </div>
@@ -1269,14 +1284,14 @@ const SignUpAsExpert = () => {
                       id={`designtaion${form.id}`}
                       name={`designtaion${form.id}`}
                       value={expInfo.designation[ind]}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const updatedDesignation = [...expInfo.designation];
+                        updatedDesignation[ind] = e.target.value;
                         setExpInfo({
                           ...expInfo,
-                          designtaion: expInfo.designation.map((item, index) =>
-                            index === ind ? e.target.value : item
-                          ),
-                        })
-                      }
+                          designation: updatedDesignation,
+                        });
+                      }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       placeholder="Designtaion"
                     />
