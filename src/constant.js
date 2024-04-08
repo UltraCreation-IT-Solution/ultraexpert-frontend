@@ -346,6 +346,165 @@ export const profileObj = [
     topSkills: ["React", "Angular", "Node"],
     ratings: 4.8,
   },
+  {
+    name: "Bhavesh Bhanusali",
+    username: "Bhavesh884",
+    location: "India",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    username: "Bhavesh884",
+    location: "India",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1551500226-b50b653e33e8?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    username: "Bhavesh884",
+    location: "India",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1621416953228-87ad15716483?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    username: "Bhavesh884",
+    location: "India",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title: "Naman Paliwal ",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    username: "Bhavesh884",
+    location: "India",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    username: "Bhavesh884",
+    location: "India",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1551500226-b50b653e33e8?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    username: "Bhavesh884",
+    location: "India",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1621416953228-87ad15716483?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    username: "Bhavesh884",
+    location: "India",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    username: "Bhavesh884",
+    location: "India",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
+  {
+    name: "Bhavesh Bhanusali",
+    username: "Bhavesh884",
+    location: "India",
+    profile:
+      "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+    banner:
+      "https://images.unsplash.com/photo-1551500226-b50b653e33e8?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    designation: "Web Developer",
+    meetings: "60 Meetings",
+    title:
+      " I will work with you to ensure that you are preparing for it in a decent state of mental well being too",
+    followers: 500,
+    topSkills: ["React", "Angular", "Node"],
+    ratings: 4.8,
+  },
 ];
 export const expertDashInfo = {
   name: "Bhavesh Bhanusali",
@@ -376,6 +535,156 @@ export const expertDashInfo = {
   viewCount: 1567,
   followersCount: 730,
   blogcount: 28,
+  myBookings:[
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+  ],
+  chats: [
+    {
+      img: "https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      name: "Naman Paliwal",
+      lastSeen: "1 Day ago",
+      comment:
+        "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1611095973763-414019e72400?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fHdvcmt8ZW58MHwwfDB8fHww",
+      name: "Bhavesh Bhanusali",
+      lastSeen: "1 Day ago",
+      comment:
+        "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1513258496099-48168024aec0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTMwfHx3b3JrfGVufDB8MHwwfHx8MA%3D%3D",
+      name: "Ashi Pandey",
+      lastSeen: "1 Day ago",
+      comment:
+        "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1573496527892-904f897eb744?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjQ4fHx3b3JrfGVufDB8MHwwfHx8MA%3D%3D",
+      name: "Lavina Shahani",
+      lastSeen: "1 Day ago",
+      comment:
+        "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos",
+    },
+    {
+      img: "https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      name: "Naman Paliwal",
+      lastSeen: "1 Day ago",
+      comment:
+        "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1611095973763-414019e72400?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fHdvcmt8ZW58MHwwfDB8fHww",
+      name: "Bhavesh Bhanusali",
+      lastSeen: "1 Day ago",
+      comment:
+        "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1513258496099-48168024aec0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTMwfHx3b3JrfGVufDB8MHwwfHx8MA%3D%3D",
+      name: "Ashi Pandey",
+      lastSeen: "1 Day ago",
+      comment:
+        "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos",
+    },
+    {
+      img: "https://images.unsplash.com/photo-1573496527892-904f897eb744?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjQ4fHx3b3JrfGVufDB8MHwwfHx8MA%3D%3D",
+      name: "Lavina Shahani",
+      lastSeen: "1 Day ago",
+      comment:
+        "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos",
+    },
+  ],
   recentContributions: [
     {
       serviceName: "API testing using postman",
@@ -455,6 +764,129 @@ export const expertDashInfo = {
       serviceDate: "22 May, 2024",
     },
   ],
+  testimonials:[
+    {
+      date:"26 May, 2024",
+      comment:"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ullam quas aspernatur .",
+    },
+    {
+      date:"24 May, 2024",
+      comment:"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ullam quas aspernatur numquam cupiditate, eos quisquam obcaecati exercitationem modi odit, velit fugiat aperiam nulla nam quaerat ipsum nemo ut? Ab enim eius laboriosam eos distinctio magnam quod iusto natus delectus praesentium.",
+    },
+    {
+      date:"22 May, 2024",
+      comment:"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ullam quas aspernatur numquam cupiditate, eos quisquam obcaecati exercitationem modi odit, velit fugiat aperiam nulla nam quaerat ipsum nemo ut? Ab enim eius laboriosam eos distinctio magnam quod iusto natus delectus praesentium.",
+    },
+    {
+      date:"20 May, 2024",
+      comment:"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ullam quas aspernatur numquam cupiditate, eos quisquam obcaecati exercitationem modi odit, velit fugiat aperiam nulla nam quaerat ipsum nemo ut? Ab enim eius laboriosam eos distinctio magnam quod iusto natus delectus praesentium.",
+    },
+    {
+      date:"15 May, 2024",
+      comment:"Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ullam quas aspernatur numquam cupiditate, eos quisquam obcaecati exercitationem modi odit, velit fugiat aperiam nulla nam quaerat ipsum nemo ut? Ab enim eius laboriosam eos distinctio magnam quod iusto natus delectus praesentium.",
+    },
+  ],
+};
+export const customerDashboardInfo = {
+  name: "Bhavesh Bhanusali",
+  username: "Bhavesh884",
+  location: "India",
+  profile:
+    "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
+  designation: "Web Developer",
+  meetings: "60 Meetings",
+  myBookings:[
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+    {
+      bookingTime:"2:00 PM",
+      bookingDate:"24 Mar, 2024",
+      scheduledDate:"30 Mar, 2024",
+      startTime:"3:00 PM",
+      endTime:"4:00 PM",
+      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName:"Guy Hawkins"
+    },
+  ],
   chats: [
     {
       img: "https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -513,6 +945,7 @@ export const expertDashInfo = {
         "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos",
     },
   ],
+
 };
 export const leaderboardRanking = [
   {

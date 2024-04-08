@@ -34,7 +34,9 @@ import ExpertDashboard, {
   Chats,
   Dashboard,
   Leaderboard,
+  MyBookings
 } from "./components/Experts/ExpertDashboard";
+import About from "./components/About.jsx";
 import Update from "./components/Experts/EditDashboardProfile";
 import SignUpAs from "./components/Auth/SignUpAs";
 import SignUpAsExpert from "./components/Auth/SignUpAsExpert";
@@ -43,6 +45,7 @@ import ForgotPassword from "./components/Auth/ForgotPassword";
 import EditProfileCustomer from "./components/Auth/EditProfileCustomer";
 import EditProfileExpert from "./components/Auth/EditProfileExpert";
 import CreateService from "./components/Experts/CreateService";
+import CustomerDashboard,{CustomerProfile, CustomerChats, CustomerBookings, CustomerRecentMeetngs} from "./components/CustomerDashboard.jsx";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -208,7 +211,15 @@ const appRouter = createBrowserRouter([
             path: "leaderboard",
             element: <Leaderboard />,
           },
+          {
+            path:"mybookings",
+            element:<MyBookings/>
+          }
         ],
+      },
+      {
+        path:"/about",
+        element:<About/>,
       },
       {
         path: "/test",
@@ -218,6 +229,28 @@ const appRouter = createBrowserRouter([
         path: "editprofile",
         element: <Update />,
       },
+      {
+        path:"customerdashboard",
+        element:<CustomerDashboard/>,
+        children:[
+          {
+            path:"",
+            element:<CustomerProfile/>
+          },
+          {
+            path:"chats",
+            element:<CustomerChats/>
+          },
+          {
+            path:"mybookings",
+            element:<CustomerBookings/>
+          },
+          {
+            path:"recentmeetings",
+            element:<CustomerRecentMeetngs/>
+          },
+        ]
+      }
     ],
   },
 ]);
