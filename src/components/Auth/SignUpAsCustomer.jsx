@@ -58,7 +58,7 @@ const SignUpAsCustomer = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${jsonData.access_token}`,
-            // "X-CSRF-TOKEN": `${jsonData.csrf_token}`,
+            // "X-CSRF-TOKEN": ${jsonData.csrf_token},
           },
         }
       );
@@ -136,7 +136,7 @@ const SignUpAsCustomer = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${jsonData.access_token}`,
-            // "X-CSRF-TOKEN": `${jsonData.csrf_token}`,
+            // "X-CSRF-TOKEN": ${jsonData.csrf_token},
           },
         }
       );

@@ -16,7 +16,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}$/;
+  const passwordRegex = /^(?=.[a-z])(?=.[!@#$%^&*]).{8,}$/;
 
   const validateForm = () => {
     let isValid = true;
@@ -69,8 +69,8 @@ const Login = () => {
         // const json = await res.json();
         if (res.status === 200) {
           console.log("Login successful");
-          document.cookie = `access_token=${res.data.access_token};  SameSite=Lax`;
-          document.cookie = `refresh_token=${res.data.refresh_token};  SameSite=Lax`;
+          document.cookie = `access_token=${res.data.access_token};  SameSite=Lax;`;
+          document.cookie = `refresh_token=${res.data.refresh_token};  SameSite=Lax;`;
 
           console.log(res);
           // console.log(json);
