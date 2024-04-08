@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
-
 const CHECKOUT_STEPS = [{ name: "Personal Details" }, { name: "Skills" }];
 
 const SignUpAsCustomer = () => {
@@ -20,22 +19,56 @@ const SignUpAsCustomer = () => {
 
   const updatePersonalInfo = async (e) => {
     e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+
+    console.log(jsonData);
+    // console.log(cookies.csrf_token);
     try {
-      const res = await fetch("http://localhost:8000/customers/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      // const res = await fetch("http://localhost:8000/customers/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 1,
+      //     marital_status: personalInfo.marital_status,
+      //     profession: personalInfo.profession,
+      //     about_me: personalInfo.about_me,
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = await res.json();
+      // console.log(json);
+
+      const response = await axios.post(
+        "/customers/",
+        {
+          action: 1,
           marital_status: personalInfo.marital_status,
           profession: personalInfo.profession,
           about_me: personalInfo.about_me,
-        }),
-        credentials: "include",
-      });
-      const json = await res.json();
-      console.log(json);
-      handleNext(e);
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+            // "X-CSRF-TOKEN": ${jsonData.csrf_token},
+          },
+        }
+      );
+      const data = response.data;
+      if (!data) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data, personalInfo);
+      handleNext();
     } catch (error) {
       console.log(error.message);
     }
@@ -74,40 +107,48 @@ const SignUpAsCustomer = () => {
     setIsComplete(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleInterests = async (e) => {
     e.preventDefault();
-    setIsComplete(true);
-    navigate("/");
-  };
-  const handlePersonalInfoSubmit = async (e) => {
-    e.preventDefault();
-    console.log(personalInfoForm);
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
     try {
-      const res = await fetch("http://localhost:8000/customers/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          action: 1,
-          marital_status: personalInfoForm.marital_status,
-          about_me: personalInfoForm.about_me,
-          profession: personalInfoForm.profession,
-        }),
-        credentials: "include",
-      });
-      const json = await res.json();
-      // const response =await axios.post(
-      //   "/customers/",
-      //   { action: 1, marital_status: "Single", about_me: "", profession: "" },
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-      // );
-      console.log(json);
-      handleNext();
+      // const res = await fetch("http://localhost:8000/customers/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 2,
+      //     interest_list:selectedSkill
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = await res.json();
+      const response = await axios.post(
+        "/customers/",
+        { action: 2, interest_list: selectedSkill },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+            // "X-CSRF-TOKEN": ${jsonData.csrf_token},
+          },
+        }
+      );
+      // console.log(json);
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data, selectedSkill);
+      alert("Profile created successfully!");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -176,7 +217,7 @@ const SignUpAsCustomer = () => {
           </div>
           <div className="h-[1px] w-full bg-gray-400 my-2"></div>
           {currStep === 0 && (
-            <form className="flex flex-col">
+            <form onSubmit={updatePersonalInfo} className="flex flex-col">
               <div className="flex flex-col text-center my-5 md:my-8">
                 <div className="text-3xl md:text-4xl font-bold text-[#3E5676]">
                   Sign Up as Customer
@@ -196,7 +237,7 @@ const SignUpAsCustomer = () => {
                   onChange={(e) =>
                     setPersonalInfo({
                       ...personalInfo,
-                      [e.target.name]: e.target.value,
+                      marital_status: e.target.value,
                     })
                   }
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
@@ -219,7 +260,8 @@ const SignUpAsCustomer = () => {
                   onChange={(e) =>
                     setPersonalInfo({
                       ...personalInfo,
-                      [e.target.name]: e.target.value,
+                      profession: e.target.value,
+                      profession: e.target.value,
                     })
                   }
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
@@ -229,13 +271,12 @@ const SignUpAsCustomer = () => {
                   About Me
                 </label>
                 <textarea
-                  required
                   type="text"
                   id="about"
                   name="about"
                   onChange={(e) => {
-                    setPersonalInfoForm({
-                      ...personalInfoForm,
+                    setPersonalInfo({
+                      ...personalInfo,
                       about_me: e.target.value,
                     });
                   }}
@@ -245,7 +286,7 @@ const SignUpAsCustomer = () => {
               </div>
               <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
                 <button
-                  onClick={updatePersonalInfo}
+                  type="submit"
                   className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
@@ -254,7 +295,7 @@ const SignUpAsCustomer = () => {
             </form>
           )}
           {currStep === 1 && (
-            <form className="flex flex-col">
+            <form onSubmit={handleInterests} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] my-5">
                 <label
                   htmlFor="interests"
@@ -263,16 +304,16 @@ const SignUpAsCustomer = () => {
                   Interests
                 </label>
                 <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-3">
                     {selectedSkill.length > 0 ? (
                       selectedSkill.map((skill) => {
                         return (
-                          <button
+                          <div
                             key={skill}
-                            className="px-4 py-1 rounded-full bg-inherit border border-solid border-black"
+                            className="px-4 py-1 text-nowrap text-xs md:text-sm rounded-full bg-inherit border border-solid border-black"
                           >
                             {skill}
-                          </button>
+                          </div>
                         );
                       })
                     ) : (
@@ -286,16 +327,15 @@ const SignUpAsCustomer = () => {
                   <div className="flex flex-wrap justifty-around gap-3">
                     {interest.map((skill, ind) => {
                       return (
-                        <button
+                        <div
                           key={ind}
-                          onClick={(e) => {
-                            e.preventDefault();
+                          onClick={() => {
                             handleChange(skill.name);
                           }}
-                          className="cursor-pointer px-4 py-1 text-nowrap rounded-full bg-inherit border border-solid border-[#c7c7c7] text-[#8D8D8D] bg-[#E8E8E8] flex justify-center items-center overflow-visible"
+                          className="cursor-pointer px-4 py-1 text-nowrap text-xs md:text-sm rounded-full bg-inherit border border-solid border-[#c7c7c7] text-[#8D8D8D] bg-[#E8E8E8] flex justify-center items-center overflow-visible"
                         >
                           {skill.name}
-                        </button>
+                        </div>
                       );
                     })}
                   </div>
@@ -311,7 +351,7 @@ const SignUpAsCustomer = () => {
                   Previous
                 </button>
                 <button
-                  onClick={handleSubmit}
+                  type="submit"
                   className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md"
                 >
                   Submit

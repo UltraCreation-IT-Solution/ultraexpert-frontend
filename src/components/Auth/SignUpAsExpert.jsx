@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../../axios";
 
 const CHECKOUT_STEPS = [
   { name: "Personal Details" },
@@ -17,18 +18,241 @@ const SignUpAsExpert = () => {
     marginRight: 0,
   });
 
+  const navigate = useNavigate();
+
+  const stepRef = useRef([]);
+
+  const [personalInfo, setPersonalInfo] = useState({
+    gender: "Male",
+    level: "Basic",
+    about_me: "",
+    profession: "",
+  });
+
+  const handlePersonalInfo = async (e) => {
+    e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+
+    try {
+      // const response = await fetch("http://localhost:8000/experts/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 1,
+      //     gender: personalInfo.gender,
+      //     level: personalInfo.level,
+      //     about_me: personalInfo.about_me,
+      //     profession: personalInfo.profession,
+      //   }),
+      //   credentials: "include",
+      // });
+      const response = await axios.post(
+        "/experts/",
+        {
+          action: 1,
+          gender: personalInfo.gender,
+          level: personalInfo.level,
+          about_me: personalInfo.about_me,
+          profession: personalInfo.profession,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const data = response.data;
+      console.log(data);
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data, personalInfo);
+      setIsComplete(true);
+      setCurrStep((prevStep) => prevStep + 1);
+      setIsComplete(false);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const [educationForms, setEducationForms] = useState([{ id: 1 }]);
 
   const addEducationForm = () => {
     const newId = educationForms.length + 1;
     setEducationForms([...educationForms, { id: newId }]);
+    setEduInfo((prevEduInfo) => ({
+      ...prevEduInfo,
+      type: [...prevEduInfo.type, ""],
+      institute_name: [...prevEduInfo.institute_name, ""],
+      city: [...prevEduInfo.city, ""],
+      passing_year: [...prevEduInfo.passing_year, ""],
+      Devision: [...prevEduInfo.Devision, ""],
+    }));
   };
+
+  const [eduInfo, setEduInfo] = useState({
+    type: [],
+    institute_name: [],
+    city: [],
+    state_name: [],
+    country: ["India"],
+    passing_year: [],
+    Devision: ["First"],
+  });
+
+  const handleEducationForm = async (e) => {
+    e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+
+    try {
+      // const response = fetch("http://localhost:8000/experts/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 2,
+      //     education_json: [
+      //       {
+      //         type: eduInfo.type,
+      //         institute_name: eduInfo.institute_name,
+      //         city: eduInfo.city,
+      //         state_name: eduInfo.state_name,
+      //         country: eduInfo.country,
+      //         passing_year: eduInfo.passing_year,
+      //         Devision: eduInfo.Devision,
+      //       },
+      //     ],
+      //   }),
+      //   credentials: "include",
+      // });
+      const educationData = educationForms.map((form, index) => ({
+        type: eduInfo.type[index],
+        institute_name: eduInfo.institute_name[index],
+        city: eduInfo.city[index],
+        state_name: eduInfo.state_name[index],
+        country: eduInfo.country[index],
+        passing_year: eduInfo.passing_year[index],
+        Devision: eduInfo.Devision[index],
+      }));
+
+      const response = await axios.post(
+        "/experts/",
+        {
+          action: 2,
+          education_json: educationData,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data, eduInfo);
+      setIsComplete(true);
+      setCurrStep((prevStep) => prevStep + 1);
+      setIsComplete(false);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const [skillInfo, setSkillInfo] = useState({
+    technology_name: [],
+    ratings: [],
+  });
 
   const [skillForms, setSkillForms] = useState([{ id: 1 }]);
 
   const addSkillForm = () => {
     const newId = skillForms.length + 1;
     setSkillForms([...skillForms, { id: newId }]);
+    setSkillInfo((prevSkillInfo) => ({
+      ...prevSkillInfo,
+      technology_name: [...prevSkillInfo.technology_name, ""],
+      ratings: [...prevSkillInfo.ratings, ""],
+    }));
+  };
+
+  const handleSkillForm = async (e) => {
+    e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      // const response = fetch("http://localhost:8000/experts/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 3,
+      //     skill_json: [
+      //       {
+      //         technology_name: skillInfo.technology_name,
+      //         ratings: skillInfo.ratings,
+      //       },
+      //     ],
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = response.json();
+      const skillData = skillForms.map((form, index) => ({
+        technology_name: skillInfo.technology_name[index],
+        ratings: skillInfo.ratings[index],
+      }));
+      const response = await axios.post(
+        "/experts/",
+        {
+          action: 3,
+          skill_json: skillData,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data, skillInfo);
+      setIsComplete(true);
+      setCurrStep((prevStep) => prevStep + 1);
+      setIsComplete(false);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const [experienceForms, setExperienceForms] = useState([{ id: 1 }]);
@@ -36,59 +260,145 @@ const SignUpAsExpert = () => {
   const addExperienceForm = () => {
     const newId = experienceForms.length + 1;
     setExperienceForms([...experienceForms, { id: newId }]);
+    setExpInfo((prevExpInfo) => ({
+      ...prevExpInfo,
+      company_name: [...prevExpInfo.company_name, ""],
+      start_date: [...prevExpInfo.start_date, ""],
+      end_date: [...prevExpInfo.end_date, ""],
+      designation: [...prevExpInfo.designation, ""],
+    }));
   };
 
-  const navigate = useNavigate();
-
-  const stepRef = useRef([]);
-
-  const [userData, setUserData] = useState({
-    gender: "",
-    level: "",
-    about_me: "",
-    profession: "",
+  const [expInfo, setExpInfo] = useState({
+    company_name: [],
+    start_date: ["2019-jan-01"],
+    end_date: ["2019-jan-01"],
+    designation: [],
   });
 
-  const handleNext1 = async (e) => {
+  const handleExperienceForm = async (e) => {
     e.preventDefault();
-    console.log(e);
-    setUserData({ ...userData, [e.target.name]: e.target.value });
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
     try {
-      const response = await axios.post("/experts/", {
-        gender: userData.gender,
-        level: userData.level,
-        about_me: userData.about_me,
-        profession: userData.profession,
-      });
+      // const response = fetch("http://localhost:8000/experts/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 4,
+      //     experience_json: [
+      //       {
+      //         company_name: expInfo.company_name,
+      //         start_date: expInfo.start_date,
+      //         end_date: expInfo.end_date,
+      //         designation: expInfo.designation,
+      //       },
+      //     ],
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = response.json();
+      // console.log(json);
+      const experienceData = experienceForms.map((form, index) => ({
+        company_name: expInfo.company_name[index],
+        start_date: expInfo.start_date[index],
+        end_date: expInfo.end_date[index],
+        designation: expInfo.designation[index],
+      }));
+      const response = await axios.post(
+        "/experts/",
+        {
+          action: 4,
+          experience_json: experienceData,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data, expInfo);
+      setIsComplete(true);
+      setCurrStep((prevStep) => prevStep + 1);
+      setIsComplete(false);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
-    } catch (error) {}
-    setIsComplete(true);
-    setCurrStep((prevStep) => prevStep + 1);
-    setIsComplete(false);
-  };
-  const handleNext2 = (e) => {
-    e.preventDefault();
-    setIsComplete(true);
-    setCurrStep((prevStep) => prevStep + 1);
-    setIsComplete(false);
-  };
-  const handleNext3 = (e) => {
-    e.preventDefault();
-    setIsComplete(true);
-    setCurrStep((prevStep) => prevStep + 1);
-    setIsComplete(false);
-  };
-  const handleNext4 = (e) => {
-    e.preventDefault();
-    setIsComplete(true);
-    setCurrStep((prevStep) => prevStep + 1);
-    setIsComplete(false);
-  };
+  const [accInfo, setAccInfo] = useState({
+    account_holder: "",
+    bank_name: "",
+    account_number: "",
+    ifsc_code: "",
+  });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsComplete(true);
-    navigate("/");
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      // const response = fetch("http://localhost:8000/experts/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 5,
+      //     account_holder: accInfo.account_holder,
+      //     bank_name: accInfo.bank_name,
+      //     account_number: accInfo.account_number,
+      //     ifsc_code: accInfo.ifsc_code,
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = response.json();
+      // console.log(json);
+      const response = await axios.post(
+        "/experts/",
+        {
+          action: 5,
+          account_holder: accInfo.account_holder,
+          bank_name: accInfo.bank_name,
+          account_number: accInfo.account_number,
+          ifsc_code: accInfo.ifsc_code,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data, accInfo);
+      setIsComplete(true);
+      navigate("/");
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   useEffect(() => {
@@ -151,7 +461,7 @@ const SignUpAsExpert = () => {
           </div>
           <div className="h-[1px] w-full bg-gray-400 my-2"></div>
           {currStep === 0 && (
-            <form className="flex flex-col">
+            <form onSubmit={handlePersonalInfo} className="flex flex-col">
               <div className="flex flex-col text-center mt-5 mb-8">
                 <div className="text-3xl md:text-4xl font-bold text-[#3E5676]">
                   Sign Up as Expert
@@ -172,6 +482,13 @@ const SignUpAsExpert = () => {
                     <select
                       name="gender"
                       id="gender"
+                      value={personalInfo.gender}
+                      onChange={(e) =>
+                        setPersonalInfo({
+                          ...personalInfo,
+                          gender: e.target.value,
+                        })
+                      }
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     >
                       <option value="male">Male</option>
@@ -189,6 +506,13 @@ const SignUpAsExpert = () => {
                     <select
                       name="level"
                       id="level"
+                      value={personalInfo.level}
+                      onChange={(e) =>
+                        setPersonalInfo({
+                          ...personalInfo,
+                          level: e.target.value,
+                        })
+                      }
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     >
                       <option value="basic">Basic</option>
@@ -209,6 +533,13 @@ const SignUpAsExpert = () => {
                   id="profession"
                   name="profession"
                   required
+                  value={personalInfo.profession}
+                  onChange={(e) =>
+                    setPersonalInfo({
+                      ...personalInfo,
+                      profession: e.target.value,
+                    })
+                  }
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   placeholder="Profession"
                 />
@@ -220,13 +551,19 @@ const SignUpAsExpert = () => {
                   type="text"
                   id="about"
                   name="about"
+                  onChange={(e) =>
+                    setPersonalInfo({
+                      ...personalInfo,
+                      about_me: e.target.value,
+                    })
+                  }
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                   placeholder="I want to learn css, html, python with django"
                 />
               </div>
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
-                  onClick={handleNext1}
+                  type="submit"
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
@@ -235,7 +572,7 @@ const SignUpAsExpert = () => {
             </form>
           )}
           {currStep === 1 && (
-            <form className="flex flex-col">
+            <form onSubmit={handleEducationForm} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
                 {educationForms.map((form, ind) => (
                   <>
@@ -261,6 +598,17 @@ const SignUpAsExpert = () => {
                       type="text"
                       id={`institute${form.id}`}
                       name={`institute${form.id}`}
+                      value={eduInfo.institute_name[ind]}
+                      onChange={(e) => {
+                        const updatedInstituteNames = [
+                          ...eduInfo.institute_name,
+                        ];
+                        updatedInstituteNames[ind] = e.target.value;
+                        setEduInfo({
+                          ...eduInfo,
+                          institute_name: updatedInstituteNames,
+                        });
+                      }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       placeholder="Institute Name"
                     />
@@ -276,6 +624,12 @@ const SignUpAsExpert = () => {
                           type="text"
                           id={`type${form.id}`}
                           name={`type${form.id}`}
+                          value={eduInfo.type[ind]}
+                          onChange={(e) => {
+                            const updatedType = [...eduInfo.type];
+                            updatedType[ind] = e.target.value;
+                            setEduInfo({ ...eduInfo, type: updatedType });
+                          }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                           placeholder="Institute Name"
                         />
@@ -287,18 +641,24 @@ const SignUpAsExpert = () => {
                         >
                           Passing Year
                         </label>
-                        <select
-                          name={`passing${form.id}`}
+                        <input
+                          type="text"
                           id={`passing${form.id}`}
+                          name={`passing${form.id}`}
+                          value={eduInfo.passing_year[ind]}
+                          onChange={(e) => {
+                            const updatedPassingYear = [
+                              ...eduInfo.passing_year,
+                            ];
+                            updatedPassingYear[ind] = e.target.value;
+                            setEduInfo({
+                              ...eduInfo,
+                              passing_year: updatedPassingYear,
+                            });
+                          }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                        >
-                          <option value="2021">2021</option>
-                          <option value="2022">2022</option>
-                          <option value="2023">2023</option>
-                          <option value="2024">2024</option>
-                          <option value="2025">2025</option>
-                          <option value="2026">2026</option>
-                        </select>
+                          placeholder="Institute Name"
+                        />
                       </div>
                     </div>
                     <div className="flex justify-around gap-5">
@@ -313,6 +673,12 @@ const SignUpAsExpert = () => {
                           type="text"
                           id={`city${form.id}`}
                           name={`city${form.id}`}
+                          value={eduInfo.city[ind]}
+                          onChange={(e) => {
+                            const updatedCityName = [...eduInfo.city];
+                            updatedCityName[ind] = e.target.value;
+                            setEduInfo({ ...eduInfo, city: updatedCityName });
+                          }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                           placeholder="City"
                         />
@@ -324,51 +690,22 @@ const SignUpAsExpert = () => {
                         >
                           State
                         </label>
-                        <select
+                        <input
+                          type="text"
                           id={`state${form.id}`}
                           name={`state${form.id}`}
+                          value={eduInfo.state_name[ind]}
+                          onChange={(e) => {
+                            const updatedStateName = [...eduInfo.state_name];
+                            updatedStateName[ind] = e.target.value;
+                            setEduInfo({
+                              ...eduInfo,
+                              state_name: updatedStateName,
+                            });
+                          }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                        >
-                          <option value="AN">
-                            Andaman and Nicobar Islands
-                          </option>
-                          <option value="AP">Andhra Pradesh</option>
-                          <option value="AR">Arunachal Pradesh</option>
-                          <option value="AS">Assam</option>
-                          <option value="BR">Bihar</option>
-                          <option value="CH">Chandigarh</option>
-                          <option value="CT">Chhattisgarh</option>
-                          <option value="DN">Dadra and Nagar Haveli</option>
-                          <option value="DD">Daman and Diu</option>
-                          <option value="DL">Delhi</option>
-                          <option value="GA">Goa</option>
-                          <option value="GJ">Gujarat</option>
-                          <option value="HR">Haryana</option>
-                          <option value="HP">Himachal Pradesh</option>
-                          <option value="JK">Jammu and Kashmir</option>
-                          <option value="JH">Jharkhand</option>
-                          <option value="KA">Karnataka</option>
-                          <option value="KL">Kerala</option>
-                          <option value="LA">Ladakh</option>
-                          <option value="LD">Lakshadweep</option>
-                          <option value="MP">Madhya Pradesh</option>
-                          <option value="MH">Maharashtra</option>
-                          <option value="MN">Manipur</option>
-                          <option value="ML">Meghalaya</option>
-                          <option value="MZ">Mizoram</option>
-                          <option value="NL">Nagaland</option>
-                          <option value="OR">Odisha</option>
-                          <option value="PY">Puducherry</option>
-                          <option value="PB">Punjab</option>
-                          <option value="RJ">Rajasthan</option>
-                          <option value="SK">Sikkim</option>
-                          <option value="TN">Tamil Nadu</option>
-                          <option value="TG">Telangana</option>
-                          <option value="TR">Tripura</option>
-                          <option value="UP">Uttar Pradesh</option>
-                          <option value="UT">Uttarakhand</option>
-                          <option value="WB">West Bengal</option>
-                        </select>
+                          placeholder="State"
+                        />
                       </div>
                     </div>
                     <div className="flex justify-around gap-5">
@@ -382,8 +719,18 @@ const SignUpAsExpert = () => {
                         <select
                           name={`country${form.id}`}
                           id={`country${form.id}`}
+                          value={eduInfo.country[ind]}
+                          onChange={(e) => {
+                            const updatedCountryNames = [...eduInfo.country];
+                            updatedCountryNames[ind] = e.target.value;
+                            setEduInfo({
+                              ...eduInfo,
+                              country: updatedCountryNames,
+                            });
+                          }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                         >
+                          <option value="India">India</option>
                           <option value="United States">United States</option>
                           <option value="Afghanistan">Afghanistan</option>
                           <option value="Albania">Albania</option>
@@ -517,7 +864,6 @@ const SignUpAsExpert = () => {
                           <option value="Hong Kong">Hong Kong</option>
                           <option value="Hungary">Hungary</option>
                           <option value="Iceland">Iceland</option>
-                          <option value="India">India</option>
                           <option value="Indonesia">Indonesia</option>
                           <option value="Iran">
                             Iran (Islamic Republic of)
@@ -721,6 +1067,15 @@ const SignUpAsExpert = () => {
                         <select
                           name={`division${form.id}`}
                           id={`division${form.id}`}
+                          value={eduInfo.Devision[ind]}
+                          onChange={(e) => {
+                            const updatedDivisionNames = [...eduInfo.Devision];
+                            updatedDivisionNames[ind] = e.target.value;
+                            setEduInfo({
+                              ...eduInfo,
+                              Devision: updatedDivisionNames,
+                            });
+                          }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                         >
                           <option value="first">First</option>
@@ -743,7 +1098,7 @@ const SignUpAsExpert = () => {
                   Previous
                 </button>
                 <button
-                  onClick={handleNext2}
+                  type="submit"
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
@@ -752,7 +1107,7 @@ const SignUpAsExpert = () => {
             </form>
           )}
           {currStep === 2 && (
-            <form className="flex flex-col">
+            <form onSubmit={handleSkillForm} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
                 {skillForms.map((form, ind) => (
                   <>
@@ -778,6 +1133,15 @@ const SignUpAsExpert = () => {
                       type="text"
                       id={`technology${form.id}`}
                       name={`technology${form.id}`}
+                      value={skillInfo.technology_name[ind]}
+                      onChange={(e) => {
+                        const updatedTechNames = [...skillInfo.technology_name];
+                        updatedTechNames[ind] = e.target.value;
+                        setSkillInfo({
+                          ...skillInfo,
+                          technology_name: updatedTechNames,
+                        });
+                      }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       placeholder="Institute Name"
                     />
@@ -791,6 +1155,15 @@ const SignUpAsExpert = () => {
                       type="number"
                       id={`rating${form.id}`}
                       name={`rating${form.id}`}
+                      value={skillInfo.ratings[ind]}
+                      onChange={(e) => {
+                        const updatedRatings = [...skillInfo.ratings];
+                        updatedRatings[ind] = e.target.value;
+                        setSkillInfo({
+                          ...skillInfo,
+                          ratings: updatedRatings,
+                        });
+                      }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-[50%]"
                       placeholder="1"
                     />
@@ -807,7 +1180,7 @@ const SignUpAsExpert = () => {
                   Previous
                 </button>
                 <button
-                  onClick={handleNext3}
+                  type="submit"
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
@@ -816,7 +1189,7 @@ const SignUpAsExpert = () => {
             </form>
           )}
           {currStep === 3 && (
-            <form className="flex flex-col">
+            <form onSubmit={handleExperienceForm} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
                 {experienceForms.map((form, ind) => (
                   <>
@@ -842,6 +1215,15 @@ const SignUpAsExpert = () => {
                       type="text"
                       id={`company${form.id}`}
                       name={`company${form.id}`}
+                      value={expInfo.company_name[ind]}
+                      onChange={(e) => {
+                        const updatedCompany = [...expInfo.company_name];
+                        updatedCompany[ind] = e.target.value;
+                        setExpInfo({
+                          ...expInfo,
+                          company_name: updatedCompany,
+                        });
+                      }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       placeholder="Company Name"
                     />
@@ -853,18 +1235,20 @@ const SignUpAsExpert = () => {
                         >
                           Start Year
                         </label>
-                        <select
-                          name={`start${form.id}`}
+                        <input
+                          type="date"
                           id={`start${form.id}`}
-                          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                        >
-                          <option value="2021">2021</option>
-                          <option value="2022">2022</option>
-                          <option value="2023">2023</option>
-                          <option value="2024">2024</option>
-                          <option value="2025">2025</option>
-                          <option value="2026">2026</option>
-                        </select>
+                          name={`start${form.id}`}
+                          value={expInfo.start_date[ind]}
+                          onChange={(e) => {
+                            const updatedStartDate = [...expInfo.start_date];
+                            updatedStartDate[ind] = e.target.value;
+                            setExpInfo({
+                              ...expInfo,
+                              start_date: updatedStartDate,
+                            });
+                          }}
+                        />
                       </div>
                       <div className="flex flex-col w-full">
                         <label
@@ -873,18 +1257,20 @@ const SignUpAsExpert = () => {
                         >
                           End Year
                         </label>
-                        <select
-                          name={`end${form.id}`}
-                          id={`end${form.id}`}
-                          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                        >
-                          <option value="2021">2021</option>
-                          <option value="2022">2022</option>
-                          <option value="2023">2023</option>
-                          <option value="2024">2024</option>
-                          <option value="2025">2025</option>
-                          <option value="2026">2026</option>
-                        </select>
+                        <input
+                          type="date"
+                          id={`start${form.id}`}
+                          name={`start${form.id}`}
+                          value={expInfo.end_date[ind]}
+                          onChange={(e) => {
+                            const updatedEndDate = [...expInfo.end_date];
+                            updatedEndDate[ind] = e.target.value;
+                            setExpInfo({
+                              ...expInfo,
+                              end_date: updatedEndDate,
+                            });
+                          }}
+                        />
                       </div>
                     </div>
                     <label
@@ -897,6 +1283,15 @@ const SignUpAsExpert = () => {
                       type="text"
                       id={`designtaion${form.id}`}
                       name={`designtaion${form.id}`}
+                      value={expInfo.designation[ind]}
+                      onChange={(e) => {
+                        const updatedDesignation = [...expInfo.designation];
+                        updatedDesignation[ind] = e.target.value;
+                        setExpInfo({
+                          ...expInfo,
+                          designation: updatedDesignation,
+                        });
+                      }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       placeholder="Designtaion"
                     />
@@ -913,7 +1308,7 @@ const SignUpAsExpert = () => {
                   Previous
                 </button>
                 <button
-                  onClick={handleNext4}
+                  type="submit"
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
@@ -922,7 +1317,7 @@ const SignUpAsExpert = () => {
             </form>
           )}
           {currStep === 4 && (
-            <form className="flex flex-col">
+            <form onSubmit={handleSubmit} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] my-5">
                 <div className="flex flex-col w-full">
                   <label
@@ -936,6 +1331,10 @@ const SignUpAsExpert = () => {
                     id="holderName"
                     name="holderName"
                     required
+                    value={accInfo.holder_name}
+                    onChange={(e) =>
+                      setAccInfo({ ...accInfo, holder_name: e.target.value })
+                    }
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     placeholder="Account Holder Name"
                   />
@@ -950,6 +1349,10 @@ const SignUpAsExpert = () => {
                     id="bankName"
                     name="bankName"
                     required
+                    value={accInfo.bank_name}
+                    onChange={(e) =>
+                      setAccInfo({ ...accInfo, bank_name: e.target.value })
+                    }
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     placeholder="Bank Name"
                   />
@@ -964,6 +1367,10 @@ const SignUpAsExpert = () => {
                     id="accNumber"
                     name="accNumber"
                     required
+                    value={accInfo.acc_number}
+                    onChange={(e) =>
+                      setAccInfo({ ...accInfo, acc_number: e.target.value })
+                    }
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     placeholder="Account Number"
                   />
@@ -975,6 +1382,10 @@ const SignUpAsExpert = () => {
                     id="ifsc"
                     name="ifsc"
                     required
+                    value={accInfo.ifsc_code}
+                    onChange={(e) =>
+                      setAccInfo({ ...accInfo, ifsc_code: e.target.value })
+                    }
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     placeholder="IFSC Code"
                   />
@@ -990,7 +1401,7 @@ const SignUpAsExpert = () => {
                   Previous
                 </button>
                 <button
-                  onClick={handleSubmit}
+                  type="submit"
                   className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md"
                 >
                   Submit

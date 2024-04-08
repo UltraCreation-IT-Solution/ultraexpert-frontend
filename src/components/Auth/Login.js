@@ -16,7 +16,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}$/;
+  const passwordRegex = /^(?=.[a-z])(?=.[!@#$%^&*]).{8,}$/;
 
   const validateForm = () => {
     let isValid = true;
@@ -39,37 +39,45 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (validateForm()) {
       try {
-        const res = await fetch("http://localhost:8000/login/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: userData.email,
-            password: userData.password,
-          }),
-          credentials: "include",
-        });
-        // const res = await axios.post(
-        //   "/login/",
-        //   {
+        // const res = await fetch("http://localhost:8000/login/", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
         //     email: userData.email,
         //     password: userData.password,
-        //   },
-        //   {
-        //     withCredentials: true,
-        //   }
-        // );
-        const json = await res.json();
+        //   }),
+        //   credentials: "include",
+        // });
+        const res = await axios.post(
+          "/login/",
+          {
+            email: userData.email,
+            password: userData.password,
+          },
+
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        // const json = await res.json();
         if (res.status === 200) {
           console.log("Login successful");
-          console.log(json);
+          document.cookie = `access_token=${res.data.access_token};  SameSite=Lax;`;
+          document.cookie = `refresh_token=${res.data.refresh_token};  SameSite=Lax;`;
+
+          console.log(res);
+          // console.log(json);
           navigate("/");
         }
       } catch (error) {
-        console.error(error?.response?.data?.msg);
+        console.error(error);
       }
     }
   };

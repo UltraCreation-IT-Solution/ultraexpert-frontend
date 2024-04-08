@@ -89,15 +89,16 @@ const SignUp = () => {
     if (validateEmail()) {
       try {
         console.log(secondStep.email);
-        const res = await fetch(
-          `http://localhost:8000/verify/?action=1&email=${secondStep.email}`
-        );
-        const json = await res.json();
-        console.log(json);
-        // const response = await axios.get(
-        //   `/verify/?action=1&email=${secondStep.email}`
+        // const res = await fetch(
+        //   `http://localhost:8000/verify/?action=1&email=${secondStep.email}`
         // );
-        if (!json) {
+        // const json = await res.json();
+        // console.log(json);
+        const response = await axios.get(
+          `/verify/?action=1&email=${secondStep.email}`
+        );
+        const data = response.data;
+        if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid Email");
           return;
         }
@@ -135,16 +136,16 @@ const SignUp = () => {
     e.preventDefault();
     if (validateOTP()) {
       try {
-        const res = await fetch(
-          `http://localhost:8000/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
-        );
-        const json = await res.json();
-        console.log(json);
-        // const response = await axios.get(
-        //   `/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
+        // const res = await fetch(
+        //   `http://localhost:8000/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
         // );
-        // const data = response.data;
-        if (!json) {
+        // const json = await res.json();
+        // console.log(json);
+        const response = await axios.get(
+          `/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
+        );
+        const data = response.data;
+        if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid OTP");
           return;
         }
@@ -182,25 +183,12 @@ const SignUp = () => {
     // console.log(e);
     if (validatePassword()) {
       try {
-        const res = await fetch("http://localhost:8000/register/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            first_name: firstStep.firstName,
-            last_name: firstStep.lastName,
-            mobile_number: firstStep.mobileNumber,
-            reffered_by: firstStep.refBy,
-            email: secondStep.email,
-            password1: forthStep.password,
-            password2: forthStep.confirmPassword,
-          }),
-          credentials: "include",
-        });
-        // const response = await axios.post(
-        //   "/register/",
-        //   {
+        // const res = await fetch("http://localhost:8000/register/", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
         //     first_name: firstStep.firstName,
         //     last_name: firstStep.lastName,
         //     mobile_number: firstStep.mobileNumber,
@@ -208,43 +196,66 @@ const SignUp = () => {
         //     email: secondStep.email,
         //     password1: forthStep.password,
         //     password2: forthStep.confirmPassword,
-        //   },
-        //   {
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //   }
-        // );
+        //   }),
+        //   credentials: "include",
+        // });
 
-        const json = await res.json();
-        if (!json) {
+        const response = await axios.post(
+          "/register/",
+          {
+            first_name: firstStep.firstName,
+            last_name: firstStep.lastName,
+            mobile_number: firstStep.mobileNumber,
+            reffered_by: firstStep.refBy,
+            email: secondStep.email,
+            password1: forthStep.password,
+            password2: forthStep.confirmPassword,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            // withCredentials: true,
+          }
+        );
+        const data = response.data;
+        // const json = await res.json();
+        if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid Registration");
           console.log("Invalid Registration");
         } else {
-          console.log(json);
+          console.log(data);
           try {
-            const response = await fetch("http://localhost:8000/login/", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                email: secondStep.email,
-                password: forthStep.password,
-              }),
-              credentials: "include",
+            // const response = await fetch("http://localhost:8000/login/", {
+            //   method: "POST",
+            //   headers: {
+            //     "Content-Type": "application/json",
+            //   },
+            //   body: JSON.stringify({
+            //     email: secondStep.email,
+            //     password: forthStep.password,
+            //   }),
+            //   credentials: "include",
+            // });
+            // const json = await response.json();
+            const res = await axios.post("/login/", {
+              email: secondStep.email,
+              password: forthStep.password,
             });
-            const json = await response.json();
-            if (!json) {
-              window.alert("Invalid Login Credentials");
+            // const json = await res.json();
+            const data = res.data;
+            document.cookie = `access_token=${res.data.access_token}; SameSite=Lax;`;
+            document.cookie = `refresh_token=${res.data.refresh_token}; SameSite=Lax;`;
+            if (!data || data.status === 400 || data.status === 401) {
+              window.alert("Invalid Credentials");
               return;
             }
-            console.log(json);
+            window.alert("Registration Successful");
+            localStorage.setItem("token", res.data.access_token);
+            navigate("/signUpAs");
           } catch (error) {
             console.error(error);
           }
-          window.alert("Registration Successful");
-          navigate("/signUpAs");
         }
       } catch (error) {
         console.error(error);

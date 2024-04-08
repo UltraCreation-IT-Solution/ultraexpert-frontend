@@ -31,13 +31,13 @@ const ForgotPassword = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const res = await fetch(`http://localhost:8000/reset/?email=${userEmail.email}`);
-        const json = await res.json();
-        console.log(json);
-        // const response = await axios.get(`/reset/?email=${userEmail.email}`);
-
+        // const res = await fetch(`http://localhost:8000/reset/?email=${userEmail.email}`);
+        // const json = await res.json();
+        // console.log(json);
+        const response = await axios.get(`/reset/?email=${userEmail.email}`);
+        const data = response.data;
         if (
-          !json
+          !data || data.status===400 || data.status===401
         ) {
           window.alert("Invalid Email");
           return;
@@ -68,43 +68,43 @@ const ForgotPassword = () => {
     e.preventDefault();
     if (validateForm2()) {
       try {
-        const res = await fetch("http://localhost:8000/reset/",{
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: userEmail.email,
-            otp: userOtp.otp,
-            password: userOtp.password,
-            password_confirm: userOtp.confirmPassword,
-          }),
-          credentials: "include",
-        });
-        const json = await res.json();
-        console.log(json);
-        // const response = await axios.post(
-        //   "/reset/",
-        //   {
+        // const res = await fetch("http://localhost:8000/reset/",{
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
         //     email: userEmail.email,
         //     otp: userOtp.otp,
         //     password: userOtp.password,
         //     password_confirm: userOtp.confirmPassword,
-        //   },
-        //   {
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //   }
-        // );
+        //   }),
+        //   credentials: "include",
+        // });
+        // const json = await res.json();
+        // console.log(json);
+        const response = await axios.post(
+          "/reset/",
+          {
+            email: userEmail.email,
+            otp: userOtp.otp,
+            password: userOtp.password,
+            password_confirm: userOtp.confirmPassword,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (
-          !json
+          !response.data
         ) {
           window.alert("Invalid OTP");
           return;
         }
 
-          // console.log(response.data);
+          console.log(response.data);
           alert("Password Reset Successfully");
           navigate("/login");
         } catch (error) {

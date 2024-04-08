@@ -39,7 +39,9 @@ const Navbar = () => {
               : "hidden flex-row gap-[3.5vw]"
           } items-center font-montserrat justify-center h-auto  mr-6 text-[16px]  md:flex`}
         >
-          <Link to="/favourites" ><FaRegHeart /></Link>
+          <Link to="/favourites">
+            <FaRegHeart />
+          </Link>
           <Link
             to={"/experts"}
             className={`${
@@ -80,7 +82,17 @@ const Navbar = () => {
           >
             Dashboard
           </Link>
-          <div className="relative font-medium">Contact Us</div>
+
+          <Link
+            to={"/about"}
+            className={`${
+              location === "/about"
+                ? "font-extrabold"
+                : "font-medium hover:underline hover:scale-105"
+            } relative no-underline text-black`}
+          >
+            About us
+          </Link>
           <Link
             to={"/login"}
             className="relative bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
