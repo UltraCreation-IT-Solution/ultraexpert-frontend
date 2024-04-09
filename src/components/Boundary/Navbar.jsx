@@ -143,7 +143,17 @@ const Navbar = () => {
           >
             Dashboard
           </Link>
-          <div className="relative font-medium">Contact Us</div>
+
+          <Link
+            to={"/about"}
+            className={`${
+              location === "/about"
+                ? "font-extrabold"
+                : "font-medium hover:underline hover:scale-105"
+            } relative no-underline text-black`}
+          >
+            About us
+          </Link>
           <Link
             to={"/login"}
             className="relative bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"

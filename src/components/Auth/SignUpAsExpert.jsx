@@ -316,7 +316,7 @@ const SignUpAsExpert = () => {
         "/experts/",
         {
           action: 4,
-          experience_json: experienceData
+          experience_json: experienceData,
         },
         {
           headers: {
@@ -330,7 +330,7 @@ const SignUpAsExpert = () => {
         console.log("Something went wrong");
         return;
       }
-      console.log(data,expInfo);
+      console.log(data, expInfo);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -393,7 +393,7 @@ const SignUpAsExpert = () => {
         console.log("Something went wrong");
         return;
       }
-      console.log(data,accInfo);
+      console.log(data, accInfo);
       setIsComplete(true);
       navigate("/");
     } catch (error) {

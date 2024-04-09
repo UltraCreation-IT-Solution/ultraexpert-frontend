@@ -69,8 +69,6 @@ const LoginWithOTP = () => {
           window.alert("Invalid OTP");
           return;
         }
-        alert("OTP sent successfully to your email address");
-        nextStep();
       } catch (error) {
         console.log(error.message);
       }
