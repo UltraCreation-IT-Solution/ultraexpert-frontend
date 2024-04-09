@@ -1236,10 +1236,12 @@ const SignUpAsExpert = () => {
                           Start Year
                         </label>
                         <input
-                          type="date"
+                          type="text"
                           id={`start${form.id}`}
                           name={`start${form.id}`}
                           value={expInfo.start_date[ind]}
+                          pattern="\d{4}-\d{2}-\d{2}"
+                          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                           onChange={(e) => {
                             const updatedStartDate = [...expInfo.start_date];
                             updatedStartDate[ind] = e.target.value;
@@ -1258,10 +1260,12 @@ const SignUpAsExpert = () => {
                           End Year
                         </label>
                         <input
-                          type="date"
+                          type="text"
                           id={`start${form.id}`}
                           name={`start${form.id}`}
                           value={expInfo.end_date[ind]}
+                          pattern="\d{4}-\d{2}-\d{2}"
+                          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                           onChange={(e) => {
                             const updatedEndDate = [...expInfo.end_date];
                             updatedEndDate[ind] = e.target.value;
@@ -1331,9 +1335,9 @@ const SignUpAsExpert = () => {
                     id="holderName"
                     name="holderName"
                     required
-                    value={accInfo.holder_name}
+                    value={accInfo.account_holder}
                     onChange={(e) =>
-                      setAccInfo({ ...accInfo, holder_name: e.target.value })
+                      setAccInfo({ ...accInfo, account_holder: e.target.value })
                     }
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     placeholder="Account Holder Name"
@@ -1367,9 +1371,9 @@ const SignUpAsExpert = () => {
                     id="accNumber"
                     name="accNumber"
                     required
-                    value={accInfo.acc_number}
+                    value={accInfo.account_number}
                     onChange={(e) =>
-                      setAccInfo({ ...accInfo, acc_number: e.target.value })
+                      setAccInfo({ ...accInfo, account_number: e.target.value })
                     }
                     className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     placeholder="Account Number"
