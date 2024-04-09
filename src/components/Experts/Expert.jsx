@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TopExperts } from "../Landing/Landing";
 import Subheader from "../../utilities/Subheader";
 import SearchByCategoriesSlider from "../../utilities/SearchByCategoriesSlider";
 import { Link } from "react-router-dom";
 import { profileObj } from "../../constant";
+import axios from "../../axios";
 import Pagination from "../../subsitutes/Pagination";
 import {
   FaStar,
@@ -96,7 +97,30 @@ const AllExperts = () => {
   const lastIndex = currentPage * itemsPerPage;
   const firstIndex = lastIndex - itemsPerPage;
   const slicedArray = profileObj.slice(firstIndex, lastIndex);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
 
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  const getAllExperts = async () => {
+    try {
+      const res = await axios.get("/customers/experts?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      console.log(res.data);
+      // setTopExpertList(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAllExperts();
+  });
   return (
     <div className="mt-[40px] md:mt-[100px] relative w-full h-auto py-[5vw] sm:py-[3vw] px-[3vw] xs:px-[6vw] md:px-[10vw] flex flex-col">
       <div className="flex w-full justify-center sm:justify-between">

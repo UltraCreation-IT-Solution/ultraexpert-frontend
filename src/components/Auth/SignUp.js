@@ -205,7 +205,7 @@ const SignUp = () => {
           {
             first_name: firstStep.firstName,
             last_name: firstStep.lastName,
-            mobile_number: firstStep.mobileNumber,
+            mobile: firstStep.mobileNumber,
             reffered_by: firstStep.refBy,
             email: secondStep.email,
             password1: forthStep.password,

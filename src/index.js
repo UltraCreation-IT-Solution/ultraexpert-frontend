@@ -51,6 +51,7 @@ import CustomerDashboard, {
   CustomerBookings,
   CustomerRecentMeetngs,
 } from "./components/Customers/CustomerDashboard.jsx";
+import TestElement from "./TestElement.jsx";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -225,6 +226,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
+      },
+      {
+        path: "/testelement",
+        element: <TestElement />,
       },
       {
         path: "/test",
