@@ -66,6 +66,7 @@ const EditProfileCustomer = () => {
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
+      alert("Something went wrong");
     }
   };
 
