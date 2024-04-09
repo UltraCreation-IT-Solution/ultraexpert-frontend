@@ -4,6 +4,72 @@ import Marquee from "react-fast-marquee";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { landingImgRow1, landingImgRow2 } from "../../constant";
 
+export const WhatWeDo = () => {
+  return(
+    <div className="relative px-[5vw] md:px-[10vw] pb-[20vw] py-[10vw] lg:py-[6vw] my-20 lg:my-0">
+        <div className="bg-[#E9F2FF] h-36 w-36 md:h-44 md:w-44 absolute top-0 lg:top-24 -left-28 sm:-left-20 rounded-full"></div>
+        <div className="bg-[#DFC7FF] h-20 w-20 absolute top-6 lg:top-32 -right-14 sm:-right-5 rounded-full"></div>
+        <div className="bg-[#FFE1D3] h-32 w-32 md:h-40 md:w-40 absolute bottom-0 -right-24 sm:-right-20 rounded-full"></div>
+        <div className="text-[1.8rem] xs:text-4xl md:text-5xl font-bold text-center overflow-hidden">What is it we do?</div>
+
+        <div className="flex flex-wrap gap-[2vw] lg:gap-[1vw] mt-10">
+          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
+            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#B276FF]"></div>
+            <div className="text-xl md:text-2xl font-bold shrink-0">Web Design</div>
+            <div className="mt-5 line-clamp-5 text-ellipsis text-base">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Recusandae aut ut totam neque repellat accusantium ipsam itaque
+              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
+              facilis quam saepe consectetur molestias?
+            </div>
+          </div>
+
+          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
+            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#75ACFF]"></div>
+            <div className="text-xl md:text-2xl font-bold shrink-0">Web Development</div>
+            <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Recusandae aut ut totam neque repellat accusantium ipsam itaque
+              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
+              facilis quam saepe consectetur molestias?
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-[2vw] lg:gap-[1vw] my-5">
+          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
+            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#FFA37B]"></div>
+            <div className="text-xl md:text-2xl font-bold shrink-0">Product Design</div>
+            <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Recusandae aut ut totam neque repellat accusantium ipsam itaque
+              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
+              facilis quam saepe consectetur molestias?
+            </div>
+          </div>
+
+          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
+            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#FFA6A6]"></div>
+            <div className="text-xl md:text-2xl font-bold shrink-0">Branding</div>
+            <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Recusandae aut ut totam neque repellat accusantium ipsam itaque
+              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
+              facilis quam saepe consectetur molestias?
+            </div>
+          </div>
+        </div>
+        <div className="bg-[#DAE9FF] rounded-3xl pl-5 sm:pl-8 pr-5 py-10 flex gap-2 sm:gap-5 items-center justify-between ">
+          <div className="shrink-0 h-8 w-8 sm:h-10 sm:w-10 bg-[#795CFF] rounded-full"></div>
+          <div className="text-xl md:text-2xl font-bold">Extended design services</div>
+          <div className="ml-auto text-2xl md:text-3xl cursor-pointer shrink-0">
+            <FaArrowRightLong />
+          </div>
+        </div>
+      </div>
+  )
+}
+
 const HeroSection = () => {
   const [search, setSearch] = useState("");
   return (
@@ -110,68 +176,8 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-
-      <div className="relative px-[5vw] md:px-[10vw] pb-[20vw] py-[10vw] lg:py-[6vw] my-20 lg:my-0">
-        <div className="bg-[#E9F2FF] h-36 w-36 md:h-44 md:w-44 absolute top-0 lg:top-24 -left-28 sm:-left-20 rounded-full"></div>
-        <div className="bg-[#DFC7FF] h-20 w-20 absolute top-6 lg:top-32 -right-14 sm:-right-5 rounded-full"></div>
-        <div className="bg-[#FFE1D3] h-32 w-32 md:h-40 md:w-40 absolute bottom-0 -right-24 sm:-right-20 rounded-full"></div>
-        <div className="text-[1.8rem] xs:text-4xl md:text-5xl font-bold text-center overflow-hidden">What is it we do?</div>
-
-        <div className="flex flex-wrap gap-[2vw] lg:gap-[1vw] mt-10">
-          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
-            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#B276FF]"></div>
-            <div className="text-xl md:text-2xl font-bold shrink-0">Web Design</div>
-            <div className="mt-5 line-clamp-5 text-ellipsis text-base">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
-            </div>
-          </div>
-
-          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
-            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#75ACFF]"></div>
-            <div className="text-xl md:text-2xl font-bold shrink-0">Web Development</div>
-            <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-[2vw] lg:gap-[1vw] my-5">
-          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
-            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#FFA37B]"></div>
-            <div className="text-xl md:text-2xl font-bold shrink-0">Product Design</div>
-            <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
-            </div>
-          </div>
-
-          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
-            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#FFA6A6]"></div>
-            <div className="text-xl md:text-2xl font-bold shrink-0">Branding</div>
-            <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
-            </div>
-          </div>
-        </div>
-        <div className="bg-[#DAE9FF] rounded-3xl pl-5 sm:pl-8 pr-5 py-10 flex gap-2 sm:gap-5 items-center justify-between ">
-          <div className="shrink-0 h-8 w-8 sm:h-10 sm:w-10 bg-[#795CFF] rounded-full"></div>
-          <div className="text-xl md:text-2xl font-bold">Extended design services</div>
-          <div className="ml-auto text-2xl md:text-3xl cursor-pointer shrink-0">
-            <FaArrowRightLong />
-          </div>
-        </div>
-      </div>
+      <WhatWeDo/>
+      
     </div>
   );
 };

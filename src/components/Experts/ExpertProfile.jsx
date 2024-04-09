@@ -728,10 +728,6 @@ export const SideComponent = () => {
         </div>
       </div>
 
-      <div className="my-10 mx-[2.5vw] ">
-        <ShowSchedule />
-      </div>
-
       {/*******Accordian starts from here*******/}
       {
         <div

@@ -26,14 +26,47 @@ const EditProfileCustomer = () => {
   };
 
   const [generalInfo, setGeneralInfo] = useState({
-    name: "",
+    first_name: "",
+    last_name: "",
     mobile_number: "",
-    email: "",
   });
 
   const handleSubmit1 = async (e) => {
     e.preventDefault();
-    alert("Profile Updated Successfully!");
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    console.log(jsonData);
+    try {
+      const response = await axios.post(
+        "/user_details/?action=1",
+        {
+          action: 1,
+          first_name: generalInfo.first_name,
+          last_name: generalInfo.last_name,
+          mobile_number: generalInfo.mobile_number,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data, generalInfo);
+      alert("Profile Updated Successfully!");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const [personalInfo, setPersonalInfo] = useState({
@@ -41,10 +74,19 @@ const EditProfileCustomer = () => {
     marital_status: "Single",
     profession: "",
     about_me: "",
+    dob: "2002-01-01",
   });
 
   const handleSubmit2 = async (e) => {
     e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    console.log(jsonData);
     try {
       // const response =await fetch("http://localhost:8000/customers/",{
       //   method:"POST",
@@ -64,24 +106,26 @@ const EditProfileCustomer = () => {
       const response = await axios.post(
         "/customers/",
         {
-          action: 1,
+          action: 3,
           marital_status: personalInfo.marital_status,
           profession: personalInfo.profession,
           about_me: personalInfo.about_me,
+          dob: personalInfo.dob,
+          gender: personalInfo.gender,
         },
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
           },
-          withCredentials: true,
         }
       );
       const data = response.data;
-      console.log(data);
       if (!data || data.status === 400 || data.status === 401) {
         alert(data.message);
         return;
       }
+      console.log(data, personalInfo);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
@@ -90,6 +134,13 @@ const EditProfileCustomer = () => {
 
   const handleSubmit3 = async (e) => {
     e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
     try {
       // const response = await fetch("http://localhost:8000/customers/", {
       //   method: "POST",
@@ -107,26 +158,30 @@ const EditProfileCustomer = () => {
       const response = await axios.post(
         "/customers/",
         {
-          action: 2,
+          action: 4,
           interest_list: selectedSkill,
         },
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
           },
-          withCredentials: true,
         }
       );
       const data = response.data;
-      console.log(data);
       if (!data || data.status === 400 || data.status === 401) {
         alert(data.message);
         return;
       }
+      console.log(data);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const  handleRemove = (skill) => {
+    setSelectedSkill(selectedSkill.filter((s) => s !== skill));
   };
 
   return (
@@ -167,18 +222,37 @@ const EditProfileCustomer = () => {
         {currStep === 0 && (
           <form onSubmit={handleSubmit1} className="grow flex flex-col h-full">
             <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
-              <label htmlFor="name" className="text-lg mb-1">
-                Name
+              <label htmlFor="firstName" className="text-lg mb-1">
+                First Name
               </label>
               <input
                 required
                 type="text"
-                id="name"
-                name="name"
+                id="firstName"
+                name="firstName"
+                value={generalInfo.first_name}
+                onChange={(e) =>
+                  setGeneralInfo({ ...generalInfo, first_name: e.target.value })
+                }
                 className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                placeholder="Enter your name"
+                placeholder="Enter your first name"
               />
-              <label htmlFor="profession" className="text-lg mb-1">
+              <label htmlFor="lastName" className="text-lg mb-1">
+                Last Name
+              </label>
+              <input
+                required
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={generalInfo.last_name}
+                onChange={(e) =>
+                  setGeneralInfo({ ...generalInfo, last_name: e.target.value })
+                }
+                className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                placeholder="Enter your last name"
+              />
+              <label htmlFor="mobileNumber" className="text-lg mb-1">
                 Mobile Number
               </label>
               <input
@@ -186,19 +260,15 @@ const EditProfileCustomer = () => {
                 type="number"
                 id="mobileNumber"
                 name="mobileNumber"
+                value={generalInfo.mobile_number}
+                onChange={(e) =>
+                  setGeneralInfo({
+                    ...generalInfo,
+                    mobile_number: e.target.value,
+                  })
+                }
                 className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                 placeholder="Enter your mobile number"
-              />
-              <label htmlFor="email" className="text-lg mb-1">
-                Email
-              </label>
-              <input
-                required
-                type="text"
-                id="email"
-                name="email"
-                className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
-                placeholder="Enter your email address"
               />
             </div>
             <div className="flex justify-end mx-20 mb-8">
@@ -257,24 +327,44 @@ const EditProfileCustomer = () => {
                   </select>
                 </div>
               </div>
-              <label htmlFor="profession" className="text-lg mb-1">
-                Profession
-              </label>
-              <input
-                required
-                type="text"
-                id="profession"
-                name="profession"
-                value={personalInfo.profession}
-                onChange={(e) =>
-                  setPersonalInfo({
-                    ...personalInfo,
-                    profession: e.target.value,
-                  })
-                }
-                className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                placeholder="Profession"
-              />
+              <div className="flex justify-around gap-5">
+                <div className="flex flex-col w-full">
+                  <label htmlFor="profession" className="text-lg mb-1">
+                    Profession
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    id="profession"
+                    name="profession"
+                    value={personalInfo.profession}
+                    onChange={(e) =>
+                      setPersonalInfo({
+                        ...personalInfo,
+                        profession: e.target.value,
+                      })
+                    }
+                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                    placeholder="Profession"
+                  />
+                </div>
+                <div className="flex flex-col w-full">
+                  <label htmlFor="dob" className="text-base md:text-lg mb-1">
+                    Date of Birth 
+                  </label>
+                  <input
+                    type="text"
+                    id="dob"
+                    name="dob"
+                    pattern="\d{4}-\d{2}-\d{2}"
+                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                    value={personalInfo.dob}
+                    onChange={(e) => {
+                      setPersonalInfo({ ...personalInfo, dob: e.target.value });
+                    }}
+                  />
+                </div>
+              </div>
               <label htmlFor="about" className="text-lg mb-1">
                 About Me
               </label>
@@ -313,9 +403,10 @@ const EditProfileCustomer = () => {
                       return (
                         <div
                           key={skill}
-                          className="px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black"
+                          className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black"
                         >
                           {skill}
+                          <div className="cursor-pointer" onClick={() => handleRemove(skill)}>x</div>
                         </div>
                       );
                     })

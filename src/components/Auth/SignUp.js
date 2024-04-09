@@ -199,6 +199,7 @@ const SignUp = () => {
         //   }),
         //   credentials: "include",
         // });
+
         const response = await axios.post(
           "/register/",
           {
@@ -237,13 +238,10 @@ const SignUp = () => {
             //   credentials: "include",
             // });
             // const json = await response.json();
-            const res = await axios.post(
-              "/login/",
-              {
-                email: secondStep.email,
-                password: forthStep.password,
-              },
-            );
+            const res = await axios.post("/login/", {
+              email: secondStep.email,
+              password: forthStep.password,
+            });
             // const json = await res.json();
             const data = res.data;
             document.cookie = `access_token=${res.data.access_token}; SameSite=Lax;`;
