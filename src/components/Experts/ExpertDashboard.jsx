@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Update from "./EditDashboardProfile";
 import Instructions from "../GetCertified/Instructions";
-import { FaEdit, FaTags, FaWallet, FaMedal, FaRegTrashAlt } from "react-icons/fa";
+import {
+  FaEdit,
+  FaTags,
+  FaWallet,
+  FaMedal,
+  FaRegTrashAlt,
+} from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import {
   MdSpaceDashboard,
@@ -25,12 +31,13 @@ import {
   BsGlobe,
   BsThreeDotsVertical,
 } from "react-icons/bs";
-import { RiPagesFill } from "react-icons/ri";
+import { RiPagesFill, RiArrowRightSLine} from "react-icons/ri";
 import { PiCrownFill } from "react-icons/pi";
-import { ExpertBlogs } from "./ExpertProfile";
+import { ExpertBlogs, ExpertInfo } from "./ExpertProfile";
 import {
   expertDashInfo as expert,
   expertDashInfo,
+  expertDetailsObj,
   leaderboardRanking,
 } from "../../constant";
 import {
@@ -277,23 +284,22 @@ const Contributioncard = ({
 };
 export const TestimonialsCard = ({ item, index }) => {
   const [comment, setComment] = useState("Click to Change Testimonial");
-  const [readOnly,setReadOnly]=useState(true);
+  const [readOnly, setReadOnly] = useState(true);
   const [editTestimonial, setEditTestimonial] = useState(false);
   const handleComment = (e) => {
     setComment(e.target.value);
-  }
-  const handleEdit=()=>{
+  };
+  const handleEdit = () => {
     setReadOnly(false);
     setEditTestimonial(true);
-  }
+  };
   const handleSubmitEditedTestimonial = () => {
     setEditTestimonial(false);
     setReadOnly(true);
-  }
- 
+  };
+
   return (
     <>
-      
       <div
         className={`px-14 py-4 my-5 rounded-md relative ${
           index % 2 == 0
@@ -303,13 +309,28 @@ export const TestimonialsCard = ({ item, index }) => {
       >
         <div className="flex items-center justify-between text-sm font-semibold">
           <div>{item?.date}</div>
-          <FaEdit
-            className="text-xl"
-            onClick={handleEdit}
-          />
+          <div className="flex items-center gap-3">
+          <FaEdit className="text-xl" onClick={handleEdit} />
+          <FaRegTrashAlt className="text-xl" />
+
+          </div>
         </div>
-        <textarea readOnly={readOnly} value={comment} onChange={handleComment} className={`bg-inherit min-w-[100%] max-w-[100%] line-clamp-3 text-sm mt-4 focus:outline-none rounded-md ${editTestimonial ? "border border-solid border-[#c7c7c7] p-1" : ""}`}/>
-        {editTestimonial && <div className="px-3 py-2 mt-4 rounded-sm bg-green-500 text-white w-fit cursor-pointer" onClick={handleSubmitEditedTestimonial}>Submit</div>}
+        <textarea
+          readOnly={readOnly}
+          value={comment}
+          onChange={handleComment}
+          className={`bg-inherit min-w-[100%] max-w-[100%] line-clamp-3 text-sm mt-4 focus:outline-none rounded-md ${
+            editTestimonial ? "border border-solid border-[#c7c7c7] p-1" : ""
+          }`}
+        />
+        {editTestimonial && (
+          <div
+            className="px-3 py-2 mt-4 rounded-sm bg-green-500 text-white w-fit cursor-pointer"
+            onClick={handleSubmitEditedTestimonial}
+          >
+            Submit
+          </div>
+        )}
       </div>
     </>
   );
@@ -344,6 +365,7 @@ export const Dashboard = () => {
   const [meetings, setMeetings] = useState(false);
   const [blogs, setBlogs] = useState(false);
   const [testimonials, setTestimonials] = useState(false);
+  const [projects, setProjects] = useState(false);
   const [avgRating, setAvgRating] = useState(true);
   const [ratingDistribution, setRatingDistribution] = useState(false);
 
@@ -352,24 +374,35 @@ export const Dashboard = () => {
     setMeetings(false);
     setBlogs(false);
     setTestimonials(false);
+    setProjects(false);
   };
   const HandleMeetings = () => {
     setContributions(false);
     setMeetings(true);
     setBlogs(false);
     setTestimonials(false);
+    setProjects(false);
   };
   const HandleBlogs = () => {
     setContributions(false);
     setMeetings(false);
     setBlogs(true);
     setTestimonials(false);
+    setProjects(false);
   };
   const HandleTestimonials = () => {
     setContributions(false);
     setMeetings(false);
     setBlogs(false);
     setTestimonials(true);
+    setProjects(false);
+  };
+  const HandleProjects = () => {
+    setContributions(false);
+    setMeetings(false);
+    setBlogs(false);
+    setTestimonials(false);
+    setProjects(true);
   };
   const HandleAvgRating = () => {
     setAvgRating(true);
@@ -808,6 +841,14 @@ export const Dashboard = () => {
           >
             Testimonials
           </div>
+          <div
+            className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+              projects && `bg-[#ececec] rounded-sm`
+            }`}
+            onClick={() => HandleProjects()}
+          >
+            Projects
+          </div>
         </div>
         {contributions && (
           <div>
@@ -851,11 +892,40 @@ export const Dashboard = () => {
         {blogs && <ExpertBlogs />}
         {testimonials && (
           <div>
-            {expertDashInfo?.testimonials.map((item, index) => (
+            {expertDashInfo?.testimonials?.map((item, index) => (
               <TestimonialsCard key={index} item={item} index={index} />
             ))}
           </div>
         )}
+        {projects &&  
+          expertDetailsObj?.projects?.map((items, index) => 
+          <div
+          className={`px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
+            index % 2 === 0
+              ? `bg-[#ececec]`
+              : `border border-[#c7c7c7] border-solid `
+          }`}
+        >
+          <div className="flex flex-col sm:flex-row items-start gap-5">
+            <img
+              className=" w-full h-48 object-cover sm:h-36 sm:w-40 rounded-md shrink-0 self-start"
+              src={items?.banner}
+              alt=""
+            />
+            <div className="text-[#575757]">
+              <div className="text-lg font-semibold line-clamp-2 text-balance">
+                {items?.title}
+              </div>
+              <div className="my-2 text-sm line-clamp-3 text-balance">
+                {items?.description}
+              </div>
+            </div>
+          </div>
+          <div className="hidden border border-solid border-slate-300 h-fit sm:flex items-center justify-center rounded-full text-4xl font-thin self-center shrink-0 cursor-pointer">
+            <RiArrowRightSLine />
+          </div>
+        </div>
+          )}
       </div>
     </section>
   );
@@ -1063,34 +1133,37 @@ export const MyBookings = () => {
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
         Active Bookings
       </div>
-      <div className="flex items-center justify-between gap-3 text-sm text-gray-600 font-semibold my-5">
-        <div>Booking Date</div>
-        <div>Booking Time</div>
-        <div className="w-[200px] ">Client Name</div>
-        <div>Scheduled Date</div>
-        <div>Start Time</div>
-        <div>End Time</div>
-        <div>Action</div>
+      <div className="flex items-center justify-between gap-10 text-sm text-gray-600 font-bold my-5 overflow-x-scroll">
+        <div className="shrink-0 w-[120px]">Booking Date</div>
+        <div className="w-[200px] shrink-0">Client Name</div>
+        <div className="shrink-0 w-[120px]">Scheduled Date</div>
+        <div className="shrink-0 w-[120px]">Start Time</div>
+        <div className="shrink-0 w-[120px]">End Time</div>
+        <div className="shrink-0 w-[120px]">Action</div>
       </div>
-      <div className=" ">
-        {expertDashInfo?.myBookings.map((item,index)=> 
-        <div key={index} className="text-sm flex items-center justify-between border border-solid border-slate-300 my-5 px-2 py-3 rounded-md overflow-x-scroll shrink-0 min-w-[100%] ">
-          <div>{item?.bookingDate} </div>
-          <div>{item?.bookingTime} </div>
-          <div className="flex items-center gap-2 w-[200px]  text-center">
-            <img src={item?.customerProfile} className="h-9 w-9 rounded-full shrink-0 object-cover" alt="" />
+      {expertDashInfo?.myBookings.map((item, index) => (
+        <div
+          key={index}
+          className="text-sm flex items-center justify-between gap-10 border-t border-solid border-slate-300 my-5 py-3  overflow-x-scroll shrink-0"
+        >
+          <div className="shrink-0 w-[120px]">{item?.bookingDate} </div>
+          <div className="flex items-center gap-2 w-[200px] shrink-0">
+            <img
+              src={item?.customerProfile}
+              className="h-9 w-9 rounded-full shrink-0 object-cover"
+              alt=""
+            />
             <div>{item?.customerName}</div>
           </div>
-          <div>{item?.scheduledDate} </div>
-          <div>{item?.startTime} </div>
-          <div>{item?.endTime} </div>
-          <FaRegTrashAlt />
+          <div className="shrink-0 w-[120px]">{item?.scheduledDate} </div>
+          <div className="shrink-0 w-[120px]">{item?.startTime} </div>
+          <div className="shrink-0 w-[120px]">{item?.endTime} </div>
+          <FaRegTrashAlt className="shrink-0 w-[120px]" />
         </div>
-        )}
-      </div>
+      ))}
     </div>
   );
-}
+};
 
 const ExpertDashboard = () => {
   const [showEditProfile, setShowEditProfile] = useState(false);
@@ -1167,19 +1240,19 @@ const ExpertDashboard = () => {
           </div>
           <div>
             <ul className="p-0 mt-0 mb-0">
-              <Link to="">
+              <Link to="" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <MdSpaceDashboard className="text-[1.65vw]" />
                   Dashboard
                 </li>
               </Link>
-              <Link to="leaderboard">
+              <Link to="leaderboard" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <FaMedal className="text-[1.65vw]" />
                   Leaderboard
                 </li>
               </Link>
-              <Link to="mybookings">
+              <Link to="mybookings" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <IoBookmarksSharp className="text-[1.65vw]" />
                   Bookings
@@ -1189,7 +1262,7 @@ const ExpertDashboard = () => {
                 <FaWallet className="text-[1.55vw]" />
                 Wallet
               </li>
-              <Link to="chats">
+              <Link to="chats" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <BsFillChatSquareTextFill className="text-[1.55vw]" />
                   Chat
@@ -1221,8 +1294,8 @@ const ExpertDashboard = () => {
       <Outlet>
         <Dashboard />
         <Chats />
-        <Leaderboard/>
-        <MyBookings/>
+        <Leaderboard />
+        <MyBookings />
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />

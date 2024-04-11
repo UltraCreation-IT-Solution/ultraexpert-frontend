@@ -7,6 +7,7 @@ import { FaBars, FaTimes, FaRegHeart } from "react-icons/fa";
 const Navbar = () => {
   const location = useLocation().pathname;
   const [showNav, setShowNav] = useState(false);
+  
   useEffect(() => {
     setShowNav(false);
   }, [location]);

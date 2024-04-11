@@ -535,96 +535,106 @@ export const expertDashInfo = {
   viewCount: 1567,
   followersCount: 730,
   blogcount: 28,
-  myBookings:[
+  myBookings: [
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Bhavesh Bhanusali",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
   ],
   chats: [
@@ -727,8 +737,8 @@ export const expertDashInfo = {
       meetingId: "11xxxxxxxx",
       customerName: "Bhavesh Bhanusali",
       servicePrice: "450",
-      startTime:"2:00 PM",
-      endTime:"2:00 PM",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
       serviceTitle: "API integration using postman",
       serviceDate: "22 May, 2024",
     },
@@ -736,8 +746,8 @@ export const expertDashInfo = {
       meetingId: "11xxxxxxxx",
       customerName: "Bhavesh Bhanusali",
       servicePrice: "450",
-      startTime:"2:00 PM",
-      endTime:"2:00 PM",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
       serviceTitle: "API integration using postman",
       serviceDate: "22 May, 2024",
     },
@@ -745,8 +755,8 @@ export const expertDashInfo = {
       meetingId: "11xxxxxxxx",
       customerName: "Bhavesh Bhanusali",
       servicePrice: "450",
-      startTime:"2:00 PM",
-      endTime:"2:00 PM",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
       serviceTitle: "API integration using postman",
       serviceDate: "22 May, 2024",
     },
@@ -754,8 +764,8 @@ export const expertDashInfo = {
       meetingId: "11xxxxxxxx",
       customerName: "Bhavesh Bhanusali",
       servicePrice: "450",
-      startTime:"2:00 PM",
-      endTime:"2:00 PM",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
       serviceTitle: "API integration using postman",
       serviceDate: "22 May, 2024",
     },
@@ -763,8 +773,8 @@ export const expertDashInfo = {
       meetingId: "11xxxxxxxx",
       customerName: "Bhavesh Bhanusali",
       servicePrice: "450",
-      startTime:"2:00 PM",
-      endTime:"2:00 PM",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
       serviceTitle: "API integration using postman",
       serviceDate: "22 May, 2024",
     },
@@ -772,8 +782,8 @@ export const expertDashInfo = {
       meetingId: "11xxxxxxxx",
       customerName: "Bhavesh Bhanusali",
       servicePrice: "450",
-      startTime:"2:00 PM",
-      endTime:"2:00 PM",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
       serviceTitle: "API integration using postman",
       serviceDate: "22 May, 2024",
     },
@@ -781,8 +791,8 @@ export const expertDashInfo = {
       meetingId: "11xxxxxxxx",
       customerName: "Bhavesh Bhanusali",
       servicePrice: "450",
-      startTime:"2:00 PM",
-      endTime:"2:00 PM",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
       serviceTitle: "API integration using postman",
       serviceDate: "22 May, 2024",
     },
@@ -790,8 +800,8 @@ export const expertDashInfo = {
       meetingId: "11xxxxxxxx",
       customerName: "Bhavesh Bhanusali",
       servicePrice: "450",
-      startTime:"2:00 PM",
-      endTime:"2:00 PM",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
       serviceTitle: "API integration using postman",
       serviceDate: "22 May, 2024",
     },
@@ -799,13 +809,34 @@ export const expertDashInfo = {
       meetingId: "11xxxxxxxx",
       customerName: "Bhavesh Bhanusali",
       servicePrice: "450",
-      startTime:"2:00 PM",
-      endTime:"2:00 PM",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
       serviceTitle: "API integration using postman",
       serviceDate: "22 May, 2024",
     },
-    
   ],
+  testimonials:[
+    {
+      date:"25 March, 2024",
+      comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
+    },
+    {
+      date:"25 March, 2024",
+      comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
+    },
+    {
+      date:"25 March, 2024",
+      comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
+    },
+    {
+      date:"25 March, 2024",
+      comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
+    },
+    {
+      date:"25 March, 2024",
+      comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
+    },
+  ]
 };
 export const customerDashboardInfo = {
   name: "Bhavesh Bhanusali",
@@ -815,96 +846,106 @@ export const customerDashboardInfo = {
     "https://images.pexels.com/photos/8114406/pexels-photo-8114406.jpeg?auto=compress&cs=tinysrgb&w=600",
   designation: "Web Developer",
   meetings: "60 Meetings",
-  myBookings:[
+  myBookings: [
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Bhavesh Bhanusali",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
     {
-      bookingTime:"2:00 PM",
-      bookingDate:"24 Mar, 2024",
-      scheduledDate:"30 Mar, 2024",
-      startTime:"3:00 PM",
-      endTime:"4:00 PM",
-      customerProfile:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      customerName:"Guy Hawkins"
+      bookingTime: "2:00 PM",
+      bookingDate: "24 Mar, 2024",
+      scheduledDate: "30 Mar, 2024",
+      startTime: "3:00 PM",
+      endTime: "4:00 PM",
+      customerProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      customerName: "Guy Hawkins",
     },
   ],
   chats: [
@@ -965,7 +1006,208 @@ export const customerDashboardInfo = {
         "Lorem ipsum dolor sit amet adipisicing elit Eius doloribus, similique maxime cumque optio quisquam dolore corrupti nobis eos",
     },
   ],
-
+  recentMeetings: [
+    {
+      meetingId: "11xxxxxxxx",
+      expertName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+    {
+      meetingId: "11xxxxxxxx",
+      expertName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+    {
+      meetingId: "11xxxxxxxx",
+      expertName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+    {
+      meetingId: "11xxxxxxxx",
+      expertName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+    {
+      meetingId: "11xxxxxxxx",
+      expertName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+    {
+      meetingId: "11xxxxxxxx",
+      expertName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+    {
+      meetingId: "11xxxxxxxx",
+      expertName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+    {
+      meetingId: "11xxxxxxxx",
+      expertName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+    {
+      meetingId: "11xxxxxxxx",
+      expertName: "Bhavesh Bhanusali",
+      servicePrice: "450",
+      startTime: "2:00 PM",
+      endTime: "2:00 PM",
+      serviceTitle: "API integration using postman",
+      serviceDate: "22 May, 2024",
+    },
+  ],
+  transactionHistory: [
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+    {
+      invoice: "Invoice 006",
+      date: "30 Mar, 2024",
+      time: "3:00 PM",
+      amount: "1100",
+      expertProfile:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      expertName: "Guy Hawkins",
+    },
+  ],
 };
 export const leaderboardRanking = [
   {
@@ -2371,16 +2613,21 @@ export const allBlogs = [
 export const expertDetailsObj = {
   id: 1,
   personalDetails: {
-    name: "Antony Phobes",
+    firstName: "Antony",
+    lastName: "Phobes",
+    gender: "Female",
+    banner:
+      "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     img: "https://images.unsplash.com/photo-1485217988980-11786ced9454?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzR8fHdvbWFufGVufDB8MHwwfHx8MA%3D%3D",
     designation: "UI/UX Designer",
-    location: "Maharastra",
-    country: "India",
-    title: "Web Designer and Figma Expert",
-    rating: "4.9",
-    ratingNumber: "100",
     aboutMe:
       "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Impedit cum ipsum tenetur facilis, nemo explicabo ea recusandae minus iste deleniti ipsam, autem repellendus aliquam, quidem nobis reiciendis iure quod hic!",
+    location: "Maharastra",
+    country: "India",
+    meetingCount: "50",
+    followerCount: "1k",
+    rating: "4.9",
+    ratingCount: "100",
   },
   ratingBreakdown: {
     availability: "2.3",
@@ -2405,37 +2652,29 @@ export const expertDetailsObj = {
     {
       companyName: "Amazon Web Services",
       designation: "Associate Technical Account Manager",
-      startMonth: "March",
-      startYear: "2022",
-      endMonth: "",
-      endYear: "",
+      startDate: "March, 2022",
+      endDate: "",
       present: true,
     },
     {
       companyName: "Deloitte India",
       designation: "DevOps Engineer",
-      startMonth: "January",
-      startYear: "2021",
-      endMonth: "March",
-      endYear: "2022",
+      startDate: "January, 2021",
+      endDate: "March, 2022",
       present: false,
     },
     {
       companyName: "Sainsbury's",
       designation: "Cloud Engineer",
-      startMonth: "October",
-      startYear: "2017",
-      endMonth: "February",
-      endYear: "2020",
+      startDate: "October, 2017",
+      endDate: "February, 2020",
       present: false,
     },
     {
       companyName: "Tata Consultancy Services",
       designation: "Cloud Engineer",
-      startMonth: "June",
-      startYear: "2017",
-      endMonth: "January",
-      endYear: "2021",
+      startDate: "June, 2017",
+      endDate: "January, 2021",
       present: false,
     },
   ],
@@ -2446,6 +2685,9 @@ export const expertDetailsObj = {
       description:
         "Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.",
       title: "Cloud Portal",
+      tags: ["React js", "Node js", "Express js", "MongoDB", "React Native"],
+      type:"Group",
+      role:"Developer"
     },
     {
       banner:
@@ -2453,6 +2695,8 @@ export const expertDetailsObj = {
       description:
         "Lorem ipsum 2, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.",
       title: "UltraXpert",
+      tags: ["React js", "Node js", "Rapid API"],
+      type:"Indie",
     },
     {
       banner:
@@ -2460,6 +2704,9 @@ export const expertDetailsObj = {
       description:
         "Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.",
       title: "Clone",
+      tags: ["React js", "Node js", "React Native"],
+      type:"Group",
+      role:"Designer"
     },
     {
       banner:
@@ -2467,6 +2714,8 @@ export const expertDetailsObj = {
       description:
         "Lorem ipsum 4, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.",
       title: "My Project 4",
+      tags: ["React js", "Node js"],
+      type:"Indie",
     },
   ],
   education: [
@@ -2479,18 +2728,6 @@ export const expertDetailsObj = {
       instituteName: "Indian Institue of Technology, Indore",
       degreeName: "Bechelor of Engineering - Information Technology",
       duration: "2019-2023",
-    },
-  ],
-  workExperience: [
-    {
-      companyName: "Ultracreation It Solution",
-      position: "Software Developer",
-      duration: "2023-2024",
-    },
-    {
-      companyName: "JP Morgan",
-      position: "Graduate Analyst",
-      duration: "6 months",
     },
   ],
   achievements: [
@@ -2911,14 +3148,17 @@ export const ProjectsCarousel = () => {
   const [slider, setSlider] = useState(0);
 
   return (
+    <div className="relative">
+
+    
     <div className="flex justify-center items-center mt-5">
       {expertDetailsObj?.projects.map((temp, idx) => (
-        <div className="">
+        <div className=" bg-red-500">
           <div className="relative w-[95%] m-auto">
             <div
               className={
                 slider === idx
-                  ? "absolute bottom-0 w-full flex items-center justify-center h-[8vw] md:h-[5.5vw] bg-black/45 tracking-wider  text-[2.5vw] md:text-[1.5vw] text-white font-bold"
+                  ? "absolute bottom-0 w-full flex items-center justify-center h-[8vw] md:h-[5.5vw] bg-black/45 tracking-wider text-[2.5vw] md:text-[1.5vw] text-white font-bold"
                   : "hidden"
               }
             >
@@ -2956,6 +3196,22 @@ export const ProjectsCarousel = () => {
               }
             />
           </div>
+          <div className={slider===idx ? "absolute -top-0 left-0 w-fit px-8 py-2 btnBlack text-white rounded-sm"  : "hidden"}>
+            <div className="text-center text-sm">{temp?.type} Project</div>
+            <div className="text-center text-xs text-gray-300 ">{temp?.role} </div>
+          </div>
+          <div
+            className={
+              slider === idx ? "mt-3 flex items-center gap-1 flex-wrap pl-3 sm:pl-5" : "hidden"
+            }
+          >
+            {temp?.tags?.map((item,index) => (
+              <div key={index} className="border border-solid border-slate-300 rounded-sm px-3 py-[6px] text-xs">
+                {item}
+              </div>
+            ))}
+          </div>
+
           <p
             className={
               slider === idx
@@ -2968,16 +3224,17 @@ export const ProjectsCarousel = () => {
         </div>
       ))}
     </div>
+    </div>
   );
 };
 
 export const BlogCardHorizontal = ({ index, items }) => {
   return (
     <div
-      className={`px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5 ${
+      className={`px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
         index % 2 === 0
           ? `bg-[#ececec]`
-          : `border border-[#c7c7c7] border-solid`
+          : `border border-[#c7c7c7] border-solid `
       }`}
     >
       <div className="flex flex-col sm:flex-row items-center gap-5">
@@ -3095,7 +3352,10 @@ export const ShowSchedule = ({ price, id }) => {
           ))}
         </div>
       </div>
-      <Link to={`/experts/expertprofile/booking/${id}`} className="no-underline">
+      <Link
+        to={`/experts/expertprofile/booking/${id}`}
+        className="no-underline"
+      >
         <div className="mt-6 bg-[#007AFF] text-white text-lg font-semibold text-center p-3 rounded-lg cursor-pointer no-underline">
           Book a slot
         </div>

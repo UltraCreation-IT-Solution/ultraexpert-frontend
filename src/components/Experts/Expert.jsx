@@ -96,6 +96,7 @@ const AllExperts = () => {
   const lastIndex = currentPage * itemsPerPage;
   const firstIndex = lastIndex - itemsPerPage;
   const slicedArray = profileObj.slice(firstIndex, lastIndex);
+  const lastPage = Math.ceil(profileObj.length / itemsPerPage); 
 
   return (
     <div className="mt-[40px] md:mt-[100px] relative w-full h-auto py-[5vw] sm:py-[3vw] px-[3vw] xs:px-[6vw] md:px-[10vw] flex flex-col">
@@ -111,7 +112,7 @@ const AllExperts = () => {
       </div>
       <div className="mt-[3vw] flex items-center justify-center xs:justify-between gap-[4vw] text-white">
         <div
-          className="text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-md bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer"
+          className={`text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-md bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer ${currentPage < 2  && "opacity-80"} `}
           onClick={() => {
             currentPage > 1 && setCurrentPage(currentPage - 1);
           }}
@@ -122,12 +123,13 @@ const AllExperts = () => {
         <Pagination
           totalItems={profileObj.length}
           itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />
         <div
-          className="text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-lg bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer"
+          className={`text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-lg bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer ${currentPage === lastPage && "opacity-80"} `}
           onClick={() => {
-            currentPage < profileObj.length - 1 &&
+            currentPage < lastPage &&
               setCurrentPage(currentPage + 1);
           }}
         >
