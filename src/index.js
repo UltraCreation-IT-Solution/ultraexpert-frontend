@@ -52,6 +52,7 @@ import CustomerDashboard, {
   CustomerRecentMeetngs,
 } from "./components/Customers/CustomerDashboard.jsx";
 import TestElement from "./TestElement.jsx";
+import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -230,6 +231,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/testelement",
         element: <TestElement />,
+      },
+      {
+        path: "/firebaseuploadtest",
+        element: <FirebaseImageUpload />,
       },
       {
         path: "/test",

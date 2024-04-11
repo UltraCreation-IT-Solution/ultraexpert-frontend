@@ -1,12 +1,36 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import axios from "../../axios";
 
-const EditProfileExpert = () => {
-  const navigate = useNavigate();
+const cookies = document.cookie.split("; ");
+const jsonData = {};
 
-  const [currStep, setCurrStep] = useState(0);
-
+cookies.forEach((item) => {
+  const [key, value] = item.split("=");
+  jsonData[key] = value;
+});
+export const GenDetails = () => {
+  const getGenDetails = async () => {
+    try {
+      const response = await axios.get("/experts/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      console.log(response);
+      setGeneralInfo({
+        ...generalInfo,
+        first_name: response.data.data.first_name,
+        last_name: response.data.data.last_name,
+        mobile_number: response.data.data.mobile_number,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getGenDetails();
+  }, []);
   const [generalInfo, setGeneralInfo] = useState({
     first_name: "",
     last_name: "",
@@ -50,6 +74,71 @@ const EditProfileExpert = () => {
       console.log(error);
     }
   };
+  return (
+    <form onSubmit={handleSubmit1} className="grow flex flex-col h-full">
+      <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
+        <label htmlFor="firstName" className="text-lg mb-1">
+          First Name
+        </label>
+        <input
+          required
+          type="text"
+          id="firstName"
+          name="firstName"
+          value={generalInfo.first_name}
+          onChange={(e) =>
+            setGeneralInfo({ ...generalInfo, first_name: e.target.value })
+          }
+          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+          placeholder="Enter your first name"
+        />
+        <label htmlFor="lastName" className="text-lg mb-1">
+          Last Name
+        </label>
+        <input
+          required
+          type="text"
+          id="lastName"
+          name="lastName"
+          value={generalInfo.last_name}
+          onChange={(e) =>
+            setGeneralInfo({ ...generalInfo, last_name: e.target.value })
+          }
+          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+          placeholder="Enter your last name"
+        />
+        <label htmlFor="mobileNumber" className="text-lg mb-1">
+          Mobile Number
+        </label>
+        <input
+          required
+          type="number"
+          id="mobileNumber"
+          name="mobileNumber"
+          value={generalInfo.mobile_number}
+          onChange={(e) =>
+            setGeneralInfo({
+              ...generalInfo,
+              mobile_number: e.target.value,
+            })
+          }
+          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+          placeholder="Enter your mobile number"
+        />
+      </div>
+      <div className="flex justify-end mx-20 mb-8">
+        <button
+          type="submit"
+          className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  );
+};
+const EditProfileExpert = () => {
+  const [currStep, setCurrStep] = useState(0);
 
   const [personalInfo, setPersonalInfo] = useState({
     gender: "Male",
@@ -198,7 +287,7 @@ const EditProfileExpert = () => {
         alert(data.message);
         return;
       }
-      console.log(data,educationData);
+      console.log(data, educationData);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
@@ -271,7 +360,7 @@ const EditProfileExpert = () => {
         alert(data.message);
         return;
       }
-      console.log(data,skillData);
+      console.log(data, skillData);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
@@ -352,7 +441,7 @@ const EditProfileExpert = () => {
         alert(data.message);
         return;
       }
-      console.log(data,experienceData);
+      console.log(data, experienceData);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
@@ -412,7 +501,7 @@ const EditProfileExpert = () => {
         alert(data.message);
         return;
       }
-      console.log(data,accInfo);
+      console.log(data, accInfo);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
@@ -484,68 +573,7 @@ const EditProfileExpert = () => {
             Account Details
           </button>
         </div>
-        {currStep === 0 && (
-          <form onSubmit={handleSubmit1} className="grow flex flex-col h-full">
-            <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
-              <label htmlFor="firstName" className="text-lg mb-1">
-                First Name
-              </label>
-              <input
-                required
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={generalInfo.first_name}
-                onChange={(e) =>
-                  setGeneralInfo({ ...generalInfo, first_name: e.target.value })
-                }
-                className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                placeholder="Enter your first name"
-              />
-              <label htmlFor="lastName" className="text-lg mb-1">
-                Last Name
-              </label>
-              <input
-                required
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={generalInfo.last_name}
-                onChange={(e) =>
-                  setGeneralInfo({ ...generalInfo, last_name: e.target.value })
-                }
-                className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                placeholder="Enter your last name"
-              />
-              <label htmlFor="mobileNumber" className="text-lg mb-1">
-                Mobile Number
-              </label>
-              <input
-                required
-                type="number"
-                id="mobileNumber"
-                name="mobileNumber"
-                value={generalInfo.mobile_number}
-                onChange={(e) =>
-                  setGeneralInfo({
-                    ...generalInfo,
-                    mobile_number: e.target.value,
-                  })
-                }
-                className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                placeholder="Enter your mobile number"
-              />
-            </div>
-            <div className="flex justify-end mx-20 mb-8">
-              <button
-                type="submit"
-                className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
-        )}
+        {currStep === 0 && <GenDetails />}
         {currStep === 1 && (
           <form onSubmit={handleSubmit2} className="grow flex flex-col h-full">
             <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
@@ -616,7 +644,10 @@ const EditProfileExpert = () => {
                   />
                 </div>
                 <div className="flex flex-col w-full">
-                  <label htmlFor="experience" className="flex gap-1 text-lg mb-1">
+                  <label
+                    htmlFor="experience"
+                    className="flex gap-1 text-lg mb-1"
+                  >
                     Experience <div className="text-xs my-auto">(in years)</div>
                   </label>
                   <input
@@ -696,9 +727,7 @@ const EditProfileExpert = () => {
                     name={`institute${form.id}`}
                     value={eduInfo.institute_name[ind]}
                     onChange={(e) => {
-                      const updatedInstituteNames = [
-                        ...eduInfo.institute_name,
-                      ];
+                      const updatedInstituteNames = [...eduInfo.institute_name];
                       updatedInstituteNames[ind] = e.target.value;
                       setEduInfo({
                         ...eduInfo,
@@ -738,23 +767,21 @@ const EditProfileExpert = () => {
                         Passing Year
                       </label>
                       <input
-                          type="text"
-                          id={`passing${form.id}`}
-                          name={`passing${form.id}`}
-                          value={eduInfo.passing_year[ind]}
-                          onChange={(e) => {
-                            const updatedPassingYear = [
-                              ...eduInfo.passing_year,
-                            ];
-                            updatedPassingYear[ind] = e.target.value;
-                            setEduInfo({
-                              ...eduInfo,
-                              passing_year: updatedPassingYear,
-                            });
-                          }}
-                          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                          placeholder="Passing Year"
-                        />
+                        type="text"
+                        id={`passing${form.id}`}
+                        name={`passing${form.id}`}
+                        value={eduInfo.passing_year[ind]}
+                        onChange={(e) => {
+                          const updatedPassingYear = [...eduInfo.passing_year];
+                          updatedPassingYear[ind] = e.target.value;
+                          setEduInfo({
+                            ...eduInfo,
+                            passing_year: updatedPassingYear,
+                          });
+                        }}
+                        className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                        placeholder="Passing Year"
+                      />
                     </div>
                   </div>
                   <div className="flex justify-around gap-5">
@@ -787,21 +814,21 @@ const EditProfileExpert = () => {
                         State
                       </label>
                       <input
-                          type="text"
-                          id={`state${form.id}`}
-                          name={`state${form.id}`}
-                          value={eduInfo.state_name[ind]}
-                          onChange={(e) => {
-                            const updatedStateName = [...eduInfo.state_name];
-                            updatedStateName[ind] = e.target.value;
-                            setEduInfo({
-                              ...eduInfo,
-                              state_name: updatedStateName,
-                            });
-                          }}
-                          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                          placeholder="State"
-                        />
+                        type="text"
+                        id={`state${form.id}`}
+                        name={`state${form.id}`}
+                        value={eduInfo.state_name[ind]}
+                        onChange={(e) => {
+                          const updatedStateName = [...eduInfo.state_name];
+                          updatedStateName[ind] = e.target.value;
+                          setEduInfo({
+                            ...eduInfo,
+                            state_name: updatedStateName,
+                          });
+                        }}
+                        className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                        placeholder="State"
+                      />
                     </div>
                   </div>
                   <div className="flex justify-around gap-5">
@@ -1332,15 +1359,15 @@ const EditProfileExpert = () => {
                         name={`end${form.id}`}
                         value={expInfo.end_date[ind]}
                         pattern="\d{4}-\d{2}-\d{2}"
-                          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                          onChange={(e) => {
-                            const updatedEndDate = [...expInfo.end_date];
-                            updatedEndDate[ind] = e.target.value;
-                            setExpInfo({
-                              ...expInfo,
-                              end_date: updatedEndDate,
-                            });
-                          }}
+                        className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                        onChange={(e) => {
+                          const updatedEndDate = [...expInfo.end_date];
+                          updatedEndDate[ind] = e.target.value;
+                          setExpInfo({
+                            ...expInfo,
+                            end_date: updatedEndDate,
+                          });
+                        }}
                       />
                     </div>
                   </div>
