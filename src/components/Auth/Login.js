@@ -16,7 +16,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const passwordRegex = /^(?=.[a-z])(?=.[!@#$%^&*]).{8,}$/;
+  // const passwordRegex = /^(?=.[a-z])(?=.[!@#$%^&*]).{8,}$/;
 
   const validateForm = () => {
     let isValid = true;
@@ -27,10 +27,6 @@ const Login = () => {
       !userData.email
     ) {
       newErrors.email = "Invalid email";
-      isValid = false;
-    }
-    if (!userData.password || !passwordRegex.test(userData.password)) {
-      newErrors.password = "Invalid password";
       isValid = false;
     }
     setErrors(newErrors);

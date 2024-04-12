@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TopExperts } from "../Landing/Landing";
 import Subheader from "../../utilities/Subheader";
 import SearchByCategoriesSlider from "../../utilities/SearchByCategoriesSlider";
 import { Link } from "react-router-dom";
 import { profileObj } from "../../constant";
+import axios from "../../axios";
 import Pagination from "../../subsitutes/Pagination";
 import {
   FaStar,
@@ -96,8 +97,31 @@ const AllExperts = () => {
   const lastIndex = currentPage * itemsPerPage;
   const firstIndex = lastIndex - itemsPerPage;
   const slicedArray = profileObj.slice(firstIndex, lastIndex);
-  const lastPage = Math.ceil(profileObj.length / itemsPerPage); 
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+  const lastPage = Math.ceil(profileObj.length / itemsPerPage);
 
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  const getAllExperts = async () => {
+    try {
+      const res = await axios.get("/customers/experts?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      console.log(res.data);
+      // setTopExpertList(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAllExperts();
+  });
   return (
     <div className="mt-[40px] md:mt-[100px] relative w-full h-auto py-[5vw] sm:py-[3vw] px-[3vw] xs:px-[6vw] md:px-[10vw] flex flex-col">
       <div className="flex w-full justify-center sm:justify-between">
@@ -112,7 +136,9 @@ const AllExperts = () => {
       </div>
       <div className="mt-[3vw] flex items-center justify-center xs:justify-between gap-[4vw] text-white">
         <div
-          className={`text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-md bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer ${currentPage < 2  && "opacity-80"} `}
+          className={`text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-md bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer ${
+            currentPage < 2 && "opacity-80"
+          } `}
           onClick={() => {
             currentPage > 1 && setCurrentPage(currentPage - 1);
           }}
@@ -127,10 +153,11 @@ const AllExperts = () => {
           setCurrentPage={setCurrentPage}
         />
         <div
-          className={`text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-lg bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer ${currentPage === lastPage && "opacity-80"} `}
+          className={`text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-lg bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer ${
+            currentPage === lastPage && "opacity-80"
+          } `}
           onClick={() => {
-            currentPage < lastPage &&
-              setCurrentPage(currentPage + 1);
+            currentPage < lastPage && setCurrentPage(currentPage + 1);
           }}
         >
           Next
