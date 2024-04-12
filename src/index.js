@@ -51,6 +51,7 @@ import CustomerDashboard, {
   CustomerBookings,
   CustomerRecentMeetngs,
 } from "./components/Customers/CustomerDashboard.jsx";
+import CreateProject from "./components/Experts/CreateProject.jsx";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -163,6 +164,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/createService",
         element: <CreateService />,
+      },
+      {
+        path: "/createProject",
+        element: <CreateProject />,
       },
       {
         path: "/favourites",
