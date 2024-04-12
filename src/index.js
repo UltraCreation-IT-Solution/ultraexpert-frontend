@@ -51,10 +51,11 @@ import CustomerDashboard, {
   CustomerChats,
   CustomerBookings,
   CustomerRecentMeetngs,
-  CustomerTransactionHistory
+  CustomerTransactionHistory,
 } from "./components/Customers/CustomerDashboard.jsx";
 import TestElement from "./TestElement.jsx";
 import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
+import CreateProject from "./components/Experts/CreateProject.jsx";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -169,6 +170,10 @@ const appRouter = createBrowserRouter([
         element: <CreateService />,
       },
       {
+        path: "/createProject",
+        element: <CreateProject />,
+      },
+      {
         path: "/favourites",
         element: <Favourites />,
         children: [
@@ -273,9 +278,9 @@ const appRouter = createBrowserRouter([
         ],
       },
       {
-        path:"createblog",
-        element:<CreateBlog/>
-      }
+        path: "createblog",
+        element: <CreateBlog />,
+      },
     ],
   },
 ]);

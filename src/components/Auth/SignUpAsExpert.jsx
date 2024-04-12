@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
+import { BsUpload, BsX } from "react-icons/bs";
 
 const CHECKOUT_STEPS = [
   { name: "Personal Details" },
+  { name: "General Details" },
   { name: "Education" },
   { name: "Skill Set" },
+  { name: "Achievements" },
   { name: "Experience" },
   { name: "Account Details" },
 ];
@@ -24,13 +27,23 @@ const SignUpAsExpert = () => {
 
   const [personalInfo, setPersonalInfo] = useState({
     gender: "Male",
-    level: "Basic",
-    about_me: "",
-    profession: "",
+    dob: "",
+    marital_status: "Single",
+    profile_img: "xyz.jpg",
+    banner_img: "abc.jpg",
   });
 
   const handlePersonalInfo = async (e) => {
     e.preventDefault();
+    const trimmedPersonalInfo = {
+      ...personalInfo,
+      gender: personalInfo.gender,
+      dob: personalInfo.dob,
+      anniversary_date: personalInfo.anniversary_date,
+      marital_status: personalInfo.marital_status, 
+      profile_img: personalInfo.profile_img, 
+      banner_img: personalInfo.banner_img 
+    };
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -54,14 +67,12 @@ const SignUpAsExpert = () => {
       //   }),
       //   credentials: "include",
       // });
+      console.log(personalInfo);
       const response = await axios.post(
-        "/experts/",
+        "/user_details/",
         {
           action: 1,
-          gender: personalInfo.gender,
-          level: personalInfo.level,
-          about_me: personalInfo.about_me,
-          profession: personalInfo.profession,
+          ...trimmedPersonalInfo
         },
         {
           headers: {
@@ -71,12 +82,60 @@ const SignUpAsExpert = () => {
         }
       );
       const data = response.data;
-      console.log(data);
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
         return;
       }
       console.log(data, personalInfo);
+      setIsComplete(true);
+      setCurrStep((prevStep) => prevStep + 1);
+      setIsComplete(false);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const [generalInfo, setGeneralInfo] = useState({
+    profession: "",
+    about_me: "",
+    level: "Beginner",
+    experience_years: "",
+  });
+
+  const handleGeneralInfo = async (e) => {
+    e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+
+    try {
+      const response = await axios.post(
+        "/experts/",
+        {
+          action: 1,
+          profession: generalInfo.profession,
+          about_me: generalInfo.about_me,
+          level: generalInfo.level,
+          experience_years: generalInfo.experience_years,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data, generalInfo);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -95,6 +154,7 @@ const SignUpAsExpert = () => {
       type: [...prevEduInfo.type, ""],
       institute_name: [...prevEduInfo.institute_name, ""],
       city: [...prevEduInfo.city, ""],
+      country: [...prevEduInfo.country, ""],
       passing_year: [...prevEduInfo.passing_year, ""],
       Devision: [...prevEduInfo.Devision, ""],
     }));
@@ -255,6 +315,84 @@ const SignUpAsExpert = () => {
     }
   };
 
+  const [achInfo, setAchInfo] = useState({
+    name: [],
+    year: [],
+    certificate: [],
+  });
+
+  const [achForms, setAchForms] = useState([{ id: 1 }]);
+
+  const addAchForm = () => {
+    const newId = achForms.length + 1;
+    setAchForms([...achForms, { id: newId }]);
+    setAchInfo((prevAchInfo) => ({
+      ...prevAchInfo,
+      name: [...prevAchInfo.name, ""],
+      year: [...prevAchInfo.year, ""],
+      certificate: [...prevAchInfo.certificate, ""],
+    }));
+  };
+
+  const handleAchForm = async (e) => {
+    e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      // const response = fetch("http://localhost:8000/experts/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     action: 3,
+      //     skill_json: [
+      //       {
+      //         technology_name: skillInfo.technology_name,
+      //         ratings: skillInfo.ratings,
+      //       },
+      //     ],
+      //   }),
+      //   credentials: "include",
+      // });
+      // const json = response.json();
+      const achData = achForms.map((form, index) => ({
+        name: achInfo.name[index],
+        year: achInfo.year[index],
+        certificate: achInfo.certificate[index],
+      }));
+      const response = await axios.post(
+        "/experts/",
+        {
+          action: 6,
+          achievements_json: achData,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data, achInfo);
+      setIsComplete(true);
+      setCurrStep((prevStep) => prevStep + 1);
+      setIsComplete(false);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const [experienceForms, setExperienceForms] = useState([{ id: 1 }]);
 
   const addExperienceForm = () => {
@@ -271,8 +409,8 @@ const SignUpAsExpert = () => {
 
   const [expInfo, setExpInfo] = useState({
     company_name: [],
-    start_date: ["2019-jan-01"],
-    end_date: ["2019-jan-01"],
+    start_date: [],
+    end_date: [],
     designation: [],
   });
 
@@ -412,6 +550,45 @@ const SignUpAsExpert = () => {
     return (currStep / (CHECKOUT_STEPS.length - 1)) * 100;
   };
 
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [selectedBanner, setSelectedBanner] = useState(null);
+
+  const handleProfileChange = (event) => {
+    const file = event.target.files[0]; // Get the first selected file
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setSelectedProfile(reader.result);
+        setPersonalInfo({
+          ...personalInfo,
+          profile_img: [reader.result], // Store the image data in an array
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  const handleBannerChange = (event) => {
+    const file = event.target.files[0]; // Get the first selected file
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setSelectedBanner(reader.result);
+        setPersonalInfo({
+          ...personalInfo,
+          banner_img: [reader.result], // Store the image data in an array
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveProfile = () => {
+    setSelectedProfile(null);
+  };
+  const handleRemoveBanner = () => {
+    setSelectedBanner(null);
+  };
+
   if (!CHECKOUT_STEPS.length) return <></>;
 
   return (
@@ -473,6 +650,48 @@ const SignUpAsExpert = () => {
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
                 <div className="flex justify-around gap-5">
                   <div className="flex flex-col w-full">
+                    <label htmlFor="dob" className="text-base md:text-lg mb-1">
+                      Date of Birth
+                    </label>
+                    <input
+                      type="text"
+                      id="dob"
+                      name="dob"
+                      value={personalInfo.dob}
+                      onChange={(e) =>
+                        setPersonalInfo({
+                          ...personalInfo,
+                          dob: e.target.value,
+                        })
+                      }
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md"
+                      pattern="\d{4}-\d{2}-\d{2}"
+                      placeholder="YYYY-MM-DD"
+                    />
+                  </div>
+                  <div className="flex flex-col w-full">
+                    <label htmlFor="status" className="text-base md:text-lg">
+                      Marital Status
+                    </label>
+                    <select
+                      name="status"
+                      id="status"
+                      value={personalInfo.status}
+                      onChange={(e) =>
+                        setPersonalInfo({
+                          ...personalInfo,
+                          status: e.target.value,
+                        })
+                      }
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                    >
+                      <option value="single">Single</option>
+                      <option value="married">Married</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="flex justify-around gap-5">
+                  <div className="flex flex-col w-full">
                     <label
                       htmlFor="gender"
                       className="text-base md:text-lg mb-1"
@@ -498,6 +717,130 @@ const SignUpAsExpert = () => {
                   </div>
                   <div className="flex flex-col w-full">
                     <label
+                      htmlFor="annDate"
+                      className="text-base md:text-lg mb-1"
+                    >
+                      Anniversary Date
+                    </label>
+                    <input
+                      type="text"
+                      id="annDate"
+                      name="annDate"
+                      value={personalInfo.anniversary_date}
+                      onChange={(e) =>
+                        setPersonalInfo({
+                          ...personalInfo,
+                          anniversary_date: e.target.value,
+                        })
+                      }
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md"
+                      pattern="\d{4}-\d{2}-\d{2}"
+                      placeholder="YYYY-MM-DD"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-around gap-5">
+                  <div className="flex flex-col w-full">
+                    <label htmlFor="profile" className="text-lg mb-1">
+                      Profile Photo
+                    </label>
+                    <div
+                      onClick={() =>
+                        document.querySelector("#profileSelector").click()
+                      }
+                      className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
+                    >
+                      {selectedProfile ? (
+                        <div className="relative">
+                          <img
+                            src={selectedProfile}
+                            alt="Selected Profile"
+                            className="w-28 h-28 object-cover rounded-lg"
+                          />
+                          <div
+                            onClick={handleRemoveProfile}
+                            className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
+                          >
+                            <BsX />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center">
+                          <BsUpload size={20} />
+                          <div className="text-sm text-[#1475cf] mt-2">
+                            Click here to upload a profile photo
+                          </div>
+                        </div>
+                      )}
+                      <input
+                        type="file"
+                        id="profileSelector"
+                        accept="image/*"
+                        onChange={handleProfileChange}
+                        className="hidden"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col w-full">
+                    <label htmlFor="banner" className="text-lg mb-1">
+                      Banner Photo
+                    </label>
+                    <div
+                      onClick={() =>
+                        document.querySelector("#bannerSelector").click()
+                      }
+                      className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
+                    >
+                      {selectedProfile ? (
+                        <div className="relative">
+                          <img
+                            src={selectedBanner}
+                            alt="Selected Banner"
+                            className="w-28 h-28 object-cover rounded-lg"
+                          />
+                          <div
+                            onClick={handleRemoveBanner}
+                            className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
+                          >
+                            <BsX />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center">
+                          <BsUpload size={20} />
+                          <div className="text-sm text-[#1475cf] mt-2">
+                            Click here to upload a banner photo
+                          </div>
+                        </div>
+                      )}
+                      <input
+                        type="file"
+                        id="bannerSelector"
+                        accept="image/*"
+                        name="bannerSelector"
+                        onChange={handleBannerChange}
+                        className="hidden"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-center md:justify-end md:mx-20 mb-8">
+                <button
+                  type="submit"
+                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          )}
+          {currStep === 1 && (
+            <form className="flex flex-col" onSubmit={handleGeneralInfo}>
+              <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] my-5">
+                <div className="flex justify-around gap-5">
+                  <div className="flex flex-col w-full">
+                    <label
                       htmlFor="level"
                       className="text-base md:text-lg mb-1"
                     >
@@ -506,20 +849,44 @@ const SignUpAsExpert = () => {
                     <select
                       name="level"
                       id="level"
-                      value={personalInfo.level}
+                      value={generalInfo.level}
                       onChange={(e) =>
-                        setPersonalInfo({
-                          ...personalInfo,
+                        setGeneralInfo({
+                          ...generalInfo,
                           level: e.target.value,
                         })
                       }
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                     >
-                      <option value="basic">Basic</option>
+                      <option value="basic">Beginner</option>
                       <option value="inter">Intermediate</option>
                       <option value="amateur">Amateur</option>
                       <option value="pro">Professional</option>
                     </select>
+                  </div>
+                  <div className="flex flex-col w-full">
+                    <label
+                      htmlFor="years"
+                      className="text-base md:text-lg mb-1 flex gap-1"
+                    >
+                      Experience{" "}
+                      <div className="text-xs my-auto">(in years)</div>
+                    </label>
+                    <input
+                      type="number"
+                      id="years"
+                      name="years"
+                      required
+                      value={generalInfo.experience_years}
+                      onChange={(e) =>
+                        setGeneralInfo({
+                          ...generalInfo,
+                          experience_years: e.target.value,
+                        })
+                      }
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                      placeholder="years"
+                    />
                   </div>
                 </div>
                 <label
@@ -533,10 +900,10 @@ const SignUpAsExpert = () => {
                   id="profession"
                   name="profession"
                   required
-                  value={personalInfo.profession}
+                  value={generalInfo.profession}
                   onChange={(e) =>
-                    setPersonalInfo({
-                      ...personalInfo,
+                    setGeneralInfo({
+                      ...generalInfo,
                       profession: e.target.value,
                     })
                   }
@@ -552,8 +919,8 @@ const SignUpAsExpert = () => {
                   id="about"
                   name="about"
                   onChange={(e) =>
-                    setPersonalInfo({
-                      ...personalInfo,
+                    setGeneralInfo({
+                      ...generalInfo,
                       about_me: e.target.value,
                     })
                   }
@@ -571,7 +938,7 @@ const SignUpAsExpert = () => {
               </div>
             </form>
           )}
-          {currStep === 1 && (
+          {currStep === 2 && (
             <form onSubmit={handleEducationForm} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
                 {educationForms.map((form, ind) => (
@@ -1059,21 +1426,21 @@ const SignUpAsExpert = () => {
                       </div>
                       <div className="flex flex-col w-full">
                         <label
-                          htmlFor={`division${form.id}`}
+                          htmlFor={`devision${form.id}`}
                           className="text-base md:text-lg mb-1"
                         >
-                          Division
+                          Devision
                         </label>
                         <select
-                          name={`division${form.id}`}
-                          id={`division${form.id}`}
+                          name={`devision${form.id}`}
+                          id={`devision${form.id}`}
                           value={eduInfo.Devision[ind]}
                           onChange={(e) => {
-                            const updatedDivisionNames = [...eduInfo.Devision];
-                            updatedDivisionNames[ind] = e.target.value;
+                            const updatedDevisionNames = [...eduInfo.Devision];
+                            updatedDevisionNames[ind] = e.target.value;
                             setEduInfo({
                               ...eduInfo,
-                              Devision: updatedDivisionNames,
+                              Devision: updatedDevisionNames,
                             });
                           }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
@@ -1088,15 +1455,7 @@ const SignUpAsExpert = () => {
                   </>
                 ))}
               </div>
-              <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
-                <button
-                  onClick={() => {
-                    setCurrStep((prev) => prev - 1);
-                  }}
-                  className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-gray-500 rounded-md shadow-md"
-                >
-                  Previous
-                </button>
+              <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
@@ -1106,7 +1465,7 @@ const SignUpAsExpert = () => {
               </div>
             </form>
           )}
-          {currStep === 2 && (
+          {currStep === 3 && (
             <form onSubmit={handleSkillForm} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
                 {skillForms.map((form, ind) => (
@@ -1170,15 +1529,7 @@ const SignUpAsExpert = () => {
                   </>
                 ))}
               </div>
-              <div className="flex justify-center md:justify-end gap-4 md:mx-20 mb-8">
-                <button
-                  onClick={() => {
-                    setCurrStep((prev) => prev - 1);
-                  }}
-                  className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-gray-500 rounded-md shadow-md"
-                >
-                  Previous
-                </button>
+              <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
@@ -1188,7 +1539,102 @@ const SignUpAsExpert = () => {
               </div>
             </form>
           )}
-          {currStep === 3 && (
+          {currStep === 4 && (
+            <form onSubmit={handleAchForm} className="flex flex-col">
+              <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+                {achForms.map((form, ind) => (
+                  <>
+                    <div key={form.id} className="flex justify-between">
+                      <p className="font-bold text-lg">Achievement {ind + 1}</p>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          addAchForm();
+                        }}
+                        className="underline cursor-pointer text-gray-400 bg-inherit"
+                      >
+                        + Add Achievement
+                      </button>
+                    </div>
+                    <label
+                      htmlFor={`name${form.id}`}
+                      className="text-base md:text-lg mb-1"
+                    >
+                      Achievement Name
+                    </label>
+                    <input
+                      type="text"
+                      id={`name${form.id}`}
+                      name={`name${form.id}`}
+                      value={achInfo.name[ind]}
+                      onChange={(e) => {
+                        const updatedTechNames = [...achInfo.name];
+                        updatedTechNames[ind] = e.target.value;
+                        setAchInfo({
+                          ...achInfo,
+                          name: updatedTechNames,
+                        });
+                      }}
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                      placeholder="Achievement Name"
+                    />
+                    <label
+                      htmlFor={`year${form.id}`}
+                      className="text-base md:text-lg mb-1"
+                    >
+                      Achievement Year
+                    </label>
+                    <input
+                      type="number"
+                      id={`year${form.id}`}
+                      name={`year${form.id}`}
+                      value={achInfo.year[ind]}
+                      onChange={(e) => {
+                        const updatedRatings = [...achInfo.year];
+                        updatedRatings[ind] = e.target.value;
+                        setAchInfo({
+                          ...achInfo,
+                          year: updatedRatings,
+                        });
+                      }}
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-full"
+                      placeholder="YYYY"
+                    />
+                    <label
+                      htmlFor={`certificate${form.id}`}
+                      className="text-lg mb-1"
+                    >
+                      Certificate
+                    </label>
+                    <input
+                      type="file"
+                      id={`certificate${form.id}`}
+                      name={`certificate${form.id}`}
+                      value={achInfo.certificate[ind]}
+                      onChange={(e) => {
+                        const updatedCertificates = [...achInfo.certificate];
+                        updatedCertificates[ind] = e.target.value;
+                        setAchInfo({
+                          ...achInfo,
+                          certificate: updatedCertificates,
+                        });
+                      }}
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-full"
+                    />
+                  </>
+                ))}
+              </div>
+              <div className="flex justify-center md:justify-end md:mx-20 mb-8">
+                <button
+                  type="submit"
+                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                >
+                  Next
+                </button>
+              </div>
+            </form>
+          )}
+          {currStep === 5 && (
             <form onSubmit={handleExperienceForm} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
                 {experienceForms.map((form, ind) => (
@@ -1242,6 +1688,7 @@ const SignUpAsExpert = () => {
                           value={expInfo.start_date[ind]}
                           pattern="\d{4}-\d{2}-\d{2}"
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                          placeholder="YYYY-MM-DD"
                           onChange={(e) => {
                             const updatedStartDate = [...expInfo.start_date];
                             updatedStartDate[ind] = e.target.value;
@@ -1266,6 +1713,7 @@ const SignUpAsExpert = () => {
                           value={expInfo.end_date[ind]}
                           pattern="\d{4}-\d{2}-\d{2}"
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                          placeholder="YYYY-MM-DD"
                           onChange={(e) => {
                             const updatedEndDate = [...expInfo.end_date];
                             updatedEndDate[ind] = e.target.value;
@@ -1302,15 +1750,7 @@ const SignUpAsExpert = () => {
                   </>
                 ))}
               </div>
-              <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
-                <button
-                  onClick={() => {
-                    setCurrStep((prev) => prev - 1);
-                  }}
-                  className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-gray-500 rounded-md shadow-md"
-                >
-                  Previous
-                </button>
+              <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
@@ -1320,7 +1760,7 @@ const SignUpAsExpert = () => {
               </div>
             </form>
           )}
-          {currStep === 4 && (
+          {currStep === 6 && (
             <form onSubmit={handleSubmit} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] my-5">
                 <div className="flex flex-col w-full">
@@ -1395,15 +1835,7 @@ const SignUpAsExpert = () => {
                   />
                 </div>
               </div>
-              <div className="flex justify-center md:justify-end gap-4 md:mx-20 mb-8">
-                <button
-                  onClick={() => {
-                    setCurrStep((prev) => prev - 1);
-                  }}
-                  className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-gray-500 rounded-md shadow-md"
-                >
-                  Previous
-                </button>
+              <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
                   className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md"

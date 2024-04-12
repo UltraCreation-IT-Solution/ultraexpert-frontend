@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
+import { BsUpload, BsX } from "react-icons/bs";
 
 const EditProfileCustomer = () => {
   const navigate = useNavigate();
@@ -29,6 +30,10 @@ const EditProfileCustomer = () => {
     first_name: "",
     last_name: "",
     mobile_number: "",
+    dob: "",
+    marital_status: "Single",
+    profile_img: "",
+    gender: "Male",
   });
 
   const handleSubmit1 = async (e) => {
@@ -43,12 +48,16 @@ const EditProfileCustomer = () => {
     console.log(jsonData);
     try {
       const response = await axios.post(
-        "/user_details/?action=1",
+        "/user_details/",
         {
           action: 1,
           first_name: generalInfo.first_name,
           last_name: generalInfo.last_name,
           mobile_number: generalInfo.mobile_number,
+          dob: generalInfo.dob,
+          marital_status: generalInfo.marital_status,
+          profile_img: selectedProfile,
+          gender: generalInfo.gender,
         },
         {
           headers: {
@@ -71,11 +80,8 @@ const EditProfileCustomer = () => {
   };
 
   const [personalInfo, setPersonalInfo] = useState({
-    gender: "Male",
-    marital_status: "Single",
     profession: "",
     about_me: "",
-    dob: "2002-01-01",
   });
 
   const handleSubmit2 = async (e) => {
@@ -108,11 +114,8 @@ const EditProfileCustomer = () => {
         "/customers/",
         {
           action: 3,
-          marital_status: personalInfo.marital_status,
           profession: personalInfo.profession,
           about_me: personalInfo.about_me,
-          dob: personalInfo.dob,
-          gender: personalInfo.gender,
         },
         {
           headers: {
@@ -181,8 +184,39 @@ const EditProfileCustomer = () => {
     }
   };
 
-  const  handleRemove = (skill) => {
+  const handleRemove = (skill) => {
     setSelectedSkill(selectedSkill.filter((s) => s !== skill));
+  };
+
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [selectedBanner, setSelectedBanner] = useState(null);
+
+  const handleProfileChange = (event) => {
+    const file = event.target.files[0]; // Get the first selected file
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setSelectedProfile(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  const handleBannerChange = (event) => {
+    const file = event.target.files[0]; // Get the first selected file
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setSelectedBanner(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveProfile = () => {
+    setSelectedProfile(null);
+  };
+  const handleRemoveBanner = () => {
+    setSelectedBanner(null);
   };
 
   return (
@@ -197,7 +231,7 @@ const EditProfileCustomer = () => {
                 : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
             }`}
           >
-            General Details
+            Personal Details
           </button>
           <button
             onClick={() => setCurrStep(1)}
@@ -207,7 +241,7 @@ const EditProfileCustomer = () => {
                 : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
             }`}
           >
-            Personal Details
+            General Details
           </button>
           <button
             onClick={() => setCurrStep(2)}
@@ -253,24 +287,131 @@ const EditProfileCustomer = () => {
                 className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                 placeholder="Enter your last name"
               />
-              <label htmlFor="mobileNumber" className="text-lg mb-1">
-                Mobile Number
+              <div className="flex gap-4 justify-around">
+                <div className="flex flex-col w-full">
+                  <label htmlFor="mobileNumber" className="text-lg mb-1">
+                    Mobile Number
+                  </label>
+                  <input
+                    required
+                    type="number"
+                    id="mobileNumber"
+                    name="mobileNumber"
+                    value={generalInfo.mobile_number}
+                    onChange={(e) =>
+                      setGeneralInfo({
+                        ...generalInfo,
+                        mobile_number: e.target.value,
+                      })
+                    }
+                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                    placeholder="Enter your mobile number"
+                  />
+                </div>
+                <div className="flex flex-col w-full">
+                  <label htmlFor="gender" className="text-lg mb-1">
+                    Gender
+                  </label>
+                  <select
+                    name="gender"
+                    id="gender"
+                    value={generalInfo.gender}
+                    onChange={(e) =>
+                      setGeneralInfo({
+                        ...generalInfo,
+                        gender: e.target.value,
+                      })
+                    }
+                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                  >
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex justify-around gap-5">
+                <div className="flex flex-col w-full">
+                  <label htmlFor="dob" className="text-lg mb-1">
+                    Date of Birth
+                  </label>
+                  <input
+                    name="dob"
+                    id="dob"
+                    value={generalInfo.dob}
+                    type="text"
+                    pattern="\d{4}-\d{2}-\d{2}"
+                    placeholder="YYYY-MM-DD"
+                    onChange={(e) => {
+                      setPersonalInfo({
+                        ...generalInfo,
+                        dob: e.target.value,
+                      });
+                    }}
+                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                  />
+                </div>
+                <div className="flex flex-col w-full">
+                  <label htmlFor="status" className="text-lg mb-1">
+                    Marital Status
+                  </label>
+                  <select
+                    name="status"
+                    id="status"
+                    value={generalInfo.marital_status}
+                    onChange={(e) => {
+                      setPersonalInfo({
+                        ...generalInfo,
+                        marital_status: e.target.value,
+                      });
+                    }}
+                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                  >
+                    <option value="basic">Single</option>
+                    <option value="inter">Married</option>
+                  </select>
+                </div>
+              </div>
+              <label htmlFor="profile" className="text-lg mb-1">
+                Profile Photo
               </label>
-              <input
-                required
-                type="number"
-                id="mobileNumber"
-                name="mobileNumber"
-                value={generalInfo.mobile_number}
-                onChange={(e) =>
-                  setGeneralInfo({
-                    ...generalInfo,
-                    mobile_number: e.target.value,
-                  })
+              <div
+                onClick={() =>
+                  document.querySelector("#profileSelector").click()
                 }
-                className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                placeholder="Enter your mobile number"
-              />
+                className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
+              >
+                {selectedProfile ? (
+                  <div className="relative">
+                    <img
+                      src={selectedProfile}
+                      alt="Selected Profile"
+                      className="w-28 h-28 object-cover rounded-lg"
+                    />
+                    <div
+                      onClick={handleRemoveProfile}
+                      className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
+                    >
+                      <BsX />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center">
+                    <BsUpload size={20} />
+                    <div className="text-sm text-[#1475cf] mt-2">
+                      Click here to upload a profile photo
+                    </div>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  id="profileSelector"
+                  accept="image/*"
+                  onChange={handleProfileChange}
+                  className="hidden"
+                />
+              </div>
             </div>
             <div className="flex justify-end mx-20 mb-8">
               <button
@@ -285,87 +426,25 @@ const EditProfileCustomer = () => {
         {currStep === 1 && (
           <form onSubmit={handleSubmit2} className="grow flex flex-col h-full">
             <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
-              <div className="flex justify-around gap-5">
-                <div className="flex flex-col w-full">
-                  <label htmlFor="gender" className="text-lg mb-1">
-                    Gender
-                  </label>
-                  <select
-                    name="gender"
-                    id="gender"
-                    value={personalInfo.gender}
-                    onChange={(e) =>
-                      setPersonalInfo({
-                        ...personalInfo,
-                        gender: e.target.value,
-                      })
-                    }
-                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  >
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-                <div className="flex flex-col w-full">
-                  <label htmlFor="status" className="text-lg mb-1">
-                    Marital Status
-                  </label>
-                  <select
-                    name="status"
-                    id="status"
-                    value={personalInfo.status}
-                    onChange={(e) =>
-                      setPersonalInfo({
-                        ...personalInfo,
-                        status: e.target.value,
-                      })
-                    }
-                    className="border border-solid border-gray-300 px-2 py-2 rounded-s-md w-full mb-4"
-                  >
-                    <option value="single">Single</option>
-                    <option value="married">Married</option>
-                  </select>
-                </div>
-              </div>
-              <div className="flex justify-around gap-5">
-                <div className="flex flex-col w-full">
-                  <label htmlFor="profession" className="text-lg mb-1">
-                    Profession
-                  </label>
-                  <input
-                    required
-                    type="text"
-                    id="profession"
-                    name="profession"
-                    value={personalInfo.profession}
-                    onChange={(e) =>
-                      setPersonalInfo({
-                        ...personalInfo,
-                        profession: e.target.value,
-                      })
-                    }
-                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                    placeholder="Profession"
-                  />
-                </div>
-                <div className="flex flex-col w-full">
-                  <label htmlFor="dob" className="text-base md:text-lg mb-1">
-                    Date of Birth 
-                  </label>
-                  <input
-                    type="text"
-                    id="dob"
-                    name="dob"
-                    pattern="\d{4}-\d{2}-\d{2}"
-                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                    value={personalInfo.dob}
-                    onChange={(e) => {
-                      setPersonalInfo({ ...personalInfo, dob: e.target.value });
-                    }}
-                  />
-                </div>
-              </div>
+              <label htmlFor="profession" className="text-lg mb-1">
+                Profession
+              </label>
+              <input
+                required
+                type="text"
+                id="profession"
+                name="profession"
+                value={personalInfo.profession}
+                onChange={(e) =>
+                  setPersonalInfo({
+                    ...personalInfo,
+                    profession: e.target.value,
+                  })
+                }
+                className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                placeholder="Profession"
+              />
+
               <label htmlFor="about" className="text-lg mb-1">
                 About Me
               </label>
@@ -407,7 +486,12 @@ const EditProfileCustomer = () => {
                           className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black"
                         >
                           {skill}
-                          <div className="cursor-pointer" onClick={() => handleRemove(skill)}>x</div>
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => handleRemove(skill)}
+                          >
+                            x
+                          </div>
                         </div>
                       );
                     })
