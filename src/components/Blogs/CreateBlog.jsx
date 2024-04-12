@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { BsUpload } from "react-icons/bs";
+import { BsX } from "react-icons/bs";
 
 const CreateBlog = () => {
   const [value, setValue] = useState("");
+  console.log(value)
   const modules = {
     toolbar: [
       [
         { header: "1" },
         { header: "2" },
-        { header: "3" },
-        { header: "4" },
-        { header: "5" },
-        { header: "6" },
+        
         { font: [] },
       ],
-      [{ size: ["1", "2", "3", 4, 5, 6, 7, 8, 9, 10] }],
+      [{ size: [] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       [
         { list: "ordered" },
@@ -36,7 +36,6 @@ const CreateBlog = () => {
       ],
     ],
   };
-  console.log(modules);
   const formats = [
     "header",
     "font",
@@ -61,15 +60,32 @@ const CreateBlog = () => {
     "code",
     "formula",
   ];
-  const handleImageInserted = (imageElement) => {
-    // Adjust image size here if needed
-    imageElement.setAttribute("width", "200"); // Set width to 200 pixels
-    imageElement.setAttribute("height", "auto"); // Maintain aspect ratio
+
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+  
+      reader.onload = () => {
+        setSelectedFile(reader.result);
+      };
+  
+      reader.readAsDataURL(file);
+    } else {
+      // Handle the case where the user cancels the file selection
+      setSelectedFile(null);
+    }
   };
+  const removeImage = () => {
+    setSelectedFile(null);
+  };
+
 
   return (
     <div className="mt-[100px] mx-[7vw] ">
-      <div className="flex items-start gap-10 ">
+      <div className="md:flex items-start gap-10 ">
         <div className="w-full">
           <div>
             <div className="text-lg font-bold">Blog Title</div>
@@ -90,14 +106,49 @@ const CreateBlog = () => {
             />
           </div>
           <div className="flex items-center mt-5 gap-2">
-            <input type="checkbox" className="h-[18px] w-[18px]"/>
+            <input type="checkbox" className="h-[18px] w-[18px]" />
             <div>Allow Comments</div>
-
           </div>
         </div>
-        <div className="w-[400px] shrink-0 ">
-          <input type="file" alt=""  className="h-[300px] w-full border border-solid border-slate-300"/>
-          <div className="text-gray-500 text-sm mt-1 text-center">Upload your blog image here</div>
+
+        <div className="w-full my-5 md:my-0 md:w-[300px] lg:w-[400px] shrink-0">
+          <div
+            onClick={() => document.querySelector("#imageSelector").click()}
+            className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
+          >
+            <input
+              type="file"
+              id="imageSelector"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            {selectedFile ? (
+              <div className="relative">
+                <img
+                  src={selectedFile}
+                  alt="Selected preview"
+                  className="w-28 h-28 object-cover shrink-0 brightness-95 "
+                />
+                <div
+                  onClick={removeImage}
+                  className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
+                >
+                  <BsX className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full "/>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center">
+                <BsUpload size={20} />
+                <div className="text-sm text-[#1475cf] mt-2 text-center text-balance" >
+                  Click here to attach or upload an image
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="text-gray-500 text-sm mt-1 text-center">
+            Upload your blog image here
+          </div>
         </div>
       </div>
       <ReactQuill
@@ -106,9 +157,8 @@ const CreateBlog = () => {
         onChange={setValue}
         modules={modules}
         formats={formats}
-        onInsertImage={handleImageInserted}
         placeholder="Write something..."
-        className="my-10"
+        className="my-10 min-h-[400px] "
       />
     </div>
   );
