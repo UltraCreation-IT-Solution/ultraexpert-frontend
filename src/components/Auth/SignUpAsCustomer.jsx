@@ -97,10 +97,16 @@ const SignUpAsCustomer = () => {
     });
     console.log(jsonData);
     try {
-      const response = await axios.post("/user_details/", {
+      const response = await axios.post("/customers/", {
         action: 1,
         about_me: generalInfo.about_me,
         profession: generalInfo.profession,
+      },{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+          // "X-CSRF-TOKEN": ${jsonData.csrf_token},
+        },
       });
       const data = response.data;
       if (!data) {
@@ -207,7 +213,6 @@ const SignUpAsCustomer = () => {
   };
 
   const [selectedProfile, setSelectedProfile] = useState(null);
-  const [selectedBanner, setSelectedBanner] = useState(null);
 
   const handleProfileChange = (event) => {
     const file = event.target.files[0]; // Get the first selected file
@@ -219,22 +224,9 @@ const SignUpAsCustomer = () => {
       reader.readAsDataURL(file);
     }
   };
-  const handleBannerChange = (event) => {
-    const file = event.target.files[0]; // Get the first selected file
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setSelectedBanner(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleRemoveProfile = () => {
     setSelectedProfile(null);
-  };
-  const handleRemoveBanner = () => {
-    setSelectedBanner(null);
   };
 
   if (!CHECKOUT_STEPS.length) return <></>;
@@ -320,26 +312,6 @@ const SignUpAsCustomer = () => {
                       <option value="married">Married</option>
                     </select>
                   </div>
-                  <div className="w-full flex flex-col">
-                    <label htmlFor="dob" className="text-base md:text-lg mb-1">
-                      Date of Birth
-                    </label>
-                    <input
-                      type="text"
-                      id="dob"
-                      name="dob"
-                      pattern="\d{4}-\d{2}-\d{2}"
-                      placeholder="YYYY-MM-DD"
-                      value={personalInfo.dob}
-                      onChange={(e) =>
-                        setPersonalInfo({
-                          ...personalInfo,
-                          dob: e.target.value,
-                        })
-                      }
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
-                    />
-                  </div>
                 </div>
 
                 <label htmlFor="gender" className="text-base md:text-lg mb-1">
@@ -396,7 +368,6 @@ const SignUpAsCustomer = () => {
                   <input
                     type="file"
                     id="profileSelector"
-                    accept="image/*"
                     onChange={handleProfileChange}
                     className="hidden"
                   />
@@ -428,7 +399,7 @@ const SignUpAsCustomer = () => {
                   name="profession"
                   value={generalInfo.profession}
                   onChange={(e) =>
-                    setPersonalInfo({
+                    setGeneralInfo({
                       ...generalInfo,
                       profession: e.target.value,
                     })
@@ -444,7 +415,7 @@ const SignUpAsCustomer = () => {
                   id="about"
                   name="about"
                   onChange={(e) => {
-                    setPersonalInfo({
+                    setGeneralInfo({
                       ...generalInfo,
                       about_me: e.target.value,
                     });
