@@ -69,6 +69,7 @@ const LoginWithOTP = () => {
           window.alert("Invalid OTP");
           return;
         }
+        setStep(2);
       } catch (error) {
         console.log(error.message);
       }
@@ -94,7 +95,7 @@ const LoginWithOTP = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            withCredentials: true,
+            // withCredentials: true,
           }
         );
         const data = response.data;
@@ -104,6 +105,8 @@ const LoginWithOTP = () => {
           window.alert("Invalid OTP");
           return;
         }
+        document.cookie = `access_token=${response.data.access_token};  SameSite=Lax;`;
+        document.cookie = `refresh_token=${response.data.refresh_token};  SameSite=Lax;`;
         alert("Login Successfull!");
         navigate("/");
         // console.log(data);

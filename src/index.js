@@ -21,6 +21,7 @@ import Favourites, {
 import Expert from "./components/Experts/Expert";
 import Service from "./components/Services/Service";
 import Blog from "./components/Blogs/Blogs/Blog";
+import CreateBlog from "./components/Blogs/CreateBlog.jsx";
 import ExpertProfile from "./components/Experts/ExpertProfile";
 import ServiceDescription from "./components/Experts/ServiceDescription";
 import ServiceBooking from "./components/Experts/ServiceBooking";
@@ -50,7 +51,11 @@ import CustomerDashboard, {
   CustomerChats,
   CustomerBookings,
   CustomerRecentMeetngs,
+  CustomerTransactionHistory,
 } from "./components/Customers/CustomerDashboard.jsx";
+import TestElement from "./TestElement.jsx";
+import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
+import CreateProject from "./components/Experts/CreateProject.jsx";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -165,6 +170,10 @@ const appRouter = createBrowserRouter([
         element: <CreateService />,
       },
       {
+        path: "/createProject",
+        element: <CreateProject />,
+      },
+      {
         path: "/favourites",
         element: <Favourites />,
         children: [
@@ -227,6 +236,14 @@ const appRouter = createBrowserRouter([
         element: <About />,
       },
       {
+        path: "/testelement",
+        element: <TestElement />,
+      },
+      {
+        path: "/firebaseuploadtest",
+        element: <FirebaseImageUpload />,
+      },
+      {
         path: "/test",
         element: <Test />,
       },
@@ -254,7 +271,15 @@ const appRouter = createBrowserRouter([
             path: "recentmeetings",
             element: <CustomerRecentMeetngs />,
           },
+          {
+            path: "transactionhistory",
+            element: <CustomerTransactionHistory />,
+          },
         ],
+      },
+      {
+        path: "createblog",
+        element: <CreateBlog />,
       },
     ],
   },
