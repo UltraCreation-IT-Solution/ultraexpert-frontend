@@ -21,6 +21,7 @@ import Favourites, {
 import Expert from "./components/Experts/Expert";
 import Service from "./components/Services/Service";
 import Blog from "./components/Blogs/Blogs/Blog";
+import CreateBlog from "./components/Blogs/CreateBlog.jsx";
 import ExpertProfile from "./components/Experts/ExpertProfile";
 import ServiceDescription from "./components/Experts/ServiceDescription";
 import ServiceBooking from "./components/Experts/ServiceBooking";
@@ -34,9 +35,9 @@ import ExpertDashboard, {
   Chats,
   Dashboard,
   Leaderboard,
-  MyBookings
+  MyBookings,
 } from "./components/Experts/ExpertDashboard";
-import About from "./components/About.jsx";
+import About from "./components/Other_Pages/About.jsx";
 import Update from "./components/Experts/EditDashboardProfile";
 import SignUpAs from "./components/Auth/SignUpAs";
 import SignUpAsExpert from "./components/Auth/SignUpAsExpert";
@@ -45,7 +46,13 @@ import ForgotPassword from "./components/Auth/ForgotPassword";
 import EditProfileCustomer from "./components/Auth/EditProfileCustomer";
 import EditProfileExpert from "./components/Auth/EditProfileExpert";
 import CreateService from "./components/Experts/CreateService";
-import CustomerDashboard,{CustomerProfile, CustomerChats, CustomerBookings, CustomerRecentMeetngs} from "./components/CustomerDashboard.jsx";
+import CustomerDashboard, {
+  CustomerProfile,
+  CustomerChats,
+  CustomerBookings,
+  CustomerRecentMeetngs,
+  CustomerTransactionHistory
+} from "./components/Customers/CustomerDashboard.jsx";
 
 const Layout = () => {
   const action = useNavigationType();
@@ -212,14 +219,14 @@ const appRouter = createBrowserRouter([
             element: <Leaderboard />,
           },
           {
-            path:"mybookings",
-            element:<MyBookings/>
-          }
+            path: "mybookings",
+            element: <MyBookings />,
+          },
         ],
       },
       {
-        path:"/about",
-        element:<About/>,
+        path: "/about",
+        element: <About />,
       },
       {
         path: "/test",
@@ -230,26 +237,34 @@ const appRouter = createBrowserRouter([
         element: <Update />,
       },
       {
-        path:"customerdashboard",
-        element:<CustomerDashboard/>,
-        children:[
+        path: "customerdashboard",
+        element: <CustomerDashboard />,
+        children: [
           {
-            path:"",
-            element:<CustomerProfile/>
+            path: "",
+            element: <CustomerProfile />,
           },
           {
-            path:"chats",
-            element:<CustomerChats/>
+            path: "chats",
+            element: <CustomerChats />,
           },
           {
-            path:"mybookings",
-            element:<CustomerBookings/>
+            path: "mybookings",
+            element: <CustomerBookings />,
           },
           {
-            path:"recentmeetings",
-            element:<CustomerRecentMeetngs/>
+            path: "recentmeetings",
+            element: <CustomerRecentMeetngs />,
           },
-        ]
+          {
+            path: "transactionhistory",
+            element: <CustomerTransactionHistory />,
+          },
+        ],
+      },
+      {
+        path:"createblog",
+        element:<CreateBlog/>
       }
     ],
   },

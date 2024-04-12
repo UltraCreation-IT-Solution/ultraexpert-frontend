@@ -105,7 +105,7 @@ export const TopExperts = () => {
             activeNo === 0
               ? "activeExpert"
               : "w-full sm:w-1/2 h-[36vh] md:h-[56vh] lg:h-[65vh]"
-          } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D')] bg-center  rounded`}
+          } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D')] bg-center bg-cover bg-no-repeat rounded`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[60%] ">
             <h2>Web Developer</h2>
@@ -157,7 +157,7 @@ export const TopExperts = () => {
             activeNo === 1
               ? "activeExpert"
               : "w-full sm:w-1/2 h-[36vh] md:h-[56vh] lg:h-[65vh]"
-          } expertDiv bg-[url('https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center rounded`}
+          } expertDiv bg-[url('https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D')] bg-center bg-cover bg-no-repeat rounded`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
@@ -209,7 +209,7 @@ export const TopExperts = () => {
             activeNo === 2
               ? "activeExpert"
               : "w-full sm:w-1/2 h-[36vh] md:h-[56vh] lg:h-[65vh]"
-          } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww')] bg-center rounded`}
+          } expertDiv relative flex flex-col gap-4  items-start bg-[url('https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww')] bg-center bg-cover bg-no-repeat rounded`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
@@ -261,7 +261,7 @@ export const TopExperts = () => {
             activeNo === 3
               ? "activeExpert"
               : "w-full sm:w-1/2 h-[36vh] md:h-[56vh] lg:h-[65vh]"
-          } expertDiv rounded relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-center bg-cover hidden md:flex`}
+          } expertDiv rounded relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-center bg-cover bg-no-repeat hidden md:flex`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>
@@ -294,7 +294,7 @@ export const TopExperts = () => {
             activeNo === 4
               ? "activeExpert"
               : "w-full sm:w-1/2 h-[36vh] md:h-[56vh] lg:h-[65vh] "
-          } expertDiv rounded relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D')] bg-center bg-cover hidden md:flex`}
+          } expertDiv rounded relative  flex-col gap-4 items-start bg-[url('https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D')] bg-center bg-cover bg-no-repeat hidden md:flex`}
         >
           <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[65%] ">
             <h2>Web Developer</h2>

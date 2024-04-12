@@ -22,6 +22,7 @@ import {
   expertDetailsObj,
   ProjectsCarousel,
   BlogCard,
+  BlogCardHorizontal,
   ShowSchedule,
 } from "../../constant";
 
@@ -51,13 +52,13 @@ export const ExpertSummary = () => {
                       ) : (
                         <>
                           <div>
-                            {item?.endMonth}, {item?.endYear}
+                            {item?.endDate}
                           </div>
                           <div className="block md:hidden"> - </div>
                         </>
                       )}
                       <div>
-                        {item?.startMonth}, {item?.startYear}
+                        {item?.startDate}
                       </div>
                     </div>
                     {/* 2nd portion */}
@@ -79,7 +80,7 @@ export const ExpertSummary = () => {
           </div>
         </>
       )}
-      <div className="text-xl md:text-2xl font-semibold font-montserrat">
+      <div className="mb-5 text-xl md:text-2xl font-semibold font-montserrat">
         My projects
       </div>
       <ProjectsCarousel />
@@ -348,7 +349,7 @@ export const AboutExpert = () => {
           <div className="relative pb-20">
             <img
               className="h-32 md:h-40 w-full object-cover rounded-md p-1"
-              src="https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src={expertDetailsObj?.personalDetails?.banner}
               alt=""
             />
             <img
@@ -361,10 +362,10 @@ export const AboutExpert = () => {
           <div className="ml-5 md:ml-10">
             <div className="flex items-center justify-between mr-1">
               <div className="text-2xl md:text-3xl font-semibold">
-                {expertDetailsObj?.personalDetails?.name}
+                {expertDetailsObj?.personalDetails?.firstName} {expertDetailsObj?.personalDetails?.lastName}
               </div>
               <div className="hidden md:flex gap-2">
-                <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer">
+                <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white btnBlack rounded-sm text-xs xs:text-base font-semibold cursor-pointer">
                   Follow
                 </button>
                 <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm flex items-center justify-center gap-2 cursor-pointer">
@@ -406,12 +407,12 @@ export const AboutExpert = () => {
               <div className="py-2 flex gap-[0.3vw] justify-center items-center">
                 <MdGroupAdd />
 
-                <div>50+ Meetings</div>
+                <div>{expertDetailsObj?.personalDetails?.meetingCount} Meetings</div>
               </div>
               <div className="py-2 flex gap-[0.3vw] justify-center items-center">
                 <FaUserCheck />
 
-                <div>1k</div>
+                <div>{expertDetailsObj?.personalDetails?.followerCount}</div>
               </div>
             </div>
             <div className="hidden lg:block mt-8 md:mt-4">
@@ -469,21 +470,6 @@ export const EducationCard = ({ instituteName, degreeName, duration }) => {
   );
 };
 
-export const WorkExperienceCard = ({ companyName, position, duration }) => {
-  return (
-    <div className="flex items-start gap-3 px-[1.5vw] lg:px-0 my-4">
-      <div className="text-3xl sm:text-4xl shrink-0 mt-[0.6vw]">
-        <HiOfficeBuilding />
-      </div>
-      <div>
-        <div className="text-sm xs:text-base">{companyName}</div>
-        <div className="text-xs xs:text-sm my-1">{position}</div>
-        <div className="text-xs xs:text-sm text-gray-400 ">{duration}</div>
-      </div>
-    </div>
-  );
-};
-
 export const AchievementCard = ({ name, year }) => {
   return (
     <div className="flex items-start gap-3 px-[1.5vw] lg:px-0 my-4">
@@ -505,7 +491,6 @@ export const ExpertInfo = () => {
   const [blogs, setBlogs] = useState(false);
   const [education, setEducation] = useState(false);
   const [achievements, setAchievements] = useState(false);
-  const [workExperience, setWorkExperience] = useState(false);
 
   const MakeSummaryTrue = () => {
     setSummary(true);
@@ -612,36 +597,7 @@ export const ExpertInfo = () => {
                   <EducationCard key={idx} {...temp} />
                 ))}
             </div>
-            {/* This is Work Experience accordian */}
-            <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
-              <div
-                className="flex items-center justify-between text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
-                onClick={() =>
-                  workExperience
-                    ? setWorkExperience(false)
-                    : setWorkExperience(true)
-                }
-              >
-                <div>Work Experience</div>
-                <div className="text-xl md:text-2xl">
-                  {!workExperience ? (
-                    <MdKeyboardArrowDown />
-                  ) : (
-                    <MdKeyboardArrowUp />
-                  )}
-                </div>
-              </div>
-              {workExperience &&
-                expertDetailsObj.workExperience.length === 0 && (
-                  <div className="text-xs xs:text-base pb-[1vw]">
-                    No information provided by the expert
-                  </div>
-                )}
-              {workExperience &&
-                expertDetailsObj.workExperience.map((temp, idx) => (
-                  <WorkExperienceCard key={idx} {...temp} />
-                ))}
-            </div>
+            
             {/* This is Achievements accordian */}
             <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
               <div
@@ -683,7 +639,6 @@ export const SideComponent = () => {
   const [blogs, setBlogs] = useState(false);
   const [education, setEducation] = useState(true);
   const [achievements, setAchievements] = useState(true);
-  const [workExperience, setWorkExperience] = useState(true);
 
   const MakeSummaryTrue = () => {
     setSummary(true);
@@ -760,37 +715,6 @@ export const SideComponent = () => {
               {education &&
                 expertDetailsObj.education.map((temp, idx) => (
                   <EducationCard key={idx} {...temp} />
-                ))}
-            </div>
-
-            {/* This is Work Experience accordian */}
-            <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
-              <div
-                className="flex items-center justify-between text-base sm:text-lg lg:text-xl py-[1vw] mb-2 cursor-pointer font-montserrat font-semibold"
-                onClick={() =>
-                  workExperience
-                    ? setWorkExperience(false)
-                    : setWorkExperience(true)
-                }
-              >
-                <div>Work Experience</div>
-                <div className="text-xl md:text-2xl">
-                  {!workExperience ? (
-                    <MdKeyboardArrowDown />
-                  ) : (
-                    <MdKeyboardArrowUp />
-                  )}
-                </div>
-              </div>
-              {workExperience &&
-                expertDetailsObj.workExperience.length === 0 && (
-                  <div className="text-xs xs:text-base pb-[1vw]">
-                    No information provided by the expert
-                  </div>
-                )}
-              {workExperience &&
-                expertDetailsObj.workExperience.map((temp, idx) => (
-                  <WorkExperienceCard key={idx} {...temp} />
                 ))}
             </div>
 
