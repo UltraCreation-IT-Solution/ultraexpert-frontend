@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import { BsUpload, BsX } from "react-icons/bs";
@@ -8,29 +8,10 @@ const EditProfileCustomer = () => {
 
   const [currStep, setCurrStep] = useState(0);
 
-  const interest = [
-    { id: 1, name: "Python" },
-    { id: 2, name: "C++" },
-    { id: 3, name: "Django" },
-    { id: 4, name: "HTML" },
-    { id: 5, name: "CSS" },
-    { id: 6, name: "JS" },
-    { id: 7, name: "React JS" },
-  ];
-
-  const [selectedSkill, setSelectedSkill] = useState([]);
-
-  const handleChange = (skill) => {
-    if (!selectedSkill.includes(skill)) {
-      setSelectedSkill([...selectedSkill, skill]);
-    }
-  };
-
   const [generalInfo, setGeneralInfo] = useState({
     first_name: "",
     last_name: "",
     mobile_number: "",
-    dob: "",
     marital_status: "Single",
     profile_img: "",
     gender: "Male",
@@ -54,7 +35,6 @@ const EditProfileCustomer = () => {
           first_name: generalInfo.first_name,
           last_name: generalInfo.last_name,
           mobile_number: generalInfo.mobile_number,
-          dob: generalInfo.dob,
           marital_status: generalInfo.marital_status,
           profile_img: selectedProfile,
           gender: generalInfo.gender,
@@ -79,10 +59,83 @@ const EditProfileCustomer = () => {
     }
   };
 
+  const getGenInfo = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    console.log(jsonData);  
+    try {
+      const response = await axios.get("/customers/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data.data);
+      setGeneralInfo({
+        ...generalInfo,
+        first_name: data.data.first_name,
+        last_name: data.data.last_name,
+        mobile_number: data.data.mobile_number,
+        marital_status: data.data.marital_status,
+        profile_img: data.data.profile_img,
+        gender: data.data.gender,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getGenInfo();
+  }, []);
+
   const [personalInfo, setPersonalInfo] = useState({
     profession: "",
     about_me: "",
   });
+
+  const getPerInfo = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    console.log(jsonData);  
+    try {
+      const response = await axios.get("/customers/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data.data);
+      console.log(data.data.profession);
+      setPersonalInfo({
+        ...personalInfo,
+        profession: data.data.profession,
+        about_me: data.data.about_me,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleSubmit2 = async (e) => {
     e.preventDefault();
@@ -136,6 +189,88 @@ const EditProfileCustomer = () => {
     }
   };
 
+  useEffect(() => {
+    getPerInfo();
+  }, []);
+
+  const interest = [
+    { id: 1, name: "Python" },
+    { id: 2, name: "C++" },
+    { id: 3, name: "Django" },
+    { id: 4, name: "HTML" },
+    { id: 5, name: "CSS" },
+    { id: 6, name: "JS" },
+    { id: 7, name: "React JS" },
+  ];
+
+  const [selectedSkill, setSelectedSkill] = useState([]);
+  const [skillForms, setSkillForms] = useState([]);
+
+  const handleChange = (skill) => {
+    if (!selectedSkill.includes(skill)) {
+      setSelectedSkill([...selectedSkill, skill]);
+    }
+  };
+
+  const getSkillInfo = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    console.log(jsonData);
+    try {
+      const response = await axios.get("/customers/?action=2", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        alert(data.message);
+        return;
+      }
+      console.log(data.data.interest_list);
+      setSelectedSkill(data.data.interest_list);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getSkillInfo();
+  }, []);
+
+  const handleRemove = (skill) => {
+    setSelectedSkill(selectedSkill.filter((s) => s !== skill));
+  };
+
+  const [selectedProfile, setSelectedProfile] = useState(null);
+
+  const handleProfileChange = (event) => {
+    const file = event.target.files[0]; // Get the first selected file
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setSelectedProfile(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveProfile = () => {
+    setSelectedProfile(null);
+  };
+
+  const handleAddFromSuggestions = (skill) => {
+    if (!selectedSkill.includes(skill)) {
+      setSelectedSkill([...selectedSkill, skill]);
+    }
+  };
+
   const handleSubmit3 = async (e) => {
     e.preventDefault();
     const cookies = document.cookie.split("; ");
@@ -182,41 +317,6 @@ const EditProfileCustomer = () => {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleRemove = (skill) => {
-    setSelectedSkill(selectedSkill.filter((s) => s !== skill));
-  };
-
-  const [selectedProfile, setSelectedProfile] = useState(null);
-  const [selectedBanner, setSelectedBanner] = useState(null);
-
-  const handleProfileChange = (event) => {
-    const file = event.target.files[0]; // Get the first selected file
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setSelectedProfile(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  const handleBannerChange = (event) => {
-    const file = event.target.files[0]; // Get the first selected file
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setSelectedBanner(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleRemoveProfile = () => {
-    setSelectedProfile(null);
-  };
-  const handleRemoveBanner = () => {
-    setSelectedBanner(null);
   };
 
   return (
@@ -332,26 +432,7 @@ const EditProfileCustomer = () => {
               </div>
 
               <div className="flex justify-around gap-5">
-                <div className="flex flex-col w-full">
-                  <label htmlFor="dob" className="text-lg mb-1">
-                    Date of Birth
-                  </label>
-                  <input
-                    name="dob"
-                    id="dob"
-                    value={generalInfo.dob}
-                    type="text"
-                    pattern="\d{4}-\d{2}-\d{2}"
-                    placeholder="YYYY-MM-DD"
-                    onChange={(e) => {
-                      setPersonalInfo({
-                        ...generalInfo,
-                        dob: e.target.value,
-                      });
-                    }}
-                    className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  />
-                </div>
+                
                 <div className="flex flex-col w-full">
                   <label htmlFor="status" className="text-lg mb-1">
                     Marital Status
@@ -453,8 +534,9 @@ const EditProfileCustomer = () => {
                 type="text"
                 id="about"
                 name="about"
+                value={personalInfo.about_me}
                 onChange={(e) =>
-                  setPersonalInfo({ ...personalInfo, about: e.target.value })
+                  setPersonalInfo({ ...personalInfo, about_me: e.target.value })
                 }
                 className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                 placeholder="I want to learn css, html, python with django"
@@ -477,7 +559,7 @@ const EditProfileCustomer = () => {
                 Interests
               </label>
               <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {selectedSkill.length > 0 ? (
                     selectedSkill.map((skill) => {
                       return (

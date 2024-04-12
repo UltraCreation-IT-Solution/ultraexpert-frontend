@@ -104,31 +104,33 @@ const GeneralDetails = () => {
 
   const handleProfileChange = (event) => {
     const file = event.target.files[0]; // Get the first selected file
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setSelectedProfile(reader.result);
-        setPersonalInfo({
-          ...personalInfo,
-          profile_img: [reader.result], // Store the image data in an array
-        });
-      };
-      reader.readAsDataURL(file);
-    }
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const imageData = reader.result;
+      setSelectedProfile(imageData);
+      setGeneralInfo({
+        ...generalInfo,
+        profile_img: imageData, // Assign the base64 data directly
+      });
+    };
+    reader.readAsDataURL(file);
+  }
   };
   const handleBannerChange = (event) => {
     const file = event.target.files[0]; // Get the first selected file
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setSelectedBanner(reader.result);
-        setPersonalInfo({
-          ...personalInfo,
-          banner_img: [reader.result], // Store the image data in an array
-        });
-      };
-      reader.readAsDataURL(file);
-    }
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const imageData = reader.result;
+      setSelectedBanner(imageData);
+      setGeneralInfo({
+        ...generalInfo,
+        banner_img: imageData, // Assign the base64 data directly
+      });
+    };
+    reader.readAsDataURL(file);
+  }
   };
 
   const handleRemoveProfile = () => {
@@ -291,7 +293,6 @@ const GeneralDetails = () => {
               <input
                 type="file"
                 id="profileSelector"
-                accept="image/*"
                 onChange={handleProfileChange}
                 className="hidden"
               />
@@ -330,7 +331,6 @@ const GeneralDetails = () => {
               <input
                 type="file"
                 id="bannerSelector"
-                accept="image/*"
                 onChange={handleBannerChange}
                 className="hidden"
               />
@@ -708,7 +708,7 @@ const EducationDetails = () => {
   return (
     <form
       onSubmit={handleSubmit3}
-      className="grow h-full flex flex-col overflow-y-scroll"
+      className="grow h-full flex flex-col"
     >
       <div className="flex justify-center mx-auto flex-col w-[50%] my-8">
         <button
@@ -1675,7 +1675,7 @@ const ExperienceDetails = () => {
       });
       const data = response.data;
       if (!data || data.status === 400 || data.status === 401) {
-        alert(data.message);
+        alert(data);
         return;
       }
       console.log(response.data.data);
@@ -1697,10 +1697,10 @@ const ExperienceDetails = () => {
       });
 
       setExpInfo({
-        company_name: response.data.data.company_name,
-        start_date: response.data.data.start_date,
-        end_date: response.data.data.end_date,
-        designation: response.data.data.designation,
+        company_name: updatedCompName,
+        start_date: updatedStartDate,
+        end_date: updatedEndDate,
+        designation: updatedDesignation,
       });
     } catch (error) {
       console.log(error);
@@ -1712,9 +1712,7 @@ const ExperienceDetails = () => {
   }, []);
 
   const removeExpForm = (id) => {
-    const updatedExpForms = setExperienceForms(
-      experienceForms.filter((form) => form.id !== id)
-    );
+    const updatedExpForms = experienceForms.filter((form) => form.id !== id);
 
     setExperienceForms(updatedExpForms);
     setExpInfo((prevExpInfo) => {
@@ -1727,6 +1725,7 @@ const ExperienceDetails = () => {
       updatedEndDate.splice(id - 1, 1);
       updatedDesignation.splice(id - 1, 1);
       return {
+        ...prevExpInfo,
         company_name: updatedCompName,
         start_date: updatedStartDate,
         end_date: updatedEndDate,
@@ -1765,7 +1764,7 @@ const ExperienceDetails = () => {
               type="text"
               id={`company${form.id}`}
               name={`company${form.id}`}
-              value={expInfo.company_name}
+              value={expInfo.company_name[ind]}
               onChange={(e) => {
                 const updatedCompany = [...expInfo.company_name];
                 updatedCompany[ind] = e.target.value;
