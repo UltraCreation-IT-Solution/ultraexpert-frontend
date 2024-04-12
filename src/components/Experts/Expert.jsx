@@ -99,6 +99,7 @@ const AllExperts = () => {
   const slicedArray = profileObj.slice(firstIndex, lastIndex);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
+  const lastPage = Math.ceil(profileObj.length / itemsPerPage);
 
   cookies.forEach((item) => {
     const [key, value] = item.split("=");
@@ -135,7 +136,9 @@ const AllExperts = () => {
       </div>
       <div className="mt-[3vw] flex items-center justify-center xs:justify-between gap-[4vw] text-white">
         <div
-          className="text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-md bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer"
+          className={`text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-md bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer ${
+            currentPage < 2 && "opacity-80"
+          } `}
           onClick={() => {
             currentPage > 1 && setCurrentPage(currentPage - 1);
           }}
@@ -146,13 +149,15 @@ const AllExperts = () => {
         <Pagination
           totalItems={profileObj.length}
           itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />
         <div
-          className="text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-lg bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer"
+          className={`text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-lg bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer ${
+            currentPage === lastPage && "opacity-80"
+          } `}
           onClick={() => {
-            currentPage < profileObj.length - 1 &&
-              setCurrentPage(currentPage + 1);
+            currentPage < lastPage && setCurrentPage(currentPage + 1);
           }}
         >
           Next

@@ -25,18 +25,18 @@ const NotificationDropdown = ({ notifications, isOpen, toggleDropdown }) => {
         )}
       </div>
       <div>
-      {isOpen && (
-        <div className="bg-white p-4 w-52 absolute z-10 right-0 shadow-lg">
-          {notifications.map((notification, index) => (
-            <div
-              key={index}
-              className="px-4 py-2 text-base text-gray-700 hover:bg-blue-200 rounded-lg duration-200"
-            >
-              {notification}
-            </div>
-          ))}
-        </div>
-      )}
+        {isOpen && (
+          <div className="bg-white p-4 w-52 absolute z-10 right-0 shadow-lg">
+            {notifications.map((notification, index) => (
+              <div
+                key={index}
+                className="px-4 py-2 text-base text-gray-700 hover:bg-blue-200 rounded-lg duration-200"
+              >
+                {notification}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -45,15 +45,7 @@ const NotificationDropdown = ({ notifications, isOpen, toggleDropdown }) => {
 const Navbar = () => {
   const location = useLocation().pathname;
   const [showNav, setShowNav] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const notifications = [
-    "Notification 1",
-    "Notification 2",
-    "Notification 3",
-    "Notification 4",
-    "Notification 5",
-    "Notification 6",
-  ];
+
   useEffect(() => {
     setShowNav(false);
   }, [location]);
@@ -98,11 +90,11 @@ const Navbar = () => {
           <Link to="/favourites">
             <FaRegHeart />
           </Link>
-          <NotificationDropdown
+          {/* <NotificationDropdown
             notifications={notifications}
             isOpen={isOpen}
             toggleDropdown={toggleDropdown}
-          />
+          /> */}
           <Link
             to={"/experts"}
             className={`${
