@@ -1,136 +1,121 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { CiStar } from "react-icons/ci";
+import React, { useState, useEffect } from "react";
 import { GrFormNextLink } from "react-icons/gr";
+import { motion } from "framer-motion";
+const allTestimonials = [
+  {
+    id: 1,
+    image:
+      "https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600",
+    name: "John Doe",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquet nunc, vel aliquet nunc nisl aliquet nunc",
+    date: "12 Jan 2024",
+  },
+  {
+    id: 2,
+    image:
+      "https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600",
+    name: "John Doe",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquet nunc, vel aliquet nunc nisl aliquet nunc",
+    date: "12 Jan 2024",
+  },
+  {
+    id: 3,
+    image:
+      "https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600",
+    name: "John Doe",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquet nunc, vel aliquet nunc nisl aliquet nunc",
+    date: "12 Jan 2024",
+  },
+  {
+    id: 4,
+    image:
+      "https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600",
+    name: "John Doe",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquet nunc, vel aliquet nunc nisl aliquet nunc",
+    date: "12 Jan 2024",
+  },
+  {
+    id: 5,
+    image:
+      "https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600",
+    name: "John Doe",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquet nunc, vel aliquet nunc nisl aliquet nunc",
+    date: "12 Jan 2024",
+  },
+];
 
-const TestElement = () => {
-  const location = useLocation().pathname;
-  const [activeNo, setActiveNo] = useState(0);
-  const topExpertList = [
-    {
-      name: "Bhavesh Bhanusali",
-      image:
-        "https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-      rating: 4.5,
-      profession: "Software Developer",
-    },
-    {
-      name: "Naman Paliwal",
-      image:
-        "https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D",
-      rating: 4.5,
-      profession: "Software Developer",
-    },
-    {
-      name: "Naman Paliwal",
-      image:
-        "https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww",
-      rating: 4.5,
-      profession: "Software Developer",
-    },
-    {
-      name: "Naman Paliwal",
-      image:
-        "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      rating: 4.5,
-      profession: "Software Developer",
-    },
-    {
-      name: "Naman Paliwal",
-      image:
-        "https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D",
-      rating: 4.5,
-      profession: "Software Developer",
-    },
-  ];
+const TestimonialCard = ({ id, image, name, text, date }) => {
+  const val = id % 5;
   return (
-    <div className="relative w-full h-auto py-[5vw] md:py-[3vw] bg-[#F2F2F2] px-[6vw] md:px-[10vw] overflow-hidden mb-[3vw]">
-      <Link
-        to={"/experts"}
-        className={`${
-          location === "/experts" ? "hidden" : "block"
-        } text-[#C5C3C3] text-4xl xs:text-5xl md:text-7xl lg:text-[84px]  font-bold flex justify-start md:justify-end decoration-transparent`}
+    <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
+      <div
+        className={`relative w-full h-full object-cover ${
+          val == 1
+            ? "bg-[#EA7794]"
+            : val == 2
+            ? "bg-[#78A7EE]"
+            : val == 3
+            ? "bg-[#F66B3A]"
+            : val == 4
+            ? "bg-[#804EDA]"
+            : val == 5
+            ? "bg-[#78A7EE]"
+            : "bg-[#EA7794]"
+        }   rounded-xl pointer-events-none border-white border flex flex-col`}
       >
-        EXPERTS
-      </Link>
-      <div className="flex flex-col sm:flex-row mb-[12.5vw] sm:mb-[10vw] md:mb-[5vw] gap-5 md:gap-8 w-full  mt-[3vw] md:mt-[2vw]">
-        {topExpertList.map((expert, index) => (
-          <div
-            key={index}
-            onMouseOver={() => setActiveNo(index)}
-            onMouseLeave={() => setActiveNo(index)}
-            className={`${
-              activeNo === index
-                ? "activeExpert"
-                : "w-full sm:w-1/2 h-[36vh] md:h-[56vh] lg:h-[65vh]"
-            } expertDiv relative flex flex-col gap-4  items-start rounded`}
-          >
-            <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[60%] ">
-              <img
-                src={expert.image}
-                alt="expert profile"
-                className={`absolute left-0 right-0 brightness-[60%] w-full h-full shrink-0 ${
-                  activeNo === index
-                    ? "object-center"
-                    : "object-center  object-cover"
-                }`}
-              />
-              <h2>{expert.profession}</h2>
-              {activeNo === index ? (
-                <div className=" absolute right-4 justify-start  bottom-0">
-                  <h3 className=" justify-end text-[4vw] sm:text-[2vw] md:text-[1.5vw]">
-                    {expert.name}
-                  </h3>
-                  <h3 className=" justify-end text-[2.8vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
-                    <CiStar className="text-[3.4vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
-                    {expert.rating} /5
-                  </h3>
-                  <Link
-                    to={"experts/expertprofile"}
-                    className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3"
-                  >
-                    <span className="underline  text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]">
-                      See More
-                    </span>
-                    <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.1vw]" />
-                  </Link>
-                </div>
-              ) : (
-                <div className="sm:invisible absolute right-4 justify-start  bottom-0">
-                  <h3 className=" justify-end text-[4vw] sm:text-[2vw] md:text-[1.5vw]">
-                    {expert.name}
-                  </h3>
-                  <h3 className=" justify-end text-[2.8vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
-                    <CiStar className="text-[3.4vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
-                    {expert.rating} /5
-                  </h3>
-                  <Link
-                    to={"experts/expertprofile"}
-                    className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3"
-                  >
-                    <span className="underline text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]">
-                      See More
-                    </span>{" "}
-                    <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
-                  </Link>
-                </div>
-              )}
-            </div>
+        <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw]">
+          <img
+            className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
+            src={image}
+            alt=""
+          />
+          <div>
+            <h2 className="shrink-0 text-[4vw] sm:text-[2vw] tracking-wide sm:tracking-normal mb-0">
+              {name}
+            </h2>
+            <h4 className="mt-[0.25vw] font-medium text-[2.8vw] xs:text-[2vw] sm:text-[1.15vw]">
+              {date}
+            </h4>
           </div>
-        ))}
+        </div>
+        <div className="w-full h-2/3 text-[2.98vw] sm:text-[1.55vw] md:text-[1.45vw] flex items-start justify-start px-[2vw]">
+          {text}
+        </div>
       </div>
-
-      <Link
-        to={"/experts"}
-        className={`${
-          location === "/experts" ? "hidden" : "block"
-        } text-[2.4vw] md:text-[1.6vw] text-black flex items-cemter justify-end no-underline mt-[-10vw] sm:mt-[-8vw] md:mt-[-3vw]`}
-      >
-        See More Experts
-        <GrFormNextLink className="mt-[0.5vw] text-[2vw] md:text-[1.4vw]" />
-      </Link>
+    </motion.div>
+  );
+};
+const FinalElement = () => {
+  return (
+    <div className="relative w-full h-auto flex flex-col border-y my-[5vw] sm:my-[3vw] border-solid  md:px-[12vw] px-[8vw] items-center pt-[3vw] sm:pt-[2vw] pb-[6vw] sm:pb-[4vw] ">
+      <div className="w-full h-full text-start  justify-between  flex flex-row">
+        <div className="">
+          <h3 className="text-2xl xs:text-4xl md:text-5xl lg:text-6xl font-extralight mb-[-3.6vw]">
+            what our user <br /> thinks of
+          </h3>
+          <h1 className="text-3xl xs:text-5xl  md:text-6xl lg:text-7xl font-sans font-extrabold tracking-wide">
+            UltraXperts
+          </h1>
+        </div>
+        <span className="flex items-center justify-center no-underline text-xs xs:text-base sm:text-lg md:text-xl lg:text-2xl">
+          See More <GrFormNextLink />
+        </span>
+      </div>
+      <motion.div className=" overflow-scroll w-full h-full flex flex-row">
+        <motion.div className="flex gap-[4vw] md:gap-[1.4vw] overflow-visible ">
+          {allTestimonials.map((item) => (
+            <TestimonialCard key={item.id} {...item} />
+          ))}
+        </motion.div>
+      </motion.div>
     </div>
   );
 };
-
+const TestElement = () => {
+  return (
+    <>
+      <FinalElement />
+    </>
+  );
+};
 export default TestElement;
