@@ -22,7 +22,7 @@ const CHECKOUT_STEPS = [
 ];
 
 const SignUpAsExpert = () => {
-  const [currStep, setCurrStep] = useState(0);
+  const [currStep, setCurrStep] = useState(4);
   const [isComplete, setIsComplete] = useState(false);
   const [margin, setMargin] = useState({
     marginLeft: 0,
@@ -36,10 +36,18 @@ const SignUpAsExpert = () => {
   const [personalInfo, setPersonalInfo] = useState({
     gender: "Male",
     dob: "",
+    anniversary_date: "",
     marital_status: "Single",
     profile_img: "",
     banner_img: "",
   });
+
+  const handleMaritalStatusChange = (e) => {
+    setPersonalInfo({
+      ...personalInfo,
+      marital_status: e.target.value,
+    });
+  };
 
   const handlePersonalInfo = async (e) => {
     e.preventDefault();
@@ -340,6 +348,36 @@ const SignUpAsExpert = () => {
       year: [...prevAchInfo.year, ""],
       certificate: [...prevAchInfo.certificate, ""],
     }));
+  };
+
+  const [selectedCertificate, setSelectedCertificate] = useState(null);
+
+  const handleCertificateChange = (event, ind) => {
+    const file = event.target.files[0]; // Get the first selected file
+    if (file) {
+      if (!file.type.match('image/.*')) {
+        alert('Only image files are allowed!');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setSelectedCertificate(reader.result);
+      };
+      reader.readAsDataURL(file);
+      const updatedCertificates = [...achInfo.certificate];
+      updatedCertificates[ind] = event.target.value;
+      setAchInfo({
+        ...achInfo,
+        certificate: updatedCertificates,
+      });
+    }
+  };
+
+  const handleRemoveCertificate = () => {
+    setSelectedCertificate(null);
+    const updatedCertificates = [...achInfo.certificate];
+    updatedCertificates[updatedCertificates.findIndex(cert => cert === selectedCertificate)] = null;
+    setAchInfo({ ...achInfo, certificate: updatedCertificates });
   };
 
   const handleAchForm = async (e) => {
@@ -742,97 +780,95 @@ const SignUpAsExpert = () => {
                 </div>
               </div>
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
-                <div className="flex justify-around gap-5">
-                  <div className="flex flex-col w-full">
-                    <label htmlFor="dob" className="text-base md:text-lg mb-1">
-                      Date of Birth
-                    </label>
-                    <input
-                      type="text"
-                      id="dob"
-                      name="dob"
-                      value={personalInfo.dob}
-                      onChange={(e) =>
-                        setPersonalInfo({
-                          ...personalInfo,
-                          dob: e.target.value,
-                        })
-                      }
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md"
-                      pattern="\d{4}-\d{2}-\d{2}"
-                      placeholder="YYYY-MM-DD"
-                    />
-                  </div>
-                  <div className="flex flex-col w-full">
-                    <label htmlFor="status" className="text-base md:text-lg">
-                      Marital Status
-                    </label>
-                    <select
-                      name="status"
-                      id="status"
-                      value={personalInfo.status}
-                      onChange={(e) =>
-                        setPersonalInfo({
-                          ...personalInfo,
-                          status: e.target.value,
-                        })
-                      }
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                    >
-                      <option value="single">Single</option>
-                      <option value="married">Married</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="flex justify-around gap-5">
-                  <div className="flex flex-col w-full">
+                <label htmlFor="gender" className="text-base md:text-lg mb-1">
+                  Gender
+                </label>
+                <select
+                  name="gender"
+                  id="gender"
+                  value={personalInfo.gender}
+                  onChange={(e) =>
+                    setPersonalInfo({
+                      ...personalInfo,
+                      gender: e.target.value,
+                    })
+                  }
+                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                >
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+                <label htmlFor="dob" className="text-base md:text-lg mb-1">
+                  Date of Birth
+                </label>
+                <input
+                  type="date"
+                  id="dob"
+                  name="dob"
+                  value={personalInfo.dob}
+                  onChange={(e) => {
+                    const selectedDate = new Date(e.target.value);
+                    const year = selectedDate.getFullYear();
+                    const month = String(selectedDate.getMonth() + 1).padStart(
+                      2,
+                      "0"
+                    );
+                    const day = String(selectedDate.getDate()).padStart(2, "0");
+                    const formattedDate = `${year}-${month}-${day}`;
+                    setPersonalInfo({
+                      ...personalInfo,
+                      dob: formattedDate,
+                    });
+                  }}
+                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                />
+                <label htmlFor="status" className="text-base md:text-lg">
+                  Marital Status
+                </label>
+                <select
+                  name="status"
+                  id="status"
+                  value={personalInfo.status}
+                  onChange={handleMaritalStatusChange}
+                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                >
+                  <option value="single">Single</option>
+                  <option value="married">Married</option>
+                </select>
+                {personalInfo.marital_status === "married" && (
+                  <>
                     <label
-                      htmlFor="gender"
-                      className="text-base md:text-lg mb-1"
-                    >
-                      Gender
-                    </label>
-                    <select
-                      name="gender"
-                      id="gender"
-                      value={personalInfo.gender}
-                      onChange={(e) =>
-                        setPersonalInfo({
-                          ...personalInfo,
-                          gender: e.target.value,
-                        })
-                      }
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                    >
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                  <div className="flex flex-col w-full">
-                    <label
-                      htmlFor="annDate"
+                      htmlFor="anniversary_date"
                       className="text-base md:text-lg mb-1"
                     >
                       Anniversary Date
                     </label>
                     <input
-                      type="text"
-                      id="annDate"
-                      name="annDate"
+                      type="date"
+                      id="anniversary_date"
+                      name="anniversary_date"
                       value={personalInfo.anniversary_date}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const selectedDate = new Date(e.target.value);
+                        const year = selectedDate.getFullYear();
+                        const month = String(
+                          selectedDate.getMonth() + 1
+                        ).padStart(2, "0");
+                        const day = String(selectedDate.getDate()).padStart(
+                          2,
+                          "0"
+                        );
+                        const formattedDate = `${year}-${month}-${day}`;
                         setPersonalInfo({
                           ...personalInfo,
-                          anniversary_date: e.target.value,
-                        })
-                      }
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md"
-                      pattern="\d{4}-\d{2}-\d{2}"
-                      placeholder="YYYY-MM-DD"
+                          anniversary_date: formattedDate,
+                        });
+                      }}
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                     />
-                  </div>
-                </div>
+                  </>
+                )}
                 <div className="flex justify-around gap-5">
                   <div className="flex flex-col w-full">
                     <label htmlFor="profile" className="text-lg mb-1">
@@ -860,6 +896,7 @@ const SignUpAsExpert = () => {
                             className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
                           >
                             <BsX
+                              className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"
                               size={20}
                               onClick={() => setUploadProfileProgress(0)}
                             />
@@ -911,7 +948,11 @@ const SignUpAsExpert = () => {
                             onClick={handleRemoveBanner}
                             className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
                           >
-                            <BsX />
+                            <BsX
+                              size={20}
+                              className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"
+                              onClick={() => setUploadBannerProgress(0)}
+                            />
                           </div>
                         </div>
                       ) : (
@@ -1042,6 +1083,7 @@ const SignUpAsExpert = () => {
                   }
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                   placeholder="I want to learn css, html, python with django"
+                  style={{ minWidth: "200px", maxWidth: "575px" }}
                 />
               </div>
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
@@ -1057,19 +1099,31 @@ const SignUpAsExpert = () => {
           {currStep === 2 && (
             <form onSubmit={handleEducationForm} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addEducationForm();
+                  }}
+                  className="underline cursor-pointer text-gray-400 bg-inherit"
+                >
+                  + Add Education
+                </button>
                 {educationForms.map((form, ind) => (
                   <>
                     <div key={form.id} className="flex justify-between">
                       <p className="font-bold text-lg">Education {ind + 1}</p>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          addEducationForm();
-                        }}
-                        className="underline cursor-pointer text-gray-400 bg-inherit"
-                      >
-                        + Add Education
-                      </button>
+                      {ind > 0 && (
+                        <button
+                          onClick={() => {
+                            const newEducationForms = [...educationForms];
+                            newEducationForms.splice(ind, 1);
+                            setEducationForms(newEducationForms);
+                          }}
+                          className="underline cursor-pointer text-red-400 bg-inherit"
+                        >
+                          - Remove Education
+                        </button>
+                      )}
                     </div>
                     <label
                       htmlFor={`institute${form.id}`}
@@ -1101,7 +1155,7 @@ const SignUpAsExpert = () => {
                           htmlFor={`type${form.id}`}
                           className="text-base md:text-lg mb-1"
                         >
-                          Type
+                          Degree Type
                         </label>
                         <input
                           type="text"
@@ -1114,7 +1168,7 @@ const SignUpAsExpert = () => {
                             setEduInfo({ ...eduInfo, type: updatedType });
                           }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                          placeholder="Institute Name"
+                          placeholder="Degree Type"
                         />
                       </div>
                       <div className="flex flex-col w-full">
@@ -1140,7 +1194,7 @@ const SignUpAsExpert = () => {
                             });
                           }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                          placeholder="Institute Name"
+                          placeholder="Passing Year"
                         />
                       </div>
                     </div>
@@ -1545,27 +1599,23 @@ const SignUpAsExpert = () => {
                           htmlFor={`devision${form.id}`}
                           className="text-base md:text-lg mb-1"
                         >
-                          Devision
+                          CGPA / %
                         </label>
-                        <select
-                          name={`devision${form.id}`}
+                        <input
+                          type="text"
                           id={`devision${form.id}`}
+                          name={`devision${form.id}`}
                           value={eduInfo.Devision[ind]}
                           onChange={(e) => {
-                            const updatedDevisionNames = [...eduInfo.Devision];
-                            updatedDevisionNames[ind] = e.target.value;
+                            const updatedDevision = [...eduInfo.Devision];
+                            updatedDevision[ind] = e.target.value;
                             setEduInfo({
                               ...eduInfo,
-                              Devision: updatedDevisionNames,
+                              Devision: updatedDevision,
                             });
                           }}
-                          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                        >
-                          <option value="first">First</option>
-                          <option value="second">Second</option>
-                          <option value="third">Third</option>
-                          <option value="forth">Forth</option>
-                        </select>
+                          className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
+                        />
                       </div>
                     </div>
                   </>
@@ -1584,19 +1634,31 @@ const SignUpAsExpert = () => {
           {currStep === 3 && (
             <form onSubmit={handleSkillForm} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addSkillForm();
+                  }}
+                  className="underline cursor-pointer text-gray-400 bg-inherit"
+                >
+                  + Add Skill
+                </button>
                 {skillForms.map((form, ind) => (
                   <>
                     <div key={form.id} className="flex justify-between">
                       <p className="font-bold text-lg">Skill {ind + 1}</p>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          addSkillForm();
-                        }}
-                        className="underline cursor-pointer text-gray-400 bg-inherit"
-                      >
-                        + Add Skill
-                      </button>
+                      {ind > 0 && (
+                        <button
+                          onClick={() => {
+                            const newSKillForms = [...skillForms];
+                            newSKillForms.splice(ind, 1);
+                            setSkillForms(newSKillForms);
+                          }}
+                          className="underline cursor-pointer text-red-400 bg-inherit"
+                        >
+                          - Remove Skill
+                        </button>
+                      )}
                     </div>
                     <label
                       htmlFor={`technology${form.id}`}
@@ -1630,17 +1692,21 @@ const SignUpAsExpert = () => {
                       type="number"
                       id={`rating${form.id}`}
                       name={`rating${form.id}`}
-                      value={skillInfo.ratings[ind]}
+                      value={Math.min(skillInfo.ratings[ind], 5)}
                       onChange={(e) => {
+                        const newRating = Math.min(
+                          parseInt(e.target.value, 10),
+                          5
+                        );
                         const updatedRatings = [...skillInfo.ratings];
-                        updatedRatings[ind] = e.target.value;
+                        updatedRatings[ind] = newRating;
                         setSkillInfo({
                           ...skillInfo,
                           ratings: updatedRatings,
                         });
                       }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-[50%]"
-                      placeholder="1"
+                      placeholder="Give rating out of 5 (Max)"
                     />
                   </>
                 ))}
@@ -1658,19 +1724,31 @@ const SignUpAsExpert = () => {
           {currStep === 4 && (
             <form onSubmit={handleAchForm} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addAchForm();
+                  }}
+                  className="underline cursor-pointer text-gray-400 bg-inherit"
+                >
+                  + Add Achievement
+                </button>
                 {achForms.map((form, ind) => (
                   <>
                     <div key={form.id} className="flex justify-between">
                       <p className="font-bold text-lg">Achievement {ind + 1}</p>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          addAchForm();
-                        }}
-                        className="underline cursor-pointer text-gray-400 bg-inherit"
-                      >
-                        + Add Achievement
-                      </button>
+                      {ind > 0 && (
+                        <button
+                          onClick={() => {
+                            const newAchForms = [...achForms];
+                            newAchForms.splice(ind, 1);
+                            setAchForms(newAchForms);
+                          }}
+                          className="underline cursor-pointer text-red-400 bg-inherit"
+                        >
+                          - Remove Achievement
+                        </button>
+                      )}
                     </div>
                     <label
                       htmlFor={`name${form.id}`}
@@ -1722,20 +1800,33 @@ const SignUpAsExpert = () => {
                     >
                       Certificate
                     </label>
+                    <div onClick={()=>document.querySelector(`#certificate${form.id}`).click()} className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-[50%] mx-auto cursor-pointer rounded-lg">
+                      {selectedCertificate && selectedCertificate.startsWith('data:')?(
+                        <div className="relative">
+                          <img src={selectedCertificate} alt="Certificate"
+                          className="w-32 h-32 object-cover rounded-lg"/>
+                          <div onClick={handleRemoveCertificate}
+                          className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1">
+                            <BsX size={20} className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"/>
+                          </div>
+                        </div>
+                      ):(<div className="flex flex-col items-center">
+                      <BsUpload size={20} />
+                      <div className="text-sm text-[#1475cf] mt-2">
+                        Click here to upload a profile photo
+                      </div>
+                    </div>)}
+                    </div>
                     <input
                       type="file"
+                      accept="image/*"
                       id={`certificate${form.id}`}
                       name={`certificate${form.id}`}
-                      value={achInfo.certificate[ind]}
-                      onChange={(e) => {
-                        const updatedCertificates = [...achInfo.certificate];
-                        updatedCertificates[ind] = e.target.value;
-                        setAchInfo({
-                          ...achInfo,
-                          certificate: updatedCertificates,
-                        });
-                      }}
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-full"
+                      onChange={(e) => 
+                        {handleCertificateChange(e,ind);}
+                      }
+                      className="hidden"
+                      aria-label="Upload certificate for achievement"
                     />
                   </>
                 ))}
@@ -1753,19 +1844,31 @@ const SignUpAsExpert = () => {
           {currStep === 5 && (
             <form onSubmit={handleExperienceForm} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addExperienceForm();
+                  }}
+                  className="underline cursor-pointer text-gray-400 bg-inherit"
+                >
+                  + Add Experience
+                </button>
                 {experienceForms.map((form, ind) => (
                   <>
                     <div key={form.id} className="flex justify-between">
                       <p className="font-bold text-lg">Experience {ind + 1}</p>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          addExperienceForm();
-                        }}
-                        className="underline cursor-pointer text-gray-400 bg-inherit"
-                      >
-                        + Add Experience
-                      </button>
+                      {ind > 0 && (
+                        <button
+                          onClick={() => {
+                            const newExpForms = [...experienceForms];
+                            newExpForms.splice(ind, 1);
+                            setExperienceForms(newExpForms);
+                          }}
+                          className="underline cursor-pointer text-red-400 bg-inherit"
+                        >
+                          - Remove Experience
+                        </button>
+                      )}
                     </div>
                     <label
                       htmlFor={`company${form.id}`}
@@ -1798,16 +1901,25 @@ const SignUpAsExpert = () => {
                           Start Year
                         </label>
                         <input
-                          type="text"
+                          type="date"
                           id={`start${form.id}`}
                           name={`start${form.id}`}
                           value={expInfo.start_date[ind]}
-                          pattern="\d{4}-\d{2}-\d{2}"
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                           placeholder="YYYY-MM-DD"
                           onChange={(e) => {
+                            const selectedDate = new Date(e.target.value);
+                            const year = selectedDate.getFullYear();
+                            const month = String(
+                              selectedDate.getMonth() + 1
+                            ).padStart(2, "0");
+                            const day = String(selectedDate.getDate()).padStart(
+                              2,
+                              "0"
+                            );
+                            const formattedDate = `${year}-${month}-${day}`;
                             const updatedStartDate = [...expInfo.start_date];
-                            updatedStartDate[ind] = e.target.value;
+                            updatedStartDate[ind] = formattedDate;
                             setExpInfo({
                               ...expInfo,
                               start_date: updatedStartDate,
@@ -1823,16 +1935,25 @@ const SignUpAsExpert = () => {
                           End Year
                         </label>
                         <input
-                          type="text"
+                          type="date"
                           id={`start${form.id}`}
                           name={`start${form.id}`}
                           value={expInfo.end_date[ind]}
-                          pattern="\d{4}-\d{2}-\d{2}"
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                           placeholder="YYYY-MM-DD"
                           onChange={(e) => {
+                            const selectedDate = new Date(e.target.value);
+                            const year = selectedDate.getFullYear();
+                            const month = String(
+                              selectedDate.getMonth() + 1
+                            ).padStart(2, "0");
+                            const day = String(selectedDate.getDate()).padStart(
+                              2,
+                              "0"
+                            );
+                            const formattedDate = `${year}-${month}-${day}`;
                             const updatedEndDate = [...expInfo.end_date];
-                            updatedEndDate[ind] = e.target.value;
+                            updatedEndDate[ind] = formattedDate;
                             setExpInfo({
                               ...expInfo,
                               end_date: updatedEndDate,
