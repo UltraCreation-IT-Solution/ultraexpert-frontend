@@ -1369,6 +1369,38 @@ const AchDetails = () => {
     setAchForms([...achForms, { id: achForms.length + 1 }]);
   };
 
+  const [selectedCertificate, setSelectedCertificate] = useState(null);
+
+  const handleCertificateChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (file.size > 1024 * 1024) {
+      // 1MB limit
+      console.error("File size exceeds the limit of 1MB");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      console.error("Only image files are allowed");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const imageData = reader.result;
+      setSelectedCertificate(imageData);
+      setAchInfo({
+        ...achInfo,
+        certificate: imageData, // Assign the base64 data directly
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveCertificate = () => {
+    setSelectedCertificate(null);
+  };
+
   const getAchForm = async () => {
     try {
       const response = await axios.get("/experts/?action=1", {
@@ -1531,28 +1563,46 @@ const AchDetails = () => {
               className="text-lg mb-1 flex gap-1"
               htmlFor={`certificate${form.id}`}
             >
-              Certificate <div className="text-xs">(optional)</div>
+              Certificate
             </label>
+            <div
+              className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
+              onClick={() =>
+                document.querySelector(`#certificate${form.id}`).click()
+              }
+            >
+              {selectedCertificate ? (
+                <div className="relative">
+                  <img
+                    src={selectedCertificate}
+                    alt="Certificate"
+                    className="w-32 h-32 object-cover rounded-lg"
+                  />
+                  <div
+                    onClick={handleRemoveCertificate}
+                    className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
+                  >
+                    <BsX
+                      className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"
+                      size={20}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center">
+                  <BsUpload size={20} />
+                  <div className="text-sm text-[#1475cf] mt-2">
+                    Click here to upload a profile photo
+                  </div>
+                </div>
+              )}
+            </div>
             <input
               type="file"
               name={`certificate${form.id}`}
               id={`certificate${form.id}`}
-              className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-full"
-              onChange={(e) => {
-                const file = e.target.files[ind]; // Get the first selected file
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onload = () => {
-                    const updatedCertificates = [...achInfo.certificate];
-                    updatedCertificates[ind] = reader.result; // Store the file contents (base64 data) in the array
-                    setAchInfo({
-                      ...achInfo,
-                      certificate: updatedCertificates,
-                    });
-                  };
-                  reader.readAsDataURL(file); // Read the file as a data URL
-                }
-              }}
+              className="hidden"
+              onChange={handleCertificateChange}
             />
           </>
         ))}

@@ -67,7 +67,7 @@ const EditProfileCustomer = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    console.log(jsonData);  
+    console.log(jsonData);
     try {
       const response = await axios.get("/customers/?action=1", {
         headers: {
@@ -112,7 +112,7 @@ const EditProfileCustomer = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    console.log(jsonData);  
+    console.log(jsonData);
     try {
       const response = await axios.get("/customers/?action=1", {
         headers: {
@@ -432,7 +432,6 @@ const EditProfileCustomer = () => {
               </div>
 
               <div className="flex justify-around gap-5">
-                
                 <div className="flex flex-col w-full">
                   <label htmlFor="status" className="text-lg mb-1">
                     Marital Status
@@ -474,7 +473,10 @@ const EditProfileCustomer = () => {
                       onClick={handleRemoveProfile}
                       className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
                     >
-                      <BsX />
+                      <BsX
+                        className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"
+                        size={20}
+                      />
                     </div>
                   </div>
                 ) : (

@@ -418,7 +418,10 @@ const SignUpAsCustomer = () => {
                         onClick={handleRemoveProfile}
                         className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
                       >
-                        <BsX className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"/>
+                        <BsX
+                          size={20}
+                          className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"
+                        />
                       </div>
                     </div>
                   ) : (
@@ -431,7 +434,9 @@ const SignUpAsCustomer = () => {
                   )}
                   <input
                     type="file"
+                    accept="image/*"
                     id="profileSelector"
+                    name="profileSelector"
                     onChange={handleProfileChange}
                     className="hidden"
                   />
