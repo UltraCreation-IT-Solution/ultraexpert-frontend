@@ -164,6 +164,7 @@ export const ServiceCategory = () => {
   );
 };
 export const TopExperts = () => {
+  const [top5ExpertList, setTop5ExpertList] = useState([]);
   const location = useLocation().pathname;
   const [activeNo, setActiveNo] = useState(0);
   const cookies = document.cookie.split("; ");
@@ -173,23 +174,31 @@ export const TopExperts = () => {
     const [key, value] = item.split("=");
     jsonData[key] = value;
   });
-  const getTopExperts = async () => {
+  const getTop5Experts = async () => {
     try {
-      const res = await axios.get("/experts/?action=2", {
+      const response = await axios.get("/topfive/?action=1", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
-      console.log(res.data.data);
-      //set respective data
-      // setTopExpertList(res.data);
+      if (
+        !response.data ||
+        response.data.status === 400 ||
+        response.data.status === 401
+      ) {
+        console.log(response.data.message);
+        return;
+      }
+      console.log(response.data.data);
+      // set respective data
+      setTop5ExpertList(response.data.data);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
-    getTopExperts();
+    getTop5Experts();
   }, []);
   return (
     <div className="relative w-full h-auto py-[5vw] md:py-[3vw] bg-[#F2F2F2] px-[6vw] md:px-[10vw] overflow-hidden mb-[3vw]">
@@ -202,9 +211,9 @@ export const TopExperts = () => {
         EXPERTS
       </Link>
       <div className="flex flex-col sm:flex-row mb-[12.5vw] sm:mb-[10vw] md:mb-[5vw] gap-5 md:gap-8 w-full  mt-[3vw] md:mt-[2vw]">
-        {topExpertList.map((expert, index) => (
+        {top5ExpertList.map((expert,index) => (
           <div
-            key={index}
+            key={expert?.expert_id}
             onMouseOver={() => setActiveNo(index)}
             onMouseLeave={() => setActiveNo(index)}
             className={`${
@@ -215,7 +224,7 @@ export const TopExperts = () => {
           >
             <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[60%] ">
               <img
-                src={expert.image}
+                src={expert?.profile_img}
                 alt="expert profile"
                 className={`absolute left-0 right-0 brightness-[60%] w-full h-full shrink-0 ${
                   activeNo === index
@@ -223,15 +232,15 @@ export const TopExperts = () => {
                     : "object-center  object-cover"
                 }`}
               />
-              <h2>{expert.profession}</h2>
+              <h2>{expert?.profession}</h2>
               {activeNo === index ? (
                 <div className=" absolute right-4 justify-start  bottom-0">
                   <h3 className=" justify-end text-[4vw] sm:text-[2vw] md:text-[1.5vw]">
-                    {expert.name}
+                    {expert?.expert_name}
                   </h3>
                   <h3 className=" justify-end text-[2.8vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
                     <CiStar className="text-[3.4vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
-                    {expert.rating} /5
+                    {expert?.rating_count} /5
                   </h3>
                   <Link
                     to={"experts/expertprofile"}
@@ -246,11 +255,11 @@ export const TopExperts = () => {
               ) : (
                 <div className="sm:invisible absolute right-4 justify-start  bottom-0">
                   <h3 className=" justify-end text-[4vw] sm:text-[2vw] md:text-[1.5vw]">
-                    {expert.name}
+                    {expert?.expert_name}
                   </h3>
                   <h3 className=" justify-end text-[2.8vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
                     <CiStar className="text-[3.4vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
-                    {expert.rating} /5
+                    {expert?.rating_count} /5
                   </h3>
                   <Link
                     to={"experts/expertprofile"}

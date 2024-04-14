@@ -3150,14 +3150,16 @@ export const favBlogs = [
   },
 ];
 
-export const ProjectsCarousel = () => {
+export const ProjectsCarousel = ({projectsArray}) => {
+  console.log(projectsArray);
   const [slider, setSlider] = useState(0);
-
   return (
+    <>
+     
     <div className="">
       <div className="flex justify-center items-center ">
-        {expertDetailsObj?.projects.map((temp, idx) => (
-          <div className=" ">
+        {projectsArray?.length > 0 && projectsArray?.map((item, idx) => (
+          <div key={idx}>
             <div className="relative w-[95%] m-auto">
               <div
                 className={
@@ -3167,10 +3169,10 @@ export const ProjectsCarousel = () => {
                 }
               >
                 <div className="text-center text-xs sm:text-sm">
-                  {temp?.type} Project
+                  {item?.type} Project
                 </div>
                 <div className="text-center text-xs text-gray-300 ">
-                  {temp?.role}{" "}
+                  {item?.role}{" "}
                 </div>
               </div>
               <div
@@ -3180,7 +3182,7 @@ export const ProjectsCarousel = () => {
                     : "hidden"
                 }
               >
-                {temp?.title}
+                {item?.title}
               </div>
               <MdOutlineKeyboardArrowLeft
                 className={`absolute left-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] rounded-full ${
@@ -3194,18 +3196,18 @@ export const ProjectsCarousel = () => {
               />
               <MdOutlineKeyboardArrowRight
                 className={`absolute right-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] ${
-                  slider === expertDetailsObj?.projects.length - 1
+                  slider === projectsArray?.length - 1
                     ? ` border-slate-400 border-solid text-slate-400`
                     : `border-white border-solid text-white`
                 } bg-black/50 rounded-full`}
                 onClick={() =>
-                  slider === expertDetailsObj?.projects.length - 1
-                    ? setSlider(expertDetailsObj?.projects.length - 1)
+                  slider === projectsArray?.length - 1
+                    ? setSlider(projectsArray?.length - 1)
                     : setSlider(slider + 1)
                 }
               />
               <img
-                src={temp?.banner}
+                src={item?.image}
                 key={idx}
                 className={
                   slider === idx
@@ -3222,7 +3224,7 @@ export const ProjectsCarousel = () => {
                   : "hidden"
               }
             >
-              {temp?.tags?.map((item, index) => (
+              {item?.tags?.map((item, index) => (
                 <div
                   key={index}
                   className="border border-solid border-slate-300 rounded-sm px-3 py-[6px] text-xs"
@@ -3239,12 +3241,13 @@ export const ProjectsCarousel = () => {
                   : "hidden"
               }
             >
-              {temp?.description}
+              {item?.description}
             </p>
           </div>
         ))}
       </div>
     </div>
+    </>
   );
 };
 
