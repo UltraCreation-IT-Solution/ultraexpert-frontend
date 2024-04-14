@@ -183,7 +183,7 @@ const SignUpAsExpert = () => {
     state_name: [],
     country: ["India"],
     passing_year: [],
-    Devision: ["First"],
+    Devision: [],
   });
 
   const handleEducationForm = async (e) => {
@@ -1619,6 +1619,7 @@ const SignUpAsExpert = () => {
                             });
                           }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
+                          placeholder="CGPA / %"
                         />
                       </div>
                     </div>
@@ -1684,7 +1685,7 @@ const SignUpAsExpert = () => {
                         });
                       }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      placeholder="Institute Name"
+                      placeholder="Technology Name"
                     />
                     <label
                       htmlFor={`rating${form.id}`}
