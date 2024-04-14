@@ -110,7 +110,7 @@ const AllExperts = () => {
       const res = await axios.get("/customers/experts?action=1", {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
+          // Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
       console.log(res.data);
