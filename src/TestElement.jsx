@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiUpload, FiX, FiEdit } from "react-icons/fi";
 import { imageDB } from "./components/firebase/config";
 import {
@@ -30,6 +30,23 @@ const TestElement = () => {
     const [key, value] = item.split("=");
     jsonData[key] = value;
   });
+  const fetchProjects = async () => {
+    try {
+      const response = await axios.get("/experts/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      setProjects(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -168,7 +185,7 @@ const TestElement = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-20 px-4 border border-gray-500 rounded-lg shadow-lg">
-      <div className="flex justify-between items-center bg-slate-400 px-6 py-3 rounded-t-lg">
+      <div className="flex justify-between items-center bg-white border border-slate-300 border-solid px-6 py-3 rounded-t-lg">
         <h2 className="text-xl font-semibold">Add Project</h2>
         <div className="flex flex-wrap justify-between">
           <button
@@ -188,7 +205,7 @@ const TestElement = () => {
           </button>
         </div>
       </div>
-      <div className="p-6">
+      <div className={`p-6 ${projects.length > 0 && "shadow-lg"}`}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col">
             <input
@@ -196,13 +213,13 @@ const TestElement = () => {
               placeholder="Title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:border-blue-500"
+              className="border border-slate-300 rounded px-4 py-2 mb-4 focus:outline-none focus:border-blue-500"
             />
             <textarea
               placeholder="Description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="border border-gray-300 rounded px-4 py-2 h-32 resize-none mb-4 focus:outline-none focus:border-blue-500"
+              className="border border-slate-300 rounded px-4 py-2 h-32 resize-none mb-4 focus:outline-none focus:border-blue-500"
             />
             {type === "group" && (
               <input
@@ -210,12 +227,12 @@ const TestElement = () => {
                 placeholder="Role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="border border-gray-300 rounded-lg px-4 py-2 mb-4 focus:outline-none focus:border-blue-500"
+                className="border border-slate-300 rounded-lg px-4 py-2 mb-4 focus:outline-none focus:border-blue-500"
               />
             )}
           </div>
           <div className="flex flex-col ">
-            <div className="relative h-32 border border-gray-300 border-solid rounded overflow-hidden mb-4">
+            <div className="relative h-32 border border-slate-300 border-solid rounded overflow-hidden mb-4">
               <input
                 type="file"
                 accept="image/*"
@@ -248,7 +265,7 @@ const TestElement = () => {
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+              className="border border-slate-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
             >
               <option value="">Select Type</option>
               <option value="group">Group Project</option>
@@ -256,7 +273,7 @@ const TestElement = () => {
             </select>
           </div>
         </div>
-        <div className="flex flex-wrap border border-gray-300 rounded px-2 py-2 ">
+        <div className="flex flex-wrap border border-slate-300 rounded px-2 py-2 ">
           {tags.map((tag, index) => (
             <div
               key={index}
@@ -276,7 +293,7 @@ const TestElement = () => {
             placeholder="Add Tag"
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
-            className="border border-gray-300 rounded px-4 py-2 mr-2 focus:outline-none focus:border-blue-500"
+            className="border border-slate-300 rounded px-4 py-2 mr-2 focus:outline-none focus:border-blue-500"
           />
           <button
             onClick={addTag}
@@ -294,13 +311,18 @@ const TestElement = () => {
         >
           {editingIndex !== null ? "Update Project" : "Add Project"}
         </button>
-        <div className="mt-8">
-          {projects.map((project, index) => (
+      </div>
+      <div className="mt-8">
+        {projects.length > 0 && (
+          <div className="text-xl font-semibold">Your Projects</div>
+        )}
+        <div className="">
+          {projects?.map((project, index) => (
             <div
               key={index}
               className="mb-8 p-6 bg-white rounded shadow-md border border-gray-200"
             >
-              <h2 className="text-xl font-semibold mb-4">{project.title}</h2>
+              <h3 className="text-xl font-semibold mb-4">{project.title}</h3>
               <p className="text-gray-700 mb-4">{project.description}</p>
               <div className="flex gap-10">
                 {project.image && (

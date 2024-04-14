@@ -302,32 +302,35 @@ export const TestimonialsCard = ({ item, index }) => {
     const [key, value] = item.split("=");
     jsonData[key] = value;
   });
-  const handleSubmitEditedTestimonial =async (e,id) => {
-    
+  const handleSubmitEditedTestimonial = async (e, id) => {
     try {
-      const response = await axios.post("/testimonial/", {
-        action:2,
-        id:{id},
-        content_json: {comment}
-      },
-      {headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${jsonData.access_token}`,
-    }});
-    if (
-      !response.data ||
-      response.data.status === 400 ||
-      response.data.status === 401
-    ) {
-      console.log(response.data.message);
-      return;
-    }
-    setEditTestimonial(false);
-    setReadOnly(true);
-    console.log(response.data.data);
-    
+      const response = await axios.post(
+        "/testimonial/",
+        {
+          action: 2,
+          id: { id },
+          content_json: { comment },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      if (
+        !response.data ||
+        response.data.status === 400 ||
+        response.data.status === 401
+      ) {
+        console.log(response.data.message);
+        return;
+      }
+      setEditTestimonial(false);
+      setReadOnly(true);
+      console.log(response.data.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -359,7 +362,7 @@ export const TestimonialsCard = ({ item, index }) => {
         {editTestimonial && (
           <div
             className="px-3 py-2 mt-4 rounded-sm bg-green-500 text-white w-fit cursor-pointer"
-            onClick={ handleSubmitEditedTestimonial(item.id)}
+            onClick={handleSubmitEditedTestimonial(item.id)}
           >
             Submit
           </div>
@@ -963,11 +966,10 @@ export const Dashboard = () => {
         {/* Blogs section of dashboard */}
         {blogs && <ExpertBlogs />}
         {/* Testimonials section of dashboard */}
-        {testimonials && 
-            expertAllTestimonials?.map((item, index) => (
-              <TestimonialsCard key={index} item={item} index={index} />
-            ))
-        }
+        {testimonials &&
+          expertAllTestimonials?.map((item, index) => (
+            <TestimonialsCard key={index} item={item} index={index} />
+          ))}
         {/* Project section of dashboard */}
         {projects && (
           <div>
@@ -1207,7 +1209,6 @@ export const Leaderboard = () => {
 };
 
 export const MyBookings = () => {
- 
   return (
     <div className="w-full md:w-[68%]">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">

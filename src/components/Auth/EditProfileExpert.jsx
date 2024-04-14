@@ -1369,36 +1369,38 @@ const AchDetails = () => {
     setAchForms([...achForms, { id: achForms.length + 1 }]);
   };
 
-  const [selectedCertificate, setSelectedCertificate] = useState(null);
+  const [selectedCertificate, setSelectedCertificate] = useState(Array.from({ length: achForms.length }, () => null));
 
-  const handleCertificateChange = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    if (file.size > 1024 * 1024) {
-      // 1MB limit
-      console.error("File size exceeds the limit of 1MB");
-      return;
-    }
-
-    if (!file.type.startsWith("image/")) {
-      console.error("Only image files are allowed");
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      const imageData = reader.result;
-      setSelectedCertificate(imageData);
+  const handleCertificateChange = (event, ind) => {
+    const file = event.target.files[0]; // Get the first selected file
+    if (file) {
+      if (!file.type.match('image/.*')) {
+        alert('Only image files are allowed!');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const updatedSelectedCertificates = [...selectedCertificate];
+      updatedSelectedCertificates[ind] = reader.result;
+      setSelectedCertificate(updatedSelectedCertificates);
+      };
+      reader.readAsDataURL(file);
+      const updatedCertificates = [...achInfo.certificate];
+      updatedCertificates[ind] = event.target.value;
       setAchInfo({
         ...achInfo,
-        certificate: imageData, // Assign the base64 data directly
+        certificate: updatedCertificates,
       });
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
-  const handleRemoveCertificate = () => {
-    setSelectedCertificate(null);
+  const handleRemoveCertificate = (ind) => {
+    const updatedSelectedCertificates = [...selectedCertificate];
+  updatedSelectedCertificates[ind] = null;
+  setSelectedCertificate(updatedSelectedCertificates);
+  const updatedCertificates = [...achInfo.certificate];
+  updatedCertificates[ind] = null;
+  setAchInfo({ ...achInfo, certificate: updatedCertificates });
   };
 
   const getAchForm = async () => {
@@ -1571,15 +1573,15 @@ const AchDetails = () => {
                 document.querySelector(`#certificate${form.id}`).click()
               }
             >
-              {selectedCertificate ? (
+              {selectedCertificate[ind] && selectedCertificate[ind].startsWith("data:") ? (
                 <div className="relative">
                   <img
-                    src={selectedCertificate}
+                    src={selectedCertificate[ind]}
                     alt="Certificate"
                     className="w-32 h-32 object-cover rounded-lg"
                   />
                   <div
-                    onClick={handleRemoveCertificate}
+                    onClick={()=>handleRemoveCertificate(ind)}
                     className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
                   >
                     <BsX
@@ -1602,7 +1604,8 @@ const AchDetails = () => {
               name={`certificate${form.id}`}
               id={`certificate${form.id}`}
               className="hidden"
-              onChange={handleCertificateChange}
+              onChange={(e)=>handleCertificateChange(e,ind)}
+              aria-label="Upload certificate for achievement"
             />
           </>
         ))}

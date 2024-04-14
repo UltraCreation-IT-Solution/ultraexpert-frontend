@@ -13,7 +13,7 @@ import {
 import { BiSolidLike } from "react-icons/bi";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { IoEyeSharp } from "react-icons/io5";
-import { FaTags, FaPlus,FaRegTrashAlt } from "react-icons/fa";
+import { FaTags, FaPlus, FaRegTrashAlt } from "react-icons/fa";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
@@ -3150,14 +3150,16 @@ export const favBlogs = [
   },
 ];
 
-export const ProjectsCarousel = () => {
+export const ProjectsCarousel = ({projectsArray}) => {
+  console.log(projectsArray);
   const [slider, setSlider] = useState(0);
-
   return (
+    <>
+     
     <div className="">
       <div className="flex justify-center items-center ">
-        {expertDetailsObj?.projects.map((temp, idx) => (
-          <div className=" ">
+        {projectsArray?.length > 0 && projectsArray?.map((item, idx) => (
+          <div key={idx}>
             <div className="relative w-[95%] m-auto">
               <div
                 className={
@@ -3166,9 +3168,11 @@ export const ProjectsCarousel = () => {
                     : "hidden"
                 }
               >
-                <div className="text-center text-xs sm:text-sm">{temp?.type} Project</div>
+                <div className="text-center text-xs sm:text-sm">
+                  {item?.type} Project
+                </div>
                 <div className="text-center text-xs text-gray-300 ">
-                  {temp?.role}{" "}
+                  {item?.role}{" "}
                 </div>
               </div>
               <div
@@ -3178,7 +3182,7 @@ export const ProjectsCarousel = () => {
                     : "hidden"
                 }
               >
-                {temp?.title}
+                {item?.title}
               </div>
               <MdOutlineKeyboardArrowLeft
                 className={`absolute left-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] rounded-full ${
@@ -3192,18 +3196,18 @@ export const ProjectsCarousel = () => {
               />
               <MdOutlineKeyboardArrowRight
                 className={`absolute right-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] ${
-                  slider === expertDetailsObj?.projects.length - 1
+                  slider === projectsArray?.length - 1
                     ? ` border-slate-400 border-solid text-slate-400`
                     : `border-white border-solid text-white`
                 } bg-black/50 rounded-full`}
                 onClick={() =>
-                  slider === expertDetailsObj?.projects.length - 1
-                    ? setSlider(expertDetailsObj?.projects.length - 1)
+                  slider === projectsArray?.length - 1
+                    ? setSlider(projectsArray?.length - 1)
                     : setSlider(slider + 1)
                 }
               />
               <img
-                src={temp?.banner}
+                src={item?.image}
                 key={idx}
                 className={
                   slider === idx
@@ -3220,7 +3224,7 @@ export const ProjectsCarousel = () => {
                   : "hidden"
               }
             >
-              {temp?.tags?.map((item, index) => (
+              {item?.tags?.map((item, index) => (
                 <div
                   key={index}
                   className="border border-solid border-slate-300 rounded-sm px-3 py-[6px] text-xs"
@@ -3237,50 +3241,65 @@ export const ProjectsCarousel = () => {
                   : "hidden"
               }
             >
-              {temp?.description}
+              {item?.description}
             </p>
           </div>
         ))}
       </div>
     </div>
+    </>
   );
 };
 
-export const BookingCard = ({item}) => {
+export const BookingCard = ({ item }) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-        <div
-          className="text-sm flex items-center justify-between  border-t border-solid border-slate-300 my-5 py-3 overflow-x-scroll"
-          
-        >
-          <div className="flex items-center xs:gap-[4vw] text-sm">
-            <div className="flex items-center gap-2 w-[200px] ">
-              <img
-                src={item?.customerProfile}
-                className="h-9 w-9 rounded-full shrink-0 object-cover"
-                alt=""
-              />
-              <div>{item?.customerName}</div>
-            </div>
-            <div className="hidden sm:block w-[120px]">{item?.scheduledDate} </div>
-            <div className="w-[60px] flex items-center justify-center shrink-0">
-              <FaRegTrashAlt className="shrink-0" />
-            </div>
+      <div className="text-sm flex items-center justify-between  border-t border-solid border-slate-300 my-5 py-3 overflow-x-scroll">
+        <div className="flex items-center xs:gap-[4vw] text-sm">
+          <div className="flex items-center gap-2 w-[200px] ">
+            <img
+              src={item?.customerProfile}
+              className="h-9 w-9 rounded-full shrink-0 object-cover"
+              alt=""
+            />
+            <div>{item?.customerName}</div>
           </div>
-          {open ? <IoIosArrowUp className="shrink-0 text-xl " onClick={() => (open ? setOpen(false) : setOpen(true))}/> : <IoIosArrowDown className="shrink-0 text-xl " onClick={() => (open ? setOpen(false) : setOpen(true))}/>}
+          <div className="hidden sm:block w-[120px]">
+            {item?.scheduledDate}{" "}
+          </div>
+          <div className="w-[60px] flex items-center justify-center shrink-0">
+            <FaRegTrashAlt className="shrink-0" />
+          </div>
         </div>
-        {open && <div  >
-          <div className="text-sm line-clamp-2">Service Title: Learn API integration using Postman </div>
+        {open ? (
+          <IoIosArrowUp
+            className="shrink-0 text-xl "
+            onClick={() => (open ? setOpen(false) : setOpen(true))}
+          />
+        ) : (
+          <IoIosArrowDown
+            className="shrink-0 text-xl "
+            onClick={() => (open ? setOpen(false) : setOpen(true))}
+          />
+        )}
+      </div>
+      {open && (
+        <div>
+          <div className="text-sm line-clamp-2">
+            Service Title: Learn API integration using Postman{" "}
+          </div>
           <div className="text-sm mt-2">Booking Date: {item?.bookingDate} </div>
-          <div className="block sm:hidden mt-2 shrink-0  text-sm">Scheduled date: {item?.scheduledDate} </div>
+          <div className="block sm:hidden mt-2 shrink-0  text-sm">
+            Scheduled date: {item?.scheduledDate}{" "}
+          </div>
           <div className="text-sm mt-2">Start Time: {item?.startTime} </div>
           <div className="text-sm mt-2">End Time: {item?.endTime} </div>
         </div>
-        }
-        </>
-  )
-}
+      )}
+    </>
+  );
+};
 
 export const BlogCardHorizontal = ({ index, items }) => {
   return (

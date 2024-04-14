@@ -142,7 +142,7 @@ const appRouter = createBrowserRouter([
             element: <Expert />,
           },
           {
-            path: "expertprofile",
+            path: "expertprofile/:id",
             children: [
               {
                 path: "",
