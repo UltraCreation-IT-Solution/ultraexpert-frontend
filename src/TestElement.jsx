@@ -38,7 +38,8 @@ const TestElement = () => {
           Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
-      setProjects(response.data);
+      console.log(response.data.data.projects);
+      setProjects(response.data.data.projects);
     } catch (error) {
       console.log(error);
     }
@@ -51,10 +52,10 @@ const TestElement = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "/experts/",
+        "/experts/update/",
         {
-          action: 7,
-          data: projects,
+          action: 8,
+          projects_json: projects,
         },
         {
           headers: {
@@ -317,62 +318,63 @@ const TestElement = () => {
           <div className="text-xl font-semibold">Your Projects</div>
         )}
         <div className="">
-          {projects.map((project, index) => (
-            <div
-              key={index}
-              className="mb-8 p-6 bg-white rounded shadow-md border border-gray-200"
-            >
-              <h3 className="text-xl font-semibold mb-4">{project.title}</h3>
-              <p className="text-gray-700 mb-4">{project.description}</p>
-              <div className="flex gap-10">
-                {project.image && (
-                  <img
-                    src={project.image}
-                    alt="Project"
-                    className="mb-4 h-44 w-60 object-cover rounded"
-                  />
-                )}
-                <div>
-                  <p className="text-sm font-medium">
-                    <span className="font-extrabold">Type: </span>
-                    {project.type === "group"
-                      ? "Group Project"
-                      : "Indie Project"}
-                  </p>
-                  {project.type === "group" && (
-                    <p className="text-sm font-medium">
-                      <span className="font-extrabold">Role: </span>
-                      {project.role}
-                    </p>
+          {projects.length > 0 &&
+            projects.map((project, index) => (
+              <div
+                key={index}
+                className="mb-8 p-6 bg-white rounded shadow-md border border-gray-200"
+              >
+                <h3 className="text-xl font-semibold mb-4">{project.title}</h3>
+                <p className="text-gray-700 mb-4">{project.description}</p>
+                <div className="flex gap-10">
+                  {project.image && (
+                    <img
+                      src={project.image}
+                      alt="Project"
+                      className="mb-4 h-44 w-60 object-cover rounded"
+                    />
                   )}
-                  <div className="flex flex-wrap mt-2">
-                    {project.tags.map((tag, tagIndex) => (
-                      <span
-                        key={tagIndex}
-                        className="flex gap-1 items-center bg-slate-300 text-gray-600 pl-4 pr-2 py-1 rounded-full text-sm mr-2 mb-2"
+                  <div>
+                    <p className="text-sm font-medium">
+                      <span className="font-extrabold">Type: </span>
+                      {project.type === "group"
+                        ? "Group Project"
+                        : "Indie Project"}
+                    </p>
+                    {project.type === "group" && (
+                      <p className="text-sm font-medium">
+                        <span className="font-extrabold">Role: </span>
+                        {project.role}
+                      </p>
+                    )}
+                    <div className="flex flex-wrap mt-2">
+                      {project.tags.map((tag, tagIndex) => (
+                        <span
+                          key={tagIndex}
+                          className="flex gap-1 items-center bg-slate-300 text-gray-600 pl-4 pr-2 py-1 rounded-full text-sm mr-2 mb-2"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex mt-2">
+                      <button
+                        onClick={() => handleEditProject(index)}
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2 hover:bg-blue-600"
                       >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex mt-2">
-                    <button
-                      onClick={() => handleEditProject(index)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2 hover:bg-blue-600"
-                    >
-                      <FiEdit /> Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteProject(index)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-                    >
-                      Delete
-                    </button>
+                        <FiEdit /> Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProject(index)}
+                        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>

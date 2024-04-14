@@ -4,7 +4,23 @@ import ultraXpert from "../../assets/images/ultraXpert.svg";
 import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaTimes, FaRegHeart } from "react-icons/fa";
 import { IoIosNotificationsOutline } from "react-icons/io";
+import axios from "../../axios";
 
+const cookies = document.cookie.split("; ");
+const jsonData = {};
+
+cookies.forEach((item) => {
+  const [key, value] = item.split("=");
+  jsonData[key] = value;
+});
+const handleLogout = () => {
+  localStorage.clear();
+  window.location.reload();
+  document.cookie =
+    "access_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
+  document.cookie =
+    "refresh_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
+};
 const NotificationDropdown = ({ notifications, isOpen, toggleDropdown }) => {
   if (!notifications) {
     console.error("Notifications prop is missing or null.");
@@ -146,12 +162,21 @@ const Navbar = () => {
           >
             About us
           </Link>
-          <Link
-            to={"/login"}
-            className="relative bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
-          >
-            Sign In
-          </Link>
+          {!jsonData.access_token || !jsonData.refresh_token ? (
+            <Link
+              to={"/login"}
+              className="relative bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
+            >
+              Sign In
+            </Link>
+          ) : (
+            <Link
+              onClick={handleLogout}
+              className="relative bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
+            >
+              Logout
+            </Link>
+          )}
         </nav>
         <button
           onClick={() => setShowNav(!showNav)}

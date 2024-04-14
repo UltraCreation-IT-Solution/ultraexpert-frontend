@@ -69,12 +69,15 @@ const Login = () => {
         // const json = await res.json();
         if (res.status === 200) {
           console.log("Login successful");
-          document.cookie = `access_token=${res.data.access_token};  SameSite=Lax;`;
-          document.cookie = `refresh_token=${res.data.refresh_token};  SameSite=Lax;`;
-
-          console.log(res);
-          // console.log(json);
-          navigate("/");
+          const expirationDate = new Date();
+          expirationDate.setDate(expirationDate.getDate() + 5);
+          document.cookie = `access_token=${
+            res.data.access_token
+          };expires=${expirationDate.toUTCString()};  SameSite=Lax;`;
+          document.cookie = `refresh_token=${
+            res.data.refresh_token
+          };expires=${expirationDate.toUTCString()};  SameSite=Lax;`;
+          window.location.href = "/";
         }
       } catch (error) {
         console.error(error);

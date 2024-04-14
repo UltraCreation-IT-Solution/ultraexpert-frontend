@@ -244,8 +244,15 @@ const SignUp = () => {
             });
             // const json = await res.json();
             const data = res.data;
-            document.cookie = `access_token=${res.data.access_token}; SameSite=Lax;`;
-            document.cookie = `refresh_token=${res.data.refresh_token}; SameSite=Lax;`;
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + 5);
+            document.cookie = `access_token=${
+              res.data.access_token
+            };expires=${expirationDate.toUTCString()};  SameSite=Lax;`;
+            document.cookie = `refresh_token=${
+              res.data.refresh_token
+            };expires=${expirationDate.toUTCString()};  SameSite=Lax;`;
+            window.location.href = "/";
             if (!data || data.status === 400 || data.status === 401) {
               window.alert("Invalid Credentials");
               return;
