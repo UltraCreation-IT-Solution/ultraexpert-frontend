@@ -61,7 +61,7 @@ const NotificationDropdown = ({ notifications, isOpen, toggleDropdown }) => {
 const Navbar = () => {
   const location = useLocation().pathname;
   const [showNav, setShowNav] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(true);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
     setShowNav(false);
