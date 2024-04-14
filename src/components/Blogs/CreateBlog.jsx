@@ -1,68 +1,69 @@
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import QuillToolbar,{ modules , formats } from "../../subsitutes/EditorToolbar";
 import { BsUpload } from "react-icons/bs";
 import { BsX } from "react-icons/bs";
 
 const CreateBlog = () => {
   const [value, setValue] = useState("");
   console.log(value)
-  const modules = {
-    toolbar: [
-      [
-        { header: "1" },
-        { header: "2" },
+  // const modules = {
+  //   toolbar: [
+  //     [
+  //       { header: "1" },
+  //       { header: "2" },
         
-        { font: [] },
-      ],
-      [{ size: [] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [
-        { list: "ordered" },
-        { list: "bullet" },
-        { indent: "-1" },
-        { indent: "+1" },
-      ],
-      ["link", "image", "video"],
-      ["clean"],
-      [{ script: "sub" }, { script: "super" }],
-      [{ direction: "rtl" }], // Right-to-left text direction
-      [{ color: [] }, { background: [] }], // Text color and background color
-      [{ align: [] }], // Text alignment
-      [
-        { "code-block": "code-block" },
-        { code: "code" },
-        { formula: "formula" },
-      ],
-    ],
-  };
-  const formats = [
-    "header",
-    "font",
-    "size",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "blockquote",
-    "list",
-    "bullet",
-    "indent",
-    "link",
-    "image",
-    "video",
-    "script",
-    "direction",
-    "color",
-    "background",
-    "align",
-    "code-block",
-    "code",
-    "formula",
-  ];
+  //       { font: [] },
+  //     ],
+  //     [{ size: [] }],
+  //     ["bold", "italic", "underline", "strike", "blockquote"],
+  //     [
+  //       { list: "ordered" },
+  //       { list: "bullet" },
+  //       { indent: "-1" },
+  //       { indent: "+1" },
+  //     ],
+  //     ["link", "image", "video"],
+  //     ["clean"],
+  //     [{ script: "sub" }, { script: "super" }],
+  //     [{ direction: "rtl" }], // Right-to-left text direction
+  //     [{ color: [] }, { background: [] }], // Text color and background color
+  //     [{ align: [] }], // Text alignment
+  //     [
+  //       { "code-block": "code-block" },
+  //       { code: "code" },
+  //       { formula: "formula" },
+  //     ],
+  //   ],
+  // };
+  // const formats = [
+  //   "header",
+  //   "font",
+  //   "size",
+  //   "bold",
+  //   "italic",
+  //   "underline",
+  //   "strike",
+  //   "blockquote",
+  //   "list",
+  //   "bullet",
+  //   "indent",
+  //   "link",
+  //   "image",
+  //   "video",
+  //   "script",
+  //   "direction",
+  //   "color",
+  //   "background",
+  //   "align",
+  //   "code-block",
+  //   "code",
+  //   "formula",
+  // ];
 
+  // code for uploading image for blog starts
   const [selectedFile, setSelectedFile] = useState(null);
-
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -81,7 +82,7 @@ const CreateBlog = () => {
   const removeImage = () => {
     setSelectedFile(null);
   };
-
+  // code for uploading image for blog ends
 
   return (
     <div className="mt-[100px] mx-[7vw] ">
@@ -151,15 +152,19 @@ const CreateBlog = () => {
           </div>
         </div>
       </div>
+      <div className="my-10 ">
+
+      <QuillToolbar toolbarId={'t1'} />
       <ReactQuill
         theme="snow"
         value={value}
         onChange={setValue}
-        modules={modules}
+        modules={modules('t1')}
         formats={formats}
         placeholder="Write something..."
-        className="my-10 min-h-[400px] "
+        className="min-h-[400px] "
       />
+      </div>
     </div>
   );
 };

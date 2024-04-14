@@ -29,7 +29,6 @@ const GeneralDetails = () => {
         first_name: response.data.data.first_name,
         last_name: response.data.data.last_name,
         mobile_number: response.data.data.mobile_number,
-        dob: response.data.data.dob,
         marital_status: response.data.data.marital_status,
         profile_img: response.data.data.profile_img,
         banner_img: response.data.data.banner_img,
@@ -49,7 +48,6 @@ const GeneralDetails = () => {
     first_name: "",
     last_name: "",
     mobile_number: "",
-    dob: "",
     marital_status: "Single",
     profile_img: "",
     banner_img: "",
@@ -74,7 +72,6 @@ const GeneralDetails = () => {
           first_name: generalInfo.first_name,
           last_name: generalInfo.last_name,
           mobile_number: generalInfo.mobile_number,
-          dob: generalInfo.dob,
           marital_status: generalInfo.marital_status,
           profile_img: selectedProfile,
           gender: generalInfo.gender,
@@ -194,6 +191,9 @@ const GeneralDetails = () => {
               placeholder="Enter your mobile number"
             />
           </div>
+        </div>
+
+        <div className="flex justify-around gap-5">
           <div className="flex flex-col w-full">
             <label htmlFor="gender" className="text-lg mb-1">
               Gender
@@ -214,29 +214,6 @@ const GeneralDetails = () => {
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </select>
-          </div>
-        </div>
-
-        <div className="flex justify-around gap-5">
-          <div className="flex flex-col w-full">
-            <label htmlFor="dob" className="text-lg mb-1">
-              Date of Birth
-            </label>
-            <input
-              name="dob"
-              id="dob"
-              value={generalInfo.dob}
-              type="text"
-              pattern="\d{4}-\d{2}-\d{2}"
-              placeholder="YYYY-MM-DD"
-              onChange={(e) => {
-                setPersonalInfo({
-                  ...generalInfo,
-                  dob: e.target.value,
-                });
-              }}
-              className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-            />
           </div>
           <div className="flex flex-col w-full">
             <label htmlFor="status" className="text-lg mb-1">
@@ -1392,6 +1369,40 @@ const AchDetails = () => {
     setAchForms([...achForms, { id: achForms.length + 1 }]);
   };
 
+  const [selectedCertificate, setSelectedCertificate] = useState(Array.from({ length: achForms.length }, () => null));
+
+  const handleCertificateChange = (event, ind) => {
+    const file = event.target.files[0]; // Get the first selected file
+    if (file) {
+      if (!file.type.match('image/.*')) {
+        alert('Only image files are allowed!');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const updatedSelectedCertificates = [...selectedCertificate];
+      updatedSelectedCertificates[ind] = reader.result;
+      setSelectedCertificate(updatedSelectedCertificates);
+      };
+      reader.readAsDataURL(file);
+      const updatedCertificates = [...achInfo.certificate];
+      updatedCertificates[ind] = event.target.value;
+      setAchInfo({
+        ...achInfo,
+        certificate: updatedCertificates,
+      });
+    }
+  };
+
+  const handleRemoveCertificate = (ind) => {
+    const updatedSelectedCertificates = [...selectedCertificate];
+  updatedSelectedCertificates[ind] = null;
+  setSelectedCertificate(updatedSelectedCertificates);
+  const updatedCertificates = [...achInfo.certificate];
+  updatedCertificates[ind] = null;
+  setAchInfo({ ...achInfo, certificate: updatedCertificates });
+  };
+
   const getAchForm = async () => {
     try {
       const response = await axios.get("/experts/?action=1", {
@@ -1554,28 +1565,47 @@ const AchDetails = () => {
               className="text-lg mb-1 flex gap-1"
               htmlFor={`certificate${form.id}`}
             >
-              Certificate <div className="text-xs">(optional)</div>
+              Certificate
             </label>
+            <div
+              className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
+              onClick={() =>
+                document.querySelector(`#certificate${form.id}`).click()
+              }
+            >
+              {selectedCertificate[ind] && selectedCertificate[ind].startsWith("data:") ? (
+                <div className="relative">
+                  <img
+                    src={selectedCertificate[ind]}
+                    alt="Certificate"
+                    className="w-32 h-32 object-cover rounded-lg"
+                  />
+                  <div
+                    onClick={()=>handleRemoveCertificate(ind)}
+                    className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
+                  >
+                    <BsX
+                      className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"
+                      size={20}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center">
+                  <BsUpload size={20} />
+                  <div className="text-sm text-[#1475cf] mt-2">
+                    Click here to upload a profile photo
+                  </div>
+                </div>
+              )}
+            </div>
             <input
               type="file"
               name={`certificate${form.id}`}
               id={`certificate${form.id}`}
-              className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-full"
-              onChange={(e) => {
-                const file = e.target.files[ind]; // Get the first selected file
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onload = () => {
-                    const updatedCertificates = [...achInfo.certificate];
-                    updatedCertificates[ind] = reader.result; // Store the file contents (base64 data) in the array
-                    setAchInfo({
-                      ...achInfo,
-                      certificate: updatedCertificates,
-                    });
-                  };
-                  reader.readAsDataURL(file); // Read the file as a data URL
-                }
-              }}
+              className="hidden"
+              onChange={(e)=>handleCertificateChange(e,ind)}
+              aria-label="Upload certificate for achievement"
             />
           </>
         ))}
@@ -2017,11 +2047,11 @@ const EditProfileExpert = () => {
 
   return (
     <div className="h-auto bg-white mt-[150px]">
-      <div className="w-[50%] flex border border-solid border-slate-300 mx-auto rounded-lg shadow-lg">
-        <div className="w-1/4 flex flex-col bg-white justify-start border-r border-solid border-slate-300">
+      <div className="md:w-[50%] w-[90%] flex md:flex-row flex-col border border-solid border-slate-300 mx-auto rounded-lg shadow-lg">
+        <div className="md:w-1/4 flex md:flex-col flex-row bg-white justify-start border-r border-solid border-slate-300">
           <button
             onClick={() => setCurrStep(0)}
-            className={`w-full text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
               currStep === 0
                 ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
                 : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
@@ -2031,7 +2061,7 @@ const EditProfileExpert = () => {
           </button>
           <button
             onClick={() => setCurrStep(1)}
-            className={`w-full text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
               currStep === 1
                 ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
                 : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
@@ -2041,7 +2071,7 @@ const EditProfileExpert = () => {
           </button>
           <button
             onClick={() => setCurrStep(2)}
-            className={`w-full text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
               currStep === 2
                 ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
                 : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
@@ -2051,7 +2081,7 @@ const EditProfileExpert = () => {
           </button>
           <button
             onClick={() => setCurrStep(3)}
-            className={`w-full text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
               currStep === 3
                 ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
                 : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
@@ -2061,7 +2091,7 @@ const EditProfileExpert = () => {
           </button>
           <button
             onClick={() => setCurrStep(4)}
-            className={`w-full text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            className={`w-full text-xs md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
               currStep === 4
                 ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
                 : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
@@ -2071,7 +2101,7 @@ const EditProfileExpert = () => {
           </button>
           <button
             onClick={() => setCurrStep(5)}
-            className={`w-full text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
               currStep === 5
                 ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
                 : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
@@ -2081,7 +2111,7 @@ const EditProfileExpert = () => {
           </button>
           <button
             onClick={() => setCurrStep(6)}
-            className={`w-full text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
               currStep === 6
                 ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
                 : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"

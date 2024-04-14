@@ -3,8 +3,9 @@ import { WhatWeDo } from "../Boundary/HeroSection";
 import { Testimonial } from "../Landing/Landing";
 import { PiCheckCircleLight } from "react-icons/pi";
 import about_us_1 from "../../assets/images/about_us _1.png";
-import about_us_mission_2 from "../../assets/images/about_us_mission_2.png"
+import about_us_mission_2 from "../../assets/images/about_us_mission_2.png";
 import about_us_vision_3 from "../../assets/images/about_us_vision_3.png";
+import axios from "../../axios";
 const About = () => {
   return (
     <div className="mt-[70px]">
@@ -38,13 +39,15 @@ const About = () => {
         />
       </div>
       <div className="flex-wrap sm:flex-nowrap flex items-center justify-center sm:justify-between px-[7vw] md:px-[10vw] py-5 my-10 bg-blue-50">
-      <img
+        <img
           src={about_us_mission_2}
           alt=""
           className="h-[80vw] xs:h-[70vw] xs:w-[80vw] sm:h-[30vw] sm:w-[35vw]  shrink-0 "
         />
         <div>
-          <div className="text-base sm:text-lg font-bold text-sky-800 ">OUR MISSION</div>
+          <div className="text-base sm:text-lg font-bold text-sky-800 ">
+            OUR MISSION
+          </div>
           <div className="text-xl sm:text-2xl font-bold ">What do we do?</div>
           <div className="text-sm sm:text-[1.7vw] md:text-[1.5vw] lg:text-[1.1vw] mt-3 text-balance">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum,
@@ -58,8 +61,13 @@ const About = () => {
       </div>
       <div className="flex-wrap-reverse sm:flex-nowrap flex items-center justify-center sm:justify-between mx-[7vw] md:mx-[10vw]">
         <div>
-          <div className="text-base sm:text-lg font-bold text-sky-800 ">OUR VISION</div>
-          <div className="text-xl sm:text-2xl font-bold">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae, eveniet?</div>
+          <div className="text-base sm:text-lg font-bold text-sky-800 ">
+            OUR VISION
+          </div>
+          <div className="text-xl sm:text-2xl font-bold">
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae,
+            eveniet?
+          </div>
           <div className="text-sm sm:text-[1.7vw] md:text-[1.5vw] lg:text-[1.1vw] mt-3 text-balance">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum,
             numquam. Suscipit, ipsum velit. Nostrum repudiandae veniam qui
@@ -151,6 +159,8 @@ const About = () => {
             name=""
             id=""
             rows="10"
+            value={writeTestimonial}
+            onChange={(e) => setWriteTestimonial(e.target.value)}
             placeholder="Add your testimonial here"
             className="min-w-full max-w-full border border-solid border-slate-400 text-base rounded-md p-2"
           ></textarea>

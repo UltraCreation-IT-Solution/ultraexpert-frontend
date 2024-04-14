@@ -13,6 +13,7 @@ import {
   MdSpaceDashboard,
   MdInsertPageBreak,
   MdOutlineStarBorderPurple500,
+  MdOpenInNew,
 } from "react-icons/md";
 import {
   BsFillPersonLinesFill,
@@ -31,10 +32,11 @@ import {
   BsGlobe,
   BsThreeDotsVertical,
 } from "react-icons/bs";
-import { RiPagesFill, RiArrowRightSLine} from "react-icons/ri";
+import { RiPagesFill, RiArrowRightSLine } from "react-icons/ri";
 import { PiCrownFill } from "react-icons/pi";
-import { ExpertBlogs, ExpertInfo } from "./ExpertProfile";
+import { ExpertBlogs } from "./ExpertProfile";
 import {
+  BookingCard,
   expertDashInfo as expert,
   expertDashInfo,
   expertDetailsObj,
@@ -49,7 +51,6 @@ import {
   Bar,
   XAxis,
   YAxis,
-  ReferenceLine,
   Legend,
   CartesianGrid,
   Tooltip,
@@ -60,6 +61,7 @@ import {
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { Outlet, Link } from "react-router-dom";
+import axios from "../../axios";
 
 const generateRandomData = () => {
   const today = new Date();
@@ -283,7 +285,7 @@ const Contributioncard = ({
   );
 };
 export const TestimonialsCard = ({ item, index }) => {
-  const [comment, setComment] = useState("Click to Change Testimonial");
+  const [comment, setComment] = useState(item?.content);
   const [readOnly, setReadOnly] = useState(true);
   const [editTestimonial, setEditTestimonial] = useState(false);
   const handleComment = (e) => {
@@ -293,9 +295,43 @@ export const TestimonialsCard = ({ item, index }) => {
     setReadOnly(false);
     setEditTestimonial(true);
   };
-  const handleSubmitEditedTestimonial = () => {
-    setEditTestimonial(false);
-    setReadOnly(true);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  const handleSubmitEditedTestimonial = async (e, id) => {
+    try {
+      const response = await axios.post(
+        "/testimonial/",
+        {
+          action: 2,
+          id: { id },
+          content_json: { comment },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      if (
+        !response.data ||
+        response.data.status === 400 ||
+        response.data.status === 401
+      ) {
+        console.log(response.data.message);
+        return;
+      }
+      setEditTestimonial(false);
+      setReadOnly(true);
+      console.log(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -308,17 +344,17 @@ export const TestimonialsCard = ({ item, index }) => {
         }`}
       >
         <div className="flex items-center justify-between text-sm font-semibold">
-          <div>{item?.date}</div>
+          <div className="text-sm ">{item?.date_created?.split("T")[0]}</div>
           <div className="flex items-center gap-3">
-          <FaEdit className="text-xl" onClick={handleEdit} />
-          <FaRegTrashAlt className="text-xl" />
-
+            <FaEdit className="text-xl" onClick={handleEdit} />
+            <FaRegTrashAlt className="text-xl" />
           </div>
         </div>
         <textarea
           readOnly={readOnly}
           value={comment}
           onChange={handleComment}
+          rows="5"
           className={`bg-inherit min-w-[100%] max-w-[100%] line-clamp-3 text-sm mt-4 focus:outline-none rounded-md ${
             editTestimonial ? "border border-solid border-[#c7c7c7] p-1" : ""
           }`}
@@ -326,7 +362,7 @@ export const TestimonialsCard = ({ item, index }) => {
         {editTestimonial && (
           <div
             className="px-3 py-2 mt-4 rounded-sm bg-green-500 text-white w-fit cursor-pointer"
-            onClick={handleSubmitEditedTestimonial}
+            onClick={handleSubmitEditedTestimonial(item.id)}
           >
             Submit
           </div>
@@ -360,6 +396,39 @@ export const Dashboard = () => {
       );
     }, 500);
   }, [a, b, c]);
+
+  // API integration for testimonials of expert start--->>>
+  const [expertAllTestimonials, setExpertAllTestimonials] = useState([]);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  const getExpertAllTestimonials = async () => {
+    try {
+      const response = await axios.get(`/testimonial/?action=3`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      if (
+        !response.data ||
+        response.data.status === 400 ||
+        response.data.status === 401
+      ) {
+        console.log(response.data.message);
+        return;
+      }
+      console.log(response.data.data);
+      setExpertAllTestimonials(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // API integration for testimonials of expert end--->>>
 
   const [contributions, setContributions] = useState(true);
   const [meetings, setMeetings] = useState(false);
@@ -837,7 +906,10 @@ export const Dashboard = () => {
             className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
               testimonials && `bg-[#ececec] rounded-sm`
             }`}
-            onClick={() => HandleTestimonials()}
+            onClick={() => {
+              getExpertAllTestimonials();
+              HandleTestimonials();
+            }}
           >
             Testimonials
           </div>
@@ -850,6 +922,7 @@ export const Dashboard = () => {
             Projects
           </div>
         </div>
+        {/* Contributions section of dashboard */}
         {contributions && (
           <div>
             {expert?.recentContributions?.map((item, idx) => (
@@ -857,6 +930,7 @@ export const Dashboard = () => {
             ))}
           </div>
         )}
+        {/* Meetings section of dashboard */}
         {meetings && (
           <div>
             {expert?.recentMeetings?.map((item, idx) => (
@@ -889,43 +963,50 @@ export const Dashboard = () => {
             ))}
           </div>
         )}
+        {/* Blogs section of dashboard */}
         {blogs && <ExpertBlogs />}
-        {testimonials && (
+        {/* Testimonials section of dashboard */}
+        {testimonials &&
+          expertAllTestimonials?.map((item, index) => (
+            <TestimonialsCard key={index} item={item} index={index} />
+          ))}
+        {/* Project section of dashboard */}
+        {projects && (
           <div>
-            {expertDashInfo?.testimonials?.map((item, index) => (
-              <TestimonialsCard key={index} item={item} index={index} />
+            <div className="text-sm md:text-base text-white bg-emerald-500 rounded-md px-4 py-2 w-fit flex items-center gap-2 cursor-pointer">
+              Add a new project <MdOpenInNew className="text-base ms:text-xl" />
+            </div>
+
+            {expertDetailsObj?.projects?.map((items, index) => (
+              <div
+                className={`px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
+                  index % 2 === 0
+                    ? `bg-[#ececec]`
+                    : `border border-[#c7c7c7] border-solid `
+                }`}
+              >
+                <div className="flex flex-col sm:flex-row items-start gap-5">
+                  <img
+                    className=" w-full h-48 object-cover sm:h-36 sm:w-40 rounded-md shrink-0 self-start"
+                    src={items?.banner}
+                    alt=""
+                  />
+                  <div className="text-[#575757]">
+                    <div className="text-lg font-semibold line-clamp-2 text-balance">
+                      {items?.title}
+                    </div>
+                    <div className="my-2 text-sm line-clamp-3 text-balance">
+                      {items?.description}
+                    </div>
+                  </div>
+                </div>
+                <div className="hidden border border-solid border-slate-300 h-fit sm:flex items-center justify-center rounded-full text-4xl font-thin self-center shrink-0 cursor-pointer">
+                  <RiArrowRightSLine />
+                </div>
+              </div>
             ))}
           </div>
         )}
-        {projects &&  
-          expertDetailsObj?.projects?.map((items, index) => 
-          <div
-          className={`px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
-            index % 2 === 0
-              ? `bg-[#ececec]`
-              : `border border-[#c7c7c7] border-solid `
-          }`}
-        >
-          <div className="flex flex-col sm:flex-row items-start gap-5">
-            <img
-              className=" w-full h-48 object-cover sm:h-36 sm:w-40 rounded-md shrink-0 self-start"
-              src={items?.banner}
-              alt=""
-            />
-            <div className="text-[#575757]">
-              <div className="text-lg font-semibold line-clamp-2 text-balance">
-                {items?.title}
-              </div>
-              <div className="my-2 text-sm line-clamp-3 text-balance">
-                {items?.description}
-              </div>
-            </div>
-          </div>
-          <div className="hidden border border-solid border-slate-300 h-fit sm:flex items-center justify-center rounded-full text-4xl font-thin self-center shrink-0 cursor-pointer">
-            <RiArrowRightSLine />
-          </div>
-        </div>
-          )}
       </div>
     </section>
   );
@@ -1133,33 +1214,16 @@ export const MyBookings = () => {
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
         Active Bookings
       </div>
-      <div className="flex items-center justify-between gap-10 text-sm text-gray-600 font-bold my-5 overflow-x-scroll">
-        <div className="shrink-0 w-[120px]">Booking Date</div>
-        <div className="w-[200px] shrink-0">Client Name</div>
-        <div className="shrink-0 w-[120px]">Scheduled Date</div>
-        <div className="shrink-0 w-[120px]">Start Time</div>
-        <div className="shrink-0 w-[120px]">End Time</div>
-        <div className="shrink-0 w-[120px]">Action</div>
+      <div className="flex items-center justify-between text-sm text-gray-600 font-bold my-5 overflow-x-scroll">
+        <div className="flex items-center xs:gap-[4vw] shrink-0">
+          <div className="w-[200px]">Client Name</div>
+          <div className="hidden sm:block w-[120px] ">Scheduled Date</div>
+          <div className="shrink-0 w-[60px]">Action</div>
+        </div>
+        <div className="shrink-0 text-right w-[60px] "></div>
       </div>
       {expertDashInfo?.myBookings.map((item, index) => (
-        <div
-          key={index}
-          className="text-sm flex items-center justify-between gap-10 border-t border-solid border-slate-300 my-5 py-3  overflow-x-scroll shrink-0"
-        >
-          <div className="shrink-0 w-[120px]">{item?.bookingDate} </div>
-          <div className="flex items-center gap-2 w-[200px] shrink-0">
-            <img
-              src={item?.customerProfile}
-              className="h-9 w-9 rounded-full shrink-0 object-cover"
-              alt=""
-            />
-            <div>{item?.customerName}</div>
-          </div>
-          <div className="shrink-0 w-[120px]">{item?.scheduledDate} </div>
-          <div className="shrink-0 w-[120px]">{item?.startTime} </div>
-          <div className="shrink-0 w-[120px]">{item?.endTime} </div>
-          <FaRegTrashAlt className="shrink-0 w-[120px]" />
-        </div>
+        <BookingCard item={item} key={index} />
       ))}
     </div>
   );
