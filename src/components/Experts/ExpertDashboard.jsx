@@ -965,8 +965,8 @@ export const Dashboard = () => {
         {/* Testimonials section of dashboard */}
         {testimonials && (
           <div>
-            {expertAllTestimonials?.map((item,index) => (
-              <TestimonialsCard key={item?.id} item={item} index={index} />
+            {expertDashInfo?.testimonials?.map((item, index) => (
+              <TestimonialsCard key={index} item={item} index={index} />
             ))}
           </div>
         )}
