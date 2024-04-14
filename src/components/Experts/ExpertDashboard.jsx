@@ -1096,9 +1096,36 @@ export const Chats = () => {
 export const Leaderboard = () => {
   const [weeklyLeaderboard, setWeeklyLeaderboard] = useState(true);
   const [monthlyLeaderboard, setMonthlyLeaderboard] = useState(false);
-  const handleWeeklyLeaderboard = () => {
-    setWeeklyLeaderboard(true);
-    setMonthlyLeaderboard(false);
+  const [leaderBoardData, setLeaderBoardData] = useState([]);
+
+  useEffect(async() => {
+    handleWeeklyLeaderboard();
+  },[])
+  const handleWeeklyLeaderboard = async () => {
+    
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const response = await axios.get("/experts/?action=2", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      console.log(response.data);
+      const expData = response.data.data;
+      console.log(expData);
+      setLeaderBoardData(expData);
+      setWeeklyLeaderboard(true);
+      setMonthlyLeaderboard(false);
+    } catch (error) {
+      console.log(error);
+    }
+    
   };
   const handleMonthlyLeaderboard = () => {
     setWeeklyLeaderboard(false);
@@ -1212,28 +1239,28 @@ export const Leaderboard = () => {
             <div>Score</div>
           </div>
           <div>
-            {leaderboardRanking.map((item, idx) => (
+            {leaderBoardData.map((item, idx) => (
               <div
                 key={idx}
                 className="flex items-center justify-between gap-1 py-3"
               >
                 <div className="flex items-center gap-[8vw]">
                   <div className="text-sm sm:text-base shrink-0">
-                    {item?.rank}
+                    {item.rank}
                   </div>
                   <div className="flex gap-3 sm:gap-6 items-center w-[300px] ">
                     <img
-                      src={item?.img}
-                      alt="img"
+                      src={item.profile_img}
+                      alt="Profile"
                       className="h-10 w-10 rounded-full object-cover shrink-0"
                     />
                     <div className="text-sm sm:text-base shrink-0">
-                      {item?.name}
+                      {item.expert_name}
                     </div>
                   </div>
                 </div>
                 <div className="text-sm sm:text-base shrink-0">
-                  {item?.score}
+                  {item.avg_score}
                 </div>
               </div>
             ))}
