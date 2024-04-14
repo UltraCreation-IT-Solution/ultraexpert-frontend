@@ -10,7 +10,6 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
-import { progress } from "framer-motion";
 
 const CHECKOUT_STEPS = [
   { name: "Personal Details" },
@@ -23,7 +22,7 @@ const CHECKOUT_STEPS = [
 ];
 
 const SignUpAsExpert = () => {
-  const [currStep, setCurrStep] = useState(4);
+  const [currStep, setCurrStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [margin, setMargin] = useState({
     marginLeft: 0,
@@ -184,7 +183,7 @@ const SignUpAsExpert = () => {
     state_name: [],
     country: ["India"],
     passing_year: [],
-    Devision: ["First"],
+    Devision: [],
   });
 
   const handleEducationForm = async (e) => {
@@ -1620,6 +1619,7 @@ const SignUpAsExpert = () => {
                             });
                           }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
+                          placeholder="CGPA / %"
                         />
                       </div>
                     </div>
@@ -1685,7 +1685,7 @@ const SignUpAsExpert = () => {
                         });
                       }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      placeholder="Institute Name"
+                      placeholder="Technology Name"
                     />
                     <label
                       htmlFor={`rating${form.id}`}
