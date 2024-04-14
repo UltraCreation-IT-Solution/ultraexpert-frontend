@@ -216,7 +216,7 @@ export const CustomerTransactionHistoryCard = ({ item }) => {
       <div className="text-xs sm:text-sm line-clamp-2"> Date: {item?.date} </div>
       <div className="text-xs sm:text-sm mt-2">Time: {item?.time} </div>
       <div className="block md:hidden text-xs sm:text-sm mt-2">Invoice: {item?.invoice} </div>
-      <div className="text-xs sm:text-sm mt-2 cursor-pointer">Download Invoice </div>
+      <div className="w-fit text-xs sm:text-sm mt-2 cursor-pointer text-red-500 hover:underline ">Download Invoice </div>
     </div>
     }
     </>
