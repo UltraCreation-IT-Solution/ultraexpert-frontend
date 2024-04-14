@@ -29,6 +29,10 @@ const Login = () => {
       newErrors.email = "Invalid email";
       isValid = false;
     }
+    // if (!userData.password || !passwordRegex.test(userData.password)) {
+    //   newErrors.password = "Invalid password";
+    //   isValid = false;
+    // }
     setErrors(newErrors);
     return isValid;
   };

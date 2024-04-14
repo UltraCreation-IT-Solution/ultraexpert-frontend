@@ -13,9 +13,10 @@ import {
 import { BiSolidLike } from "react-icons/bi";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { IoEyeSharp } from "react-icons/io5";
-import { FaTags, FaPlus } from "react-icons/fa";
+import { FaTags, FaPlus,FaRegTrashAlt } from "react-icons/fa";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
 export const topExpertsBar = [
   {
@@ -815,28 +816,33 @@ export const expertDashInfo = {
       serviceDate: "22 May, 2024",
     },
   ],
-  testimonials:[
+  testimonials: [
     {
-      date:"25 March, 2024",
-      comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
+      date: "25 March, 2024",
+      comment:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
     },
     {
-      date:"25 March, 2024",
-      comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
+      date: "25 March, 2024",
+      comment:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
     },
     {
-      date:"25 March, 2024",
-      comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
+      date: "25 March, 2024",
+      comment:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
     },
     {
-      date:"25 March, 2024",
-      comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
+      date: "25 March, 2024",
+      comment:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
     },
     {
-      date:"25 March, 2024",
-      comment:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
+      date: "25 March, 2024",
+      comment:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem.",
     },
-  ]
+  ],
 };
 export const customerDashboardInfo = {
   name: "Bhavesh Bhanusali",
@@ -851,8 +857,8 @@ export const customerDashboardInfo = {
       bookingTime: "2:00 PM",
       bookingDate: "24 Mar, 2024",
       scheduledDate: "30 Mar, 2024",
-      startTime: "3:00 PM",
-      endTime: "4:00 PM",
+      startTime: "5:00 PM",
+      endTime: "6:00 PM",
       customerProfile:
         "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       customerName: "Bhavesh Bhanusali",
@@ -2686,8 +2692,8 @@ export const expertDetailsObj = {
         "Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.",
       title: "Cloud Portal",
       tags: ["React js", "Node js", "Express js", "MongoDB", "React Native"],
-      type:"Group",
-      role:"Developer"
+      type: "Group",
+      role: "Developer",
     },
     {
       banner:
@@ -2696,7 +2702,7 @@ export const expertDetailsObj = {
         "Lorem ipsum 2, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur, recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit. recusandae iusto quia? Vero ea doloribus beatae impedit nobis placeat sed? Lorem ipsum 1, dolor sit amet consectetur adipisicing elit.",
       title: "UltraXpert",
       tags: ["React js", "Node js", "Rapid API"],
-      type:"Indie",
+      type: "Indie",
     },
     {
       banner:
@@ -2705,8 +2711,8 @@ export const expertDetailsObj = {
         "Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.",
       title: "Clone",
       tags: ["React js", "Node js", "React Native"],
-      type:"Group",
-      role:"Designer"
+      type: "Group",
+      role: "Designer",
     },
     {
       banner:
@@ -2715,7 +2721,7 @@ export const expertDetailsObj = {
         "Lorem ipsum 4, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur. Lorem ipsum 3, dolor sit amet consectetur adipisicing elit. Aliquid itaque ipsa quos corporis, fugit nostrum dignissimos laborum provident consectetur.",
       title: "My Project 4",
       tags: ["React js", "Node js"],
-      type:"Indie",
+      type: "Indie",
     },
   ],
   education: [
@@ -3148,85 +3154,133 @@ export const ProjectsCarousel = () => {
   const [slider, setSlider] = useState(0);
 
   return (
-    <div className="relative">
+    <div className="">
+      <div className="flex justify-center items-center ">
+        {expertDetailsObj?.projects.map((temp, idx) => (
+          <div className=" ">
+            <div className="relative w-[95%] m-auto">
+              <div
+                className={
+                  slider === idx
+                    ? "absolute top-1 left-1 w-fit px-4 sm:px-8 py-1 sm:py-2 btnBlack text-white rounded-sm rounded-r-full border border-solid border-white "
+                    : "hidden"
+                }
+              >
+                <div className="text-center text-xs sm:text-sm">{temp?.type} Project</div>
+                <div className="text-center text-xs text-gray-300 ">
+                  {temp?.role}{" "}
+                </div>
+              </div>
+              <div
+                className={
+                  slider === idx
+                    ? "absolute bottom-0 w-full flex items-center justify-center h-[8vw] md:h-[5.5vw] bg-black/45 tracking-wider text-[2.5vw] md:text-[1.5vw] text-white font-bold"
+                    : "hidden"
+                }
+              >
+                {temp?.title}
+              </div>
+              <MdOutlineKeyboardArrowLeft
+                className={`absolute left-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] rounded-full ${
+                  slider === 0
+                    ? ` border-slate-400 border-solid text-slate-400`
+                    : `border-white border-solid text-white`
+                } bg-black/50 `}
+                onClick={() =>
+                  slider === 0 ? setSlider(0) : setSlider(slider - 1)
+                }
+              />
+              <MdOutlineKeyboardArrowRight
+                className={`absolute right-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] ${
+                  slider === expertDetailsObj?.projects.length - 1
+                    ? ` border-slate-400 border-solid text-slate-400`
+                    : `border-white border-solid text-white`
+                } bg-black/50 rounded-full`}
+                onClick={() =>
+                  slider === expertDetailsObj?.projects.length - 1
+                    ? setSlider(expertDetailsObj?.projects.length - 1)
+                    : setSlider(slider + 1)
+                }
+              />
+              <img
+                src={temp?.banner}
+                key={idx}
+                className={
+                  slider === idx
+                    ? "h-[50vw] md:h-[30vw] w-[100%] object-cover shrink-0 flex"
+                    : "hidden"
+                }
+              />
+            </div>
 
-    
-    <div className="flex justify-center items-center mt-5">
-      {expertDetailsObj?.projects.map((temp, idx) => (
-        <div className=" bg-red-500">
-          <div className="relative w-[95%] m-auto">
             <div
               className={
                 slider === idx
-                  ? "absolute bottom-0 w-full flex items-center justify-center h-[8vw] md:h-[5.5vw] bg-black/45 tracking-wider text-[2.5vw] md:text-[1.5vw] text-white font-bold"
+                  ? "mt-3 flex items-center gap-1 flex-wrap pl-3 sm:pl-5"
                   : "hidden"
               }
             >
-              {temp?.title}
+              {temp?.tags?.map((item, index) => (
+                <div
+                  key={index}
+                  className="border border-solid border-slate-300 rounded-sm px-3 py-[6px] text-xs"
+                >
+                  {item}
+                </div>
+              ))}
             </div>
-            <MdOutlineKeyboardArrowLeft
-              className={`absolute left-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] rounded-full ${
-                slider === 0
-                  ? ` border-slate-400 border-solid text-slate-400`
-                  : `border-white border-solid text-white`
-              } bg-black/50 `}
-              onClick={() =>
-                slider === 0 ? setSlider(0) : setSlider(slider - 1)
-              }
-            />
-            <MdOutlineKeyboardArrowRight
-              className={`absolute right-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] ${
-                slider === expertDetailsObj?.projects.length - 1
-                  ? ` border-slate-400 border-solid text-slate-400`
-                  : `border-white border-solid text-white`
-              } bg-black/50 rounded-full`}
-              onClick={() =>
-                slider === expertDetailsObj?.projects.length - 1
-                  ? setSlider(expertDetailsObj?.projects.length - 1)
-                  : setSlider(slider + 1)
-              }
-            />
-            <img
-              src={temp?.banner}
-              key={idx}
+
+            <p
               className={
                 slider === idx
-                  ? "h-[50vw] md:h-[30vw] w-[100%] object-cover shrink-0 flex"
+                  ? "flex w-[95%] m-auto mt-4 text-sm md:text-base font-montserrat"
                   : "hidden"
               }
-            />
+            >
+              {temp?.description}
+            </p>
           </div>
-          <div className={slider===idx ? "absolute -top-0 left-0 w-fit px-8 py-2 btnBlack text-white rounded-sm"  : "hidden"}>
-            <div className="text-center text-sm">{temp?.type} Project</div>
-            <div className="text-center text-xs text-gray-300 ">{temp?.role} </div>
-          </div>
-          <div
-            className={
-              slider === idx ? "mt-3 flex items-center gap-1 flex-wrap pl-3 sm:pl-5" : "hidden"
-            }
-          >
-            {temp?.tags?.map((item,index) => (
-              <div key={index} className="border border-solid border-slate-300 rounded-sm px-3 py-[6px] text-xs">
-                {item}
-              </div>
-            ))}
-          </div>
-
-          <p
-            className={
-              slider === idx
-                ? "flex w-[95%] m-auto mt-4 text-sm md:text-base font-montserrat"
-                : "hidden"
-            }
-          >
-            {temp?.description}
-          </p>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
     </div>
   );
 };
+
+export const BookingCard = ({item}) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+        <div
+          className="text-sm flex items-center justify-between  border-t border-solid border-slate-300 my-5 py-3 overflow-x-scroll"
+          
+        >
+          <div className="flex items-center xs:gap-[4vw] text-sm">
+            <div className="flex items-center gap-2 w-[200px] ">
+              <img
+                src={item?.customerProfile}
+                className="h-9 w-9 rounded-full shrink-0 object-cover"
+                alt=""
+              />
+              <div>{item?.customerName}</div>
+            </div>
+            <div className="hidden sm:block w-[120px]">{item?.scheduledDate} </div>
+            <div className="w-[60px] flex items-center justify-center shrink-0">
+              <FaRegTrashAlt className="shrink-0" />
+            </div>
+          </div>
+          {open ? <IoIosArrowUp className="shrink-0 text-xl " onClick={() => (open ? setOpen(false) : setOpen(true))}/> : <IoIosArrowDown className="shrink-0 text-xl " onClick={() => (open ? setOpen(false) : setOpen(true))}/>}
+        </div>
+        {open && <div  >
+          <div className="text-sm line-clamp-2">Service Title: Learn API integration using Postman </div>
+          <div className="text-sm mt-2">Booking Date: {item?.bookingDate} </div>
+          <div className="block sm:hidden mt-2 shrink-0  text-sm">Scheduled date: {item?.scheduledDate} </div>
+          <div className="text-sm mt-2">Start Time: {item?.startTime} </div>
+          <div className="text-sm mt-2">End Time: {item?.endTime} </div>
+        </div>
+        }
+        </>
+  )
+}
 
 export const BlogCardHorizontal = ({ index, items }) => {
   return (

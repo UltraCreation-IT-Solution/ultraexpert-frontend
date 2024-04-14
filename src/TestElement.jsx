@@ -1,134 +1,358 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { CiStar } from "react-icons/ci";
-import { GrFormNextLink } from "react-icons/gr";
+import { FiUpload, FiX, FiEdit } from "react-icons/fi";
+import { imageDB } from "./components/firebase/config";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { v4 } from "uuid";
+import axios from "./axios";
 
 const TestElement = () => {
-  const location = useLocation().pathname;
-  const [activeNo, setActiveNo] = useState(0);
-  const topExpertList = [
-    {
-      name: "Bhavesh Bhanusali",
-      image:
-        "https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-      rating: 4.5,
-      profession: "Software Developer",
-    },
-    {
-      name: "Naman Paliwal",
-      image:
-        "https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D",
-      rating: 4.5,
-      profession: "Software Developer",
-    },
-    {
-      name: "Naman Paliwal",
-      image:
-        "https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww",
-      rating: 4.5,
-      profession: "Software Developer",
-    },
-    {
-      name: "Naman Paliwal",
-      image:
-        "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      rating: 4.5,
-      profession: "Software Developer",
-    },
-    {
-      name: "Naman Paliwal",
-      image:
-        "https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D",
-      rating: 4.5,
-      profession: "Software Developer",
-    },
-  ];
+  const [projects, setProjects] = useState([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [type, setType] = useState("");
+  const [role, setRole] = useState("");
+  const [tags, setTags] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [tagInput, setTagInput] = useState("");
+  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
+
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "/experts/",
+        {
+          action: 7,
+          data: projects,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+    // console.log(projects);
+  };
+  const handleAddProject = () => {
+    if (!title || !description || !image || !type) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    const newProject = { title, description, image, type, role, tags };
+    if (editingIndex !== null) {
+      // Replace the project at the editing index
+      const updatedProjects = [...projects];
+      updatedProjects[editingIndex] = newProject;
+      setProjects(updatedProjects);
+      setEditingIndex(null);
+    } else {
+      // Add the new project
+      setProjects([...projects, newProject]);
+    }
+
+    // Reset form fields
+    setTitle("");
+    setDescription("");
+    setImage("");
+    setType("");
+    setRole("");
+    setTags([]);
+  };
+
+  const handleEditProject = (index) => {
+    // Set the project fields to the form fields for editing
+    const projectToEdit = projects[index];
+    setTitle(projectToEdit.title);
+    setDescription(projectToEdit.description);
+    setImage(projectToEdit.image);
+    setType(projectToEdit.type);
+    setRole(projectToEdit.role);
+    setTags(projectToEdit.tags);
+    setEditingIndex(index);
+
+    // Scroll to the top of the page
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleDeleteProject = (index) => {
+    const updatedProjects = projects.filter((_, i) => i !== index);
+    setProjects(updatedProjects);
+  };
+
+  const handleImageUpload = async (e) => {
+    if (e.target.files.length > 0) {
+      setImage(URL.createObjectURL(e.target.files[0]));
+      const file = e.target.files[0];
+      if (file) {
+        const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
+        const uploadTask = uploadBytesResumable(imgRef, file);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            // Get upload progress as a percentage
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            setUploadProfileProgress(progress);
+          },
+          (error) => {
+            console.error("Error uploading image: ", error);
+            // Handle error if needed
+          },
+          () => {
+            // Upload completed successfully
+            console.log("Upload complete");
+          }
+        );
+
+        try {
+          await uploadTask;
+          const url = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log(url);
+          setImageUrl(url);
+          setImage(url);
+        } catch (error) {
+          console.error("Error uploading image: ", error);
+          // Handle error if needed
+          alert("Something went wrong");
+        }
+      }
+    }
+  };
+  const handleImageRemove = () => {
+    setImage("");
+  };
+
+  const handleCancel = () => {
+    // Add your code here to navigate back to the previous page
+    // For simplicity, let's just log a message
+    console.log("Cancelled");
+    setEditingIndex(null); // Reset editing index
+  };
+
+  const isFormEmpty =
+    !title || !description || !image || !type || (type === "group" && !role);
+
+  const addTag = () => {
+    if (tagInput.trim() !== "") {
+      setTags([...tags, tagInput.trim()]);
+      setTagInput("");
+    }
+  };
+
+  const removeTag = (index) => {
+    const updatedTags = [...tags];
+    updatedTags.splice(index, 1);
+    setTags(updatedTags);
+  };
+
   return (
-    <div className="relative w-full h-auto py-[5vw] md:py-[3vw] bg-[#F2F2F2] px-[6vw] md:px-[10vw] overflow-hidden mb-[3vw]">
-      <Link
-        to={"/experts"}
-        className={`${
-          location === "/experts" ? "hidden" : "block"
-        } text-[#C5C3C3] text-4xl xs:text-5xl md:text-7xl lg:text-[84px]  font-bold flex justify-start md:justify-end decoration-transparent`}
-      >
-        EXPERTS
-      </Link>
-      <div className="flex flex-col sm:flex-row mb-[12.5vw] sm:mb-[10vw] md:mb-[5vw] gap-5 md:gap-8 w-full  mt-[3vw] md:mt-[2vw]">
-        {topExpertList.map((expert, index) => (
-          <div
-            key={index}
-            onMouseOver={() => setActiveNo(index)}
-            onMouseLeave={() => setActiveNo(index)}
-            className={`${
-              activeNo === index
-                ? "activeExpert"
-                : "w-full sm:w-1/2 h-[36vh] md:h-[56vh] lg:h-[65vh]"
-            } expertDiv relative flex flex-col gap-4  items-start rounded`}
+    <div className="max-w-3xl mx-auto mt-20 px-4 border border-gray-500 rounded-lg shadow-lg">
+      <div className="flex justify-between items-center bg-slate-400 px-6 py-3 rounded-t-lg">
+        <h2 className="text-xl font-semibold">Add Project</h2>
+        <div className="flex flex-wrap justify-between">
+          <button
+            onClick={handleCancel}
+            className="bg-red-600 text-white px-4 py-2 rounded mr-4  hover:bg-gray-600"
           >
-            <div className="relative flex flex-col text-white justify-between w-full h-full backdrop-brightness-[60%] ">
-              <img
-                src={expert.image}
-                alt="expert profile"
-                className={`absolute left-0 right-0 brightness-[60%] w-full h-full shrink-0 ${
-                  activeNo === index
-                    ? "object-center"
-                    : "object-center  object-cover"
-                }`}
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={projects.length === 0}
+            className={`bg-blue-500 text-white px-6 py-2 rounded ${
+              projects.length === 0 && "opacity-50 cursor-not-allowed"
+            }`}
+          >
+            Submit Projects
+          </button>
+        </div>
+      </div>
+      <div className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex flex-col">
+            <input
+              type="text"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:border-blue-500"
+            />
+            <textarea
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="border border-gray-300 rounded px-4 py-2 h-32 resize-none mb-4 focus:outline-none focus:border-blue-500"
+            />
+            {type === "group" && (
+              <input
+                type="text"
+                placeholder="Role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="border border-gray-300 rounded-lg px-4 py-2 mb-4 focus:outline-none focus:border-blue-500"
               />
-              <h2>{expert.profession}</h2>
-              {activeNo === index ? (
-                <div className=" absolute right-4 justify-start  bottom-0">
-                  <h3 className=" justify-end text-[4vw] sm:text-[2vw] md:text-[1.5vw]">
-                    {expert.name}
-                  </h3>
-                  <h3 className=" justify-end text-[2.8vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
-                    <CiStar className="text-[3.4vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
-                    {expert.rating} /5
-                  </h3>
-                  <Link
-                    to={"experts/expertprofile"}
-                    className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3"
+            )}
+          </div>
+          <div className="flex flex-col ">
+            <div className="relative h-32 border border-gray-300 border-solid rounded overflow-hidden mb-4">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              />
+              {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
+                <p>Upload Progress: {uploadProfileProgress}%</p>
+              ) : image ? (
+                <div className="relative w-full h-full flex justify-center items-center">
+                  <img
+                    src={image}
+                    alt="Preview"
+                    className="max-h-28 max-w-44 object-cover rounded"
+                  />
+                  <button
+                    onClick={handleImageRemove}
+                    className="absolute top-2 right-2 bg-slate-400 text-white p-1 rounded hover:bg-gray-600 flex justify-center items-center"
                   >
-                    <span className="underline  text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]">
-                      See More
-                    </span>
-                    <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.1vw]" />
-                  </Link>
+                    <FiX className="w-4 h-4" />
+                  </button>
                 </div>
               ) : (
-                <div className="sm:invisible absolute right-4 justify-start  bottom-0">
-                  <h3 className=" justify-end text-[4vw] sm:text-[2vw] md:text-[1.5vw]">
-                    {expert.name}
-                  </h3>
-                  <h3 className=" justify-end text-[2.8vw] sm:text-[1.5vw] md:text-[1.2vw] flex gap-1 items-center -my-[8px] md:-my-[14px]">
-                    <CiStar className="text-[3.4vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
-                    {expert.rating} /5
-                  </h3>
-                  <Link
-                    to={"experts/expertprofile"}
-                    className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3"
-                  >
-                    <span className="underline text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]">
-                      See More
-                    </span>{" "}
-                    <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
-                  </Link>
+                <div className="flex items-center justify-center w-full h-full text-gray-600">
+                  <FiUpload className="w-10 h-10" />
+                  <span className="ml-2">Upload Image</span>
                 </div>
               )}
             </div>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
+            >
+              <option value="">Select Type</option>
+              <option value="group">Group Project</option>
+              <option value="indie">Indie Project</option>
+            </select>
           </div>
-        ))}
+        </div>
+        <div className="flex flex-wrap border border-gray-300 rounded px-2 py-2 ">
+          {tags.map((tag, index) => (
+            <div
+              key={index}
+              className="flex gap-1 items-center bg-slate-300 text-gray-600 pl-4 pr-2 py-1 rounded-full text-sm mr-2 mb-2"
+            >
+              {tag}
+              <FiX
+                onClick={() => removeTag(index)}
+                className="ml-1 cursor-pointer text-center text-lg"
+              />
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center">
+          <input
+            type="text"
+            placeholder="Add Tag"
+            value={tagInput}
+            onChange={(e) => setTagInput(e.target.value)}
+            className="border border-gray-300 rounded px-4 py-2 mr-2 focus:outline-none focus:border-blue-500"
+          />
+          <button
+            onClick={addTag}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Add
+          </button>
+        </div>
+        <button
+          onClick={handleAddProject}
+          disabled={isFormEmpty}
+          className={`bg-blue-500 text-white mt-4 px-6 py-3 rounded block mx-auto ${
+            isFormEmpty && "opacity-50 cursor-not-allowed"
+          }`}
+        >
+          {editingIndex !== null ? "Update Project" : "Add Project"}
+        </button>
+        <div className="mt-8">
+          {projects.map((project, index) => (
+            <div
+              key={index}
+              className="mb-8 p-6 bg-white rounded shadow-md border border-gray-200"
+            >
+              <h2 className="text-xl font-semibold mb-4">{project.title}</h2>
+              <p className="text-gray-700 mb-4">{project.description}</p>
+              <div className="flex gap-10">
+                {project.image && (
+                  <img
+                    src={project.image}
+                    alt="Project"
+                    className="mb-4 h-44 w-60 object-cover rounded"
+                  />
+                )}
+                <div>
+                  <p className="text-sm font-medium">
+                    <span className="font-extrabold">Type: </span>
+                    {project.type === "group"
+                      ? "Group Project"
+                      : "Indie Project"}
+                  </p>
+                  {project.type === "group" && (
+                    <p className="text-sm font-medium">
+                      <span className="font-extrabold">Role: </span>
+                      {project.role}
+                    </p>
+                  )}
+                  <div className="flex flex-wrap mt-2">
+                    {project.tags.map((tag, tagIndex) => (
+                      <span
+                        key={tagIndex}
+                        className="flex gap-1 items-center bg-slate-300 text-gray-600 pl-4 pr-2 py-1 rounded-full text-sm mr-2 mb-2"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex mt-2">
+                    <button
+                      onClick={() => handleEditProject(index)}
+                      className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2 hover:bg-blue-600"
+                    >
+                      <FiEdit /> Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteProject(index)}
+                      className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-
-      <Link
-        to={"/experts"}
-        className={`${
-          location === "/experts" ? "hidden" : "block"
-        } text-[2.4vw] md:text-[1.6vw] text-black flex items-cemter justify-end no-underline mt-[-10vw] sm:mt-[-8vw] md:mt-[-3vw]`}
-      >
-        See More Experts
-        <GrFormNextLink className="mt-[0.5vw] text-[2vw] md:text-[1.4vw]" />
-      </Link>
     </div>
   );
 };
