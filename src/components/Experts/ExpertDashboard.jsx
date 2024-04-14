@@ -1097,18 +1097,16 @@ export const Leaderboard = () => {
   const [weeklyLeaderboard, setWeeklyLeaderboard] = useState(true);
   const [monthlyLeaderboard, setMonthlyLeaderboard] = useState(false);
   const [leaderBoardData, setLeaderBoardData] = useState([]);
-
-  useEffect(async() => {
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  useEffect(() => {
     handleWeeklyLeaderboard();
-  },[])
+  }, []);
   const handleWeeklyLeaderboard = async () => {
-    
-    const cookies = document.cookie.split("; ");
-    const jsonData = {};
-    cookies.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
     try {
       const response = await axios.get("/experts/?action=2", {
         headers: {
@@ -1125,7 +1123,6 @@ export const Leaderboard = () => {
     } catch (error) {
       console.log(error);
     }
-    
   };
   const handleMonthlyLeaderboard = () => {
     setWeeklyLeaderboard(false);
@@ -1252,7 +1249,7 @@ export const Leaderboard = () => {
                     <img
                       src={item.profile_img}
                       alt="Profile"
-                      className="h-10 w-10 rounded-full object-cover shrink-0"
+                      className="h-10 w-10 sm:h-14 sm:w-14 rounded-full object-center object-cover shrink-0"
                     />
                     <div className="text-sm sm:text-base shrink-0">
                       {item.expert_name}
