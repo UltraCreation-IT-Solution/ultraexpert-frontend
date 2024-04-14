@@ -183,23 +183,6 @@ const SignUp = () => {
     // console.log(e);
     if (validatePassword()) {
       try {
-        // const res = await fetch("http://localhost:8000/register/", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     first_name: firstStep.firstName,
-        //     last_name: firstStep.lastName,
-        //     mobile_number: firstStep.mobileNumber,
-        //     reffered_by: firstStep.refBy,
-        //     email: secondStep.email,
-        //     password1: forthStep.password,
-        //     password2: forthStep.confirmPassword,
-        //   }),
-        //   credentials: "include",
-        // });
-
         const response = await axios.post(
           "/register/",
           {
@@ -226,18 +209,6 @@ const SignUp = () => {
         } else {
           console.log(data);
           try {
-            // const response = await fetch("http://localhost:8000/login/", {
-            //   method: "POST",
-            //   headers: {
-            //     "Content-Type": "application/json",
-            //   },
-            //   body: JSON.stringify({
-            //     email: secondStep.email,
-            //     password: forthStep.password,
-            //   }),
-            //   credentials: "include",
-            // });
-            // const json = await response.json();
             const res = await axios.post("/login/", {
               email: secondStep.email,
               password: forthStep.password,
@@ -252,6 +223,10 @@ const SignUp = () => {
             document.cookie = `refresh_token=${
               res.data.refresh_token
             };expires=${expirationDate.toUTCString()};  SameSite=Lax;`;
+
+            localStorage.setItem("username", `${res.data.first_name}`);
+            localStorage.setItem("profile", `${res.data.profile_img}`);
+            localStorage.setItem("isExpert", res.data.is_expert);
             window.location.href = "/";
             if (!data || data.status === 400 || data.status === 401) {
               window.alert("Invalid Credentials");
