@@ -54,7 +54,47 @@ const topExpertList = [
     profession: "Software Developer",
   },
 ];
-
+const TestimonialCard = ({ id, user, content, date_created }) => {
+  const val = id % 5;
+  return (
+    <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
+      <div
+        className={`relative w-full h-full object-cover ${
+          val == 1
+            ? "bg-[#EA7794]"
+            : val == 2
+            ? "bg-[#78A7EE]"
+            : val == 3
+            ? "bg-[#F66B3A]"
+            : val == 4
+            ? "bg-[#804EDA]"
+            : val == 5
+            ? "bg-[#78A7EE]"
+            : "bg-[#EA7794]"
+        }   rounded-xl pointer-events-none border-white border flex flex-col`}
+      >
+        <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw]">
+          <img
+            className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
+            src={user?.profile_img}
+            alt=""
+          />
+          <div>
+            <h2 className="shrink-0 text-[4vw] sm:text-[2vw] tracking-wide sm:tracking-normal mb-0">
+              {user?.first_name} {user?.last_name}
+            </h2>
+            <h4 className="mt-[0.25vw] font-medium text-[2.8vw] xs:text-[2vw] sm:text-[1.15vw]">
+              {date_created.split("T")[0]}
+            </h4>
+          </div>
+        </div>
+        <div className="w-full h-2/3 text-[2.98vw] sm:text-[1.55vw] md:text-[1.45vw] flex items-start justify-start px-[2vw]">
+          {content}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 export const ServiceCategory = () => {
   return (
     <div className="relative flex flex-col md:flex-row gap-4 overflow-hidden  px-[6vw] md:px-[11vw] pt-[8.5vw] sm:pt-[10vh] w-full min-h-[88vh] md:min-h-[55vw] mb-[3vw] md:mb-[1vw] lg:mb-[5vw]">
@@ -273,6 +313,40 @@ export const Story = () => {
   );
 };
 export const Testimonial = () => {
+  const [allTestimonials, setAllTestimonials] = useState([]);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  const getallTestimonials = async () => {
+    try {
+      const response = await axios.get(`/testimonial/?action=1`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      if (
+        !response.data ||
+        response.data.status === 400 ||
+        response.data.status === 401
+      ) {
+        console.log(response.data.message);
+        return;
+      }
+      console.log(response.data.data);
+      setAllTestimonials(response.data.data);
+      // setTestimonialList(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getallTestimonials();
+  }, []);
   return (
     <div className="relative w-full h-auto flex flex-col border-y my-[5vw] sm:my-[3vw] border-solid  md:px-[12vw] px-[8vw] items-center pt-[3vw] sm:pt-[2vw] pb-[6vw] sm:pb-[4vw] ">
       <div className="w-full h-full text-start  justify-between  flex flex-row">
@@ -290,195 +364,9 @@ export const Testimonial = () => {
       </div>
       <motion.div className=" overflow-scroll w-full h-full flex flex-row">
         <motion.div className="flex gap-[4vw] md:gap-[1.4vw] overflow-visible ">
-          <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
-            <div
-              className={`relative w-full h-full object-cover bg-[#EA7794]   rounded-xl pointer-events-none border-white border flex flex-col`}
-            >
-              <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw]">
-                <img
-                  className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
-                  src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt=""
-                />
-                <div>
-                  <h2 className="shrink-0 text-[4vw] sm:text-[2vw] tracking-wide sm:tracking-normal mb-0">
-                    Bhavesh Bhanusali
-                  </h2>
-                  <h4 className="mt-[0.25vw] font-medium text-[2.8vw] xs:text-[2vw] sm:text-[1.15vw]">
-                    12 Jan 2024
-                  </h4>
-                </div>
-              </div>
-              <div className="w-full h-2/3 text-[2.98vw] sm:text-[1.55vw] md:text-[1.45vw] flex items-start justify-start px-[2vw]">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
-                nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
-                Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Ducimus, sed.
-              </div>
-            </div>
-          </motion.div>
-          <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
-            <div
-              className={`w-full h-full object-cover bg-[#78A7EE]  rounded-xl pointer-events-none border-white border flex flex-col`}
-            >
-              <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw]">
-                <img
-                  className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
-                  src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt=""
-                />
-                <div>
-                  <h2 className="shrink-0 text-[4vw] sm:text-[2vw] tracking-wide sm:tracking-normal mb-0">
-                    Bhavesh Bhanusali
-                  </h2>
-                  <h4 className="mt-[0.25vw] font-medium text-[2.8vw] xs:text-[2vw] sm:text-[1.15vw]">
-                    12 Jan 2024
-                  </h4>
-                </div>
-              </div>
-              <div className="w-full h-2/3 text-[2.98vw] sm:text-[1.55vw] md:text-[1.45vw] flex items-start justify-start px-[2vw]">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
-                nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
-                Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Ducimus, sed.
-              </div>
-            </div>
-          </motion.div>
-          <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
-            <div
-              className={`w-full h-full object-cover bg-[#F66B3A]   rounded-xl pointer-events-none border-white border flex flex-col`}
-            >
-              <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw]">
-                <img
-                  className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
-                  src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt=""
-                />
-                <div>
-                  <h2 className="shrink-0 text-[4vw] sm:text-[2vw] tracking-wide sm:tracking-normal mb-0">
-                    Bhavesh Bhanusali
-                  </h2>
-                  <h4 className="mt-[0.25vw] font-medium text-[2.8vw] xs:text-[2vw] sm:text-[1.15vw]">
-                    12 Jan 2024
-                  </h4>
-                </div>
-              </div>
-              <div className="w-full h-2/3 text-[2.98vw] sm:text-[1.55vw] md:text-[1.45vw] flex items-start justify-start px-[2vw]">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
-                nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
-                Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Ducimus, sed.
-              </div>
-            </div>
-          </motion.div>
-          <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
-            <div
-              className={`w-full h-full object-cover bg-[#F1BE60]   rounded-xl pointer-events-none border-white border flex flex-col`}
-            >
-              <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw]">
-                <img
-                  className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
-                  src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt=""
-                />
-                <div>
-                  <h2 className="shrink-0 text-[4vw] sm:text-[2vw] tracking-wide sm:tracking-normal mb-0">
-                    Bhavesh Bhanusali
-                  </h2>
-                  <h4 className="mt-[0.25vw] font-medium text-[2.8vw] xs:text-[2vw] sm:text-[1.15vw]">
-                    12 Jan 2024
-                  </h4>
-                </div>
-              </div>
-              <div className="w-full h-2/3 text-[2.98vw] sm:text-[1.55vw] md:text-[1.45vw] flex items-start justify-start px-[2vw]">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
-                nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
-                Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Ducimus, sed.
-              </div>
-            </div>
-          </motion.div>
-          <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
-            <div
-              className={`w-full h-full object-cover bg-[#804EDA]    rounded-xl pointer-events-none border-white border flex flex-col`}
-            >
-              <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw]">
-                <img
-                  className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
-                  src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt=""
-                />
-                <div>
-                  <h2 className="shrink-0 text-[4vw] sm:text-[2vw] tracking-wide sm:tracking-normal mb-0">
-                    Bhavesh Bhanusali
-                  </h2>
-                  <h4 className="mt-[0.25vw] font-medium text-[2.8vw] xs:text-[2vw] sm:text-[1.15vw]">
-                    12 Jan 2024
-                  </h4>
-                </div>
-              </div>
-              <div className="w-full h-2/3 text-[2.98vw] sm:text-[1.55vw] md:text-[1.45vw] flex items-start justify-start px-[2vw]">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
-                nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
-                Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Ducimus, sed.
-              </div>
-            </div>
-          </motion.div>
-          <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
-            <div
-              className={`w-full h-full object-cover bg-[#78A7EE]   rounded-xl pointer-events-none border-white border flex flex-col`}
-            >
-              <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw]">
-                <img
-                  className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
-                  src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt=""
-                />
-                <div>
-                  <h2 className="shrink-0 text-[4vw] sm:text-[2vw] tracking-wide sm:tracking-normal mb-0">
-                    Bhavesh Bhanusali
-                  </h2>
-                  <h4 className="mt-[0.25vw] font-medium text-[2.8vw] xs:text-[2vw] sm:text-[1.15vw]">
-                    12 Jan 2024
-                  </h4>
-                </div>
-              </div>
-              <div className="w-full h-2/3 text-[2.98vw] sm:text-[1.55vw] md:text-[1.45vw] flex items-start justify-start px-[2vw]">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
-                nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
-                Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Ducimus, sed.
-              </div>
-            </div>
-          </motion.div>
-          <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
-            <div
-              className={`w-full h-full object-cover bg-[#F66B3A]   rounded-xl pointer-events-none border-white border flex flex-col`}
-            >
-              <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw]">
-                <img
-                  className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
-                  src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt=""
-                />
-                <div>
-                  <h2 className="shrink-0 text-[4vw] sm:text-[2vw] tracking-wide sm:tracking-normal mb-0">
-                    Bhavesh Bhanusali
-                  </h2>
-                  <h4 className="mt-[0.25vw] font-medium text-[2.8vw] xs:text-[2vw] sm:text-[1.15vw]">
-                    12 Jan 2024
-                  </h4>
-                </div>
-              </div>
-              <div className="w-full h-2/3 text-[2.98vw] sm:text-[1.55vw] md:text-[1.45vw] flex items-start justify-start px-[2vw]">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero
-                nemo eos ea unde, provident magni enim ducimus dicta reiciendis.
-                Omnis sit harum accusamus. Recusandae?Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Ducimus, sed.
-              </div>
-            </div>
-          </motion.div>
+          {allTestimonials.map((item) => (
+            <TestimonialCard key={item.id} {...item} />
+          ))}
         </motion.div>
       </motion.div>
     </div>

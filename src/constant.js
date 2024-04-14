@@ -13,9 +13,10 @@ import {
 import { BiSolidLike } from "react-icons/bi";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { IoEyeSharp } from "react-icons/io5";
-import { FaTags, FaPlus } from "react-icons/fa";
+import { FaTags, FaPlus,FaRegTrashAlt } from "react-icons/fa";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
 export const topExpertsBar = [
   {
@@ -856,8 +857,8 @@ export const customerDashboardInfo = {
       bookingTime: "2:00 PM",
       bookingDate: "24 Mar, 2024",
       scheduledDate: "30 Mar, 2024",
-      startTime: "3:00 PM",
-      endTime: "4:00 PM",
+      startTime: "5:00 PM",
+      endTime: "6:00 PM",
       customerProfile:
         "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       customerName: "Bhavesh Bhanusali",
@@ -3161,11 +3162,11 @@ export const ProjectsCarousel = () => {
               <div
                 className={
                   slider === idx
-                    ? "absolute top-1 left-1  w-fit px-8 py-2 btnBlack text-white rounded-sm rounded-r-full border border-solid border-white "
+                    ? "absolute top-1 left-1 w-fit px-4 sm:px-8 py-1 sm:py-2 btnBlack text-white rounded-sm rounded-r-full border border-solid border-white "
                     : "hidden"
                 }
               >
-                <div className="text-center text-sm">{temp?.type} Project</div>
+                <div className="text-center text-xs sm:text-sm">{temp?.type} Project</div>
                 <div className="text-center text-xs text-gray-300 ">
                   {temp?.role}{" "}
                 </div>
@@ -3244,6 +3245,42 @@ export const ProjectsCarousel = () => {
     </div>
   );
 };
+
+export const BookingCard = ({item}) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+        <div
+          className="text-sm flex items-center justify-between  border-t border-solid border-slate-300 my-5 py-3 overflow-x-scroll"
+          
+        >
+          <div className="flex items-center xs:gap-[4vw] text-sm">
+            <div className="flex items-center gap-2 w-[200px] ">
+              <img
+                src={item?.customerProfile}
+                className="h-9 w-9 rounded-full shrink-0 object-cover"
+                alt=""
+              />
+              <div>{item?.customerName}</div>
+            </div>
+            <div className="hidden sm:block w-[120px]">{item?.scheduledDate} </div>
+            <div className="w-[60px] flex items-center justify-center shrink-0">
+              <FaRegTrashAlt className="shrink-0" />
+            </div>
+          </div>
+          {open ? <IoIosArrowUp className="shrink-0 text-xl " onClick={() => (open ? setOpen(false) : setOpen(true))}/> : <IoIosArrowDown className="shrink-0 text-xl " onClick={() => (open ? setOpen(false) : setOpen(true))}/>}
+        </div>
+        {open && <div  >
+          <div className="text-sm line-clamp-2">Service Title: Learn API integration using Postman </div>
+          <div className="text-sm mt-2">Booking Date: {item?.bookingDate} </div>
+          <div className="block sm:hidden mt-2 shrink-0  text-sm">Scheduled date: {item?.scheduledDate} </div>
+          <div className="text-sm mt-2">Start Time: {item?.startTime} </div>
+          <div className="text-sm mt-2">End Time: {item?.endTime} </div>
+        </div>
+        }
+        </>
+  )
+}
 
 export const BlogCardHorizontal = ({ index, items }) => {
   return (

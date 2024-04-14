@@ -2,6 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import { BsUpload, BsX } from "react-icons/bs";
+import { imageDB } from "../firebase/config";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { v4 } from "uuid";
 
 const CHECKOUT_STEPS = [
   { name: "Personal Details" },
@@ -97,17 +105,21 @@ const SignUpAsCustomer = () => {
     });
     console.log(jsonData);
     try {
-      const response = await axios.post("/customers/", {
-        action: 1,
-        about_me: generalInfo.about_me,
-        profession: generalInfo.profession,
-      },{
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-          // "X-CSRF-TOKEN": ${jsonData.csrf_token},
+      const response = await axios.post(
+        "/customers/",
+        {
+          action: 1,
+          about_me: generalInfo.about_me,
+          profession: generalInfo.profession,
         },
-      });
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+            // "X-CSRF-TOKEN": ${jsonData.csrf_token},
+          },
+        }
+      );
       const data = response.data;
       if (!data) {
         console.log("Something went wrong");
@@ -213,11 +225,44 @@ const SignUpAsCustomer = () => {
   };
 
   const [selectedProfile, setSelectedProfile] = useState(null);
+  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
 
-  const handleProfileChange = (event) => {
+  const handleProfileChange = async (event) => {
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
       const reader = new FileReader();
+      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
+      const uploadTask = uploadBytesResumable(imgRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Get upload progress as a percentage
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setUploadProfileProgress(progress);
+        },
+        (error) => {
+          console.error("Error uploading image: ", error);
+          // Handle error if needed
+        },
+        () => {
+          // Upload completed successfully
+          console.log("Upload complete");
+        }
+      );
+      try {
+        await uploadTask;
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log(url);
+        setPersonalInfo({
+          ...personalInfo,
+          profile_img: url, // Store the image data in an array
+        });
+      } catch (error) {
+        console.error("Error uploading image: ", error);
+        // Handle error if needed
+      }
       reader.onload = () => {
         setSelectedProfile(reader.result);
       };
@@ -343,6 +388,9 @@ const SignUpAsCustomer = () => {
                   }
                   className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
                 >
+                  {uploadProfileProgress > 0 && uploadProfileProgress < 100 && (
+                    <p>Upload Progress: {uploadProfileProgress}%</p>
+                  )}
                   {selectedProfile ? (
                     <div className="relative">
                       <img
@@ -359,10 +407,14 @@ const SignUpAsCustomer = () => {
                     </div>
                   ) : (
                     <div className="flex flex-col items-center">
-                      <BsUpload size={20} />
-                      <div className="text-sm text-[#1475cf] mt-2">
-                        Click here to upload a profile photo
-                      </div>
+                      {uploadProfileProgress === 0 && (
+                        <>
+                          <BsUpload size={20} />
+                          <div className="text-sm text-[#1475cf] mt-2">
+                            Click here to upload a profile photo
+                          </div>
+                        </>
+                      )}
                     </div>
                   )}
                   <input
