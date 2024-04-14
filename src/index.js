@@ -56,7 +56,6 @@ import CustomerDashboard, {
 import TestElement from "./TestElement.jsx";
 import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import CreateProject from "./components/Experts/CreateProject.jsx";
-
 const Layout = () => {
   const action = useNavigationType();
   const pathname = useLocation().pathname;

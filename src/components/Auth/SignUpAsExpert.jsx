@@ -10,7 +10,6 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
-import { progress } from "framer-motion";
 
 const CHECKOUT_STEPS = [
   { name: "Personal Details" },

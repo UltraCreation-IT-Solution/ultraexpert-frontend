@@ -6,13 +6,11 @@ import {
   MdKeyboardArrowUp,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
-import { CiBookmark } from "react-icons/ci";
 import { RiFlowChart } from "react-icons/ri";
 import { IoDiamondSharp } from "react-icons/io5";
 import { FaUserGraduate, FaUserCheck, FaBookmark} from "react-icons/fa6";
 import { IoIosChatboxes } from "react-icons/io";
 import { GiAchievement } from "react-icons/gi";
-import { HiOfficeBuilding } from "react-icons/hi";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { BsBookmarkPlusFill, BsBookmarkDashFill } from "react-icons/bs";
@@ -23,8 +21,7 @@ import {
   ProjectsCarousel,
   BlogCard,
   BlogCardHorizontal,
-  ShowSchedule,
-} from "../../constant";
+} from "../../constant";  
 
 export const ExpertSummary = () => {
   return (
@@ -62,7 +59,7 @@ export const ExpertSummary = () => {
                       </div>
                     </div>
                     {/* 2nd portion */}
-                    <div className="hidden md:block absolute left-[180px] h-5 w-5 rounded-full bg-slate-200"></div>
+                    <div className={`hidden md:block ${item?.present?"bg-emerald-500":"bg-slate-200"} absolute left-[180px] h-5 w-5 rounded-full `}></div>
 
                     {/* 3rd portion */}
                     <div className="md:pl-10 flex flex-col order-1 md:order-2 md:border-l border-solid border-slate-200 md:py-5">
