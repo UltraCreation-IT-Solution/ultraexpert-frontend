@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { WhatWeDo } from "../Boundary/HeroSection";
 import { Testimonial } from "../Landing/Landing";
 import { PiCheckCircleLight } from "react-icons/pi";
 import about_us_1 from "../../assets/images/about_us _1.png";
@@ -6,41 +7,6 @@ import about_us_mission_2 from "../../assets/images/about_us_mission_2.png";
 import about_us_vision_3 from "../../assets/images/about_us_vision_3.png";
 import axios from "../../axios";
 const About = () => {
-  const cookies = document.cookie.split("; ");
-  const jsonData = {};
-
-  cookies.forEach((item) => {
-    const [key, value] = item.split("=");
-    jsonData[key] = value;
-  });
-  const [writeTestimonial, setWriteTestimonial] = useState("");
-  console.log(writeTestimonial);
-  const handleTestimonialSubmit = async () => {
-    try {
-      const response = await axios.post(
-        "/testimonial/",
-        {
-          action: 1,
-          content_json: `${writeTestimonial}`,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      const data = response.data;
-      if (!data || data.status === 400 || data.status === 401) {
-        console.log("Something went wrong");
-        return;
-      }
-      console.log(response.data);
-      setWriteTestimonial("");
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <div className="mt-[70px]">
       <div className="text-center bg-[#FBFBFB] py-16 sm:py-24 px-5 ">
@@ -198,10 +164,7 @@ const About = () => {
             placeholder="Add your testimonial here"
             className="min-w-full max-w-full border border-solid border-slate-400 text-base rounded-md p-2"
           ></textarea>
-          <div
-            className="px-6 py-2 mt-3 text-white bg-[#2A2A2A] rounded-sm w-fit ml-auto cursor-pointer"
-            onClick={() => handleTestimonialSubmit()}
-          >
+          <div className="px-6 py-2 mt-3 text-white bg-[#2A2A2A] rounded-sm w-fit ml-auto cursor-pointer">
             Submit
           </div>
         </div>

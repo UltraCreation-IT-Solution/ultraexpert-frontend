@@ -344,7 +344,7 @@ export const TestimonialsCard = ({ item, index }) => {
         }`}
       >
         <div className="flex items-center justify-between text-sm font-semibold">
-          <div className="text-sm ">{item?.date_created.split("T")[0]}</div>
+          <div className="text-sm ">{item?.date_created?.split("T")[0]}</div>
           <div className="flex items-center gap-3">
             <FaEdit className="text-xl" onClick={handleEdit} />
             <FaRegTrashAlt className="text-xl" />
@@ -966,13 +966,10 @@ export const Dashboard = () => {
         {/* Blogs section of dashboard */}
         {blogs && <ExpertBlogs />}
         {/* Testimonials section of dashboard */}
-        {testimonials && (
-          <div>
-            {expertAllTestimonials?.map((item, index) => (
-              <TestimonialsCard key={item?.id} item={item} index={index} />
-            ))}
-          </div>
-        )}
+        {testimonials &&
+          expertAllTestimonials?.map((item, index) => (
+            <TestimonialsCard key={index} item={item} index={index} />
+          ))}
         {/* Project section of dashboard */}
         {projects && (
           <div>

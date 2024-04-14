@@ -62,3 +62,65 @@ input[type="number"]::-webkit-outer-spin-button {
 .btnBlack {
   background-color: #2A2A2A;
 }
+
+/* Custom styles for Quill Toolbar */
+.custom-toolbar {
+  height: auto;
+  background-color: #f8f9fa; /* Set the background color of the toolbar */
+  padding: 8px; /* Add padding to the toolbar */
+  border-bottom: 1px solid #dee2e6; /* Add a bottom border */
+}
+.ql-formats{
+  @apply h-auto  
+}
+/* Styles for toolbar buttons */
+.custom-toolbar .ql-formats button {
+  background-color: transparent; /* Set button background color */
+  border: none; /* Remove button border */
+  cursor: pointer; /* Set cursor to pointer */
+  margin-right: 4px; /* Add margin between buttons */
+}
+
+/* Styles for dropdown selects */
+.custom-toolbar .ql-formats select {
+  width: 100px;
+  height: 200px;
+  background-color: red;
+  appearance: none; /* Remove default appearance */
+  background-color: #fff; /* Set dropdown background color */
+  border: 1px solid #ced4da; /* Add dropdown border */
+  padding: 4px 8px; /* Add padding to dropdown */
+  cursor: pointer; /* Set cursor to pointer */
+  margin-right: 4px; /* Add margin between selects */
+}
+
+/* Styles for undo and redo buttons */
+.custom-toolbar .ql-formats .ql-undo,
+.custom-toolbar .ql-formats .ql-redo {
+  background-color: #fff; /* Set button background color */
+  border: 1px solid #ced4da; /* Add button border */
+  padding: 4px; /* Add padding to button */
+  cursor: pointer; /* Set cursor to pointer */
+  margin-right: 4px; /* Add margin between buttons */
+}
+
+/* Styles for undo and redo icons */
+.custom-toolbar .ql-formats .ql-undo svg,
+.custom-toolbar .ql-formats .ql-redo svg {
+  width: 12px; /* Set icon width */
+  height: 12px; /* Set icon height */
+  fill: #495057; /* Set icon color */
+}
+
+/* Styles for dropdown arrow */
+.custom-toolbar .ql-formats .ql-undo::after,
+.custom-toolbar .ql-formats .ql-redo::after {
+  content: ""; /* Add pseudo-element */
+  display: inline-block; /* Make pseudo-element inline */
+  width: 0; /* Set width to 0 */
+  height: 0; /* Set height to 0 */
+  border-style: solid; /* Set border style */
+  border-width: 4px 3px 0; /* Set border width */
+  border-color: #495057 transparent transparent; /* Set border color */
+  margin-left: 4px; /* Add margin between button and arrow */
+}

@@ -3287,7 +3287,7 @@ export const BookingCard = ({ item }) => {
             Service Title: Learn API integration using Postman{" "}
           </div>
           <div className="text-sm mt-2">Booking Date: {item?.bookingDate} </div>
-          <div className="block sm:hidden my-2 shrink-0 w-[120px] text-sm">
+          <div className="block sm:hidden mt-2 shrink-0  text-sm">
             Scheduled date: {item?.scheduledDate}{" "}
           </div>
           <div className="text-sm mt-2">Start Time: {item?.startTime} </div>

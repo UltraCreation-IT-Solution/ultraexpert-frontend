@@ -54,7 +54,7 @@ const topExpertList = [
     profession: "Software Developer",
   },
 ];
-const TestimonialCard = ({ id, user, content }) => {
+const TestimonialCard = ({ id, user, content, date_created }) => {
   const val = id % 5;
   return (
     <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
@@ -84,7 +84,7 @@ const TestimonialCard = ({ id, user, content }) => {
               {user?.first_name} {user?.last_name}
             </h2>
             <h4 className="mt-[0.25vw] font-medium text-[2.8vw] xs:text-[2vw] sm:text-[1.15vw]">
-              {"12 Aug, 2022"}
+              {date_created.split("T")[0]}
             </h4>
           </div>
         </div>
