@@ -15,7 +15,7 @@ cookies.forEach((item) => {
 });
 const handleLogout = () => {
   localStorage.clear();
-  window.location.reload();
+  window.location.href = "/";
   document.cookie =
     "access_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
   document.cookie =
@@ -181,7 +181,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   to={
-                    localStorage.getItem("isExpert")
+                    localStorage.getItem("isExpert") === "true"
                       ? "/expertdashboard"
                       : "/customerdashboard"
                   }

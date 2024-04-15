@@ -69,7 +69,7 @@ const Login = () => {
           };expires=${expirationDate.toUTCString()};  SameSite=Lax;`;
           localStorage.setItem("username", `${res.data.first_name}`);
           localStorage.setItem("profile", `${res.data.profile_img}`);
-          localStorage.setItem("isExpert", res.data.is_expert);
+          localStorage.setItem("isExpert", `${res.data.is_expert}`);
           window.location.href = "/";
         }
       } catch (error) {

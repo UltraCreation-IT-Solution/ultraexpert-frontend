@@ -226,7 +226,7 @@ const SignUp = () => {
 
             localStorage.setItem("username", `${res.data.first_name}`);
             localStorage.setItem("profile", `${res.data.profile_img}`);
-            localStorage.setItem("isExpert", res.data.is_expert);
+            localStorage.setItem("isExpert", `${res.data.is_expert}`);
             window.location.href = "/";
             if (!data || data.status === 400 || data.status === 401) {
               window.alert("Invalid Credentials");
