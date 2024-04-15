@@ -60,15 +60,15 @@ const TestimonialCard = ({ id, user, content, date_created }) => {
     <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
       <div
         className={`relative w-full h-full object-cover ${
-          val == 1
+          val == 4
             ? "bg-[#EA7794]"
-            : val == 2
-            ? "bg-[#78A7EE]"
             : val == 3
+            ? "bg-[#78A7EE]"
+            : val == 2
             ? "bg-[#F66B3A]"
-            : val == 4
+            : val == 1
             ? "bg-[#804EDA]"
-            : val == 5
+            : val == 0
             ? "bg-[#78A7EE]"
             : "bg-[#EA7794]"
         }   rounded-xl pointer-events-none border-white border flex flex-col`}

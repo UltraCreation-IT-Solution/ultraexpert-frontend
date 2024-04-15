@@ -42,17 +42,6 @@ const Login = () => {
 
     if (validateForm()) {
       try {
-        // const res = await fetch("http://localhost:8000/login/", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     email: userData.email,
-        //     password: userData.password,
-        //   }),
-        //   credentials: "include",
-        // });
         const res = await axios.post(
           "/login/",
           {
@@ -69,12 +58,19 @@ const Login = () => {
         // const json = await res.json();
         if (res.status === 200) {
           console.log("Login successful");
-          document.cookie = `access_token=${res.data.access_token};  SameSite=Lax;`;
-          document.cookie = `refresh_token=${res.data.refresh_token};  SameSite=Lax;`;
-
           console.log(res);
-          // console.log(json);
-          navigate("/");
+          const expirationDate = new Date();
+          expirationDate.setDate(expirationDate.getDate() + 5);
+          document.cookie = `access_token=${
+            res.data.access_token
+          };expires=${expirationDate.toUTCString()};  SameSite=Lax;`;
+          document.cookie = `refresh_token=${
+            res.data.refresh_token
+          };expires=${expirationDate.toUTCString()};  SameSite=Lax;`;
+          localStorage.setItem("username", `${res.data.first_name}`);
+          localStorage.setItem("profile", `${res.data.profile_img}`);
+          localStorage.setItem("isExpert", `${res.data.is_expert}`);
+          window.location.href = "/";
         }
       } catch (error) {
         console.error(error);

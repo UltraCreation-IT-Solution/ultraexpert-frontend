@@ -38,7 +38,8 @@ const TestElement = () => {
           Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
-      setProjects(response.data);
+      console.log(response.data.data.projects);
+      setProjects(response.data.data.projects);
     } catch (error) {
       console.log(error);
     }
@@ -51,10 +52,10 @@ const TestElement = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "/experts/",
+        "/experts/update/",
         {
-          action: 7,
-          data: projects,
+          action: 8,
+          projects_json: projects,
         },
         {
           headers: {

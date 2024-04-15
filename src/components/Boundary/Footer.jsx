@@ -1,6 +1,6 @@
 import { FaLinkedin, FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
-import React from "react";
-
+import React, { useState,useEffect } from "react";
+import axios from "../../axios";
 // export const Footer = () => {
 //   return (
 //     <div className="relative w-full h-auto bg-[#2A2A2A] mt-[3vw] px-[8vw] py-[3vw] sm:py-[2vw] text-white">
@@ -58,6 +58,68 @@ import React from "react";
 // };
 
 const Footer = () => {
+
+  const [email,setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("subscribedEmail");
+    if (storedEmail) {
+      setEmail(storedEmail);
+      setSubscribed(true);
+    }
+  }, []);
+
+  const handleSubmit = async(e) =>{
+    e.preventDefault();
+    try{
+      const response = await axios.post("/subscription/",{
+        action:1,
+        email:email
+      },{
+        headers:{
+          "Content-Type":"application/json"
+        }
+      });
+      const data = response.data;
+      if(!data || data.status === 400 || data.status === 401){
+        console.log("Invalid Email");
+        return;
+      }
+      console.log(data);
+      alert("Subscription Added!");
+      setSubscribed(true);
+      localStorage.setItem("subscribedEmail", email);
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+  const handleUnsubscribe = async(e) => {
+    e.preventDefault();
+    try{
+      const res = await axios.post("/subscription/",{
+        action:2,
+        email:email
+      },{
+        headers:{
+          "Content-Type":"application/json"
+        }
+      });
+      const data = res.data;
+      if(!data || data.status === 400 || data.status === 401){
+        console.log("Invalid Email");
+        return;
+      }
+      console.log(data);
+      alert("Subscription Removed!");
+      setSubscribed(false);
+      localStorage.removeItem("subscribedEmail");
+    }catch(error){
+      console.log(error);
+    }
+  }
+
   return (
     <div className="px-[4vw] pt-[15vw] md:pt-24 pb-6 mt-10 text-[#E4E4E4] bg-[#2A2A2A]">
       <div className="flex-col md:flex md:flex-row md:gap-[5vw] xl:gap-[10vw]">
@@ -67,16 +129,28 @@ const Footer = () => {
             <br />
             Do Effective.
           </div>
-          <div className="flex items-center gap-2 my-[6vw] md:my-[3vw]">
+          {subscribed ? (
+            <div className="my-4">
+            <div>You are subscribed with email: <div className="font-bold text-xl mt-2">{email}</div></div>
+            <button onClick={handleUnsubscribe} className="my-2 px-4 py-3 xs:px-4 xs:py-4 text-sm rounded-lg xs:rounded-sm bg-[#F0F0F0]">
+              Unsubscribe
+            </button>
+          </div>
+          ):(
+            <form onSubmit={handleSubmit} className="flex items-center gap-2 my-[6vw] md:my-[3vw]">
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               className="px-2 py-3 xs:px-4 xs:py-5 text-md rounded-md w-[80%] bg-[#F0F0F0] outline-none"
             />
-            <button className="px-4 py-3 xs:px-4 xs:py-4 text-sm rounded-lg xs:rounded-sm bg-[#F0F0F0]">
+            <button type="submit" className="px-4 py-3 xs:px-4 xs:py-4 text-sm rounded-lg xs:rounded-sm bg-[#F0F0F0]">
               Go
             </button>
-          </div>
+          </form>
+          )}
+          
           <div className=" text-sm xs:text-base md:text-sm xl:text-base ">
             UltraCreation, setting new standards in the digital landscape. As
             their journey unfolded, challenges were met with expertise, and each

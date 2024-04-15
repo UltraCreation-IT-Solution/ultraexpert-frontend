@@ -183,7 +183,7 @@ const SignUpAsExpert = () => {
     state_name: [],
     country: ["India"],
     passing_year: [],
-    Devision: ["First"],
+    Devision: [],
   });
 
   const handleEducationForm = async (e) => {
@@ -350,20 +350,22 @@ const SignUpAsExpert = () => {
     }));
   };
 
-  const [selectedCertificate, setSelectedCertificate] = useState(Array.from({ length: achForms.length }, () => null));
+  const [selectedCertificate, setSelectedCertificate] = useState(
+    Array.from({ length: achForms.length }, () => null)
+  );
 
   const handleCertificateChange = (event, ind) => {
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
-      if (!file.type.match('image/.*')) {
-        alert('Only image files are allowed!');
+      if (!file.type.match("image/.*")) {
+        alert("Only image files are allowed!");
         return;
       }
       const reader = new FileReader();
       reader.onload = () => {
         const updatedSelectedCertificates = [...selectedCertificate];
-      updatedSelectedCertificates[ind] = reader.result;
-      setSelectedCertificate(updatedSelectedCertificates);
+        updatedSelectedCertificates[ind] = reader.result;
+        setSelectedCertificate(updatedSelectedCertificates);
       };
       reader.readAsDataURL(file);
       const updatedCertificates = [...achInfo.certificate];
@@ -377,11 +379,11 @@ const SignUpAsExpert = () => {
 
   const handleRemoveCertificate = (ind) => {
     const updatedSelectedCertificates = [...selectedCertificate];
-  updatedSelectedCertificates[ind] = null;
-  setSelectedCertificate(updatedSelectedCertificates);
-  const updatedCertificates = [...achInfo.certificate];
-  updatedCertificates[ind] = null;
-  setAchInfo({ ...achInfo, certificate: updatedCertificates });
+    updatedSelectedCertificates[ind] = null;
+    setSelectedCertificate(updatedSelectedCertificates);
+    const updatedCertificates = [...achInfo.certificate];
+    updatedCertificates[ind] = null;
+    setAchInfo({ ...achInfo, certificate: updatedCertificates });
   };
 
   const handleAchForm = async (e) => {
@@ -1619,6 +1621,7 @@ const SignUpAsExpert = () => {
                             });
                           }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
+                          placeholder="CGPA / %"
                         />
                       </div>
                     </div>
@@ -1684,7 +1687,7 @@ const SignUpAsExpert = () => {
                         });
                       }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      placeholder="Institute Name"
+                      placeholder="Technology Name"
                     />
                     <label
                       htmlFor={`rating${form.id}`}
@@ -1804,31 +1807,47 @@ const SignUpAsExpert = () => {
                     >
                       Certificate
                     </label>
-                    <div onClick={()=>document.querySelector(`#certificate${form.id}`).click()} className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-[50%] mx-auto cursor-pointer rounded-lg">
-                      {selectedCertificate[ind] && selectedCertificate[ind].startsWith('data:')?(
+                    <div
+                      onClick={() =>
+                        document.querySelector(`#certificate${form.id}`).click()
+                      }
+                      className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-[50%] mx-auto cursor-pointer rounded-lg"
+                    >
+                      {selectedCertificate[ind] &&
+                      selectedCertificate[ind].startsWith("data:") ? (
                         <div className="relative">
-                          <img src={selectedCertificate[ind]} alt="Certificate"
-                          className="w-32 h-32 object-cover rounded-lg"/>
-                          <div onClick={()=>handleRemoveCertificate(ind)}
-                          className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1">
-                            <BsX size={20} className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"/>
+                          <img
+                            src={selectedCertificate[ind]}
+                            alt="Certificate"
+                            className="w-32 h-32 object-cover rounded-lg"
+                          />
+                          <div
+                            onClick={() => handleRemoveCertificate(ind)}
+                            className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
+                          >
+                            <BsX
+                              size={20}
+                              className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"
+                            />
                           </div>
                         </div>
-                      ):(<div className="flex flex-col items-center">
-                      <BsUpload size={20} />
-                      <div className="text-sm text-[#1475cf] mt-2">
-                        Click here to upload a profile photo
-                      </div>
-                    </div>)}
+                      ) : (
+                        <div className="flex flex-col items-center">
+                          <BsUpload size={20} />
+                          <div className="text-sm text-[#1475cf] mt-2">
+                            Click here to upload a profile photo
+                          </div>
+                        </div>
+                      )}
                     </div>
                     <input
                       type="file"
                       accept="image/*"
                       id={`certificate${form.id}`}
                       name={`certificate${form.id}`}
-                      onChange={(e) => 
-                        {handleCertificateChange(e,ind);}
-                      }
+                      onChange={(e) => {
+                        handleCertificateChange(e, ind);
+                      }}
                       className="hidden"
                       aria-label="Upload certificate for achievement"
                     />
