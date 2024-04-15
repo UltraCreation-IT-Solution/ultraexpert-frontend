@@ -62,6 +62,7 @@ import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { Outlet, Link } from "react-router-dom";
 import axios from "../../axios";
+import CreateProject from "./CreateProject";
 
 const generateRandomData = () => {
   const today = new Date();
@@ -372,6 +373,76 @@ export const TestimonialsCard = ({ item, index }) => {
   );
 };
 
+const ShowMyProjects = () => {
+  const [addProjectOpen, setAddProjectOpen] = useState(false);
+  const [myProjects, setMyProjects] = useState([]);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const response = await axios.get("/experts/?action=1", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        });
+        console.log(response.data.data.projects);
+        setMyProjects(response.data.data.projects);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchAllData();
+  }, [addProjectOpen]);
+  return (
+    <div>
+      {!addProjectOpen && (
+        <div
+          onClick={() => setAddProjectOpen(true)}
+          className="text-sm md:text-base text-white bg-emerald-500 rounded-md px-4 py-2 w-fit flex items-center gap-2 cursor-pointer"
+        >
+          Add a new project <MdOpenInNew className="text-base ms:text-xl" />
+        </div>
+      )}
+      {addProjectOpen && (
+        <CreateProject setAddProjectOpen={setAddProjectOpen} />
+      )}
+      {console.log(myProjects)}
+      {!addProjectOpen &&
+        myProjects?.map((items, index) => (
+          <div
+            className={`px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
+              index % 2 === 0
+                ? `bg-[#ececec]`
+                : `border border-[#c7c7c7] border-solid `
+            }`}
+          >
+            <div className="flex flex-col sm:flex-row items-start gap-5">
+              <img
+                className=" w-full h-48 object-cover sm:h-36 sm:w-40 rounded-md shrink-0 self-start"
+                src={items?.image}
+                alt=""
+              />
+              <div className="text-[#575757]">
+                <div className="text-lg font-semibold line-clamp-2 text-balance">
+                  {items?.title}
+                </div>
+                <div className="my-2 text-sm line-clamp-3 text-balance">
+                  {items?.description}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+    </div>
+  );
+};
 export const Dashboard = () => {
   const [a, seta] = useState(0);
   const [b, setb] = useState(0);
@@ -971,42 +1042,7 @@ export const Dashboard = () => {
             <TestimonialsCard key={index} item={item} index={index} />
           ))}
         {/* Project section of dashboard */}
-        {projects && (
-          <div>
-            <div className="text-sm md:text-base text-white bg-emerald-500 rounded-md px-4 py-2 w-fit flex items-center gap-2 cursor-pointer">
-              Add a new project <MdOpenInNew className="text-base ms:text-xl" />
-            </div>
-
-            {expertDetailsObj?.projects?.map((items, index) => (
-              <div
-                className={`px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
-                  index % 2 === 0
-                    ? `bg-[#ececec]`
-                    : `border border-[#c7c7c7] border-solid `
-                }`}
-              >
-                <div className="flex flex-col sm:flex-row items-start gap-5">
-                  <img
-                    className=" w-full h-48 object-cover sm:h-36 sm:w-40 rounded-md shrink-0 self-start"
-                    src={items?.banner}
-                    alt=""
-                  />
-                  <div className="text-[#575757]">
-                    <div className="text-lg font-semibold line-clamp-2 text-balance">
-                      {items?.title}
-                    </div>
-                    <div className="my-2 text-sm line-clamp-3 text-balance">
-                      {items?.description}
-                    </div>
-                  </div>
-                </div>
-                <div className="hidden border border-solid border-slate-300 h-fit sm:flex items-center justify-center rounded-full text-4xl font-thin self-center shrink-0 cursor-pointer">
-                  <RiArrowRightSLine />
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        {projects && <ShowMyProjects />}
       </div>
     </section>
   );
@@ -1060,9 +1096,33 @@ export const Chats = () => {
 export const Leaderboard = () => {
   const [weeklyLeaderboard, setWeeklyLeaderboard] = useState(true);
   const [monthlyLeaderboard, setMonthlyLeaderboard] = useState(false);
-  const handleWeeklyLeaderboard = () => {
-    setWeeklyLeaderboard(true);
-    setMonthlyLeaderboard(false);
+  const [leaderBoardData, setLeaderBoardData] = useState([]);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  useEffect(() => {
+    handleWeeklyLeaderboard();
+  }, []);
+  const handleWeeklyLeaderboard = async () => {
+    try {
+      const response = await axios.get("/experts/?action=2", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      console.log(response.data);
+      const expData = response.data.data;
+      console.log(expData);
+      setLeaderBoardData(expData);
+      setWeeklyLeaderboard(true);
+      setMonthlyLeaderboard(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleMonthlyLeaderboard = () => {
     setWeeklyLeaderboard(false);
@@ -1176,28 +1236,28 @@ export const Leaderboard = () => {
             <div>Score</div>
           </div>
           <div>
-            {leaderboardRanking.map((item, idx) => (
+            {leaderBoardData.map((item, idx) => (
               <div
                 key={idx}
                 className="flex items-center justify-between gap-1 py-3"
               >
                 <div className="flex items-center gap-[8vw]">
                   <div className="text-sm sm:text-base shrink-0">
-                    {item?.rank}
+                    {item.rank}
                   </div>
                   <div className="flex gap-3 sm:gap-6 items-center w-[300px] ">
                     <img
-                      src={item?.img}
-                      alt="img"
-                      className="h-10 w-10 rounded-full object-cover shrink-0"
+                      src={item.profile_img}
+                      alt="Profile"
+                      className="h-10 w-10 sm:h-14 sm:w-14 rounded-full object-center object-cover shrink-0"
                     />
                     <div className="text-sm sm:text-base shrink-0">
-                      {item?.name}
+                      {item.expert_name}
                     </div>
                   </div>
                 </div>
                 <div className="text-sm sm:text-base shrink-0">
-                  {item?.score}
+                  {item.avg_score}
                 </div>
               </div>
             ))}

@@ -4,7 +4,23 @@ import ultraXpert from "../../assets/images/ultraXpert.svg";
 import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaTimes, FaRegHeart } from "react-icons/fa";
 import { IoIosNotificationsOutline } from "react-icons/io";
+import axios from "../../axios";
 
+const cookies = document.cookie.split("; ");
+const jsonData = {};
+
+cookies.forEach((item) => {
+  const [key, value] = item.split("=");
+  jsonData[key] = value;
+});
+const handleLogout = () => {
+  localStorage.clear();
+  window.location.href = "/";
+  document.cookie =
+    "access_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
+  document.cookie =
+    "refresh_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
+};
 const NotificationDropdown = ({ notifications, isOpen, toggleDropdown }) => {
   if (!notifications) {
     console.error("Notifications prop is missing or null.");
@@ -45,6 +61,7 @@ const NotificationDropdown = ({ notifications, isOpen, toggleDropdown }) => {
 const Navbar = () => {
   const location = useLocation().pathname;
   const [showNav, setShowNav] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
     setShowNav(false);
@@ -62,7 +79,7 @@ const Navbar = () => {
     <div
       className={`fixed z-50 shadow-sm top-0 left-0 bg-white w-[100vw] ${
         showNav ? "h-[60vh]" : null
-      } overflow-hidden flex flex-col md:flex-row items-center justify-between px-[20px] box-border font-montserrat text-[24px]`}
+      }  flex flex-col md:flex-row items-center justify-between px-[20px] box-border font-montserrat text-[24px] overflow-visible`}
     >
       <div className="self-start">
         <Link
@@ -125,16 +142,6 @@ const Navbar = () => {
           >
             Blog
           </Link>
-          <Link
-            to={"/expertdashboard"}
-            className={`${
-              location === "/expertdashboard"
-                ? "font-extrabold"
-                : "font-medium hover:underline hover:scale-105"
-            } relative no-underline text-black`}
-          >
-            Dashboard
-          </Link>
 
           <Link
             to={"/about"}
@@ -146,12 +153,65 @@ const Navbar = () => {
           >
             About us
           </Link>
-          <Link
-            to={"/login"}
-            className="relative bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
+          <div
+            className=" cursor-pointer"
+            onMouseEnter={() => setIsProfileOpen(true)}
           >
-            Sign In
-          </Link>
+            <div className="flex gap-2 justify-center items-center">
+              <span className="font-bold">{`Hii! ${localStorage.getItem(
+                "username"
+              )}`}</span>
+              <img
+                src={localStorage.getItem("profile")}
+                alt="profile"
+                className="w-10 h-10 rounded-full object-cover object-center"
+              />
+            </div>
+            {isProfileOpen && (
+              <div
+                onMouseLeave={() => setIsProfileOpen(false)}
+                className="absolute flex flex-col  gap-2 justify-center items-center 
+              rounded-md mt-2 -ml-24  shrink-0 z-[999] bg-white border-2 border-slate-300 border-solid drop-shadow-lg w-1/6 h-auto px-2 py-2"
+              >
+                <Link
+                  to={"/"}
+                  className="no-underline text-black border-slate-300 border-solid border-2 w-full text-center py-2"
+                >
+                  Home
+                </Link>
+                <Link
+                  to={
+                    localStorage.getItem("isExpert") === "true"
+                      ? "/expertdashboard"
+                      : "/customerdashboard"
+                  }
+                  className={`${
+                    location === "/expertdashboard" ||
+                    location === "/customerdashboard"
+                      ? "font-extrabold"
+                      : "font-medium hover:underline hover:scale-105"
+                  } relative no-underline text-black border-slate-300 border-solid border-2 w-full text-center py-2`}
+                >
+                  Dashboard
+                </Link>
+                {!jsonData.access_token || !jsonData.refresh_token ? (
+                  <Link
+                    to={"/login"}
+                    className="relative w-full text-center  bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
+                  >
+                    Sign In
+                  </Link>
+                ) : (
+                  <Link
+                    onClick={handleLogout}
+                    className="relative w-full text-center bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
+                  >
+                    Logout
+                  </Link>
+                )}
+              </div>
+            )}
+          </div>
         </nav>
         <button
           onClick={() => setShowNav(!showNav)}
