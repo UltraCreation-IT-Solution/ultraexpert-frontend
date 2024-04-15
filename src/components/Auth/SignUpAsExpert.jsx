@@ -22,7 +22,7 @@ const CHECKOUT_STEPS = [
 ];
 
 const SignUpAsExpert = () => {
-  const [currStep, setCurrStep] = useState(0);
+  const [currStep, setCurrStep] = useState(5);
   const [isComplete, setIsComplete] = useState(false);
   const [margin, setMargin] = useState({
     marginLeft: 0,
@@ -440,6 +440,7 @@ const SignUpAsExpert = () => {
       ...prevExpInfo,
       company_name: [...prevExpInfo.company_name, ""],
       start_date: [...prevExpInfo.start_date, ""],
+      is_present: [...prevExpInfo.is_present, false],
       end_date: [...prevExpInfo.end_date, ""],
       designation: [...prevExpInfo.designation, ""],
     }));
@@ -448,6 +449,7 @@ const SignUpAsExpert = () => {
   const [expInfo, setExpInfo] = useState({
     company_name: [],
     start_date: [],
+    is_present:[],
     end_date: [],
     designation: [],
   });
@@ -485,6 +487,7 @@ const SignUpAsExpert = () => {
       const experienceData = experienceForms.map((form, index) => ({
         company_name: expInfo.company_name[index],
         start_date: expInfo.start_date[index],
+        is_present: expInfo.is_present[index],
         end_date: expInfo.end_date[index],
         designation: expInfo.designation[index],
       }));
@@ -1901,42 +1904,66 @@ const SignUpAsExpert = () => {
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       placeholder="Company Name"
                     />
-                    <div className="flex justify-around gap-5">
-                      <div className="flex flex-col w-full">
-                        <label
-                          htmlFor={`start${form.id}`}
-                          className="text-base md:text-lg mb-1"
-                        >
-                          Start Year
-                        </label>
-                        <input
-                          type="date"
-                          id={`start${form.id}`}
-                          name={`start${form.id}`}
-                          value={expInfo.start_date[ind]}
-                          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                          placeholder="YYYY-MM-DD"
-                          onChange={(e) => {
-                            const selectedDate = new Date(e.target.value);
-                            const year = selectedDate.getFullYear();
-                            const month = String(
-                              selectedDate.getMonth() + 1
-                            ).padStart(2, "0");
-                            const day = String(selectedDate.getDate()).padStart(
-                              2,
-                              "0"
-                            );
-                            const formattedDate = `${year}-${month}-${day}`;
-                            const updatedStartDate = [...expInfo.start_date];
-                            updatedStartDate[ind] = formattedDate;
-                            setExpInfo({
-                              ...expInfo,
-                              start_date: updatedStartDate,
-                            });
-                          }}
-                        />
-                      </div>
-                      <div className="flex flex-col w-full">
+
+                    <label
+                      htmlFor={`start${form.id}`}
+                      className="text-base md:text-lg mb-1"
+                    >
+                      Start Year
+                    </label>
+                    <input
+                      type="date"
+                      id={`start${form.id}`}
+                      name={`start${form.id}`}
+                      value={expInfo.start_date[ind]}
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                      placeholder="YYYY-MM-DD"
+                      onChange={(e) => {
+                        const selectedDate = new Date(e.target.value);
+                        const year = selectedDate.getFullYear();
+                        const month = String(
+                          selectedDate.getMonth() + 1
+                        ).padStart(2, "0");
+                        const day = String(selectedDate.getDate()).padStart(
+                          2,
+                          "0"
+                        );
+                        const formattedDate = `${year}-${month}-${day}`;
+                        const updatedStartDate = [...expInfo.start_date];
+                        updatedStartDate[ind] = formattedDate;
+                        setExpInfo({
+                          ...expInfo,
+                          start_date: updatedStartDate,
+                        });
+                      }}
+                    />
+                    <label
+                      htmlFor="present"
+                      className="text-base md:text-lg mb-1"
+                    >
+                      Is Present ?
+                    </label>
+                    <select
+                      name="present"
+                      id="present"
+                      value={expInfo.is_present[ind]}
+                      onChange={(e) => {
+                        const updatedPresent = [...expInfo.is_present];
+                        updatedPresent[ind] = e.target.value;
+                        setExpInfo({
+                          ...expInfo,
+                          is_present: updatedPresent,
+                        });
+                      }}
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                    >
+                      <option value="false">False</option>
+                      <option value="true">True</option>
+                    </select>
+                    {expInfo.is_present[ind] === "true" ? (
+                      <></>
+                    ) : (
+                      <>
                         <label
                           htmlFor={`end${form.id}`}
                           className="text-base md:text-lg mb-1"
@@ -1969,8 +1996,9 @@ const SignUpAsExpert = () => {
                             });
                           }}
                         />
-                      </div>
-                    </div>
+                      </>
+                    )}
+
                     <label
                       htmlFor={`designtaion${form.id}`}
                       className="text-base md:text-lg mb-1"

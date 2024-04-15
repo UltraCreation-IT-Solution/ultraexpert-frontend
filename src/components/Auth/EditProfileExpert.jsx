@@ -177,7 +177,7 @@ const GeneralDetails = () => {
             </label>
             <input
               required
-              type="number"
+              type="text"
               id="mobileNumber"
               name="mobileNumber"
               value={generalInfo.mobile_number}
@@ -245,10 +245,10 @@ const GeneralDetails = () => {
               onClick={() => document.querySelector("#profileSelector").click()}
               className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
             >
-              {selectedProfile ? (
+              {generalInfo.profile_img ? (
                 <div className="relative">
                   <img
-                    src={selectedProfile}
+                    src={generalInfo.profile_img}
                     alt="Selected Profile"
                     className="w-28 h-28 object-cover rounded-lg"
                   />
@@ -262,13 +262,14 @@ const GeneralDetails = () => {
               ) : (
                 <div className="flex flex-col items-center">
                   <BsUpload size={20} />
-                  <div className="text-sm text-[#1475cf] mt-2">
+                  <div className="text-sm text-center text-[#1475cf] mt-2">
                     Click here to upload a profile photo
                   </div>
                 </div>
               )}
               <input
                 type="file"
+                accept="image/*"
                 id="profileSelector"
                 onChange={handleProfileChange}
                 className="hidden"
@@ -283,10 +284,10 @@ const GeneralDetails = () => {
               onClick={() => document.querySelector("#bannerSelector").click()}
               className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
             >
-              {selectedProfile ? (
+              {generalInfo.banner_img ? (
                 <div className="relative">
                   <img
-                    src={selectedBanner}
+                    src={generalInfo.banner_img}
                     alt="Selected Banner"
                     className="w-28 h-28 object-cover rounded-lg"
                   />
@@ -300,13 +301,14 @@ const GeneralDetails = () => {
               ) : (
                 <div className="flex flex-col items-center">
                   <BsUpload size={20} />
-                  <div className="text-sm text-[#1475cf] mt-2">
+                  <div className="text-sm text-center text-[#1475cf] mt-2">
                     Click here to upload a banner photo
                   </div>
                 </div>
               )}
               <input
                 type="file"
+                accept="image/*"
                 id="bannerSelector"
                 onChange={handleBannerChange}
                 className="hidden"
@@ -1812,15 +1814,22 @@ const ExperienceDetails = () => {
                   Start Year
                 </label>
                 <input
-                  type="text"
+                  type="date"
                   id={`start${form.id}`}
                   name={`start${form.id}`}
                   value={expInfo.start_date[ind]}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  pattern="\d{4}-\d{2}-\d{2}"
                   onChange={(e) => {
+                    const selectedDate = new Date(e.target.value);
+                    const year = selectedDate.getFullYear();
+                    const month = String(selectedDate.getMonth() + 1).padStart(
+                      2,
+                      "0"
+                    );
+                    const day = String(selectedDate.getDate()).padStart(2, "0");
+                    const formattedDate = `${year}-${month}-${day}`;
                     const updatedStartDate = [...expInfo.start_date];
-                    updatedStartDate[ind] = e.target.value;
+                    updatedStartDate[ind] = formattedDate;
                     setExpInfo({
                       ...expInfo,
                       start_date: updatedStartDate,
@@ -1833,15 +1842,22 @@ const ExperienceDetails = () => {
                   End Year
                 </label>
                 <input
-                  type="text"
+                  type="date"
                   id={`end${form.id}`}
                   name={`end${form.id}`}
                   value={expInfo.end_date[ind]}
-                  pattern="\d{4}-\d{2}-\d{2}"
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                   onChange={(e) => {
+                    const selectedDate = new Date(e.target.value);
+                    const year = selectedDate.getFullYear();
+                    const month = String(selectedDate.getMonth() + 1).padStart(
+                      2,
+                      "0"
+                    );
+                    const day = String(selectedDate.getDate()).padStart(2, "0");
+                    const formattedDate = `${year}-${month}-${day}`;
                     const updatedEndDate = [...expInfo.end_date];
-                    updatedEndDate[ind] = e.target.value;
+                    updatedEndDate[ind] = formattedDate;
                     setExpInfo({
                       ...expInfo,
                       end_date: updatedEndDate,
