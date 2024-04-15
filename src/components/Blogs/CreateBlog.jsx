@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import QuillToolbar,{ modules , formats } from "../../subsitutes/EditorToolbar";
+import QuillToolbar, { modules, formats } from "../../subsitutes/EditorToolbar";
 import { BsUpload } from "react-icons/bs";
 import { BsX } from "react-icons/bs";
 
 const CreateBlog = () => {
   const [value, setValue] = useState("");
-  console.log(value)
+  const [preview, setPreview] = useState(false);
+  console.log(value);
   // const modules = {
   //   toolbar: [
   //     [
   //       { header: "1" },
   //       { header: "2" },
-        
+
   //       { font: [] },
   //     ],
   //     [{ size: [] }],
@@ -68,11 +69,11 @@ const CreateBlog = () => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-  
+
       reader.onload = () => {
         setSelectedFile(reader.result);
       };
-  
+
       reader.readAsDataURL(file);
     } else {
       // Handle the case where the user cancels the file selection
@@ -135,13 +136,13 @@ const CreateBlog = () => {
                   onClick={removeImage}
                   className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
                 >
-                  <BsX className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full "/>
+                  <BsX className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full " />
                 </div>
               </div>
             ) : (
               <div className="flex flex-col items-center">
                 <BsUpload size={20} />
-                <div className="text-sm text-[#1475cf] mt-2 text-center text-balance" >
+                <div className="text-sm text-[#1475cf] mt-2 text-center text-balance">
                   Click here to attach or upload an image
                 </div>
               </div>
@@ -152,19 +153,44 @@ const CreateBlog = () => {
           </div>
         </div>
       </div>
-      <div className="my-10 ">
-
-      <QuillToolbar toolbarId={'t1'} />
-      <ReactQuill
-        theme="snow"
-        value={value}
-        onChange={setValue}
-        modules={modules('t1')}
-        formats={formats}
-        placeholder="Write something..."
-        className="min-h-[400px] "
-      />
+      <div className="my-10 overflow-visible">
+          <QuillToolbar toolbarId={"t1"} />
+          <ReactQuill
+            theme="snow"
+            value={value}
+            onChange={setValue}
+            readOnly={preview}
+            modules={modules("t1")}
+            formats={formats}
+            placeholder="Write something..."
+            className=" border border-solid border-slate-400 "
+          />
       </div>
+      <div
+        className="text-base w-fit px-4 py-1 rounded-md bg-blue-500 text-white cursor-pointer hover:bg-blue-600"
+        onClick={() => setPreview(true)}
+      >
+        Preview
+      </div>
+      {preview && (
+        <>
+          <p
+            dangerouslySetInnerHTML={{ __html: value }}
+            className="border border-solid border-slate-300 p-2 rounded-sm mt-16"
+          />
+          <div className="flex items-center gap-5 ">
+            <div
+              className="text-base bg-blue-500 hover:bg-blue-600 rounded-md px-4 py-1 text-white w-fit cursor-pointer"
+              onClick={() => setPreview(false)}
+            >
+              Edit
+            </div>
+            <div className="text-base bg-green-500 hover:bg-green-600 rounded-md px-4 py-1 text-white w-fit cursor-pointer">
+              Submit
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
