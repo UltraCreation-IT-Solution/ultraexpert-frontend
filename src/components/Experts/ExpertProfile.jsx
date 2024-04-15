@@ -15,25 +15,27 @@ import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { BsBookmarkPlusFill, BsBookmarkDashFill } from "react-icons/bs";
 
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   expertDetailsObj,
   ProjectsCarousel,
   BlogCard,
   BlogCardHorizontal,
 } from "../../constant";  
+import axios from "../../axios";
 
-export const ExpertSummary = () => {
+export const ExpertSummary = ({experienceArray,projectsArray}) => {
+  console.log(projectsArray)
   return (
     <div className="mt-3">
-      {expertDetailsObj?.carrierJourney.length !== 0 && (
+      {experienceArray?.length !== 0 && (
         <>
           <div className="border border-solid border-slate-300 rounded-md p-4 mb-6">
             <div className="text-xl md:text-2xl font-semibold">
               Carrer Journey
             </div>
             <div className="mt-6">
-              {expertDetailsObj?.carrierJourney?.map((item, index) => {
+              {experienceArray?.map((item, index) => {
                 return (
                   <div
                     key={index}
@@ -49,17 +51,17 @@ export const ExpertSummary = () => {
                       ) : (
                         <>
                           <div>
-                            {item?.endDate}
+                            {item?.end_date}
                           </div>
                           <div className="block md:hidden"> - </div>
                         </>
                       )}
                       <div>
-                        {item?.startDate}
+                        {item?.start_date}
                       </div>
                     </div>
                     {/* 2nd portion */}
-                    <div className={`hidden md:block ${item?.present?"bg-emerald-500":"bg-slate-200"} absolute left-[180px] h-5 w-5 rounded-full `}></div>
+                    <div className={`hidden md:block ${item?.present?"bg-emerald-300":"bg-slate-200"} absolute left-[180px] h-5 w-5 rounded-full `}></div>
 
                     {/* 3rd portion */}
                     <div className="md:pl-10 flex flex-col order-1 md:order-2 md:border-l border-solid border-slate-200 md:py-5">
@@ -67,7 +69,7 @@ export const ExpertSummary = () => {
                         {item?.designation}
                       </div>
                       <div className="text-sm text-slate-500">
-                        {item?.companyName}
+                        {item?.company_name}
                       </div>
                     </div>
                   </div>
@@ -80,7 +82,7 @@ export const ExpertSummary = () => {
       <div className="mb-5 text-xl md:text-2xl font-semibold font-montserrat">
         My projects
       </div>
-      <ProjectsCarousel />
+      <ProjectsCarousel projectsArray={projectsArray} />
     </div>
   );
 };
@@ -338,7 +340,7 @@ export const ExpertBlogs = () => {
   );
 };
 
-export const AboutExpert = () => {
+export const AboutExpert = ({...expert}) => {
   return (
     <div>
       <div className=" px-[2.5vw] lg:border-r border-solid border-slate-300">
@@ -346,12 +348,12 @@ export const AboutExpert = () => {
           <div className="relative pb-20">
             <img
               className="h-32 md:h-40 w-full object-cover rounded-md p-1"
-              src={expertDetailsObj?.personalDetails?.banner}
+              src={expert?.expert?.expert?.user?.banner_img}
               alt=""
             />
             <img
               className="h-32 w-32 md:h-40 md:w-40 rounded-xl shrink-0 object-cover absolute top-16 left-5 md:left-10 border-[3px] border-solid border-white"
-              src={expertDetailsObj?.personalDetails?.img}
+              src={expert?.expert?.expert?.user?.profile_img} 
               alt=""
             />
           </div>
@@ -359,7 +361,7 @@ export const AboutExpert = () => {
           <div className="ml-5 md:ml-10">
             <div className="flex items-center justify-between mr-1">
               <div className="text-2xl md:text-3xl font-semibold">
-                {expertDetailsObj?.personalDetails?.firstName} {expertDetailsObj?.personalDetails?.lastName}
+                {expert?.expert?.expert?.user?.first_name} {expert?.expert?.expert?.user?.last_name}
               </div>
               <div className="hidden md:flex gap-2">
                 <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white btnBlack rounded-sm text-xs xs:text-base font-semibold cursor-pointer">
@@ -374,13 +376,10 @@ export const AboutExpert = () => {
               </div>
             </div>
             <div className="text-base md:text-lg text-[#565454] mt-3">
-              {expertDetailsObj?.personalDetails?.designation}
+              {expert?.expert?.expert?.profession}
             </div>
             <div className="md:w-[600px] text-sm sm:text-base text-[#565454] mt-3">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime a
-              quia deserunt aut unde inventore. Adipisci voluptate deleniti
-              beatae rerum sapiente, vitae unde neque totam itaque nobis
-              placeat. Veniam, quod?
+              {expert?.expert?.expert?.about_me}
             </div>
             <div className="flex flex-col mt-4">
               <div className="flex items-center gap-2 text-lg md:text-xl text-[#565454] font-semibold">
@@ -388,9 +387,9 @@ export const AboutExpert = () => {
                 <div>Top skills</div>
               </div>
               <div className="flex items-center gap-3 mt-4">
-                {[...Array(3)].map((temp) => (
-                  <div className="bg-[#E7E7E7] px-4 py-1 text-sm rounded-sm">
-                    React
+                {expert?.expert?.skills?.skills_json?.slice(0,3)?.map((item,index) => (
+                  <div key={index} className="bg-[#E7E7E7] px-4 py-1 text-sm rounded-sm">
+                    {item?.technology_name}
                   </div>
                 ))}
               </div>
@@ -417,7 +416,7 @@ export const AboutExpert = () => {
                 About me
               </div>
               <div className="text-sm md:text-base mt-[1.5vw] md:mt-[0.7vw] ">
-                {expertDetailsObj?.personalDetails?.aboutMe}
+                {expert?.expert?.expert?.about_me}
               </div>
             </div>
           </div>
@@ -430,12 +429,12 @@ export const AboutExpert = () => {
           Skills
         </div>
         <div className="flex flex-wrap gap-2 md:gap-[1vw] mt-3 pb-1">
-          {expertDetailsObj.skills.map((temp, idx) => (
+          {expert?.expert?.skills?.skills_json?.map((item, idx) => (
             <div
               key={idx}
               className="px-2 py-1 text-xs md:text-sm border border-solid border-[#dedede] font-semibold rounded-sm cursor-pointer shadow-sm drop-shadow-sm"
             >
-              {temp}
+              {item?.technology_name}
             </div>
           ))}
         </div>
@@ -444,7 +443,7 @@ export const AboutExpert = () => {
             About me
           </div>
           <div className="text-sm md:text-base mt-[1.5vw] md:mt-[0.7vw] ">
-            {expertDetailsObj?.personalDetails?.aboutMe}
+          {expert?.expert?.expert?.about_me}
           </div>
         </div>
       </div>
@@ -452,22 +451,22 @@ export const AboutExpert = () => {
   );
 };
 
-export const EducationCard = ({ instituteName, degreeName, duration }) => {
+export const EducationCard = ({ institute_name, type, passing_year }) => {
   return (
     <div className="flex items-start gap-3 px-[1.5vw] lg:px-0 my-4">
       <div className="text-3xl sm:text-3xl shrink-0 mt-[0.6vw]">
         <FaUserGraduate />
       </div>
       <div>
-        <div className="text-sm xs:text-base">{instituteName}</div>
-        <div className="text-xs xs:text-sm my-1">{degreeName}</div>
-        <div className="text-xs xs:text-sm text-gray-400 ">{duration}</div>
+        <div className="text-sm xs:text-base">{institute_name}</div>
+        <div className="text-xs xs:text-sm my-1">{type}</div>
+        <div className="text-xs xs:text-sm text-gray-400 ">{passing_year}</div>
       </div>
     </div>
   );
 };
 
-export const AchievementCard = ({ name, year }) => {
+export const AchievementCard = ({ name, year, certificate }) => {
   return (
     <div className="flex items-start gap-3 px-[1.5vw] lg:px-0 my-4">
       <div className="text-4xl sm:text-5xl items-center shrink-0 mt-[0.6vw]">
@@ -476,18 +475,24 @@ export const AchievementCard = ({ name, year }) => {
       <div>
         <div className="text-sm xs:text-base">{name}</div>
         <div className="text-xs xs:text-sm text-gray-400 my-1">{year}</div>
+        <a href="" className="text-xs xs:text-sm text-red-500 no-underline hover:underline"> View certificate</a>
       </div>
     </div>
   );
 };
 
-export const ExpertInfo = () => {
+export const ExpertInfo = ({...expert}) => {
   const [summary, setSummary] = useState(true);
   const [services, setServices] = useState(false);
   const [ratings, setRatings] = useState(false);
   const [blogs, setBlogs] = useState(false);
   const [education, setEducation] = useState(false);
   const [achievements, setAchievements] = useState(false);
+
+  const experienceArray = expert?.expert?.experience?.experience;
+  const educationArray = expert?.expert?.education?.education;
+  const achievementsArray = expert?.expert?.achievements?.achievements;
+  const projectsArray = expert?.expert?.projects[0]?.projects;
 
   const MakeSummaryTrue = () => {
     setSummary(true);
@@ -553,7 +558,7 @@ export const ExpertInfo = () => {
           </div>
         </div>
         <div className="mt-[3vw]">
-          {summary && <ExpertSummary />}
+          {summary && <ExpertSummary experienceArray={experienceArray} projectsArray={projectsArray} />}
           {services && <ExpertServices />}
           {ratings && <ExpertRatings />}
           {blogs && <ExpertBlogs />}
@@ -584,14 +589,14 @@ export const ExpertInfo = () => {
                   {!education ? <MdKeyboardArrowDown /> : <MdKeyboardArrowUp />}
                 </div>
               </div>
-              {education && expertDetailsObj.education.length === 0 && (
+              {education && educationArray?.length === 0 && (
                 <div className="text-xs xs:text-base pb-[1vw]">
                   No information provided by the expert
                 </div>
               )}
               {education &&
-                expertDetailsObj.education.map((temp, idx) => (
-                  <EducationCard key={idx} {...temp} />
+                educationArray?.map((item, idx) => (
+                  <EducationCard key={idx} {...item} />
                 ))}
             </div>
             
@@ -612,14 +617,14 @@ export const ExpertInfo = () => {
                   )}
                 </div>
               </div>
-              {achievements && expertDetailsObj.achievements.length === 0 && (
+              {achievements && achievementsArray?.length === 0 && (
                 <div className="text-xs xs:text-base pb-[1vw]">
                   No information provided by the expert
                 </div>
               )}
               {achievements &&
-                expertDetailsObj.achievements.map((temp, idx) => (
-                  <AchievementCard key={idx} {...temp} />
+                achievementsArray?.map((item, idx) => (
+                  <AchievementCard key={idx} {...item} />
                 ))}
             </div>
           </div>
@@ -629,13 +634,17 @@ export const ExpertInfo = () => {
   );
 };
 
-export const SideComponent = () => {
+export const SideComponent = ({...expert}) => {
   const [summary, setSummary] = useState(true);
   const [services, setServices] = useState(false);
   const [ratings, setRatings] = useState(false);
   const [blogs, setBlogs] = useState(false);
   const [education, setEducation] = useState(true);
   const [achievements, setAchievements] = useState(true);
+
+  const educationArray = expert?.expert?.education?.education;
+  const achievementsArray = expert?.expert?.achievements?.achievements;
+  
 
   const MakeSummaryTrue = () => {
     setSummary(true);
@@ -669,12 +678,12 @@ export const SideComponent = () => {
           Skills
         </div>
         <div className="flex flex-wrap gap-2 md:gap-[1vw] mt-3 pb-1">
-          {expertDetailsObj.skills.map((item, index) => (
+          {expert?.expert?.skills?.skills_json?.map((item, index) => (
             <div
               key={index}
               className="px-2 py-1 text-xs md:text-sm border border-solid border-[#dedede] font-semibold rounded-sm cursor-pointer shadow-sm drop-shadow-sm"
             >
-              {item}
+              {item?.technology_name}
             </div>
           ))}
         </div>
@@ -704,14 +713,14 @@ export const SideComponent = () => {
                 </div>
               </div>
 
-              {education && expertDetailsObj.education.length === 0 && (
+              {education && educationArray?.length === 0 && (
                 <div className="text-xs xs:text-base pb-[1vw]">
                   No information provided by the expert
                 </div>
               )}
               {education &&
-                expertDetailsObj.education.map((temp, idx) => (
-                  <EducationCard key={idx} {...temp} />
+                educationArray?.map((item, idx) => (
+                  <EducationCard key={idx} {...item} />
                 ))}
             </div>
 
@@ -732,13 +741,13 @@ export const SideComponent = () => {
                   )}
                 </div>
               </div>
-              {achievements && expertDetailsObj.achievements.length === 0 && (
+              {achievements && achievementsArray?.length === 0 && (
                 <div className="text-xs xs:text-base pb-[1vw]">
                   No information provided by the expert
                 </div>
               )}
               {achievements &&
-                expertDetailsObj.achievements.map((temp, idx) => (
+                achievementsArray?.map((temp, idx) => (
                   <AchievementCard key={idx} {...temp} />
                 ))}
             </div>
@@ -751,15 +760,52 @@ export const SideComponent = () => {
 
 //This is the main expert profile component.
 const ExpertProfile = () => {
+  const params = useParams();
+  const [expertDetail, setExpertDetail] = useState(null);
+  const {id} = params;
+  console.log(id)
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  const getExpertDetails = async () => {
+    try {
+      const res = await axios.get(`/customers/experts/?action=2&expert_id=${id} `, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      if(!res.data || res.data.status===400 || res.data.status===401 || res.status===500 || res.data.status===404){
+        console.log(response.data.message);
+        return;
+
+      }
+      const data = res.data.data;
+      console.log(data);
+      setExpertDetail(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getExpertDetails();
+  },[id]);
+  useEffect(() => {
+    console.log(expertDetail);
+  },[expertDetail]);
+  
   return (
     <div>
       <div className="lg:flex mt-[90px] md:mt-[80px]">
         <div className="lg:w-[70%] h-[88vh]">
-          <AboutExpert />
-          <ExpertInfo />
+          <AboutExpert expert={expertDetail} />
+          <ExpertInfo expert={expertDetail} />
         </div>
         <div className="hidden lg:block w-[30%]">
-          <SideComponent />
+          <SideComponent  expert={expertDetail}/>
         </div>
       </div>
     </div>

@@ -38,7 +38,8 @@ const TestElement = () => {
           Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
-      setProjects(response.data);
+      console.log(response.data.data.projects);
+      setProjects(response.data.data.projects);
     } catch (error) {
       console.log(error);
     }
@@ -51,10 +52,10 @@ const TestElement = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "/experts/",
+        "/experts/update/",
         {
-          action: 7,
-          data: projects,
+          action: 8,
+          projects_json: projects,
         },
         {
           headers: {
@@ -317,7 +318,7 @@ const TestElement = () => {
           <div className="text-xl font-semibold">Your Projects</div>
         )}
         <div className="">
-          {projects.map((project, index) => (
+          {projects?.map((project, index) => (
             <div
               key={index}
               className="mb-8 p-6 bg-white rounded shadow-md border border-gray-200"
