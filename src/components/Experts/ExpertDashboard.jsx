@@ -411,7 +411,10 @@ const ShowMyProjects = () => {
         </div>
       )}
       {addProjectOpen && (
-        <CreateProject setAddProjectOpen={setAddProjectOpen} />
+        <CreateProject
+          setAddProjectOpen={setAddProjectOpen}
+          getBackWidth={window.scrollY}
+        />
       )}
       {console.log(myProjects)}
       {!addProjectOpen &&

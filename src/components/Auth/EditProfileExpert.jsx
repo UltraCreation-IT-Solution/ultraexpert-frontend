@@ -1369,20 +1369,22 @@ const AchDetails = () => {
     setAchForms([...achForms, { id: achForms.length + 1 }]);
   };
 
-  const [selectedCertificate, setSelectedCertificate] = useState(Array.from({ length: achForms.length }, () => null));
+  const [selectedCertificate, setSelectedCertificate] = useState(
+    Array.from({ length: achForms.length }, () => null)
+  );
 
   const handleCertificateChange = (event, ind) => {
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
-      if (!file.type.match('image/.*')) {
-        alert('Only image files are allowed!');
+      if (!file.type.match("image/.*")) {
+        alert("Only image files are allowed!");
         return;
       }
       const reader = new FileReader();
       reader.onload = () => {
         const updatedSelectedCertificates = [...selectedCertificate];
-      updatedSelectedCertificates[ind] = reader.result;
-      setSelectedCertificate(updatedSelectedCertificates);
+        updatedSelectedCertificates[ind] = reader.result;
+        setSelectedCertificate(updatedSelectedCertificates);
       };
       reader.readAsDataURL(file);
       const updatedCertificates = [...achInfo.certificate];
@@ -1396,11 +1398,11 @@ const AchDetails = () => {
 
   const handleRemoveCertificate = (ind) => {
     const updatedSelectedCertificates = [...selectedCertificate];
-  updatedSelectedCertificates[ind] = null;
-  setSelectedCertificate(updatedSelectedCertificates);
-  const updatedCertificates = [...achInfo.certificate];
-  updatedCertificates[ind] = null;
-  setAchInfo({ ...achInfo, certificate: updatedCertificates });
+    updatedSelectedCertificates[ind] = null;
+    setSelectedCertificate(updatedSelectedCertificates);
+    const updatedCertificates = [...achInfo.certificate];
+    updatedCertificates[ind] = null;
+    setAchInfo({ ...achInfo, certificate: updatedCertificates });
   };
 
   const getAchForm = async () => {
@@ -1573,7 +1575,8 @@ const AchDetails = () => {
                 document.querySelector(`#certificate${form.id}`).click()
               }
             >
-              {selectedCertificate[ind] && selectedCertificate[ind].startsWith("data:") ? (
+              {selectedCertificate[ind] &&
+              selectedCertificate[ind].startsWith("data:") ? (
                 <div className="relative">
                   <img
                     src={selectedCertificate[ind]}
@@ -1581,7 +1584,7 @@ const AchDetails = () => {
                     className="w-32 h-32 object-cover rounded-lg"
                   />
                   <div
-                    onClick={()=>handleRemoveCertificate(ind)}
+                    onClick={() => handleRemoveCertificate(ind)}
                     className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
                   >
                     <BsX
@@ -1604,7 +1607,7 @@ const AchDetails = () => {
               name={`certificate${form.id}`}
               id={`certificate${form.id}`}
               className="hidden"
-              onChange={(e)=>handleCertificateChange(e,ind)}
+              onChange={(e) => handleCertificateChange(e, ind)}
               aria-label="Upload certificate for achievement"
             />
           </>
@@ -2046,8 +2049,8 @@ const EditProfileExpert = () => {
   const [currStep, setCurrStep] = useState(0);
 
   return (
-    <div className="h-auto bg-white mt-[150px]">
-      <div className="md:w-[50%] w-[90%] flex md:flex-row flex-col border border-solid border-slate-300 mx-auto rounded-lg shadow-lg">
+    <div className="h-auto bg-white mt-5">
+      <div className="md:w-[95%] w-[60%] flex md:flex-row flex-col border border-solid border-slate-300 mx-auto rounded-lg shadow-lg">
         <div className="md:w-1/4 flex md:flex-col flex-row bg-white justify-start border-r border-solid border-slate-300">
           <button
             onClick={() => setCurrStep(0)}

@@ -69,20 +69,6 @@ const SignUpAsExpert = () => {
     });
 
     try {
-      // const response = await fetch("http://localhost:8000/experts/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 1,
-      //     gender: personalInfo.gender,
-      //     level: personalInfo.level,
-      //     about_me: personalInfo.about_me,
-      //     profession: personalInfo.profession,
-      //   }),
-      //   credentials: "include",
-      // });
       console.log(personalInfo);
       const response = await axios.post(
         "/user_details/",

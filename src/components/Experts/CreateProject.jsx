@@ -10,7 +10,7 @@ import {
 import { v4 } from "uuid";
 import axios from "../../axios";
 
-const CreateProject = ({ setAddProjectOpen }) => {
+const CreateProject = ({ setAddProjectOpen, getBackWidth }) => {
   const [projects, setProjects] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -110,7 +110,7 @@ const CreateProject = ({ setAddProjectOpen }) => {
     setEditingIndex(index);
 
     // Scroll to the top of the page
-    // window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: `${getBackWidth}`, behavior: "smooth" });
   };
 
   const handleDeleteProject = (index) => {
