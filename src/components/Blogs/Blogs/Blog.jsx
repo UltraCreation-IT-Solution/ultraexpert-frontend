@@ -301,7 +301,10 @@ const Blogs = () => {
           <div className="text-xl lg:text-3xl font-bold text-center px-5">
             Write a Blog
           </div>
-          <Link to="createblog" className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer">
+          <Link
+            to="createblog"
+            className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
+          >
             Write a Blog
           </Link>
         </div>
