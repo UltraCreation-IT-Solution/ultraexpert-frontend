@@ -86,6 +86,8 @@ const SignUpAsCustomer = () => {
         return;
       }
       console.log(data, personalInfo);
+      localStorage.setItem("isExpert", `false`);
+      localStorage.setItem("profile", `${personalInfo.profile_img}`);
       handleNext();
     } catch (error) {
       console.log(error.message);

@@ -4,8 +4,8 @@ import {
   recentBlog,
   hotTopics,
   allBlogs,
-  BlogCardHorizontal,
 } from "../../../constant";
+import { BlogCardHorizontal } from "../../../subsitutes/ShowBlogs";
 import { CiBookmark } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import axios from "../../../axios";
@@ -176,13 +176,13 @@ const Blogs = () => {
 
   const getData = async () => {
     console.log(localStorage.getItem("isExpert"));
-    if(localStorage.getItem("isExpert") === "true"){
-      try{
-        const res = await axios.get("/experts/?action=1",{
-          headers:{
+    if (localStorage.getItem("isExpert") === "true") {
+      try {
+        const res = await axios.get("/experts/?action=1", {
+          headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`
-          }
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
         });
         const allData = res.data.data;
         setAuthor({
@@ -191,18 +191,18 @@ const Blogs = () => {
           last_name: allData.last_name,
           gender: allData.gender,
           profession: allData.profession,
-          about_me: allData.about_me}
-        )
-      }catch(error){
+          about_me: allData.about_me,
+        });
+      } catch (error) {
         console.log(error);
       }
-    }else{
-      try{
-        const res = await axios.get("/customers/?action=1",{
-          headers:{
+    } else {
+      try {
+        const res = await axios.get("/customers/?action=1", {
+          headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`
-          }
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
         });
         const allData = res.data.data;
         setAuthor({
@@ -211,44 +211,48 @@ const Blogs = () => {
           last_name: allData.last_name,
           gender: allData.gender,
           profession: allData.profession,
-          about_me: allData.about_me
-        });        
-      }catch(error){
+          about_me: allData.about_me,
+        });
+      } catch (error) {
         console.log(error);
       }
     }
   };
 
   useEffect(() => {
-    if(localStorage.getItem("isAuthor") === "true"){
+    if (localStorage.getItem("isAuthor") === "true") {
       setIsAuthor(true);
     }
     getData();
   }, []);
 
-  const [isAuthor,setIsAuthor] = useState(false);
+  const [isAuthor, setIsAuthor] = useState(false);
 
   const createAuthor = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/blogs/author/",{
-        action: 1,
-        first_name: author.first_name,
-        last_name: author.last_name,
-        gender: author.gender,
-        profession: author.profession,
-        about_me: author.about_me
-      },{
-        headers:{
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`
+      const response = await axios.post(
+        "/blogs/author/",
+        {
+          action: 1,
+          first_name: author.first_name,
+          last_name: author.last_name,
+          gender: author.gender,
+          profession: author.profession,
+          about_me: author.about_me,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
         }
-      })
+      );
       const data = response.data;
-      console.log(data); 
+      console.log(data);
       setIsAuthor(true);
-      localStorage.setItem("isAuthor",true);
+      localStorage.setItem("isAuthor", true);
     } catch (error) {
       console.log(error);
     }
@@ -292,11 +296,20 @@ const Blogs = () => {
           </div>
         ))}
       </div>
-        {
-          isAuthor ? (<div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
-            <div className="text-xl lg:text-3xl font-bold text-center px-5">Write a Blog</div>
-            <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer">Write a Blog</button>
-          </div>) : (<div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
+      {isAuthor ? (
+        <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
+          <div className="text-xl lg:text-3xl font-bold text-center px-5">
+            Write a Blog
+          </div>
+          <Link
+            to="createblog"
+            className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
+          >
+            Write a Blog
+          </Link>
+        </div>
+      ) : (
+        <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
           <div className="flex flex-col px-5">
             <div className="text-xl lg:text-3xl font-bold text-center">
               Become an Author
@@ -305,12 +318,15 @@ const Blogs = () => {
               (If you want to write a blog)
             </div>
           </div>
-          <button onClick={(e)=>createAuthor(e)} className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer">
+          <button
+            onClick={(e) => createAuthor(e)}
+            className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
+          >
             Become an Author
           </button>
-        </div>)
-        }
-      
+        </div>
+      )}
+
       {searchText.length === 0 ? (
         <BlogBody />
       ) : (

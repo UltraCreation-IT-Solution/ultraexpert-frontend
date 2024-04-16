@@ -2065,8 +2065,8 @@ const EditProfileExpert = () => {
   const [currStep, setCurrStep] = useState(0);
 
   return (
-    <div className="h-auto bg-white mt-[150px]">
-      <div className="md:w-[50%] w-[90%] flex md:flex-row flex-col border border-solid border-slate-300 mx-auto rounded-lg shadow-lg">
+    <div className="h-auto bg-white mt-5">
+      <div className="md:w-[95%] w-[60%] flex md:flex-row flex-col border border-solid border-slate-300 mx-auto rounded-lg shadow-lg">
         <div className="md:w-1/4 flex md:flex-col flex-row bg-white justify-start border-r border-solid border-slate-300">
           <button
             onClick={() => setCurrStep(0)}
