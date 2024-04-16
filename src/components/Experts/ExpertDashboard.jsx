@@ -32,9 +32,9 @@ import {
   BsGlobe,
   BsThreeDotsVertical,
 } from "react-icons/bs";
-import { RiPagesFill, RiArrowRightSLine } from "react-icons/ri";
+import { RiPagesFill, RiArrowRightSLine, RiCustomerService2Fill } from "react-icons/ri";
 import { PiCrownFill } from "react-icons/pi";
-import { ExpertBlogs } from "./ExpertProfile";
+import ShowBlogs from "../../subsitutes/ShowBlogs";
 import {
   BookingCard,
   expertDashInfo as expert,
@@ -1035,7 +1035,7 @@ export const Dashboard = () => {
           </div>
         )}
         {/* Blogs section of dashboard */}
-        {blogs && <ExpertBlogs />}
+        {blogs && <ShowBlogs />}
         {/* Testimonials section of dashboard */}
         {testimonials &&
           expertAllTestimonials?.map((item, index) => (
@@ -1380,6 +1380,12 @@ const ExpertDashboard = () => {
                 <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <IoBookmarksSharp className="text-[1.65vw]" />
                   Bookings
+                </li>
+              </Link>
+              <Link to="createservice" className="no-underline">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                  <RiCustomerService2Fill className="text-[1.65vw]" />
+                  Create service
                 </li>
               </Link>
               <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">

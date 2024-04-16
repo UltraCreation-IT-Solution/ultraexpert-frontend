@@ -8,7 +8,7 @@ import {
 } from "react-icons/md";
 import { RiFlowChart } from "react-icons/ri";
 import { IoDiamondSharp } from "react-icons/io5";
-import { FaUserGraduate, FaUserCheck, FaBookmark} from "react-icons/fa6";
+import { FaUserGraduate, FaUserCheck} from "react-icons/fa6";
 import { IoIosChatboxes } from "react-icons/io";
 import { GiAchievement } from "react-icons/gi";
 import { BiLike } from "react-icons/bi";
@@ -19,13 +19,19 @@ import { Link, useParams } from "react-router-dom";
 import {
   expertDetailsObj,
   ProjectsCarousel,
-  BlogCard,
-  BlogCardHorizontal,
 } from "../../constant";  
+import ShowBlogs from "../../subsitutes/ShowBlogs";
 import axios from "../../axios";
 
 export const ExpertSummary = ({experienceArray,projectsArray}) => {
   console.log(projectsArray)
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  }
+
   return (
     <div className="mt-3">
       {experienceArray?.length !== 0 && (
@@ -51,13 +57,13 @@ export const ExpertSummary = ({experienceArray,projectsArray}) => {
                       ) : (
                         <>
                           <div>
-                            {item?.end_date}
+                          {formatDate(item?.end_date)}
                           </div>
                           <div className="block md:hidden"> - </div>
                         </>
                       )}
                       <div>
-                        {item?.start_date}
+                      {formatDate(item?.start_date)}
                       </div>
                     </div>
                     {/* 2nd portion */}
@@ -330,15 +336,15 @@ export const ExpertRatings = () => {
   );
 };
 
-export const ExpertBlogs = () => {
-  return (
-    <div>
-      {expertDetailsObj?.blogs?.map((item, idx) => (
-        <BlogCardHorizontal key={idx} index={idx} items={item} />
-      ))}
-    </div>
-  );
-};
+// export const ShowBlogs = () => {
+//   return (
+//     <div>
+//       {expertDetailsObj?.blogs?.map((item, idx) => (
+//         <BlogCardHorizontal key={idx} index={idx} items={item} />
+//       ))}
+//     </div>
+//   );
+// };
 
 export const AboutExpert = ({...expert}) => {
   return (
@@ -561,7 +567,7 @@ export const ExpertInfo = ({...expert}) => {
           {summary && <ExpertSummary experienceArray={experienceArray} projectsArray={projectsArray} />}
           {services && <ExpertServices />}
           {ratings && <ExpertRatings />}
-          {blogs && <ExpertBlogs />}
+          {blogs && <ShowBlogs />}
         </div>
       </div>
 

@@ -42,6 +42,7 @@ const CreateProject = ({ setAddProjectOpen }) => {
       setProjects(response.data.data.projects);
     } catch (error) {
       console.log(error);
+      setProjects([]);
     }
   };
   useEffect(() => {
