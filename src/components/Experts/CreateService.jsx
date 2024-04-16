@@ -1,29 +1,27 @@
 import React, { useState } from "react";
-import { BsUpload,BsX } from "react-icons/bs";
+import { BsUpload, BsX } from "react-icons/bs";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { FaIndianRupeeSign } from "react-icons/fa6";
+import { FiX } from "react-icons/fi";
 
 const CreateService = () => {
-
   const navigate = useNavigate();
 
-  const interest = [
-    { id: 1, name: "Python" },
-    { id: 2, name: "C++" },
-    { id: 3, name: "Django" },
-    { id: 4, name: "HTML" },
-    { id: 5, name: "CSS" },
-    { id: 6, name: "JS" },
-    { id: 7, name: "React JS" },
-  ];
+  const [interest, setInterest] = useState([]);
+  const [interestInput, setInterestInput] = useState("");
 
-  const [selectedSkill, setSelectedSkill] = useState([]);
-
-  const handleChange = (skill) => {
-    if (!selectedSkill.includes(skill)) {
-      setSelectedSkill([...selectedSkill, skill]);
+  const addInterest = () => {
+    if (interestInput.trim() !== "") {
+      setInterest([...interest, interestInput.trim()]);
+      setInterestInput("");
     }
+  };
+
+  const removeInterest = (index) => {
+    const updatedInterest = [...interest];
+    updatedInterest.splice(index, 1);
+    setInterest(updatedInterest);
   };
 
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -42,9 +40,9 @@ const CreateService = () => {
         newPreviews.push(e.target.result);
         if (newPreviews.length === files.length) {
           const totalFiles = combinedFiles.length + newPreviews.length;
-          if(totalFiles > 4) {
+          if (totalFiles > 4) {
             setErrorMessage("You can only upload up to 4 files.");
-          }else{
+          } else {
             setErrorMessage("");
             setSelectedFiles([...combinedFiles, ...newPreviews]);
           }
@@ -67,21 +65,30 @@ const CreateService = () => {
     removeImage(index);
   };
 
-  const handleBack = () =>{
+  const handleBack = () => {
     navigate("/services");
-  }
+  };
 
   return (
     <div className="mt-[100px] flex flex-col bg-white h-auto">
       <div className="flex w-[60%] mx-auto">
-        <div onClick={()=>handleBack()} className="flex gap-2 text-lg font-bold cursor-pointer hover:bg-[#e2e2e2] py-2 px-1 rounded-md duration-200"><MdOutlineKeyboardBackspace size={25}/>Add a service</div>
+        <div
+          onClick={() => handleBack()}
+          className="flex gap-2 text-lg font-bold cursor-pointer hover:bg-[#e2e2e2] py-2 px-1 rounded-md duration-200"
+        >
+          <MdOutlineKeyboardBackspace size={25} />
+          Add a service
+        </div>
       </div>
       <div className="w-[60%] flex flex-col border border-solid border-slate-300 mx-auto items-center justify-center rounded-lg shadow-lg">
         <div className="text-4xl text-[#3E5676] font-bold my-4">
           Create a serivce
         </div>
         <u className="border border-[#d8d8d8] border-solid w-[90%] mb-8"></u>
-        <form onSubmit={(event) => event.preventDefault()} className="w-[60%] flex flex-col mb-5">
+        <form
+          onSubmit={(event) => event.preventDefault()}
+          className="w-[60%] flex flex-col mb-5"
+        >
           <label htmlFor="title" className="text-lg mb-1">
             Service Title
           </label>
@@ -106,43 +113,37 @@ const CreateService = () => {
           <label htmlFor="interests" className="text-lg mb-1">
             Service Tags
           </label>
-          <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-            <div className="flex flex-wrap gap-3">
-              {selectedSkill.length > 0 ? (
-                selectedSkill.map((skill) => {
-                  return (
-                    <div
-                      key={skill}
-                      className="px-4 py-1 text-sm text-nowrap rounded-full bg-inherit border border-solid border-black"
-                    >
-                      {skill}
-                    </div>
-                  );
-                })
-              ) : (
-                <p className="text-gray-300 text-sm">
-                  Select skills of your interest from below.
-                </p>
-              )}
-            </div>
+
+          <div className="flex flex-wrap border border-slate-300 rounded p-2 gap-3 ">
+            {interest.map((skill, ind) => (
+              <div
+                key={ind}
+                className="flex gap-1 items-center bg-slate-300 text-gray-600 pl-4 pr-2 py-1 rounded-full text-sm mr-2 mb-2"
+              >
+                {skill}
+                <FiX
+                  onClick={() => removeInterest(ind)}
+                  className="ml-1 cursor-pointer text-center text-lg"
+                />
+              </div>
+            ))}
           </div>
-          <div className="border border-solid border-slate-200 px-4 py-2 rounded-md mb-4 overflow-y-auto">
-            <div className="flex flex-wrap gap-3">
-              {interest.map((skill, ind) => {
-                return (
-                  <div
-                    key={ind}
-                    onClick={() => {
-                      handleChange(skill.name);
-                    }}
-                    className="cursor-pointer px-4 py-1 text-sm text-nowrap rounded-full bg-inherit border border-solid border-[#c7c7c7] text-[#8D8D8D] bg-[#E8E8E8] flex justify-center items-center overflow-visible"
-                  >
-                    {skill.name}
-                  </div>
-                );
-              })}
-            </div>
+          <div className="flex items-center mb-4 gap-2">
+            <input
+              type="text"
+              placeholder="Add Tags"
+              value={interestInput}
+              onChange={(e) => setInterestInput(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-4 py-2 w-full"
+            />
+            <button
+              onClick={()=>addInterest()}
+              className="bg-blue-500 text-white rounded px-4 py-2 cursor-pointer"
+            >
+              Add
+            </button>
           </div>
+
           <label htmlFor="imageSelector" className="text-lg mb-1">
             Service Images
           </label>
@@ -162,14 +163,17 @@ const CreateService = () => {
               <div className="flex flex-wrap">
                 {selectedFiles.map((preview, index) => (
                   <div key={index} className="relative mr-2 mb-2">
-                  <img
-                    src={preview}
-                    alt={`Preview ${index}`}
-                    className="w-24 h-24 object-cover"
-                  />
-                  <div onClick={(e)=>handleButtonClick(e,index)} className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1">
-                    <BsX/>
-                  </div>
+                    <img
+                      src={preview}
+                      alt={`Preview ${index}`}
+                      className="w-24 h-24 object-cover"
+                    />
+                    <div
+                      onClick={(e) => handleButtonClick(e, index)}
+                      className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
+                    >
+                      <BsX />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -188,7 +192,9 @@ const CreateService = () => {
             Service Price
           </label>
           <div className="flex">
-            <div className="border border-solid border-slate-300 rounded-s-md p-2 mb-4"><FaIndianRupeeSign/></div>
+            <div className="border border-solid border-slate-300 rounded-s-md p-2 mb-4">
+              <FaIndianRupeeSign />
+            </div>
             <input
               placeholder="Service Price"
               type="number"
@@ -198,7 +204,10 @@ const CreateService = () => {
             />
           </div>
           <div className="flex justify-center mb-4">
-            <button type="submit" className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md">
+            <button
+              type="submit"
+              className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md"
+            >
               Create
             </button>
           </div>
