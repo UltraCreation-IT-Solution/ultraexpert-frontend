@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FiUpload, FiX, FiEdit } from "react-icons/fi";
-import { imageDB } from "./components/firebase/config";
+import { imageDB } from "../firebase/config";
 import {
   ref,
   uploadBytesResumable,
@@ -8,9 +8,9 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
-import axios from "./axios";
+import axios from "../../axios";
 
-const TestElement = () => {
+const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
   const [projects, setProjects] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -42,6 +42,7 @@ const TestElement = () => {
       setProjects(response.data.data.projects);
     } catch (error) {
       console.log(error);
+      setProjects([]);
     }
   };
   useEffect(() => {
@@ -65,6 +66,7 @@ const TestElement = () => {
         }
       );
       console.log(response);
+      setAddProjectOpen(false);
     } catch (error) {
       console.log(error);
     }
@@ -109,7 +111,7 @@ const TestElement = () => {
     setEditingIndex(index);
 
     // Scroll to the top of the page
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: `${getBackWidth}`, behavior: "smooth" });
   };
 
   const handleDeleteProject = (index) => {
@@ -166,6 +168,7 @@ const TestElement = () => {
     // For simplicity, let's just log a message
     console.log("Cancelled");
     setEditingIndex(null); // Reset editing index
+    setAddProjectOpen(false);
   };
 
   const isFormEmpty =
@@ -185,8 +188,8 @@ const TestElement = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-20 px-4 border border-gray-500 rounded-lg shadow-lg">
-      <div className="flex justify-between items-center bg-white border border-slate-300 border-solid px-6 py-3 rounded-t-lg">
+    <div className="max-w-3xl mx-auto mt-2 px-4 border border-gray-500 rounded-lg shadow-lg">
+      <div className="flex justify-between items-center bg-[#ebebeb] border border-slate-300 border-solid px-6 py-3 rounded-t-lg">
         <h2 className="text-xl font-semibold">Add Project</h2>
         <div className="flex flex-wrap justify-between">
           <button
@@ -318,66 +321,67 @@ const TestElement = () => {
           <div className="text-xl font-semibold">Your Projects</div>
         )}
         <div className="">
-          {projects?.map((project, index) => (
-            <div
-              key={index}
-              className="mb-8 p-6 bg-white rounded shadow-md border border-gray-200"
-            >
-              <h3 className="text-xl font-semibold mb-4">{project.title}</h3>
-              <p className="text-gray-700 mb-4">{project.description}</p>
-              <div className="flex gap-10">
-                {project.image && (
-                  <img
-                    src={project.image}
-                    alt="Project"
-                    className="mb-4 h-44 w-60 object-cover rounded"
-                  />
-                )}
-                <div>
-                  <p className="text-sm font-medium">
-                    <span className="font-extrabold">Type: </span>
-                    {project.type === "group"
-                      ? "Group Project"
-                      : "Indie Project"}
-                  </p>
-                  {project.type === "group" && (
-                    <p className="text-sm font-medium">
-                      <span className="font-extrabold">Role: </span>
-                      {project.role}
-                    </p>
+          {projects.length > 0 &&
+            projects.map((project, index) => (
+              <div
+                key={index}
+                className="mb-8 p-6 bg-white rounded shadow-md border border-gray-200"
+              >
+                <h3 className="text-xl font-semibold mb-4">{project.title}</h3>
+                <p className="text-gray-700 mb-4">{project.description}</p>
+                <div className="flex gap-10">
+                  {project.image && (
+                    <img
+                      src={project.image}
+                      alt="Project"
+                      className="mb-4 h-44 w-60 object-cover rounded"
+                    />
                   )}
-                  <div className="flex flex-wrap mt-2">
-                    {project.tags.map((tag, tagIndex) => (
-                      <span
-                        key={tagIndex}
-                        className="flex gap-1 items-center bg-slate-300 text-gray-600 pl-4 pr-2 py-1 rounded-full text-sm mr-2 mb-2"
+                  <div>
+                    <p className="text-sm font-medium">
+                      <span className="font-extrabold">Type: </span>
+                      {project.type === "group"
+                        ? "Group Project"
+                        : "Indie Project"}
+                    </p>
+                    {project.type === "group" && (
+                      <p className="text-sm font-medium">
+                        <span className="font-extrabold">Role: </span>
+                        {project.role}
+                      </p>
+                    )}
+                    <div className="flex flex-wrap mt-2">
+                      {project.tags.map((tag, tagIndex) => (
+                        <span
+                          key={tagIndex}
+                          className="flex gap-1 items-center bg-slate-300 text-gray-600 pl-4 pr-2 py-1 rounded-full text-sm mr-2 mb-2"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex mt-2">
+                      <button
+                        onClick={() => handleEditProject(index)}
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2 hover:bg-blue-600"
                       >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex mt-2">
-                    <button
-                      onClick={() => handleEditProject(index)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2 hover:bg-blue-600"
-                    >
-                      <FiEdit /> Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteProject(index)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-                    >
-                      Delete
-                    </button>
+                        <FiEdit /> Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProject(index)}
+                        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>
   );
 };
 
-export default TestElement;
+export default UpdateProject;

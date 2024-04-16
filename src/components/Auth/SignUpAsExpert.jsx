@@ -69,20 +69,6 @@ const SignUpAsExpert = () => {
     });
 
     try {
-      // const response = await fetch("http://localhost:8000/experts/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 1,
-      //     gender: personalInfo.gender,
-      //     level: personalInfo.level,
-      //     about_me: personalInfo.about_me,
-      //     profession: personalInfo.profession,
-      //   }),
-      //   credentials: "include",
-      // });
       console.log(personalInfo);
       const response = await axios.post(
         "/user_details/",
@@ -103,6 +89,8 @@ const SignUpAsExpert = () => {
         return;
       }
       console.log(data, personalInfo);
+      localStorage.setItem("isExpert", `true`);
+      localStorage.setItem("profile", `${personalInfo.profile_img}`);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -183,7 +171,7 @@ const SignUpAsExpert = () => {
     state_name: [],
     country: ["India"],
     passing_year: [],
-    Devision: ["First"],
+    Devision: [],
   });
 
   const handleEducationForm = async (e) => {
@@ -197,27 +185,6 @@ const SignUpAsExpert = () => {
     });
 
     try {
-      // const response = fetch("http://localhost:8000/experts/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 2,
-      //     education_json: [
-      //       {
-      //         type: eduInfo.type,
-      //         institute_name: eduInfo.institute_name,
-      //         city: eduInfo.city,
-      //         state_name: eduInfo.state_name,
-      //         country: eduInfo.country,
-      //         passing_year: eduInfo.passing_year,
-      //         Devision: eduInfo.Devision,
-      //       },
-      //     ],
-      //   }),
-      //   credentials: "include",
-      // });
       const educationData = educationForms.map((form, index) => ({
         type: eduInfo.type[index],
         institute_name: eduInfo.institute_name[index],
@@ -283,23 +250,6 @@ const SignUpAsExpert = () => {
       jsonData[key] = value;
     });
     try {
-      // const response = fetch("http://localhost:8000/experts/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 3,
-      //     skill_json: [
-      //       {
-      //         technology_name: skillInfo.technology_name,
-      //         ratings: skillInfo.ratings,
-      //       },
-      //     ],
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = response.json();
       const skillData = skillForms.map((form, index) => ({
         technology_name: skillInfo.technology_name[index],
         ratings: skillInfo.ratings[index],
@@ -350,20 +300,22 @@ const SignUpAsExpert = () => {
     }));
   };
 
-  const [selectedCertificate, setSelectedCertificate] = useState(Array.from({ length: achForms.length }, () => null));
+  const [selectedCertificate, setSelectedCertificate] = useState(
+    Array.from({ length: achForms.length }, () => null)
+  );
 
   const handleCertificateChange = (event, ind) => {
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
-      if (!file.type.match('image/.*')) {
-        alert('Only image files are allowed!');
+      if (!file.type.match("image/.*")) {
+        alert("Only image files are allowed!");
         return;
       }
       const reader = new FileReader();
       reader.onload = () => {
         const updatedSelectedCertificates = [...selectedCertificate];
-      updatedSelectedCertificates[ind] = reader.result;
-      setSelectedCertificate(updatedSelectedCertificates);
+        updatedSelectedCertificates[ind] = reader.result;
+        setSelectedCertificate(updatedSelectedCertificates);
       };
       reader.readAsDataURL(file);
       const updatedCertificates = [...achInfo.certificate];
@@ -377,11 +329,11 @@ const SignUpAsExpert = () => {
 
   const handleRemoveCertificate = (ind) => {
     const updatedSelectedCertificates = [...selectedCertificate];
-  updatedSelectedCertificates[ind] = null;
-  setSelectedCertificate(updatedSelectedCertificates);
-  const updatedCertificates = [...achInfo.certificate];
-  updatedCertificates[ind] = null;
-  setAchInfo({ ...achInfo, certificate: updatedCertificates });
+    updatedSelectedCertificates[ind] = null;
+    setSelectedCertificate(updatedSelectedCertificates);
+    const updatedCertificates = [...achInfo.certificate];
+    updatedCertificates[ind] = null;
+    setAchInfo({ ...achInfo, certificate: updatedCertificates });
   };
 
   const handleAchForm = async (e) => {
@@ -394,23 +346,6 @@ const SignUpAsExpert = () => {
       jsonData[key] = value;
     });
     try {
-      // const response = fetch("http://localhost:8000/experts/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 3,
-      //     skill_json: [
-      //       {
-      //         technology_name: skillInfo.technology_name,
-      //         ratings: skillInfo.ratings,
-      //       },
-      //     ],
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = response.json();
       const achData = achForms.map((form, index) => ({
         name: achInfo.name[index],
         year: achInfo.year[index],
@@ -452,6 +387,7 @@ const SignUpAsExpert = () => {
       ...prevExpInfo,
       company_name: [...prevExpInfo.company_name, ""],
       start_date: [...prevExpInfo.start_date, ""],
+      is_present: [...prevExpInfo.is_present, false],
       end_date: [...prevExpInfo.end_date, ""],
       designation: [...prevExpInfo.designation, ""],
     }));
@@ -460,6 +396,7 @@ const SignUpAsExpert = () => {
   const [expInfo, setExpInfo] = useState({
     company_name: [],
     start_date: [],
+    is_present: [],
     end_date: [],
     designation: [],
   });
@@ -474,29 +411,10 @@ const SignUpAsExpert = () => {
       jsonData[key] = value;
     });
     try {
-      // const response = fetch("http://localhost:8000/experts/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 4,
-      //     experience_json: [
-      //       {
-      //         company_name: expInfo.company_name,
-      //         start_date: expInfo.start_date,
-      //         end_date: expInfo.end_date,
-      //         designation: expInfo.designation,
-      //       },
-      //     ],
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = response.json();
-      // console.log(json);
       const experienceData = experienceForms.map((form, index) => ({
         company_name: expInfo.company_name[index],
         start_date: expInfo.start_date[index],
+        is_present: expInfo.is_present[index],
         end_date: expInfo.end_date[index],
         designation: expInfo.designation[index],
       }));
@@ -544,22 +462,6 @@ const SignUpAsExpert = () => {
       jsonData[key] = value;
     });
     try {
-      // const response = fetch("http://localhost:8000/experts/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 5,
-      //     account_holder: accInfo.account_holder,
-      //     bank_name: accInfo.bank_name,
-      //     account_number: accInfo.account_number,
-      //     ifsc_code: accInfo.ifsc_code,
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = response.json();
-      // console.log(json);
       const response = await axios.post(
         "/experts/",
         {
@@ -582,6 +484,25 @@ const SignUpAsExpert = () => {
         return;
       }
       console.log(data, accInfo);
+      try {
+        const response = await axios.post(
+          "/experts/",
+          {
+            action: 7,
+            projects_json: [],
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${jsonData.access_token}`,
+            },
+          }
+        );
+        console.log(response);
+        setAddProjectOpen(false);
+      } catch (error) {
+        console.log(error);
+      }
       setIsComplete(true);
       navigate("/");
     } catch (error) {
@@ -1619,6 +1540,7 @@ const SignUpAsExpert = () => {
                             });
                           }}
                           className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
+                          placeholder="CGPA / %"
                         />
                       </div>
                     </div>
@@ -1684,7 +1606,7 @@ const SignUpAsExpert = () => {
                         });
                       }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      placeholder="Institute Name"
+                      placeholder="Technology Name"
                     />
                     <label
                       htmlFor={`rating${form.id}`}
@@ -1804,31 +1726,47 @@ const SignUpAsExpert = () => {
                     >
                       Certificate
                     </label>
-                    <div onClick={()=>document.querySelector(`#certificate${form.id}`).click()} className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-[50%] mx-auto cursor-pointer rounded-lg">
-                      {selectedCertificate[ind] && selectedCertificate[ind].startsWith('data:')?(
+                    <div
+                      onClick={() =>
+                        document.querySelector(`#certificate${form.id}`).click()
+                      }
+                      className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-[50%] mx-auto cursor-pointer rounded-lg"
+                    >
+                      {selectedCertificate[ind] &&
+                      selectedCertificate[ind].startsWith("data:") ? (
                         <div className="relative">
-                          <img src={selectedCertificate[ind]} alt="Certificate"
-                          className="w-32 h-32 object-cover rounded-lg"/>
-                          <div onClick={()=>handleRemoveCertificate(ind)}
-                          className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1">
-                            <BsX size={20} className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"/>
+                          <img
+                            src={selectedCertificate[ind]}
+                            alt="Certificate"
+                            className="w-32 h-32 object-cover rounded-lg"
+                          />
+                          <div
+                            onClick={() => handleRemoveCertificate(ind)}
+                            className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
+                          >
+                            <BsX
+                              size={20}
+                              className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"
+                            />
                           </div>
                         </div>
-                      ):(<div className="flex flex-col items-center">
-                      <BsUpload size={20} />
-                      <div className="text-sm text-[#1475cf] mt-2">
-                        Click here to upload a profile photo
-                      </div>
-                    </div>)}
+                      ) : (
+                        <div className="flex flex-col items-center">
+                          <BsUpload size={20} />
+                          <div className="text-sm text-[#1475cf] mt-2">
+                            Click here to upload a profile photo
+                          </div>
+                        </div>
+                      )}
                     </div>
                     <input
                       type="file"
                       accept="image/*"
                       id={`certificate${form.id}`}
                       name={`certificate${form.id}`}
-                      onChange={(e) => 
-                        {handleCertificateChange(e,ind);}
-                      }
+                      onChange={(e) => {
+                        handleCertificateChange(e, ind);
+                      }}
                       className="hidden"
                       aria-label="Upload certificate for achievement"
                     />
@@ -1896,42 +1834,66 @@ const SignUpAsExpert = () => {
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                       placeholder="Company Name"
                     />
-                    <div className="flex justify-around gap-5">
-                      <div className="flex flex-col w-full">
-                        <label
-                          htmlFor={`start${form.id}`}
-                          className="text-base md:text-lg mb-1"
-                        >
-                          Start Year
-                        </label>
-                        <input
-                          type="date"
-                          id={`start${form.id}`}
-                          name={`start${form.id}`}
-                          value={expInfo.start_date[ind]}
-                          className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                          placeholder="YYYY-MM-DD"
-                          onChange={(e) => {
-                            const selectedDate = new Date(e.target.value);
-                            const year = selectedDate.getFullYear();
-                            const month = String(
-                              selectedDate.getMonth() + 1
-                            ).padStart(2, "0");
-                            const day = String(selectedDate.getDate()).padStart(
-                              2,
-                              "0"
-                            );
-                            const formattedDate = `${year}-${month}-${day}`;
-                            const updatedStartDate = [...expInfo.start_date];
-                            updatedStartDate[ind] = formattedDate;
-                            setExpInfo({
-                              ...expInfo,
-                              start_date: updatedStartDate,
-                            });
-                          }}
-                        />
-                      </div>
-                      <div className="flex flex-col w-full">
+
+                    <label
+                      htmlFor={`start${form.id}`}
+                      className="text-base md:text-lg mb-1"
+                    >
+                      Start Year
+                    </label>
+                    <input
+                      type="date"
+                      id={`start${form.id}`}
+                      name={`start${form.id}`}
+                      value={expInfo.start_date[ind]}
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                      placeholder="YYYY-MM-DD"
+                      onChange={(e) => {
+                        const selectedDate = new Date(e.target.value);
+                        const year = selectedDate.getFullYear();
+                        const month = String(
+                          selectedDate.getMonth() + 1
+                        ).padStart(2, "0");
+                        const day = String(selectedDate.getDate()).padStart(
+                          2,
+                          "0"
+                        );
+                        const formattedDate = `${year}-${month}-${day}`;
+                        const updatedStartDate = [...expInfo.start_date];
+                        updatedStartDate[ind] = formattedDate;
+                        setExpInfo({
+                          ...expInfo,
+                          start_date: updatedStartDate,
+                        });
+                      }}
+                    />
+                    <label
+                      htmlFor="present"
+                      className="text-base md:text-lg mb-1"
+                    >
+                      Is Present ?
+                    </label>
+                    <select
+                      name="present"
+                      id="present"
+                      value={expInfo.is_present[ind]}
+                      onChange={(e) => {
+                        const updatedPresent = [...expInfo.is_present];
+                        updatedPresent[ind] = e.target.value;
+                        setExpInfo({
+                          ...expInfo,
+                          is_present: updatedPresent,
+                        });
+                      }}
+                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
+                    >
+                      <option value="false">False</option>
+                      <option value="true">True</option>
+                    </select>
+                    {expInfo.is_present[ind] === "true" ? (
+                      <></>
+                    ) : (
+                      <>
                         <label
                           htmlFor={`end${form.id}`}
                           className="text-base md:text-lg mb-1"
@@ -1964,8 +1926,9 @@ const SignUpAsExpert = () => {
                             });
                           }}
                         />
-                      </div>
-                    </div>
+                      </>
+                    )}
+
                     <label
                       htmlFor={`designtaion${form.id}`}
                       className="text-base md:text-lg mb-1"
