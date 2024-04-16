@@ -22,7 +22,7 @@ const CHECKOUT_STEPS = [
 ];
 
 const SignUpAsExpert = () => {
-  const [currStep, setCurrStep] = useState(5);
+  const [currStep, setCurrStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [margin, setMargin] = useState({
     marginLeft: 0,
@@ -89,6 +89,8 @@ const SignUpAsExpert = () => {
         return;
       }
       console.log(data, personalInfo);
+      localStorage.setItem("isExpert", `true`);
+      localStorage.setItem("profile", `${personalInfo.profile_img}`);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -183,27 +185,6 @@ const SignUpAsExpert = () => {
     });
 
     try {
-      // const response = fetch("http://localhost:8000/experts/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 2,
-      //     education_json: [
-      //       {
-      //         type: eduInfo.type,
-      //         institute_name: eduInfo.institute_name,
-      //         city: eduInfo.city,
-      //         state_name: eduInfo.state_name,
-      //         country: eduInfo.country,
-      //         passing_year: eduInfo.passing_year,
-      //         Devision: eduInfo.Devision,
-      //       },
-      //     ],
-      //   }),
-      //   credentials: "include",
-      // });
       const educationData = educationForms.map((form, index) => ({
         type: eduInfo.type[index],
         institute_name: eduInfo.institute_name[index],
@@ -269,23 +250,6 @@ const SignUpAsExpert = () => {
       jsonData[key] = value;
     });
     try {
-      // const response = fetch("http://localhost:8000/experts/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 3,
-      //     skill_json: [
-      //       {
-      //         technology_name: skillInfo.technology_name,
-      //         ratings: skillInfo.ratings,
-      //       },
-      //     ],
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = response.json();
       const skillData = skillForms.map((form, index) => ({
         technology_name: skillInfo.technology_name[index],
         ratings: skillInfo.ratings[index],
@@ -382,23 +346,6 @@ const SignUpAsExpert = () => {
       jsonData[key] = value;
     });
     try {
-      // const response = fetch("http://localhost:8000/experts/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 3,
-      //     skill_json: [
-      //       {
-      //         technology_name: skillInfo.technology_name,
-      //         ratings: skillInfo.ratings,
-      //       },
-      //     ],
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = response.json();
       const achData = achForms.map((form, index) => ({
         name: achInfo.name[index],
         year: achInfo.year[index],
@@ -449,7 +396,7 @@ const SignUpAsExpert = () => {
   const [expInfo, setExpInfo] = useState({
     company_name: [],
     start_date: [],
-    is_present:[],
+    is_present: [],
     end_date: [],
     designation: [],
   });
@@ -464,26 +411,6 @@ const SignUpAsExpert = () => {
       jsonData[key] = value;
     });
     try {
-      // const response = fetch("http://localhost:8000/experts/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 4,
-      //     experience_json: [
-      //       {
-      //         company_name: expInfo.company_name,
-      //         start_date: expInfo.start_date,
-      //         end_date: expInfo.end_date,
-      //         designation: expInfo.designation,
-      //       },
-      //     ],
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = response.json();
-      // console.log(json);
       const experienceData = experienceForms.map((form, index) => ({
         company_name: expInfo.company_name[index],
         start_date: expInfo.start_date[index],
@@ -535,22 +462,6 @@ const SignUpAsExpert = () => {
       jsonData[key] = value;
     });
     try {
-      // const response = fetch("http://localhost:8000/experts/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 5,
-      //     account_holder: accInfo.account_holder,
-      //     bank_name: accInfo.bank_name,
-      //     account_number: accInfo.account_number,
-      //     ifsc_code: accInfo.ifsc_code,
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = response.json();
-      // console.log(json);
       const response = await axios.post(
         "/experts/",
         {
@@ -573,6 +484,25 @@ const SignUpAsExpert = () => {
         return;
       }
       console.log(data, accInfo);
+      try {
+        const response = await axios.post(
+          "/experts/",
+          {
+            action: 7,
+            projects_json: [],
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${jsonData.access_token}`,
+            },
+          }
+        );
+        console.log(response);
+        setAddProjectOpen(false);
+      } catch (error) {
+        console.log(error);
+      }
       setIsComplete(true);
       navigate("/");
     } catch (error) {

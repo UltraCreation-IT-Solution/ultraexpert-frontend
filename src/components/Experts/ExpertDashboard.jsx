@@ -62,7 +62,7 @@ import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { Outlet, Link } from "react-router-dom";
 import axios from "../../axios";
-import CreateProject from "./CreateProject";
+import UpdateProject from "./UpdateProjeect";
 
 const generateRandomData = () => {
   const today = new Date();
@@ -285,7 +285,13 @@ const Contributioncard = ({
     </div>
   );
 };
-export const TestimonialsCard = ({ item, index }) => {
+export const TestimonialsCard = ({
+  item,
+  index,
+  HandleBlogs,
+  HandleTestimonials,
+  getExpertAllTestimonials,
+}) => {
   const [comment, setComment] = useState(item?.content);
   const [readOnly, setReadOnly] = useState(true);
   const [editTestimonial, setEditTestimonial] = useState(false);
@@ -304,13 +310,15 @@ export const TestimonialsCard = ({ item, index }) => {
     jsonData[key] = value;
   });
   const handleSubmitEditedTestimonial = async (e, id) => {
+    e.preventDefault();
+    console.log(id);
     try {
       const response = await axios.post(
         "/testimonial/",
         {
           action: 2,
-          id: { id },
-          content_json: { comment },
+          id: id,
+          content_json: comment,
         },
         {
           headers: {
@@ -328,13 +336,41 @@ export const TestimonialsCard = ({ item, index }) => {
         return;
       }
       setEditTestimonial(false);
+      handleupdates();
       setReadOnly(true);
-      console.log(response.data.data);
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleupdates = () => {
+    HandleBlogs();
+    getExpertAllTestimonials();
+    HandleTestimonials();
+  };
+  const handleDeleteTestimonial = async (id) => {
+    console.log(id);
+    try {
+      const response = await axios.post(
+        "/testimonial/",
+        {
+          action: 3,
+          testimonial_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      console.log(response);
+      handleupdates();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <div
@@ -348,7 +384,10 @@ export const TestimonialsCard = ({ item, index }) => {
           <div className="text-sm ">{item?.date_created?.split("T")[0]}</div>
           <div className="flex items-center gap-3">
             <FaEdit className="text-xl" onClick={handleEdit} />
-            <FaRegTrashAlt className="text-xl" />
+            <FaRegTrashAlt
+              onClick={() => handleDeleteTestimonial(item.id)}
+              className="text-xl"
+            />
           </div>
         </div>
         <textarea
@@ -363,7 +402,7 @@ export const TestimonialsCard = ({ item, index }) => {
         {editTestimonial && (
           <div
             className="px-3 py-2 mt-4 rounded-sm bg-green-500 text-white w-fit cursor-pointer"
-            onClick={handleSubmitEditedTestimonial(item.id)}
+            onClick={(e) => handleSubmitEditedTestimonial(e, item.id)}
           >
             Submit
           </div>
@@ -407,11 +446,11 @@ const ShowMyProjects = () => {
           onClick={() => setAddProjectOpen(true)}
           className="text-sm md:text-base text-white bg-emerald-500 rounded-md px-4 py-2 w-fit flex items-center gap-2 cursor-pointer"
         >
-          Add a new project <MdOpenInNew className="text-base ms:text-xl" />
+          Add or Edit a project <MdOpenInNew className="text-base ms:text-xl" />
         </div>
       )}
       {addProjectOpen && (
-        <CreateProject
+        <UpdateProject
           setAddProjectOpen={setAddProjectOpen}
           getBackWidth={window.scrollY}
         />
@@ -445,6 +484,11 @@ const ShowMyProjects = () => {
         ))}
     </div>
   );
+};
+const AllUserTestimonials = ({ expertAllTestimonials }) => {
+  return expertAllTestimonials?.map((item, index) => (
+    <TestimonialsCard key={index} item={item} index={index} />
+  ));
 };
 export const Dashboard = () => {
   const [a, seta] = useState(0);
@@ -494,12 +538,14 @@ export const Dashboard = () => {
         response.data.status === 401
       ) {
         console.log(response.data.message);
+        setExpertAllTestimonials([]);
         return;
       }
       console.log(response.data.data);
       setExpertAllTestimonials(response.data.data);
     } catch (error) {
       console.log(error);
+      setExpertAllTestimonials([]);
     }
   };
   // API integration for testimonials of expert end--->>>
@@ -1041,8 +1087,16 @@ export const Dashboard = () => {
         {blogs && <ExpertBlogs />}
         {/* Testimonials section of dashboard */}
         {testimonials &&
+          expertAllTestimonials.length > 0 &&
           expertAllTestimonials?.map((item, index) => (
-            <TestimonialsCard key={index} item={item} index={index} />
+            <TestimonialsCard
+              key={index}
+              item={item}
+              index={index}
+              HandleBlogs={HandleBlogs}
+              HandleTestimonials={HandleTestimonials}
+              getExpertAllTestimonials={getExpertAllTestimonials}
+            />
           ))}
         {/* Project section of dashboard */}
         {projects && <ShowMyProjects />}

@@ -10,7 +10,7 @@ import {
 import { v4 } from "uuid";
 import axios from "../../axios";
 
-const CreateProject = ({ setAddProjectOpen, getBackWidth }) => {
+const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
   const [projects, setProjects] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -383,4 +383,4 @@ const CreateProject = ({ setAddProjectOpen, getBackWidth }) => {
   );
 };
 
-export default CreateProject;
+export default UpdateProject;
