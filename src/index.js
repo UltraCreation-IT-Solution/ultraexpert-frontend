@@ -55,7 +55,6 @@ import CustomerDashboard, {
 } from "./components/Customers/CustomerDashboard.jsx";
 import TestElement from "./TestElement.jsx";
 import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
-import CreateProject from "./components/Experts/CreateProject.jsx";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
 const Layout = () => {
   const action = useNavigationType();

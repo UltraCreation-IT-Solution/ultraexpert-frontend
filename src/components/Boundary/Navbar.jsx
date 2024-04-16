@@ -133,65 +133,74 @@ const Navbar = () => {
           >
             About us
           </Link>
-          <div div
-            className=" cursor-pointer"
-            onMouseEnter={() => setIsProfileOpen(true)}
-          >
-            <div className="flex gap-2 justify-center items-center">
-              <span className="font-bold">{`Hii! ${localStorage.getItem(
-                "username"
-              )}`}</span>
-              <img
-                src={localStorage.getItem("profile")}
-                alt="profile"
-                className="w-10 h-10 rounded-full object-cover object-center"
-              />
-            </div>
-            {isProfileOpen && (
-              <div
-                onMouseLeave={() => setIsProfileOpen(false)}
-                className="absolute flex flex-col  gap-2 justify-center items-center 
-              rounded-md mt-2 -ml-24  shrink-0 z-[999] bg-white border-2 border-slate-300 border-solid drop-shadow-lg w-1/6 h-auto px-2 py-2"
-              >
-                <Link
-                  to={"/"}
-                  className="no-underline text-black border-slate-300 border-solid border-2 w-full text-center py-2"
-                >
-                  Home
-                </Link>
-                <Link
-                  to={
-                    localStorage.getItem("isExpert") === "true"
-                      ? "/expertdashboard"
-                      : "/customerdashboard"
-                  }
-                  className={`${
-                    location === "/expertdashboard" ||
-                    location === "/customerdashboard"
-                      ? "font-extrabold"
-                      : "font-medium hover:underline hover:scale-105"
-                  } relative no-underline text-black border-slate-300 border-solid border-2 w-full text-center py-2`}
-                >
-                  Dashboard
-                </Link>
-                {!jsonData.access_token || !jsonData.refresh_token ? (
-                  <Link
-                    to={"/login"}
-                    className="relative w-full text-center  bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
-                  >
-                    Sign In
-                  </Link>
-                ) : (
-                  <Link
-                    onClick={handleLogout}
-                    className="relative w-full text-center bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
-                  >
-                    Logout
-                  </Link>
-                )}
+          {localStorage.getItem("isExpert") ? (
+            <div
+              className=" cursor-pointer"
+              onMouseEnter={() => setIsProfileOpen(true)}
+            >
+              <div className="flex gap-2 justify-center items-center">
+                <span className="font-bold">{`Hii! ${localStorage.getItem(
+                  "username"
+                )}`}</span>
+                <img
+                  src={localStorage.getItem("profile")}
+                  alt="profile"
+                  className="w-10 h-10 rounded-full object-cover object-center"
+                />
               </div>
-            )}
-          </div>
+              {isProfileOpen && (
+                <div
+                  onMouseLeave={() => setIsProfileOpen(false)}
+                  className="absolute flex flex-col  gap-2 justify-center items-center 
+              rounded-md mt-2 -ml-24  shrink-0 z-[999] bg-white border-2 border-slate-300 border-solid drop-shadow-lg w-1/6 h-auto px-2 py-2"
+                >
+                  <Link
+                    to={"/"}
+                    className="no-underline text-black border-slate-300 border-solid border-2 w-full text-center py-2"
+                  >
+                    Home
+                  </Link>
+                  <Link
+                    to={
+                      localStorage.getItem("isExpert") === "true"
+                        ? "/expertdashboard"
+                        : "/customerdashboard"
+                    }
+                    className={`${
+                      location === "/expertdashboard" ||
+                      location === "/customerdashboard"
+                        ? "font-extrabold"
+                        : "font-medium hover:underline hover:scale-105"
+                    } relative no-underline text-black border-slate-300 border-solid border-2 w-full text-center py-2`}
+                  >
+                    Dashboard
+                  </Link>
+                  {!jsonData.access_token || !jsonData.refresh_token ? (
+                    <Link
+                      to={"/login"}
+                      className="relative w-full text-center  bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
+                    >
+                      Sign In
+                    </Link>
+                  ) : (
+                    <Link
+                      onClick={handleLogout}
+                      className="relative w-full text-center bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
+                    >
+                      Logout
+                    </Link>
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              to={"/login"}
+              className="relative text-center  bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
+            >
+              Sign In
+            </Link>
+          )}
         </nav>
         <button
           onClick={() => setShowNav(!showNav)}
