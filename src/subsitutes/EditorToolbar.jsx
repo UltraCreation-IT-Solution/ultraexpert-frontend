@@ -95,7 +95,7 @@ export const QuillToolbar = (props) => {
   return (
     <>
       {props.toolbarId !== undefined && (
-        <div id={props.toolbarId} className="custom-toolbar" >
+        <div id={props.toolbarId} className="custom-toolbar overflow-visible min-h-[50px] max-h-[50px] " >
           <span className="ql-formats">
             <button className="ql-bold" />
             <button className="ql-italic" />
@@ -103,7 +103,7 @@ export const QuillToolbar = (props) => {
             <button className="ql-strike" />
           </span>
           <span className="ql-formats">
-            <select className="ql-font  ">
+            <select className="ql-font overflow-visible ">
               <option value="arial"> Arial </option>
               <option value="comic-sans">Comic Sans</option>
               <option value="courier-new">Courier New</option>
@@ -114,7 +114,7 @@ export const QuillToolbar = (props) => {
               </option>
               <option value="lucida">Lucida</option>
             </select>
-            <select className="ql-size">
+            <select className="ql-size overflow-visible">
               <option value="extra-small">Extra Small</option>
               <option value="small">Small</option>
               <option value="medium" selected>
@@ -122,7 +122,7 @@ export const QuillToolbar = (props) => {
               </option>
               <option value="large">Large</option>
             </select>
-            <select className="ql-header">
+            <select className="ql-header overflow-visible">
               <option value="1">Heading 1</option>
               <option value="2">Heading 2</option>
               <option value="3">Heading 3</option>
@@ -147,9 +147,9 @@ export const QuillToolbar = (props) => {
             <button className="ql-direction" />
           </span>
           <span className="ql-formats">
-            <select className="ql-align" />
-            <select className="ql-color" />
-            <select className="ql-background" />
+            <select className="ql-align overflow-visible" />
+            <select className="ql-color overflow-visible" />
+            <select className="ql-background overflow-visible" />
           </span>
           <span className="ql-formats">
             <button className="ql-link" />

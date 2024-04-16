@@ -8,12 +8,16 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { BsFillChatSquareTextFill } from "react-icons/bs";
 import { Link, Outlet } from "react-router-dom";
 import { BookingCard, customerDashboardInfo } from "../../constant";
+import ShowBlogs from "../../subsitutes/ShowBlogs";
 
 export const CustomerProfile = () => {
   return (
     <div className="w-full md:w-[68%] ">
-      <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
-        Profile
+      <div className="flex items-center justify-between border-b border-solid border-slate-200 pb-3">
+        <div className="text-xl font-bold ">
+          Profile
+        </div>
+        <div className="text-base bg-green-500 px-4 py-2 rounded-md cursor-pointer text-white">Edit Profile</div> 
       </div>
       <div className="mt-5 md:w-[80%] lg:w-[60%]">
         <div>
@@ -273,6 +277,12 @@ const CustomerDashboard = () => {
                   Chat
                 </li>
               </Link>
+              <Link to="showblogs" className="no-underline" >
+                <li className="flex gap-[1.25vw] items-center  font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                  <BsFillChatSquareTextFill className="text-[1.55vw]" />
+                  My Blogs
+                </li>
+              </Link>
               <Link to="mybookings" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <IoBookmarksSharp className="text-[1.55vw]" />
@@ -303,6 +313,7 @@ const CustomerDashboard = () => {
       <Outlet>
         <CustomerProfile />
         <CustomerChats />
+        <ShowBlogs/>
         <CustomerBookings />
         <CustomerRecentMeetngs />
         <CustomerTransactionHistory />
