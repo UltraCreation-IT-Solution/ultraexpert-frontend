@@ -154,12 +154,42 @@ const SignUpAsCustomer = () => {
   ];
 
   const [selectedSkill, setSelectedSkill] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
 
-  const handleChange = (skill) => {
-    if (!selectedSkill.includes(skill)) {
-      setSelectedSkill([...selectedSkill, skill]);
-    }
+  const handleChange = (event) => {
+    const { value } = event.target;
+    setInputValue(value);
+    setSuggestions(
+      interest.filter((suggestion) =>
+        suggestion.name.toLowerCase().includes(value.toLowerCase())
+      )
+    );
   };
+
+  const handleSuggestionClick = (suggestion) => {
+    // Add suggestion to selected skills
+    if (!selectedSkill.includes(suggestion.name)) {
+      setSelectedSkill([...selectedSkill, suggestion.name]);
+      console.log(selectedSkill);
+    }
+    // Clear input and suggestions
+    setInputValue("");
+    setSuggestions([]);
+  };
+
+  const handleRemove = (skill) => {
+    setSelectedSkill(selectedSkill.filter((s) => s !== skill));
+  };
+
+  const handleNewSkillAdd = (value) => {
+    if (!selectedSkill.includes(value)) {
+      setSelectedSkill([...selectedSkill, value]);
+    }
+    setInputValue("");
+  };
+
+  
 
   const navigate = useNavigate();
   const stepRef = useRef([]);
@@ -215,10 +245,6 @@ const SignUpAsCustomer = () => {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleRemove = (skill) => {
-    setSelectedSkill(selectedSkill.filter((s) => s !== skill));
   };
 
   useEffect(() => {
@@ -557,20 +583,17 @@ const SignUpAsCustomer = () => {
           {currStep === 2 && (
             <form onSubmit={handleInterests} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] my-5">
-                <label
-                  htmlFor="interests"
-                  className="text-base md:text-lg mb-1"
-                >
-                  Interests
+                <label htmlFor="interests" className="text-lg mb-1 font-bold">
+                  Inetrests
                 </label>
-                <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-                  <div className="flex flex-wrap gap-3">
+                <div className="border border-solid border-gray-300 px-2 rounded-md mb-4">
+                  <div className="flex flex-wrap gap-2">
                     {selectedSkill.length > 0 ? (
-                      selectedSkill.map((skill) => {
+                      selectedSkill.map((skill, ind) => {
                         return (
                           <div
-                            key={skill}
-                            className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black"
+                            key={ind}
+                            className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
                           >
                             {skill}
                             <div
@@ -589,23 +612,38 @@ const SignUpAsCustomer = () => {
                     )}
                   </div>
                 </div>
-                <div className="border border-solid border-slate-200 px-4 py-2 rounded-md mb-4">
-                  <div className="flex flex-wrap justifty-around gap-3">
-                    {interest.map((skill, ind) => {
-                      return (
-                        <div
-                          key={ind}
-                          onClick={() => {
-                            handleChange(skill.name);
-                          }}
-                          className="cursor-pointer px-4 py-1 text-nowrap text-xs md:text-sm rounded-full bg-inherit border border-solid border-[#c7c7c7] text-[#8D8D8D] bg-[#E8E8E8] flex justify-center items-center overflow-visible"
-                        >
-                          {skill.name}
+                <input
+                  type="text"
+                  id="interests"
+                  value={inputValue}
+                  onChange={handleChange}
+                  className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none"
+                  placeholder="Enter your interests"
+                />
+                {suggestions.length > 0
+                  ? inputValue.length > 0 && (
+                      <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
+                        <div>
+                          {suggestions.map((suggestion, ind) => (
+                            <div
+                              key={suggestion.id}
+                              onClick={() => handleSuggestionClick(suggestion)}
+                              className="cursor-pointer hover:bg-gray-100 px-4 py-1"
+                            >
+                              {suggestion.name}
+                            </div>
+                          ))}
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                      </div>
+                    )
+                  : inputValue.length > 0 && (
+                      <button
+                        onClick={() => handleNewSkillAdd(inputValue)}
+                        className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none bg-green-500 text-white w-[30%] mt-2"
+                      >
+                        Add Interest
+                      </button>
+                    )}
               </div>
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button

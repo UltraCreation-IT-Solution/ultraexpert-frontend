@@ -120,7 +120,6 @@ export const CustomerProfile = () => {
   const [selectedSkill, setSelectedSkill] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [open, setOpen] = useState(false);
 
   const handleChange = (event) => {
     const { value } = event.target;
