@@ -216,6 +216,10 @@ const appRouter = createBrowserRouter([
             element: <Dashboard />,
           },
           {
+            path: "editprofile",
+            element: <EditProfileExpert />,
+          },
+          {
             path: "chats",
             element: <Chats />,
           },
@@ -262,8 +266,8 @@ const appRouter = createBrowserRouter([
             element: <CustomerChats />,
           },
           {
-            path:"showblogs",
-            element:<ShowBlogs/>
+            path: "showblogs",
+            element: <ShowBlogs />,
           },
           {
             path: "mybookings",
@@ -279,7 +283,6 @@ const appRouter = createBrowserRouter([
           },
         ],
       },
-      
     ],
   },
 ]);
