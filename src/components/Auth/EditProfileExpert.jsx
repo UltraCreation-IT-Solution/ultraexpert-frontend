@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "../../axios";
-import { BsUpload, BsX } from "react-icons/bs";
+import { BsArrowLeftSquare, BsUpload, BsX } from "react-icons/bs";
+import {
+  BiSolidCaretLeftSquare,
+  BiSolidCaretRightSquare,
+} from "react-icons/bi";
 
 const cookies = document.cookie.split("; ");
 const jsonData = {};
@@ -686,7 +690,7 @@ const EducationDetails = () => {
 
   return (
     <form onSubmit={handleSubmit3} className="grow h-full flex flex-col">
-      <div className="flex justify-center mx-auto flex-col w-[50%] my-8">
+      <div className="flex justify-center mx-auto flex-col w-[65%] my-8 ">
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -2062,11 +2066,25 @@ const AccDetails = () => {
 };
 
 const EditProfileExpert = () => {
+  const categoryRef = useRef(null);
   const [currStep, setCurrStep] = useState(0);
+  const scrollLeft = () => {
+    categoryRef.current.scrollBy({
+      left: -150, // Adjust scroll amount as needed
+      behavior: "smooth",
+    });
+  };
+
+  const scrollRight = () => {
+    categoryRef.current.scrollBy({
+      left: 150, // Adjust scroll amount as needed
+      behavior: "smooth",
+    });
+  };
 
   return (
-    <div className="h-auto bg-white mt-[150px]">
-      <div className="md:w-[50%] w-[90%] flex md:flex-row flex-col border border-solid border-slate-300 mx-auto rounded-lg shadow-lg">
+    <div className="h-auto bg-white mt-5">
+      <div className="md:w-[95%] w-[60%] flex md:flex-row flex-col border border-solid border-slate-300 mx-auto rounded-lg shadow-lg">
         <div className="md:w-1/4 flex md:flex-col flex-row bg-white justify-start border-r border-solid border-slate-300">
           <button
             onClick={() => setCurrStep(0)}

@@ -8,7 +8,7 @@ import {
 } from "react-icons/md";
 import { RiFlowChart } from "react-icons/ri";
 import { IoDiamondSharp } from "react-icons/io5";
-import { FaUserGraduate, FaUserCheck, FaBookmark} from "react-icons/fa6";
+import { FaUserGraduate, FaUserCheck} from "react-icons/fa6";
 import { IoIosChatboxes } from "react-icons/io";
 import { GiAchievement } from "react-icons/gi";
 import { BiLike } from "react-icons/bi";
@@ -19,13 +19,19 @@ import { Link, useParams } from "react-router-dom";
 import {
   expertDetailsObj,
   ProjectsCarousel,
-  BlogCard,
-  BlogCardHorizontal,
 } from "../../constant";  
+import ShowBlogs from "../../subsitutes/ShowBlogs";
 import axios from "../../axios";
 
 export const ExpertSummary = ({experienceArray,projectsArray}) => {
   console.log(projectsArray)
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  }
+
   return (
     <div className="mt-3">
       {experienceArray?.length !== 0 && (
@@ -51,13 +57,13 @@ export const ExpertSummary = ({experienceArray,projectsArray}) => {
                       ) : (
                         <>
                           <div>
-                            {item?.end_date}
+                          {formatDate(item?.end_date)}
                           </div>
                           <div className="block md:hidden"> - </div>
                         </>
                       )}
                       <div>
-                        {item?.start_date}
+                      {formatDate(item?.start_date)}
                       </div>
                     </div>
                     {/* 2nd portion */}
@@ -330,15 +336,15 @@ export const ExpertRatings = () => {
   );
 };
 
-export const ExpertBlogs = () => {
-  return (
-    <div>
-      {expertDetailsObj?.blogs?.map((item, idx) => (
-        <BlogCardHorizontal key={idx} index={idx} items={item} />
-      ))}
-    </div>
-  );
-};
+// export const ShowBlogs = () => {
+//   return (
+//     <div>
+//       {expertDetailsObj?.blogs?.map((item, idx) => (
+//         <BlogCardHorizontal key={idx} index={idx} items={item} />
+//       ))}
+//     </div>
+//   );
+// };
 
 export const AboutExpert = ({...expert}) => {
   return (
@@ -494,6 +500,36 @@ export const ExpertInfo = ({...expert}) => {
   const achievementsArray = expert?.expert?.achievements?.achievements;
   const projectsArray = expert?.expert?.projects[0]?.projects;
 
+
+  const [expertBlogsArray, setExpertBlogsArray] = useState([]);
+
+  const getBlogData = async() =>{
+    const cookie = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try{
+      const res = await axios.get("/blogs/?action=2",{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const allData = res.data.data;
+      console.log(allData);
+      setExpertBlogsArray(allData);
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getBlogData();
+  },[])
+
   const MakeSummaryTrue = () => {
     setSummary(true);
     setServices(false);
@@ -561,7 +597,7 @@ export const ExpertInfo = ({...expert}) => {
           {summary && <ExpertSummary experienceArray={experienceArray} projectsArray={projectsArray} />}
           {services && <ExpertServices />}
           {ratings && <ExpertRatings />}
-          {blogs && <ExpertBlogs />}
+          {blogs && <ShowBlogs blogArray={expertBlogsArray} />}
         </div>
       </div>
 

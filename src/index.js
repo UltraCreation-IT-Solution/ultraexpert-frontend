@@ -55,7 +55,7 @@ import CustomerDashboard, {
 } from "./components/Customers/CustomerDashboard.jsx";
 import TestElement from "./TestElement.jsx";
 import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
-import CreateProject from "./components/Experts/CreateProject.jsx";
+import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
 const Layout = () => {
   const action = useNavigationType();
   const pathname = useLocation().pathname;
@@ -165,12 +165,8 @@ const appRouter = createBrowserRouter([
         element: <Service />,
       },
       {
-        path: "/createService",
+        path: "expertdashboard/createService",
         element: <CreateService />,
-      },
-      {
-        path: "/createProject",
-        element: <CreateProject />,
       },
       {
         path: "/favourites",
@@ -201,9 +197,12 @@ const appRouter = createBrowserRouter([
             path: "",
             element: <Blog />,
           },
-
           {
-            path: "blogdetail",
+            path: "createblog",
+            element: <CreateBlog />,
+          },
+          {
+            path: "blogdetail/:id",
             element: <BlogDetails />,
           },
         ],
@@ -215,6 +214,10 @@ const appRouter = createBrowserRouter([
           {
             path: "",
             element: <Dashboard />,
+          },
+          {
+            path: "editprofile",
+            element: <EditProfileExpert />,
           },
           {
             path: "chats",
@@ -263,6 +266,10 @@ const appRouter = createBrowserRouter([
             element: <CustomerChats />,
           },
           {
+            path: "showblogs",
+            element: <ShowBlogs />,
+          },
+          {
             path: "mybookings",
             element: <CustomerBookings />,
           },
@@ -275,10 +282,6 @@ const appRouter = createBrowserRouter([
             element: <CustomerTransactionHistory />,
           },
         ],
-      },
-      {
-        path: "createblog",
-        element: <CreateBlog />,
       },
     ],
   },

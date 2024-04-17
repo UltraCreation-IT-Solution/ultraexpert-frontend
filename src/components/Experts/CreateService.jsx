@@ -66,7 +66,7 @@ const CreateService = () => {
   };
 
   const handleBack = () => {
-    navigate("/services");
+    navigate("/expertdashboard");
   };
 
   return (
@@ -106,9 +106,7 @@ const CreateService = () => {
             placeholder="Service Description"
             name="desc"
             id="desc"
-            cols="30"
-            rows="5"
-            className="border border-solid border-slate-300 rounded-md px-4 py-2 mb-4"
+            className="border border-solid resize-none h-32 border-slate-300 rounded-md px-4 py-2 mb-4"
           />
           <label htmlFor="interests" className="text-lg mb-1">
             Service Tags
@@ -137,7 +135,7 @@ const CreateService = () => {
               className="border border-solid border-slate-300 rounded-md px-4 py-2 w-full"
             />
             <button
-              onClick={()=>addInterest()}
+              onClick={() => addInterest()}
               className="bg-blue-500 text-white rounded px-4 py-2 cursor-pointer"
             >
               Add
