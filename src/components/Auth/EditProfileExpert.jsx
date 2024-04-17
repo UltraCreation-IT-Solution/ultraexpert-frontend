@@ -686,7 +686,7 @@ const EducationDetails = () => {
 
   return (
     <form onSubmit={handleSubmit3} className="grow h-full flex flex-col">
-      <div className="flex justify-center mx-auto flex-col w-[50%] my-8">
+      <div className="flex justify-center mx-auto flex-col w-[65%] my-8 ">
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -2065,78 +2065,81 @@ const EditProfileExpert = () => {
   const [currStep, setCurrStep] = useState(0);
 
   return (
-    <div className="h-auto bg-white mt-5">
-      <div className="md:w-[95%] w-[60%] flex md:flex-row flex-col border border-solid border-slate-300 mx-auto rounded-lg shadow-lg">
-        <div className="md:w-1/4 flex md:flex-col flex-row bg-white justify-start border-r border-solid border-slate-300">
+    <div className="h-auto bg-white w-[68%]">
+      <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
+        Update Profile
+      </div>
+      <div className=" w-full flex md:flex-col border border-solid border-slate-300 mx-auto rounded-sm mt-5">
+        <div className="md:w-full flex bg-white justify-start border-r border-solid border-slate-300 overflow-x-scroll">
           <button
-            onClick={() => setCurrStep(0)}
-            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            
+            className={`w-fit shrink-0 text-sm md:text-base py-1 px-2 border-b border-solid border-slate-300 ${
               currStep === 0
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
+                ? " bg-white"
+                : "bg-inherit text-black"
             }`}
           >
-            Personal Details
+            <div onClick={() => setCurrStep(0)} className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${currStep === 0 ? 'bg-[#ececec]' : 'bg-white'}`}>Personal Details</div>
           </button>
           <button
-            onClick={() => setCurrStep(1)}
-            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            
+            className={`w-fit shrink-0 text-sm md:text-base p-5 border-b border-solid border-slate-300 ${
               currStep === 1
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
+                ? " bg-white"
+                : "bg-inherit text-black "
             }`}
           >
-            General Details
+            <div onClick={() => setCurrStep(1)} className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${currStep === 1 ? 'bg-[#ececec]' : 'bg-white'}`}>General Details</div>
           </button>
           <button
-            onClick={() => setCurrStep(2)}
-            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            
+            className={`w-fit shrink-0 text-sm md:text-base p-5 border-b border-solid border-slate-300 ${
               currStep === 2
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
+                ? " bg-white"
+                : "bg-inherit text-black "
             }`}
           >
-            Education
+            <div onClick={() => setCurrStep(2)} className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${currStep === 2 ? 'bg-[#ececec]' : 'bg-white'}`}>Education</div>
           </button>
           <button
-            onClick={() => setCurrStep(3)}
-            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            
+            className={`w-fit shrink-0 text-sm md:text-base p-5 border-b border-solid border-slate-300 ${
               currStep === 3
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
+                ? "bg-white"
+                : "bg-inherit text-black "
             }`}
           >
-            Skill Set
+            <div onClick={() => setCurrStep(3)} className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${currStep === 3 ? 'bg-[#ececec]' : 'bg-white'}`}>Skill Set</div>
           </button>
           <button
-            onClick={() => setCurrStep(4)}
-            className={`w-full text-xs md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            
+            className={`w-fit shrink-0 text-sm md:text-base p-5 border-b border-solid border-slate-300  ${
               currStep === 4
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
+                ? "bg-white"
+                : "bg-inherit text-black"
             }`}
           >
-            Achievements
+            <div onClick={() => setCurrStep(4)} className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${currStep === 4 ? 'bg-[#ececec]' : 'bg-white'}`}>Achievements</div>
           </button>
           <button
-            onClick={() => setCurrStep(5)}
-            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            
+            className={`w-fit shrink-0 text-sm md:text-base p-5 border-b border-solid border-slate-300  ${
               currStep === 5
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
+                ? "bg-white"
+                : "bg-inherit text-black"
             }`}
           >
-            Experience
+            <div onClick={() => setCurrStep(5)} className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${currStep === 5 ? 'bg-[#ececec]' : 'bg-white'}`}>Experience</div>
           </button>
           <button
-            onClick={() => setCurrStep(6)}
-            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
+            
+            className={`w-fit shrink-0 text-sm md:text-base p-5 border-b border-solid border-slate-300  ${
               currStep === 6
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
+                ? "bg-white"
+                : "bg-inherit text-black"
             }`}
           >
-            Account Details
+            <div onClick={() => setCurrStep(6)} className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${currStep === 6 ? 'bg-[#ececec]' : 'bg-white'}`}>Account Details</div>
           </button>
         </div>
         {currStep === 0 && <GeneralDetails />}

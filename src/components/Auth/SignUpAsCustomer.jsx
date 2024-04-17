@@ -475,7 +475,7 @@ const SignUpAsCustomer = () => {
                       {uploadProfileProgress === 0 && (
                         <>
                           <BsUpload size={20} />
-                          <div className="text-sm text-[#1475cf] mt-2">
+                          <div className="text-sm text-[#1475cf] mt-2 text-center">
                             Click here to upload a profile photo
                           </div>
                         </>
