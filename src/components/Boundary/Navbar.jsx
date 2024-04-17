@@ -32,7 +32,15 @@ const Navbar = () => {
     setShowNav(false);
   }, [location]);
 
-  const notifications = ["Welcome to UltraXpert!","Read the updated terms and conditions", "update your profile to earn more rewards and points","your meeeting was scheduled! click here to check details", "you may have new notifications", "subscribe to our newslatter to get daily updates","you have successfully created an account!"];
+  const notifications = [
+    "Welcome to UltraXpert!",
+    "Read the updated terms and conditions",
+    "update your profile to earn more rewards and points",
+    "your meeeting was scheduled! click here to check details",
+    "you may have new notifications",
+    "subscribe to our newslatter to get daily updates",
+    "you have successfully created an account!",
+  ];
   return (
     <div
       className={`fixed z-50 shadow-sm top-0 left-0 bg-white w-[100vw] ${
@@ -71,25 +79,33 @@ const Navbar = () => {
               className="text-xl"
               onClick={() => setShowNotifications(!showNotifications)}
             />
-            {notifications.length >0 && <div className="absolute -mt-2 ml-3 shrink-0 text-xs rounded-full text-center bg-red-500 text-white h-4 w-4 ">
-              {notifications.length}{" "}
-            </div>}
-            
-            {showNotifications && 
-
-              <div className=" w-[400px] max-h-[400px] overflow-scroll absolute top-16 z-[1000] shrink-0 flex flex-col gap-4 px-5 py-3 rounded-md bg-white shadow-lg drop-shadow-lg">
-                {notifications.length===0 ? <div className="text-gray-800 text-sm text-center">No new notifications</div> :
-                notifications.map((item, index) => (
-                  <div
-                    key={index} className="text-gray-800 text-sm border-b border-solid border-slate-300 pb-3 shrink-0 flex gap-3"
-                  >
-                    <div className="mr-auto">{item}</div>
-                    <div className="shrink-0 ml-auto text-xs">{"2 days ago"}</div>
-                    
-                  </div>
-                ))}
+            {notifications.length > 0 && (
+              <div className="absolute -mt-2 ml-3 shrink-0 text-xs rounded-full text-center bg-red-500 text-white h-4 w-4 ">
+                {notifications.length}{" "}
               </div>
-            }
+            )}
+
+            {showNotifications && (
+              <div className=" w-[400px] max-h-[400px] overflow-scroll absolute top-16 z-[1000] shrink-0 flex flex-col gap-4 px-5 py-3 rounded-md bg-white shadow-lg drop-shadow-lg">
+                {notifications.length === 0 ? (
+                  <div className="text-gray-800 text-sm text-center">
+                    No new notifications
+                  </div>
+                ) : (
+                  notifications.map((item, index) => (
+                    <div
+                      key={index}
+                      className="text-gray-800 text-sm border-b border-solid border-slate-300 pb-3 shrink-0 flex gap-3"
+                    >
+                      <div className="mr-auto">{item}</div>
+                      <div className="shrink-0 ml-auto text-xs">
+                        {"2 days ago"}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
           </div>
 
           <Link
