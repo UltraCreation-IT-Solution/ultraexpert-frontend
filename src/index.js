@@ -202,7 +202,7 @@ const appRouter = createBrowserRouter([
             element: <CreateBlog />,
           },
           {
-            path: "blogdetail",
+            path: "blogdetail/:id",
             element: <BlogDetails />,
           },
         ],
@@ -266,8 +266,8 @@ const appRouter = createBrowserRouter([
             element: <CustomerChats />,
           },
           {
-            path:"showblogs",
-            element:<ShowBlogs/>
+            path: "showblogs",
+            element: <ShowBlogs />,
           },
           {
             path: "mybookings",
@@ -283,7 +283,6 @@ const appRouter = createBrowserRouter([
           },
         ],
       },
-      
     ],
   },
 ]);

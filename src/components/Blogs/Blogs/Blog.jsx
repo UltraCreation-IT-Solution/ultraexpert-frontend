@@ -11,6 +11,40 @@ import { Link } from "react-router-dom";
 import axios from "../../../axios";
 
 export const BlogBody = () => {
+  const [allBlogsArray, setAllBlogsArray] = useState([]);
+
+  const getData = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get("/blogs/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const allData = res.data.data.all;
+      setAllBlogsArray(allData);
+      console.log(...data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+  console.log(allBlogsArray);
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  }
+
   return (
     <>
       {/* Recent Blogs */}
@@ -123,8 +157,15 @@ export const BlogBody = () => {
           All Blogs
         </div>
         <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
-          {allBlogs.map((item, idx) => (
-            <BlogCardHorizontal key={idx} index={idx} items={item} />
+          {allBlogsArray?.map((item, index) => (
+            <BlogCardHorizontal
+              key={item.id}
+              index={index}
+              id={item.id}
+              items={item}
+              title={item.title}
+              date={formatDate(item.date_created.split("T")[0])}
+            />
           ))}
         </div>
       </div>
@@ -138,6 +179,39 @@ export const SearchedBlog = ({ array }) => {
       {array.map((item, idx) => (
         <BlogCardHorizontal key={idx} index={idx} items={item} />
       ))}
+    </div>
+  );
+};
+const Author = ({ createAuthor }) => {
+  useEffect(() => {
+    console.log("author");
+  }, [localStorage.getItem("isAuthor")]);
+  return localStorage.getItem("isAuthor") === "true" ? (
+    <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
+      <div className="text-xl lg:text-3xl font-bold text-center px-5">
+        Write a Blog
+      </div>
+      <Link
+        to="createblog"
+        className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
+      >
+        Write a Blog
+      </Link>
+    </div>
+  ) : (
+    <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
+      <div className="flex flex-col px-5">
+        <div className="text-xl lg:text-3xl font-bold text-center">
+          Become an Author
+        </div>
+        <div className="text-center text-sm">(If you want to write a blog)</div>
+      </div>
+      <button
+        onClick={(e) => createAuthor(e)}
+        className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
+      >
+        Become an Author
+      </button>
     </div>
   );
 };
@@ -296,36 +370,9 @@ const Blogs = () => {
           </div>
         ))}
       </div>
-      {isAuthor ? (
-        <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
-          <div className="text-xl lg:text-3xl font-bold text-center px-5">
-            Write a Blog
-          </div>
-          <Link
-            to="createblog"
-            className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
-          >
-            Write a Blog
-          </Link>
-        </div>
-      ) : (
-        <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
-          <div className="flex flex-col px-5">
-            <div className="text-xl lg:text-3xl font-bold text-center">
-              Become an Author
-            </div>
-            <div className="text-center text-sm">
-              (If you want to write a blog)
-            </div>
-          </div>
-          <button
-            onClick={(e) => createAuthor(e)}
-            className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
-          >
-            Become an Author
-          </button>
-        </div>
-      )}
+      {localStorage.getItem("isExpert") === "true" ? (
+        <Author createAuthor={createAuthor} />
+      ) : null}
 
       {searchText.length === 0 ? (
         <BlogBody />

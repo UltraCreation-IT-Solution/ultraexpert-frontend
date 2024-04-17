@@ -451,34 +451,30 @@ export const CustomerProfile = () => {
               className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none"
               placeholder="Enter your interests"
             />
-            {suggestions.length > 0 ? (
-              (inputValue.length > 0) && (
-              <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-                <div>
-                  {suggestions.map((suggestion, ind) => (
-                    <div
-                      key={suggestion.id}
-                      onClick={() => handleSuggestionClick(suggestion)}
-                      className="cursor-pointer hover:bg-gray-100 px-4 py-1"
-                    >
-                      {suggestion.name}
+            {suggestions.length > 0
+              ? inputValue.length > 0 && (
+                  <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
+                    <div>
+                      {suggestions.map((suggestion, ind) => (
+                        <div
+                          key={suggestion.id}
+                          onClick={() => handleSuggestionClick(suggestion)}
+                          className="cursor-pointer hover:bg-gray-100 px-4 py-1"
+                        >
+                          {suggestion.name}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
-              )
-            ) : (
-              (inputValue.length > 0) && (
-
-
-              <button
-                onClick={() => handleNewSkillAdd(inputValue)}
-                className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none bg-green-500 text-white w-[30%] mt-2"
-              >
-                Add Interest
-              </button>
-              )
-            )}
+                  </div>
+                )
+              : inputValue.length > 0 && (
+                  <button
+                    onClick={() => handleNewSkillAdd(inputValue)}
+                    className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none bg-green-500 text-white w-[30%] mt-2"
+                  >
+                    Add Interest
+                  </button>
+                )}
 
             {/* <div className="border border-solid border-slate-200 px-4 py-2 rounded-md mb-4">
               <div className="flex flex-wrap justifty-around gap-3">

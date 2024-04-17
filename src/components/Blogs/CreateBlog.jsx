@@ -5,6 +5,7 @@ import QuillToolbar, { modules, formats } from "../../subsitutes/EditorToolbar";
 import { BsUpload } from "react-icons/bs";
 import { BsX } from "react-icons/bs";
 import axios from "../../axios";
+import DOMPurify from 'dompurify';
 
 const CreateBlog = () => {
   const [value, setValue] = useState("");
@@ -16,10 +17,9 @@ const CreateBlog = () => {
 
   const [blogData,setBlogData] = useState({
     title: "",
-    description: "",
     category_id: "",
     service_ll : [],
-    image: "",
+    image: [],
   })
 
   // code for uploading image for blog starts
@@ -95,6 +95,7 @@ const CreateBlog = () => {
       jsonData[key] = value;
     });
     console.log(value2?.name);
+    console.log(value2.number)
     try {
       const res = await axios.post(
         "/blogs/",
@@ -116,6 +117,7 @@ const CreateBlog = () => {
         return;
       }
       console.log(data);
+
     } catch (error) {
       console.log(error);
     }
@@ -125,22 +127,29 @@ const CreateBlog = () => {
 
   const blogCreated = async (e) => {
     e.preventDefault();
-    
+    const cookie = document.cookie.split("; ");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
     console.log(value2?.number);
     console.log(blogData);
-    console.log(selectedFile);
     console.log(value);
+    console.log(blogData.title);
+    console.log(blogData.service_ll);
     try{
-      const res = await axios.post("/blogs",{
+      const res = await axios.post("/blogs/",{
         action:2,
         blog_title: blogData.title,
-        content: value,
+        content_json: value,
         category_id: value2.number,
         service_link_list: blogData.service_ll,
-        image_url_list: selectedFile
+        image_url_list: ""
       },{
         headers:{
           "Content-Type":"application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
         }
       });
       const data = res.data;
@@ -168,7 +177,7 @@ const CreateBlog = () => {
               className="w-full mt-1 border border-solid border-slate-300 p-2 text-sm rounded-sm focus:outline-none"
             />
           </div>
-          <div className="mt-5 relative">
+          <div className="mt-5 relative overflow-visible">
             <div className="text-lg font-bold">Category</div>
             <input
               type="text"
@@ -181,18 +190,20 @@ const CreateBlog = () => {
               className="w-full mt-1 border border-solid border-slate-300 p-2 text-sm rounded-sm focus:outline-none"
             />
             {filterCategoriesArray.length > 0 && (
-              <div className=" border border-solid border-slate-300 px-4 py-2 text-sm rounded-sm mt-2 w-fit">
+              <div className=" border border-solid border-slate-300 px-1 text-sm rounded-sm mt-2 w-fit min-h-auto max-h-[150px] overflow-y-auto ">
                 {filterCategoriesArray.length > 0 &&
                   filterCategoriesArray?.map((item, index) => (
                     <div
                       key={index}
-                      className="text-sm text-center text-gray-600 border-b border-solid border-slate-300 pb-2 cursor-pointer"
-                      onClick={() =>
+                      className="text-sm text-center text-gray-600 px-3 py-2 border-b border-solid border-slate-300 pb-2 cursor-pointer"
+                      onClick={() =>{
                         setValue2({
                           ...value2,
                           name: item?.name,
                           number: item?.number,
                         })
+                        setFilterCategoriesArray([]);
+                      }
                       }
                     >
                       {item?.name}
@@ -203,7 +214,9 @@ const CreateBlog = () => {
             {filterCategoriesArray.length === 0 && value2?.name !== "" && (
               <div
                 className="bg-green-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer mt-2"
-                onClick={(e) => setNewCategory(e)}
+                onClick={(e) => {setNewCategory(e);
+                setValue2({...value2,number:categoriesArray.length+1})
+                }}
               >
                 Add Category
               </div>
@@ -270,7 +283,11 @@ const CreateBlog = () => {
       </div>
       <div
         className="text-base w-fit px-4 py-1 rounded-md bg-blue-500 text-white cursor-pointer hover:bg-blue-600"
-        onClick={() => setPreview(true)}
+        onClick={() => {setPreview(true);
+          console.log(value)
+           setValue( DOMPurify.sanitize(value))
+           console.log(value);
+        }}
       >
         Preview
       </div>
@@ -278,7 +295,7 @@ const CreateBlog = () => {
         <>
           <p
             dangerouslySetInnerHTML={{ __html: value }}
-            className="border border-solid border-slate-300 p-2 rounded-sm mt-16"
+            className="border border-solid border-slate-300 p-2 rounded-sm mt-16 dangerHtml"
           />
           <div className="flex items-center gap-5 ">
             <div
