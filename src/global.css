@@ -120,3 +120,10 @@ input[type="number"]::-webkit-outer-spin-button {
   border-color: #495057 transparent transparent; /* Set border color */
   margin-left: 4px; /* Add margin between button and arrow */
 }
+
+.dangerHtml img{
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  object-position: center;
+}
