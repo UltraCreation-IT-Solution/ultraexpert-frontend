@@ -164,6 +164,7 @@ export const BlogBody = () => {
               id={item.id}
               items={item}
               title={item.title}
+              tags={item.tags}
               date={formatDate(item.date_created.split("T")[0])}
             />
           ))}

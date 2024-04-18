@@ -7,7 +7,7 @@ import { FaPlus } from "react-icons/fa";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { useLocation, Link } from "react-router-dom";
 
-export const BlogCardHorizontal = ({ index, id, items, title, date }) => {
+export const BlogCardHorizontal = ({ index, id, items, title, date, tags,views,likes }) => {
   return (
     <div
       className={`w-full px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
@@ -30,20 +30,20 @@ export const BlogCardHorizontal = ({ index, id, items, title, date }) => {
           <div className="mt-3 text-xs flex items-center gap-2">
             <FaTags />
             <div className="flex items-center gap-2">
-              {items?.tags?.map((item) => (
+              {tags?.map((item) => (
                 <div className="text-[10px] border border-solid border-slate-300 px-2 py-1 rounded-xl cursor-pointer">
-                  {item}
+                  {item.charAt(0).toUpperCase() + item.slice(1)}
                 </div>
               ))}
             </div>
           </div>
           <div className="flex gap-[3vw] sm:gap-0 sm:flex-col">
             <div className="mt-3 text-xs flex items-center gap-2">
-              <IoEyeSharp /> {items?.views}
+              <IoEyeSharp /> {views}
             </div>
             <div className="mt-3 flex items-center gap-4">
               <div className=" text-xs flex items-center gap-1 sm:gap-2">
-                <BiSolidLike /> {items?.likes} likes{" "}
+                <BiSolidLike /> {likes} likes{" "}
               </div>
               <div className="border border-solid border-slate-400 text-[10px] rounded-full px-3 py-0.5 flex items-center cursor-pointer gap-1">
                 <FaPlus /> Add to Fav
@@ -80,7 +80,7 @@ const ShowBlogs = ({blogArray}) => {
         </div>
       )}
       {blogArray?.map((item, idx) => (
-        <BlogCardHorizontal key={item?.id} index={idx} items={item} title={item?.title}  id={item?.id} date={formatDate(item.date_created.split("T")[0])} />
+        <BlogCardHorizontal key={item?.id} index={idx} items={item} likes={item?.reaction_count} views={item?.blog_view_count} title={item?.title} tags={item?.tags}  id={item?.id} date={formatDate(item.date_created.split("T")[0])} />
       ))}
     </div>
   );
