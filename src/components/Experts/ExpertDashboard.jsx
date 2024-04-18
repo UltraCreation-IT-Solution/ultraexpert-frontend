@@ -591,6 +591,8 @@ export const Dashboard = () => {
   const [avgRating, setAvgRating] = useState(true);
   const [ratingDistribution, setRatingDistribution] = useState(false);
 
+  const [blogData,setBlogData] = useState([]);
+
   const HandleContributions = () => {
     setContributions(true);
     setMeetings(false);
@@ -606,12 +608,42 @@ export const Dashboard = () => {
     setProjects(false);
   };
   const HandleBlogs = () => {
+    
     setContributions(false);
     setMeetings(false);
     setBlogs(true);
     setTestimonials(false);
     setProjects(false);
+    
   };
+
+  const getBlogsData = async () => {
+    const cookie = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try{
+      const res = await axios.get("/blogs/?action=2", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const allData = res.data.data;
+      console.log(allData);
+      setBlogData(allData);
+    }catch(error){
+      console.log(error);
+    }
+  }
+  useEffect(()=>{
+    getBlogsData();
+  },[]);
+
+
   const HandleTestimonials = () => {
     setContributions(false);
     setMeetings(false);
@@ -1110,7 +1142,7 @@ export const Dashboard = () => {
           </div>
         )}
         {/* Blogs section of dashboard */}
-        {blogs && <ShowBlogs />}
+        {blogs && <ShowBlogs blogArray={blogData}/>}
         {/* Testimonials section of dashboard */}
         {testimonials &&
           expertAllTestimonials.length > 0 &&
