@@ -53,9 +53,9 @@ import CustomerDashboard, {
   CustomerRecentMeetngs,
   CustomerTransactionHistory,
 } from "./components/Customers/CustomerDashboard.jsx";
-import TestElement from "./TestElement.jsx";
 import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
+import MyCalendar from "./TestElement.jsx";
 const Layout = () => {
   const action = useNavigationType();
   const pathname = useLocation().pathname;
@@ -239,7 +239,7 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/testelement",
-        element: <TestElement />,
+        element: <MyCalendar />,
       },
       {
         path: "/firebaseuploadtest",

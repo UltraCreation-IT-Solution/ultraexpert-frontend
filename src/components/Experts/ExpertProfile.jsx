@@ -22,6 +22,7 @@ import {
 } from "../../constant";  
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import axios from "../../axios";
+import MyCalendar from "../../TestElement";
 
 export const ExpertSummary = ({experienceArray,projectsArray}) => {
   console.log(projectsArray)
@@ -384,9 +385,7 @@ export const AboutExpert = ({...expert}) => {
             <div className="text-base md:text-lg text-[#565454] mt-3">
               {expert?.expert?.expert?.profession}
             </div>
-            <div className="md:w-[600px] text-sm sm:text-base text-[#565454] mt-3">
-              {expert?.expert?.expert?.about_me}
-            </div>
+           
             <div className="flex flex-col mt-4">
               <div className="flex items-center gap-2 text-lg md:text-xl text-[#565454] font-semibold">
                 <IoDiamondSharp />
@@ -797,8 +796,8 @@ export const SideComponent = ({...expert}) => {
 //This is the main expert profile component.
 const ExpertProfile = () => {
   const params = useParams();
-  const [expertDetail, setExpertDetail] = useState(null);
   const {id} = params;
+  const [expertDetail, setExpertDetail] = useState(null);
   console.log(id)
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -822,6 +821,7 @@ const ExpertProfile = () => {
       const data = res.data.data;
       console.log(data);
       setExpertDetail(data);
+      console.log(ExpertProfile)
     } catch (error) {
       console.log(error);
     }
@@ -832,8 +832,10 @@ const ExpertProfile = () => {
   useEffect(() => {
     console.log(expertDetail);
   },[expertDetail]);
+  if(!expertDetail) return <MyCalendar/>
+    
   
-  return (
+     return(
     <div>
       <div className="lg:flex mt-[90px] md:mt-[80px]">
         <div className="lg:w-[70%] h-[88vh]">

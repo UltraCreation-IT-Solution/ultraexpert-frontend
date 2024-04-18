@@ -5,6 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import { FiX } from "react-icons/fi";
 
+// slots
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+const localizer = momentLocalizer(moment);
+//slots
+
+
 const CreateService = () => {
   const navigate = useNavigate();
 
@@ -23,7 +32,8 @@ const CreateService = () => {
     updatedInterest.splice(index, 1);
     setInterest(updatedInterest);
   };
-
+  const [serviceTitle, setServiceTitle] = useState("");
+  console.log(serviceTitle)
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -69,7 +79,62 @@ const CreateService = () => {
     navigate("/expertdashboard");
   };
 
+  //slots
+  const [showSlots,setShowSlots] = useState(false);
+
+  const [events, setEvents] = useState([]);
+  console.log(events)
+  const [startInputDate, setStartInputDate] = useState('');
+  const [startInputTime, setStartInputTime] = useState('');
+  const [endInputDate, setEndInputDate] = useState('');
+  const [endInputTime, setEndInputTime] = useState('');
+  // const [titleInput, setTitleInput] = useState('');
+
+  const handleCreateEvent = () => {
+    const startDate = moment(startInputDate, 'YYYY-MM-DD');
+    const endDate = moment(endInputDate, 'YYYY-MM-DD');
+    const startTime = moment(startInputTime, 'HH:mm');
+    const endTime = moment(endInputTime, 'HH:mm');
+
+    if (
+      startDate.isValid() &&
+      endDate.isValid() &&
+      endTime.isValid() &&
+      endTime.isSameOrAfter(startTime) &&
+      serviceTitle.trim() !== ''
+    ) {
+      if (startTime.isSame(endTime)) {
+        alert('Start time and end time for an event should not be the same.');
+        return;
+      }
+      const newEvents = [];
+      let currentDate = startDate.clone();
+      while (currentDate.isSameOrBefore(endDate, 'day')) {
+        const newEvent = {
+          id: events.length + 1,
+          title: serviceTitle.trim(),
+          start: currentDate.clone().hour(startTime.hour()).minute(startTime.minute()).toDate(),
+          end: currentDate.clone().hour(endTime.hour()).minute(endTime.minute()).toDate(),
+        };
+        newEvents.push(newEvent);
+        currentDate.add(1, 'day');
+      }
+      setEvents([...events, ...newEvents]);
+      setStartInputDate('');
+      setStartInputTime('');
+      setEndInputDate('');
+      setEndInputTime('');
+      // setTitleInput('');
+      setServiceTitle('')
+    } else {
+      alert('Please enter valid start and end dates, time, and a non-empty title.');
+    }
+  };
+  //slots
+
   return (
+    <>
+    
     <div className="mt-[100px] flex flex-col bg-white h-auto">
       <div className="flex w-[60%] mx-auto">
         <div
@@ -94,6 +159,8 @@ const CreateService = () => {
           </label>
           <input
             placeholder="Service Title"
+            value={serviceTitle}
+            onChange={(e) => setServiceTitle(e.target.value)}
             type="text"
             id="title"
             name="title"
@@ -204,14 +271,48 @@ const CreateService = () => {
           <div className="flex justify-center mb-4">
             <button
               type="submit"
-              className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md"
+              onClick={()=> setShowSlots(!showSlots)}
+              className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md shadow-md"
             >
-              Create
+              Create time slots
             </button>
           </div>
         </form>
       </div>
     </div>
+
+    {/* slots */}
+    {
+    showSlots && 
+    <div className="calendar-container mt-[100px] w-[90%] m-auto   ">
+      <div>
+        <label>Start Date:</label>
+        <input type="date" value={startInputDate} onChange={(e) => setStartInputDate(e.target.value)} />
+        <label>Start Time:</label>
+        <input type="time" value={startInputTime} onChange={(e) => setStartInputTime(e.target.value)} />
+      </div>
+      <div>
+        <label>End Date:</label>
+        <input type="date" value={endInputDate} onChange={(e) => setEndInputDate(e.target.value)} />
+        <label>End Time:</label>
+        <input type="time" value={endInputTime} onChange={(e) => setEndInputTime(e.target.value)} />
+      </div>
+      <div>
+        <label>Event Title:</label>
+        <input type="text" value={serviceTitle}  />
+      </div>
+      <button onClick={handleCreateEvent}>Create Event</button>
+      <Calendar className='mt-[100px] '
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: 500 }}
+      />
+    </div>
+    }
+    {/* slolts */}
+    </>
   );
 };
 
