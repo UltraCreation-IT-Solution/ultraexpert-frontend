@@ -102,6 +102,7 @@ const GeneralDetails = () => {
         return;
       }
       console.log(data, generalInfo);
+      localStorage.setItem("profile", generalInfo.profile_img);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);

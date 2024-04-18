@@ -6,6 +6,14 @@ import { BsUpload } from "react-icons/bs";
 import { BsX } from "react-icons/bs";
 import axios from "../../axios";
 import DOMPurify from "dompurify";
+import { imageDB } from "../firebase/config";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { v4 } from "uuid";
 
 const CreateBlog = () => {
   const [value, setValue] = useState("");
@@ -24,16 +32,48 @@ const CreateBlog = () => {
 
   // code for uploading image for blog starts
   const [selectedFile, setSelectedFile] = useState(null);
-  const handleFileChange = (event) => {
+  const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
+      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
+      const uploadTask = uploadBytesResumable(imgRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Get upload progress as a percentage
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setUploadBannerProgress(progress);
+        },
+        (error) => {
+          console.error("Error uploading image: ", error);
+          // Handle error if needed
+        },
+        () => {
+          // Upload completed successfully
+          console.log("Upload complete");
+        }
+      );
+      try {
+        await uploadTask;
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log(url);
+        setBlogData({ ...blogData, image: [url] });
+        setSelectedFile(url);
+        console.log(blogData);
+      } catch (error) {
+        console.error("Error uploading image: ", error);
+        // Handle error if needed
+        alert("Something went wrong");
+      }
 
       reader.onload = () => {
         setSelectedFile(reader.result);
+        reader.readAsDataURL(file);
       };
-
-      reader.readAsDataURL(file);
     } else {
       // Handle the case where the user cancels the file selection
       setSelectedFile(null);
@@ -41,6 +81,8 @@ const CreateBlog = () => {
   };
   const removeImage = () => {
     setSelectedFile(null);
+    setUploadBannerProgress(0);
+    setBlogData({ ...blogData, image: [] });
   };
   // code for uploading image for blog ends
 
@@ -146,8 +188,8 @@ const CreateBlog = () => {
           content_json: value,
           category_id: value2.number,
           service_link_list: blogData.service_ll,
-          image_url_list: "",
-          tags_list: selectedSkill
+          image_url_list: blogData.image,
+          tags_list: selectedSkill,
         },
         {
           headers: {
@@ -367,10 +409,16 @@ const CreateBlog = () => {
               </div>
             ) : (
               <div className="flex flex-col items-center">
-                <BsUpload size={20} />
-                <div className="text-sm text-[#1475cf] mt-2 text-center text-balance">
-                  Click here to attach or upload an image
-                </div>
+                {uploadBannerProgress > 0 && uploadBannerProgress < 100 ? (
+                  <div>current progress: {uploadBannerProgress}%</div>
+                ) : (
+                  <>
+                    <BsUpload size={20} />
+                    <div className="text-sm text-[#1475cf] mt-2 text-center text-balance">
+                      Click here to attach or upload an image
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>
