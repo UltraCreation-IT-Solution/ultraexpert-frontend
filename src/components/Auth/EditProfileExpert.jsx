@@ -1373,6 +1373,12 @@ const AchDetails = () => {
 
   const addAchForm = () => {
     setAchForms([...achForms, { id: achForms.length + 1 }]);
+    setAchInfo((prevAchInfo) => ({
+      ...prevAchInfo,
+      name: [...prevAchInfo.name, ""],
+      year: [...prevAchInfo.year, ""],
+      certificate: [...prevAchInfo.certificate, ""],
+    }));
   };
 
   const [selectedCertificate, setSelectedCertificate] = useState(
