@@ -1425,9 +1425,7 @@ const AchDetails = () => {
     }));
   };
 
-  const [selectedCertificate, setSelectedCertificate] = useState(
-    Array.from({ length: achForms.length }, () => null)
-  );
+  const [selectedCertificate, setSelectedCertificate] = useState([]);
 
   const handleCertificateChange = async (event, ind) => {
     const file = event.target.files[0]; // Get the first selected file
@@ -1452,33 +1450,49 @@ const AchDetails = () => {
           console.error("Error uploading image: ", error);
           // Handle error if needed
         },
-        () => {
+        async () => {
           // Upload completed successfully
           console.log("Upload complete");
+          try {
+            const url = await getDownloadURL(uploadTask.snapshot.ref);
+            console.log(url);
+            setImageUrl((prevUrls) => {
+              const updatedUrls = prevUrls ? [...prevUrls] : [];
+              updatedUrls[ind] = url;
+              return updatedUrls;
+            });
+            setSelectedCertificate((prevSelectedCertificate) => {
+              const updatedSelectedCertificate = [...prevSelectedCertificate];
+              updatedSelectedCertificate[ind] = url;
+              return updatedSelectedCertificate;
+            });
+            setAchInfo((prevAchInfo) => {
+              const updatedCertificates = [...prevAchInfo.certificate];
+              updatedCertificates[ind] = url;
+              return {
+                ...prevAchInfo,
+                certificate: updatedCertificates,
+              };
+            });
+          } catch (error) {
+            console.error("Error uploading image: ", error);
+            // Handle error if needed
+            alert("Something went wrong");
+          }
         }
       );
-      try {
-        await uploadTask;
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log(url);
-        setImageUrl(url);
-      } catch (error) {
-        console.error("Error uploading image: ", error);
-        // Handle error if needed
-        alert("Something went wrong");
-      }
       reader.onload = () => {
         const updatedSelectedCertificates = [...selectedCertificate];
         updatedSelectedCertificates[ind] = reader.result;
         setSelectedCertificate(updatedSelectedCertificates);
       };
       reader.readAsDataURL(file);
-      const updatedCertificates = [...achInfo.certificate];
-      updatedCertificates[ind] = imageUrl;
-      setAchInfo({
-        ...achInfo,
-        certificate: updatedCertificates,
-      });
+      // const updatedCertificates = [...achInfo.certificate];
+      // updatedCertificates[ind] = imageUrl;
+      // setAchInfo({
+      //   ...achInfo,
+      //   certificate: updatedCertificates,
+      // });
     }
   };
 
@@ -1518,7 +1532,6 @@ const AchDetails = () => {
         updatedNames.push(form.name);
         updatedYears.push(form.year);
         updatedCertificates.push(form.certificate);
-        selectedCertificate.push(form.certificate);
       });
 
       setAchInfo({
@@ -1526,6 +1539,8 @@ const AchDetails = () => {
         year: updatedYears,
         certificate: updatedCertificates,
       });
+
+      setSelectedCertificate(selectedCertificate);
     } catch (error) {
       console.log(error);
     }
@@ -1664,11 +1679,10 @@ const AchDetails = () => {
                 document.querySelector(`#certificate${form.id}`).click()
               }
             >
-              {selectedCertificate[ind] &&
-              selectedCertificate[ind] !== "null" ? (
+              {achInfo.certificate[ind] ? (
                 <div className="relative">
                   <img
-                    src={selectedCertificate[ind]}
+                    src={achInfo.certificate[ind]}
                     alt="Certificate"
                     className="w-32 h-32 object-cover rounded-lg"
                   />
