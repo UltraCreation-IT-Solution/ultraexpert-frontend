@@ -1,178 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { FiUpload, FiX, FiEdit } from "react-icons/fi";
-import { imageDB } from "./components/firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "./axios";
+import ReactQuiz from "./TestElement2";
 
-const TestElement = () => {
-  const [userData, setUserData] = useState({});
-  const [image, setImage] = useState(null);
-  const [progress, setProgress] = useState(0);
-  // const [currData, setCurrData] = useState({
-  //   first_name: "",
-  //   last_name: "",
-  //   mobile_number: "",
-  //   profile_img: "",
-  //   gender: "",
-  //   marital_status: "",
-  // });
-  const cookies = document.cookie.split("; ");
-  const jsonData = {};
-
-  cookies.forEach((item) => {
-    const [key, value] = item.split("=");
-    jsonData[key] = value;
-  });
+function TestComponent() {
+  const [test_id, setTest_id] = useState("");
+  const [thoughtProcess, setThoughtProcess] = useState([]);
+  const [repord_id, setRepord_id] = useState("");
   useEffect(() => {
-    const getUserData = async () => {
+    const fetchQuestions = async () => {
+      const cookies = document.cookie.split("; ");
+      const jsonData = {};
+
+      cookies.forEach((item) => {
+        const [key, value] = item.split("=");
+        jsonData[key] = value;
+      });
       try {
-        const response = await axios.get("/customers/?action=1", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        });
-        if (
-          !response.data ||
-          response.data.status === 400 ||
-          response.data.status === 401
-        ) {
-          console.log(response.data.message);
-          return;
-        }
-        setUserData(response.data.data);
-        console.log("ander wala", response.data.data);
-        setImage(response.data.data.profile_img);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUserData();
-  }, []);
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-      const uploadTask = uploadBytesResumable(imgRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Get upload progress as a percentage
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setProgress(progress);
-        },
-        (error) => {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-        },
-        () => {
-          // Upload completed successfully
-          console.log("Upload complete");
-        }
-      );
-      try {
-        await uploadTask;
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log(url);
-        setImage(url);
-        setUserData({
-          ...userData,
-          profile_img: url,
-        });
-      } catch (error) {
-        console.error("Error uploading image: ", error);
-        // Handle error if needed
-        alert("Something went wrong");
-      }
-
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const interest = [
-    { id: 1, name: "Python" },
-    { id: 2, name: "C++" },
-    { id: 3, name: "Django" },
-    { id: 4, name: "HTML" },
-    { id: 5, name: "CSS" },
-    { id: 6, name: "JS" },
-    { id: 7, name: "React JS" },
-  ];
-
-  const [selectedSkill, setSelectedSkill] = useState([]);
-  const [inputValue, setInputValue] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-
-  const handleChange = (event) => {
-    const { value } = event.target;
-    setInputValue(value);
-    setSuggestions(interest.filter((suggestion) => suggestion.name.toLowerCase().includes(value.toLowerCase())));
-  };
-
-  const handleSuggestionClick = (suggestion) => {
-    // Add suggestion to selected skills
-    if(!selectedSkill.includes(suggestion.name)){
-      setSelectedSkill([...selectedSkill, suggestion.name]);
-      console.log(selectedSkill)
-    }
-    // Clear input and suggestions
-    setInputValue('');
-    setSuggestions([]);
-  };
-  const saveProfile = async () => {
-    const cookies = document.cookie.split("; ");
-    const jsonData = {};
-
-    cookies.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    console.log(jsonData);
-    try {
-      const response = await axios.post(
-        "/user_details/",
-        {
-          action: 1,
-          first_name: userData.first_name,
-          last_name: userData.last_name,
-          mobile_number: userData.mobile_number,
-          marital_status: userData.marital_status,
-          gender: userData.gender,
-          profile_img: userData.profile_img,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      if (
-        !response.data ||
-        response.data.status === 400 ||
-        response.data.status === 401
-      ) {
-        console.log(response.data.message);
-        return;
-      }
-      console.log(response.data);
-      try {
-        const res = await axios.post(
-          "/customers/",
-          {
-            action: 3,
-            about_me: userData.about_me,
-            profession: userData.profession,
-          },
+        const response = await axios.get(
+          "/inspections/test/?action=1&skill_name=reacthvhgvghchg",
           {
             headers: {
               "Content-Type": "application/json",
@@ -180,49 +26,61 @@ const TestElement = () => {
             },
           }
         );
-        if (
-          !response.data ||
-          response.data.status === 400 ||
-          response.data.status === 401
-        ) {
-          console.log(response.data.message);
-          return;
-        }
-        console.log(res.data);
-        try {
-          const res2 = await axios.post(
-            "/customers/",
-            {
-              action: 4,
-              interest_list: selectedSkill,
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${jsonData.access_token}`,
-              },
-            }
-          );
-          if (
-            !response.data ||
-            response.data.status === 400 ||
-            response.data.status === 401
-          ) {
-            console.log(response.data.message);
-            return;
-          }
-          console.log(res2.data);
-        } catch (error) {
-          console.log(error);
-        }
+        setTest_id(response.data.data.test_id);
+        setThoughtProcess(response.data.data.thought_process);
+        setRepord_id(response.data.data.report_id);
+        console.log(response);
       } catch (error) {
         console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    };
+    fetchQuestions();
+  }, []);
+
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes timer
+  const [isTimeOver, setIsTimeOver] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime === 0) {
+          clearInterval(timer);
+          setIsTimeOver(true);
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (isTimeOver) {
+      // Handle time over action, e.g., show popup
+      // You can add custom logic here
+      console.log("Time is over");
     }
+  }, [isTimeOver]);
+
+  const handleDragStart = (e, index) => {
+    e.dataTransfer.setData("index", index);
   };
-  const getSkillInfo = async () => {
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e, newIndex) => {
+    const droppedIndex = parseInt(e.dataTransfer.getData("index"));
+    const newThoughtProcess = [...thoughtProcess];
+    const movedItem = newThoughtProcess.splice(droppedIndex, 1)[0];
+    newThoughtProcess.splice(newIndex, 0, movedItem);
+    setThoughtProcess(newThoughtProcess);
+  };
+
+  const handleSubmit = async () => {
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -230,240 +88,121 @@ const TestElement = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    console.log(jsonData);
+    console.log("User's ordered array:", thoughtProcess);
     try {
-      const response = await axios.get("/customers/?action=2", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
+      const response = await axios.post(
+        "/inspections/test/",
+        {
+          action: 1,
+          answer: `${thoughtProcess}`,
+          report_id: repord_id,
+          test_id: test_id,
         },
-      });
-      const data = response.data;
-      if (!data || data.status === 400 || data.status === 401) {
-        alert(data.message);
-        return;
-      }
-      console.log(data.data.interest_list);
-      const selectedInterest = data.data.interest_list;
-      setSelectedSkill(selectedInterest);
-      console.log(selectedSkill)
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    getSkillInfo();
-  }, []);
 
-  const handleRemove = (skill) => {
-    setSelectedSkill(selectedSkill.filter((s) => s !== skill));
+  const handleCancel = () => {
+    // Handle cancel action, e.g., navigate back to previous route
+    // You can use react-router-dom or any routing library for this
+    console.log("Cancelled the test");
   };
 
-  return (
-    <div className="w-full md:w-[68%] border border-solid border-slate-300 p-5 rounded-sm">
-      <div className="flex items-center justify-between border-b border-solid border-slate-200 pb-3">
-        <div className="text-xl font-bold ">Profile</div>
-        <div
-          onClick={() => saveProfile()}
-          className="text-base bg-green-500 px-4 py-2 rounded-md cursor-pointer text-white"
-        >
-          Save Profile
-        </div>
-      </div>
-      <div className="flex items-center justify-around gap-4">
-        <div className="mt-5 md:w-[80%] lg:w-[45%]">
-          <div className="mt-5">
-            <div className="text-base">First Name</div>
-            <input
-              type="text"
-              value={userData.first_name}
-              onChange={(e) =>
-                setUserData({ ...userData, first_name: e.target.value })
-              }
-              className="mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none w-full"
-              placeholder="Enter your first name"
-            />
-          </div>
-          <div className="mt-5">
-            <div className="text-base">Last Name</div>
-            <input
-              type="text"
-              value={userData.last_name}
-              onChange={(e) =>
-                setUserData({ ...userData, last_name: e.target.value })
-              }
-              className="mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none w-full"
-              placeholder="Enter your last name"
-            />
-          </div>
-          <div className="mt-5">
-            <div className="text-base ">Mobile number</div>
-            <input
-              type="number"
-              value={userData.mobile_number}
-              onChange={(e) =>
-                setUserData({ ...userData, mobile_number: e.target.value })
-              }
-              className="mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none w-full"
-              placeholder="Enter your mobile number"
-            />
-          </div>
-          <div className=" mt-5 w-full">
-            <div>
-              <div className="text-base ">Gender</div>
-              <select
-                name="Gender"
-                id="Gender"
-                value={userData.gender}
-                onChange={(e) =>
-                  setUserData({ ...userData, gender: e.target.value })
-                }
-                className="mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none shrink-0 w-full"
-              >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Others">Others</option>
-              </select>
-            </div>
-          </div>
-          <div className="mt-5">
-            <div className="text-base ">Marital Status</div>
-            <select
-              name="Marital"
-              id="Marital"
-              value={userData.marital_status}
-              onChange={(e) =>
-                setUserData({ ...userData, marital_status: e.target.value })
-              }
-              className="mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none shrink-0 w-full"
-            >
-              <option value="">Married</option>
-              <option value="">Unmarried</option>
-            </select>
-          </div>
-          <div className="mt-5">
-            <div className="text-base ">About Me</div>
-            <textarea
-              rows="6"
-              placeholder="Write about your self"
-              value={userData.about_me}
-              onChange={(e) =>
-                setUserData({ ...userData, about_me: e.target.value })
-              }
-              className="min-w-full max-w-full mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none"
-              style={{ resize: "none" }}
-            ></textarea>
-          </div>
-          <div className="mt-5">
-            <div className="text-base ">Profession</div>
-            <input
-              type="text"
-              value={userData.profession}
-              onChange={(e) =>
-                setUserData({ ...userData, profession: e.target.value })
-              }
-              className="mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none w-full"
-              placeholder="Enter your profession"
-            />
-          </div>
-        </div>
-        <div className="flex flex-col self-start py-5 w-[45%]">
-          <label htmlFor="profile" className="text-base mb-1">
-            Profile Photo
-          </label>
-          <div
-            onClick={() => document.querySelector("#profileSelector").click()}
-            className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
-          >
-            <input
-              type="file"
-              accept="image/*"
-              id="profileSelector"
-              name="profileSelector"
-              onChange={handleImageChange}
-              className="hidden"
-            />
-            {image && (
-              <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
-                <img
-                  src={image}
-                  alt="Preview"
-                  className="w-auto h-40 shrink-0 object-cover object-center m-2"
-                />
-              </div>
-            )}
-          </div>
-          <div className="flex justify-center mx-auto flex-col w-full my-8">
-            <label htmlFor="interests" className="text-lg mb-1">
-              Interests
-            </label>
-            <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-              <div className="flex flex-wrap gap-2">
-                {selectedSkill.length > 0 ? (
-                  selectedSkill.map((skill,ind) => {
-                    return (
-                      <div
-                        key={ind}
-                        className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black"
-                      >
-                        {skill}
-                        <div
-                          className="cursor-pointer"
-                          onClick={() => handleRemove(skill)}
-                        >
-                          x
-                        </div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <p className="text-gray-300 text-sm">
-                    Select skills of your interest from below.
-                  </p>
-                )}
-              </div>
-            </div>
-            <input type="text" id="interests" value={inputValue} onChange={handleChange} className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none" placeholder="Enter your interests"/>
-            {
-              suggestions.length > 0 && (
-                <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-                  <div>
-                    {suggestions.map((suggestion,ind) => (
-                      <div
-                        key={suggestion.id}
-                        onClick={() => handleSuggestionClick(suggestion)}
-                        className="cursor-pointer hover:bg-gray-100 px-4 py-1"
-                      >
-                        {suggestion.name}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )
-            }
-            
-            {/* <div className="border border-solid border-slate-200 px-4 py-2 rounded-md mb-4">
-              <div className="flex flex-wrap justifty-around gap-3">
-                {interest.map((skill, ind) => {
-                  return (
-                    <div
-                      key={ind}
-                      onClick={() => {
-                        handleChange(skill.name);
-                      }}
-                      className="cursor-pointer px-4 py-1 text-sm text-nowrap rounded-full bg-inherit border border-solid border-[#c7c7c7] text-[#8D8D8D] bg-[#E8E8E8] flex justify-center items-center overflow-visible"
-                    >
-                      {skill.name}
-                    </div>
-                  );
-                })}
-              </div>
-            </div> */}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+  // Format the time left to mm:ss
+  const formattedTimeLeft = new Date(timeLeft * 1000)
+    .toISOString()
+    .substr(14, 5);
 
-export default TestElement;
+  return (
+    // <div className="min-h-screen bg-white flex flex-col justify-center items-center">
+    //   <div className="container mx-auto px-4 py-8 bg-white rounded-lg shadow-md mb-8 border border-blue-500">
+    //     <h2 className="text-2xl font-semibold mb-4">
+    //       Thought Process Reordering Quiz
+    //     </h2>
+    //     <div className="flex items-center justify-center bg-blue-300 text-white px-6 py-3 rounded-full shadow-md mb-4">
+    //       <svg
+    //         className="w-6 h-6 mr-2"
+    //         fill="none"
+    //         stroke="currentColor"
+    //         viewBox="0 0 24 24"
+    //         xmlns="http://www.w3.org/2000/svg"
+    //       >
+    //         <path
+    //           strokeLinecap="round"
+    //           strokeLinejoin="round"
+    //           strokeWidth="2"
+    //           d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+    //         ></path>
+    //       </svg>
+    //       <span className="text-xl">{formattedTimeLeft}</span>
+    //     </div>
+    //     <p className="mb-4">
+    //       Drag and drop the components to reorder them in the correct order:
+    //     </p>
+    //     <ul className="flex flex-wrap gap-2 py-4">
+    //       {thoughtProcess.map((step, index) => (
+    //         <li
+    //           key={index}
+    //           className="bg-white text-gray-800 border border-blue-500 px-4 py-2 rounded-md cursor-move shadow-md flex-grow"
+    //           draggable
+    //           onDragStart={(e) => handleDragStart(e, index)}
+    //           onDragOver={(e) => handleDragOver(e, index)}
+    //           onDrop={(e) => handleDrop(e, index)}
+    //         >
+    //           {step}
+    //         </li>
+    //       ))}
+    //     </ul>
+    //   </div>
+    //   {isTimeOver && (
+    //     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+    //       <div className="bg-white rounded-lg p-8 shadow-lg">
+    //         <p className="text-2xl font-semibold text-gray-800 mb-4">
+    //           Time's Up!
+    //         </p>
+    //         <p className="text-gray-600">
+    //           Your time is over. Please submit your answers.
+    //         </p>
+    //         <button
+    //           className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mt-4"
+    //           onClick={handleSubmit}
+    //         >
+    //           Submit
+    //         </button>
+    //       </div>
+    //     </div>
+    //   )}
+    //   <div className="bg-white py-4 w-full border-t border-blue-500">
+    //     <div className="container mx-auto flex justify-between">
+    //       <button
+    //         className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600"
+    //         onClick={handleCancel}
+    //       >
+    //         Cancel
+    //       </button>
+    //       <button
+    //         className="bg-white text-blue-500 px-4 py-2 rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent"
+    //         onClick={handleSubmit}
+    //       >
+    //         Submit
+    //       </button>
+    //     </div>
+    //   </div>
+    //   <div className="fixed top-4 right-4 bg-white p-4 rounded-md shadow-md border border-blue-500 text-blue-500">
+    //     {formattedTimeLeft}
+    //   </div>
+    // </div>
+    <ReactQuiz />
+  );
+}
+
+export default TestComponent;
