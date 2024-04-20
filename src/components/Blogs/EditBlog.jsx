@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import QuillToolbar, { modules, formats } from "../../subsitutes/EditorToolbar";
@@ -14,81 +14,135 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
-const CreateBlog = () => {
-  const [value, setValue] = useState("");
-  const [value2, setValue2] = useState({
-    name: "",
-    number: "",
-  });
+const EditBlog = () => {
   const [preview, setPreview] = useState(false);
-
-  const [blogData, setBlogData] = useState({
-    title: "",
-    category_id: "",
-    service_ll: [],
-    image: [],
-  });
-
+  const params = useParams();
+  console.log(params.id);
   // code for uploading image for blog starts
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-      const uploadTask = uploadBytesResumable(imgRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Get upload progress as a percentage
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setUploadBannerProgress(progress);
-        },
-        (error) => {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-        },
-        () => {
-          // Upload completed successfully
-          console.log("Upload complete");
-        }
-      );
-      try {
-        await uploadTask;
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log(url);
-        setBlogData({ ...blogData, image: [url] });
-        setSelectedFile(url);
-        console.log(blogData);
-      } catch (error) {
-        console.error("Error uploading image: ", error);
-        // Handle error if needed
-        alert("Something went wrong");
-      }
+  //   const [selectedFile, setSelectedFile] = useState(null);
+  //   const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
+  //   const handleFileChange = async (event) => {
+  //     const file = event.target.files[0];
+  //     if (file) {
+  //       const reader = new FileReader();
+  //       const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
+  //       const uploadTask = uploadBytesResumable(imgRef, file);
+  //       uploadTask.on(
+  //         "state_changed",
+  //         (snapshot) => {
+  //           // Get upload progress as a percentage
+  //           const progress = Math.round(
+  //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+  //           );
+  //           setUploadBannerProgress(progress);
+  //         },
+  //         (error) => {
+  //           console.error("Error uploading image: ", error);
+  //           // Handle error if needed
+  //         },
+  //         () => {
+  //           // Upload completed successfully
+  //           console.log("Upload complete");
+  //         }
+  //       );
+  //       try {
+  //         await uploadTask;
+  //         const url = await getDownloadURL(uploadTask.snapshot.ref);
+  //         console.log(url);
+  //         setBlogData({ ...blogData, image: [url] });
+  //         setSelectedFile(url);
+  //         console.log(blogData);
+  //       } catch (error) {
+  //         console.error("Error uploading image: ", error);
+  //         // Handle error if needed
+  //         alert("Something went wrong");
+  //       }
 
-      reader.onload = () => {
-        setSelectedFile(reader.result);
-        reader.readAsDataURL(file);
-      };
-    } else {
-      // Handle the case where the user cancels the file selection
-      setSelectedFile(null);
-    }
-  };
-  const removeImage = () => {
-    setSelectedFile(null);
-    setUploadBannerProgress(0);
-    setBlogData({ ...blogData, image: [] });
-  };
+  //       reader.onload = () => {
+  //         setSelectedFile(reader.result);
+  //         reader.readAsDataURL(file);
+  //       };
+  //     } else {
+  //       // Handle the case where the user cancels the file selection
+  //       setSelectedFile(null);
+  //     }
+  //   };
+  //   const removeImage = () => {
+  //     setSelectedFile(null);
+  //     setUploadBannerProgress(0);
+  //     setBlogData({ ...blogData, image: [] });
+  //   };
   // code for uploading image for blog ends
 
   const [categoriesArray, setCategoriesArray] = useState([]);
   const [filterCategoriesArray, setFilterCategoriesArray] = useState([]);
+
+  //   console.log(value2);
+
+  const interest = [
+    { id: 1, name: "Python" },
+    { id: 2, name: "C++" },
+    { id: 3, name: "Django" },
+    { id: 4, name: "HTML" },
+    { id: 5, name: "CSS" },
+    { id: 6, name: "JS" },
+    { id: 7, name: "React JS" },
+  ];
+
+  const [selectedSkill, setSelectedSkill] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+
+  const [value2, setValue2] = useState({
+    name: "",
+    number: "",
+  });
+
+  const [allBlogData, setAllBlogData] = useState({
+    title: "",
+    id: "",
+    image: [],
+    content: "",
+  });
+
+  const getBlogData = async () => {
+    const cookie = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get(`/blogs/?action=3&blog_id=${params.id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      console.log(res.data.data);
+      setAllBlogData({
+        ...allBlogData,
+        title: res.data.data.title,
+        id: Number(params.id),
+        image: res.data.data.images_list,
+        content: res.data.data.content,
+      });
+      setValue2({
+        ...value2,
+        name: res.data.data.blog_category.category,
+      });
+      setSelectedSkill(res.data.data.tags_list);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getBlogData();
+  }, []);
   const getCategories = async () => {
     const cookies = document.cookie.split("; ");
     const jsonData = {};
@@ -129,99 +183,6 @@ const CreateBlog = () => {
     );
   };
 
-  const setNewCategory = async (e) => {
-    e.preventDefault();
-    const cookies = document.cookie.split("; ");
-    const jsonData = {};
-    cookies.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    console.log(value2?.name);
-    console.log(value2.number);
-    try {
-      const res = await axios.post(
-        "/blogs/",
-        {
-          action: 1,
-          category_name: value2.name,
-          img_url: "abc.jpg",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      const data = res.data;
-      if (!data || data.status === 400 || data.status === 401) {
-        console.log("Something went wrong");
-        return;
-      }
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const blogCreated = async (e) => {
-    e.preventDefault();
-    const cookie = document.cookie.split("; ");
-    const jsonData = {};
-    cookie.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    console.log(value2?.number);
-    console.log(blogData);
-    console.log(value);
-    console.log(blogData.title);
-    console.log(blogData.service_ll);
-    try {
-      const res = await axios.post(
-        "/blogs/",
-        {
-          action: 2,
-          blog_title: blogData.title,
-          content_json: value,
-          category_id: value2.number,
-          service_link_list: blogData.service_ll,
-          image_url_list: blogData.image,
-          tags_list: selectedSkill,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      const data = res.data;
-      if (!data || data.status === 400 || data.status === 401) {
-        console.log("Something went wrong");
-        return;
-      }
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const interest = [
-    { id: 1, name: "Python" },
-    { id: 2, name: "C++" },
-    { id: 3, name: "Django" },
-    { id: 4, name: "HTML" },
-    { id: 5, name: "CSS" },
-    { id: 6, name: "JS" },
-    { id: 7, name: "React JS" },
-  ];
-
-  const [selectedSkill, setSelectedSkill] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-
   const handleChange = (event) => {
     const { value } = event.target;
     setInputValue(value);
@@ -253,8 +214,142 @@ const CreateBlog = () => {
     }
     setInputValue("");
   };
+
+  const setNewCategory = async (e) => {
+    e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    console.log(value2?.name);
+    console.log(value2.number);
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 1,
+          category_name: value2.name,
+          img_url: "",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const data = res.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //   const [content, setContent] = useState(allBlogData.content);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
+  const removeImage = () => {
+    setSelectedFile(null);
+    setUploadBannerProgress(0);
+    setAllBlogData({ ...allBlogData, image: [] });
+  };
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
+      const uploadTask = uploadBytesResumable(imgRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Get upload progress as a percentage
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setUploadBannerProgress(progress);
+        },
+        (error) => {
+          console.error("Error uploading image: ", error);
+          // Handle error if needed
+        },
+        () => {
+          // Upload completed successfully
+          console.log("Upload complete");
+        }
+      );
+      try {
+        await uploadTask;
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log(url);
+        setAllBlogData({ ...allBlogData, image: [url] });
+        setSelectedFile(url);
+        console.log(allBlogData);
+      } catch (error) {
+        console.error("Error uploading image: ", error);
+        // Handle error if needed
+        alert("Something went wrong");
+      }
+
+      reader.onload = () => {
+        setSelectedFile(reader.result);
+        reader.readAsDataURL(file);
+      };
+    } else {
+      // Handle the case where the user cancels the file selection
+      setSelectedFile(null);
+    }
+  };
+  const blogCreated = async (e) => {
+    e.preventDefault();
+    const cookie = document.cookie.split("; ");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    // console.log(value2?.number);
+    // console.log(blogData);
+    // console.log(value);
+    // console.log(blogData.title);
+    // console.log(blogData.service_ll);
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 3,
+          id: allBlogData.id,
+          blog_title: allBlogData.title,
+          content_json: allBlogData.content,
+          category_id: value2.number,
+          service_link_list: [],
+          image_url_list: allBlogData.image,
+          tags_list: selectedSkill,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const data = res.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      alert("Blog Updated");
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const navigate = useNavigate();
- 
   return (
     <div className="mt-[100px] mx-[7vw] ">
       <div className="md:flex items-start gap-10 ">
@@ -264,9 +359,9 @@ const CreateBlog = () => {
             <input
               type="text"
               placeholder="Enter title"
-              value={blogData.title}
+              value={allBlogData.title}
               onChange={(e) =>
-                setBlogData({ ...blogData, title: e.target.value })
+                setAllBlogData({ ...allBlogData, title: e.target.value })
               }
               className="w-full mt-1 border border-solid border-slate-300 p-2 text-sm rounded-sm focus:outline-none"
             />
@@ -278,7 +373,7 @@ const CreateBlog = () => {
               placeholder="Enter category"
               name=""
               id=""
-              value={value2.name}
+              value={value2?.name}
               onChange={(e) => handleCategoryChange(e)}
               onFocus={() => getCategories()}
               className="w-full mt-1 border border-solid border-slate-300 p-2 text-sm rounded-sm focus:outline-none"
@@ -296,6 +391,9 @@ const CreateBlog = () => {
                           name: item?.name,
                           number: item?.number,
                         });
+                        console.log(value2.name);
+                        console.log(value2.number);
+
                         setFilterCategoriesArray([]);
                       }}
                     >
@@ -310,6 +408,7 @@ const CreateBlog = () => {
                 onClick={(e) => {
                   setNewCategory(e);
                   setValue2({ ...value2, number: categoriesArray.length + 1 });
+                  alert("Category Added");
                 }}
               >
                 Add Category
@@ -396,7 +495,7 @@ const CreateBlog = () => {
             {selectedFile ? (
               <div className="relative">
                 <img
-                  src={selectedFile}
+                  src={allBlogData.image[0]}
                   alt="Selected preview"
                   className="w-28 h-28 object-cover shrink-0 brightness-95 "
                 />
@@ -431,8 +530,8 @@ const CreateBlog = () => {
         <QuillToolbar toolbarId={"t1"} />
         <ReactQuill
           theme="snow"
-          value={value}
-          onChange={setValue}
+          value={allBlogData.content}
+          onChange={(content) => setAllBlogData({ ...allBlogData, content })}
           readOnly={preview}
           modules={modules("t1")}
           formats={formats}
@@ -440,47 +539,39 @@ const CreateBlog = () => {
           className=" border border-solid border-slate-400 "
         />
       </div>
-      <a href="#preview" style={{scrollBehavior: "smooth",
-      color:"white",
-      textDecoration:"none"}} >
       <div
-        className="text-sm w-fit px-5 py-2 rounded-sm btnBlack text-white cursor-pointer "
+        className="text-base w-fit px-4 py-1 rounded-md bg-blue-500 text-white cursor-pointer hover:bg-blue-600"
         onClick={() => {
-          if(value.length!==0){
-            setPreview(true);
-            console.log(value);
-            setValue(DOMPurify.sanitize(value));
-          }
-          if(value.length===0){
-            alert("Please write something first");
-          } 
+          setPreview(true);
+          console.log(allBlogData.content);
+          const originalContent = JSON.parse(
+            JSON.stringify(allBlogData.content)
+          );
+          const sanitizedContent = DOMPurify.sanitize(originalContent);
+          setAllBlogData({ ...allBlogData, content: sanitizedContent });
+          console.log(allBlogData.content);
         }}
       >
-        Preview 
+        Preview
       </div>
-      </a>
-      {preview && value.length!==0 && (
+      {preview && (
         <>
-          <div id="preview" className="border border-solid border-slate-300 p-2 rounded-sm mt-16 dangerHtml">
-            {blogData.title !== "" && (
-              <div className="text-3xl overflow-hidden xs:text-4xl lg:text-5xl font-bold md:px-[7vw] my-5 md:my-4 tracking-wide text-center pb-5">
-                {blogData.title}{" "}
-              </div>
-            )}
-            <p dangerouslySetInnerHTML={{ __html: value }} className="" />
-          </div>
-          <div className="flex items-center gap-5 mt-5">
+          <p
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(allBlogData.content),
+            }}
+            className="border border-solid border-slate-300 p-2 rounded-sm mt-16 dangerHtml"
+          />
+          <div className="flex items-center gap-5 ">
             <div
-              className="text-sm border border-solid border-black rounded-sm px-6 py-2 text-black w-fit cursor-pointer"
+              className="text-base bg-blue-500 hover:bg-blue-600 rounded-md px-4 py-1 text-white w-fit cursor-pointer"
               onClick={() => setPreview(false)}
             >
               Edit
             </div>
             <div
-              onClick={
-              blogCreated
-              }
-              className="text-sm w-fit px-5 py-2 rounded-sm btnBlack text-white cursor-pointer"
+              onClick={blogCreated}
+              className="text-base bg-green-500 hover:bg-green-600 rounded-md px-4 py-1 text-white w-fit cursor-pointer"
             >
               Submit
             </div>
@@ -491,4 +582,4 @@ const CreateBlog = () => {
   );
 };
 
-export default CreateBlog;
+export default EditBlog;

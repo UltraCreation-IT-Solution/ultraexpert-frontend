@@ -578,8 +578,7 @@ export const Dashboard = () => {
   };
   // API integration for testimonials of expert end--->>>
 
-  const [contributions, setContributions] = useState(true);
-  const [meetings, setMeetings] = useState(false);
+  const [meetings, setMeetings] = useState(true);
   const [blogs, setBlogs] = useState(false);
   const [testimonials, setTestimonials] = useState(false);
   const [projects, setProjects] = useState(false);
@@ -588,29 +587,20 @@ export const Dashboard = () => {
 
   const [blogData, setBlogData] = useState([]);
 
-  const HandleContributions = () => {
-    setContributions(true);
-    setMeetings(false);
-    setBlogs(false);
-    setTestimonials(false);
-    setProjects(false);
-  };
   const HandleMeetings = () => {
-    setContributions(false);
     setMeetings(true);
     setBlogs(false);
     setTestimonials(false);
     setProjects(false);
   };
   const HandleBlogs = () => {
-    setContributions(false);
     setMeetings(false);
     setBlogs(true);
     setTestimonials(false);
     setProjects(false);
   };
 
-  const getBlogsData = async () => {
+  const getExpertAllBlogs = async () => {
     const cookie = document.cookie.split("; ");
     const jsonData = {};
 
@@ -632,19 +622,14 @@ export const Dashboard = () => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    getBlogsData();
-  }, []);
 
   const HandleTestimonials = () => {
-    setContributions(false);
     setMeetings(false);
     setBlogs(false);
     setTestimonials(true);
     setProjects(false);
   };
   const HandleProjects = () => {
-    setContributions(false);
     setMeetings(false);
     setBlogs(false);
     setTestimonials(false);
@@ -1050,14 +1035,6 @@ export const Dashboard = () => {
         <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-4 mb-4 text-sm md:text-base overflow-x-scroll">
           <div
             className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
-              contributions && `bg-[#ececec] rounded-sm`
-            }`}
-            onClick={() => HandleContributions()}
-          >
-            Recent Contributions
-          </div>
-          <div
-            className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
               meetings && `bg-[#ececec] rounded-sm`
             }`}
             onClick={() => HandleMeetings()}
@@ -1068,7 +1045,10 @@ export const Dashboard = () => {
             className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
               blogs && `bg-[#ececec] rounded-sm`
             }`}
-            onClick={() => HandleBlogs()}
+            onClick={() => {
+              getExpertAllBlogs();
+              HandleBlogs();
+            }}
           >
             Recent Blogs
           </div>
@@ -1092,14 +1072,7 @@ export const Dashboard = () => {
             Projects
           </div>
         </div>
-        {/* Contributions section of dashboard */}
-        {contributions && (
-          <div>
-            {expert?.recentContributions?.map((item, idx) => (
-              <Contributioncard key={idx} {...item} />
-            ))}
-          </div>
-        )}
+
         {/* Meetings section of dashboard */}
         {meetings && (
           <div>
@@ -1134,7 +1107,14 @@ export const Dashboard = () => {
           </div>
         )}
         {/* Blogs section of dashboard */}
-        {blogs && <ShowBlogs blogArray={blogData} />}
+        {blogs && (
+          <ShowBlogs
+            HandleBlogs={HandleBlogs}
+            HandleTestimonials={HandleTestimonials}
+            getExpertAllBlogs={getExpertAllBlogs}
+            blogArray={blogData}
+          />
+        )}
         {/* Testimonials section of dashboard */}
         {testimonials &&
           expertAllTestimonials.length > 0 &&
