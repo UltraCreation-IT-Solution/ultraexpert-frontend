@@ -15,6 +15,7 @@ import {
   FaBackward,
   FaForward,
 } from "react-icons/fa";
+import ExpertCardShimmer from "../../subsitutes/Shimmers/ExpertCardShimmer";
 
 export const ExpertCard = ({ item }) => {
   const [FavExpert, setFavExpert] = useState(false);
@@ -124,6 +125,13 @@ const AllExperts = () => {
   useEffect(() => {
     getAllExperts();
   },[]);
+
+  if(!allExpertsList.length) return (
+    <div className=" px-[3vw] xs:px-[6vw] md:px-[10vw] w-full flex flex-wrap gap-[3vw] md:gap-[2vw] pb-[2vw]  justify-center sm:justify-normal  items-center ">
+      <ExpertCardShimmer/>
+    </div>
+  )
+  
   return (
     <div className="mt-[40px] md:mt-[100px] relative w-full h-auto py-[5vw] sm:py-[3vw] px-[3vw] xs:px-[6vw] md:px-[10vw] flex flex-col">
       <div className="flex w-full justify-center sm:justify-between">

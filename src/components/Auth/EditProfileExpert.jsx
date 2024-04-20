@@ -1,6 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "../../axios";
-import { BsUpload, BsX } from "react-icons/bs";
+import { BsArrowLeftSquare, BsUpload, BsX } from "react-icons/bs";
+import {
+  BiSolidCaretLeftSquare,
+  BiSolidCaretRightSquare,
+} from "react-icons/bi";
+import { imageDB } from "../firebase/config";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { v4 } from "uuid";
 
 const cookies = document.cookie.split("; ");
 const jsonData = {};
@@ -63,7 +75,7 @@ const GeneralDetails = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    console.log(jsonData);
+
     try {
       const response = await axios.post(
         "/user_details/?action=1",
@@ -73,9 +85,9 @@ const GeneralDetails = () => {
           last_name: generalInfo.last_name,
           mobile_number: generalInfo.mobile_number,
           marital_status: generalInfo.marital_status,
-          profile_img: selectedProfile,
+          profile_img: generalInfo.profile_img,
           gender: generalInfo.gender,
-          banner_img: selectedBanner,
+          banner_img: generalInfo.banner_img,
         },
         {
           headers: {
@@ -90,6 +102,7 @@ const GeneralDetails = () => {
         return;
       }
       console.log(data, generalInfo);
+      localStorage.setItem("profile", generalInfo.profile_img);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
@@ -99,32 +112,93 @@ const GeneralDetails = () => {
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [selectedBanner, setSelectedBanner] = useState(null);
 
-  const handleProfileChange = (event) => {
+  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
+  const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
+
+  const handleProfileChange = async (event) => {
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
       const reader = new FileReader();
+      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
+      const uploadTask = uploadBytesResumable(imgRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Get upload progress as a percentage
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setUploadProfileProgress(progress);
+        },
+        (error) => {
+          console.error("Error uploading image: ", error);
+          // Handle error if needed
+        },
+        () => {
+          // Upload completed successfully
+          console.log("Upload complete");
+        }
+      );
+      try {
+        await uploadTask;
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log(url);
+        setGeneralInfo({
+          ...generalInfo,
+          profile_img: url, // Assign the base64 data directly
+        });
+      } catch (error) {
+        console.error("Error uploading image: ", error);
+        // Handle error if needed
+        alert("Something went wrong");
+      }
       reader.onload = () => {
         const imageData = reader.result;
         setSelectedProfile(imageData);
-        setGeneralInfo({
-          ...generalInfo,
-          profile_img: imageData, // Assign the base64 data directly
-        });
       };
       reader.readAsDataURL(file);
     }
   };
-  const handleBannerChange = (event) => {
+  const handleBannerChange = async (event) => {
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
       const reader = new FileReader();
+      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
+      const uploadTask = uploadBytesResumable(imgRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Get upload progress as a percentage
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setUploadBannerProgress(progress);
+        },
+        (error) => {
+          console.error("Error uploading image: ", error);
+          // Handle error if needed
+        },
+        () => {
+          // Upload completed successfully
+          console.log("Upload complete");
+        }
+      );
+      try {
+        await uploadTask;
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log(url);
+        setGeneralInfo({
+          ...generalInfo,
+          banner_img: url, // Assign the base64 data directly
+        });
+      } catch (error) {
+        console.error("Error uploading image: ", error);
+        // Handle error if needed
+        alert("Something went wrong");
+      }
       reader.onload = () => {
         const imageData = reader.result;
         setSelectedBanner(imageData);
-        setGeneralInfo({
-          ...generalInfo,
-          banner_img: imageData, // Assign the base64 data directly
-        });
       };
       reader.readAsDataURL(file);
     }
@@ -245,6 +319,9 @@ const GeneralDetails = () => {
               onClick={() => document.querySelector("#profileSelector").click()}
               className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
             >
+              {uploadProfileProgress > 0 && uploadProfileProgress < 100 && (
+                <p>Upload Progress: {uploadProfileProgress}%</p>
+              )}
               {generalInfo.profile_img ? (
                 <div className="relative">
                   <img
@@ -261,10 +338,14 @@ const GeneralDetails = () => {
                 </div>
               ) : (
                 <div className="flex flex-col items-center">
-                  <BsUpload size={20} />
-                  <div className="text-sm text-center text-[#1475cf] mt-2">
-                    Click here to upload a profile photo
-                  </div>
+                  {uploadProfileProgress === 0 && (
+                    <>
+                      <BsUpload size={20} />
+                      <div className="text-sm text-[#1475cf] mt-2">
+                        Click here to upload a profile photo
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
               <input
@@ -284,6 +365,9 @@ const GeneralDetails = () => {
               onClick={() => document.querySelector("#bannerSelector").click()}
               className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
             >
+              {uploadBannerProgress > 0 && uploadBannerProgress < 100 && (
+                <p>Upload Progress: {uploadBannerProgress}%</p>
+              )}
               {generalInfo.banner_img ? (
                 <div className="relative">
                   <img
@@ -300,10 +384,14 @@ const GeneralDetails = () => {
                 </div>
               ) : (
                 <div className="flex flex-col items-center">
-                  <BsUpload size={20} />
-                  <div className="text-sm text-center text-[#1475cf] mt-2">
-                    Click here to upload a banner photo
-                  </div>
+                  {uploadBannerProgress === 0 && (
+                    <>
+                      <BsUpload size={20} />
+                      <div className="text-sm text-[#1475cf] mt-2">
+                        Click here to upload a banner photo
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
               <input
@@ -595,29 +683,6 @@ const EducationDetails = () => {
   const handleSubmit3 = async (e) => {
     e.preventDefault();
     try {
-      // const response = await fetch("http://localhost:8000/experts/update/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 3,
-      //     education_json: [
-      //       {
-      //         type: eduInfo.type,
-      //         institute_name: eduInfo.institute_name,
-      //         city: eduInfo.city,
-      //         state_name: eduInfo.state_name,
-      //         country: eduInfo.country,
-      //         passing_year: eduInfo.passing_year,
-      //         Devision: eduInfo.devision,
-      //       },
-      //     ],
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = await response.json();
-      // console.log(json);
       const educationData = educationForms.map((form, index) => ({
         type: eduInfo.type[index],
         institute_name: eduInfo.institute_name[index],
@@ -686,7 +751,7 @@ const EducationDetails = () => {
 
   return (
     <form onSubmit={handleSubmit3} className="grow h-full flex flex-col">
-      <div className="flex justify-center mx-auto flex-col w-[50%] my-8">
+      <div className="flex justify-center mx-auto flex-col w-[65%] my-8 ">
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -1180,24 +1245,6 @@ const SkillDetails = () => {
   const handleSubmit4 = async (e) => {
     e.preventDefault();
     try {
-      // const response = await fetch("http://localhost:8000/experts/update/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 4,
-      //     skill_json: [
-      //       {
-      //         technology_name: selectedSkill.technology_name,
-      //         ratings: selectedSkill.ratings,
-      //       },
-      //     ],
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = await response.json();
-      // console.log(json);
       const skillData = skillForms.map((form, index) => ({
         technology_name: selectedSkill.technology_name[index],
         ratings: selectedSkill.ratings[index],
@@ -1364,18 +1411,24 @@ const AchDetails = () => {
     year: [],
     certificate: [],
   });
+  const [imageUrl, setImageUrl] = useState(null);
+  const [uploadCertificateProgress, setUploadCertificateProgress] = useState(0);
 
   const [achForms, setAchForms] = useState([]);
 
   const addAchForm = () => {
     setAchForms([...achForms, { id: achForms.length + 1 }]);
+    setAchInfo((prevAchInfo) => ({
+      ...prevAchInfo,
+      name: [...prevAchInfo.name, ""],
+      year: [...prevAchInfo.year, ""],
+      certificate: [...prevAchInfo.certificate, ""],
+    }));
   };
 
-  const [selectedCertificate, setSelectedCertificate] = useState(
-    Array.from({ length: achForms.length }, () => null)
-  );
+  const [selectedCertificate, setSelectedCertificate] = useState([]);
 
-  const handleCertificateChange = (event, ind) => {
+  const handleCertificateChange = async (event, ind) => {
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
       if (!file.type.match("image/.*")) {
@@ -1383,18 +1436,64 @@ const AchDetails = () => {
         return;
       }
       const reader = new FileReader();
+      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
+      const uploadTask = uploadBytesResumable(imgRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Get upload progress as a percentage
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setUploadCertificateProgress(progress);
+        },
+        (error) => {
+          console.error("Error uploading image: ", error);
+          // Handle error if needed
+        },
+        async () => {
+          // Upload completed successfully
+          console.log("Upload complete");
+          try {
+            const url = await getDownloadURL(uploadTask.snapshot.ref);
+            console.log(url);
+            setImageUrl((prevUrls) => {
+              const updatedUrls = prevUrls ? [...prevUrls] : [];
+              updatedUrls[ind] = url;
+              return updatedUrls;
+            });
+            setSelectedCertificate((prevSelectedCertificate) => {
+              const updatedSelectedCertificate = [...prevSelectedCertificate];
+              updatedSelectedCertificate[ind] = url;
+              return updatedSelectedCertificate;
+            });
+            setAchInfo((prevAchInfo) => {
+              const updatedCertificates = [...prevAchInfo.certificate];
+              updatedCertificates[ind] = url;
+              return {
+                ...prevAchInfo,
+                certificate: updatedCertificates,
+              };
+            });
+          } catch (error) {
+            console.error("Error uploading image: ", error);
+            // Handle error if needed
+            alert("Something went wrong");
+          }
+        }
+      );
       reader.onload = () => {
         const updatedSelectedCertificates = [...selectedCertificate];
         updatedSelectedCertificates[ind] = reader.result;
         setSelectedCertificate(updatedSelectedCertificates);
       };
       reader.readAsDataURL(file);
-      const updatedCertificates = [...achInfo.certificate];
-      updatedCertificates[ind] = event.target.value;
-      setAchInfo({
-        ...achInfo,
-        certificate: updatedCertificates,
-      });
+      // const updatedCertificates = [...achInfo.certificate];
+      // updatedCertificates[ind] = imageUrl;
+      // setAchInfo({
+      //   ...achInfo,
+      //   certificate: updatedCertificates,
+      // });
     }
   };
 
@@ -1441,6 +1540,8 @@ const AchDetails = () => {
         year: updatedYears,
         certificate: updatedCertificates,
       });
+
+      setSelectedCertificate(selectedCertificate);
     } catch (error) {
       console.log(error);
     }
@@ -1451,6 +1552,8 @@ const AchDetails = () => {
   }, []);
 
   const handleSubmit4 = async (e) => {
+    console.log(achInfo);
+    console.log(selectedCertificate);
     e.preventDefault();
     try {
       const achData = achForms.map((form, index) => ({
@@ -1459,7 +1562,7 @@ const AchDetails = () => {
         certificate: achInfo.certificate[index],
       }));
       const response = await axios.post(
-        "/experts/",
+        "/experts/update/",
         {
           action: 7,
           achievements_json: achData,
@@ -1577,11 +1680,10 @@ const AchDetails = () => {
                 document.querySelector(`#certificate${form.id}`).click()
               }
             >
-              {selectedCertificate[ind] &&
-              selectedCertificate[ind].startsWith("data:") ? (
+              {achInfo.certificate[ind] ? (
                 <div className="relative">
                   <img
-                    src={selectedCertificate[ind]}
+                    src={achInfo.certificate[ind]}
                     alt="Certificate"
                     className="w-32 h-32 object-cover rounded-lg"
                   />
@@ -2062,82 +2164,142 @@ const AccDetails = () => {
 };
 
 const EditProfileExpert = () => {
+  const categoryRef = useRef(null);
   const [currStep, setCurrStep] = useState(0);
+  const scrollLeft = () => {
+    categoryRef.current.scrollBy({
+      left: -150, // Adjust scroll amount as needed
+      behavior: "smooth",
+    });
+  };
+
+  const scrollRight = () => {
+    categoryRef.current.scrollBy({
+      left: 150, // Adjust scroll amount as needed
+      behavior: "smooth",
+    });
+  };
 
   return (
-    <div className="h-auto bg-white mt-5">
-      <div className="md:w-[95%] w-[60%] flex md:flex-row flex-col border border-solid border-slate-300 mx-auto rounded-lg shadow-lg">
-        <div className="md:w-1/4 flex md:flex-col flex-row bg-white justify-start border-r border-solid border-slate-300">
-          <button
-            onClick={() => setCurrStep(0)}
-            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
-              currStep === 0
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
-            }`}
+    <div className="h-auto bg-white w-[68%]">
+      <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
+        Update Profile
+      </div>
+      <div className=" w-full flex md:flex-col border border-solid border-slate-300 mx-auto rounded-sm mt-5">
+        <div className="flex h-full justify-between w-full items-center px-2">
+          <BiSolidCaretLeftSquare
+            className=" shrink-0 border border-slate-300 border-solid mx-2"
+            size={32}
+            onClick={scrollLeft}
+          />
+          <div
+            ref={categoryRef}
+            className=" w-full flex bg-white justify-start overflow-x-scroll"
           >
-            Personal Details
-          </button>
-          <button
-            onClick={() => setCurrStep(1)}
-            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
-              currStep === 1
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
-            }`}
-          >
-            General Details
-          </button>
-          <button
-            onClick={() => setCurrStep(2)}
-            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
-              currStep === 2
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
-            }`}
-          >
-            Education
-          </button>
-          <button
-            onClick={() => setCurrStep(3)}
-            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
-              currStep === 3
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
-            }`}
-          >
-            Skill Set
-          </button>
-          <button
-            onClick={() => setCurrStep(4)}
-            className={`w-full text-xs md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
-              currStep === 4
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
-            }`}
-          >
-            Achievements
-          </button>
-          <button
-            onClick={() => setCurrStep(5)}
-            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
-              currStep === 5
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
-            }`}
-          >
-            Experience
-          </button>
-          <button
-            onClick={() => setCurrStep(6)}
-            className={`w-full text-base md:text-lg py-5 border-b border-solid border-slate-300 cursor-pointer ${
-              currStep === 6
-                ? "bg-[#3E5676] text-white hover:bg-[#3E5676]"
-                : "bg-inherit text-[#3E5676] hover:bg-[#e1ebf9]"
-            }`}
-          >
-            Account Details
-          </button>
+            <button
+              className={`w-fit shrink-0 text-sm md:text-base py-1 px-2 border-b border-solid border-slate-300 ${
+                currStep === 0 ? " bg-white" : "bg-inherit text-black"
+              }`}
+            >
+              <div
+                onClick={() => setCurrStep(0)}
+                className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${
+                  currStep === 0 ? "bg-[#ececec]" : "bg-white"
+                }`}
+              >
+                Personal Details
+              </div>
+            </button>
+            <button
+              className={`w-fit shrink-0 text-sm md:text-base p-5 border-b border-solid border-slate-300 ${
+                currStep === 1 ? " bg-white" : "bg-inherit text-black "
+              }`}
+            >
+              <div
+                onClick={() => setCurrStep(1)}
+                className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${
+                  currStep === 1 ? "bg-[#ececec]" : "bg-white"
+                }`}
+              >
+                General Details
+              </div>
+            </button>
+            <button
+              className={`w-fit shrink-0 text-sm md:text-base p-5 border-b border-solid border-slate-300 ${
+                currStep === 2 ? " bg-white" : "bg-inherit text-black "
+              }`}
+            >
+              <div
+                onClick={() => setCurrStep(2)}
+                className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${
+                  currStep === 2 ? "bg-[#ececec]" : "bg-white"
+                }`}
+              >
+                Education
+              </div>
+            </button>
+            <button
+              className={`w-fit shrink-0 text-sm md:text-base p-5 border-b border-solid border-slate-300 ${
+                currStep === 3 ? "bg-white" : "bg-inherit text-black "
+              }`}
+            >
+              <div
+                onClick={() => setCurrStep(3)}
+                className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${
+                  currStep === 3 ? "bg-[#ececec]" : "bg-white"
+                }`}
+              >
+                Skill Set
+              </div>
+            </button>
+            <button
+              className={`w-fit shrink-0 text-sm md:text-base p-5 border-b border-solid border-slate-300  ${
+                currStep === 4 ? "bg-white" : "bg-inherit text-black"
+              }`}
+            >
+              <div
+                onClick={() => setCurrStep(4)}
+                className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${
+                  currStep === 4 ? "bg-[#ececec]" : "bg-white"
+                }`}
+              >
+                Achievements
+              </div>
+            </button>
+            <button
+              className={`w-fit shrink-0 text-sm md:text-base p-5 border-b border-solid border-slate-300  ${
+                currStep === 5 ? "bg-white" : "bg-inherit text-black"
+              }`}
+            >
+              <div
+                onClick={() => setCurrStep(5)}
+                className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${
+                  currStep === 5 ? "bg-[#ececec]" : "bg-white"
+                }`}
+              >
+                Experience
+              </div>
+            </button>
+            <button
+              className={`w-fit shrink-0 text-sm md:text-base p-5 border-b border-solid border-slate-300  ${
+                currStep === 6 ? "bg-white" : "bg-inherit text-black"
+              }`}
+            >
+              <div
+                onClick={() => setCurrStep(6)}
+                className={`px-3 py-2 text-black rounded-md font-semibold cursor-pointer ${
+                  currStep === 6 ? "bg-[#ececec]" : "bg-white"
+                }`}
+              >
+                Account Details
+              </div>
+            </button>
+          </div>
+          <BiSolidCaretRightSquare
+            className=" h-full left-0 shrink-0 border border-slate-300 border-solid mx-2"
+            size={32}
+            onClick={scrollRight}
+          />
         </div>
         {currStep === 0 && <GeneralDetails />}
         {currStep === 1 && <PersonalDetails />}

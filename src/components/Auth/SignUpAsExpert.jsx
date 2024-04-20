@@ -304,7 +304,7 @@ const SignUpAsExpert = () => {
     Array.from({ length: achForms.length }, () => null)
   );
 
-  const handleCertificateChange = (event, ind) => {
+  const handleCertificateChange = async (event, ind) => {
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
       if (!file.type.match("image/.*")) {
@@ -312,6 +312,36 @@ const SignUpAsExpert = () => {
         return;
       }
       const reader = new FileReader();
+      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
+      const uploadTask = uploadBytesResumable(imgRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Get upload progress as a percentage
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          // setUploadCertificateProgress(progress);
+        },
+        (error) => {
+          console.error("Error uploading image: ", error);
+          // Handle error if needed
+        },
+        () => {
+          // Upload completed successfully
+          console.log("Upload complete");
+        }
+      );
+      try {
+        await uploadTask;
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log(url);
+        setImageUrl(url);
+      } catch (error) {
+        console.error("Error uploading image: ", error);
+        // Handle error if needed
+        alert("Something went wrong");
+      }
       reader.onload = () => {
         const updatedSelectedCertificates = [...selectedCertificate];
         updatedSelectedCertificates[ind] = reader.result;
@@ -319,7 +349,7 @@ const SignUpAsExpert = () => {
       };
       reader.readAsDataURL(file);
       const updatedCertificates = [...achInfo.certificate];
-      updatedCertificates[ind] = event.target.value;
+      updatedCertificates[ind] = imageUrl;
       setAchInfo({
         ...achInfo,
         certificate: updatedCertificates,
@@ -910,6 +940,12 @@ const SignUpAsExpert = () => {
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
+                  onClick={() =>
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth", // This smooth scrolls to the top
+                    })
+                  }
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
@@ -1014,6 +1050,12 @@ const SignUpAsExpert = () => {
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
+                  onClick={() =>
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth", // This smooth scrolls to the top
+                    })
+                  }
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
@@ -1550,6 +1592,12 @@ const SignUpAsExpert = () => {
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
+                  onClick={() =>
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth", // This smooth scrolls to the top
+                    })
+                  }
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
@@ -1640,6 +1688,12 @@ const SignUpAsExpert = () => {
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
+                  onClick={() =>
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth", // This smooth scrolls to the top
+                    })
+                  }
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next
@@ -1776,6 +1830,12 @@ const SignUpAsExpert = () => {
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
+                  onClick={() =>
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth", // This smooth scrolls to the top
+                    })
+                  }
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
                 >
                   Next

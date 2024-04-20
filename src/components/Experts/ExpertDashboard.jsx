@@ -7,6 +7,7 @@ import {
   FaWallet,
   FaMedal,
   FaRegTrashAlt,
+  FaUser,
 } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import {
@@ -32,7 +33,11 @@ import {
   BsGlobe,
   BsThreeDotsVertical,
 } from "react-icons/bs";
-import { RiPagesFill, RiArrowRightSLine, RiCustomerService2Fill } from "react-icons/ri";
+import {
+  RiPagesFill,
+  RiArrowRightSLine,
+  RiCustomerService2Fill,
+} from "react-icons/ri";
 import { PiCrownFill } from "react-icons/pi";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import {
@@ -63,6 +68,7 @@ import "react-calendar-heatmap/dist/styles.css";
 import { Outlet, Link } from "react-router-dom";
 import axios from "../../axios";
 import UpdateProject from "./UpdateProjeect";
+import EditProfileExpert from "../Auth/EditProfileExpert";
 
 const generateRandomData = () => {
   const today = new Date();
@@ -514,6 +520,33 @@ export const Dashboard = () => {
       );
     }, 500);
   }, [a, b, c]);
+  const [expertData, setExpertData] = useState({});
+  const getCurrentExpert = async () => {
+    try {
+      const response = await axios.get("/experts/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      if (
+        response.data.status === 401 ||
+        response.data.status === 400 ||
+        response.data.status === 500
+      ) {
+        console.log(response.data.message);
+        return;
+      }
+      console.log(response.data);
+      setExpertData(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getCurrentExpert();
+  }, []);
 
   // API integration for testimonials of expert start--->>>
   const [expertAllTestimonials, setExpertAllTestimonials] = useState([]);
@@ -550,44 +583,59 @@ export const Dashboard = () => {
   };
   // API integration for testimonials of expert end--->>>
 
-  const [contributions, setContributions] = useState(true);
-  const [meetings, setMeetings] = useState(false);
+  const [meetings, setMeetings] = useState(true);
   const [blogs, setBlogs] = useState(false);
   const [testimonials, setTestimonials] = useState(false);
   const [projects, setProjects] = useState(false);
   const [avgRating, setAvgRating] = useState(true);
   const [ratingDistribution, setRatingDistribution] = useState(false);
 
-  const HandleContributions = () => {
-    setContributions(true);
-    setMeetings(false);
-    setBlogs(false);
-    setTestimonials(false);
-    setProjects(false);
-  };
+  const [blogData, setBlogData] = useState([]);
+
+  
   const HandleMeetings = () => {
-    setContributions(false);
     setMeetings(true);
     setBlogs(false);
     setTestimonials(false);
     setProjects(false);
   };
   const HandleBlogs = () => {
-    setContributions(false);
     setMeetings(false);
     setBlogs(true);
     setTestimonials(false);
     setProjects(false);
   };
+
+  const getExpertAllBlogs = async () => {
+    const cookie = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get("/blogs/?action=2", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const allData = res.data.data;
+      console.log(allData);
+      setBlogData(allData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const HandleTestimonials = () => {
-    setContributions(false);
     setMeetings(false);
     setBlogs(false);
     setTestimonials(true);
     setProjects(false);
   };
   const HandleProjects = () => {
-    setContributions(false);
     setMeetings(false);
     setBlogs(false);
     setTestimonials(false);
@@ -696,46 +744,39 @@ export const Dashboard = () => {
         <div className="flex justify-between">
           <div className="flex gap-[2.65vw] xs:gap-[2.25vw]">
             <img
-              src={expert.profile}
-              className="w-[20vw] h-[20vw] xs:w-[14vw] xs:h-[14vw] sm:w-[12vw] sm:h-[12vw] rounded-lg obj"
+              src={expertData.profile_img}
+              className="w-[20vw] h-[20vw] xs:w-[14vw] xs:h-[14vw] sm:w-[12vw] sm:h-[12vw] rounded-lg object-cover object-center shrink-0"
               alt="profileImg"
             />
             <div className="flex flex-col justify-between py-[0.2vw]">
               <div className=" flex flex-col gap-[0.8vw] xs:gap-[0.5vw] ">
                 <div className="font-bold text-[4vw] xs:text-[2.8vw] sm:text-[2.65vw]">
-                  {expert?.name}
+                  {expertData.first_name} {expertData.last_name}
                 </div>
                 <div className="font-medium text-[3.55vw] xs:text-[2.25vw] sm:text-[2vw] text-[#8F8F8F]">
-                  @{expert?.username}
+                  UltraXpert
                 </div>
               </div>
               <div className="font-semibold text-[3.8vw] xs:text-[2.5vw] sm:text-[2.25vw] text-black/60">
-                {expert?.designation}
+                {expertData?.profession}
               </div>
             </div>
           </div>
-          <div className="text-[5vw] xs:text-[3.12vw] sm:text-[2.85vw]">
-            <FaEdit />
-          </div>
         </div>
-        <div className="mt-[4vw] xs:mt-[2.25vw] w-full text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#525252]">
-          {expert.title}
+        <div className="mt-[4vw] xs:mt-[2.25vw] w-full text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#525252] line-clamp-3">
+          {expertData.about_me}
         </div>
         <div className="mt-[3.65vw] xs:mt-[2vw] flex flex-col gap-[2.25vw] xs:gap-[1.65vw]">
-          <div className="flex gap-[1.85vw] items-center text-[3.45vw] xs:text-[2.25vw] sm:text-[2vw] text-[#515151]">
-            <FaLocationDot className="text-[4.45vw] xs:text-[2.9vw] sm:text-[2.65vw]" />
-            {expert?.location}
-          </div>
           <div className="flex gap-[1.65vw] items-center text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#515151]">
             <FaTags className="text-[4.45vw] xs:text-[2.9vw] sm:text-[2.65vw]" />
             <div className="flex ">
-              {expert?.topSkills.map((item, idx) => {
+              {expertData?.skills?.slice(0, 3)?.map((item, idx) => {
                 return (
                   <div
                     key={idx}
                     className="px-[3vw] xs:px-[2.2vw] sm:px-[2.4vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] border border-[#cdcdcd] border-solid"
                   >
-                    {item}
+                    {item.technology_name}
                   </div>
                 );
               })}
@@ -784,11 +825,11 @@ export const Dashboard = () => {
           <div className="flex md:flex-col justify-between md:justify-around h-[80%] mt-[1.4vw] md:mt-[1vw] lg:mt-[0.2vw] text-[#575757] text-[2.65vw] xs:text-[1.8vw] md:text-[1.2vw] lg:text-[1vw] mb-[1vw] md:mb-[0.4vw] lg:mb-0 px-[2vw] md:border-l border-[#2e2e2e] border-solid">
             <div className="flex items-center gap-[1.2vw] ">
               <IoEyeSharp className="text-[#FF5E18] text-[3.65vw] xs:text-[2.65vw] md:text-[1.65vw] lg:text-[1.45vw]" />{" "}
-              Views <span>{expert.viewCount}</span>
+              Views <span>{expertData.profile_view_count}</span>
             </div>
             <div className="flex items-center gap-[1.2vw]">
               <IoPersonAdd className="text-[#5900C9] text-[3.65vw] xs:text-[2.65vw] md:text-[1.65vw] lg:text-[1.45vw]" />{" "}
-              Followers <span>{expert.viewCount}</span>
+              Followers <span>{expertData.followers_count}</span>
             </div>
             <div className="flex items-center gap-[1.2vw]">
               <RiPagesFill className="text-[#EF0064] text-[3.65vw] xs:text-[2.65vw] md:text-[1.65vw] lg:text-[1.45vw]" />{" "}
@@ -998,14 +1039,7 @@ export const Dashboard = () => {
       </div>
       <div className="border border-[#c7c7c7] border-solid rounded-lg px-5 py-4 ">
         <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-4 mb-4 text-sm md:text-base overflow-x-scroll">
-          <div
-            className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
-              contributions && `bg-[#ececec] rounded-sm`
-            }`}
-            onClick={() => HandleContributions()}
-          >
-            Recent Contributions
-          </div>
+          
           <div
             className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
               meetings && `bg-[#ececec] rounded-sm`
@@ -1018,7 +1052,10 @@ export const Dashboard = () => {
             className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
               blogs && `bg-[#ececec] rounded-sm`
             }`}
-            onClick={() => HandleBlogs()}
+            onClick={() => {
+              getExpertAllBlogs();
+              HandleBlogs();
+            }}
           >
             Recent Blogs
           </div>
@@ -1042,14 +1079,7 @@ export const Dashboard = () => {
             Projects
           </div>
         </div>
-        {/* Contributions section of dashboard */}
-        {contributions && (
-          <div>
-            {expert?.recentContributions?.map((item, idx) => (
-              <Contributioncard key={idx} {...item} />
-            ))}
-          </div>
-        )}
+        
         {/* Meetings section of dashboard */}
         {meetings && (
           <div>
@@ -1084,7 +1114,14 @@ export const Dashboard = () => {
           </div>
         )}
         {/* Blogs section of dashboard */}
-        {blogs && <ShowBlogs />}
+        {blogs && (
+          <ShowBlogs
+            HandleBlogs={HandleBlogs}
+            HandleTestimonials={HandleTestimonials}
+            getExpertAllBlogs={getExpertAllBlogs}
+            blogArray={blogData}
+          />
+        )}
         {/* Testimonials section of dashboard */}
         {testimonials &&
           expertAllTestimonials.length > 0 &&
@@ -1348,6 +1385,43 @@ export const MyBookings = () => {
 
 const ExpertDashboard = () => {
   const [showEditProfile, setShowEditProfile] = useState(false);
+
+  const [expertData, setExpertData] = useState({});
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+
+  const getCurrentExpert = async () => {
+    try {
+      const response = await axios.get("/experts/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      if (
+        response.data.status === 401 ||
+        response.data.status === 400 ||
+        response.data.status === 500
+      ) {
+        console.log(response.data.message);
+        return;
+      }
+      console.log(response.data);
+      setExpertData(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getCurrentExpert();
+  }, []);
+
   const handleShowEditProfile = () => {
     setShowEditProfile(false);
   };
@@ -1370,48 +1444,39 @@ const ExpertDashboard = () => {
             <div className="flex justify-between">
               <div className="flex gap-[0.75vw]">
                 <img
-                  src={expert.profile}
-                  className="w-[6.5vw] h-[6.5vw] rounded-lg"
+                  src={expertData.profile_img}
+                  className="w-[6.5vw] h-[6.5vw] rounded-lg shrink-0 object-cover object-center"
                   alt="profileImg"
                 />
                 <div className="flex flex-col justify-between py-[0.2vw]">
                   <div className=" flex flex-col gap-[0.5vw] ">
-                    <div className="font-bold text-[1.4vw]">{expert?.name}</div>
+                    <div className="font-bold text-[1.4vw]">
+                      {expertData.first_name} {expertData.last_name}
+                    </div>
                     <div className="font-medium text-[1vw] text-[#8F8F8F]">
-                      @{expert?.username}
+                      UltraXpert
                     </div>
                   </div>
                   <div className="font-semibold text-[1.3vw] text-black/60">
-                    {expert?.designation}
+                    {expertData.profession}
                   </div>
                 </div>
               </div>
-              <div className="py-[0.4vw] text-[1.25vw]">
-                <FaEdit
-                  onClick={() =>
-                    !showEditProfile ? setShowEditProfile(true) : null
-                  }
-                />
-              </div>
             </div>
-            <div className=" mt-[1.6vw] w-full text-[1vw] text-[#525252]">
-              {expert.title}
+            <div className=" mt-[1.6vw] w-full text-sm text-[#525252] line-clamp-3">
+              {expertData.about_me}
             </div>
             <div className="mt-[1.25vw] flex flex-col gap-[1vw]">
               <div className="flex gap-[1.25vw] items-center text-[1.25vw] text-[#515151]">
-                <FaLocationDot />
-                {expert?.location}
-              </div>
-              <div className="flex gap-[1.25vw] items-center text-[1.25vw] text-[#515151]">
                 <FaTags />
                 <div className="flex">
-                  {expert?.topSkills.map((item, idx) => {
+                  {expertData?.skills?.slice(0, 3)?.map((item, idx) => {
                     return (
                       <div
                         key={idx}
                         className="px-[2.65vw] xs:px-[2.2vw] sm:px-[1.8vw] lg:px-[1vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] text-[2.85vw] xs:text-[2.25vw] sm:text-[1.45vw] lg:text-[1vw] border border-[#cdcdcd] border-solid"
                       >
-                        {item}
+                        {item.technology_name}
                       </div>
                     );
                   })}
@@ -1421,6 +1486,12 @@ const ExpertDashboard = () => {
           </div>
           <div>
             <ul className="p-0 mt-0 mb-0">
+              <Link to="editprofile" className="no-underline">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                  <FaUser className="text-[1.65vw]" />
+                  Update Profile
+                </li>
+              </Link>
               <Link to="" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <MdSpaceDashboard className="text-[1.65vw]" />
@@ -1479,6 +1550,7 @@ const ExpertDashboard = () => {
         </section>
       }
       <Outlet>
+        <EditProfileExpert />
         <Dashboard />
         <Chats />
         <Leaderboard />

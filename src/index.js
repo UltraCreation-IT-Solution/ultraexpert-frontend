@@ -22,6 +22,7 @@ import Expert from "./components/Experts/Expert";
 import Service from "./components/Services/Service";
 import Blog from "./components/Blogs/Blogs/Blog";
 import CreateBlog from "./components/Blogs/CreateBlog.jsx";
+import EditBlog from "./components/Blogs/EditBlog.jsx";
 import ExpertProfile from "./components/Experts/ExpertProfile";
 import ServiceDescription from "./components/Experts/ServiceDescription";
 import ServiceBooking from "./components/Experts/ServiceBooking";
@@ -53,9 +54,9 @@ import CustomerDashboard, {
   CustomerRecentMeetngs,
   CustomerTransactionHistory,
 } from "./components/Customers/CustomerDashboard.jsx";
-import TestElement from "./TestElement.jsx";
 import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
+import MyCalendar from "./TestElement.jsx";
 const Layout = () => {
   const action = useNavigationType();
   const pathname = useLocation().pathname;
@@ -202,6 +203,10 @@ const appRouter = createBrowserRouter([
             element: <CreateBlog />,
           },
           {
+            path: "editblog/:id",
+            element: <EditBlog />,
+          },
+          {
             path: "blogdetail/:id",
             element: <BlogDetails />,
           },
@@ -214,6 +219,10 @@ const appRouter = createBrowserRouter([
           {
             path: "",
             element: <Dashboard />,
+          },
+          {
+            path: "editprofile",
+            element: <EditProfileExpert />,
           },
           {
             path: "chats",
@@ -235,7 +244,7 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/testelement",
-        element: <TestElement />,
+        element: <MyCalendar />,
       },
       {
         path: "/firebaseuploadtest",
@@ -262,8 +271,8 @@ const appRouter = createBrowserRouter([
             element: <CustomerChats />,
           },
           {
-            path:"showblogs",
-            element:<ShowBlogs/>
+            path: "showblogs",
+            element: <ShowBlogs />,
           },
           {
             path: "mybookings",
@@ -279,7 +288,6 @@ const appRouter = createBrowserRouter([
           },
         ],
       },
-      
     ],
   },
 ]);

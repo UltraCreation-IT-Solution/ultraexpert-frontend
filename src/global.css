@@ -127,3 +127,29 @@ input[type="number"]::-webkit-outer-spin-button {
   object-fit: cover;
   object-position: center;
 }
+
+.rbc-month-header .rbc-header{
+  padding:6px 3px;
+}
+.rbc-row-segment .rbc-event{
+  background-color: white;
+  
+  
+}
+.rbc-event-content{
+  color:black;
+  background-color: white;
+  border:1px solid black;
+  padding:3px;
+  font-size: 14px;
+}
+
+
+.shimmer{
+  background: linear-gradient(-45deg, #eee 40%, #fafafa 50%, #eee 60%);
+  animation: shimmer 2s infinite linear;
+}
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}

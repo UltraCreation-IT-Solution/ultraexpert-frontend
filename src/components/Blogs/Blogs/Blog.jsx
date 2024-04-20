@@ -7,7 +7,13 @@ import {
 } from "../../../constant";
 import { BlogCardHorizontal } from "../../../subsitutes/ShowBlogs";
 import { CiBookmark } from "react-icons/ci";
-import { Link } from "react-router-dom";
+import { FaTags } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa6";
+import { IoEyeSharp } from "react-icons/io5";
+import { BiSolidLike } from "react-icons/bi";
+import { RiArrowRightSLine } from "react-icons/ri";
+import { Link, useNavigate } from "react-router-dom";
+
 import axios from "../../../axios";
 
 export const BlogBody = () => {
@@ -30,7 +36,7 @@ export const BlogBody = () => {
       });
       const allData = res.data.data.all;
       setAllBlogsArray(allData);
-      console.log(...data)
+      console.log(...data);
     } catch (error) {
       console.log(error);
     }
@@ -38,11 +44,11 @@ export const BlogBody = () => {
   useEffect(() => {
     getData();
   }, []);
-console.log(allBlogsArray)
+  console.log(allBlogsArray);
   function formatDate(dateString) {
     const date = new Date(dateString);
-    const options = { day: 'numeric', month: 'short', year: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
   }
 
   return (
@@ -157,8 +163,17 @@ console.log(allBlogsArray)
           All Blogs
         </div>
         <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
-          {allBlogsArray?.map((item,index) => (
-            <BlogCardHorizontal key={item.id} index={index} id={item.id} items={item} title={item.title} date={formatDate(item.date_created.split("T")[0])} />
+          {allBlogsArray?.map((item, index) => (
+            <BlogCard
+              key={item.id}
+              index={index}
+              id={item.id}
+              items={item}
+              title={item.title}
+              tags={item.tags}
+              image={item.images[0]}
+              date={formatDate(item.date_created.split("T")[0])}
+            />
           ))}
         </div>
       </div>
@@ -175,7 +190,100 @@ export const SearchedBlog = ({ array }) => {
     </div>
   );
 };
-
+const Author = ({ createAuthor }) => {
+  useEffect(() => {
+    console.log("author");
+  }, [localStorage.getItem("isAuthor")]);
+  return localStorage.getItem("isAuthor") === "true" ? (
+    <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
+      <div className="text-xl lg:text-3xl font-bold text-center px-5">
+        Write a Blog
+      </div>
+      <Link
+        to="createblog"
+        className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
+      >
+        Write a Blog
+      </Link>
+    </div>
+  ) : (
+    <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
+      <div className="flex flex-col px-5">
+        <div className="text-xl lg:text-3xl font-bold text-center">
+          Become an Author
+        </div>
+        <div className="text-center text-sm">(If you want to write a blog)</div>
+      </div>
+      <button
+        onClick={(e) => createAuthor(e)}
+        className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
+      >
+        Become an Author
+      </button>
+    </div>
+  );
+};
+export const BlogCard = ({
+  index,
+  id,
+  title,
+  date,
+  tags,
+  views,
+  likes,
+  image,
+}) => {
+  const navigate = useNavigate();
+  return (
+    <div
+      className={`w-full px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
+        index % 2 === 0
+          ? `bg-[#ececec]`
+          : `border border-[#c7c7c7] border-solid `
+      }`}
+    >
+      <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+        <img
+          className=" w-full h-48 object-cover sm:h-36 sm:w-40 rounded-md shrink-0 self-start"
+          src={image}
+          alt=""
+        />
+        <div className="text-[#575757]">
+          <div className="text-base font-semibold line-clamp-2 text-ellipsis " onClick={()=> navigate(`/blog/blogdetail/${id}`)}>
+            {title}
+          </div>
+          <div className="text-sm text-[#898888]">{date}</div>
+          <div className="mt-3 text-xs flex items-center gap-2">
+            <FaTags />
+            <div className="flex items-center flex-wrap gap-2">
+              {tags?.map((item) => (
+                <div className="text-[10px] shrink-0 border border-solid border-slate-300 px-2 py-1 rounded-xl cursor-pointer">
+                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex gap-[3vw] sm:gap-0 sm:flex-col">
+            <div className="mt-3 text-xs flex items-center gap-2">
+              <IoEyeSharp /> {views>0 ? views : "no views"} 
+            </div>
+            <div className="mt-3 flex items-center gap-4">
+              <div className=" text-xs flex items-center gap-1 sm:gap-2">
+                <BiSolidLike /> {likes>0 ? likes + "likes": "no likes"} 
+              </div>
+              <div className="border border-solid border-slate-400 text-[10px] rounded-full px-3 py-0.5 flex items-center cursor-pointer gap-1">
+                <FaPlus /> Add to Fav
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="hidden border border-solid border-slate-300 h-fit sm:flex items-center justify-center rounded-full text-4xl font-thin self-center shrink-0 cursor-pointer">
+        <RiArrowRightSLine onClick={()=> navigate(`/blog/blogdetail/${id}`)} />
+      </div>
+    </div>
+  );
+};
 const Blogs = () => {
   const [searchText, setSearchText] = useState("");
   const [blogArray, setBlogArray] = useState(allBlogs);
@@ -330,36 +438,9 @@ const Blogs = () => {
           </div>
         ))}
       </div>
-      {isAuthor ? (
-        <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
-          <div className="text-xl lg:text-3xl font-bold text-center px-5">
-            Write a Blog
-          </div>
-          <Link
-            to="createblog"
-            className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
-          >
-            Write a Blog
-          </Link>
-        </div>
-      ) : (
-        <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
-          <div className="flex flex-col px-5">
-            <div className="text-xl lg:text-3xl font-bold text-center">
-              Become an Author
-            </div>
-            <div className="text-center text-sm">
-              (If you want to write a blog)
-            </div>
-          </div>
-          <button
-            onClick={(e) => createAuthor(e)}
-            className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
-          >
-            Become an Author
-          </button>
-        </div>
-      )}
+      {localStorage.getItem("isExpert") === "true" ? (
+        <Author createAuthor={createAuthor} />
+      ) : null}
 
       {searchText.length === 0 ? (
         <BlogBody />
