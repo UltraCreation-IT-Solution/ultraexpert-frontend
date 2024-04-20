@@ -1,61 +1,105 @@
-import React, { useEffect, useState } from "react";
-import { FiUpload, FiX, FiEdit } from "react-icons/fi";
-import { imageDB } from "./components/firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "./axios";
+import ReactQuiz from "./TestElement2";
 
-const TestElement = () => {
-  const [projects, setProjects] = useState([]);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [type, setType] = useState("");
-  const [role, setRole] = useState("");
-  const [tags, setTags] = useState([]);
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [tagInput, setTagInput] = useState("");
-  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
-
-  const cookies = document.cookie.split("; ");
-  const jsonData = {};
-
-  cookies.forEach((item) => {
-    const [key, value] = item.split("=");
-    jsonData[key] = value;
-  });
-  const fetchProjects = async () => {
-    try {
-      const response = await axios.get("/experts/?action=1", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
-      console.log(response.data.data.projects);
-      setProjects(response.data.data.projects);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const ThoughtProcess = () => {
+  const [test_id, setTest_id] = useState("");
+  const [thoughtProcess, setThoughtProcess] = useState([]);
+  const [repord_id, setRepord_id] = useState("");
   useEffect(() => {
-    fetchProjects();
+    const fetchQuestions = async () => {
+      const cookies = document.cookie.split("; ");
+      const jsonData = {};
+
+      cookies.forEach((item) => {
+        const [key, value] = item.split("=");
+        jsonData[key] = value;
+      });
+      try {
+        const response = await axios.get(
+          "/inspections/test/?action=1&skill_name=reacthvhgvghchg",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${jsonData.access_token}`,
+            },
+          }
+        );
+        setTest_id(response.data.data.test_id);
+        setThoughtProcess(response.data.data.thought_process);
+        setRepord_id(response.data.data.report_id);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchQuestions();
   }, []);
 
-  const handleSubmit = async (e) => {
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes timer
+  const [isTimeOver, setIsTimeOver] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime === 0) {
+          clearInterval(timer);
+          setIsTimeOver(true);
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (isTimeOver) {
+      // Handle time over action, e.g., show popup
+      // You can add custom logic here
+      console.log("Time is over");
+    }
+  }, [isTimeOver]);
+
+  const handleDragStart = (e, index) => {
+    e.dataTransfer.setData("index", index);
+  };
+
+  const handleDragOver = (e, index) => {
     e.preventDefault();
+  };
+
+  const handleDrop = (e, newIndex) => {
+    const droppedIndex = parseInt(e.dataTransfer.getData("index"));
+    const newThoughtProcess = [...thoughtProcess];
+    const movedItem = newThoughtProcess.splice(droppedIndex, 1)[0];
+    newThoughtProcess.splice(newIndex, 0, movedItem);
+    setThoughtProcess(newThoughtProcess);
+  };
+
+  const handleSubmit = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    // console.log(`'${thoughtProcess}'`);
+    const arrayString =
+      '"[' + thoughtProcess.map((item) => "'" + item + "'").join(", ") + ']"';
+    console.log(arrayString);
     try {
       const response = await axios.post(
-        "/experts/update/",
+        "/inspections/test/",
         {
-          action: 8,
-          projects_json: projects,
+          action: 1,
+          answer: arrayString,
+          report_id: repord_id,
+          test_id: test_id,
         },
         {
           headers: {
@@ -68,316 +112,104 @@ const TestElement = () => {
     } catch (error) {
       console.log(error);
     }
-    // console.log(projects);
-  };
-  const handleAddProject = () => {
-    if (!title || !description || !image || !type) {
-      alert("Please fill in all fields");
-      return;
-    }
-
-    const newProject = { title, description, image, type, role, tags };
-    if (editingIndex !== null) {
-      // Replace the project at the editing index
-      const updatedProjects = [...projects];
-      updatedProjects[editingIndex] = newProject;
-      setProjects(updatedProjects);
-      setEditingIndex(null);
-    } else {
-      // Add the new project
-      setProjects([...projects, newProject]);
-    }
-
-    // Reset form fields
-    setTitle("");
-    setDescription("");
-    setImage("");
-    setType("");
-    setRole("");
-    setTags([]);
-  };
-
-  const handleEditProject = (index) => {
-    // Set the project fields to the form fields for editing
-    const projectToEdit = projects[index];
-    setTitle(projectToEdit.title);
-    setDescription(projectToEdit.description);
-    setImage(projectToEdit.image);
-    setType(projectToEdit.type);
-    setRole(projectToEdit.role);
-    setTags(projectToEdit.tags);
-    setEditingIndex(index);
-
-    // Scroll to the top of the page
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const handleDeleteProject = (index) => {
-    const updatedProjects = projects.filter((_, i) => i !== index);
-    setProjects(updatedProjects);
-  };
-
-  const handleImageUpload = async (e) => {
-    if (e.target.files.length > 0) {
-      setImage(URL.createObjectURL(e.target.files[0]));
-      const file = e.target.files[0];
-      if (file) {
-        const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-        const uploadTask = uploadBytesResumable(imgRef, file);
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            // Get upload progress as a percentage
-            const progress = Math.round(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            );
-            setUploadProfileProgress(progress);
-          },
-          (error) => {
-            console.error("Error uploading image: ", error);
-            // Handle error if needed
-          },
-          () => {
-            // Upload completed successfully
-            console.log("Upload complete");
-          }
-        );
-
-        try {
-          await uploadTask;
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
-          console.log(url);
-          setImageUrl(url);
-          setImage(url);
-        } catch (error) {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-          alert("Something went wrong");
-        }
-      }
-    }
-  };
-  const handleImageRemove = () => {
-    setImage("");
   };
 
   const handleCancel = () => {
-    // Add your code here to navigate back to the previous page
-    // For simplicity, let's just log a message
-    console.log("Cancelled");
-    setEditingIndex(null); // Reset editing index
+    // Handle cancel action, e.g., navigate back to previous route
+    // You can use react-router-dom or any routing library for this
+    console.log("Cancelled the test");
   };
 
-  const isFormEmpty =
-    !title || !description || !image || !type || (type === "group" && !role);
-
-  const addTag = () => {
-    if (tagInput.trim() !== "") {
-      setTags([...tags, tagInput.trim()]);
-      setTagInput("");
-    }
-  };
-
-  const removeTag = (index) => {
-    const updatedTags = [...tags];
-    updatedTags.splice(index, 1);
-    setTags(updatedTags);
-  };
-
+  // Format the time left to mm:ss
+  const formattedTimeLeft = new Date(timeLeft * 1000)
+    .toISOString()
+    .substr(14, 5);
   return (
-    <div className="max-w-3xl mx-auto mt-20 px-4 border border-gray-500 rounded-lg shadow-lg">
-      <div className="flex justify-between items-center bg-white border border-slate-300 border-solid px-6 py-3 rounded-t-lg">
-        <h2 className="text-xl font-semibold">Add Project</h2>
-        <div className="flex flex-wrap justify-between">
+    <div className="min-h-screen bg-white flex flex-col justify-center items-center">
+      <div className="container mx-auto px-4 py-8 bg-white rounded-lg shadow-md mb-8 border border-blue-500">
+        <h2 className="text-2xl font-semibold mb-4">
+          Thought Process Reordering Quiz
+        </h2>
+        <div className="flex items-center justify-center bg-blue-300 text-white px-6 py-3 rounded-full shadow-md mb-4">
+          <svg
+            className="w-6 h-6 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            ></path>
+          </svg>
+          <span className="text-xl">{formattedTimeLeft}</span>
+        </div>
+        <p className="mb-4">
+          Drag and drop the components to reorder them in the correct order:
+        </p>
+        <ul className="flex flex-wrap gap-2 py-4">
+          {thoughtProcess.map((step, index) => (
+            <li
+              key={index}
+              className="bg-white text-gray-800 border border-blue-500 px-4 py-2 rounded-md cursor-move shadow-md flex-grow"
+              draggable
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={(e) => handleDrop(e, index)}
+            >
+              {step}
+            </li>
+          ))}
+        </ul>
+      </div>
+      {isTimeOver && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+          <div className="bg-white rounded-lg p-8 shadow-lg">
+            <p className="text-2xl font-semibold text-gray-800 mb-4">
+              Time's Up!
+            </p>
+            <p className="text-gray-600">
+              Your time is over. Please submit your answers.
+            </p>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mt-4"
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      )}
+      <div className="bg-white py-4 w-full border-t border-blue-500">
+        <div className="container mx-auto flex justify-between">
           <button
+            className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600"
             onClick={handleCancel}
-            className="bg-red-600 text-white px-4 py-2 rounded mr-4  hover:bg-gray-600"
           >
             Cancel
           </button>
           <button
+            className="bg-white text-blue-500 px-4 py-2 rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent"
             onClick={handleSubmit}
-            disabled={projects.length === 0}
-            className={`bg-blue-500 text-white px-6 py-2 rounded ${
-              projects.length === 0 && "opacity-50 cursor-not-allowed"
-            }`}
           >
-            Submit Projects
+            Submit
           </button>
         </div>
       </div>
-      <div className={`p-6 ${projects.length > 0 && "shadow-lg"}`}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <input
-              type="text"
-              placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="border border-slate-300 rounded px-4 py-2 mb-4 focus:outline-none focus:border-blue-500"
-            />
-            <textarea
-              placeholder="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="border border-slate-300 rounded px-4 py-2 h-32 resize-none mb-4 focus:outline-none focus:border-blue-500"
-            />
-            {type === "group" && (
-              <input
-                type="text"
-                placeholder="Role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="border border-slate-300 rounded-lg px-4 py-2 mb-4 focus:outline-none focus:border-blue-500"
-              />
-            )}
-          </div>
-          <div className="flex flex-col ">
-            <div className="relative h-32 border border-slate-300 border-solid rounded overflow-hidden mb-4">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
-              {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
-                <p>Upload Progress: {uploadProfileProgress}%</p>
-              ) : image ? (
-                <div className="relative w-full h-full flex justify-center items-center">
-                  <img
-                    src={image}
-                    alt="Preview"
-                    className="max-h-28 max-w-44 object-cover rounded"
-                  />
-                  <button
-                    onClick={handleImageRemove}
-                    className="absolute top-2 right-2 bg-slate-400 text-white p-1 rounded hover:bg-gray-600 flex justify-center items-center"
-                  >
-                    <FiX className="w-4 h-4" />
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center justify-center w-full h-full text-gray-600">
-                  <FiUpload className="w-10 h-10" />
-                  <span className="ml-2">Upload Image</span>
-                </div>
-              )}
-            </div>
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              className="border border-slate-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500"
-            >
-              <option value="">Select Type</option>
-              <option value="group">Group Project</option>
-              <option value="indie">Indie Project</option>
-            </select>
-          </div>
-        </div>
-        <div className="flex flex-wrap border border-slate-300 rounded px-2 py-2 ">
-          {tags.map((tag, index) => (
-            <div
-              key={index}
-              className="flex gap-1 items-center bg-slate-300 text-gray-600 pl-4 pr-2 py-1 rounded-full text-sm mr-2 mb-2"
-            >
-              {tag}
-              <FiX
-                onClick={() => removeTag(index)}
-                className="ml-1 cursor-pointer text-center text-lg"
-              />
-            </div>
-          ))}
-        </div>
-        <div className="flex items-center">
-          <input
-            type="text"
-            placeholder="Add Tag"
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            className="border border-slate-300 rounded px-4 py-2 mr-2 focus:outline-none focus:border-blue-500"
-          />
-          <button
-            onClick={addTag}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Add
-          </button>
-        </div>
-        <button
-          onClick={handleAddProject}
-          disabled={isFormEmpty}
-          className={`bg-blue-500 text-white mt-4 px-6 py-3 rounded block mx-auto ${
-            isFormEmpty && "opacity-50 cursor-not-allowed"
-          }`}
-        >
-          {editingIndex !== null ? "Update Project" : "Add Project"}
-        </button>
-      </div>
-      <div className="mt-8">
-        {projects.length > 0 && (
-          <div className="text-xl font-semibold">Your Projects</div>
-        )}
-        <div className="">
-          {projects?.map((project, index) => (
-            <div
-              key={index}
-              className="mb-8 p-6 bg-white rounded shadow-md border border-gray-200"
-            >
-              <h3 className="text-xl font-semibold mb-4">{project.title}</h3>
-              <p className="text-gray-700 mb-4">{project.description}</p>
-              <div className="flex gap-10">
-                {project.image && (
-                  <img
-                    src={project.image}
-                    alt="Project"
-                    className="mb-4 h-44 w-60 object-cover rounded"
-                  />
-                )}
-                <div>
-                  <p className="text-sm font-medium">
-                    <span className="font-extrabold">Type: </span>
-                    {project.type === "group"
-                      ? "Group Project"
-                      : "Indie Project"}
-                  </p>
-                  {project.type === "group" && (
-                    <p className="text-sm font-medium">
-                      <span className="font-extrabold">Role: </span>
-                      {project.role}
-                    </p>
-                  )}
-                  <div className="flex flex-wrap mt-2">
-                    {project.tags.map((tag, tagIndex) => (
-                      <span
-                        key={tagIndex}
-                        className="flex gap-1 items-center bg-slate-300 text-gray-600 pl-4 pr-2 py-1 rounded-full text-sm mr-2 mb-2"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex mt-2">
-                    <button
-                      onClick={() => handleEditProject(index)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2 hover:bg-blue-600"
-                    >
-                      <FiEdit /> Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteProject(index)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="fixed top-4 right-4 bg-white p-4 rounded-md shadow-md border border-blue-500 text-blue-500">
+        {formattedTimeLeft}
       </div>
     </div>
   );
 };
+function TestElement() {
+  return (
+    // <ThoughtProcess />
+    <ReactQuiz />
+  );
+}
 
 export default TestElement;

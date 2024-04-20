@@ -118,11 +118,28 @@ export const CustomerProfile = () => {
   ];
 
   const [selectedSkill, setSelectedSkill] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
 
-  const handleChange = (skill) => {
-    if (!selectedSkill.includes(skill)) {
-      setSelectedSkill([...selectedSkill, skill]);
+  const handleChange = (event) => {
+    const { value } = event.target;
+    setInputValue(value);
+    setSuggestions(
+      interest.filter((suggestion) =>
+        suggestion.name.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    // Add suggestion to selected skills
+    if (!selectedSkill.includes(suggestion.name)) {
+      setSelectedSkill([...selectedSkill, suggestion.name]);
+      console.log(selectedSkill);
     }
+    // Clear input and suggestions
+    setInputValue("");
+    setSuggestions([]);
   };
   const saveProfile = async () => {
     const cookies = document.cookie.split("; ");
@@ -208,6 +225,7 @@ export const CustomerProfile = () => {
             return;
           }
           console.log(res2.data);
+          alert("Profile updated successfully!");
         } catch (error) {
           console.log(error);
         }
@@ -252,6 +270,14 @@ export const CustomerProfile = () => {
   const handleRemove = (skill) => {
     setSelectedSkill(selectedSkill.filter((s) => s !== skill));
   };
+
+  const handleNewSkillAdd = (value) => {
+    if (!selectedSkill.includes(value)) {
+      setSelectedSkill([...selectedSkill, value]);
+    }
+    setInputValue("");
+  };
+
   return (
     <div className="w-full md:w-[68%] border border-solid border-slate-300 p-5 rounded-sm">
       <div className="flex items-center justify-between border-b border-solid border-slate-200 pb-3">
@@ -393,10 +419,10 @@ export const CustomerProfile = () => {
             <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
               <div className="flex flex-wrap gap-2">
                 {selectedSkill.length > 0 ? (
-                  selectedSkill.map((skill) => {
+                  selectedSkill.map((skill, ind) => {
                     return (
                       <div
-                        key={skill}
+                        key={ind}
                         className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black"
                       >
                         {skill}
@@ -416,7 +442,40 @@ export const CustomerProfile = () => {
                 )}
               </div>
             </div>
-            <div className="border border-solid border-slate-200 px-4 py-2 rounded-md mb-4">
+            <input
+              type="text"
+              id="interests"
+              value={inputValue}
+              onChange={handleChange}
+              className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none"
+              placeholder="Enter your interests"
+            />
+            {suggestions.length > 0
+              ? inputValue.length > 0 && (
+                  <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
+                    <div>
+                      {suggestions.map((suggestion, ind) => (
+                        <div
+                          key={suggestion.id}
+                          onClick={() => handleSuggestionClick(suggestion)}
+                          className="cursor-pointer hover:bg-gray-100 px-4 py-1"
+                        >
+                          {suggestion.name}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              : inputValue.length > 0 && (
+                  <button
+                    onClick={() => handleNewSkillAdd(inputValue)}
+                    className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none bg-green-500 text-white w-[30%] mt-2"
+                  >
+                    Add Interest
+                  </button>
+                )}
+
+            {/* <div className="border border-solid border-slate-200 px-4 py-2 rounded-md mb-4">
               <div className="flex flex-wrap justifty-around gap-3">
                 {interest.map((skill, ind) => {
                   return (
@@ -432,7 +491,7 @@ export const CustomerProfile = () => {
                   );
                 })}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

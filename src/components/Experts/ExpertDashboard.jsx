@@ -491,11 +491,6 @@ const ShowMyProjects = () => {
     </div>
   );
 };
-const AllUserTestimonials = ({ expertAllTestimonials }) => {
-  return expertAllTestimonials?.map((item, index) => (
-    <TestimonialsCard key={index} item={item} index={index} />
-  ));
-};
 export const Dashboard = () => {
   const [a, seta] = useState(0);
   const [b, setb] = useState(0);
@@ -583,44 +578,58 @@ export const Dashboard = () => {
   };
   // API integration for testimonials of expert end--->>>
 
-  const [contributions, setContributions] = useState(true);
-  const [meetings, setMeetings] = useState(false);
+  const [meetings, setMeetings] = useState(true);
   const [blogs, setBlogs] = useState(false);
   const [testimonials, setTestimonials] = useState(false);
   const [projects, setProjects] = useState(false);
   const [avgRating, setAvgRating] = useState(true);
   const [ratingDistribution, setRatingDistribution] = useState(false);
 
-  const HandleContributions = () => {
-    setContributions(true);
-    setMeetings(false);
-    setBlogs(false);
-    setTestimonials(false);
-    setProjects(false);
-  };
+  const [blogData, setBlogData] = useState([]);
+
   const HandleMeetings = () => {
-    setContributions(false);
     setMeetings(true);
     setBlogs(false);
     setTestimonials(false);
     setProjects(false);
   };
   const HandleBlogs = () => {
-    setContributions(false);
     setMeetings(false);
     setBlogs(true);
     setTestimonials(false);
     setProjects(false);
   };
+
+  const getExpertAllBlogs = async () => {
+    const cookie = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get("/blogs/?action=2", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const allData = res.data.data;
+      console.log(allData);
+      setBlogData(allData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const HandleTestimonials = () => {
-    setContributions(false);
     setMeetings(false);
     setBlogs(false);
     setTestimonials(true);
     setProjects(false);
   };
   const HandleProjects = () => {
-    setContributions(false);
     setMeetings(false);
     setBlogs(false);
     setTestimonials(false);
@@ -1026,14 +1035,6 @@ export const Dashboard = () => {
         <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-4 mb-4 text-sm md:text-base overflow-x-scroll">
           <div
             className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
-              contributions && `bg-[#ececec] rounded-sm`
-            }`}
-            onClick={() => HandleContributions()}
-          >
-            Recent Contributions
-          </div>
-          <div
-            className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
               meetings && `bg-[#ececec] rounded-sm`
             }`}
             onClick={() => HandleMeetings()}
@@ -1044,7 +1045,10 @@ export const Dashboard = () => {
             className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
               blogs && `bg-[#ececec] rounded-sm`
             }`}
-            onClick={() => HandleBlogs()}
+            onClick={() => {
+              getExpertAllBlogs();
+              HandleBlogs();
+            }}
           >
             Recent Blogs
           </div>
@@ -1068,14 +1072,7 @@ export const Dashboard = () => {
             Projects
           </div>
         </div>
-        {/* Contributions section of dashboard */}
-        {contributions && (
-          <div>
-            {expert?.recentContributions?.map((item, idx) => (
-              <Contributioncard key={idx} {...item} />
-            ))}
-          </div>
-        )}
+
         {/* Meetings section of dashboard */}
         {meetings && (
           <div>
@@ -1110,7 +1107,14 @@ export const Dashboard = () => {
           </div>
         )}
         {/* Blogs section of dashboard */}
-        {blogs && <ShowBlogs />}
+        {blogs && (
+          <ShowBlogs
+            HandleBlogs={HandleBlogs}
+            HandleTestimonials={HandleTestimonials}
+            getExpertAllBlogs={getExpertAllBlogs}
+            blogArray={blogData}
+          />
+        )}
         {/* Testimonials section of dashboard */}
         {testimonials &&
           expertAllTestimonials.length > 0 &&
@@ -1515,13 +1519,14 @@ const ExpertDashboard = () => {
                   Chat
                 </li>
               </Link>
-              <li
+              <Link
+                to={"getcertified"}
                 className="cursor-pointer flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]"
                 onClick={() => setShowInstructions(true)}
               >
                 <BsFillPatchCheckFill className="text-[1.55vw]" />
                 Get Certified
-              </li>
+              </Link>
               <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                 <BsFillPersonLinesFill className="text-[1.55vw]" />
                 Go to Experts
@@ -1543,14 +1548,15 @@ const ExpertDashboard = () => {
         <Dashboard />
         <Chats />
         <Leaderboard />
+        <Instructions handleShowInstructions={handleShowInstructions} />
         <MyBookings />
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />
       )}
-      {showInstructions === true && (
-        <Instructions handleShowInstructions={handleShowInstructions} />
-      )}
+      {/* {showInstructions === true && (
+        
+      )} */}
     </div>
   );
 };
