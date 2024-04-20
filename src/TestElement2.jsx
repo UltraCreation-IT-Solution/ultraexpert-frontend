@@ -1,134 +1,186 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "./axios";
+import PropTypes from "prop-types";
+import { FcAlarmClock } from "react-icons/fc";
+
+function Question({ question, options, selectedOption, onOptionSelect }) {
+  return (
+    <div className="container mx-auto px-4 py-8 bg-white rounded-lg shadow-md mb-8 border border-blue-500">
+      <h2 className="text-2xl font-semibold mb-4">React Quiz</h2>
+      {typeof question === "object" ? (
+        <div className="bg-gray-100 px-4 py-2 rounded-md mb-4">
+          <code>{question.code}</code>
+        </div>
+      ) : (
+        <p className="text-gray-800 mb-4">{question}</p>
+      )}
+      <div className="grid grid-cols-1 gap-4">
+        {options.map(({ option, text }) => (
+          <button
+            key={option}
+            className={`bg-white text-gray-800 border border-gray-300 px-4 py-2 rounded-md hover:bg-blue-100 focus:outline-none ${
+              selectedOption === option ? "bg-blue-400" : ""
+            }`}
+            onClick={() => onOptionSelect(option)}
+          >
+            {text}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+Question.propTypes = {
+  question: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      code: PropTypes.string.isRequired,
+    }),
+  ]).isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      option: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  selectedOption: PropTypes.string,
+  onOptionSelect: PropTypes.func.isRequired,
+};
 
 function ReactQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [score, setScore] = useState(0);
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [timer, setTimer] = useState(60); // Initial timer value in seconds
 
-  const questions = [
-    {
-      question:
-        "What is the purpose of React's componentDidMount lifecycle method?",
-      options: {
-        a: "To update the component's state",
-        b: "To perform side effects, such as data fetching or DOM manipulations",
-        c: "To initialize the component's props",
-        d: "To render the component on the screen",
-      },
-      question_id: "b03cc186-fdbe-11ee-aec7-0242ac140004",
-      correct_answer: "b",
-    },
-    {
-      question:
-        "Which React hook is used to conditionally run effects in a functional component?",
-      options: {
-        a: "useEffect",
-        b: "useLayoutEffect",
-        c: "useContext",
-        d: "useReducer",
-      },
-      question_id: "b03cc26c-fdbe-11ee-aec7-0242ac140004",
-      correct_answer: "a",
-    },
-    {
-      question: "What will be the output of the following React code?",
-      question_id: "b03cc302-fdbe-11ee-aec7-0242ac140004",
-      code: "function MyComponent() {\n  const [count, setCount] = useState(0);\n\n  useEffect(() => {\n    document.title = `You clicked ${count} times`;\n  });\n\n  return (\n    <button onClick={() => setCount(count + 1)}>\n      Click me\n    </button>\n  );\n}",
-      options: {
-        a: "This component will not render anything",
-        b: "The document title will not update when the button is clicked",
-        c: "The component will update the document title with the count of button clicks",
-        d: "The count of button clicks will not update",
-      },
-      correct_answer: "c",
-    },
-    {
-      question: "What is the purpose of React's PureComponent?",
-      options: {
-        a: "To optimize performance by preventing unnecessary re-renders",
-        b: "To handle user input events",
-        c: "To manage state in functional components",
-        d: "To create reusable components",
-      },
-      question_id: "b03cc3b6-fdbe-11ee-aec7-0242ac140004",
-      correct_answer: "a",
-    },
-    {
-      question:
-        "Which of the following is NOT a valid way to pass data from a parent component to a child component in React?",
-      options: {
-        a: "Using props",
-        b: "Using context",
-        c: "Using refs",
-        d: "Using state",
-      },
-      question_id: "b03cc44c-fdbe-11ee-aec7-0242ac140004",
-      correct_answer: "d",
-    },
-  ];
+  const cookies = document.cookie.split(";");
+  const jsonData = {};
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "/inspections/test/?action=1&skill_name=react",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${jsonData.access_token}`,
+            },
+          }
+        );
+        console.log(response);
+        setQuestions(response.data?.data?.questions || []);
+      } catch (error) {
+        setError("Error fetching data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer <= 0) {
+          setCurrentQuestion((prevQuestion) => prevQuestion + 1);
+          return 60; // Reset timer for the next question
+        } else {
+          return prevTimer - 1;
+        }
+      });
+    }, 1000);
+
+    // Cleanup function
+    return () => clearInterval(timerId);
+  }, [currentQuestion]);
+
+  useEffect(() => {
+    // Reset timer when current question changes
+    setTimer(60);
+  }, [currentQuestion]);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
   };
 
   const handleNextQuestion = () => {
-    if (selectedOption === questions[currentQuestion].correct_answer) {
-      setScore(score + 1);
-    }
+    const selectedOptionText =
+      questions[currentQuestion].options[selectedOption];
+    console.log(`Selected Option: ${selectedOptionText}`);
     setSelectedOption(null);
-    setCurrentQuestion(currentQuestion + 1);
+    setCurrentQuestion((prevQuestion) => prevQuestion + 1);
   };
 
   const handleFinishQuiz = () => {
     // Handle finish quiz action, e.g., submit score to server
-    console.log("Quiz finished. Score:", score);
+    console.log("Quiz finished. Score:");
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (currentQuestion >= questions.length) {
+    return (
+      <div>
+        <h2>Quiz completed</h2>
+        <button onClick={handleFinishQuiz}>Finish Quiz</button>
+      </div>
+    );
+  }
+
+  const currentQuestionData = questions[currentQuestion];
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center items-center">
-      <div className="container mx-auto px-4 py-8 bg-white rounded-lg shadow-md mb-8 border border-blue-500">
-        <h2 className="text-2xl font-semibold mb-4">React Quiz</h2>
-        <p className="text-gray-800 mb-4">
-          {questions[currentQuestion].question}
-        </p>
-        {questions[currentQuestion].code && (
-          <div className="bg-gray-100 px-4 py-2 rounded-md mb-4">
-            <code>{questions[currentQuestion].code}</code>
+      <div className="mx-auto container">
+        <div className="flex justify-between items-center w-full p-4  bg-slate-300 rounded">
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            // onClick={handleCancelTest}
+          >
+            Cancel Test
+          </button>
+          <div className="flex items-center border-slate-400 border border-solid p-2 rounded">
+            <FcAlarmClock />
+            <span className="font-bold ml-2"> Time Left: </span>
+            <span className=" ml-2">{timer} seconds</span>
           </div>
-        )}
-        <div className="grid grid-cols-1 gap-4">
-          {Object.entries(questions[currentQuestion].options).map(
-            ([option, text]) => (
-              <button
-                key={option}
-                className={`bg-white text-gray-800 border border-gray-300 px-4 py-2 rounded-md hover:bg-blue-100 focus:outline-none ${
-                  selectedOption === option ? "bg-blue-200" : ""
-                }`}
-                onClick={() => handleOptionSelect(option)}
-              >
-                {text}
-              </button>
-            )
-          )}
         </div>
       </div>
-      <div>
-        {currentQuestion < questions.length - 1 ? (
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mr-4"
-            onClick={handleNextQuestion}
-          >
-            Next Question
-          </button>
-        ) : (
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mr-4"
-            onClick={handleFinishQuiz}
-          >
-            Finish Quiz
-          </button>
+      <Question
+        question={currentQuestionData.question}
+        options={Object.entries(currentQuestionData.options).map(
+          ([option, text]) => ({
+            option,
+            text,
+          })
         )}
-      </div>
+        selectedOption={selectedOption}
+        onOptionSelect={handleOptionSelect}
+      />
+      <button
+        className={`bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mr-4 ${
+          timer <= 0 ? "pointer-events-none" : ""
+        }`}
+        onClick={handleNextQuestion}
+        disabled={timer <= 0}
+      >
+        Next Question
+      </button>
     </div>
   );
 }

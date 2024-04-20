@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "./axios";
 import ReactQuiz from "./TestElement2";
 
-function TestComponent() {
+const ThoughtProcess = () => {
   const [test_id, setTest_id] = useState("");
   const [thoughtProcess, setThoughtProcess] = useState([]);
   const [repord_id, setRepord_id] = useState("");
@@ -88,13 +88,16 @@ function TestComponent() {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    console.log("User's ordered array:", thoughtProcess);
+    // console.log(`'${thoughtProcess}'`);
+    const arrayString =
+      '"[' + thoughtProcess.map((item) => "'" + item + "'").join(", ") + ']"';
+    console.log(arrayString);
     try {
       const response = await axios.post(
         "/inspections/test/",
         {
           action: 1,
-          answer: `${thoughtProcess}`,
+          answer: arrayString,
           report_id: repord_id,
           test_id: test_id,
         },
@@ -121,86 +124,90 @@ function TestComponent() {
   const formattedTimeLeft = new Date(timeLeft * 1000)
     .toISOString()
     .substr(14, 5);
-
   return (
-    // <div className="min-h-screen bg-white flex flex-col justify-center items-center">
-    //   <div className="container mx-auto px-4 py-8 bg-white rounded-lg shadow-md mb-8 border border-blue-500">
-    //     <h2 className="text-2xl font-semibold mb-4">
-    //       Thought Process Reordering Quiz
-    //     </h2>
-    //     <div className="flex items-center justify-center bg-blue-300 text-white px-6 py-3 rounded-full shadow-md mb-4">
-    //       <svg
-    //         className="w-6 h-6 mr-2"
-    //         fill="none"
-    //         stroke="currentColor"
-    //         viewBox="0 0 24 24"
-    //         xmlns="http://www.w3.org/2000/svg"
-    //       >
-    //         <path
-    //           strokeLinecap="round"
-    //           strokeLinejoin="round"
-    //           strokeWidth="2"
-    //           d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-    //         ></path>
-    //       </svg>
-    //       <span className="text-xl">{formattedTimeLeft}</span>
-    //     </div>
-    //     <p className="mb-4">
-    //       Drag and drop the components to reorder them in the correct order:
-    //     </p>
-    //     <ul className="flex flex-wrap gap-2 py-4">
-    //       {thoughtProcess.map((step, index) => (
-    //         <li
-    //           key={index}
-    //           className="bg-white text-gray-800 border border-blue-500 px-4 py-2 rounded-md cursor-move shadow-md flex-grow"
-    //           draggable
-    //           onDragStart={(e) => handleDragStart(e, index)}
-    //           onDragOver={(e) => handleDragOver(e, index)}
-    //           onDrop={(e) => handleDrop(e, index)}
-    //         >
-    //           {step}
-    //         </li>
-    //       ))}
-    //     </ul>
-    //   </div>
-    //   {isTimeOver && (
-    //     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
-    //       <div className="bg-white rounded-lg p-8 shadow-lg">
-    //         <p className="text-2xl font-semibold text-gray-800 mb-4">
-    //           Time's Up!
-    //         </p>
-    //         <p className="text-gray-600">
-    //           Your time is over. Please submit your answers.
-    //         </p>
-    //         <button
-    //           className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mt-4"
-    //           onClick={handleSubmit}
-    //         >
-    //           Submit
-    //         </button>
-    //       </div>
-    //     </div>
-    //   )}
-    //   <div className="bg-white py-4 w-full border-t border-blue-500">
-    //     <div className="container mx-auto flex justify-between">
-    //       <button
-    //         className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600"
-    //         onClick={handleCancel}
-    //       >
-    //         Cancel
-    //       </button>
-    //       <button
-    //         className="bg-white text-blue-500 px-4 py-2 rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent"
-    //         onClick={handleSubmit}
-    //       >
-    //         Submit
-    //       </button>
-    //     </div>
-    //   </div>
-    //   <div className="fixed top-4 right-4 bg-white p-4 rounded-md shadow-md border border-blue-500 text-blue-500">
-    //     {formattedTimeLeft}
-    //   </div>
-    // </div>
+    <div className="min-h-screen bg-white flex flex-col justify-center items-center">
+      <div className="container mx-auto px-4 py-8 bg-white rounded-lg shadow-md mb-8 border border-blue-500">
+        <h2 className="text-2xl font-semibold mb-4">
+          Thought Process Reordering Quiz
+        </h2>
+        <div className="flex items-center justify-center bg-blue-300 text-white px-6 py-3 rounded-full shadow-md mb-4">
+          <svg
+            className="w-6 h-6 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            ></path>
+          </svg>
+          <span className="text-xl">{formattedTimeLeft}</span>
+        </div>
+        <p className="mb-4">
+          Drag and drop the components to reorder them in the correct order:
+        </p>
+        <ul className="flex flex-wrap gap-2 py-4">
+          {thoughtProcess.map((step, index) => (
+            <li
+              key={index}
+              className="bg-white text-gray-800 border border-blue-500 px-4 py-2 rounded-md cursor-move shadow-md flex-grow"
+              draggable
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={(e) => handleDrop(e, index)}
+            >
+              {step}
+            </li>
+          ))}
+        </ul>
+      </div>
+      {isTimeOver && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+          <div className="bg-white rounded-lg p-8 shadow-lg">
+            <p className="text-2xl font-semibold text-gray-800 mb-4">
+              Time's Up!
+            </p>
+            <p className="text-gray-600">
+              Your time is over. Please submit your answers.
+            </p>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mt-4"
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      )}
+      <div className="bg-white py-4 w-full border-t border-blue-500">
+        <div className="container mx-auto flex justify-between">
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-white text-blue-500 px-4 py-2 rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent"
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+      <div className="fixed top-4 right-4 bg-white p-4 rounded-md shadow-md border border-blue-500 text-blue-500">
+        {formattedTimeLeft}
+      </div>
+    </div>
+  );
+};
+function TestComponent() {
+  return (
+    // <ThoughtProcess />
     <ReactQuiz />
   );
 }

@@ -491,11 +491,6 @@ const ShowMyProjects = () => {
     </div>
   );
 };
-const AllUserTestimonials = ({ expertAllTestimonials }) => {
-  return expertAllTestimonials?.map((item, index) => (
-    <TestimonialsCard key={index} item={item} index={index} />
-  ));
-};
 export const Dashboard = () => {
   const [a, seta] = useState(0);
   const [b, setb] = useState(0);
@@ -591,7 +586,7 @@ export const Dashboard = () => {
   const [avgRating, setAvgRating] = useState(true);
   const [ratingDistribution, setRatingDistribution] = useState(false);
 
-  const [blogData,setBlogData] = useState([]);
+  const [blogData, setBlogData] = useState([]);
 
   const HandleContributions = () => {
     setContributions(true);
@@ -608,13 +603,11 @@ export const Dashboard = () => {
     setProjects(false);
   };
   const HandleBlogs = () => {
-    
     setContributions(false);
     setMeetings(false);
     setBlogs(true);
     setTestimonials(false);
     setProjects(false);
-    
   };
 
   const getBlogsData = async () => {
@@ -625,7 +618,7 @@ export const Dashboard = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    try{
+    try {
       const res = await axios.get("/blogs/?action=2", {
         headers: {
           "Content-Type": "application/json",
@@ -635,14 +628,13 @@ export const Dashboard = () => {
       const allData = res.data.data;
       console.log(allData);
       setBlogData(allData);
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-  }
-  useEffect(()=>{
+  };
+  useEffect(() => {
     getBlogsData();
-  },[]);
-
+  }, []);
 
   const HandleTestimonials = () => {
     setContributions(false);
@@ -1142,7 +1134,7 @@ export const Dashboard = () => {
           </div>
         )}
         {/* Blogs section of dashboard */}
-        {blogs && <ShowBlogs blogArray={blogData}/>}
+        {blogs && <ShowBlogs blogArray={blogData} />}
         {/* Testimonials section of dashboard */}
         {testimonials &&
           expertAllTestimonials.length > 0 &&
@@ -1547,13 +1539,14 @@ const ExpertDashboard = () => {
                   Chat
                 </li>
               </Link>
-              <li
+              <Link
+                to={"getcertified"}
                 className="cursor-pointer flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]"
                 onClick={() => setShowInstructions(true)}
               >
                 <BsFillPatchCheckFill className="text-[1.55vw]" />
                 Get Certified
-              </li>
+              </Link>
               <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                 <BsFillPersonLinesFill className="text-[1.55vw]" />
                 Go to Experts
@@ -1575,14 +1568,15 @@ const ExpertDashboard = () => {
         <Dashboard />
         <Chats />
         <Leaderboard />
+        <Instructions handleShowInstructions={handleShowInstructions} />
         <MyBookings />
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />
       )}
-      {showInstructions === true && (
-        <Instructions handleShowInstructions={handleShowInstructions} />
-      )}
+      {/* {showInstructions === true && (
+        
+      )} */}
     </div>
   );
 };

@@ -56,6 +56,7 @@ import CustomerDashboard, {
 import TestElement from "./TestElement.jsx";
 import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
+import Instructions from "./components/GetCertified/Instructions.js";
 const Layout = () => {
   const action = useNavigationType();
   const pathname = useLocation().pathname;
@@ -230,6 +231,10 @@ const appRouter = createBrowserRouter([
           {
             path: "mybookings",
             element: <MyBookings />,
+          },
+          {
+            path: "getcertified",
+            element: <Instructions />,
           },
         ],
       },
