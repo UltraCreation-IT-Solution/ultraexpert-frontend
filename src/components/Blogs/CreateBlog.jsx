@@ -121,11 +121,10 @@ const CreateBlog = () => {
   };
   const handleCategoryChange = (e) => {
     const searchVal = e.target.value.toLowerCase();
+    setCategoryInputValue(searchVal);
     setValue2({ ...value2, name: e.target.value });
-    setFilterCategoriesArray(
-      categoriesArray.filter((item) => {
-        return item?.name?.toLowerCase().includes(searchVal);
-      })
+    setFilterCategoriesArray((prevCat) =>
+      prevCat.filter((item) => item?.name?.toLowerCase().includes(searchVal))
     );
   };
 
@@ -254,7 +253,9 @@ const CreateBlog = () => {
     setInputValue("");
   };
   const navigate = useNavigate();
- 
+
+  const [categoryInputValue, setCategoryInputValue] = useState("");
+
   return (
     <div className="mt-[100px] mx-[7vw] ">
       <div className="md:flex items-start gap-10 ">
@@ -278,41 +279,45 @@ const CreateBlog = () => {
               placeholder="Enter category"
               name=""
               id=""
-              value={value2.name}
+              value={value2?.name}
               onChange={(e) => handleCategoryChange(e)}
               onFocus={() => getCategories()}
               className="w-full mt-1 border border-solid border-slate-300 p-2 text-sm rounded-sm focus:outline-none"
             />
-            {filterCategoriesArray.length > 0 && (
-              <div className=" border border-solid border-slate-300 px-1 text-sm rounded-sm mt-2 w-fit min-h-auto max-h-[150px] overflow-y-auto ">
-                {filterCategoriesArray.length > 0 &&
-                  filterCategoriesArray?.map((item, index) => (
+            {categoriesArray.length > 0 && (
+              <div className={` px-1 text-sm rounded-sm mt-2 w-fit min-h-auto max-h-[150px] overflow-y-auto ${filterCategoriesArray.length > 0 ? "border border-solid border-slate-300" : ""}`}>
+                {filterCategoriesArray.map((item, index) => (
+                  <div
+                    key={index}
+                    className="text-sm text-center text-gray-600 px-3 py-2 border-b border-solid border-slate-300 pb-2 cursor-pointer"
+                    onClick={() => {
+                      setValue2({
+                        ...value2,
+                        name: item.name,
+                        number: item.number,
+                      });
+                      setFilterCategoriesArray([]);
+                      setCategoryInputValue("");
+                    }}
+                  >
+                    {item.name}
+                  </div>
+                ))}
+                {filterCategoriesArray.length === 0 &&
+                  categoryInputValue.trim() !== "" && (
                     <div
-                      key={index}
-                      className="text-sm text-center text-gray-600 px-3 py-2 border-b border-solid border-slate-300 pb-2 cursor-pointer"
-                      onClick={() => {
+                      className="bg-green-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer mt-2"
+                      onClick={(e) => {
+                        setNewCategory(e);
                         setValue2({
                           ...value2,
-                          name: item?.name,
-                          number: item?.number,
+                          number: categoriesArray.length + 1,
                         });
-                        setFilterCategoriesArray([]);
                       }}
                     >
-                      {item?.name}
+                      Add Category
                     </div>
-                  ))}
-              </div>
-            )}
-            {filterCategoriesArray.length === 0 && value2?.name !== "" && (
-              <div
-                className="bg-green-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer mt-2"
-                onClick={(e) => {
-                  setNewCategory(e);
-                  setValue2({ ...value2, number: categoriesArray.length + 1 });
-                }}
-              >
-                Add Category
+                  )}
               </div>
             )}
           </div>
@@ -440,28 +445,36 @@ const CreateBlog = () => {
           className=" border border-solid border-slate-400 "
         />
       </div>
-      <a href="#preview" style={{scrollBehavior: "smooth",
-      color:"white",
-      textDecoration:"none"}} >
-      <div
-        className="text-sm w-fit px-5 py-2 rounded-sm btnBlack text-white cursor-pointer "
-        onClick={() => {
-          if(value.length!==0){
-            setPreview(true);
-            console.log(value);
-            setValue(DOMPurify.sanitize(value));
-          }
-          if(value.length===0){
-            alert("Please write something first");
-          } 
+      <a
+        href="#preview"
+        style={{
+          scrollBehavior: "smooth",
+          color: "white",
+          textDecoration: "none",
         }}
       >
-        Preview 
-      </div>
+        <div
+          className="text-sm w-fit px-5 py-2 rounded-sm btnBlack text-white cursor-pointer "
+          onClick={() => {
+            if (value.length !== 0) {
+              setPreview(true);
+              console.log(value);
+              setValue(DOMPurify.sanitize(value));
+            }
+            if (value.length === 0) {
+              alert("Please write something first");
+            }
+          }}
+        >
+          Preview
+        </div>
       </a>
-      {preview && value.length!==0 && (
+      {preview && value.length !== 0 && (
         <>
-          <div id="preview" className="border border-solid border-slate-300 p-2 rounded-sm mt-16 dangerHtml">
+          <div
+            id="preview"
+            className="border border-solid border-slate-300 p-2 rounded-sm mt-16 dangerHtml"
+          >
             {blogData.title !== "" && (
               <div className="text-3xl overflow-hidden xs:text-4xl lg:text-5xl font-bold md:px-[7vw] my-5 md:my-4 tracking-wide text-center pb-5">
                 {blogData.title}{" "}
@@ -477,9 +490,7 @@ const CreateBlog = () => {
               Edit
             </div>
             <div
-              onClick={
-              blogCreated
-              }
+              onClick={blogCreated}
               className="text-sm w-fit px-5 py-2 rounded-sm btnBlack text-white cursor-pointer"
             >
               Submit
