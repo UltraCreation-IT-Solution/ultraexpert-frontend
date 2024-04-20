@@ -125,215 +125,91 @@ const ThoughtProcess = () => {
     .toISOString()
     .substr(14, 5);
   return (
-    <div className="w-full md:w-[68%] border border-solid border-slate-300 p-5 rounded-sm">
-      <div className="flex items-center justify-between border-b border-solid border-slate-200 pb-3">
-        <div className="text-xl font-bold ">Profile</div>
-        <div
-          onClick={() => saveProfile()}
-          className="text-base bg-green-500 px-4 py-2 rounded-md cursor-pointer text-white"
-        >
-          Save Profile
+    <div className="min-h-screen bg-white flex flex-col justify-center items-center">
+      <div className="container mx-auto px-4 py-8 bg-white rounded-lg shadow-md mb-8 border border-blue-500">
+        <h2 className="text-2xl font-semibold mb-4">
+          Thought Process Reordering Quiz
+        </h2>
+        <div className="flex items-center justify-center bg-blue-300 text-white px-6 py-3 rounded-full shadow-md mb-4">
+          <svg
+            className="w-6 h-6 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            ></path>
+          </svg>
+          <span className="text-xl">{formattedTimeLeft}</span>
+        </div>
+        <p className="mb-4">
+          Drag and drop the components to reorder them in the correct order:
+        </p>
+        <ul className="flex flex-wrap gap-2 py-4">
+          {thoughtProcess.map((step, index) => (
+            <li
+              key={index}
+              className="bg-white text-gray-800 border border-blue-500 px-4 py-2 rounded-md cursor-move shadow-md flex-grow"
+              draggable
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={(e) => handleDrop(e, index)}
+            >
+              {step}
+            </li>
+          ))}
+        </ul>
+      </div>
+      {isTimeOver && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+          <div className="bg-white rounded-lg p-8 shadow-lg">
+            <p className="text-2xl font-semibold text-gray-800 mb-4">
+              Time's Up!
+            </p>
+            <p className="text-gray-600">
+              Your time is over. Please submit your answers.
+            </p>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mt-4"
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      )}
+      <div className="bg-white py-4 w-full border-t border-blue-500">
+        <div className="container mx-auto flex justify-between">
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-white text-blue-500 px-4 py-2 rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent"
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
         </div>
       </div>
-      <div className="flex items-center justify-around gap-4">
-        <div className="mt-5 md:w-[80%] lg:w-[45%]">
-          <div className="mt-5">
-            <div className="text-base">First Name</div>
-            <input
-              type="text"
-              value={userData.first_name}
-              onChange={(e) =>
-                setUserData({ ...userData, first_name: e.target.value })
-              }
-              className="mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none w-full"
-              placeholder="Enter your first name"
-            />
-          </div>
-          <div className="mt-5">
-            <div className="text-base">Last Name</div>
-            <input
-              type="text"
-              value={userData.last_name}
-              onChange={(e) =>
-                setUserData({ ...userData, last_name: e.target.value })
-              }
-              className="mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none w-full"
-              placeholder="Enter your last name"
-            />
-          </div>
-          <div className="mt-5">
-            <div className="text-base ">Mobile number</div>
-            <input
-              type="number"
-              value={userData.mobile_number}
-              onChange={(e) =>
-                setUserData({ ...userData, mobile_number: e.target.value })
-              }
-              className="mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none w-full"
-              placeholder="Enter your mobile number"
-            />
-          </div>
-          <div className=" mt-5 w-full">
-            <div>
-              <div className="text-base ">Gender</div>
-              <select
-                name="Gender"
-                id="Gender"
-                value={userData.gender}
-                onChange={(e) =>
-                  setUserData({ ...userData, gender: e.target.value })
-                }
-                className="mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none shrink-0 w-full"
-              >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Others">Others</option>
-              </select>
-            </div>
-          </div>
-          <div className="mt-5">
-            <div className="text-base ">Marital Status</div>
-            <select
-              name="Marital"
-              id="Marital"
-              value={userData.marital_status}
-              onChange={(e) =>
-                setUserData({ ...userData, marital_status: e.target.value })
-              }
-              className="mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none shrink-0 w-full"
-            >
-              <option value="">Married</option>
-              <option value="">Unmarried</option>
-            </select>
-          </div>
-          <div className="mt-5">
-            <div className="text-base ">About Me</div>
-            <textarea
-              rows="6"
-              placeholder="Write about your self"
-              value={userData.about_me}
-              onChange={(e) =>
-                setUserData({ ...userData, about_me: e.target.value })
-              }
-              className="min-w-full max-w-full mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none"
-              style={{ resize: "none" }}
-            ></textarea>
-          </div>
-          <div className="mt-5">
-            <div className="text-base ">Profession</div>
-            <input
-              type="text"
-              value={userData.profession}
-              onChange={(e) =>
-                setUserData({ ...userData, profession: e.target.value })
-              }
-              className="mt-1 border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none w-full"
-              placeholder="Enter your profession"
-            />
-          </div>
-        </div>
-        <div className="flex flex-col self-start py-5 w-[45%]">
-          <label htmlFor="profile" className="text-base mb-1">
-            Profile Photo
-          </label>
-          <div
-            onClick={() => document.querySelector("#profileSelector").click()}
-            className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
-          >
-            <input
-              type="file"
-              accept="image/*"
-              id="profileSelector"
-              name="profileSelector"
-              onChange={handleImageChange}
-              className="hidden"
-            />
-            {image && (
-              <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
-                <img
-                  src={image}
-                  alt="Preview"
-                  className="w-auto h-40 shrink-0 object-cover object-center m-2"
-                />
-              </div>
-            )}
-          </div>
-          <div className="flex justify-center mx-auto flex-col w-full my-8">
-            <label htmlFor="interests" className="text-lg mb-1">
-              Interests
-            </label>
-            <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-              <div className="flex flex-wrap gap-2">
-                {selectedSkill.length > 0 ? (
-                  selectedSkill.map((skill, ind) => {
-                    return (
-                      <div
-                        key={ind}
-                        className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black"
-                      >
-                        {skill}
-                        <div
-                          className="cursor-pointer"
-                          onClick={() => handleRemove(skill)}
-                        >
-                          x
-                        </div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <p className="text-gray-300 text-sm">
-                    Select skills of your interest from below.
-                  </p>
-                )}
-              </div>
-            </div>
-            <input
-              type="text"
-              id="interests"
-              value={inputValue}
-              onChange={handleChange}
-              className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none"
-              placeholder="Enter your interests"
-            />
-            {suggestions.length > 0 && (
-              <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-                <div>
-                  {suggestions.map((suggestion, ind) => (
-                    <div
-                      key={suggestion.id}
-                      onClick={() => handleSuggestionClick(suggestion)}
-                      className="cursor-pointer hover:bg-gray-100 px-4 py-1"
-                    >
-                      {suggestion.name}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* <div className="border border-solid border-slate-200 px-4 py-2 rounded-md mb-4">
-              <div className="flex flex-wrap justifty-around gap-3">
-                {interest.map((skill, ind) => {
-                  return (
-                    <div
-                      key={ind}
-                      onClick={() => {
-                        handleChange(skill.name);
-                      }}
-                      className="cursor-pointer px-4 py-1 text-sm text-nowrap rounded-full bg-inherit border border-solid border-[#c7c7c7] text-[#8D8D8D] bg-[#E8E8E8] flex justify-center items-center overflow-visible"
-                    >
-                      {skill.name}
-                    </div>
-                  );
-                })}
-              </div>
-            </div> */}
-          </div>
-        </div>
+      <div className="fixed top-4 right-4 bg-white p-4 rounded-md shadow-md border border-blue-500 text-blue-500">
+        {formattedTimeLeft}
       </div>
     </div>
   );
 };
+function TestElement() {
+  return (
+    // <ThoughtProcess />
+    <ReactQuiz />
+  );
+}
 
 export default TestElement;
