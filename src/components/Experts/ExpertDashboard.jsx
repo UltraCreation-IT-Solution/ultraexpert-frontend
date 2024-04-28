@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Update from "./EditDashboardProfile";
-import Instructions from "../GetCertified/Instructions";
 import {
   FaEdit,
   FaTags,
@@ -69,6 +68,7 @@ import { Outlet, Link } from "react-router-dom";
 import axios from "../../axios";
 import UpdateProject from "./UpdateProjeect";
 import EditProfileExpert from "../Auth/EditProfileExpert";
+import SkillList from "../GetCertified/Instructions";
 
 const generateRandomData = () => {
   const today = new Date();
@@ -1375,7 +1375,6 @@ export const MyBookings = () => {
     </div>
   );
 };
-
 const ExpertDashboard = () => {
   const [showEditProfile, setShowEditProfile] = useState(false);
 
@@ -1417,10 +1416,6 @@ const ExpertDashboard = () => {
 
   const handleShowEditProfile = () => {
     setShowEditProfile(false);
-  };
-  const [showInstructions, setShowInstructions] = useState(false);
-  const handleShowInstructions = () => {
-    setShowInstructions(false);
   };
 
   return (
@@ -1522,7 +1517,6 @@ const ExpertDashboard = () => {
               <Link
                 to={"getcertified"}
                 className="cursor-pointer flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]"
-                onClick={() => setShowInstructions(true)}
               >
                 <BsFillPatchCheckFill className="text-[1.55vw]" />
                 Get Certified
@@ -1548,7 +1542,7 @@ const ExpertDashboard = () => {
         <Dashboard />
         <Chats />
         <Leaderboard />
-        <Instructions handleShowInstructions={handleShowInstructions} />
+        <SkillList />
         <MyBookings />
       </Outlet>
       {showEditProfile === true && (
