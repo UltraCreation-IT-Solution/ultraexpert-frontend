@@ -8,7 +8,7 @@ import {
 } from "react-icons/md";
 import { RiFlowChart } from "react-icons/ri";
 import { IoDiamondSharp } from "react-icons/io5";
-import { FaUserGraduate, FaUserCheck} from "react-icons/fa6";
+import { FaUserGraduate, FaUserCheck } from "react-icons/fa6";
 import { IoIosChatboxes } from "react-icons/io";
 import { GiAchievement } from "react-icons/gi";
 import { BiLike } from "react-icons/bi";
@@ -16,20 +16,19 @@ import { BiDislike } from "react-icons/bi";
 import { BsBookmarkPlusFill, BsBookmarkDashFill } from "react-icons/bs";
 
 import { Link, useParams } from "react-router-dom";
-import {
-  expertDetailsObj,
-  ProjectsCarousel,
-} from "../../constant";  
+import { expertDetailsObj, ProjectsCarousel } from "../../constant";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
+import { BlogCard } from "../Blogs/Blogs/Blog";
 import axios from "../../axios";
+import MyCalendar from "../../TestElement";
 
-export const ExpertSummary = ({experienceArray,projectsArray}) => {
-  console.log(projectsArray)
+export const ExpertSummary = ({ experienceArray, projectsArray }) => {
+  console.log(projectsArray);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
-    const options = { day: 'numeric', month: 'short', year: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
   }
 
   return (
@@ -37,7 +36,7 @@ export const ExpertSummary = ({experienceArray,projectsArray}) => {
       {experienceArray?.length !== 0 && (
         <>
           <div className="border border-solid border-slate-300 rounded-md p-4 mb-6">
-            <div className="text-xl md:text-2xl font-semibold">
+            <div className="text-xl md:text-2xl font-semibold ">
               Carrer Journey
             </div>
             <div className="mt-6">
@@ -56,18 +55,18 @@ export const ExpertSummary = ({experienceArray,projectsArray}) => {
                         </>
                       ) : (
                         <>
-                          <div>
-                          {formatDate(item?.end_date)}
-                          </div>
+                          <div>{formatDate(item?.end_date)}</div>
                           <div className="block md:hidden"> - </div>
                         </>
                       )}
-                      <div>
-                      {formatDate(item?.start_date)}
-                      </div>
+                      <div>{formatDate(item?.start_date)}</div>
                     </div>
                     {/* 2nd portion */}
-                    <div className={`hidden md:block ${item?.present?"bg-emerald-300":"bg-slate-200"} absolute left-[180px] h-5 w-5 rounded-full `}></div>
+                    <div
+                      className={`hidden md:block ${
+                        item?.present ? "bg-emerald-300" : "bg-slate-200"
+                      } absolute left-[180px] h-5 w-5 rounded-full `}
+                    ></div>
 
                     {/* 3rd portion */}
                     <div className="md:pl-10 flex flex-col order-1 md:order-2 md:border-l border-solid border-slate-200 md:py-5">
@@ -92,38 +91,43 @@ export const ExpertSummary = ({experienceArray,projectsArray}) => {
     </div>
   );
 };
-export const ExpertProfileServiceCard = ({item}) => {
-  
+export const ExpertProfileServiceCard = ({ item }) => {
   const [saveService, setSaveService] = useState(false);
-  return(
-    <div
-         
-    className="flex justify-between items-start gap-2 py-4 md:py-[1vw] mb-[1.5vw] bg-white border-b border-solid border-slate-400"
-  >
-    <RiFlowChart className="mt-3 xs:mt-4 text-xl lg:text-3xl" />
-    <div className="w-full md:flex items-start justify-between gap-5">
-      <h1 className="text-base xs:text-xl lg:text-2xl font-semibold ">
-        {item?.title}
-      </h1>
+  return (
+    <div className="flex justify-between items-start gap-2 py-4 md:py-[1vw] mb-[1.5vw] bg-white border-b border-solid border-slate-400">
+      <RiFlowChart className="mt-3 xs:mt-4 text-xl lg:text-3xl" />
+      <div className="w-full md:flex items-start justify-between gap-5">
+        <h1 className="text-base xs:text-xl lg:text-2xl font-semibold ">
+          {item?.title}
+        </h1>
 
-      <div className="mt-3 xs:mt-4 flex items-center gap-[2.5vw] md:gap-[1vw] shrink-0">
-        <Link to={"service/" + item?.id}>
-          <button className="bg-white px-8 py-1 md:px-[1.8vw] md:py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm cursor-pointer">
-            View
-          </button>
-        </Link>
-        {/* <Link to={"booking/" + temp?.id}>
+        <div className="mt-3 xs:mt-4 flex items-center gap-[2.5vw] md:gap-[1vw] shrink-0">
+          <Link to={"service/" + item?.id}>
+            <button className="bg-white px-8 py-1 md:px-[1.8vw] md:py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm cursor-pointer">
+              View
+            </button>
+          </Link>
+          {/* <Link to={"booking/" + temp?.id}>
           <button className="bg-[#2A2A2A] px-6 py-1 md:px-[1.5vw] md:py-[0.3vw] text-sm md:text-base text-white font-semibold border rounded-sm sm:rounded-md cursor-pointer">
             Book
           </button>
         </Link> */}
+        </div>
       </div>
+      {!saveService ? (
+        <BsBookmarkPlusFill
+          className="mt-3 xs:mt-4 text-3xl md:text-3xl lg:text-4xl cursor-pointer"
+          onClick={() => setSaveService(true)}
+        />
+      ) : (
+        <BsBookmarkDashFill
+          className="mt-3 xs:mt-4 text-3xl md:text-3xl lg:text-4xl cursor-pointer"
+          onClick={() => setSaveService(false)}
+        />
+      )}
     </div>
-    {!saveService ? <BsBookmarkPlusFill className="mt-3 xs:mt-4 text-3xl md:text-3xl lg:text-4xl cursor-pointer" onClick={() => setSaveService(true)} />: <BsBookmarkDashFill className="mt-3 xs:mt-4 text-3xl md:text-3xl lg:text-4xl cursor-pointer" onClick={()=>setSaveService(false)}/>}
-    
-  </div>
-  )
-}
+  );
+};
 export const ExpertServices = () => {
   if (expertDetailsObj?.services.length === 0) {
     return (
@@ -346,7 +350,7 @@ export const ExpertRatings = () => {
 //   );
 // };
 
-export const AboutExpert = ({...expert}) => {
+export const AboutExpert = ({ ...expert }) => {
   return (
     <div>
       <div className=" px-[2.5vw] lg:border-r border-solid border-slate-300">
@@ -359,7 +363,7 @@ export const AboutExpert = ({...expert}) => {
             />
             <img
               className="h-32 w-32 md:h-40 md:w-40 rounded-xl shrink-0 object-cover absolute top-16 left-5 md:left-10 border-[3px] border-solid border-white"
-              src={expert?.expert?.expert?.user?.profile_img} 
+              src={expert?.expert?.expert?.user?.profile_img}
               alt=""
             />
           </div>
@@ -367,7 +371,8 @@ export const AboutExpert = ({...expert}) => {
           <div className="ml-5 md:ml-10">
             <div className="flex items-center justify-between mr-1">
               <div className="text-2xl md:text-3xl font-semibold">
-                {expert?.expert?.expert?.user?.first_name} {expert?.expert?.expert?.user?.last_name}
+                {expert?.expert?.expert?.user?.first_name}{" "}
+                {expert?.expert?.expert?.user?.last_name}
               </div>
               <div className="hidden md:flex gap-2">
                 <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white btnBlack rounded-sm text-xs xs:text-base font-semibold cursor-pointer">
@@ -384,20 +389,23 @@ export const AboutExpert = ({...expert}) => {
             <div className="text-base md:text-lg text-[#565454] mt-3">
               {expert?.expert?.expert?.profession}
             </div>
-            <div className="md:w-[600px] text-sm sm:text-base text-[#565454] mt-3">
-              {expert?.expert?.expert?.about_me}
-            </div>
+
             <div className="flex flex-col mt-4">
               <div className="flex items-center gap-2 text-lg md:text-xl text-[#565454] font-semibold">
                 <IoDiamondSharp />
                 <div>Top skills</div>
               </div>
               <div className="flex items-center gap-3 mt-4">
-                {expert?.expert?.skills?.skills_json?.slice(0,3)?.map((item,index) => (
-                  <div key={index} className="bg-[#E7E7E7] px-4 py-1 text-sm rounded-sm">
-                    {item?.technology_name}
-                  </div>
-                ))}
+                {expert?.expert?.skills?.skills_json
+                  ?.slice(0, 3)
+                  ?.map((item, index) => (
+                    <div
+                      key={index}
+                      className="bg-[#E7E7E7] px-4 py-1 text-sm rounded-sm"
+                    >
+                      {item?.technology_name}
+                    </div>
+                  ))}
               </div>
             </div>
             <div className="flex items-center gap-5 text-[#565454] text-lg xs:text-xl mt-5">
@@ -409,7 +417,9 @@ export const AboutExpert = ({...expert}) => {
               <div className="py-2 flex gap-[0.3vw] justify-center items-center">
                 <MdGroupAdd />
 
-                <div>{expertDetailsObj?.personalDetails?.meetingCount} Meetings</div>
+                <div>
+                  {expertDetailsObj?.personalDetails?.meetingCount} Meetings
+                </div>
               </div>
               <div className="py-2 flex gap-[0.3vw] justify-center items-center">
                 <FaUserCheck />
@@ -449,7 +459,7 @@ export const AboutExpert = ({...expert}) => {
             About me
           </div>
           <div className="text-sm md:text-base mt-[1.5vw] md:mt-[0.7vw] ">
-          {expert?.expert?.expert?.about_me}
+            {expert?.expert?.expert?.about_me}
           </div>
         </div>
       </div>
@@ -481,13 +491,19 @@ export const AchievementCard = ({ name, year, certificate }) => {
       <div>
         <div className="text-sm xs:text-base">{name}</div>
         <div className="text-xs xs:text-sm text-gray-400 my-1">{year}</div>
-        <a href="" className="text-xs xs:text-sm text-red-500 no-underline hover:underline"> View certificate</a>
+        <a
+          href=""
+          className="text-xs xs:text-sm text-red-500 no-underline hover:underline"
+        >
+          {" "}
+          View certificate
+        </a>
       </div>
     </div>
   );
 };
 
-export const ExpertInfo = ({...expert}) => {
+export const ExpertInfo = ({ ...expert }) => {
   const [summary, setSummary] = useState(true);
   const [services, setServices] = useState(false);
   const [ratings, setRatings] = useState(false);
@@ -499,11 +515,15 @@ export const ExpertInfo = ({...expert}) => {
   const educationArray = expert?.expert?.education?.education;
   const achievementsArray = expert?.expert?.achievements?.achievements;
   const projectsArray = expert?.expert?.projects[0]?.projects;
-
+  const blogArray = expert?.expert?.blogs;
 
   const [expertBlogsArray, setExpertBlogsArray] = useState([]);
-
-  const getBlogData = async() =>{
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  }
+  const getBlogData = async () => {
     const cookie = document.cookie.split("; ");
     const jsonData = {};
 
@@ -511,8 +531,8 @@ export const ExpertInfo = ({...expert}) => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    try{
-      const res = await axios.get("/blogs/?action=2",{
+    try {
+      const res = await axios.get("/blogs/?action=2", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jsonData.access_token}`,
@@ -521,14 +541,14 @@ export const ExpertInfo = ({...expert}) => {
       const allData = res.data.data;
       console.log(allData);
       setExpertBlogsArray(allData);
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     getBlogData();
-  },[])
+  }, []);
 
   const MakeSummaryTrue = () => {
     setSummary(true);
@@ -594,10 +614,24 @@ export const ExpertInfo = ({...expert}) => {
           </div>
         </div>
         <div className="mt-[3vw]">
-          {summary && <ExpertSummary experienceArray={experienceArray} projectsArray={projectsArray} />}
+          {summary && (
+            <ExpertSummary
+              experienceArray={experienceArray}
+              projectsArray={projectsArray}
+            />
+          )}
           {services && <ExpertServices />}
           {ratings && <ExpertRatings />}
-          {blogs && <ShowBlogs blogArray={expertBlogsArray} />}
+          {blogs && blogArray.map((item,idx) => <BlogCard key={item?.id}
+          index={idx}
+          items={item}
+          likes={item?.reaction_count}
+          views={item?.blog_view_count}
+          title={item?.title}
+          tags={item?.tags}
+          image={item?.images[0]}
+          id={item?.id}
+          date={formatDate(item.date_created.split("T")[0])} />)}
         </div>
       </div>
 
@@ -635,7 +669,7 @@ export const ExpertInfo = ({...expert}) => {
                   <EducationCard key={idx} {...item} />
                 ))}
             </div>
-            
+
             {/* This is Achievements accordian */}
             <div className="border-b-[0.1px] border-solid border-slate-300 mb-[5vw] md:mb-[2vw]">
               <div
@@ -670,7 +704,7 @@ export const ExpertInfo = ({...expert}) => {
   );
 };
 
-export const SideComponent = ({...expert}) => {
+export const SideComponent = ({ ...expert }) => {
   const [summary, setSummary] = useState(true);
   const [services, setServices] = useState(false);
   const [ratings, setRatings] = useState(false);
@@ -680,7 +714,6 @@ export const SideComponent = ({...expert}) => {
 
   const educationArray = expert?.expert?.education?.education;
   const achievementsArray = expert?.expert?.achievements?.achievements;
-  
 
   const MakeSummaryTrue = () => {
     setSummary(true);
@@ -797,9 +830,9 @@ export const SideComponent = ({...expert}) => {
 //This is the main expert profile component.
 const ExpertProfile = () => {
   const params = useParams();
+  const { id } = params;
   const [expertDetail, setExpertDetail] = useState(null);
-  const {id} = params;
-  console.log(id)
+  console.log(id);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
   cookies.forEach((item) => {
@@ -808,31 +841,41 @@ const ExpertProfile = () => {
   });
   const getExpertDetails = async () => {
     try {
-      const res = await axios.get(`/customers/experts/?action=2&expert_id=${id} `, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
-      if(!res.data || res.data.status===400 || res.data.status===401 || res.status===500 || res.data.status===404){
+      const res = await axios.get(
+        `/customers/experts/?action=2&expert_id=${id} `,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.status === 500 ||
+        res.data.status === 404
+      ) {
         console.log(response.data.message);
         return;
-
       }
       const data = res.data.data;
       console.log(data);
       setExpertDetail(data);
+      console.log(ExpertProfile);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     getExpertDetails();
-  },[id]);
+  }, [id]);
   useEffect(() => {
     console.log(expertDetail);
-  },[expertDetail]);
-  
+  }, [expertDetail]);
+  if (!expertDetail) return <MyCalendar />;
+
   return (
     <div>
       <div className="lg:flex mt-[90px] md:mt-[80px]">
@@ -841,7 +884,7 @@ const ExpertProfile = () => {
           <ExpertInfo expert={expertDetail} />
         </div>
         <div className="hidden lg:block w-[30%]">
-          <SideComponent  expert={expertDetail}/>
+          <SideComponent expert={expertDetail} />
         </div>
       </div>
     </div>
