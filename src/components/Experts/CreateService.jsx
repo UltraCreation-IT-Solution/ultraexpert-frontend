@@ -174,7 +174,7 @@ const CreateService = () => {
     id: "",
   });
 
-  const[categoryInputValue, setCategoryInputValue] = useState("");
+  const [categoryInputValue, setCategoryInputValue] = useState("");
 
   const setNewCategory = async (e) => {
     e.preventDefault();
@@ -213,7 +213,8 @@ const CreateService = () => {
   const handleCategoryChange = (e) => {
     const searchVal = e.target.value.toLowerCase();
     setCategoryInputValue(searchVal);
-    const searchVal1 = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+    const searchVal1 =
+      e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
     setSelectedCategory({ ...selectedCategory, name: searchVal1 });
     setFilterCategoriesArray((prevCat) =>
       prevCat.filter((item) => item?.name?.toLowerCase().includes(searchVal))
@@ -221,9 +222,7 @@ const CreateService = () => {
   };
 
   const [val, setVal] = useState("");
-  const [skillArray, setSkillArray] = useState([]);
   const [showSkill, setShowSkill] = useState([]);
-  const [skillInput, setSkillInput] = useState("");
 
   const getSkills = async () => {
     const cookie = document.cookie.split(";");
@@ -242,9 +241,6 @@ const CreateService = () => {
       });
       const data = res.data.data.qualified;
       console.log(data);
-
-      setSkillArray(data);
-      // console.log(skillArray);
       setShowSkill(data);
       // console.log(showSkill);
     } catch (error) {
@@ -275,10 +271,10 @@ const CreateService = () => {
   console.log(skill);
 
   const handleSkillChange = (e) => {
-    const inputValue = event.target.value;
-  if (inputValue.trim() === "") {
-    setSkill([]); // Open dropdown when input field becomes empty
-  }
+    const inputValue = e.target.value;
+    if (inputValue.trim() === "") {
+      setSkill([]); // Open dropdown when input field becomes empty
+    }
   };
 
   const handleSkillSelection = (val) => {
@@ -286,6 +282,97 @@ const CreateService = () => {
     setVal(capitalizedSkill);
     setSkill([]); // Clear skill list to close the dropdown
   };
+
+  const interests = [
+    { id: 1, name: "Python" },
+    { id: 2, name: "C++" },
+    { id: 3, name: "Django" },
+    { id: 4, name: "HTML" },
+    { id: 5, name: "CSS" },
+    { id: 6, name: "JS" },
+    { id: 7, name: "React JS" },
+  ];
+
+  const [selectedSkill, setSelectedSkill] = useState([]);
+  const [inputTagValue, setInputTagValue] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+
+  const handleTagChange = (event) => {
+    const { value } = event.target;
+    setInputTagValue(value);
+    setSuggestions(
+      interests.filter((suggestion) =>
+        suggestion.name.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    // Add suggestion to selected skills
+    if (!selectedSkill.includes(suggestion.name)) {
+      setSelectedSkill([...selectedSkill, suggestion.name]);
+      console.log(selectedSkill);
+    }
+    // Clear input and suggestions
+    setInputTagValue("");
+    setSuggestions([]);
+  };
+
+  const handleTagRemove = (skill) => {
+    setSelectedSkill(selectedSkill.filter((s) => s !== skill));
+  };
+
+  const handleNewSkillAdd = (value) => {
+    if (!selectedSkill.includes(value)) {
+      setSelectedSkill([...selectedSkill, value]);
+    }
+    setInputTagValue("");
+  };
+
+  const [createService,setCreateService] = useState({
+    img:"",
+    desc:"",
+    duration:6,
+    price:"",
+    currency:"INR",
+  })
+
+  const handleServiceCreate = async(e) =>{
+    e.preventDefault();
+
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try{
+      const res = await axios.post("/experts/services/",{
+        action:1,
+        service_name:serviceTitle,
+        service_img:createService.img,
+        category:selectedCategory.id,
+        description:createService.desc,
+        skill_name:val,
+        price:createService.price,
+        duration:createService.duration,
+        currency:createService.currency,
+        tags_list:selectedSkill
+      },{
+        headers:{
+          "Content-Type":"application/json",
+          Authorization:`Bearer ${jsonData.access_token}`
+        }
+      });
+      const data = res.data;
+      console.log(data.msg);
+      setShowSlots(!showSlots);
+    }catch(error){
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <div className="mt-[100px] flex flex-col bg-white h-auto">
@@ -326,6 +413,8 @@ const CreateService = () => {
               placeholder="Service Description"
               name="desc"
               id="desc"
+              value={createService.desc}
+              onChange={(e) => setCreateService({...createService, desc:e.target.value})}
               className="border border-solid resize-none h-32 border-slate-300 rounded-md px-4 py-2 mb-4"
             />
             <label htmlFor="category" className="text-lg mb-1">
@@ -366,7 +455,7 @@ const CreateService = () => {
                       setCategoryInputValue("");
                     }}
                   >
-                    {(item.name).charAt(0).toUpperCase() + (item.name).slice(1)}
+                    {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
                   </div>
                 ))}
                 {filterCategoriesArray.length === 0 &&
@@ -397,10 +486,12 @@ const CreateService = () => {
               placeholder="Enter Skill"
               value={val}
               onFocus={allTrueSKill}
-              onChange={(e)=>handleSkillChange(e)}
+              onChange={(e) => handleSkillChange(e)}
             />
             {skill?.length > 0 && (
-              <div className={`px-1 text-sm rounded-sm w-fit min-h-auto max-h-[150px] overflow-y-auto border border-solid border-slate-300 mb-4`}>
+              <div
+                className={`px-1 text-sm rounded-sm w-fit min-h-auto max-h-[150px] overflow-y-auto border border-solid border-slate-300 mb-4`}
+              >
                 {skill?.map((item, index) => {
                   return (
                     <div
@@ -414,6 +505,70 @@ const CreateService = () => {
                 })}
               </div>
             )}
+            <div className="flex justify-center mx-auto flex-col w-full mb-4">
+              <label htmlFor="tags" className="text-lg mb-1 font-bold">
+                Tags
+              </label>
+              <div className="border border-solid border-gray-300 px-2 rounded-md mb-2">
+                <div className="flex flex-wrap gap-2">
+                  {selectedSkill.length > 0 ? (
+                    selectedSkill.map((skill, ind) => {
+                      return (
+                        <div
+                          key={ind}
+                          className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
+                        >
+                          {skill}
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => handleTagRemove(skill)}
+                          >
+                            x
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p className="text-gray-300 text-sm">
+                      Select skills of your interest from below.
+                    </p>
+                  )}
+                </div>
+              </div>
+              <input
+                type="text"
+                id="tags"
+                name="tags"
+                value={inputTagValue}
+                onChange={handleTagChange}
+                className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none"
+                placeholder="Enter Tags for the service"
+              />
+              {suggestions.length > 0
+                ? inputTagValue.length > 0 && (
+                    <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
+                      <div>
+                        {suggestions.map((suggestion, ind) => (
+                          <div
+                            key={suggestion.id}
+                            onClick={() => handleSuggestionClick(suggestion)}
+                            className="cursor-pointer hover:bg-gray-100 px-4 py-1"
+                          >
+                            {suggestion.name}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                : inputTagValue.length > 0 && (
+                    <button
+                      onClick={() => handleNewSkillAdd(inputTagValue)}
+                      className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none bg-blue-500 text-white w-[30%] mt-2 mb-4"
+                    >
+                      Add Interest
+                    </button>
+                  )}
+            </div>
             <label htmlFor="imageSelector" className="text-lg mb-1">
               Service Images
             </label>
@@ -470,13 +625,15 @@ const CreateService = () => {
                 type="number"
                 id="price"
                 name="price"
+                value={createService.price}
+                onChange={(e)=>{setCreateService({ ...createService, price: e.target.value })}}
                 className="border border-solid border-slate-300 rounded-e-md px-4 py-2 mb-4 w-full"
               />
             </div>
             <div className="flex justify-center mb-4">
               <button
                 type="submit"
-                onClick={() => setShowSlots(!showSlots)}
+                onClick={(e) => handleServiceCreate(e)}
                 className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md shadow-md"
               >
                 Create time slots
@@ -488,40 +645,54 @@ const CreateService = () => {
 
       {/* slots */}
       {showSlots && (
-        <div className="calendar-container mt-[100px] w-[90%] m-auto   ">
-          <div>
-            <label>Start Date:</label>
-            <input
-              type="date"
-              value={startInputDate}
-              onChange={(e) => setStartInputDate(e.target.value)}
-            />
-            <label>Start Time:</label>
-            <input
-              type="time"
-              value={startInputTime}
-              onChange={(e) => setStartInputTime(e.target.value)}
-            />
-          </div>
-          <div>
-            <label>End Date:</label>
+        <div className="calendar-container mt-[100px] px-[10vw] m-auto   ">
+          <div className="flex gap-10  flex-wrap">
+            <div className="flex flex-col gap-1">
+              <label className="text-base text-gray-600">Start Date</label>
+              <input
+                type="date"
+                value={startInputDate}
+                onChange={(e) => setStartInputDate(e.target.value)}
+                className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+
+            <label className="text-base text-gray-600">End Date:</label>
             <input
               type="date"
               value={endInputDate}
               onChange={(e) => setEndInputDate(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
             />
-            <label>End Time:</label>
+            </div>
+            <div className="flex flex-col gap-1">
+
+            <label className="text-base text-gray-600">Start Time:</label>
+            <input
+              type="time"
+              value={startInputTime}
+              onChange={(e) => setStartInputTime(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+            />
+            </div>
+            <div className="flex flex-col gap-1">
+
+            <label className="text-base text-gray-600">End Time:</label>
             <input
               type="time"
               value={endInputTime}
               onChange={(e) => setEndInputTime(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
             />
+            </div>
           </div>
-          <div>
-            <label>Event Title:</label>
-            <input type="text" value={serviceTitle} />
+
+          <div className="flex items-center gap-3 mt-10 ">
+            <label className="text-base text-gray-600">Event Title:</label>
+            <input type="text" value={serviceTitle} className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-64" />
           </div>
-          <button onClick={handleCreateEvent}>Create Event</button>
+          <button onClick={handleCreateEvent} className="mt-10  text-base px-4 py-2 btnBlack rounded-sm text-white">Create Event</button>
           <Calendar
             className="mt-[100px] "
             localizer={localizer}
