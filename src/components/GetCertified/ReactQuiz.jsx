@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../../axios";
 import PropTypes from "prop-types";
 import { FcAlarmClock } from "react-icons/fc";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function Question({
   question,
@@ -57,12 +57,17 @@ Question.propTypes = {
 
 function ReactQuiz() {
   const params = useParams();
+  const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [timer, setTimer] = useState(60); // Initial timer value in seconds
+  const [timer, setTimer] = useState(60);
+  const [allSetData, setAllSetData] = useState({});
+  const [test_id, setTest_id] = useState("");
+  const [repord_id, setRepord_id] = useState("");
+  const [question_id, setQuestion_id] = useState("");
 
   const cookies = document.cookie.split(";");
   const jsonData = {};
@@ -83,7 +88,18 @@ function ReactQuiz() {
             },
           }
         );
+        if (
+          !response.data?.data ||
+          response.data?.status === 400 ||
+          response.data?.status === 401
+        ) {
+          console.log("data not fetched");
+          return;
+        }
         console.log(response);
+        setAllSetData(response.data?.data);
+        setTest_id(response.data?.data?.test_id);
+        setRepord_id(response.data?.data?.report_id);
         setQuestions(response.data?.data?.questions || []);
       } catch (error) {
         setError("Error fetching data");
@@ -121,15 +137,18 @@ function ReactQuiz() {
   };
 
   const handleNextQuestion = async () => {
+    const selectedOptionText =
+      questions[currentQuestion].options[selectedOption];
+    console.log(`Selected Option: ${selectedOptionText}`);
     try {
-      const response = axios.post(
+      const response = await axios.post(
         "/inspections/test/",
         {
           action: 1,
-          question_id: "8bb7ca00-e62f-11ee-9ff0-0242ac120004",
-          report_id: 3,
-          answer: "To interact with databases using Python objects",
-          test_id: "8bb7c6c2-e62f-11ee-9ff0-0242ac120004",
+          question_id: allSetData?.questions[currentQuestion]?.question_id,
+          report_id: repord_id,
+          answer: selectedOptionText,
+          test_id: test_id,
         },
         {
           headers: {
@@ -138,17 +157,20 @@ function ReactQuiz() {
           },
         }
       );
-    } catch (error) {}
-    const selectedOptionText =
-      questions[currentQuestion].options[selectedOption];
-    console.log(`Selected Option: ${selectedOptionText}`);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+
     setSelectedOption(null);
     setCurrentQuestion((prevQuestion) => prevQuestion + 1);
   };
 
   const handleFinishQuiz = () => {
     // Handle finish quiz action, e.g., submit score to server
+
     console.log("Quiz finished. Score:");
+    navigate("/expertdashboard");
   };
 
   if (loading) {
@@ -160,12 +182,7 @@ function ReactQuiz() {
   }
 
   if (currentQuestion >= questions.length) {
-    return (
-      <div>
-        <h2>Quiz completed</h2>
-        <button onClick={handleFinishQuiz}>Finish Quiz</button>
-      </div>
-    );
+    handleFinishQuiz();
   }
 
   const currentQuestionData = questions[currentQuestion];
@@ -188,7 +205,7 @@ function ReactQuiz() {
         </div>
       </div>
       <Question
-        question={currentQuestionData.question}
+        question={currentQuestionData?.question}
         options={Object.entries(currentQuestionData.options).map(
           ([option, text]) => ({
             option,
