@@ -207,8 +207,8 @@ const ThoughtProcess = () => {
 };
 function TestElement() {
   return (
-    // <ThoughtProcess />
-    <ReactQuiz />
+    <ThoughtProcess />
+    // <ReactQuiz />
   );
 }
 

@@ -1,128 +1,219 @@
-import React, { useState } from "react";
-import { FcClock } from "react-icons/fc";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "../../axios";
+import ReactQuiz from "./ReactQuiz";
 
-export const ThoughtProcess = () => {
-  const Nevigate = useNavigate();
-  const goToDashboard = () => {
-    Nevigate("/expertdashboard");
-  };
-  let a = "";
-  const thoughtProcess = [
-    {
-      a: -1,
-      isVisited: false,
-      option:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut nam officiis explicabo et accusamus in.",
-    },
-    {
-      a: -1,
-      isVisited: false,
-      option:
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corporis, et hic nostrum aliquam exercitationem alias. Dolorum laudantium doloremque eveniet animi.",
-    },
-    {
-      a: -1,
-      isVisited: false,
-      option:
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corporis, et hic nostrum aliquam exercitationem alias. Dolorum laudantium doloremque eveniet animi.",
-    },
-    {
-      a: -1,
-      isVisited: false,
-      option:
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corporis, et hic nostrum aliquam exercitationem alias. Dolorum laudantium doloremque eveniet animi.",
-    },
-  ];
-  const allotValue = (index) => {
-    if (thoughtProcess[index].isVisited === false) {
-      thoughtProcess[index].isVisited = true;
-      let x = a++;
-      thoughtProcess[index].a = x;
-      console.log(thoughtProcess);
-    }
+const ThoughtProcess = () => {
+  const [test_id, setTest_id] = useState("");
+  const [thoughtProcess, setThoughtProcess] = useState([]);
+  const [repord_id, setRepord_id] = useState("");
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const cookies = document.cookie.split("; ");
+      const jsonData = {};
 
-    console.log(a);
-  };
-  const clearSelections = () => {
-    for (let i = 0; i < thoughtProcess.length; i++) {
-      thoughtProcess[i].isVisited = false;
-      thoughtProcess[i].a = "";
+      cookies.forEach((item) => {
+        const [key, value] = item.split("=");
+        jsonData[key] = value;
+      });
+      try {
+        const response = await axios.get(
+          "/inspections/test/?action=1&skill_name=reacthvhgvghchg",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${jsonData.access_token}`,
+            },
+          }
+        );
+        setTest_id(response.data.data.test_id);
+        setThoughtProcess(response.data.data.thought_process);
+        setRepord_id(response.data.data.report_id);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchQuestions();
+  }, []);
+
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes timer
+  const [isTimeOver, setIsTimeOver] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime === 0) {
+          clearInterval(timer);
+          setIsTimeOver(true);
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (isTimeOver) {
+      // Handle time over action, e.g., show popup
+      // You can add custom logic here
+      console.log("Time is over");
     }
-    a = "";
+  }, [isTimeOver]);
+
+  const handleDragStart = (e, index) => {
+    e.dataTransfer.setData("index", index);
   };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e, newIndex) => {
+    const droppedIndex = parseInt(e.dataTransfer.getData("index"));
+    const newThoughtProcess = [...thoughtProcess];
+    const movedItem = newThoughtProcess.splice(droppedIndex, 1)[0];
+    newThoughtProcess.splice(newIndex, 0, movedItem);
+    setThoughtProcess(newThoughtProcess);
+  };
+
+  const handleSubmit = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    // console.log(`'${thoughtProcess}'`);
+    const arrayString =
+      '"[' + thoughtProcess.map((item) => "'" + item + "'").join(", ") + ']"';
+    console.log(arrayString);
+    try {
+      const response = await axios.post(
+        "/inspections/test/",
+        {
+          action: 1,
+          answer: arrayString,
+          report_id: repord_id,
+          test_id: test_id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      console.log(response);
+      navigate("/expertdashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCancel = () => {
+    // Handle cancel action, e.g., navigate back to previous route
+    // You can use react-router-dom or any routing library for this
+    console.log("Cancelled the test");
+  };
+
+  // Format the time left to mm:ss
+  const formattedTimeLeft = new Date(timeLeft * 1000)
+    .toISOString()
+    .substr(14, 5);
   return (
-    <>
-      <div className=" bg-black/10 rounded-full h-3 mt-5">
-        <div className="bg-[#2A2A2A] w-[25%]">f</div>
-      </div>
-      <div className="flex items-center justify-between">
-        <div
-          className="border border-solid border-slate-300 drop-shadow-lg p-2 mt-5 w-fit text-base rounded-md cursor-pointer hover:bg-slate-100"
-          onClick={() => clearSelections()}
-        >
-          Clear selections
-        </div>
-        <div className="border border-solid border-slate-300 drop-shadow-lg p-2 mt-5 w-fit text-base flex items-center gap-2 rounded-md">
-          <FcClock className="text-2xl" />
-          02:00
-        </div>
-      </div>
-      <div className="mt-6">
-        {thoughtProcess.map((item, index) => (
-          <div
-            className="flex items-start gap-4 my-7 cursor-default"
-            key={index}
-            onClick={() => allotValue(index)}
+    <div className="min-h-screen bg-white flex flex-col justify-center items-center">
+      <div className="container mx-auto px-4 py-8 bg-white rounded-lg shadow-md mb-8 border border-blue-500">
+        <h2 className="text-2xl font-semibold mb-4">
+          Thought Process Reordering Quiz
+        </h2>
+        <div className="flex items-center justify-center bg-blue-300 text-white px-6 py-3 rounded-full shadow-md mb-4">
+          <svg
+            className="w-6 h-6 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <div className="border border-solid border-slate-300 rounded-full h-10 w-10 text-center p-2 shrink-0">
-              {item.a}
-            </div>
-            <div className="text-base">{item?.option}</div>
-          </div>
-        ))}
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            ></path>
+          </svg>
+          <span className="text-xl">{formattedTimeLeft}</span>
+        </div>
+        <p className="mb-4">
+          Drag and drop the components to reorder them in the correct order:
+        </p>
+        <ul className="flex flex-wrap gap-2 py-4">
+          {thoughtProcess.map((step, index) => (
+            <li
+              key={index}
+              className="bg-white text-gray-800 border border-blue-500 px-4 py-2 rounded-md cursor-move shadow-md flex-grow"
+              draggable
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={(e) => handleDrop(e, index)}
+            >
+              {step}
+            </li>
+          ))}
+        </ul>
       </div>
-      <div className="mt-8 flex items-center justify-between">
-        <div
-          className="px-11 py-2 text-base rounded-md text-white bg-gray-400 hover:bg-gray-500 transition-all"
-          onClick={goToDashboard}
-        >
-          Exit
+      {isTimeOver && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+          <div className="bg-white rounded-lg p-8 shadow-lg">
+            <p className="text-2xl font-semibold text-gray-800 mb-4">
+              Time's Up!
+            </p>
+            <p className="text-gray-600">
+              Your time is over. Please submit your answers.
+            </p>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mt-4"
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
+          </div>
         </div>
-        <div className="px-8 py-2 text-base rounded-md text-white bg-blue-500 hover:bg-blue-600 transition-all">
-          Submit
+      )}
+      <div className="bg-white py-4 w-full border-t border-blue-500">
+        <div className="container mx-auto flex justify-between">
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-white text-blue-500 px-4 py-2 rounded-full border border-blue-500 hover:text-white hover:bg-blue-500 hover:border-transparent"
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
         </div>
       </div>
-    </>
-  );
-};
-const Test = () => {
-  return (
-    <div className="mt-[85px] flex justify-center">
-      <div className="flex  border border-solid border-slate-400 w-[70%] rounded-lg">
-        <div className="w-[20%] border-r border-solid border-slate-400 text-base text-gray-600 text-center py-10">
-          <div className="px-3 py-2 transition-all hover:bg-slate-300 my-2">
-            Thought process
-          </div>
-          <div className="px-3 py-2 transition-all hover:bg-slate-300 my-2">
-            Python
-          </div>
-          <div className="px-3 py-2 transition-all hover:bg-slate-300 my-2">
-            Java
-          </div>
-          <div className="px-3 py-2 transition-all hover:bg-slate-300 my-2">
-            Ruby
-          </div>
-          <div className="px-3 py-2 transition-all hover:bg-slate-300 my-2">
-            C++
-          </div>
-        </div>
-        <div className="w-[80%] px-20 py-5">
-          <ThoughtProcess />
-        </div>
+      <div className="fixed top-4 right-4 bg-white p-4 rounded-md shadow-md border border-blue-500 text-blue-500">
+        {formattedTimeLeft}
       </div>
     </div>
   );
 };
+function TestElement() {
+  const params = useParams();
+  console.log(params);
+  return params.skill_Name === "thought_process" ? (
+    <ThoughtProcess />
+  ) : (
+    <ReactQuiz skill_Name={params.skill_Name} />
+  );
+}
 
-export default Test;
+export default TestElement;
