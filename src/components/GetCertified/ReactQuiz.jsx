@@ -120,7 +120,25 @@ function ReactQuiz() {
     setSelectedOption(option);
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
+    try {
+      const response = axios.post(
+        "/inspections/test/",
+        {
+          action: 1,
+          question_id: "8bb7ca00-e62f-11ee-9ff0-0242ac120004",
+          report_id: 3,
+          answer: "To interact with databases using Python objects",
+          test_id: "8bb7c6c2-e62f-11ee-9ff0-0242ac120004",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+    } catch (error) {}
     const selectedOptionText =
       questions[currentQuestion].options[selectedOption];
     console.log(`Selected Option: ${selectedOptionText}`);

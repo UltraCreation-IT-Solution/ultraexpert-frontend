@@ -109,6 +109,7 @@ const ThoughtProcess = () => {
         }
       );
       console.log(response);
+      navigate("/expertdashboard");
     } catch (error) {
       console.log(error);
     }

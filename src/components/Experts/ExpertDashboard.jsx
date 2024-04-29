@@ -495,6 +495,13 @@ export const Dashboard = () => {
   const [a, seta] = useState(0);
   const [b, setb] = useState(0);
   const [c, setc] = useState(0);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
 
   useEffect(() => {
     setTimeout(() => {
@@ -516,6 +523,7 @@ export const Dashboard = () => {
     }, 500);
   }, [a, b, c]);
   const [expertData, setExpertData] = useState({});
+  const [expertStatistics, setExpertStatistics] = useState([]);
   const getCurrentExpert = async () => {
     try {
       const response = await axios.get("/experts/?action=1", {
@@ -538,20 +546,36 @@ export const Dashboard = () => {
       console.log(error);
     }
   };
+  const getExpertStatistics = async () => {
+    try {
+      const response = await axios.get("/experts/?action=3", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      if (
+        response.data.status === 401 ||
+        response.data.status === 400 ||
+        response.data.status === 500
+      ) {
+        console.log(response.data.message);
+        return;
+      }
+      console.log("statistics", response.data);
+      setExpertStatistics(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
+    getExpertStatistics();
     getCurrentExpert();
   }, []);
 
   // API integration for testimonials of expert start--->>>
   const [expertAllTestimonials, setExpertAllTestimonials] = useState([]);
-  const cookies = document.cookie.split("; ");
-  const jsonData = {};
-
-  cookies.forEach((item) => {
-    const [key, value] = item.split("=");
-    jsonData[key] = value;
-  });
   const getExpertAllTestimonials = async () => {
     try {
       const response = await axios.get(`/testimonial/?action=3`, {
@@ -790,7 +814,7 @@ export const Dashboard = () => {
           >
             <LineChart
               className="overflow-hidden"
-              data={userProfileData}
+              data={expertStatistics}
               margin={{
                 top: 20,
                 right: 50,
@@ -806,14 +830,26 @@ export const Dashboard = () => {
               />
               <YAxis
                 className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                dataKey="views"
+                dataKey="profile_view_count"
                 interval={0}
               />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="views" stroke="#8884d8" />
-              <Line type="monotone" dataKey="followers" stroke="#82ca9d" />
-              <Line type="monotone" dataKey="blogs" stroke="#f2e426" />
+              <Line
+                type="monotone"
+                dataKey="profile_view_count"
+                stroke="#8884d8"
+              />
+              <Line
+                type="monotone"
+                dataKey="service_view_count"
+                stroke="#82ca9d"
+              />
+              <Line
+                type="monotone"
+                dataKey="blog_views_count"
+                stroke="#f2e426"
+              />
             </LineChart>
           </ResponsiveContainer>
           <div className="flex md:flex-col justify-between md:justify-around h-[80%] mt-[1.4vw] md:mt-[1vw] lg:mt-[0.2vw] text-[#575757] text-[2.65vw] xs:text-[1.8vw] md:text-[1.2vw] lg:text-[1vw] mb-[1vw] md:mb-[0.4vw] lg:mb-0 px-[2vw] md:border-l border-[#2e2e2e] border-solid">
@@ -856,22 +892,25 @@ export const Dashboard = () => {
             <div className="flex justify-between px-[1vw]">
               <div className="w-[110%] h-[38vw] xs:h-[28vw] md:h-[16vw] lg:h-[14vw] ml-[-10vw] xs:ml-[-7.65vw] sm:ml-[-6vw] md:ml-[-3.4vw] lg:ml-[-2.6vw] mt-[2vw] md:mt-[0.8vw] mb-[-1vw] text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] overflow-hidden">
                 <ResponsiveContainer>
-                  <ComposedChart data={data} className="overflow-hidden">
+                  <ComposedChart
+                    data={expertStatistics}
+                    className="overflow-hidden"
+                  >
                     <CartesianGrid stroke="#629BF0" />
                     <XAxis
                       className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                      dataKey="name"
+                      dataKey="month"
                       interval={0}
                     />
                     <YAxis
                       className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                      dataKey={"avgRating"}
+                      dataKey={"avg_rating"}
                       interval={0}
                     />
                     <Tooltip />
-                    <Area dataKey="avgRating" fill="#ececec" />
-                    <Bar dataKey="avgRating" barSize={30} fill="#629BF0" />
-                    <Line dataKey="avgRating" stroke="#5950C9" />
+                    <Area dataKey="avg_rating" fill="#ececec" />
+                    <Bar dataKey="avg_rating" barSize={30} fill="#629BF0" />
+                    <Line dataKey="avg_rating" stroke="#5950C9" />
                   </ComposedChart>
                 </ResponsiveContainer>
               </div>
