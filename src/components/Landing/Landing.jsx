@@ -12,12 +12,13 @@ import videoAnim from "../../assets/images/videoAnimation.png";
 import Writting from "../../assets/images/writingTranslation.png";
 import webdesignservice from "../../assets/images/webDesignService.png";
 import musicAudio from "../../assets/images/musicAudio.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import PreLoader from "../../subsitutes/PreLoader";
 import axios from "../../axios";
 
-const TestimonialCard = ({ id, user, content, date_created }) => {
+const TestimonialCard = ({expert_id, id, user, content, date_created }) => {
+  const navigate = useNavigate();
   const val = id % 5;
   return (
     <motion.div className="w-[58vw] h-[55vw] sm:w-[34vw] sm:h-[28vw] md:w-[32vw] md:h-[25vw]  text-white flex flex-col justify-center">
@@ -34,9 +35,10 @@ const TestimonialCard = ({ id, user, content, date_created }) => {
             : val == 0
             ? "bg-[#78A7EE]"
             : "bg-[#EA7794]"
-        }   rounded-xl pointer-events-none border-white border flex flex-col`}
+        }   rounded-xl  border-white border flex flex-col`}
       >
-        <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw]">
+        <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw] cursor-pointer"
+        onClick={() => navigate(`/experts/expertprofile/${expert_id}`)}      >
           <img
             className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
             src={user?.profile_img}
@@ -130,6 +132,7 @@ export const TopExperts = () => {
   const [top5ExpertList, setTop5ExpertList] = useState([]);
   const location = useLocation().pathname;
   const [activeNo, setActiveNo] = useState(0);
+  const navigate = useNavigate();
   const cookies = document.cookie.split("; ");
   const jsonData = {};
 
@@ -205,15 +208,16 @@ export const TopExperts = () => {
                     <CiStar className="text-[3.4vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
                     {expert?.rating_count} /5
                   </h3>
-                  <Link
-                    to={"experts/expertprofile"}
-                    className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3"
+                  <div
+                    className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3 cursor-pointer"
+                    onClick={()=>navigate(`/experts/expertprofile/${expert?.expert_id}`)}
                   >
-                    <span className="underline  text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    <span className="underline  text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]"
+                     >
                       See More
                     </span>
                     <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.1vw]" />
-                  </Link>
+                  </div>
                 </div>
               ) : (
                 <div className="sm:invisible absolute right-4 justify-start  bottom-0">
@@ -224,15 +228,17 @@ export const TopExperts = () => {
                     <CiStar className="text-[3.4vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
                     {expert?.rating_count} /5
                   </h3>
-                  <Link
-                    to={"experts/expertprofile"}
-                    className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3"
+                  <div
+                    className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3 cursor-pointer"
+                    onClick={()=>navigate(`/experts/expertprofile/${expert?.expert_id}`)}
                   >
-                    <span className="underline text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    <span className="underline text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]"
+                    
+                    >
                       See More
                     </span>{" "}
                     <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
-                  </Link>
+                  </div>
                 </div>
               )}
             </div>
