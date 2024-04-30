@@ -48,8 +48,8 @@ const CreateService = () => {
         newPreviews.push(e.target.result);
         if (newPreviews.length === files.length) {
           const totalFiles = combinedFiles.length + newPreviews.length;
-          if (totalFiles > 4) {
-            setErrorMessage("You can only upload up to 4 files.");
+          if (totalFiles > 1) {
+            setErrorMessage("You can only upload 1 image at a time. Please select files.");
           } else {
             setErrorMessage("");
             setSelectedFiles([...combinedFiles, ...newPreviews]);
@@ -543,7 +543,6 @@ const CreateService = () => {
                 type="file"
                 id="imageSelector"
                 accept="image/*"
-                multiple
                 onChange={handleFileChange}
                 className="hidden"
               />
@@ -554,13 +553,13 @@ const CreateService = () => {
                       <img
                         src={preview}
                         alt={`Preview ${index}`}
-                        className="w-24 h-24 object-cover"
+                        className="w-32 h-32 object-cover"
                       />
                       <div
                         onClick={(e) => handleButtonClick(e, index)}
                         className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
                       >
-                        <BsX />
+                        <BsX className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"/>
                       </div>
                     </div>
                   ))}
@@ -571,7 +570,6 @@ const CreateService = () => {
                   <div className="text-sm text-[#1475cf] mt-2">
                     Drop here to attach or upload
                   </div>
-                  <div className="text-xs mt-10">Max Uploads: 4 files</div>
                 </div>
               )}
             </div>
