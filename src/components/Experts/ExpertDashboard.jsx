@@ -1179,22 +1179,46 @@ export const Dashboard = () => {
 
 export const MyServices = () => {
   const services = Array.from({ length: 3 });
+  const [myServices, setMyServices] = useState([]);
+  const getMyServices = async() =>{
+    const cookie = document.cookie.split(";")
+    const jsonData = {}
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=")
+      jsonData[key] = value
+    })
+    try{
+      const res = await axios.get("/experts/services/?action=1",{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`
+        }
+      });
+      const json = res.data;
+      setMyServices(json.data);
+    }catch(error){
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    getMyServices();
+  }, []);
   return(
     <div className="w-full md:w-[68%] ">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
        My services
       </div>
       <div>
-        {services.map((item,index)=>
+        {myServices.map((service,index)=>
           <div key={index} className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md">
             <div className="flex items-center gap-3">
               <button className="bg-green-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">Edit service</button>
               <button className="bg-red-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">Delete service</button>
             </div>
-            <div className="text-base sm:text-lg font-bold mt-2 line-clamp-3">Learn API connection with react js and handle postman</div>
-            <div className="mt-2 text-sm text-gray-500 line-clamp-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit mollitia sapiente blanditiis accusantium, dolores nisi ut deserunt repudiandae quos, totam enim quo minus labore possimus ad a dolorum, iure nesciunt.</div>
+            <div className="text-base sm:text-lg font-bold mt-2 line-clamp-3">{service.service_name}</div>
+            <div className="mt-2 text-sm text-gray-500 line-clamp-3">{service.description}</div>
             <div className="flex items-center mt-3 gap-3 text-sm sm:text-base">
-              <div className="flex items-center gap-1"><AiOutlineLike />  10 likes</div>
+              <div className="flex items-center gap-1"><AiOutlineLike />  {service.service_view_count} views</div>
               <div className="flex items-center gap-1"><IoStar /> rating</div>
             </div>
           </div>

@@ -35,7 +35,7 @@ const CreateService = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const files = event.target.files;
     const newPreviews = [];
     const combinedFiles = [...selectedFiles];
@@ -79,7 +79,7 @@ const CreateService = () => {
 
   //slots
   const [showSlots, setShowSlots] = useState(false);
-  
+
   const [categoriesArray, setCategoriesArray] = useState([]);
   const [filterCategoriesArray, setFilterCategoriesArray] = useState([]);
 
@@ -607,42 +607,44 @@ const CreateService = () => {
           </form>
         </div>
       </div>
-      
-      {showSlots && <MyBigCalendar serviceId={serviceId} serviceTitle={serviceTitle} setServiceTitle={setServiceTitle} />}
+
+      {showSlots && (
+        <MyBigCalendar
+          serviceId={serviceId}
+          serviceTitle={serviceTitle}
+          setServiceTitle={setServiceTitle}
+        />
+      )}
     </>
   );
 };
 
 export default CreateService;
 
-
-
-
-export const MyBigCalendar = ({serviceId, serviceTitle, setServiceTitle}) => {
-
+export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
   const localizer = momentLocalizer(moment);
   const [notifyBefore, setNotifyBefore] = useState(false);
   const [notifyAfter, setNotifyAfter] = useState(false);
   const [notifyBeforeTime, setNotifyBeforeTime] = useState(0);
   const [notifyAfterTime, setNotifyAfterTime] = useState(0);
   const [events, setEvents] = useState([]);
-  const [startInputDate, setStartInputDate] = useState('');
-  const [startInputTime, setStartInputTime] = useState('');
-  const [endInputDate, setEndInputDate] = useState('');
-  const [endInputTime, setEndInputTime] = useState('');
-  console.log(serviceId)
+  const [startInputDate, setStartInputDate] = useState("");
+  const [startInputTime, setStartInputTime] = useState("");
+  const [endInputDate, setEndInputDate] = useState("");
+  const [endInputTime, setEndInputTime] = useState("");
+  console.log(serviceId);
   const handlePostEvent = async (e) => {
     e.preventDefault();
-    const cookies = document.cookie.split('; ');
+    const cookies = document.cookie.split("; ");
     const jsonData = {};
     cookies.forEach((item) => {
-      const [key, value] = item.split('=');
+      const [key, value] = item.split("=");
       jsonData[key] = value;
     });
 
     try {
       const res = await axios.post(
-        '/experts/services/',
+        "/experts/services/",
         {
           action: 5,
           service_id: serviceId,
@@ -654,7 +656,7 @@ export const MyBigCalendar = ({serviceId, serviceTitle, setServiceTitle}) => {
         },
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
@@ -662,7 +664,7 @@ export const MyBigCalendar = ({serviceId, serviceTitle, setServiceTitle}) => {
       const data = res.data;
       console.log(data);
       if (!data || data.status === 400 || data.status === 401) {
-        console.log('Something went wrong');
+        console.log("Something went wrong");
         return;
       }
     } catch (error) {
@@ -671,43 +673,53 @@ export const MyBigCalendar = ({serviceId, serviceTitle, setServiceTitle}) => {
   };
 
   const handleCreateEvent = () => {
-    const startDate = moment(startInputDate, 'YYYY-MM-DD');
-    const endDate = moment(endInputDate, 'YYYY-MM-DD');
-    const startTime = moment(startInputTime, 'HH:mm');
-    const endTime = moment(endInputTime, 'HH:mm');
+    const startDate = moment(startInputDate, "YYYY-MM-DD");
+    const endDate = moment(endInputDate, "YYYY-MM-DD");
+    const startTime = moment(startInputTime, "HH:mm");
+    const endTime = moment(endInputTime, "HH:mm");
 
     if (
       startDate.isValid() &&
       endDate.isValid() &&
       endTime.isValid() &&
       endTime.isSameOrAfter(startTime) &&
-      serviceTitle.trim() !== ''
+      serviceTitle.trim() !== ""
     ) {
       if (startTime.isSame(endTime)) {
-        alert('Start time and end time for an event should not be the same.');
+        alert("Start time and end time for an event should not be the same.");
         return;
       }
       const newEvents = [];
       let currentDate = startDate.clone();
-      while (currentDate.isSameOrBefore(endDate, 'day')) {
+      while (currentDate.isSameOrBefore(endDate, "day")) {
         const newEvent = {
           id: events.length + 1,
           title: serviceTitle.trim(),
-          start: currentDate.clone().hour(startTime.hour()).minute(startTime.minute()).toDate(),
-          end: currentDate.clone().hour(endTime.hour()).minute(endTime.minute()).toDate(),
+          start: currentDate
+            .clone()
+            .hour(startTime.hour())
+            .minute(startTime.minute())
+            .toDate(),
+          end: currentDate
+            .clone()
+            .hour(endTime.hour())
+            .minute(endTime.minute())
+            .toDate(),
         };
         newEvents.push(newEvent);
-        currentDate.add(1, 'day');
+        currentDate.add(1, "day");
       }
       setEvents([...events, ...newEvents]);
 
-      setStartInputDate('');
-      setStartInputTime('');
-      setEndInputDate('');
-      setEndInputTime('');
-      setServiceTitle('');
+      setStartInputDate("");
+      setStartInputTime("");
+      setEndInputDate("");
+      setEndInputTime("");
+      setServiceTitle("");
     } else {
-      alert('Please enter valid start and end dates, time, and a non-empty title.');
+      alert(
+        "Please enter valid start and end dates, time, and a non-empty title."
+      );
     }
   };
 
@@ -716,21 +728,20 @@ export const MyBigCalendar = ({serviceId, serviceTitle, setServiceTitle}) => {
     const endDate = moment(event.end);
 
     return {
-      day: startDate.format('DD MMM'), // Format the date as "DD MMM" (e.g., "29 Jan")
-      start_time: startDate.format('h:mm A'), // Format the start time as "h:mm A" (e.g., "9:00 AM")
-      end_time: endDate.format('h:mm A'), // Format the end time as "h:mm A" (e.g., "1:00 PM")
-      timezone: 'IST', // Assuming the timezone is always IST
-      duration: endDate.diff(startDate, 'seconds'), // Calculate the duration in seconds
+      day: startDate.format("DD MMM"), // Format the date as "DD MMM" (e.g., "29 Jan")
+      start_time: startDate.format("h:mm A"), // Format the start time as "h:mm A" (e.g., "9:00 AM")
+      end_time: endDate.format("h:mm A"), // Format the end time as "h:mm A" (e.g., "1:00 PM")
+      timezone: "IST", // Assuming the timezone is always IST
+      duration: endDate.diff(startDate, "seconds"), // Calculate the duration in seconds
     };
   };
 
   const convertEventsToAPIFormat = (events) => {
     return events.map((event) => convertEventToAPIFormat(event));
   };
-  const myEvents=convertEventsToAPIFormat(events)
-  console.log(events)
-  console.log(myEvents)
-
+  const myEvents = convertEventsToAPIFormat(events);
+  console.log(events);
+  console.log(myEvents);
 
   return (
     <div className="calendar-container mt-[100px] px-[10vw] m-auto">
@@ -829,19 +840,18 @@ export const MyBigCalendar = ({serviceId, serviceTitle, setServiceTitle}) => {
         />
       </div>
       <div className="flex gap-3">
-
-      <button
-        onClick={handleCreateEvent}
-        className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
-      >
-        Create Event
-      </button>
-      <button
-        onClick={handlePostEvent}
-        className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
-      >
-        Post event
-      </button>
+        <button
+          onClick={handleCreateEvent}
+          className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
+        >
+          Create Event
+        </button>
+        <button
+          onClick={handlePostEvent}
+          className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
+        >
+          Post event
+        </button>
       </div>
       <Calendar
         className="mt-[100px] "

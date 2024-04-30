@@ -8,16 +8,50 @@ import SearchByCategoriesSlider from "../../utilities/SearchByCategoriesSlider";
 import axios from "../../axios";
 import { useNavigate } from "react-router-dom";
 
-export const ServiceCard = ({ item }) => {
-  const [FavExpert, setFavExpert] = useState(false);
+export const ServiceCard = ({ item, addToFavorites }) => {
+  const [FavService, setFavService] = useState(false);
+  const handleAddToFavorites = () => {
+    addToFavorites(item.id);
+    setFavService(true);
+  };
+  // console.log(item);
+  // const cookie = document.cookie.split(";");
+  // const jsonData = {};
 
+  // cookie.forEach((item) => {
+  //   const [key, value] = item.split("=");
+  //   jsonData[key] = value;
+  // });
+  // const addFav = async()=>{
+  //   try{
+  //     const res = await axios.post("",{
+  //       action:5,
+  //       service_id: item.id
+  //     },{
+  //       headers:{
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${jsonData.access_token}`
+  //       }
+  //     });
+
+  //     const json = res.data;
+  //     if(!json){
+  //       console.log("no data found");
+  //       return;
+  //     }
+  //     console.log(json);
+  //     setFavService(true);
+  //   }catch(error){
+  //     console.log(error)
+  //   }
+  // }
   return (
     <div className="relative shrink-0 w-[300px] md:w-[350px] rounded-xl bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0 pb-4">
       <div className="absolute top-2 right-2 z-10 text-white text-3xl py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid cursor-pointer">
-        {FavExpert ? (
-          <FaHeart onClick={() => setFavExpert(false)} />
+        {FavService ? (
+          <FaHeart onClick={() => setFavService(false)} />
         ) : (
-          <FaRegHeart onClick={() => setFavExpert(true)} />
+          <FaRegHeart onClick={handleAddToFavorites} />
         )}
       </div>
       <img
@@ -54,10 +88,13 @@ export const ServiceCard = ({ item }) => {
     </div>
   );
 };
+export const allServiceData = [];
+
 const Service = () => {
   const navigate = useNavigate();
   const [allServicesData, setAllServicesData] = useState([
     {
+      id: "",
       first_name: "",
       last_name: "",
       title: "",
@@ -94,6 +131,7 @@ const Service = () => {
       console.log(json);
       setAllServicesData(
         json.map((item) => ({
+          id: item.id,
           first_name: item.expert_data.first_name,
           last_name: item.expert_data.last_name,
           title: item.service_name,
@@ -147,6 +185,7 @@ const Service = () => {
 
           // Push the service to the corresponding category array
           categorizedServices[category].push({
+            id: service.id,
             first_name: service.expert_data.first_name,
             last_name: service.expert_data.last_name,
             title: service.service_name,
@@ -178,6 +217,38 @@ const Service = () => {
   }, []);
   // console.log(allServicesData);
 
+  const addToFavorites = async (serviceId) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/add-favorites-endpoint",
+        {
+          service_id: serviceId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+
+      console.log("Service added to favorites:", res.data);
+
+      setFavorites([...favorites, serviceId]);
+    } catch (error) {
+      console.error("Error adding service to favorites:", error);
+    }
+  };
+  const handleGoToService = (serviceId) => {
+    navigate(`/experts/service/${serviceId}`);
+    console.log(serviceId);
+  };
   return (
     <div>
       <div className="mt-[90px] px-[7vw] md:px-[10vw]">
@@ -194,13 +265,20 @@ const Service = () => {
               <div className="font-bold text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-1 ">
                 <span>Explore into {serviceObject.category} </span>
               </div>
-              {console.log(serviceObject.serviceArray)}
               <div className=" serviceContainer flex gap-[3.5vw] sm:gap-[1.6vw] md:gap-[1.2vw] py-[2vw] mb-[2vw] overflow-x-scroll">
                 {serviceObject.serviceArray.map((item, index) => {
-                  return <ServiceCard key={index} item={item} onClick={()=> {
-                    navigate(`/experts/service/${item?.id}`)
-                    console.log(item)
-                  }} />;
+                  console.log(item.id);
+                  return (
+                    <div onClick={() => handleGoToService(item?.id)}>
+
+                      <ServiceCard
+                        key={index}
+                        item={item}
+                        addToFavorites={addToFavorites}
+                        
+                    />
+                    </div>
+                  );
                 })}
               </div>
             </div>
@@ -216,6 +294,7 @@ const Service = () => {
             <div
               key={ind}
               className="flex flex-col xs:flex-row xs:items-center gap-5 w-full lg:w-[40vw] rounded-xl bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0 p-2"
+              onClick={() => handleGoToService(item?.id)}
             >
               <img
                 className="w-full h-48 xs:min-h-32 xs:min-w-36 xs:h-[10vw] xs:w-[12vw] object-fill shrink-0 rounded-lg"

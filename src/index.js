@@ -19,7 +19,7 @@ import Favourites, {
   FavServices,
 } from "./components/Favourites/Favourites.jsx";
 import Expert from "./components/Experts/Expert";
-import Service from "./components/Services/Service";
+import Service, { allServiceData } from "./components/Services/Service";
 import Blog from "./components/Blogs/Blogs/Blog";
 import CreateBlog from "./components/Blogs/CreateBlog.jsx";
 import EditBlog from "./components/Blogs/EditBlog.jsx";
@@ -160,7 +160,7 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "experts/service/:id",
-        element: <ServiceDescription {...expertDetailsObj} />,
+        element: <ServiceDescription/>,
       },
       {
         path: "/test/:skill_Name",
