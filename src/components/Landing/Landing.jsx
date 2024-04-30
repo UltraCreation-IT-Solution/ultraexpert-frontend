@@ -12,7 +12,7 @@ import videoAnim from "../../assets/images/videoAnimation.png";
 import Writting from "../../assets/images/writingTranslation.png";
 import webdesignservice from "../../assets/images/webDesignService.png";
 import musicAudio from "../../assets/images/musicAudio.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import PreLoader from "../../subsitutes/PreLoader";
 import axios from "../../axios";
@@ -130,6 +130,7 @@ export const TopExperts = () => {
   const [top5ExpertList, setTop5ExpertList] = useState([]);
   const location = useLocation().pathname;
   const [activeNo, setActiveNo] = useState(0);
+  const navigate = useNavigate();
   const cookies = document.cookie.split("; ");
   const jsonData = {};
 
@@ -205,15 +206,16 @@ export const TopExperts = () => {
                     <CiStar className="text-[3.4vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
                     {expert?.rating_count} /5
                   </h3>
-                  <Link
-                    to={"experts/expertprofile"}
-                    className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3"
+                  <div
+                    className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3 cursor-pointer"
+                    onClick={()=>navigate(`/experts/expertprofile/${expert?.expert_id}`)}
                   >
-                    <span className="underline  text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    <span className="underline  text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]"
+                     >
                       See More
                     </span>
                     <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.1vw]" />
-                  </Link>
+                  </div>
                 </div>
               ) : (
                 <div className="sm:invisible absolute right-4 justify-start  bottom-0">
@@ -224,15 +226,17 @@ export const TopExperts = () => {
                     <CiStar className="text-[3.4vw] sm:text-[2vw] md:text-[1.4vw]" />{" "}
                     {expert?.rating_count} /5
                   </h3>
-                  <Link
-                    to={"experts/expertprofile"}
-                    className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3"
+                  <div
+                    className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3 cursor-pointer"
+                    onClick={()=>navigate(`/experts/expertprofile/${expert?.expert_id}`)}
                   >
-                    <span className="underline text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]">
+                    <span className="underline text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]"
+                    
+                    >
                       See More
                     </span>{" "}
                     <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
-                  </Link>
+                  </div>
                 </div>
               )}
             </div>

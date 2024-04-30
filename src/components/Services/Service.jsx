@@ -6,6 +6,7 @@ import { ServiceCategory } from "../Landing/Landing";
 import Subheader from "../../utilities/Subheader";
 import SearchByCategoriesSlider from "../../utilities/SearchByCategoriesSlider";
 import axios from "../../axios";
+import { useNavigate } from "react-router-dom";
 
 export const ServiceCard = ({ item }) => {
   const [FavExpert, setFavExpert] = useState(false);
@@ -54,6 +55,7 @@ export const ServiceCard = ({ item }) => {
   );
 };
 const Service = () => {
+  const navigate = useNavigate();
   const [allServicesData, setAllServicesData] = useState([
     {
       first_name: "",
@@ -192,9 +194,13 @@ const Service = () => {
               <div className="font-bold text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-1 ">
                 <span>Explore into {serviceObject.category} </span>
               </div>
+              {console.log(serviceObject.serviceArray)}
               <div className=" serviceContainer flex gap-[3.5vw] sm:gap-[1.6vw] md:gap-[1.2vw] py-[2vw] mb-[2vw] overflow-x-scroll">
                 {serviceObject.serviceArray.map((item, index) => {
-                  return <ServiceCard key={index} item={item} />;
+                  return <ServiceCard key={index} item={item} onClick={()=> {
+                    navigate(`/experts/service/${item?.id}`)
+                    console.log(item)
+                  }} />;
                 })}
               </div>
             </div>

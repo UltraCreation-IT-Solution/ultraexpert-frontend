@@ -7,7 +7,9 @@ import {
   FaMedal,
   FaRegTrashAlt,
   FaUser,
+  FaChalkboardTeacher ,
 } from "react-icons/fa";
+import { AiOutlineLike } from "react-icons/ai";
 import { FaLocationDot } from "react-icons/fa6";
 import {
   MdSpaceDashboard,
@@ -26,6 +28,7 @@ import {
   IoSettings,
   IoLocationOutline,
   IoBookmarksSharp,
+  IoStar,
 } from "react-icons/io5";
 import {
   BsFillPatchCheckFill,
@@ -1174,6 +1177,34 @@ export const Dashboard = () => {
   );
 };
 
+export const MyServices = () => {
+  const services = Array.from({ length: 3 });
+  return(
+    <div className="w-full md:w-[68%] ">
+      <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
+       My services
+      </div>
+      <div>
+        {services.map((item,index)=>
+          <div key={index} className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md">
+            <div className="flex items-center gap-3">
+              <button className="bg-green-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">Edit service</button>
+              <button className="bg-red-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">Delete service</button>
+            </div>
+            <div className="text-base sm:text-lg font-bold mt-2 line-clamp-3">Learn API connection with react js and handle postman</div>
+            <div className="mt-2 text-sm text-gray-500 line-clamp-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit mollitia sapiente blanditiis accusantium, dolores nisi ut deserunt repudiandae quos, totam enim quo minus labore possimus ad a dolorum, iure nesciunt.</div>
+            <div className="flex items-center mt-3 gap-3 text-sm sm:text-base">
+              <div className="flex items-center gap-1"><AiOutlineLike />  10 likes</div>
+              <div className="flex items-center gap-1"><IoStar /> rating</div>
+            </div>
+          </div>
+        )}
+      </div>
+
+    </div>
+  )
+}
+
 export const Chats = () => {
   const [chatDetail, setChatDetail] = useState(false);
   return (
@@ -1543,6 +1574,12 @@ const ExpertDashboard = () => {
                   Create service
                 </li>
               </Link>
+              <Link to="myservices" className="no-underline">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                  <FaChalkboardTeacher  className="text-[1.65vw]" />
+                  My services
+                </li>
+              </Link>
               <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                 <FaWallet className="text-[1.55vw]" />
                 Wallet
@@ -1579,6 +1616,7 @@ const ExpertDashboard = () => {
       <Outlet>
         <EditProfileExpert />
         <Dashboard />
+        <MyServices/>
         <Chats />
         <Leaderboard />
         <SkillList />
@@ -1587,9 +1625,6 @@ const ExpertDashboard = () => {
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />
       )}
-      {/* {showInstructions === true && (
-        
-      )} */}
     </div>
   );
 };

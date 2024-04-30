@@ -1,10 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { MdStar, MdGroupAdd } from "react-icons/md";
-import {
-  MdKeyboardArrowDown,
-  MdKeyboardArrowUp,
-} from "react-icons/md";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { RiFlowChart } from "react-icons/ri";
 import { IoDiamondSharp } from "react-icons/io5";
 import { FaUserGraduate, FaUserCheck } from "react-icons/fa6";
@@ -14,7 +11,7 @@ import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { BsBookmarkPlusFill, BsBookmarkDashFill } from "react-icons/bs";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { expertDetailsObj, ProjectsCarousel } from "../../constant";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import { BlogCard } from "../Blogs/Blogs/Blog";
@@ -90,6 +87,7 @@ export const ExpertSummary = ({ experienceArray, projectsArray }) => {
   );
 };
 export const ExpertProfileServiceCard = ({ item }) => {
+  const navigate = useNavigate();
   const [saveService, setSaveService] = useState(false);
   return (
     <div className="flex justify-between items-start gap-2 py-4 md:py-[1vw] mb-[1.5vw] bg-white border-b border-solid border-slate-400">
@@ -100,11 +98,12 @@ export const ExpertProfileServiceCard = ({ item }) => {
         </h1>
 
         <div className="mt-3 xs:mt-4 flex items-center gap-[2.5vw] md:gap-[1vw] shrink-0">
-          <Link to={"service/" + item?.id}>
-            <button className="bg-white px-8 py-1 md:px-[1.8vw] md:py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm cursor-pointer">
-              View
-            </button>
-          </Link>
+          <button
+            className="bg-white px-8 py-1 md:px-[1.8vw] md:py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm cursor-pointer"
+            onClick={() => navigate(`/experts/service/${item?.id}`)}
+          >
+            View
+          </button>
           {/* <Link to={"booking/" + temp?.id}>
           <button className="bg-[#2A2A2A] px-6 py-1 md:px-[1.5vw] md:py-[0.3vw] text-sm md:text-base text-white font-semibold border rounded-sm sm:rounded-md cursor-pointer">
             Book
@@ -620,16 +619,21 @@ export const ExpertInfo = ({ ...expert }) => {
           )}
           {services && <ExpertServices />}
           {ratings && <ExpertRatings />}
-          {blogs && blogArray.map((item,idx) => <BlogCard key={item?.id}
-          index={idx}
-          items={item}
-          likes={item?.reaction_count}
-          views={item?.blog_view_count}
-          title={item?.title}
-          tags={item?.tags}
-          image={item?.images[0]}
-          id={item?.id}
-          date={formatDate(item.date_created.split("T")[0])} />)}
+          {blogs &&
+            blogArray.map((item, idx) => (
+              <BlogCard
+                key={item?.id}
+                index={idx}
+                items={item}
+                likes={item?.reaction_count}
+                views={item?.blog_view_count}
+                title={item?.title}
+                tags={item?.tags}
+                image={item?.images[0]}
+                id={item?.id}
+                date={formatDate(item.date_created.split("T")[0])}
+              />
+            ))}
         </div>
       </div>
 
