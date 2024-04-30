@@ -19,7 +19,7 @@ import Favourites, {
   FavServices,
 } from "./components/Favourites/Favourites.jsx";
 import Expert from "./components/Experts/Expert";
-import Service from "./components/Services/Service";
+import Service, { allServiceData } from "./components/Services/Service";
 import Blog from "./components/Blogs/Blogs/Blog";
 import CreateBlog from "./components/Blogs/CreateBlog.jsx";
 import EditBlog from "./components/Blogs/EditBlog.jsx";
@@ -37,6 +37,7 @@ import ExpertDashboard, {
   Dashboard,
   Leaderboard,
   MyBookings,
+  MyServices,
 } from "./components/Experts/ExpertDashboard";
 import About from "./components/Other_Pages/About.jsx";
 import Update from "./components/Experts/EditDashboardProfile";
@@ -151,16 +152,16 @@ const appRouter = createBrowserRouter([
                 element: <ExpertProfile />,
               },
               {
-                path: "service/:id",
-                element: <ServiceDescription {...expertDetailsObj} />,
-              },
-              {
                 path: "booking/:id",
                 element: <ServiceBooking />,
               },
             ],
           },
         ],
+      },
+      {
+        path: "experts/service/:id",
+        element: <ServiceDescription/>,
       },
       {
         path: "/test/:skill_Name",
@@ -228,6 +229,10 @@ const appRouter = createBrowserRouter([
           {
             path: "editprofile",
             element: <EditProfileExpert />,
+          },
+          {
+            path: "myservices",
+            element: <MyServices />,
           },
           {
             path: "chats",

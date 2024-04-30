@@ -7,7 +7,9 @@ import {
   FaMedal,
   FaRegTrashAlt,
   FaUser,
+  FaChalkboardTeacher ,
 } from "react-icons/fa";
+import { AiOutlineLike } from "react-icons/ai";
 import { FaLocationDot } from "react-icons/fa6";
 import {
   MdSpaceDashboard,
@@ -26,6 +28,7 @@ import {
   IoSettings,
   IoLocationOutline,
   IoBookmarksSharp,
+  IoStar,
 } from "react-icons/io5";
 import {
   BsFillPatchCheckFill,
@@ -495,6 +498,13 @@ export const Dashboard = () => {
   const [a, seta] = useState(0);
   const [b, setb] = useState(0);
   const [c, setc] = useState(0);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
 
   useEffect(() => {
     setTimeout(() => {
@@ -516,6 +526,7 @@ export const Dashboard = () => {
     }, 500);
   }, [a, b, c]);
   const [expertData, setExpertData] = useState({});
+  const [expertStatistics, setExpertStatistics] = useState([]);
   const getCurrentExpert = async () => {
     try {
       const response = await axios.get("/experts/?action=1", {
@@ -538,20 +549,36 @@ export const Dashboard = () => {
       console.log(error);
     }
   };
+  const getExpertStatistics = async () => {
+    try {
+      const response = await axios.get("/experts/?action=3", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      if (
+        response.data.status === 401 ||
+        response.data.status === 400 ||
+        response.data.status === 500
+      ) {
+        console.log(response.data.message);
+        return;
+      }
+      console.log("statistics", response.data);
+      setExpertStatistics(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
+    getExpertStatistics();
     getCurrentExpert();
   }, []);
 
   // API integration for testimonials of expert start--->>>
   const [expertAllTestimonials, setExpertAllTestimonials] = useState([]);
-  const cookies = document.cookie.split("; ");
-  const jsonData = {};
-
-  cookies.forEach((item) => {
-    const [key, value] = item.split("=");
-    jsonData[key] = value;
-  });
   const getExpertAllTestimonials = async () => {
     try {
       const response = await axios.get(`/testimonial/?action=3`, {
@@ -790,7 +817,7 @@ export const Dashboard = () => {
           >
             <LineChart
               className="overflow-hidden"
-              data={userProfileData}
+              data={expertStatistics}
               margin={{
                 top: 20,
                 right: 50,
@@ -806,14 +833,26 @@ export const Dashboard = () => {
               />
               <YAxis
                 className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                dataKey="views"
+                dataKey="profile_view_count"
                 interval={0}
               />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="views" stroke="#8884d8" />
-              <Line type="monotone" dataKey="followers" stroke="#82ca9d" />
-              <Line type="monotone" dataKey="blogs" stroke="#f2e426" />
+              <Line
+                type="monotone"
+                dataKey="profile_view_count"
+                stroke="#8884d8"
+              />
+              <Line
+                type="monotone"
+                dataKey="service_view_count"
+                stroke="#82ca9d"
+              />
+              <Line
+                type="monotone"
+                dataKey="blog_views_count"
+                stroke="#f2e426"
+              />
             </LineChart>
           </ResponsiveContainer>
           <div className="flex md:flex-col justify-between md:justify-around h-[80%] mt-[1.4vw] md:mt-[1vw] lg:mt-[0.2vw] text-[#575757] text-[2.65vw] xs:text-[1.8vw] md:text-[1.2vw] lg:text-[1vw] mb-[1vw] md:mb-[0.4vw] lg:mb-0 px-[2vw] md:border-l border-[#2e2e2e] border-solid">
@@ -856,22 +895,25 @@ export const Dashboard = () => {
             <div className="flex justify-between px-[1vw]">
               <div className="w-[110%] h-[38vw] xs:h-[28vw] md:h-[16vw] lg:h-[14vw] ml-[-10vw] xs:ml-[-7.65vw] sm:ml-[-6vw] md:ml-[-3.4vw] lg:ml-[-2.6vw] mt-[2vw] md:mt-[0.8vw] mb-[-1vw] text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] overflow-hidden">
                 <ResponsiveContainer>
-                  <ComposedChart data={data} className="overflow-hidden">
+                  <ComposedChart
+                    data={expertStatistics}
+                    className="overflow-hidden"
+                  >
                     <CartesianGrid stroke="#629BF0" />
                     <XAxis
                       className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                      dataKey="name"
+                      dataKey="month"
                       interval={0}
                     />
                     <YAxis
                       className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                      dataKey={"avgRating"}
+                      dataKey={"avg_rating"}
                       interval={0}
                     />
                     <Tooltip />
-                    <Area dataKey="avgRating" fill="#ececec" />
-                    <Bar dataKey="avgRating" barSize={30} fill="#629BF0" />
-                    <Line dataKey="avgRating" stroke="#5950C9" />
+                    <Area dataKey="avg_rating" fill="#ececec" />
+                    <Bar dataKey="avg_rating" barSize={30} fill="#629BF0" />
+                    <Line dataKey="avg_rating" stroke="#5950C9" />
                   </ComposedChart>
                 </ResponsiveContainer>
               </div>
@@ -1134,6 +1176,58 @@ export const Dashboard = () => {
     </section>
   );
 };
+
+export const MyServices = () => {
+  const services = Array.from({ length: 3 });
+  const [myServices, setMyServices] = useState([]);
+  const getMyServices = async() =>{
+    const cookie = document.cookie.split(";")
+    const jsonData = {}
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=")
+      jsonData[key] = value
+    })
+    try{
+      const res = await axios.get("/experts/services/?action=1",{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`
+        }
+      });
+      const json = res.data;
+      setMyServices(json.data);
+    }catch(error){
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    getMyServices();
+  }, []);
+  return(
+    <div className="w-full md:w-[68%] ">
+      <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
+       My services
+      </div>
+      <div>
+        {myServices.map((service,index)=>
+          <div key={index} className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md">
+            <div className="flex items-center gap-3">
+              <button className="bg-green-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">Edit service</button>
+              <button className="bg-red-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">Delete service</button>
+            </div>
+            <div className="text-base sm:text-lg font-bold mt-2 line-clamp-3">{service.service_name}</div>
+            <div className="mt-2 text-sm text-gray-500 line-clamp-3">{service.description}</div>
+            <div className="flex items-center mt-3 gap-3 text-sm sm:text-base">
+              <div className="flex items-center gap-1"><AiOutlineLike />  {service.service_view_count} views</div>
+              <div className="flex items-center gap-1"><IoStar /> rating</div>
+            </div>
+          </div>
+        )}
+      </div>
+
+    </div>
+  )
+}
 
 export const Chats = () => {
   const [chatDetail, setChatDetail] = useState(false);
@@ -1504,6 +1598,12 @@ const ExpertDashboard = () => {
                   Create service
                 </li>
               </Link>
+              <Link to="myservices" className="no-underline">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                  <FaChalkboardTeacher  className="text-[1.65vw]" />
+                  My services
+                </li>
+              </Link>
               <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                 <FaWallet className="text-[1.55vw]" />
                 Wallet
@@ -1540,6 +1640,7 @@ const ExpertDashboard = () => {
       <Outlet>
         <EditProfileExpert />
         <Dashboard />
+        <MyServices/>
         <Chats />
         <Leaderboard />
         <SkillList />
@@ -1548,9 +1649,6 @@ const ExpertDashboard = () => {
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />
       )}
-      {/* {showInstructions === true && (
-        
-      )} */}
     </div>
   );
 };
