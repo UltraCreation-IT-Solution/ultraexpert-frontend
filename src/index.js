@@ -57,7 +57,6 @@ import CustomerDashboard, {
 } from "./components/Customers/CustomerDashboard.jsx";
 import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
-import TestElement from "./TestElement.jsx";
 import SkillList from "./components/GetCertified/Instructions.js";
 const Layout = () => {
   const action = useNavigationType();
@@ -255,10 +254,6 @@ const appRouter = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
-      },
-      {
-        path: "/testelement",
-        element: <TestElement />,
       },
       {
         path: "/firebaseuploadtest",

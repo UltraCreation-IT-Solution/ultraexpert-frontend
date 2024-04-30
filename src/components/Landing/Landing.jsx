@@ -17,43 +17,6 @@ import { motion } from "framer-motion";
 import PreLoader from "../../subsitutes/PreLoader";
 import axios from "../../axios";
 
-const topExpertList = [
-  {
-    name: "Bhavesh Bhanusali",
-    image:
-      "https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",
-    rating: 4.5,
-    profession: "Software Developer",
-  },
-  {
-    name: "Naman Paliwal",
-    image:
-      "https://images.unsplash.com/photo-1615109398623-88346a601842?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbnxlbnwwfHwwfHx8MA%3D%3D",
-    rating: 4.5,
-    profession: "Software Developer",
-  },
-  {
-    name: "Naman Paliwal",
-    image:
-      "https://plus.unsplash.com/premium_photo-1677553953986-a78e31a192f8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFufGVufDB8fDB8fHww",
-    rating: 4.5,
-    profession: "Software Developer",
-  },
-  {
-    name: "Naman Paliwal",
-    image:
-      "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    rating: 4.5,
-    profession: "Software Developer",
-  },
-  {
-    name: "Naman Paliwal",
-    image:
-      "https://images.unsplash.com/photo-1599032909736-0155c1d43a6c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D",
-    rating: 4.5,
-    profession: "Software Developer",
-  },
-];
 const TestimonialCard = ({ id, user, content, date_created }) => {
   const val = id % 5;
   return (
@@ -179,7 +142,7 @@ export const TopExperts = () => {
       const response = await axios.get("/topfive/?action=1", {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
+          // Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
       if (
@@ -211,7 +174,7 @@ export const TopExperts = () => {
         EXPERTS
       </Link>
       <div className="flex flex-col sm:flex-row mb-[12.5vw] sm:mb-[10vw] md:mb-[5vw] gap-5 md:gap-8 w-full  mt-[3vw] md:mt-[2vw]">
-        {top5ExpertList.map((expert,index) => (
+        {top5ExpertList.map((expert, index) => (
           <div
             key={expert?.expert_id}
             onMouseOver={() => setActiveNo(index)}
@@ -335,7 +298,7 @@ export const Testimonial = () => {
       const response = await axios.get(`/testimonial/?action=1`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
+          // Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
       if (

@@ -198,7 +198,6 @@ const Service = () => {
           serviceArray: categorizedServices[category],
         }))
       );
-      allServiceData.push({...categorizedServices});
     } catch (error) {
       console.log(error);
     }
