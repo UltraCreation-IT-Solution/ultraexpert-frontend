@@ -128,16 +128,29 @@ input[type="number"]::-webkit-outer-spin-button {
   object-position: center;
 }
 
+
+.rbc-toolbar-label{
+  font-weight: 700;
+}
 .rbc-month-header .rbc-header{
-  padding:6px 3px;
+  padding:10px 3px;
+}
+.rbc-header span{
+  font-weight: 500;
+}
+.rbc-row-bg .rbc-today{
+  background-color: rgb(197, 221, 197);
 }
 .rbc-row-segment .rbc-event{
-  background-color: white;
-  
-  
+  background-color: #F2FFF3;
 }
+
+.rbc-event .rbc-selected, .rbc-day-slot .rbc-selected .rbc-background-event{
+  background-color: chocolate
+}
+
 .rbc-event-content{
-  color:black;
+  @apply text-gray-500;
   background-color: white;
   border:1px solid black;
   padding:3px;

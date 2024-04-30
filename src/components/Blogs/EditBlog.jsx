@@ -175,6 +175,7 @@ const EditBlog = () => {
   };
   const handleCategoryChange = (e) => {
     const searchVal = e.target.value.toLowerCase();
+    setCategoryInputValue(searchVal);
     setValue2({ ...value2, name: e.target.value });
     setFilterCategoriesArray(
       categoriesArray.filter((item) => {
@@ -349,6 +350,8 @@ const EditBlog = () => {
       console.log(error);
     }
   };
+
+  const [categoryInputValue, setCategoryInputValue] = useState("");
   const navigate = useNavigate();
   return (
     <div className="mt-[100px] mx-[7vw] ">
@@ -378,9 +381,9 @@ const EditBlog = () => {
               onFocus={() => getCategories()}
               className="w-full mt-1 border border-solid border-slate-300 p-2 text-sm rounded-sm focus:outline-none"
             />
-            {filterCategoriesArray.length > 0 && (
-              <div className=" border border-solid border-slate-300 px-1 text-sm rounded-sm mt-2 w-fit min-h-auto max-h-[150px] overflow-y-auto ">
-                {filterCategoriesArray.length > 0 &&
+            {categoriesArray.length > 0 && (
+              <div className={`  px-1 text-sm rounded-sm mt-2 w-fit min-h-auto max-h-[150px] overflow-y-auto ${filterCategoriesArray.length > 0 ? "border border-solid border-slate-300" : ""}`}>
+                {
                   filterCategoriesArray?.map((item, index) => (
                     <div
                       key={index}
@@ -391,10 +394,9 @@ const EditBlog = () => {
                           name: item?.name,
                           number: item?.number,
                         });
-                        console.log(value2.name);
-                        console.log(value2.number);
 
                         setFilterCategoriesArray([]);
+                        setCategoryInputValue("");
                       }}
                     >
                       {item?.name}
@@ -402,7 +404,7 @@ const EditBlog = () => {
                   ))}
               </div>
             )}
-            {filterCategoriesArray.length === 0 && value2?.name !== "" && (
+            {filterCategoriesArray.length === 0 && categoryInputValue.trim()!=="" && (
               <div
                 className="bg-green-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer mt-2"
                 onClick={(e) => {

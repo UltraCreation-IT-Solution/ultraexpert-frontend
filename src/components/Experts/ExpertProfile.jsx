@@ -4,7 +4,6 @@ import { MdStar, MdGroupAdd } from "react-icons/md";
 import {
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
-  MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
 import { RiFlowChart } from "react-icons/ri";
 import { IoDiamondSharp } from "react-icons/io5";
@@ -20,7 +19,6 @@ import { expertDetailsObj, ProjectsCarousel } from "../../constant";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import { BlogCard } from "../Blogs/Blogs/Blog";
 import axios from "../../axios";
-import MyCalendar from "../../TestElement";
 
 export const ExpertSummary = ({ experienceArray, projectsArray }) => {
   console.log(projectsArray);
@@ -874,7 +872,7 @@ const ExpertProfile = () => {
   useEffect(() => {
     console.log(expertDetail);
   }, [expertDetail]);
-  if (!expertDetail) return <MyCalendar />;
+  // if (!expertDetail) return <MyCalendar />;
 
   return (
     <div>
