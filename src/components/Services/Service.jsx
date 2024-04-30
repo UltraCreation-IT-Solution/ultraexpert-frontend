@@ -6,8 +6,9 @@ import { ServiceCategory } from "../Landing/Landing";
 import Subheader from "../../utilities/Subheader";
 import SearchByCategoriesSlider from "../../utilities/SearchByCategoriesSlider";
 import axios from "../../axios";
+import { useNavigate } from "react-router-dom";
 
-export const ServiceCard = ({ item,addToFavorites }) => {
+export const ServiceCard = ({ item, addToFavorites }) => {
   const [FavService, setFavService] = useState(false);
   const handleAddToFavorites = () => {
     addToFavorites(item.id);
@@ -60,8 +61,14 @@ export const ServiceCard = ({ item,addToFavorites }) => {
       />
       <div className="px-2 md:px-[0.8vw] pt-2 md:pt-0">
         <div className="flex items-center gap-4 font-semibold text-lg text-[#808080]">
-          <img src={item?.profile_img} className="h-9 w-9 rounded-full " alt="" />
-          <div>{item?.first_name} {item?.last_name}</div>
+          <img
+            src={item?.profile_img}
+            className="h-9 w-9 rounded-full "
+            alt=""
+          />
+          <div>
+            {item?.first_name} {item?.last_name}
+          </div>
         </div>
         {/* <div className="font-bold text-xl line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
           {item?.category}
@@ -84,6 +91,7 @@ export const ServiceCard = ({ item,addToFavorites }) => {
 export const allServiceData = [];
 
 const Service = () => {
+  const navigate = useNavigate();
   const [allServicesData, setAllServicesData] = useState([
     {
       id: "",
@@ -208,7 +216,6 @@ const Service = () => {
     getAllServices();
   }, []);
   // console.log(allServicesData);
-  
 
   const addToFavorites = async (serviceId) => {
     const cookie = document.cookie.split(";");
@@ -218,28 +225,30 @@ const Service = () => {
       jsonData[key] = value;
     });
     try {
-      
       const res = await axios.post(
         "/add-favorites-endpoint",
         {
-          service_id: serviceId
+          service_id: serviceId,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`
-          }
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
         }
       );
-      
+
       console.log("Service added to favorites:", res.data);
-      
+
       setFavorites([...favorites, serviceId]);
     } catch (error) {
       console.error("Error adding service to favorites:", error);
     }
   };
-
+  const handleGoToService = (serviceId) => {
+    navigate(`/experts/service/${serviceId}`);
+    console.log(serviceId);
+  };
   return (
     <div>
       <div className="mt-[90px] px-[7vw] md:px-[10vw]">
@@ -258,7 +267,18 @@ const Service = () => {
               </div>
               <div className=" serviceContainer flex gap-[3.5vw] sm:gap-[1.6vw] md:gap-[1.2vw] py-[2vw] mb-[2vw] overflow-x-scroll">
                 {serviceObject.serviceArray.map((item, index) => {
-                  return <ServiceCard key={index} item={item} addToFavorites={addToFavorites}/>;
+                  console.log(item.id);
+                  return (
+                    <div onClick={() => handleGoToService(item?.id)}>
+
+                      <ServiceCard
+                        key={index}
+                        item={item}
+                        addToFavorites={addToFavorites}
+                        
+                    />
+                    </div>
+                  );
                 })}
               </div>
             </div>
@@ -274,6 +294,7 @@ const Service = () => {
             <div
               key={ind}
               className="flex flex-col xs:flex-row xs:items-center gap-5 w-full lg:w-[40vw] rounded-xl bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0 p-2"
+              onClick={() => handleGoToService(item?.id)}
             >
               <img
                 className="w-full h-48 xs:min-h-32 xs:min-w-36 xs:h-[10vw] xs:w-[12vw] object-fill shrink-0 rounded-lg"
