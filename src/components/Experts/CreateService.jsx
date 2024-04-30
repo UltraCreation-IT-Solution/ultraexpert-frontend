@@ -10,8 +10,6 @@ import axios from "../../axios";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-
-const localizer = momentLocalizer(moment);
 //slots
 
 const CreateService = () => {
@@ -37,7 +35,7 @@ const CreateService = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const files = event.target.files;
     const newPreviews = [];
     const combinedFiles = [...selectedFiles];
@@ -82,65 +80,6 @@ const CreateService = () => {
   //slots
   const [showSlots, setShowSlots] = useState(false);
 
-  const [events, setEvents] = useState([]);
-  console.log(events);
-  const [startInputDate, setStartInputDate] = useState("");
-  const [startInputTime, setStartInputTime] = useState("");
-  const [endInputDate, setEndInputDate] = useState("");
-  const [endInputTime, setEndInputTime] = useState("");
-  // const [titleInput, setTitleInput] = useState('');
-
-  const handleCreateEvent = () => {
-    const startDate = moment(startInputDate, "YYYY-MM-DD");
-    const endDate = moment(endInputDate, "YYYY-MM-DD");
-    const startTime = moment(startInputTime, "HH:mm");
-    const endTime = moment(endInputTime, "HH:mm");
-
-    if (
-      startDate.isValid() &&
-      endDate.isValid() &&
-      endTime.isValid() &&
-      endTime.isSameOrAfter(startTime) &&
-      serviceTitle.trim() !== ""
-    ) {
-      if (startTime.isSame(endTime)) {
-        alert("Start time and end time for an event should not be the same.");
-        return;
-      }
-      const newEvents = [];
-      let currentDate = startDate.clone();
-      while (currentDate.isSameOrBefore(endDate, "day")) {
-        const newEvent = {
-          id: events.length + 1,
-          title: serviceTitle.trim(),
-          start: currentDate
-            .clone()
-            .hour(startTime.hour())
-            .minute(startTime.minute())
-            .toDate(),
-          end: currentDate
-            .clone()
-            .hour(endTime.hour())
-            .minute(endTime.minute())
-            .toDate(),
-        };
-        newEvents.push(newEvent);
-        currentDate.add(1, "day");
-      }
-      setEvents([...events, ...newEvents]);
-      setStartInputDate("");
-      setStartInputTime("");
-      setEndInputDate("");
-      setEndInputTime("");
-      // setTitleInput('');
-      setServiceTitle("");
-    } else {
-      alert(
-        "Please enter valid start and end dates, time, and a non-empty title."
-      );
-    }
-  };
-
   const [categoriesArray, setCategoriesArray] = useState([]);
   const [filterCategoriesArray, setFilterCategoriesArray] = useState([]);
 
@@ -168,7 +107,7 @@ const CreateService = () => {
       console.log(error);
     }
   };
-
+  const [serviceId, setServiceId] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState({
     name: "",
     id: "",
@@ -251,7 +190,6 @@ const CreateService = () => {
   useEffect(() => {
     getSkills();
   }, []);
-  //slots
   console.log(showSkill);
 
   const [skill, setSkill] = useState([]);
@@ -329,49 +267,72 @@ const CreateService = () => {
     setInputTagValue("");
   };
 
-  const [createService,setCreateService] = useState({
-    img:"",
-    desc:"",
-    duration:6,
-    price:"",
-    currency:"INR",
-  })
+  const [createService, setCreateService] = useState({
+    img: "",
+    desc: "",
+    duration: 6,
+    price: "",
+    currency: "INR",
+  });
 
-  const handleServiceCreate = async(e) =>{
+  const handleServiceCreate = async (e) => {
     e.preventDefault();
+    setShowSlots(!showSlots);
 
     const cookie = document.cookie.split(";");
     const jsonData = {};
-    
+
     cookie.forEach((item) => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    try{
-      const res = await axios.post("/experts/services/",{
-        action:1,
-        service_name:serviceTitle,
-        service_img:createService.img,
-        category:selectedCategory.id,
-        description:createService.desc,
-        skill_name:val,
-        price:createService.price,
-        duration:createService.duration,
-        currency:createService.currency,
-        tags_list:selectedSkill
-      },{
-        headers:{
-          "Content-Type":"application/json",
-          Authorization:`Bearer ${jsonData.access_token}`
+    try {
+      const res = await axios.post(
+        "/experts/services/",
+        {
+          action: 1,
+
+          service_name: serviceTitle,
+          service_img: createService.img,
+          category: selectedCategory.id,
+          description: createService.desc,
+          skill_name: val,
+          price: createService.price,
+          duration: createService.duration,
+          currency: createService.currency,
+          tags_list: selectedSkill,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
         }
-      });
+      );
+      if (!res.data || res.data.status === 400 || res.data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
       const data = res.data;
       console.log(data.msg);
+      try {
+        const res = await axios.get("/experts/services/?action=1", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        });
+        const data = res.data.data;
+        console.log(res.data.data[0].id);
+        setServiceId(res.data.data[0].id);
+      } catch (error) {
+        console.log(error);
+      }
       setShowSlots(!showSlots);
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <>
@@ -414,7 +375,9 @@ const CreateService = () => {
               name="desc"
               id="desc"
               value={createService.desc}
-              onChange={(e) => setCreateService({...createService, desc:e.target.value})}
+              onChange={(e) =>
+                setCreateService({ ...createService, desc: e.target.value })
+              }
               className="border border-solid resize-none h-32 border-slate-300 rounded-md px-4 py-2 mb-4"
             />
             <label htmlFor="category" className="text-lg mb-1">
@@ -626,7 +589,9 @@ const CreateService = () => {
                 id="price"
                 name="price"
                 value={createService.price}
-                onChange={(e)=>{setCreateService({ ...createService, price: e.target.value })}}
+                onChange={(e) => {
+                  setCreateService({ ...createService, price: e.target.value });
+                }}
                 className="border border-solid border-slate-300 rounded-e-md px-4 py-2 mb-4 w-full"
               />
             </div>
@@ -643,69 +608,259 @@ const CreateService = () => {
         </div>
       </div>
 
-      {/* slots */}
       {showSlots && (
-        <div className="calendar-container mt-[100px] px-[10vw] m-auto   ">
-          <div className="flex gap-10  flex-wrap">
-            <div className="flex flex-col gap-1">
-              <label className="text-base text-gray-600">Start Date</label>
-              <input
-                type="date"
-                value={startInputDate}
-                onChange={(e) => setStartInputDate(e.target.value)}
-                className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-
-            <label className="text-base text-gray-600">End Date:</label>
-            <input
-              type="date"
-              value={endInputDate}
-              onChange={(e) => setEndInputDate(e.target.value)}
-              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-            />
-            </div>
-            <div className="flex flex-col gap-1">
-
-            <label className="text-base text-gray-600">Start Time:</label>
-            <input
-              type="time"
-              value={startInputTime}
-              onChange={(e) => setStartInputTime(e.target.value)}
-              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-            />
-            </div>
-            <div className="flex flex-col gap-1">
-
-            <label className="text-base text-gray-600">End Time:</label>
-            <input
-              type="time"
-              value={endInputTime}
-              onChange={(e) => setEndInputTime(e.target.value)}
-              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-            />
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 mt-10 ">
-            <label className="text-base text-gray-600">Event Title:</label>
-            <input type="text" value={serviceTitle} className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-64" />
-          </div>
-          <button onClick={handleCreateEvent} className="mt-10  text-base px-4 py-2 btnBlack rounded-sm text-white">Create Event</button>
-          <Calendar
-            className="mt-[100px] "
-            localizer={localizer}
-            events={events}
-            startAccessor="start"
-            endAccessor="end"
-            style={{ height: 500 }}
-          />
-        </div>
+        <MyBigCalendar
+          serviceId={serviceId}
+          serviceTitle={serviceTitle}
+          setServiceTitle={setServiceTitle}
+        />
       )}
-      {/* slolts */}
     </>
   );
 };
 
 export default CreateService;
+
+export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
+  const localizer = momentLocalizer(moment);
+  const [notifyBefore, setNotifyBefore] = useState(false);
+  const [notifyAfter, setNotifyAfter] = useState(false);
+  const [notifyBeforeTime, setNotifyBeforeTime] = useState(0);
+  const [notifyAfterTime, setNotifyAfterTime] = useState(0);
+  const [events, setEvents] = useState([]);
+  const [startInputDate, setStartInputDate] = useState("");
+  const [startInputTime, setStartInputTime] = useState("");
+  const [endInputDate, setEndInputDate] = useState("");
+  const [endInputTime, setEndInputTime] = useState("");
+  console.log(serviceId);
+  const handlePostEvent = async (e) => {
+    e.preventDefault();
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+
+    try {
+      const res = await axios.post(
+        "/experts/services/",
+        {
+          action: 5,
+          service_id: serviceId,
+          notify_before: notifyBefore,
+          notify_before_time: notifyBeforeTime,
+          notify_after: notifyAfter,
+          notify_after_time: notifyAfterTime,
+          time_slots: convertEventsToAPIFormat(events), // Convert events to API format
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const data = res.data;
+      console.log(data);
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCreateEvent = () => {
+    const startDate = moment(startInputDate, "YYYY-MM-DD");
+    const endDate = moment(endInputDate, "YYYY-MM-DD");
+    const startTime = moment(startInputTime, "HH:mm");
+    const endTime = moment(endInputTime, "HH:mm");
+
+    if (
+      startDate.isValid() &&
+      endDate.isValid() &&
+      endTime.isValid() &&
+      endTime.isSameOrAfter(startTime) &&
+      serviceTitle.trim() !== ""
+    ) {
+      if (startTime.isSame(endTime)) {
+        alert("Start time and end time for an event should not be the same.");
+        return;
+      }
+      const newEvents = [];
+      let currentDate = startDate.clone();
+      while (currentDate.isSameOrBefore(endDate, "day")) {
+        const newEvent = {
+          id: events.length + 1,
+          title: serviceTitle.trim(),
+          start: currentDate
+            .clone()
+            .hour(startTime.hour())
+            .minute(startTime.minute())
+            .toDate(),
+          end: currentDate
+            .clone()
+            .hour(endTime.hour())
+            .minute(endTime.minute())
+            .toDate(),
+        };
+        newEvents.push(newEvent);
+        currentDate.add(1, "day");
+      }
+      setEvents([...events, ...newEvents]);
+
+      setStartInputDate("");
+      setStartInputTime("");
+      setEndInputDate("");
+      setEndInputTime("");
+      setServiceTitle("");
+    } else {
+      alert(
+        "Please enter valid start and end dates, time, and a non-empty title."
+      );
+    }
+  };
+
+  const convertEventToAPIFormat = (event) => {
+    const startDate = moment(event.start);
+    const endDate = moment(event.end);
+
+    return {
+      day: startDate.format("DD MMM"), // Format the date as "DD MMM" (e.g., "29 Jan")
+      start_time: startDate.format("h:mm A"), // Format the start time as "h:mm A" (e.g., "9:00 AM")
+      end_time: endDate.format("h:mm A"), // Format the end time as "h:mm A" (e.g., "1:00 PM")
+      timezone: "IST", // Assuming the timezone is always IST
+      duration: endDate.diff(startDate, "seconds"), // Calculate the duration in seconds
+    };
+  };
+
+  const convertEventsToAPIFormat = (events) => {
+    return events.map((event) => convertEventToAPIFormat(event));
+  };
+  const myEvents = convertEventsToAPIFormat(events);
+  console.log(events);
+  console.log(myEvents);
+
+  return (
+    <div className="calendar-container mt-[100px] px-[10vw] m-auto">
+      <div className="flex gap-10 flex-wrap">
+        <div className="flex flex-col gap-1">
+          <label className="text-base text-gray-600">Start Date</label>
+          <input
+            type="date"
+            value={startInputDate}
+            onChange={(e) => setStartInputDate(e.target.value)}
+            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-base text-gray-600">End Date:</label>
+          <input
+            type="date"
+            value={endInputDate}
+            onChange={(e) => setEndInputDate(e.target.value)}
+            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-base text-gray-600">Start Time:</label>
+          <input
+            type="time"
+            value={startInputTime}
+            onChange={(e) => setStartInputTime(e.target.value)}
+            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-base text-gray-600">End Time:</label>
+          <input
+            type="time"
+            value={endInputTime}
+            onChange={(e) => setEndInputTime(e.target.value)}
+            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+          />
+        </div>
+      </div>
+
+      <div className="mt-10 flex gap-10">
+        <div>
+          <div className="flex items-center gap-2">
+            <label className="text-base text-gray-600">Notify Before: </label>
+            <input
+              type="checkbox"
+              name="checkbox"
+              id="checkbox"
+              onClick={() => setNotifyBefore(!notifyBefore)}
+            />
+          </div>
+
+          {notifyBefore && (
+            <input
+              placeholder="enter time in minutes"
+              type="number"
+              name="notifyBefore"
+              id="notifyBefore"
+              onChange={(e) => setNotifyBeforeTime(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-5"
+            />
+          )}
+        </div>
+        <div>
+          <div className="flex items-center gap-2">
+            <label className="text-base text-gray-600">Notify After: </label>
+            <input
+              type="checkbox"
+              name="checkbox"
+              id="checkbox"
+              onClick={() => setNotifyAfter(!notifyAfter)}
+            />
+          </div>
+
+          {notifyAfter && (
+            <input
+              placeholder="enter time in minutes"
+              type="number"
+              name="notifyAfter"
+              id="notifyAfter"
+              onChange={(e) => setNotifyAfterTime(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-5"
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3 mt-10 ">
+        <label className="text-base text-gray-600">Event Title:</label>
+        <input
+          type="text"
+          value={serviceTitle}
+          className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-64"
+        />
+      </div>
+      <div className="flex gap-3">
+        <button
+          onClick={handleCreateEvent}
+          className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
+        >
+          Create Event
+        </button>
+        <button
+          onClick={handlePostEvent}
+          className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
+        >
+          Post event
+        </button>
+      </div>
+      <Calendar
+        className="mt-[100px] "
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: 500 }}
+      />
+    </div>
+  );
+};

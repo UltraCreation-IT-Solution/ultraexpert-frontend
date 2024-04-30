@@ -19,7 +19,7 @@ import Favourites, {
   FavServices,
 } from "./components/Favourites/Favourites.jsx";
 import Expert from "./components/Experts/Expert";
-import Service from "./components/Services/Service";
+import Service, { allServiceData } from "./components/Services/Service";
 import Blog from "./components/Blogs/Blogs/Blog";
 import CreateBlog from "./components/Blogs/CreateBlog.jsx";
 import EditBlog from "./components/Blogs/EditBlog.jsx";
@@ -37,6 +37,7 @@ import ExpertDashboard, {
   Dashboard,
   Leaderboard,
   MyBookings,
+  MyServices,
 } from "./components/Experts/ExpertDashboard";
 import About from "./components/Other_Pages/About.jsx";
 import Update from "./components/Experts/EditDashboardProfile";
@@ -56,8 +57,7 @@ import CustomerDashboard, {
 } from "./components/Customers/CustomerDashboard.jsx";
 import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
-import Instructions from "./components/GetCertified/Instructions.js";
-import TestElement from "./TestElement.jsx";
+import SkillList from "./components/GetCertified/Instructions.js";
 const Layout = () => {
   const action = useNavigationType();
   const pathname = useLocation().pathname;
@@ -151,16 +151,20 @@ const appRouter = createBrowserRouter([
                 element: <ExpertProfile />,
               },
               {
-                path: "service/:id",
-                element: <ServiceDescription {...expertDetailsObj} />,
-              },
-              {
                 path: "booking/:id",
                 element: <ServiceBooking />,
               },
             ],
           },
         ],
+      },
+      {
+        path: "experts/service/:id",
+        element: <ServiceDescription/>,
+      },
+      {
+        path: "/test/:skill_Name",
+        element: <Test />,
       },
       {
         path: "/services",
@@ -226,6 +230,10 @@ const appRouter = createBrowserRouter([
             element: <EditProfileExpert />,
           },
           {
+            path: "myservices",
+            element: <MyServices />,
+          },
+          {
             path: "chats",
             element: <Chats />,
           },
@@ -239,7 +247,7 @@ const appRouter = createBrowserRouter([
           },
           {
             path: "getcertified",
-            element: <Instructions />,
+            element: <SkillList />,
           },
         ],
       },
@@ -248,16 +256,8 @@ const appRouter = createBrowserRouter([
         element: <About />,
       },
       {
-        path: "/testelement",
-        element: <TestElement />,
-      },
-      {
         path: "/firebaseuploadtest",
         element: <FirebaseImageUpload />,
-      },
-      {
-        path: "/test",
-        element: <Test />,
       },
       {
         path: "editprofile",

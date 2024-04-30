@@ -19,13 +19,68 @@ import ExpertCardShimmer from "../../subsitutes/Shimmers/ExpertCardShimmer";
 
 export const ExpertCard = ({ item }) => {
   const [FavExpert, setFavExpert] = useState(false);
+  const cookie = document.cookie.split(";");
+  const jsonData = {};
+
+  cookie.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  const addFav = async () => {
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 3,
+          expert_id: item.expert.id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      setFavExpert(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const remFav = async () => {
+    try{
+      const res = await axios.post("/customers/connect/",{
+        action: 4,
+        expert_id: item.expert.id
+      },{
+        headers:{
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`
+        }
+      });
+      const json = res.data;
+      if(!json){
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      setFavExpert(false);
+    }catch(error){
+      console.log(error);
+    }
+  }
   return (
     <div className="relative w-[90vw] h-[81vw] xs:w-[84vw] xs:h-[66vw] sm:w-[42vw] sm:h-[46vw] md:w-[38vw]  lg:w-[25vw] lg:h-[33vw] rounded-md md:rounded-lg shadow-lg my-[2vw] md:my-[0.65vw] border-[0.001vw] border-[#dbdbdb] border-solid overflow-hidden">
       <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  ">
         {FavExpert ? (
-          <FaHeart onClick={() => setFavExpert(false)} />
+          <FaHeart onClick={() => remFav()} />
         ) : (
-          <FaRegHeart onClick={() => setFavExpert(true)} />
+          <FaRegHeart onClick={() => addFav()} />
         )}
       </div>
       <img
@@ -64,7 +119,7 @@ export const ExpertCard = ({ item }) => {
           <div className="flex gap-[1vw] items-center">
             <FaTags className="text-[4.2vw] xs:text-[3vw] sm:text-[2vw] md:text-[1.8vw] lg:text-[1.25vw]" />{" "}
             <span className="flex">
-              {item?.skills?.slice(0,3)?.map((skill, idx) => {
+              {item?.skills?.slice(0, 3)?.map((skill, idx) => {
                 return (
                   <div
                     key={idx}
@@ -102,7 +157,7 @@ const AllExperts = () => {
   const lastPage = Math.ceil(profileObj.length / itemsPerPage);
   const [allExpertsList, setAllExpertsList] = useState([]);
   const slicedArray = allExpertsList.slice(firstIndex, lastIndex);
-  console.log(slicedArray)
+  console.log(slicedArray);
   cookies.forEach((item) => {
     const [key, value] = item.split("=");
     jsonData[key] = value;
@@ -117,21 +172,22 @@ const AllExperts = () => {
       });
       console.log(res.data.data);
       setAllExpertsList(res.data.data);
-      console.log(allExpertsList)
+      console.log(allExpertsList);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     getAllExperts();
-  },[]);
+  }, []);
 
-  if(!allExpertsList.length) return (
-    <div className=" px-[3vw] xs:px-[6vw] md:px-[10vw] w-full flex flex-wrap gap-[3vw] md:gap-[2vw] pb-[2vw]  justify-center sm:justify-normal  items-center ">
-      <ExpertCardShimmer/>
-    </div>
-  )
-  
+  if (!allExpertsList.length)
+    return (
+      <div className=" px-[3vw] xs:px-[6vw] md:px-[10vw] w-full flex flex-wrap gap-[3vw] md:gap-[2vw] pb-[2vw]  justify-center sm:justify-normal  items-center ">
+        <ExpertCardShimmer />
+      </div>
+    );
+
   return (
     <div className="mt-[40px] md:mt-[100px] relative w-full h-auto py-[5vw] sm:py-[3vw] px-[3vw] xs:px-[6vw] md:px-[10vw] flex flex-col">
       <div className="flex w-full justify-center sm:justify-between">
