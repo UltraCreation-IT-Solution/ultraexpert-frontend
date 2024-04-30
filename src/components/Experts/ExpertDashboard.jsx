@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Update from "./EditDashboardProfile";
-import Instructions from "../GetCertified/Instructions";
 import {
   FaEdit,
   FaTags,
@@ -69,6 +68,7 @@ import { Outlet, Link } from "react-router-dom";
 import axios from "../../axios";
 import UpdateProject from "./UpdateProjeect";
 import EditProfileExpert from "../Auth/EditProfileExpert";
+import SkillList from "../GetCertified/Instructions";
 
 const generateRandomData = () => {
   const today = new Date();
@@ -491,11 +491,6 @@ const ShowMyProjects = () => {
     </div>
   );
 };
-const AllUserTestimonials = ({ expertAllTestimonials }) => {
-  return expertAllTestimonials?.map((item, index) => (
-    <TestimonialsCard key={index} item={item} index={index} />
-  ));
-};
 export const Dashboard = () => {
   const [a, seta] = useState(0);
   const [b, setb] = useState(0);
@@ -592,7 +587,6 @@ export const Dashboard = () => {
 
   const [blogData, setBlogData] = useState([]);
 
-  
   const HandleMeetings = () => {
     setMeetings(true);
     setBlogs(false);
@@ -1039,7 +1033,6 @@ export const Dashboard = () => {
       </div>
       <div className="border border-[#c7c7c7] border-solid rounded-lg px-5 py-4 ">
         <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-4 mb-4 text-sm md:text-base overflow-x-scroll">
-          
           <div
             className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
               meetings && `bg-[#ececec] rounded-sm`
@@ -1079,7 +1072,7 @@ export const Dashboard = () => {
             Projects
           </div>
         </div>
-        
+
         {/* Meetings section of dashboard */}
         {meetings && (
           <div>
@@ -1382,7 +1375,6 @@ export const MyBookings = () => {
     </div>
   );
 };
-
 const ExpertDashboard = () => {
   const [showEditProfile, setShowEditProfile] = useState(false);
 
@@ -1424,10 +1416,6 @@ const ExpertDashboard = () => {
 
   const handleShowEditProfile = () => {
     setShowEditProfile(false);
-  };
-  const [showInstructions, setShowInstructions] = useState(false);
-  const handleShowInstructions = () => {
-    setShowInstructions(false);
   };
 
   return (
@@ -1526,13 +1514,13 @@ const ExpertDashboard = () => {
                   Chat
                 </li>
               </Link>
-              <li
+              <Link
+                to={"getcertified"}
                 className="cursor-pointer flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]"
-                onClick={() => setShowInstructions(true)}
               >
                 <BsFillPatchCheckFill className="text-[1.55vw]" />
                 Get Certified
-              </li>
+              </Link>
               <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                 <BsFillPersonLinesFill className="text-[1.55vw]" />
                 Go to Experts
@@ -1554,14 +1542,15 @@ const ExpertDashboard = () => {
         <Dashboard />
         <Chats />
         <Leaderboard />
+        <SkillList />
         <MyBookings />
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />
       )}
-      {showInstructions === true && (
-        <Instructions handleShowInstructions={handleShowInstructions} />
-      )}
+      {/* {showInstructions === true && (
+        
+      )} */}
     </div>
   );
 };

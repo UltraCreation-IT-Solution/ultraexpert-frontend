@@ -10,17 +10,7 @@ import { useParams } from "react-router-dom";
 const BlogDetails = () => {
   const params = useParams();
   console.log(params);
-  const [date, setDate] = useState("");
-  const [title, setTitle] = useState("");
-  const [person, setPerson] = useState({
-    firstName: "",
-    lastName: "",
-  });
-  const [content, setContent] = useState("");
-  const [id, setId] = useState("");
-  const [profileImg, setProfileImg] = useState("");
-  const [tags,setTags] = useState([]);
-  const [image, setImage] = useState("");
+  const [currBlogData, setCurrBlogData] = useState({});
   const getData = async () => {
     const cookies = document.cookie.split("; ");
     const jsonData = {};
@@ -37,24 +27,7 @@ const BlogDetails = () => {
         },
       });
       const allData = res.data.data;
-      console.log(allData);
-      setId(allData?.id);
-
-      setProfileImg(allData?.author.profile_img);
-      setImage(allData?.images_list[0]);
-      setPerson({
-        ...person,
-        firstName: allData.author?.first_name,
-        lastName: allData?.author.last_name,
-      });
-
-      setTitle(allData?.title);
-
-      setDate(allData?.publish_date);
-
-      setContent(allData?.content);
-      setTags(allData.tags_list)
-      console.log(tags)
+      setCurrBlogData(allData);
     } catch (error) {
       console.log(error);
     }
@@ -68,37 +41,38 @@ const BlogDetails = () => {
       <div className="px-[6vw] md:px-[10vw] mt-[110px] md:mt-[12vw]">
         <div className="text-center">
           <div className="text-xs md:text-sm text-gray-500 font-semibold">
-            {date}
+            {currBlogData?.publish_date}
           </div>
           <div className=" text-3xl overflow-hidden xs:text-4xl lg:text-5xl font-bold md:px-[7vw] my-5 md:my-4 tracking-wide">
-            {title}
+            {currBlogData?.title}
           </div>
           <div className="flex items-center justify-center gap-3">
             <img
-              src={profileImg}
+              src={currBlogData?.author_data?.profile_img}
               alt="profile"
               className="h-10 w-10 rounded-full shrink-0 object-cover "
             />
             <div className="text-sm md:text-base text-gray-500">
-              Blog - By {person.firstName + " " + person.lastName}
+              Blog - By {currBlogData?.author_data?.first_name + " " + currBlogData?.author_data?.last_name}
             </div>
           </div>
         </div>
 
         <div className="my-[3vw]">
-          <div>
+          <div>{
+            (currBlogData?.images_list?.length)&&
             <img
               className="w-[100%] h-[45vw] object-cover shrink-0"
-              src={image}
+              src={currBlogData?.images_list[0]}
               alt=""
-            />
+            />}
           </div>
-          <div dangerouslySetInnerHTML={{ __html: content }} />
+          <div dangerouslySetInnerHTML={{ __html: currBlogData?.content }} />
         </div>
-        {tags?.length >0 && 
+        {currBlogData?.tags_list?.length >0 && 
         <div className="flex items-center gap-2 flex-wrap my-2">
           
-          {tags.map((tag,index)=>
+          {currBlogData?.tags_list.map((tag,index)=>
             <div key={index} className="text-[10px] sm:text-sm shrink-0 bg-[#D9D9D9] text-gray-500 border border-solid border-slate-300 rounded-sm px-3 py-1 " >{tag} </div>
         )}
         </div>

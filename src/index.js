@@ -56,7 +56,7 @@ import CustomerDashboard, {
 } from "./components/Customers/CustomerDashboard.jsx";
 import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
-import MyCalendar from "./TestElement.jsx";
+import SkillList from "./components/GetCertified/Instructions.js";
 const Layout = () => {
   const action = useNavigationType();
   const pathname = useLocation().pathname;
@@ -162,6 +162,10 @@ const appRouter = createBrowserRouter([
         ],
       },
       {
+        path: "/test/:skill_Name",
+        element: <Test />,
+      },
+      {
         path: "/services",
         element: <Service />,
       },
@@ -236,6 +240,10 @@ const appRouter = createBrowserRouter([
             path: "mybookings",
             element: <MyBookings />,
           },
+          {
+            path: "getcertified",
+            element: <SkillList />,
+          },
         ],
       },
       {
@@ -243,16 +251,8 @@ const appRouter = createBrowserRouter([
         element: <About />,
       },
       {
-        path: "/testelement",
-        element: <MyCalendar />,
-      },
-      {
         path: "/firebaseuploadtest",
         element: <FirebaseImageUpload />,
-      },
-      {
-        path: "/test",
-        element: <Test />,
       },
       {
         path: "editprofile",
