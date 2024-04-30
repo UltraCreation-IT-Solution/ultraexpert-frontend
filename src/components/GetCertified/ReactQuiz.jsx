@@ -204,18 +204,21 @@ function ReactQuiz() {
           </div>
         </div>
       </div>
-      <Question
-        question={currentQuestionData?.question}
-        options={Object.entries(currentQuestionData.options).map(
-          ([option, text]) => ({
-            option,
-            text,
-          })
-        )}
-        selectedOption={selectedOption}
-        onOptionSelect={handleOptionSelect}
-        skill_Name={params.skill_Name}
-      />
+      {currentQuestionData?.question_id && (
+        <Question
+          question={currentQuestionData?.question}
+          options={Object.entries(currentQuestionData?.options)?.map(
+            ([option, text]) => ({
+              option,
+              text,
+            })
+          )}
+          selectedOption={selectedOption}
+          onOptionSelect={handleOptionSelect}
+          skill_Name={params.skill_Name}
+        />
+      )}
+
       <button
         className={`bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mr-4 ${
           timer <= 0 ? "pointer-events-none" : ""
