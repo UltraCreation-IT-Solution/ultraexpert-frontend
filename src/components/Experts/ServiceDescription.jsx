@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import axios from "../../axios";
 
 export const ServiceProfileCard = ({item}) => {
+  console.log(item)
   return (
     <div
       className={`w-full px-3 py-5 bg-[#EDEDED] flex justify-between items-center shadow-sm drop-shadow-md rounded-md`}
