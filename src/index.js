@@ -58,6 +58,7 @@ import CustomerDashboard, {
 import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
 import SkillList from "./components/GetCertified/Instructions.js";
+import UpdateService from "./components/Services/UpdateService.jsx";
 const Layout = () => {
   const action = useNavigationType();
   const pathname = useLocation().pathname;
@@ -162,6 +163,7 @@ const appRouter = createBrowserRouter([
         path: "experts/service/:id",
         element: <ServiceDescription/>,
       },
+      
       {
         path: "/test/:skill_Name",
         element: <Test />,
@@ -232,6 +234,10 @@ const appRouter = createBrowserRouter([
           {
             path: "myservices",
             element: <MyServices />,
+          },
+          {
+            path: "myservices/service/updateService/:id",
+            element: <UpdateService />,
           },
           {
             path: "chats",
