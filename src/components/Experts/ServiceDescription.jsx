@@ -27,7 +27,6 @@ export const ServiceProfileCard = ({ item }) => {
           <div className="text-lg font-semibold">
             {item?.expert_data?.first_name} {item?.expert_data?.last_name}
           </div>
-          {/* <div className="text-xs text-gray-600">{item?.}</div> */}
         </div>
       </div>
 
@@ -140,7 +139,7 @@ const ServiceDescription = () => {
                 My projects
               </div>
               <div id="projects">
-                <ProjectsCarousel />
+                <ProjectsCarousel  />
               </div>
             </div>
             <div className="lg:hidden w-full">

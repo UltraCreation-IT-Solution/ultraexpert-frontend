@@ -150,8 +150,8 @@ const Service = () => {
             <div className="serviceContainer flex gap-[3.5vw] sm:gap-[1.6vw] md:gap-[1.2vw] py-[2vw] mb-[2vw] overflow-x-scroll">
               {services.map((service) => (
                 <div
-                  key={service.id}
-                  onClick={() => handleGoToService(service.id)}
+                  key={service?.id}
+                  onClick={() => handleGoToService(service?.id)}
                   className="cursor-pointer"
                 >
                   <ServiceCard item={service} />

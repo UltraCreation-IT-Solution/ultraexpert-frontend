@@ -67,7 +67,7 @@ import {
 } from "recharts";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import axios from "../../axios";
 import UpdateProject from "./UpdateProjeect";
 import EditProfileExpert from "../Auth/EditProfileExpert";
@@ -87,6 +87,81 @@ const generateRandomData = () => {
 
   return values;
 };
+//linegrapgh data
+const userProfileData = [
+  {
+    name: "Jan",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Feb",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Mar",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Apr",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "May",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Jun",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Jul",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Aug",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Sep",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Oct",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Nov",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+  {
+    name: "Dec",
+    views: 4000,
+    followers: 2400,
+    blogs: 2400,
+  },
+];
 
 const data = [
   {
@@ -1103,9 +1178,8 @@ export const Dashboard = () => {
 };
 
 export const MyServices = () => {
-  const navigate = useNavigate();
+  const services = Array.from({ length: 3 });
   const [myServices, setMyServices] = useState([]);
-  // const [deletechange, setDeletechange] = useState(0);
   const getMyServices = async () => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
@@ -1132,9 +1206,6 @@ export const MyServices = () => {
       } else console.log(error);
     }
   };
-  useEffect(() => {
-    getMyServices();
-  }, []);
   const deleteService = async (id) => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
@@ -1166,7 +1237,9 @@ export const MyServices = () => {
       console.log(error);
     }
   };
-  console.log(myServices);
+  useEffect(() => {
+    getMyServices();
+  }, []);
   return (
     <div className="w-full md:w-[68%] ">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
@@ -1179,10 +1252,7 @@ export const MyServices = () => {
             className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md"
           >
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => navigate(`service/updateService/${service.id}`)}
-                className="bg-green-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
-              >
+              <button className="bg-green-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">
                 Edit service
               </button>
               <button
@@ -1491,6 +1561,7 @@ const ExpertDashboard = () => {
   useEffect(() => {
     getCurrentExpert();
   }, []);
+
   const handleShowEditProfile = () => {
     setShowEditProfile(false);
   };
