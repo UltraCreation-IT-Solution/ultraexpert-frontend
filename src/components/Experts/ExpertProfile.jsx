@@ -1,10 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { MdStar, MdGroupAdd } from "react-icons/md";
-import {
-  MdKeyboardArrowDown,
-  MdKeyboardArrowUp,
-} from "react-icons/md";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { RiFlowChart } from "react-icons/ri";
 import { IoDiamondSharp } from "react-icons/io5";
 import { FaUserGraduate, FaUserCheck } from "react-icons/fa6";
@@ -90,8 +87,8 @@ export const ExpertSummary = ({ experienceArray, projectsArray }) => {
   );
 };
 export const ExpertProfileServiceCard = ({ item }) => {
-  const [saveService, setSaveService] = useState(false);
   const navigate = useNavigate();
+  const [saveService, setSaveService] = useState(false);
 
   return (
     <div className="flex justify-between items-start gap-2 py-4 md:py-[1vw] mb-[1.5vw] bg-white border-b border-solid border-slate-400">

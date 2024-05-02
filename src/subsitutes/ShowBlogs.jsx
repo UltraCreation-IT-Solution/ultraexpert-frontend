@@ -10,7 +10,6 @@ import axios from "../axios";
 export const BlogCardHorizontal = ({
   index,
   id,
-  items,
   title,
   date,
   tags,
@@ -58,14 +57,27 @@ export const BlogCardHorizontal = ({
   };
   return (
     <div
-      className={`w-full px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
+      className={`w-full px-3 py-4 my-6 rounded-md  ${
         index % 2 === 0
           ? `bg-[#ececec]`
           : `border border-[#c7c7c7] border-solid `
       }`}
     >
+      <div className="flex items-center gap-3">
+        <FaEdit
+          className="text-xl shrink-0"
+          onClick={() => navigate(`/blog/editblog/${id}`)}
+        />
+
+        <FaRegTrashAlt
+          onClick={() => handleDeleteBlogs(id)}
+          className="text-xl shrink-0"
+        />
+      </div>
+      <div className="sm:flex justify-between gap-5">
+
       
-      <div className="flex flex-col sm:flex-row items-center gap-5">
+      <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-5">
         <img
           className=" w-full h-48 object-cover sm:h-36 sm:w-40 rounded-md shrink-0 self-start"
           src={image}
@@ -104,16 +116,6 @@ export const BlogCardHorizontal = ({
       <div className="hidden border border-solid border-slate-300 h-fit sm:flex items-center justify-center rounded-full text-4xl font-thin self-center shrink-0 cursor-pointer">
         <RiArrowRightSLine onClick={() => navigate(`/blog/blogdetail/${id}`)} />
       </div>
-      <div className="flex items-center gap-3">
-        <FaEdit
-          className="text-xl shrink-0"
-          onClick={() => navigate(`/blog/editblog/${id}`)}
-        />
-
-        <FaRegTrashAlt
-          onClick={() => handleDeleteBlogs(id)}
-          className="text-xl shrink-0"
-        />
       </div>
     </div>
   );
