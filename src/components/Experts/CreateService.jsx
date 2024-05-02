@@ -270,7 +270,7 @@ const CreateService = () => {
   const [createService, setCreateService] = useState({
     img: "",
     desc: "",
-    duration: 6,
+    duration: "",
     price: "",
     currency: "INR",
   });
@@ -845,7 +845,7 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
           Create Event
         </button>
         <button
-          onClick={handlePostEvent}
+          onClick={(e)=>handlePostEvent(e)}
           className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
         >
           Post event
