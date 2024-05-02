@@ -67,7 +67,7 @@ import {
 } from "recharts";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import UpdateProject from "./UpdateProjeect";
 import EditProfileExpert from "../Auth/EditProfileExpert";
@@ -1176,9 +1176,53 @@ export const Dashboard = () => {
     </section>
   );
 };
-
+export const MyServiceCard = ({service, getMyServices}) => {
+  
+  const navigate = useNavigate();
+  const handleUpdate = () => {
+    getMyServices();
+  }
+  const deleteService = async(id) =>{
+    const cookie = document.cookie.split(";")
+    const jsonData = {}
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=")
+      jsonData[key] = value
+    })
+    try{
+      const res = await axios.post("/experts/services/",{
+        action: 3,
+        service_id:id
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`
+        }
+      });
+      const json = res.data;
+      console.log(json);
+      handleUpdate();
+    }catch(error){
+      console.log(error)
+    }
+  }
+  return(
+    <div className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md">
+            <div className="flex items-center gap-3">
+              <button onClick={() => navigate(`service/updateService/${service?.id}`)} className="bg-green-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">Edit service</button>
+              <button onClick={() => deleteService(service?.id)} className="bg-red-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">Delete service</button>
+            </div>
+            <div className="text-base sm:text-lg font-bold mt-2 line-clamp-3">{service?.service_name}</div>
+            <div className="mt-2 text-sm text-gray-500 line-clamp-3">{service?.description}</div>
+            <div className="flex items-center mt-3 gap-3 text-sm sm:text-base">
+              <div className="flex items-center gap-1"><AiOutlineLike />  {service?.service_view_count} views</div>
+              <div className="flex items-center gap-1"><IoStar /> rating</div>
+            </div>
+          </div>
+  )
+}
 export const MyServices = () => {
-  const services = Array.from({ length: 3 });
   const [myServices, setMyServices] = useState([]);
   const getMyServices = async() =>{
     const cookie = document.cookie.split(";")
@@ -1203,28 +1247,17 @@ export const MyServices = () => {
   useEffect(() => {
     getMyServices();
   }, []);
+  console.log(myServices);
   return(
     <div className="w-full md:w-[68%] ">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
        My services
       </div>
       <div>
-        {myServices.map((service,index)=>
-          <div key={index} className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md">
-            <div className="flex items-center gap-3">
-              <button className="bg-green-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">Edit service</button>
-              <button className="bg-red-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">Delete service</button>
-            </div>
-            <div className="text-base sm:text-lg font-bold mt-2 line-clamp-3">{service.service_name}</div>
-            <div className="mt-2 text-sm text-gray-500 line-clamp-3">{service.description}</div>
-            <div className="flex items-center mt-3 gap-3 text-sm sm:text-base">
-              <div className="flex items-center gap-1"><AiOutlineLike />  {service.service_view_count} views</div>
-              <div className="flex items-center gap-1"><IoStar /> rating</div>
-            </div>
-          </div>
+        {myServices.map((service)=>
+          <MyServiceCard key={service.id} service={service} getMyServices={getMyServices}/>
         )}
       </div>
-
     </div>
   )
 }
