@@ -11,8 +11,8 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../../axios";
 
-export const ServiceProfileCard = ({item}) => {
-  console.log(item)
+export const ServiceProfileCard = ({ item }) => {
+  console.log(item);
   return (
     <div
       className={`w-full px-3 py-5 bg-[#EDEDED] flex justify-between items-center shadow-sm drop-shadow-md rounded-md`}
@@ -24,8 +24,9 @@ export const ServiceProfileCard = ({item}) => {
           alt=""
         />
         <div className="flex flex-col">
-          <div className="text-lg font-semibold">{item?.expert_data?.first_name} {item?.expert_data?.last_name}</div>
-          {/* <div className="text-xs text-gray-600">{item?.}</div> */}
+          <div className="text-lg font-semibold">
+            {item?.expert_data?.first_name} {item?.expert_data?.last_name}
+          </div>
         </div>
       </div>
 
@@ -59,33 +60,36 @@ const ServiceDescription = () => {
   const params = useParams();
   const { id } = params;
 
-  const [servDesc,setServDesc] = useState({});
+  const [servDesc, setServDesc] = useState({});
 
-  const getServiceDesc = async()=>{
-    const cookie = document.cookie.split(";")
-    const jsonData = {}
+  const getServiceDesc = async () => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
     cookie.forEach((item) => {
-      const [key, value] = item.split("=")
-      jsonData[key] = value
-    })
-    try{
-      const res = await axios.get(`/customers/services/?action=2&service_id=${id}`,{
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get(
+        `/customers/services/?action=2&service_id=${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
         }
-      })
+      );
       const json = res.data;
       console.log(json);
       setServDesc(json.data);
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     getServiceDesc();
-  }, [])
+  }, []);
 
   // const service = services.find(service => service.id === id);
 
@@ -95,7 +99,7 @@ const ServiceDescription = () => {
     <>
       <div className="lg:flex mt-[100px] ">
         <div className="w-full lg:w-[70%] px-[2.5vw] border-r border-solid border-slate-300">
-        <ServiceProfileCard item={servDesc}/>
+          <ServiceProfileCard item={servDesc} />
           <div className="h-auto mt-5 md:mt-10">
             <div className="text-xl md:text-3xl gap-4 font-semibold flex items-start my-5">
               <RiFlowChart className="mt-1" />
@@ -135,15 +139,12 @@ const ServiceDescription = () => {
                 My projects
               </div>
               <div id="projects">
-                <ProjectsCarousel />
+                <ProjectsCarousel  />
               </div>
             </div>
             <div className="lg:hidden w-full">
               <div className="my-8">
-                <ShowSchedule
-                  price={servDesc?.price}
-                  id={servDesc?.id}
-                />
+                <ShowSchedule price={servDesc?.price} id={servDesc?.id} />
               </div>
             </div>
             <div id="ratings" className="mt-10">
@@ -217,10 +218,7 @@ const ServiceDescription = () => {
             </button>
           </div> */}
           <div className="mx-[2.5vw] w-full">
-            <ShowSchedule
-              price={servDesc?.price}
-              id={servDesc?.id}
-            />
+            <ShowSchedule price={servDesc?.price} id={servDesc?.id} />
           </div>
         </div>
       </div>
