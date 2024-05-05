@@ -3151,7 +3151,6 @@ export const favBlogs = [
 ];
 
 export const ProjectsCarousel = ({projectsArray}) => {
-  console.log(projectsArray);
   const [slider, setSlider] = useState(0);
   return (
     <>
