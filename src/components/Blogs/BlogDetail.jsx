@@ -275,10 +275,6 @@
 // };
 // export default BlogDetails;
 
-
-
-
-
 import { PiCaretLeftLight } from "react-icons/pi";
 import { PiCaretRightLight } from "react-icons/pi";
 import { AiOutlineLike } from "react-icons/ai";
@@ -322,7 +318,7 @@ const BlogDetails = () => {
   const [comments, setComments] = useState({
     comment: "",
   });
-  const postNewComment = async() =>{
+  const postNewComment = async () => {
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -330,32 +326,36 @@ const BlogDetails = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    try{
-      const res = await axios.post("/blogs/",{
-        action: 8,
-        blog_id: params.id,
-        content: comments.comment
-      },{
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 8,
+          blog_id: params.id,
+          content: comments.comment,
         },
-      })
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
       const json = res.data;
-      if(!json){
+      if (!json) {
         console.log("no data");
         return;
       }
       console.log(json);
       getAllBlogComments();
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const [blogComments, setBlogComments] = useState([]);
 
-  const getAllBlogComments = async() =>{
+  const getAllBlogComments = async () => {
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -363,24 +363,24 @@ const BlogDetails = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    try{
-      const res = await axios.get(`/blogs/?action=6&blog_id=${params.id}`,{
+    try {
+      const res = await axios.get(`/blogs/?action=6&blog_id=${params.id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jsonData.access_token}`,
         },
-      })
+      });
       const json = res.data;
-      if(!json){
+      if (!json) {
         console.log("no data");
         return;
       }
       console.log(json);
       setBlogComments(json.data);
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     getAllBlogComments();
@@ -464,18 +464,23 @@ const BlogDetails = () => {
               <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
                 50 reviews
               </div>
-              
+
               <div className=" mt-6">
                 <input
                   type="text"
                   name="comment"
                   id="comment"
                   value={comments.comment}
-                  onChange={(e) => setComments({ ...comments, comment: e.target.value })}
+                  onChange={(e) =>
+                    setComments({ ...comments, comment: e.target.value })
+                  }
                   placeholder="Write a comment"
                   className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
                 />
-                <button onClick={postNewComment} className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0">
+                <button
+                  onClick={postNewComment}
+                  className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0"
+                >
                   Comment
                 </button>
               </div>
@@ -519,4 +524,3 @@ const BlogDetails = () => {
   );
 };
 export default BlogDetails;
-

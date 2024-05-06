@@ -142,7 +142,7 @@ const Service = () => {
         <ServiceCategory />
       </div>
       <div className="w-full px-[7vw] md:px-[10vw] mt-[-1vw]">
-        {serviceObjects.map(([category, services], index) => (
+        {serviceObjects.filter(([category]) => category !== "all").map(([category, services], index) => (
           <div key={index} className="mb-4 py-3 xs:py-2 md:py-0">
             <div className="font-bold text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-1">
               <span>Explore into {category}</span>
