@@ -3,8 +3,16 @@ import { BsUpload, BsX } from "react-icons/bs";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { FaIndianRupeeSign } from "react-icons/fa6";
-import { FiX } from "react-icons/fi";
 import axios from "../../axios";
+import { FiUpload, FiX } from "react-icons/fi";
+import { imageDB } from "../firebase/config";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { v4 } from "uuid";
 
 // slots
 import { Calendar, momentLocalizer } from "react-big-calendar";
@@ -34,43 +42,52 @@ const CreateService = () => {
   console.log(serviceTitle);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [image, setImage] = useState(null);
 
-  const handleFileChange = async (event) => {
-    const files = event.target.files;
-    const newPreviews = [];
-    const combinedFiles = [...selectedFiles];
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        newPreviews.push(e.target.result);
-        if (newPreviews.length === files.length) {
-          const totalFiles = combinedFiles.length + newPreviews.length;
-          if (totalFiles > 1) {
-            setErrorMessage("You can only upload 1 image at a time. Please select files.");
-          } else {
-            setErrorMessage("");
-            setSelectedFiles([...combinedFiles, ...newPreviews]);
+  const handleFileChange = async (e) => {
+    if (e.target.files.length > 0) {
+      setImage(URL.createObjectURL(e.target.files[0]));
+      const file = e.target.files[0];
+      if (file) {
+        const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
+        const uploadTask = uploadBytesResumable(imgRef, file);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            // Get upload progress as a percentage
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            setUploadProfileProgress(progress);
+          },
+          (error) => {
+            console.error("Error uploading image: ", error);
+            // Handle error if needed
+          },
+          () => {
+            // Upload completed successfully
+            console.log("Upload complete");
           }
-        }
-      };
+        );
 
-      reader.readAsDataURL(file);
+        try {
+          await uploadTask;
+          const url = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log(url);
+          setImageUrl(url);
+          setImage(url);
+        } catch (error) {
+          console.error("Error uploading image: ", error);
+          // Handle error if needed
+          alert("Something went wrong");
+        }
+      }
     }
   };
-
-  const removeImage = (index) => {
-    const newSelectedFiles = [...selectedFiles];
-    newSelectedFiles.splice(index, 1);
-    setSelectedFiles(newSelectedFiles);
-  };
-
-  const handleButtonClick = (event, index) => {
-    event.stopPropagation(); // Prevent propagation to parent elements
-    event.preventDefault(); // Prevent the default behavior of the button click
-    removeImage(index);
+  const handleImageRemove = () => {
+    setImage("");
   };
 
   const handleBack = () => {
@@ -270,7 +287,7 @@ const CreateService = () => {
   const [createService, setCreateService] = useState({
     img: "",
     desc: "",
-    duration: 6,
+    duration: "",
     price: "",
     currency: "INR",
   });
@@ -293,7 +310,7 @@ const CreateService = () => {
           action: 1,
 
           service_name: serviceTitle,
-          service_img: createService.img,
+          service_img: image,
           category: selectedCategory.id,
           description: createService.desc,
           skill_name: val,
@@ -546,30 +563,26 @@ const CreateService = () => {
                 onChange={handleFileChange}
                 className="hidden"
               />
-              {selectedFiles.length > 0 ? (
-                <div className="flex flex-wrap">
-                  {selectedFiles.map((preview, index) => (
-                    <div key={index} className="relative mr-2 mb-2">
-                      <img
-                        src={preview}
-                        alt={`Preview ${index}`}
-                        className="w-32 h-32 object-cover"
-                      />
-                      <div
-                        onClick={(e) => handleButtonClick(e, index)}
-                        className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
-                      >
-                        <BsX className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"/>
-                      </div>
-                    </div>
-                  ))}
+              {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
+                <p>Upload Progress: {uploadProfileProgress}%</p>
+              ) : image ? (
+                <div className="relative w-full h-full flex justify-center items-center">
+                  <img
+                    src={image}
+                    alt="Preview"
+                    className="max-h-28 max-w-44 object-cover rounded"
+                  />
+                  <button
+                    onClick={handleImageRemove}
+                    className="absolute top-2 right-2 bg-slate-400 text-white p-1 rounded hover:bg-gray-600 flex justify-center items-center"
+                  >
+                    <FiX className="w-4 h-4" />
+                  </button>
                 </div>
               ) : (
-                <div className="flex flex-col items-center">
-                  <BsUpload size={20} />
-                  <div className="text-sm text-[#1475cf] mt-2">
-                    Drop here to attach or upload
-                  </div>
+                <div className="flex items-center justify-center w-full h-full text-gray-600">
+                  <FiUpload className="w-10 h-10" />
+                  <span className="ml-2">Upload Image</span>
                 </div>
               )}
             </div>
@@ -845,7 +858,7 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
           Create Event
         </button>
         <button
-          onClick={handlePostEvent}
+          onClick={(e)=>handlePostEvent(e)}
           className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
         >
           Post event

@@ -10,8 +10,10 @@ import { ExpertRatings } from "./ExpertProfile";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../../axios";
+import {RatingCard} from "../Experts/ExpertProfile";
 
-export const ServiceProfileCard = ({item}) => {
+export const ServiceProfileCard = ({ item }) => {
+  console.log(item);
   return (
     <div
       className={`w-full px-3 py-5 bg-[#EDEDED] flex justify-between items-center shadow-sm drop-shadow-md rounded-md`}
@@ -23,8 +25,9 @@ export const ServiceProfileCard = ({item}) => {
           alt=""
         />
         <div className="flex flex-col">
-          <div className="text-lg font-semibold">{item?.expert_data?.first_name} {item?.expert_data?.last_name}</div>
-          {/* <div className="text-xs text-gray-600">{item?.}</div> */}
+          <div className="text-lg font-semibold">
+            {item?.expert_data?.first_name} {item?.expert_data?.last_name}
+          </div>
         </div>
       </div>
 
@@ -58,43 +61,112 @@ const ServiceDescription = () => {
   const params = useParams();
   const { id } = params;
 
-  const [servDesc,setServDesc] = useState({});
+  const [servDesc, setServDesc] = useState({});
 
-  const getServiceDesc = async()=>{
-    const cookie = document.cookie.split(";")
-    const jsonData = {}
+  const getServiceDesc = async () => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
     cookie.forEach((item) => {
-      const [key, value] = item.split("=")
-      jsonData[key] = value
-    })
-    try{
-      const res = await axios.get(`/customers/services/?action=2&service_id=${id}`,{
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get(
+        `/customers/services/?action=2&service_id=${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
         }
-      })
+      );
       const json = res.data;
       console.log(json);
       setServDesc(json.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getServiceDesc();
+  }, []);
+
+  // const service = services.find(service => service.id === id);
+
+  // if (!service) return null;
+  const [comments, setComments] = useState({
+    comment: "",
+  });
+  const postNewComment = async() =>{
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try{
+      const res = await axios.post("/customers/connect/",{
+        action: 8,
+        service_id: id,
+        content: comments.comment
+      },{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      })
+      const json = res.data;
+      if(!json){
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+  const [blogComments, setBlogComments] = useState([]);
+
+  const getAllBlogComments = async() =>{
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try{
+      const res = await axios.get(`/customers/connect/?action=5&service_id=${id}`,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      })
+      const json = res.data;
+      if(!json){
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      setBlogComments(json.data);
     }catch(error){
       console.log(error);
     }
   }
 
   useEffect(() => {
-    getServiceDesc();
-  }, [])
+    getAllBlogComments();
+  }, []);
 
-  // const service = services.find(service => service.id === id);
-
-  // if (!service) return null;
 
   return (
     <>
       <div className="lg:flex mt-[100px] ">
         <div className="w-full lg:w-[70%] px-[2.5vw] border-r border-solid border-slate-300">
-        <ServiceProfileCard item={servDesc}/>
+          <ServiceProfileCard item={servDesc} />
           <div className="h-auto mt-5 md:mt-10">
             <div className="text-xl md:text-3xl gap-4 font-semibold flex items-start my-5">
               <RiFlowChart className="mt-1" />
@@ -134,19 +206,67 @@ const ServiceDescription = () => {
                 My projects
               </div>
               <div id="projects">
-                <ProjectsCarousel />
+                <ProjectsCarousel  />
               </div>
             </div>
             <div className="lg:hidden w-full">
               <div className="my-8">
-                <ShowSchedule
-                  price={servDesc?.price}
-                  id={servDesc?.id}
-                />
+                <ShowSchedule price={servDesc?.price} id={servDesc?.id} />
               </div>
             </div>
             <div id="ratings" className="mt-10">
-              <ExpertRatings />
+            <div className="px-1 xs:px-5 mb-10 lg:mb-0">
+            <div className="border-b border-solid border-slate-300 pb-10">
+              <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
+                50 reviews
+              </div>
+              <div className=" mt-6">
+                <input
+                  type="text"
+                  name="comment"
+                  id="comment"
+                  value={comments.comment}
+                  onChange={(e) => setComments({ ...comments, comment: e.target.value })}
+                  placeholder="Write a comment"
+                  className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
+                />
+                <button onClick={postNewComment} className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0">
+                  Comment
+                </button>
+              </div>
+            </div>
+            <div>
+              <div className="mt-8 mb-12 flex items-center justify-between">
+                <div className="text-xl md:text-2xl font-semibold ">
+                  Top Reviews
+                </div>
+                <select
+                  name="Sort by"
+                  id=""
+                  className="px-4 py-2 text-sm md:text-lg border border-solid border-slate-300 outline-none"
+                >
+                  <option
+                    value="newest"
+                    className="text-xs md:text-sm px-4 py-2"
+                  >
+                    Newest
+                  </option>
+                  <option
+                    value="oldest"
+                    className="text-xs md:text-sm px-4 py-2"
+                  >
+                    Oldest
+                  </option>
+                </select>
+              </div>
+              {blogComments?.map((temp, idx) => (
+                <RatingCard key={idx} temp={temp} />
+              ))}
+            </div>
+            <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
+              Show more
+            </button>
+          </div>
             </div>
           </div>
         </div>
@@ -216,10 +336,7 @@ const ServiceDescription = () => {
             </button>
           </div> */}
           <div className="mx-[2.5vw] w-full">
-            <ShowSchedule
-              price={servDesc?.price}
-              id={servDesc?.id}
-            />
+            <ShowSchedule price={servDesc?.price} id={servDesc?.id} />
           </div>
         </div>
       </div>

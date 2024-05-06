@@ -16,14 +16,17 @@ import { Link, useNavigate } from "react-router-dom";
 
 import axios from "../../../axios";
 
-export const BlogBody = () => {
-  const [allBlogsArray, setAllBlogsArray] = useState([]);
-
-  const getData = async () => {
-    const cookies = document.cookie.split("; ");
+export const BlogBody = ({ allBlogsArray }) => {
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  }
+  const [blogsCategory, setBlogsCategory] = useState([]);
+  const fetchBlogs = async () => {
+    const cookie = document.cookie.split(";");
     const jsonData = {};
-
-    cookies.forEach((item) => {
+    cookie.forEach((item) => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
@@ -34,54 +37,63 @@ export const BlogBody = () => {
           Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
-      const allData = res.data.data.all;
-      setAllBlogsArray(allData);
-      console.log(...data);
+      const json = res.data.data;
+      const categorizedBlogs = {};
+      for (const category in json) {
+        categorizedBlogs[category] = json[category].map((blog) => ({
+          id: blog.id,
+          title: blog.title,
+          author_name: blog.author_name,
+          content: blog.content,
+          images: blog.images,
+          views: blog.blog_view_count,
+          comments: blog.comment_count,
+          reactions: blog.reaction_count,
+          date: blog.date_created,
+        }));
+      }
+      setBlogsCategory(Object.entries(categorizedBlogs));
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    getData();
-  }, []);
-  console.log(allBlogsArray);
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { day: "numeric", month: "short", year: "numeric" };
-    return date.toLocaleDateString("en-US", options);
-  }
 
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  console.log(blogsCategory);
   return (
     <>
       {/* Recent Blogs */}
       <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
         <div className="text-xl lg:text-3xl font-extrabold ">Recent Blogs</div>
         <div className="mt-4 w-full h-auto flex gap-[2vw] overflow-scroll pb-4">
-          {recentBlog.map((item, index) => {
+          {allBlogsArray.map((item) => {
             return (
               <div
-                key={index}
+                key={item?.id}
                 className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
               >
                 <img
-                  src={item.img}
+                  src={item?.images[0]}
                   className="w-full h-[200px] object-cover shrink-0 md:mb-[0.7vw]"
                   alt=""
                 />
                 <div className="px-[0.8vw] pt-2 md:pt-0">
                   <div className="flex justify-between font-semibold text-sm text-[#808080]">
-                    <div>{item.name}</div>
-                    <div>{item.date}</div>
+                    <div>{item?.author_name}</div>
+                    <div>{formatDate(item?.date_created)}</div>
                   </div>
                   <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
-                    {item.title}
+                    {item?.title}
                   </div>
                   <div className="text-sm line-clamp-3 md:mb-[1vw]">
-                    {item.detail}
+                    {item?.content}
                   </div>
                   <div className="w-full flex text-white justify-between items-center my-2">
                     <Link
-                      to={"blogdetail"}
+                      to={"blogdetail/" + item?.id}
                       className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
                     >
                       Read More
@@ -97,46 +109,51 @@ export const BlogBody = () => {
 
       {/* Related to tech */}
       <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
-        <div className="text-xl lg:text-3xl font-extrabold ">
-          Related to tech
-        </div>
-        <div className="mt-4 w-full h-auto flex gap-[1.5vw] overflow-scroll pb-4">
-          {recentBlog.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
-              >
-                <img
-                  src={item.img}
-                  className="w-full h-[200px] object-cover  shrink-0 md:mb-[0.7vw]"
-                  alt=""
-                />
-                <div className="px-[0.8vw] pt-2 md:pt-0">
-                  <div className="flex justify-between font-semibold text-sm text-[#808080]">
-                    <div>{item.name}</div>
-                    <div>{item.date}</div>
+        {blogsCategory.filter(([category]) => category !== "all").map(([category, item]) => (
+          <>
+            <div className="text-xl lg:text-3xl font-extrabold ">
+              Related to {category}
+            </div>
+            <div className="mt-4 w-full h-auto flex gap-[1.5vw] overflow-scroll pb-4">
+              <div className="mt-4 w-full h-auto flex gap-[1.5vw] overflow-scroll pb-4">
+                {item.map((blog) => (
+                  <div
+                    key={blog.id}
+                    className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
+                  >
+                    <img
+                      src={blog.images[0]} // Assuming images is an array and you want the first image
+                      className="w-full h-[200px] object-cover  shrink-0 md:mb-[0.7vw]"
+                      alt=""
+                    />
+                    <div className="px-[0.8vw] pt-2 md:pt-0">
+                      <div className="flex justify-between font-semibold text-sm text-[#808080]">
+                        <div>{blog.author_name}</div>
+                        <div>{blog.date}</div>
+                      </div>
+                      <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
+                        {blog.title}
+                      </div>
+                      <div className="text-sm line-clamp-3 md:mb-[1vw]">
+                        {blog.content}
+                      </div>
+                      <div className="w-full flex text-white justify-between items-center my-2">
+                        {/* Link should point to the specific blog detail page */}
+                        <Link
+                          to={`/blogdetail/${blog.id}`}
+                          className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
+                        >
+                          Read More
+                        </Link>
+                        <CiBookmark className="text-4xl xs:text-5xl text-black" />
+                      </div>
+                    </div>
                   </div>
-                  <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
-                    {item.title}
-                  </div>
-                  <div className="text-sm line-clamp-3 md:mb-[1vw]">
-                    {item.detail}
-                  </div>
-                  <div className="w-full flex text-white justify-between items-center my-2">
-                    <Link
-                      to={"blogdetail"}
-                      className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
-                    >
-                      Read More
-                    </Link>
-                    <CiBookmark className="text-4xl xs:text-5xl text-black" />
-                  </div>
-                </div>
+                ))}
               </div>
-            );
-          })}
-        </div>
+            </div>
+          </>
+        ))}
       </div>
       {/* Hot topics */}
       <div className="bg-[#F2F2F2] px-[2vw] py-[3vw] mt-20">
@@ -144,8 +161,11 @@ export const BlogBody = () => {
           Hot Topics
         </div>
         <div className="mt-6 md:mt-[3vw] flex items-center gap-[2vw] overflow-x-scroll">
-          {hotTopics.map((temp) => (
-            <div className="relative flex items-center justify-center w-[150px] h-[200px] md:w-[280px] md:h-[300px] shrink-0 object-cover rounded-md ">
+          {hotTopics.map((temp, index) => (
+            <div
+              key={index}
+              className="relative flex items-center justify-center w-[150px] h-[200px] md:w-[280px] md:h-[300px] shrink-0 object-cover rounded-md "
+            >
               <img
                 src={temp.img}
                 className="absolute top-0 left-0 w-full h-full brightness-[65%] "
@@ -163,29 +183,49 @@ export const BlogBody = () => {
           All Blogs
         </div>
         <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
-          {allBlogsArray?.map((item, index) => (
-            <BlogCard
-              key={item.id}
-              index={index}
-              id={item.id}
-              items={item}
-              title={item.title}
-              tags={item.tags}
-              image={item.images[0]}
-              date={formatDate(item.date_created.split("T")[0])}
-            />
-          ))}
+          {allBlogsArray.length === 0 ? (
+            <div>no blogs</div>
+          ) : (
+            allBlogsArray?.map((item, index) => (
+              <BlogCard
+                key={item.id}
+                index={index}
+                id={item.id}
+                items={item}
+                title={item.title}
+                tags={item.tags}
+                image={item.images[0]}
+                date={formatDate(item.date_created.split("T")[0])}
+              />
+            ))
+          )}
         </div>
       </div>
     </>
   );
 };
-export const SearchedBlog = ({ array }) => {
-  console.log(array);
+export const SearchedBlog = ({ allBlogsArray }) => {
+  console.log(allBlogsArray);
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  }
+
   return (
     <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
-      {array.map((item, idx) => (
-        <BlogCardHorizontal key={idx} index={idx} items={item} />
+      {allBlogsArray?.map((item, index) => (
+        <BlogCard
+          key={item.id}
+          index={index}
+          id={item.id}
+          items={item}
+          title={item.title}
+          tags={item.tags}
+          image={item.images[0]}
+          date={formatDate(item.date_created.split("T")[0])}
+        />
       ))}
     </div>
   );
@@ -249,15 +289,21 @@ export const BlogCard = ({
           alt=""
         />
         <div className="text-[#575757]">
-          <div className="text-base font-semibold line-clamp-2 text-ellipsis " onClick={()=> navigate(`/blog/blogdetail/${id}`)}>
+          <div
+            className="text-base font-semibold line-clamp-2 text-ellipsis "
+            onClick={() => navigate(`/blog/blogdetail/${id}`)}
+          >
             {title}
           </div>
           <div className="text-sm text-[#898888]">{date}</div>
           <div className="mt-3 text-xs flex items-center gap-2">
             <FaTags />
             <div className="flex items-center flex-wrap gap-2">
-              {tags?.map((item) => (
-                <div className="text-[10px] shrink-0 border border-solid border-slate-300 px-2 py-1 rounded-xl cursor-pointer">
+              {tags?.map((item, index) => (
+                <div
+                  key={index}
+                  className="text-[10px] shrink-0 border border-solid border-slate-300 px-2 py-1 rounded-xl cursor-pointer"
+                >
                   {item.charAt(0).toUpperCase() + item.slice(1)}
                 </div>
               ))}
@@ -265,11 +311,11 @@ export const BlogCard = ({
           </div>
           <div className="flex gap-[3vw] sm:gap-0 sm:flex-col">
             <div className="mt-3 text-xs flex items-center gap-2">
-              <IoEyeSharp /> {views>0 ? views : "no views"} 
+              <IoEyeSharp /> {views > 0 ? views : "no views"}
             </div>
             <div className="mt-3 flex items-center gap-4">
               <div className=" text-xs flex items-center gap-1 sm:gap-2">
-                <BiSolidLike /> {likes>0 ? likes + "likes": "no likes"} 
+                <BiSolidLike /> {likes > 0 ? likes + "likes" : "no likes"}
               </div>
               <div className="border border-solid border-slate-400 text-[10px] rounded-full px-3 py-0.5 flex items-center cursor-pointer gap-1">
                 <FaPlus /> Add to Fav
@@ -279,27 +325,55 @@ export const BlogCard = ({
         </div>
       </div>
       <div className="hidden border border-solid border-slate-300 h-fit sm:flex items-center justify-center rounded-full text-4xl font-thin self-center shrink-0 cursor-pointer">
-        <RiArrowRightSLine onClick={()=> navigate(`/blog/blogdetail/${id}`)} />
+        <RiArrowRightSLine onClick={() => navigate(`/blog/blogdetail/${id}`)} />
       </div>
     </div>
   );
 };
 const Blogs = () => {
   const [searchText, setSearchText] = useState("");
-  const [blogArray, setBlogArray] = useState(allBlogs);
+  const [allBlogsArray, setAllBlogsArray] = useState([]);
+  const [filterAllBlogsArray, setFilterAllBlogsArray] = useState([]);
+  const [featuredBlogsArray, setFeaturedBlogsArray] = useState([]);
+
   const SearchBlogs = (e) => {
     setSearchText(e.target.value);
-    // console.log(searchText)
-    // setBlogArray(allBlogs.filter((item)=>item.tags.map((item2)=>console.log(item2))));
-    setBlogArray(
-      allBlogs.filter((item) =>
+    setFilterAllBlogsArray(
+      allBlogsArray.filter((item) =>
         item?.tags?.some((item2) =>
           item2?.toLowerCase()?.includes(searchText.toLowerCase())
         )
       )
     );
-    console.log(blogArray);
+    console.log(allBlogsArray);
   };
+
+  //api call for all Featured blogs
+  const getFeaturedBlogs = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get("/topfive/?action=4", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const allData = res.data.data;
+      setFeaturedBlogsArray(allData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getFeaturedBlogs();
+  }, []);
+  //api call for all Featured blogs
 
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -399,9 +473,68 @@ const Blogs = () => {
       console.log(error);
     }
   };
+  //api call for all blogs
+  const getBlogArray = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get("/blogs/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const allData = res.data.data.all;
+      setAllBlogsArray(allData);
+      setFilterAllBlogsArray(allData);
+      console.log(...data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getBlogArray();
+  }, []);
+  //api call for all blogs
   return (
     <div className="mt-[90px]">
-      <div className="px-[8vw] text-center">
+      {/* Featured Blogs */}
+      <div className=" flex overflow-x-auto bg-slate-100">
+        {featuredBlogsArray.map((item) => (
+          <div
+            key={item?.blog_id}
+            className={`px-3 relative text-white w-[250px] h-[300px] md:w-[450px] md:h-[500px] shrink-0 flex flex-col items-center justify-center border-[0.1vw] border-solid border-[#bbbbbb]`}
+          >
+            <img
+              className="absolute left-0 top-0 w-full h-full object-cover object-center brightness-50"
+              src={item?.blog_images[0]}
+              alt=""
+            />
+            <div className="text-xs md:text-base absolute top-2 left-2">
+              Featured
+            </div>
+            <div className="z-30 text-center">
+              <div className="text-base md:text-2xl font-bold text-balance line-clamp-2">
+                {item?.title}
+              </div>
+              <div className="my-2 md:my-4 text-xs md:text-base">
+                {item?.author?.name} | {"date"}
+              </div>
+              <Link to={`blogdetail/${item?.blog_id}`}>
+                <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs md:text-base font-semibold cursor-pointer">
+                  Read more
+                </button>
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-8 px-[8vw] text-center">
         <input
           type="text"
           placeholder="Search for the blog...."
@@ -410,42 +543,14 @@ const Blogs = () => {
           className="bg-[#ECECEC] w-[70%] p-3 outline-none rounded-md text-base"
         />
       </div>
-      {/* Featured Blogs */}
-      <div className="mt-8 flex overflow-x-auto bg-slate-100">
-        {featuredBlogs.map((temp) => (
-          <div
-            className={`px-3 relative text-white w-[250px] h-[300px] md:w-[450px] md:h-[500px] shrink-0 flex flex-col items-center justify-center border-[0.1vw] border-solid border-[#bbbbbb]`}
-          >
-            <img
-              className="absolute left-0 top-0 w-full h-full object-cover brightness-75"
-              src={temp.img}
-              alt=""
-            />
-            <div className="text-xs md:text-base absolute top-2 left-2">
-              Featured
-            </div>
-            <div className="z-30 text-center">
-              <div className="text-base md:text-2xl font-bold text-balance">
-                {temp?.title}
-              </div>
-              <div className="my-2 md:my-4 text-xs md:text-base">
-                {temp?.name} | {temp?.date}
-              </div>
-              <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs md:text-base font-semibold cursor-pointer">
-                Read more
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
       {localStorage.getItem("isExpert") === "true" ? (
         <Author createAuthor={createAuthor} />
       ) : null}
 
       {searchText.length === 0 ? (
-        <BlogBody />
+        <BlogBody allBlogsArray={allBlogsArray} />
       ) : (
-        <SearchedBlog array={blogArray} />
+        <SearchedBlog allBlogsArray={filterAllBlogsArray} />
       )}
     </div>
   );

@@ -1,10 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { MdStar, MdGroupAdd } from "react-icons/md";
-import {
-  MdKeyboardArrowDown,
-  MdKeyboardArrowUp,
-} from "react-icons/md";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { RiFlowChart } from "react-icons/ri";
 import { IoDiamondSharp } from "react-icons/io5";
 import { FaUserGraduate, FaUserCheck } from "react-icons/fa6";
@@ -90,8 +87,8 @@ export const ExpertSummary = ({ experienceArray, projectsArray }) => {
   );
 };
 export const ExpertProfileServiceCard = ({ item }) => {
-  const [saveService, setSaveService] = useState(false);
   const navigate = useNavigate();
+  const [saveService, setSaveService] = useState(false);
 
   return (
     <div className="flex justify-between items-start gap-2 py-4 md:py-[1vw] mb-[1.5vw] bg-white border-b border-solid border-slate-400">
@@ -179,22 +176,27 @@ export const ExpertServices = () => {
   );
 };
 
-export const RatingCard = ({ img, name, commentDate, comment }) => {
+export const RatingCard = ({temp}) => {
+  console.log(temp);
+
+  const date = temp?.timestamp.split("T")[0];
+  const commentDate = date
+
   return (
     <div className="my-[5vw] md:my-[2vw] pb-[1vw] border-b-[1px] border-slate-400 border-solid">
       <div className="flex gap-[2.5vw] sm:gap-[2vw]">
         <img
           className="h-12 w-12 sm:h-14 sm:w-14 xl:h-14 xl:w-14 shrink-0 object-cover rounded-full"
-          src={img}
+          src={temp?.user_profile_img}
           alt=""
         />
         <div>
-          <div className="text-lg sm:text-xl font-semibold">{name}</div>
+          <div className="text-lg sm:text-xl font-semibold">{temp?.user_first_name} {temp?.user_last_name}</div>
           <div className="mt-[2vw] md:mt-[0.9vw] text-xs sm:text-base text-slate-400">
             {commentDate}
           </div>
 
-          <p className="text-xs sm:text-base font-montserrat">{comment}</p>
+          <p className="text-xs sm:text-base font-montserrat">{temp?.content}</p>
           <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
             <div className="flex items-center gap-1">
               <BiLike />
