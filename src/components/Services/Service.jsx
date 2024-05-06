@@ -46,7 +46,7 @@ export const ServiceCard = ({ item, addToFavorites }) => {
   //   }
   // }
   return (
-    <div className="relative shrink-0 w-[300px] md:w-[350px] rounded-xl bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0 pb-4">
+    <div className="relative shrink-0 min-w-[300px] md:min-w-[350px] rounded-xl bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0 pb-4">
       <div className="absolute top-2 right-2 z-10 text-white text-3xl py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid cursor-pointer">
         {FavService ? (
           <FaHeart onClick={() => setFavService(false)} />
@@ -164,5 +164,4 @@ const Service = () => {
     </>
   );
 };
-
 export default Service;

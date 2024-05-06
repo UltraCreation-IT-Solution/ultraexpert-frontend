@@ -18,7 +18,6 @@ import { BlogCard } from "../Blogs/Blogs/Blog";
 import axios from "../../axios";
 
 export const ExpertSummary = ({ experienceArray, projectsArray }) => {
-  console.log(projectsArray);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -176,22 +175,27 @@ export const ExpertServices = () => {
   );
 };
 
-export const RatingCard = ({ img, name, commentDate, comment }) => {
+export const RatingCard = ({temp}) => {
+  console.log(temp);
+
+  const date = temp?.timestamp.split("T")[0];
+  const commentDate = date
+
   return (
     <div className="my-[5vw] md:my-[2vw] pb-[1vw] border-b-[1px] border-slate-400 border-solid">
       <div className="flex gap-[2.5vw] sm:gap-[2vw]">
         <img
           className="h-12 w-12 sm:h-14 sm:w-14 xl:h-14 xl:w-14 shrink-0 object-cover rounded-full"
-          src={img}
+          src={temp?.user_profile_img}
           alt=""
         />
         <div>
-          <div className="text-lg sm:text-xl font-semibold">{name}</div>
+          <div className="text-lg sm:text-xl font-semibold">{temp?.user_first_name} {temp?.user_last_name}</div>
           <div className="mt-[2vw] md:mt-[0.9vw] text-xs sm:text-base text-slate-400">
             {commentDate}
           </div>
 
-          <p className="text-xs sm:text-base font-montserrat">{comment}</p>
+          <p className="text-xs sm:text-base font-montserrat">{temp?.content}</p>
           <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
             <div className="flex items-center gap-1">
               <BiLike />
@@ -208,7 +212,7 @@ export const RatingCard = ({ img, name, commentDate, comment }) => {
   );
 };
 
-export const ExpertRatings = () => {
+export const ExpertRatings = ({expert}) => {
   return (
     <div className="px-1 xs:px-5 mb-10 lg:mb-0">
       <div className="border-b border-solid border-slate-300 pb-10">
@@ -222,7 +226,7 @@ export const ExpertRatings = () => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Availability</div>
                 <div>
-                  <MdStar /> {expertDetailsObj?.ratingBreakdown?.availability}
+                  <MdStar /> {expert?.expert?.avg_availability}
                 </div>
               </div>
               <div className=" bg-red-100 rounded-full">
@@ -230,7 +234,7 @@ export const ExpertRatings = () => {
                   className="border-[3px] border-solid border-red-500 rounded-full"
                   style={{
                     width: `${
-                      (expertDetailsObj?.ratingBreakdown?.availability / 5) *
+                      (expert?.expert?.avg_availability / 5) *
                       100
                     }%`,
                   }}
@@ -241,7 +245,7 @@ export const ExpertRatings = () => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Skills</div>
                 <div>
-                  <MdStar /> {expertDetailsObj?.ratingBreakdown?.skills}
+                  <MdStar /> {expert?.expert?.avg_skills}
                 </div>
               </div>
               <div className=" bg-blue-100 rounded-full">
@@ -249,7 +253,7 @@ export const ExpertRatings = () => {
                   className="border-[3px] border-solid border-blue-500 rounded-full"
                   style={{
                     width: `${
-                      (expertDetailsObj?.ratingBreakdown?.skills / 5) * 100
+                      (expert?.expert?.avg_skills / 5) * 100
                     }%`,
                   }}
                 ></div>
@@ -259,7 +263,7 @@ export const ExpertRatings = () => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Coorporation</div>
                 <div>
-                  <MdStar /> {expertDetailsObj?.ratingBreakdown?.coorporation}
+                  <MdStar /> {expert?.expert?.avg_cooperation}
                 </div>
               </div>
               <div className=" bg-purple-100 rounded-full">
@@ -267,7 +271,7 @@ export const ExpertRatings = () => {
                   className="border-[3px] border-solid border-purple-500 rounded-full"
                   style={{
                     width: `${
-                      (expertDetailsObj?.ratingBreakdown?.coorporation / 5) *
+                      (expert?.expert?.avg_cooperation / 5) *
                       100
                     }%`,
                   }}
@@ -280,7 +284,7 @@ export const ExpertRatings = () => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Deadline</div>
                 <div>
-                  <MdStar /> {expertDetailsObj?.ratingBreakdown?.deadline}
+                  <MdStar /> {expert?.expert?.avg_deadline}
                 </div>
               </div>
               <div className=" bg-red-100 rounded-full">
@@ -288,7 +292,7 @@ export const ExpertRatings = () => {
                   className="border-[3px] border-solid border-red-500 rounded-full"
                   style={{
                     width: `${
-                      (expertDetailsObj?.ratingBreakdown?.deadline / 5) * 100
+                      (expert?.expert?.avg_deadline / 5) * 100
                     }%`,
                   }}
                 ></div>
@@ -298,7 +302,7 @@ export const ExpertRatings = () => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Quality</div>
                 <div>
-                  <MdStar /> {expertDetailsObj?.ratingBreakdown?.quality}
+                  <MdStar /> {expert?.expert?.avg_quality}
                 </div>
               </div>
               <div className=" bg-blue-100 rounded-full">
@@ -306,7 +310,7 @@ export const ExpertRatings = () => {
                   className="border-[3px] border-solid border-blue-500 rounded-full"
                   style={{
                     width: `${
-                      (expertDetailsObj?.ratingBreakdown?.quality / 5) * 100
+                      (expert?.expert?.avg_quality/ 5) * 100
                     }%`,
                   }}
                 ></div>
@@ -316,7 +320,7 @@ export const ExpertRatings = () => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Communication</div>
                 <div>
-                  <MdStar /> {expertDetailsObj?.ratingBreakdown?.communication}
+                  <MdStar /> {expert?.expert?.avg_communication}
                 </div>
               </div>
               <div className=" bg-purple-100 rounded-full">
@@ -324,7 +328,7 @@ export const ExpertRatings = () => {
                   className="border-[3px] border-solid border-purple-500 rounded-full"
                   style={{
                     width: `${
-                      (expertDetailsObj?.ratingBreakdown?.communication / 5) *
+                      (expert?.expert?.avg_communication / 5) *
                       100
                     }%`,
                   }}
@@ -332,16 +336,6 @@ export const ExpertRatings = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className=" mt-6">
-          <input
-            type="text"
-            placeholder="Write a comment"
-            className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
-          />
-          <button className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0">
-            Comment
-          </button>
         </div>
       </div>
       <div>
@@ -370,16 +364,6 @@ export const ExpertRatings = () => {
     </div>
   );
 };
-
-// export const ShowBlogs = () => {
-//   return (
-//     <div>
-//       {expertDetailsObj?.blogs?.map((item, idx) => (
-//         <BlogCardHorizontal key={idx} index={idx} items={item} />
-//       ))}
-//     </div>
-//   );
-// };
 
 export const AboutExpert = ({ ...expert }) => {
   return (
@@ -420,7 +404,6 @@ export const AboutExpert = ({ ...expert }) => {
             <div className="text-base md:text-lg text-[#565454] mt-3">
               {expert?.expert?.expert?.profession}
             </div>
-
             <div className="flex flex-col mt-4">
               <div className="flex items-center gap-2 text-lg md:text-xl text-[#565454] font-semibold">
                 <IoDiamondSharp />
@@ -570,7 +553,6 @@ export const ExpertInfo = ({ ...expert }) => {
         },
       });
       const allData = res.data.data;
-      console.log(allData);
       setExpertBlogsArray(allData);
     } catch (error) {
       console.log(error);
@@ -652,7 +634,7 @@ export const ExpertInfo = ({ ...expert }) => {
             />
           )}
           {services && <ExpertServices />}
-          {ratings && <ExpertRatings />}
+          {ratings && <ExpertRatings  />}
           {blogs &&
             blogArray.map((item, idx) => (
               <BlogCard
@@ -868,7 +850,6 @@ const ExpertProfile = () => {
   const params = useParams();
   const { id } = params;
   const [expertDetail, setExpertDetail] = useState(null);
-  console.log(id);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
   cookies.forEach((item) => {
@@ -897,9 +878,7 @@ const ExpertProfile = () => {
         return;
       }
       const data = res.data.data;
-      console.log(data);
       setExpertDetail(data);
-      console.log(ExpertProfile);
     } catch (error) {
       console.log(error);
     }
