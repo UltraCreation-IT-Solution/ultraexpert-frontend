@@ -53,6 +53,8 @@ import {
   ResponsiveContainer,
   ComposedChart,
   LineChart,
+  BarChart,
+  Rectangle,
   Line,
   Area,
   Bar,
@@ -765,7 +767,7 @@ export const Dashboard = () => {
             <ResponsiveContainer
               className="-ml-[2vw] mb-[1vw] overflow-hidden"
               width="110%"
-              height="80%"
+              height="70%"
             >
               <LineChart
                 className="overflow-hidden"
@@ -773,7 +775,7 @@ export const Dashboard = () => {
                 margin={{
                   top: 20,
                   right: 50,
-                  left: 20,
+                  left: 2,
                   bottom: 5,
                 }}
               >
@@ -808,9 +810,50 @@ export const Dashboard = () => {
               </LineChart>
             </ResponsiveContainer>
           )}
+          {extraStats && (
+            <ResponsiveContainer width="105%" height="70%">
+              <BarChart
+                width={500}
+                height={300}
+                data={expertStatistics}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: -20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" interval={0} />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar
+                  dataKey="followers_count"
+                  fill="#8884d8"
+                  activeBar={<Rectangle fill="pink" stroke="blue" />}
+                />
+                <Bar
+                  dataKey="avg_score"
+                  fill="#82ca9d"
+                  activeBar={<Rectangle fill="gold" stroke="purple" />}
+                />
+                <Bar
+                  dataKey="service_count"
+                  fill="#822a9d"
+                  activeBar={<Rectangle fill="red" stroke="purple" />}
+                />
+                <Bar
+                  dataKey="rating_count"
+                  fill="#82fa9d"
+                  activeBar={<Rectangle fill="blue" stroke="purple" />}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
-        <div className="w-[28%] h-full">
-          <div className="flex md:flex-col justify-between md:justify-around h-[80%] mt-[1.4vw] md:mt-[1vw] lg:mt-[0.2vw] text-[#575757] text-[2.65vw] xs:text-[1.8vw] md:text-[1.2vw] lg:text-[1vw] mb-[1vw] md:mb-[0.4vw] lg:mb-0 px-[2vw] md:border-l border-[#2e2e2e] border-solid">
+        <div className="w-[28%] h-full md:border-l border-[#2e2e2e] border-solid">
+          <div className="flex md:flex-col justify-between md:justify-around h-[80%] mt-[1.4vw] md:mt-[1vw] lg:mt-[0.2vw] text-[#575757] text-[2.65vw] xs:text-[1.8vw] md:text-[1.2vw] lg:text-[1vw] mb-[1vw] md:mb-[0.4vw] lg:mb-0 px-[2vw]">
             <div className="flex items-center gap-[1.2vw] ">
               <IoEyeSharp className="text-[#FF5E18] text-[3.65vw] xs:text-[2.65vw] md:text-[1.65vw] lg:text-[1.45vw]" />{" "}
               Views <span>{expertData.profile_view_count}</span>
@@ -821,7 +864,7 @@ export const Dashboard = () => {
             </div>
             <div className="flex items-center gap-[1.2vw]">
               <RiPagesFill className="text-[#EF0064] text-[3.65vw] xs:text-[2.65vw] md:text-[1.65vw] lg:text-[1.45vw]" />{" "}
-              Blogs <span>{expert.viewCount}</span>
+              Blogs <span>{expertData.blog_views_count}</span>
             </div>
           </div>
         </div>
@@ -837,14 +880,14 @@ export const Dashboard = () => {
             >
               Average Rating
             </div>
-            <div
+            {/* <div
               className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
                 ratingDistribution && `bg-[#ececec] rounded-sm`
               }`}
               onClick={() => HandleRatingDistribution()}
             >
               Rating Distribution
-            </div>
+            </div> */}
           </div>
           {avgRating && (
             <div className="flex justify-between px-[1vw]">
@@ -874,7 +917,7 @@ export const Dashboard = () => {
               </div>
             </div>
           )}
-          {ratingDistribution && (
+          {/* {ratingDistribution && (
             <div className="flex w-full  justify-between items-center text-[3vw] xs:text-[1.6vw] md:text-[1.15vw] lg:text-[0.85vw] overflow-hidden">
               <PieChart
                 width={200}
@@ -918,7 +961,7 @@ export const Dashboard = () => {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
       <div className="w-full flex flex-col gap-[1vw] border border-[#c7c7c7] border-solid rounded-lg px-[1.8vw] py-[3vw] xs:py-[2vw] md:py-[1.25vw]">
@@ -926,13 +969,13 @@ export const Dashboard = () => {
           Skills
         </div>
         <div className="flex flex-wrap gap-[2vw] xs:gap-[1.6vw] md:gap-[1vw]">
-          {expert.allskils.map((item, index) => {
+          {expertData.skills?.map((item, index) => {
             return (
               <div
                 key={index}
                 className="px-[3vw] md:px-[2vw] lg:px-[1.6vw] py-[1vw] md:py-[0.6vw] rounded-sm xs:rounded bg-[#ececec] mt-[1.45vw] xs:mt-[1vw] md:mt-auto text-[2.8vw] xs:text-[1.8vw] md:text-[1.18vw] lg:text-[1vw]"
               >
-                {item}
+                {item.technology_name}
               </div>
             );
           })}
