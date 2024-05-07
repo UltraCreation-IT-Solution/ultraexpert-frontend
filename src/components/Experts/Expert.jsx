@@ -81,7 +81,7 @@ export const ExpertCard = ({ item }) => {
   return (
     <div className="relative w-[90vw] h-[81vw] xs:w-[84vw] xs:h-[66vw] sm:w-[42vw] sm:h-[46vw] md:w-[38vw]  lg:w-[25vw] lg:h-[33vw] rounded-md md:rounded-lg shadow-lg my-[2vw] md:my-[0.65vw] border-[0.001vw] border-[#dbdbdb] border-solid overflow-hidden">
       <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  ">
-        {localStorage.getItem("isExpert") ? (
+        {localStorage.getItem("isExpert") === true ? (
           <></>
         ) : FavExpert ? (
           <FaHeart onClick={() => remFav()} />
