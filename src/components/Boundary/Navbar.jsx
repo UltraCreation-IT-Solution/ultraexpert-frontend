@@ -71,9 +71,11 @@ const Navbar = () => {
           } items-center font-montserrat justify-center h-auto  mr-6 text-[16px]  md:flex`}
         >
           <Link to="/favourites">
-            {localStorage.getItem("isExpert") ? (
+            {localStorage.getItem("isExpert") === "true" ? (
               <></>
-            ):(<FaRegHeart />)}
+            ) : (
+              <FaRegHeart />
+            )}
           </Link>
 
           <div className="flex flex-col items-center">
