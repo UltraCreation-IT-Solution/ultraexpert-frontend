@@ -12,6 +12,7 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -41,6 +42,7 @@ const Login = () => {
     e.preventDefault();
 
     if (validateForm()) {
+      setLoading(true);
       try {
         const res = await axios.post(
           "/login/",
@@ -75,6 +77,7 @@ const Login = () => {
         }
       } catch (error) {
         console.error(error);
+        setLoading(false);
       }
     }
   };
@@ -159,8 +162,11 @@ const Login = () => {
               </p>
             </div>
             <button
+              disabled={loading}
               type="submit"
-              className="bg-[#272727] text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 rounded-md w-full"
+              className={`${
+                loading ? "bg-gray-300" : "bg-[#272727]"
+              } text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 rounded-md w-full`}
             >
               Login
             </button>
