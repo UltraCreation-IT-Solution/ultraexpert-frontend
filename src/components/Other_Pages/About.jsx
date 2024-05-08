@@ -48,21 +48,21 @@ const About = () => {
           About Us
         </div>
         <div className="mt-3 mx-auto text-sm sm:text-base text-balance md:w-[60%] ">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quia itaque
-          illum praesentium tempore facilis repellendus voluptatem eius
-          blanditiis autem quibusdam.
+          Our innovative consulting and mentorship platform was born from the
+          belief that everyone deserves access to expert guidance to achieve
+          their goals.
         </div>
       </div>
       <div className=" flex-wrap-reverse sm:flex-nowrap flex items-center justify-center sm:justify-between mx-[7vw] md:mx-[10vw] mt-10">
         <div>
           <div className="text-xl sm:text-2xl font-bold ">What do we do?</div>
           <div className="text-sm sm:text-[1.7vw] md:text-[1.5vw] lg:text-[1.1vw] mt-3 text-balance">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum,
-            numquam. Suscipit, ipsum velit. Nostrum repudiandae veniam qui
-            alias, commodi voluptatibus doloremque hic consequuntur aperiam rem
-            illo totam quisquam asperiores perspiciatis recusandae a. Quidem eos
-            sit libero aperiam repellendus, repudiandae sapiente incidunt
-            eligendi, culpa quae laudantium officia iste saepe soluta unde.
+            We simplify your path to success by providing a seamless platform
+            that connects you with the perfect expert mentor in your desired
+            field.We are a passionate team dedicated to bridging the gap between
+            aspiring individuals and seasoned professionals. Our innovative
+            consulting and mentorship platform was born from the belief that
+            everyone deserves access to expert guidance to achieve their goals.
           </div>
         </div>
         <img
@@ -81,14 +81,23 @@ const About = () => {
           <div className="text-base sm:text-lg font-bold text-sky-800 ">
             OUR MISSION
           </div>
-          <div className="text-xl sm:text-2xl font-bold ">What do we do?</div>
+          <div className="text-xl sm:text-2xl font-bold ">What do we focus on?</div>
           <div className="text-sm sm:text-[1.7vw] md:text-[1.5vw] lg:text-[1.1vw] mt-3 text-balance">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum,
-            numquam. Suscipit, ipsum velit. Nostrum repudiandae veniam qui
-            alias, commodi voluptatibus doloremque hic consequuntur aperiam rem
-            illo totam quisquam asperiores perspiciatis recusandae a. Quidem eos
-            sit libero aperiam repellendus, repudiandae sapiente incidunt
-            eligendi, culpa quae laudantium officia iste saepe soluta unde.
+            By fostering a vibrant community of mentors and mentees, we strive
+            to:
+            <ul className="">
+              <li className="mb-2">
+                <span className="font-bold">Bridge the knowledge gap: </span>We
+                connect aspiring individuals with experienced mentors who can
+                share their expertise and insights.
+              </li>
+              <li className="mb-2">
+                <span className="font-bold">Unlock individual potential: </span>We empower individuals to develop their skills, overcome challenges, and achieve their personal and professional goals.
+              </li>
+              <li>
+                <span className="font-bold">Drive business growth: </span>We equip businesses with the expert guidance they need to thrive in today's competitive landscape.
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -98,16 +107,10 @@ const About = () => {
             OUR VISION
           </div>
           <div className="text-xl sm:text-2xl font-bold">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vitae,
-            eveniet?
+          The Future of Learning - Personalized, Connected, and Empowering
           </div>
           <div className="text-sm sm:text-[1.7vw] md:text-[1.5vw] lg:text-[1.1vw] mt-3 text-balance">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum,
-            numquam. Suscipit, ipsum velit. Nostrum repudiandae veniam qui
-            alias, commodi voluptatibus doloremque hic consequuntur aperiam rem
-            illo totam quisquam asperiores perspiciatis recusandae a. Quidem eos
-            sit libero aperiam repellendus, repudiandae sapiente incidunt
-            eligendi, culpa quae laudantium officia iste saepe soluta unde.
+          We envision a future where personalized learning is accessible to all, fueled by a global network of expert mentors.  Imagine a world where individuals can readily connect with the perfect mentor, regardless of location, to unlock their potential and achieve their aspirations.In this future, our platform will be the go-to destination for on-demand consulting and mentorship.
           </div>
         </div>
         <img
@@ -122,9 +125,7 @@ const About = () => {
             Special features of our website
           </div>
           <div className="text-sm md:text-base mt-2 md:mt-5 text-center">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam rem
-            unde iure quidem corrupti totam laboriosam dignissimos aut!
-            Voluptatum, quae.
+          Our website is designed to provide a seamless and enriching learning experience. 
           </div>
         </div>
         <div className="md:w-[55%] px-3 md:px-[1.5vw]">
@@ -132,10 +133,9 @@ const About = () => {
             <div className="flex items-start gap-4 my-4">
               <PiCheckCircleLight className="text-4xl shrink-0" />
               <div>
-                <div className="font-bold text-lg">One-on-One Sessions</div>
+                <div className="font-bold text-lg">Interactive One-on-One Sessions</div>
                 <div className="text-sm text-gray-500 mt-1">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
-                  fugiat perspiciatis ex minima. Laudantium, inventore.
+                Engage in productive learning experiences through secure online video conferencing.
                 </div>
               </div>
             </div>
@@ -143,31 +143,28 @@ const About = () => {
               <PiCheckCircleLight className="text-4xl shrink-0" />
               <div>
                 <div className="font-bold text-lg">
-                  Live mentoring by experts
+                Live Mentorship
                 </div>
                 <div className="text-sm text-gray-500 mt-1">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
-                  fugiat perspiciatis ex minima. Laudantium, inventore.
+                Experience the power of real-time interaction with your mentor. Ask questions, receive immediate feedback, and participate in dynamic discussions to accelerate your learning curve.
                 </div>
               </div>
             </div>
             <div className="flex item-start gap-4 my-4">
               <PiCheckCircleLight className="text-4xl shrink-0" />
               <div>
-                <div className="font-bold textlgl">One-on-One Sessions</div>
+                <div className="font-bold text-lg">Progress Tracking</div>
                 <div className="text-sm text-gray-500 mt-1">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
-                  fugiat perspiciatis ex minima. Laudantium, inventore.
+                Monitor your progress and measure your learning outcomes through an integrated progress tracking system.
                 </div>
               </div>
             </div>
             <div className="flex items-start gap-4 my-4">
               <PiCheckCircleLight className="text-4xl shrink-0" />
               <div>
-                <div className="font-bold text-lg">One-on-One Sessions</div>
+                <div className="font-bold text-lg">Effortless Expert Matching</div>
                 <div className="text-sm text-gray-500 mt-1">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
-                  fugiat perspiciatis ex minima. Laudantium, inventore.
+                Find your perfect mentor with our intuitive search and filtering tools. Narrow down your options based on domain expertise, experience level, location, and preferred engagement model.
                 </div>
               </div>
             </div>
@@ -176,14 +173,12 @@ const About = () => {
       </div>
       <Testimonial />
       <div className="md:flex items-center justify-around gap-10 mx-[7vw] md:mx-[10vw] my-20">
-        <div className="md:w-[40%] text-center md:text-left">
+        <div className="md:w-[40%] text-center">
           <div className=" text-2xl font-bold">
             Want to add your testimonial ?
           </div>
-          <div className="mt-3 text-sm text-gray-600 text-balance">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus dicta
-            pariatur recusandae non nisi ipsam et molestiae, ipsa quas optio a
-            quibusdam necessitatibus tenetur!
+          <div className="mt-3 text-sm text-gray-600 text-center">
+          Your story can motivate others seeking mentorship to take the first step towards their goals.
           </div>
         </div>
         <div className="md:w-[60%] mt-10 md:mt-0">

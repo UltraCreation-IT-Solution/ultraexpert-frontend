@@ -489,32 +489,36 @@ const CreateService = () => {
               <label htmlFor="tags" className="text-lg mb-1 font-bold">
                 Tags
               </label>
-              <div className="border border-solid border-gray-300 px-2 rounded-md mb-2">
-                <div className="flex flex-wrap gap-2">
-                  {selectedSkill.length > 0 ? (
-                    selectedSkill.map((skill, ind) => {
-                      return (
-                        <div
-                          key={ind}
-                          className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
-                        >
-                          {skill}
+              {selectedSkill.length > 0 ? (
+                <div className="border border-solid border-gray-300 px-2 rounded-md mb-2">
+                  <div className="flex flex-wrap gap-2">
+                    {selectedSkill.length > 0 ? (
+                      selectedSkill.map((skill, ind) => {
+                        return (
                           <div
-                            className="cursor-pointer"
-                            onClick={() => handleTagRemove(skill)}
+                            key={ind}
+                            className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
                           >
-                            x
+                            {skill}
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => handleTagRemove(skill)}
+                            >
+                              x
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <p className="text-gray-300 text-sm">
-                      Select skills of your interest from below.
-                    </p>
-                  )}
+                        );
+                      })
+                    ) : (
+                      <p className="text-gray-300 text-sm">
+                        Select skills of your interest from below.
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <></>
+              )}
               <input
                 type="text"
                 id="tags"
@@ -633,9 +637,6 @@ const CreateService = () => {
 export default CreateService;
 
 export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
-  
-
-
   // const localizer = momentLocalizer(moment);
   // const [events, setEvents] = useState([]);
   // const [notifyBefore, setNotifyBefore] = useState(false);
@@ -739,8 +740,6 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
   //   }
   // };
 
-
-
   // const convertEventToAPIFormat = (event) => {
   //   const startDate = moment(event.start);
   //   const endDate = moment(event.end);
@@ -795,8 +794,6 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
   //   setEvents(updatedEvents);
   //   console.log(events)
   // };
-
-
 
   const localizer = momentLocalizer(moment);
   const [notifyBefore, setNotifyBefore] = useState(false);
@@ -904,9 +901,9 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
     const endDate = moment(event.end);
 
     return {
-      day: `${startDate.format('ddd DD MMM')}`, // Include day of the week (e.g., "Mon 29 Jan")
+      day: `${startDate.format("ddd DD MMM")}`, // Include day of the week (e.g., "Mon 29 Jan")
       start_time: startDate.format("h:mm A"), // Format the start time as "h:mm A" (e.g., "9:00 AM")
-      end_time: endDate.format("h:mm A"), // Format the end time as "h:mm A" (e.g., "1:00 PM")  
+      end_time: endDate.format("h:mm A"), // Format the end time as "h:mm A" (e.g., "1:00 PM")
       timezone: "IST", // Assuming the timezone is always IST
       duration: endDate.diff(startDate, "seconds"), // Calculate the duration in seconds
     };
@@ -918,7 +915,6 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
   const myEvents = convertEventsToAPIFormat(events);
   console.log(events);
   console.log(myEvents);
-
 
   return (
     <div className="calendar-container mt-[100px] px-[10vw] m-auto">
@@ -1024,7 +1020,7 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
           Create Event
         </button>
         <button
-          onClick={(e)=>handlePostEvent(e)}
+          onClick={(e) => handlePostEvent(e)}
           className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
         >
           Post event
@@ -1036,10 +1032,11 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
         events={events}
         startAccessor="start"
         endAccessor="end"
-       
         style={{ height: 500 }}
         onSelectEvent={(slot) => {
-          if (window.confirm('Are you sure you want to delete this time slot?')) {
+          if (
+            window.confirm("Are you sure you want to delete this time slot?")
+          ) {
             handleDeleteSlot(slot.id);
           }
         }}
@@ -1047,10 +1044,3 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
     </div>
   );
 };
-
-
-
-
-
-
-
