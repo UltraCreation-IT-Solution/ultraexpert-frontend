@@ -285,7 +285,13 @@ const CreateBlog = () => {
               className="w-full mt-1 border border-solid border-slate-300 p-2 text-sm rounded-sm focus:outline-none"
             />
             {categoriesArray.length > 0 && (
-              <div className={` px-1 text-sm rounded-sm mt-2 w-fit min-h-auto max-h-[150px] overflow-y-auto ${filterCategoriesArray.length > 0 ? "border border-solid border-slate-300" : ""}`}>
+              <div
+                className={` px-1 text-sm rounded-sm mt-2 w-fit min-h-auto max-h-[150px] overflow-y-auto ${
+                  filterCategoriesArray.length > 0
+                    ? "border border-solid border-slate-300"
+                    : ""
+                }`}
+              >
                 {filterCategoriesArray.map((item, index) => (
                   <div
                     key={index}
@@ -325,32 +331,36 @@ const CreateBlog = () => {
             <label htmlFor="tags" className="text-lg mb-1 font-bold">
               Tags
             </label>
-            <div className="border border-solid border-gray-300 px-2 rounded-md mb-4">
-              <div className="flex flex-wrap gap-2">
-                {selectedSkill.length > 0 ? (
-                  selectedSkill.map((skill, ind) => {
-                    return (
-                      <div
-                        key={ind}
-                        className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
-                      >
-                        {skill}
+            {selectedSkill.length > 0 ? (
+              <div className="border border-solid border-gray-300 px-2 rounded-md mb-4">
+                <div className="flex flex-wrap gap-2">
+                  {selectedSkill.length > 0 ? (
+                    selectedSkill.map((skill, ind) => {
+                      return (
                         <div
-                          className="cursor-pointer"
-                          onClick={() => handleRemove(skill)}
+                          key={ind}
+                          className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
                         >
-                          x
+                          {skill}
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => handleRemove(skill)}
+                          >
+                            x
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <p className="text-gray-300 text-sm">
-                    Select skills of your interest from below.
-                  </p>
-                )}
+                      );
+                    })
+                  ) : (
+                    <p className="text-gray-300 text-sm">
+                      Select skills of your interest from below.
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
+            ) : (
+              <></>
+            )}
             <input
               type="text"
               id="tags"

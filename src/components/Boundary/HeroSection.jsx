@@ -5,70 +5,83 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { landingImgRow1, landingImgRow2 } from "../../constant";
 
 export const WhatWeDo = () => {
-  return(
+  return (
     <div className="relative px-[5vw] md:px-[10vw] pb-[20vw] py-[10vw] lg:py-[6vw] my-20 lg:my-0">
-        <div className="bg-[#E9F2FF] h-36 w-36 md:h-44 md:w-44 absolute top-0 lg:top-24 -left-28 sm:-left-20 rounded-full"></div>
-        <div className="bg-[#DFC7FF] h-20 w-20 absolute top-6 lg:top-32 -right-14 sm:-right-5 rounded-full"></div>
-        <div className="bg-[#FFE1D3] h-32 w-32 md:h-40 md:w-40 absolute bottom-0 -right-24 sm:-right-20 rounded-full"></div>
-        <div className="text-[1.8rem] xs:text-4xl md:text-5xl font-bold text-center overflow-hidden">What is it we do?</div>
+      <div className="bg-[#E9F2FF] h-36 w-36 md:h-44 md:w-44 absolute top-0 lg:top-24 -left-28 sm:-left-20 rounded-full"></div>
+      <div className="bg-[#DFC7FF] h-20 w-20 absolute top-6 lg:top-32 -right-14 sm:-right-5 rounded-full"></div>
+      <div className="bg-[#FFE1D3] h-32 w-32 md:h-40 md:w-40 absolute bottom-0 -right-24 sm:-right-20 rounded-full"></div>
+      <div className="text-[1.8rem] xs:text-4xl md:text-5xl font-bold text-center overflow-hidden">
+        What is it we do?
+      </div>
 
-        <div className="flex flex-wrap gap-[2vw] lg:gap-[1vw] mt-10">
-          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
-            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#B276FF]"></div>
-            <div className="text-xl md:text-2xl font-bold shrink-0">Web Design</div>
-            <div className="mt-5 line-clamp-5 text-ellipsis text-base">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
-            </div>
+      <div className="flex flex-wrap gap-[2vw] lg:gap-[1vw] mt-10">
+        <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
+          <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#B276FF]"></div>
+          <div className="text-xl md:text-2xl font-bold shrink-0">
+            Web Design
           </div>
-
-          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
-            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#75ACFF]"></div>
-            <div className="text-xl md:text-2xl font-bold shrink-0">Web Development</div>
-            <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
-            </div>
+          <div className="mt-5 line-clamp-5 text-ellipsis text-base">
+            Master the art of crafting user-friendly websites with guidance on
+            best practices for HTML, CSS, and JavaScript.Gain a strong
+            foundation in server-side development with consultations on
+            languages like Python, Java, or PHP. Learn best practices for
+            building scalable and secure web applications, database management,
+            and API integration.
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-[2vw] lg:gap-[1vw] my-5">
-          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
-            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#FFA37B]"></div>
-            <div className="text-xl md:text-2xl font-bold shrink-0">Product Design</div>
-            <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
-            </div>
+        <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
+          <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#75ACFF]"></div>
+          <div className="text-xl md:text-2xl font-bold shrink-0">
+            Web Development
           </div>
-
-          <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
-            <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#FFA6A6]"></div>
-            <div className="text-xl md:text-2xl font-bold shrink-0">Branding</div>
-            <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
-            </div>
-          </div>
-        </div>
-        <div className="bg-[#DAE9FF] rounded-3xl pl-5 sm:pl-8 pr-5 py-10 flex gap-2 sm:gap-5 items-center justify-between ">
-          <div className="shrink-0 h-8 w-8 sm:h-10 sm:w-10 bg-[#795CFF] rounded-full"></div>
-          <div className="text-xl md:text-2xl font-bold">Extended design services</div>
-          <div className="ml-auto text-2xl md:text-3xl cursor-pointer shrink-0">
-            <FaArrowRightLong />
+          <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
+            Create user-centric experiences with expert guidance on UI/UX design
+            principles. Learn about user research, information architecture,
+            interaction design, and prototyping techniques to craft websites
+            that are both beautiful and functional.
           </div>
         </div>
       </div>
-  )
-}
+
+      <div className="flex flex-wrap gap-[2vw] lg:gap-[1vw] my-5">
+        <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
+          <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#FFA37B]"></div>
+          <div className="text-xl md:text-2xl font-bold shrink-0">
+            Product Design
+          </div>
+          <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
+            Bring your product ideas to life with expert mentorship on product
+            strategy development. Learn about market research techniques, user
+            journey mapping, and customer validation to create a winning product
+            roadmap.Enhance your problem-solving skills, user empathy, and
+            collaborative brainstorming techniques.
+          </div>
+        </div>
+
+        <div className="relative rounded-3xl bg-[#DAE9FF] pl-14 pr-5 py-10 w-full lg:w-[39vw]">
+          <div className="absolute top-9 left-4 sm:top-8 sm:left-3 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-[#FFA6A6]"></div>
+          <div className="text-xl md:text-2xl font-bold shrink-0">Branding</div>
+          <div className="mt-5 line-clamp-5 text-ellipsis text-base shrink-0">
+            Craft a powerful brand identity that resonates with your target
+            audience. Receive mentorship on defining your brand story, core
+            values, and unique selling proposition (USP). Learn how to develop a
+            consistent brand voice and messaging across all touchpoints.
+          </div>
+        </div>
+      </div>
+      <div className="bg-[#DAE9FF] rounded-3xl pl-5 sm:pl-8 pr-5 py-10 flex gap-2 sm:gap-5 items-center justify-between ">
+        <div className="shrink-0 h-8 w-8 sm:h-10 sm:w-10 bg-[#795CFF] rounded-full"></div>
+        <div className="text-xl md:text-2xl font-bold">
+          Extended design services
+        </div>
+        <div className="ml-auto text-2xl md:text-3xl cursor-pointer shrink-0">
+          <FaArrowRightLong />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const HeroSection = () => {
   const [search, setSearch] = useState("");
@@ -128,41 +141,44 @@ const HeroSection = () => {
         </div>
         <div className="flex items-center justify-center flex-wrap gap-7 my-10">
           <div className="w-full sm:max-w-[260px] lg:min-w-[22vw] lg:max-w-[24vw] rounded-2xl bg-[#DAE9FF] p-5 ">
-            <div className="text-xl">01</div>
-            <div className="my-3 text-2xl font-bold">Lorem</div>
+            <div className="text-xl mb-2 font-bold">01</div>
             <div className="line-clamp-5 text-ellipsis">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
+              Our innovative consulting and mentorship program connects you with
+              seasoned professionals in various fields to elevate your skills
+              and achieve your goals. Whether you're a budding entrepreneur, a
+              seasoned professional seeking a career shift, or an individual
+              aiming to master a specific skill, we have the perfect mentor
+              waiting to guide you.
             </div>
           </div>
 
           <div className="w-full sm:max-w-[260px] lg:min-w-[22vw] lg:max-w-[24vw] rounded-2xl bg-[#DAE9FF] p-5">
-            <div className="text-xl">02</div>
-            <div className="my-3 text-2xl font-bold">Lorem</div>
+            <div className="text-xl mb-2 font-bold">02</div>
             <div className="line-clamp-5 text-ellipsis">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
+              Receive tailored advice and support from an industry expert
+              aligned with your specific needs and goals.Build connections with
+              experienced professionals who can offer valuable mentorship and
+              open doors to new opportunities.Choose from various service
+              models, including single consultations, ongoing mentorship
+              packages, or project-based engagements, to fit your specific needs
+              and budget.
             </div>
           </div>
 
           <div className="w-full sm:max-w-[260px] lg:min-w-[22vw] lg:max-w-[24vw] rounded-2xl bg-[#DAE9FF] p-5">
-            <div className="text-xl">03</div>
-            <div className="my-3 text-2xl font-bold">Lorem</div>
+            <div className="text-xl mb-2 font-bold">03</div>
             <div className="line-clamp-5 text-ellipsis">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Recusandae aut ut totam neque repellat accusantium ipsam itaque
-              porro. Laboriosam laudantium iure non sapiente quaerat? Reiciendis
-              facilis quam saepe consectetur molestias?
+              Make a positive impact by guiding and empowering individuals
+              seeking your knowledge and experience.Showcase your expertise and
+              expand your network, establishing yourself as a leader in your
+              field.Monetize your knowledge by offering consulting and
+              mentorship services on a flexible schedule.
             </div>
           </div>
         </div>
         <div className="bg-[#FDE1D8] rounded-2xl p-5 lg:p-10">
           <div className="font-bold text-lg md:text-2xl line-clamp-3 text-ellipsis">
-            Ashi Di is a phenomenal creative strategist and designer.... an
+            Ashi Pandey is a phenomenal creative strategist and designer.... an
             absolute joy to work with - and the results are spectacular. Bhavesh
             Bhanusali President of AIC
           </div>
@@ -176,8 +192,7 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-      <WhatWeDo/>
-      
+      <WhatWeDo />
     </div>
   );
 };

@@ -24,6 +24,7 @@ const CHECKOUT_STEPS = [
 const SignUpAsExpert = () => {
   const [currStep, setCurrStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
+  const [loading, setIsLoading] = useState(false);
   const [margin, setMargin] = useState({
     marginLeft: 0,
     marginRight: 0,
@@ -51,6 +52,7 @@ const SignUpAsExpert = () => {
 
   const handlePersonalInfo = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const trimmedPersonalInfo = {
       ...personalInfo,
       gender: personalInfo.gender,
@@ -86,8 +88,11 @@ const SignUpAsExpert = () => {
       const data = response.data;
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
+        setIsLoading(false);
         return;
       }
+
+      setIsLoading(false);
       console.log(data, personalInfo);
       localStorage.setItem("isExpert", `true`);
       localStorage.setItem("profile", `${personalInfo.profile_img}`);
@@ -96,6 +101,7 @@ const SignUpAsExpert = () => {
       setIsComplete(false);
     } catch (error) {
       console.log(error.message);
+      setIsLoading(false);
     }
   };
 
@@ -108,6 +114,7 @@ const SignUpAsExpert = () => {
 
   const handleGeneralInfo = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -137,14 +144,17 @@ const SignUpAsExpert = () => {
       const data = response.data;
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
+        setIsLoading(false);
         return;
       }
+      setIsLoading(false);
       console.log(data, generalInfo);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
     } catch (error) {
       console.log(error.message);
+      setIsLoading(false);
     }
   };
 
@@ -176,6 +186,7 @@ const SignUpAsExpert = () => {
 
   const handleEducationForm = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -212,14 +223,17 @@ const SignUpAsExpert = () => {
       const data = response.data;
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
+        setIsLoading(false);
         return;
       }
+      setIsLoading(false);
       console.log(data, eduInfo);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
     } catch (error) {
       console.log(error.message);
+      setIsLoading(false);
     }
   };
 
@@ -242,6 +256,7 @@ const SignUpAsExpert = () => {
 
   const handleSkillForm = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -270,14 +285,17 @@ const SignUpAsExpert = () => {
       const data = response.data;
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
+        setIsLoading(false);
         return;
       }
       console.log(data, skillInfo);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
+      setIsLoading(false);
     } catch (error) {
       console.log(error.message);
+      setIsLoading(false);
     }
   };
 
@@ -305,6 +323,7 @@ const SignUpAsExpert = () => {
   );
 
   const handleCertificateChange = async (event, ind) => {
+    setIsLoading(true);
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
       if (!file.type.match("image/.*")) {
@@ -337,8 +356,10 @@ const SignUpAsExpert = () => {
         const url = await getDownloadURL(uploadTask.snapshot.ref);
         console.log(url);
         setImageUrl(url);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error uploading image: ", error);
+        setIsLoading(false);
         // Handle error if needed
         alert("Something went wrong");
       }
@@ -368,6 +389,7 @@ const SignUpAsExpert = () => {
 
   const handleAchForm = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -397,14 +419,17 @@ const SignUpAsExpert = () => {
       const data = response.data;
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
+        setIsLoading(false);
         return;
       }
+      setIsLoading(false);
       console.log(data, achInfo);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
     } catch (error) {
       console.log(error.message);
+      setIsLoading(false);
     }
   };
 
@@ -433,6 +458,7 @@ const SignUpAsExpert = () => {
 
   const handleExperienceForm = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -464,14 +490,17 @@ const SignUpAsExpert = () => {
       const data = response.data;
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
+        setIsLoading(false);
         return;
       }
+      setIsLoading(false);
       console.log(data, expInfo);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
     } catch (error) {
       console.log(error.message);
+      setIsLoading(false);
     }
   };
 
@@ -484,6 +513,7 @@ const SignUpAsExpert = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -511,8 +541,10 @@ const SignUpAsExpert = () => {
       const data = response.data;
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
+        setIsLoading(false);
         return;
       }
+
       console.log(data, accInfo);
       try {
         const response = await axios.post(
@@ -528,16 +560,28 @@ const SignUpAsExpert = () => {
             },
           }
         );
+        if (
+          !response.data ||
+          response.data.status === 400 ||
+          response.data.status === 401
+        ) {
+          console.log("Something went wrong");
+          setIsLoading(false);
+          return;
+        }
         console.log(response);
+        setIsLoading(false);
         setAddProjectOpen(false);
       } catch (error) {
         console.log(error);
+        setIsLoading(false);
       }
       setIsComplete(true);
       navigate("/");
     } catch (error) {
       console.log(error.message);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -581,6 +625,7 @@ const SignUpAsExpert = () => {
   };
 
   const handleProfileChange = async (event) => {
+    setIsLoading(true);
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
       const reader = new FileReader();
@@ -609,12 +654,14 @@ const SignUpAsExpert = () => {
         const url = await getDownloadURL(uploadTask.snapshot.ref);
         console.log(url);
         setImageUrl(url);
+        setIsLoading(false);
         setPersonalInfo({
           ...personalInfo,
           profile_img: url, // Store the image data in an array
         });
       } catch (error) {
         console.error("Error uploading image: ", error);
+        setIsLoading(false);
         // Handle error if needed
         alert("Something went wrong");
       }
@@ -625,6 +672,7 @@ const SignUpAsExpert = () => {
     }
   };
   const handleBannerChange = async (event) => {
+    setIsLoading(true);
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
       const reader = new FileReader();
@@ -653,12 +701,14 @@ const SignUpAsExpert = () => {
         const url = await getDownloadURL(uploadTask.snapshot.ref);
         console.log(url);
         setImageUrl(url);
+        setIsLoading(false);
         setPersonalInfo({
           ...personalInfo,
           banner_img: url, // Store the image data in an array
         });
       } catch (error) {
         console.error("Error uploading image: ", error);
+        setIsLoading(false);
         // Handle error if needed
         alert("Something went wrong");
       }
@@ -939,6 +989,7 @@ const SignUpAsExpert = () => {
               </div>
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
+                  disabled={loading}
                   type="submit"
                   onClick={() =>
                     window.scrollTo({
@@ -946,7 +997,9 @@ const SignUpAsExpert = () => {
                       behavior: "smooth", // This smooth scrolls to the top
                     })
                   }
-                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                  className={`${
+                    loading ? "cursor-not-allowed bg-gray-300" : ""
+                  } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
                 >
                   Next
                 </button>
@@ -1050,13 +1103,16 @@ const SignUpAsExpert = () => {
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
+                  disabled={loading}
                   onClick={() =>
                     window.scrollTo({
                       top: 0,
                       behavior: "smooth", // This smooth scrolls to the top
                     })
                   }
-                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                  className={`${
+                    loading ? "cursor-not-allowed bg-gray-300" : ""
+                  } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
                 >
                   Next
                 </button>
@@ -1592,13 +1648,16 @@ const SignUpAsExpert = () => {
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
+                  disabled={loading}
                   onClick={() =>
                     window.scrollTo({
                       top: 0,
                       behavior: "smooth", // This smooth scrolls to the top
                     })
                   }
-                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                  className={`${
+                    loading ? "cursor-not-allowed bg-gray-300" : "bg-inherit"
+                  } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
                 >
                   Next
                 </button>
@@ -1688,13 +1747,16 @@ const SignUpAsExpert = () => {
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
+                  disabled={loading}
                   onClick={() =>
                     window.scrollTo({
                       top: 0,
                       behavior: "smooth", // This smooth scrolls to the top
                     })
                   }
-                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                  className={`${
+                    loading ? "cursor-not-allowed bg-gray-300" : "bg-inherit"
+                  } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
                 >
                   Next
                 </button>
@@ -1830,13 +1892,16 @@ const SignUpAsExpert = () => {
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
+                  disabled={loading}
                   onClick={() =>
                     window.scrollTo({
                       top: 0,
                       behavior: "smooth", // This smooth scrolls to the top
                     })
                   }
-                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                  className={`${
+                    loading ? "cursor-not-allowed bg-gray-300" : "bg-inherit"
+                  } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
                 >
                   Next
                 </button>
@@ -2017,7 +2082,10 @@ const SignUpAsExpert = () => {
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
-                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                  disabled={loading}
+                  className={`${
+                    loading ? "cursor-not-allowed bg-gray-300" : "bg-inherit"
+                  } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
                 >
                   Next
                 </button>
@@ -2102,7 +2170,9 @@ const SignUpAsExpert = () => {
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
-                  className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md"
+                  className={`${
+                    loading ? "cursor-not-allowed bg-gray-300" : "bg-inherit"
+                  }  cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white rounded-md shadow-md`}
                 >
                   Submit
                 </button>
