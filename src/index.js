@@ -151,13 +151,14 @@ const appRouter = createBrowserRouter([
                 path: "",
                 element: <ExpertProfile />,
               },
-              {
-                path: "booking/:id",
-                element: <ServiceBooking />,
-              },
+              
             ],
           },
         ],
+      },
+      {
+        path: "experts/expertprofile/booking/:id",
+        element: <ServiceBooking />,
       },
       {
         path: "experts/service/:id",

@@ -391,6 +391,42 @@ const ServiceDescription = () => {
     getAllServiceComments();
   }, []);
 
+  // const handleBookService = async () => {
+  //   const cookies = document.cookie.split("; ");
+  //   const jsonData = {};
+  //   console.log("booking service")
+  //   cookies.forEach((item) => {
+  //     const [key, value] = item.split("=");
+  //     jsonData[key] = value;
+  //   });
+  //   try {
+  //     const res = await axios.post(
+  //       "/booking/",
+  //       {
+  //         action:1,
+  //         expert_id: servDesc?.expert_data?.id,
+  //         service_id: servDesc?.id,
+  //         slot_id: 248
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${jsonData.access_token}`,
+  //         },
+  //       }
+  //     );
+  //     const json = res.data;
+  //     if (!json) {
+  //       console.log("no data")
+  //       return;
+  //     }
+  //     console.log(json)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
+
   return (
     <>
       <div className="lg:flex mt-[100px] ">
@@ -440,7 +476,7 @@ const ServiceDescription = () => {
             </div>
             <div className="lg:hidden w-full">
               <div className="my-8">
-                <ShowSchedule price={servDesc?.price} id={servDesc?.id} />
+                <ShowSchedule price={servDesc?.price} id={servDesc?.id}/>
               </div>
             </div>
             <div id="ratings" className="mt-10">
