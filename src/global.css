@@ -32,9 +32,6 @@ input[type="number"]::-webkit-outer-spin-button {
 .activeExpert h2 {
   @apply bottom-[7%] sm:bottom-[5%] tracking-[3px] w-auto font-extrabold;
 }
-.serviceContainer::-webkit-scrollbar {
-  display: none;
-}
 ::-webkit-scrollbar {
   display: none;
 }
@@ -60,7 +57,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .btnBlack {
-  background-color: #2A2A2A;
+  background-color: #2a2a2a;
 }
 
 /* Custom styles for Quill Toolbar */
@@ -69,8 +66,8 @@ input[type="number"]::-webkit-outer-spin-button {
   padding: 8px; /* Add padding to the toolbar */
   border-bottom: 1px solid #dee2e6; /* Add a bottom border */
 }
-.ql-formats{
-  @apply  overflow-visible;
+.ql-formats {
+  @apply overflow-visible;
 }
 /* Styles for toolbar buttons */
 .custom-toolbar .ql-formats button {
@@ -121,48 +118,51 @@ input[type="number"]::-webkit-outer-spin-button {
   margin-left: 4px; /* Add margin between button and arrow */
 }
 
-.dangerHtml img{
+.dangerHtml img {
   width: 100px;
   height: 100px;
   object-fit: cover;
   object-position: center;
 }
 
-
-.rbc-toolbar-label{
+.rbc-toolbar-label {
   font-weight: 700;
 }
-.rbc-month-header .rbc-header{
-  padding:10px 3px;
+.rbc-month-header .rbc-header {
+  padding: 10px 3px;
 }
-.rbc-header span{
+.rbc-header span {
   font-weight: 500;
 }
-.rbc-row-bg .rbc-today{
+.rbc-row-bg .rbc-today {
   background-color: rgb(197, 221, 197);
 }
-.rbc-row-segment .rbc-event{
-  background-color: #F2FFF3;
+.rbc-row-segment .rbc-event {
+  background-color: #f2fff3;
 }
 
-.rbc-event .rbc-selected, .rbc-day-slot .rbc-selected .rbc-background-event{
-  background-color: chocolate
+.rbc-event .rbc-selected,
+.rbc-day-slot .rbc-selected .rbc-background-event {
+  background-color: chocolate;
 }
 
-.rbc-event-content{
+.rbc-event-content {
   @apply text-gray-500;
   background-color: white;
-  border:1px solid black;
-  padding:3px;
+  border: 1px solid black;
+  padding: 3px;
   font-size: 14px;
 }
 
-
-.shimmer{
+.shimmer {
   background: linear-gradient(-45deg, #eee 40%, #fafafa 50%, #eee 60%);
   animation: shimmer 2s infinite linear;
 }
 @keyframes shimmer {
-  0% { background-position: -200px 0; }
-  100% { background-position: 200px 0; }
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
 }

@@ -15,6 +15,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { expertDetailsObj, ProjectsCarousel } from "../../constant";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import { BlogCard } from "../Blogs/Blogs/Blog";
+import ExpertProfileShimmer from "../../subsitutes/Shimmers/ExpertProfileShimmer";
 import axios from "../../axios";
 
 export const ExpertSummary = ({ experienceArray, projectsArray }) => {
@@ -78,10 +79,13 @@ export const ExpertSummary = ({ experienceArray, projectsArray }) => {
           </div>
         </>
       )}
-      <div className="mb-5 text-xl md:text-2xl font-semibold font-montserrat">
-        My projects
+      <div>
+        <div className="mb-5 text-xl md:text-2xl font-semibold font-montserrat">
+         My projects
+       </div>
+       <ProjectsCarousel projectsArray={projectsArray} />
+
       </div>
-      <ProjectsCarousel projectsArray={projectsArray} />
     </div>
   );
 };
@@ -889,7 +893,7 @@ const ExpertProfile = () => {
   useEffect(() => {
     console.log(expertDetail);
   }, [expertDetail]);
-  // if (!expertDetail) return <MyCalendar />;
+  if (!expertDetail) return <ExpertProfileShimmer/> ;
 
   return (
     <div>
