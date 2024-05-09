@@ -494,6 +494,7 @@ const Blogs = () => {
         },
       });
       const allData = res.data.data.all;
+      console.log(res.data)
       setAllBlogsArray(allData);
       console.log(allBlogsArray);
       setFilterAllBlogsArray(allData);

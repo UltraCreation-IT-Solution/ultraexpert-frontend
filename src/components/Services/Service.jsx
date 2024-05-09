@@ -190,12 +190,12 @@ const Service = () => {
               <div className="font-bold text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-1">
                 <span>Explore into {category}</span>
               </div>
-              <div className="serviceContainer flex gap-[3.5vw] sm:gap-[1.6vw] md:gap-[1.2vw] py-[2vw] mb-[2vw] overflow-x-scroll">
+              <div className="serviceContainer min-w-[100%] max-w-[100%] flex gap-[3.5vw] sm:gap-[1.6vw] md:gap-[1.2vw] py-[2vw] mb-[2vw] overflow-x-auto">
                 {services.map((service) => (
                   <div
                     key={service?.id}
                     onClick={() => handleGoToService(service?.id)}
-                    className="cursor-pointer"
+                    className="cursor-pointer  min-w-[300px] max-w-[300px] md:min-w-[350px] md:max-w-[350px]"
                   >
                     <ServiceCard item={service} />
                   </div>
