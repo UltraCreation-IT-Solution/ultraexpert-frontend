@@ -53,27 +53,31 @@ export const ExpertCard = ({ item }) => {
     }
   };
   const remFav = async () => {
-    try{
-      const res = await axios.post("/customers/connect/",{
-        action: 4,
-        expert_id: item.expert.id
-      },{
-        headers:{
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 4,
+          expert_id: item.expert.id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
         }
-      });
+      );
       const json = res.data;
-      if(!json){
+      if (!json) {
         console.log("no data");
         return;
       }
       console.log(json);
       setFavExpert(false);
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
   return (
     <div className="relative w-[90vw] h-[81vw] xs:w-[84vw] xs:h-[66vw] sm:w-[42vw] sm:h-[46vw] md:w-[38vw]  lg:w-[25vw] lg:h-[33vw] rounded-md md:rounded-lg shadow-lg my-[2vw] md:my-[0.65vw] border-[0.001vw] border-[#dbdbdb] border-solid overflow-hidden">
       <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  ">
@@ -121,18 +125,22 @@ export const ExpertCard = ({ item }) => {
           </div>
           <div className="flex gap-[1vw] items-center">
             <FaTags className="text-[4.2vw] xs:text-[3vw] sm:text-[2vw] md:text-[1.8vw] lg:text-[1.25vw]" />{" "}
-            <span className="flex">
-              {item?.skills?.slice(0, 3)?.map((skill, idx) => {
-                return (
-                  <div
-                    key={idx}
-                    className="px-[2.65vw] xs:px-[2.2vw] sm:px-[1.8vw] lg:px-[1vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] text-[2.85vw] xs:text-[2.25vw] sm:text-[1.45vw] lg:text-[1vw] border border-[#e2e2e2] border-solid line-clamp-1"
-                  >
-                    {skill?.technology_name}
-                  </div>
-                );
-              })}
-            </span>
+            {item?.skills_data?.skills_json && (
+              <span className="flex">
+                {item?.skills_data?.skills_json
+                  ?.slice(0, 3)
+                  ?.map((skill, idx) => {
+                    return (
+                      <div
+                        key={idx}
+                        className="px-[2.65vw] xs:px-[2.2vw] sm:px-[1.8vw] lg:px-[1vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] text-[2.85vw] xs:text-[2.25vw] sm:text-[1.45vw] lg:text-[1vw] border border-[#e2e2e2] border-solid line-clamp-1"
+                      >
+                        {skill?.technology_name}
+                      </div>
+                    );
+                  })}
+              </span>
+            )}
           </div>
         </div>
         <div className="w-full text-[3.25vw] xs:text-[2.6vw] sm:text-[1.6vw] lg:text-[1.1vw]  py-[1vw] flex justify-between mt-[2.4vw] xs:mt-[1.6vw] lg:mt-[1vw] font-bold">
@@ -153,21 +161,18 @@ export const ExpertCard = ({ item }) => {
 const AllExperts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPage] = useState(6);
-  const lastIndex = currentPage * itemsPerPage;
-  const firstIndex = lastIndex - itemsPerPage;
+  const [lastPage,setLastPage] =  useState(0);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
-  const lastPage = Math.ceil(profileObj.length / itemsPerPage);
   const [allExpertsList, setAllExpertsList] = useState([]);
-  const slicedArray = allExpertsList.slice(firstIndex, lastIndex);
-  console.log(slicedArray);
+
   cookies.forEach((item) => {
     const [key, value] = item.split("=");
     jsonData[key] = value;
   });
   const getAllExperts = async () => {
     try {
-      const res = await axios.get("/customers/experts?action=1", {
+      const res = await axios.get(`/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}`, {
         headers: {
           "Content-Type": "application/json",
           // Authorization: `Bearer ${jsonData.access_token}`,
@@ -175,6 +180,7 @@ const AllExperts = () => {
       });
       console.log(res.data.data);
       setAllExpertsList(res.data.data);
+      setLastPage(res.data.total_pages)
       console.log(allExpertsList);
     } catch (error) {
       console.log(error);
@@ -182,7 +188,7 @@ const AllExperts = () => {
   };
   useEffect(() => {
     getAllExperts();
-  }, []);
+  }, [currentPage]);
 
   if (!allExpertsList.length)
     return (
@@ -199,7 +205,7 @@ const AllExperts = () => {
         </div>
       </div>
       <div className="w-full flex flex-wrap gap-[3vw] md:gap-[2vw] pb-[2vw]  justify-center sm:justify-normal  items-center">
-        {slicedArray.map((item) => {
+        {allExpertsList.map((item) => {
           return <ExpertCard key={item?.expert?.id} item={item} />;
         })}
       </div>
@@ -216,7 +222,7 @@ const AllExperts = () => {
           Prev
         </div>
         <Pagination
-          totalItems={allExpertsList.length}
+          lastPage={lastPage}
           itemsPerPage={itemsPerPage}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}

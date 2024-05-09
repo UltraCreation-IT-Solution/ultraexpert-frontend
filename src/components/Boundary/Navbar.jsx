@@ -73,7 +73,9 @@ const Navbar = () => {
           <Link to="/favourites">
             {localStorage.getItem("isExpert")===false ? (
               <></>
-            ):(<FaRegHeart />)}
+            ) : (
+              <FaRegHeart />
+            )}
           </Link>
 
           <div className="flex flex-col items-center">

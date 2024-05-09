@@ -19,6 +19,7 @@ const CHECKOUT_STEPS = [
 
 const SignUpAsCustomer = () => {
   const [currStep, setCurrStep] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [margin, setMargin] = useState({
     marginLeft: 0,
@@ -44,24 +45,8 @@ const SignUpAsCustomer = () => {
     });
 
     console.log(jsonData);
-    // console.log(cookies.csrf_token);
+    setLoading(true);
     try {
-      // const res = await fetch("http://localhost:8000/customers/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 1,
-      //     marital_status: personalInfo.marital_status,
-      //     profession: personalInfo.profession,
-      //     about_me: personalInfo.about_me,
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = await res.json();
-      // console.log(json);
-
       const response = await axios.post(
         "/user_details/",
         {
@@ -83,14 +68,17 @@ const SignUpAsCustomer = () => {
       const data = response.data;
       if (!data) {
         console.log("Something went wrong");
+        setLoading(false);
         return;
       }
+      setLoading(false);
       console.log(data, personalInfo);
       localStorage.setItem("isExpert", `false`);
       localStorage.setItem("profile", `${personalInfo.profile_img}`);
       handleNext();
     } catch (error) {
       console.log(error.message);
+      setLoading(false);
     }
   };
 
@@ -115,6 +103,8 @@ const SignUpAsCustomer = () => {
       jsonData[key] = value;
     });
     console.log(jsonData);
+
+    setLoading(true);
     try {
       const response = await axios.post(
         "/customers/",
@@ -134,12 +124,16 @@ const SignUpAsCustomer = () => {
       const data = response.data;
       if (!data) {
         console.log("Something went wrong");
+        setLoading(false);
         return;
       }
+
+      setLoading(false);
       console.log(data, generalInfo);
       handleNext();
     } catch (error) {
       console.log(error.message);
+      setLoading(false);
     }
   };
 
@@ -189,8 +183,6 @@ const SignUpAsCustomer = () => {
     setInputValue("");
   };
 
-  
-
   const navigate = useNavigate();
   const stepRef = useRef([]);
 
@@ -209,19 +201,8 @@ const SignUpAsCustomer = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+    setLoading(true);
     try {
-      // const res = await fetch("http://localhost:8000/customers/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 2,
-      //     interest_list:selectedSkill
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = await res.json();
       const response = await axios.post(
         "/customers/",
         { action: 2, interest_list: selectedSkill },
@@ -237,13 +218,17 @@ const SignUpAsCustomer = () => {
       const data = response.data;
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
+        setLoading(false);
         return;
       }
+
+      setLoading(false);
       console.log(data, selectedSkill);
       alert("Profile created successfully!");
       navigate("/");
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -288,16 +273,19 @@ const SignUpAsCustomer = () => {
           console.log("Upload complete");
         }
       );
+      setLoading(true);
       try {
         await uploadTask;
         const url = await getDownloadURL(uploadTask.snapshot.ref);
         console.log(url);
+        setLoading(false);
         setPersonalInfo({
           ...personalInfo,
           profile_img: url, // Store the image data in an array
         });
       } catch (error) {
         console.error("Error uploading image: ", error);
+        setLoading(false);
         // Handle error if needed
       }
       reader.onload = () => {
@@ -520,8 +508,11 @@ const SignUpAsCustomer = () => {
               </div>
               <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
                 <button
+                  disabled={loading}
                   type="submit"
-                  className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                  className={`${
+                    loading ? "bg-gray-300 cursor-not-allowed" : ""
+                  } cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
                 >
                   Next
                 </button>
@@ -572,8 +563,11 @@ const SignUpAsCustomer = () => {
               </div>
               <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
                 <button
+                  disabled={loading}
                   type="submit"
-                  className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+                  className={`${
+                    loading ? "bg-gray-300 cursor-not-allowed" : ""
+                  } cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
                 >
                   Next
                 </button>
@@ -648,7 +642,9 @@ const SignUpAsCustomer = () => {
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
                   type="submit"
-                  className=" cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md"
+                  className={`${
+                    loading ? "bg-blue-300 cursor-not-allowed" : ""
+                  } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md`}
                 >
                   Submit
                 </button>

@@ -4,6 +4,7 @@ import userImage from "../../assets/images/image.png";
 import axios from "../../axios";
 const SignUp = () => {
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -87,24 +88,23 @@ const SignUp = () => {
   const onVerifyEmailHandler = async (e) => {
     e.preventDefault();
     if (validateEmail()) {
+      setLoading(true);
       try {
         console.log(secondStep.email);
-        // const res = await fetch(
-        //   `http://localhost:8000/verify/?action=1&email=${secondStep.email}`
-        // );
-        // const json = await res.json();
-        // console.log(json);
         const response = await axios.get(
           `/verify/?action=1&email=${secondStep.email}`
         );
         const data = response.data;
         if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid Email");
+          setLoading(false);
           return;
         }
+        setLoading(false);
         nextStep();
       } catch (error) {
         console.log(error.message);
+        setLoading(false);
       }
     }
   };
@@ -132,26 +132,24 @@ const SignUp = () => {
   };
 
   const handleOTPVerification = async (e) => {
-    // console.log(initialValues3);
     e.preventDefault();
     if (validateOTP()) {
+      setLoading(true);
       try {
-        // const res = await fetch(
-        //   `http://localhost:8000/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
-        // );
-        // const json = await res.json();
-        // console.log(json);
         const response = await axios.get(
           `/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
         );
         const data = response.data;
         if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid OTP");
+          setLoading(false);
           return;
         }
+        setLoading(false);
         nextStep();
       } catch (error) {
         console.log(error.message);
+        setLoading(false);
       }
     }
   };
@@ -182,6 +180,7 @@ const SignUp = () => {
     e.preventDefault();
     // console.log(e);
     if (validatePassword()) {
+      setLoading(true);
       try {
         const response = await axios.post(
           "/register/",
@@ -198,16 +197,16 @@ const SignUp = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            // withCredentials: true,
           }
         );
         const data = response.data;
-        // const json = await res.json();
         if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid Registration");
           console.log("Invalid Registration");
+          setLoading(false);
+          return;
         } else {
-          console.log(data);
+          console.log(response);
           try {
             const res = await axios.post("/login/", {
               email: secondStep.email,
@@ -230,17 +229,21 @@ const SignUp = () => {
             localStorage.setItem("isAuthor", `${res.data.is_author}`);
             if (!data || data.status === 400 || data.status === 401) {
               window.alert("Invalid Credentials");
+              setLoading(false);
               return;
             }
+            setLoading(false);
             window.alert("Registration Successful");
             localStorage.setItem("token", res.data.access_token);
             navigate("/signUpAs");
           } catch (error) {
             console.error(error);
+            setLoading(false);
           }
         }
       } catch (error) {
         console.error(error);
+        setLoading(false);
       }
     }
   };
@@ -389,8 +392,11 @@ const SignUp = () => {
                 </p>
 
                 <button
+                  disabled={loading}
                   type="submit"
-                  className="bg-[#272727] text-base md:text-lg text-white cursor-pointer font-semibold mb-[1vw] py-2 px-4 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed w-full"
+                  className={`${
+                    loading ? "bg-gray-300 cursor-not-allowed" : "bg-[#272727]"
+                  } text-base md:text-lg text-white cursor-pointer font-semibold mb-[1vw] py-2 px-4 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
                 >
                   Next
                 </button>
@@ -435,8 +441,11 @@ const SignUp = () => {
                   Previous
                 </button>
                 <button
+                  disabled={loading}
                   type="submit"
-                  className="bg-[#272727] text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full"
+                  className={`${
+                    loading ? "bg-gray-300 cursor-not-allowed" : "bg-[#272727]"
+                  } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
                 >
                   Verify Email
                 </button>
@@ -484,8 +493,11 @@ const SignUp = () => {
                   Previous
                 </button>
                 <button
+                  disabled={loading}
                   type="submit"
-                  className="bg-[#272727] text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full"
+                  className={`${
+                    loading ? "bg-gray-300 cursor-not-allowed" : "bg-[#272727]"
+                  } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
                 >
                   Verify OTP
                 </button>
@@ -536,7 +548,10 @@ const SignUp = () => {
                 </div>
                 <button
                   type="submit"
-                  className="bg-[#272727] text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full"
+                  disabled={loading}
+                  className={`${
+                    loading ? "bg-gray-300 cursor-not-allowed" : "bg-[#272727]"
+                  } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
                 >
                   Complete SignUp
                 </button>

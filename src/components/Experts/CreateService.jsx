@@ -39,7 +39,6 @@ const CreateService = () => {
     setInterest(updatedInterest);
   };
   const [serviceTitle, setServiceTitle] = useState("");
-  console.log(serviceTitle);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
@@ -196,9 +195,7 @@ const CreateService = () => {
         },
       });
       const data = res.data.data.qualified;
-      console.log(data);
       setShowSkill(data);
-      // console.log(showSkill);
     } catch (error) {
       console.log(error);
     }
@@ -207,7 +204,6 @@ const CreateService = () => {
   useEffect(() => {
     getSkills();
   }, []);
-  console.log(showSkill);
 
   const [skill, setSkill] = useState([]);
 
@@ -223,7 +219,6 @@ const CreateService = () => {
 
     setSkill(filteredSkills);
   };
-  console.log(skill);
 
   const handleSkillChange = (e) => {
     const inputValue = e.target.value;
@@ -287,7 +282,7 @@ const CreateService = () => {
   const [createService, setCreateService] = useState({
     img: "",
     desc: "",
-    duration: 6,
+    duration: "",
     price: "",
     currency: "INR",
   });
@@ -308,7 +303,6 @@ const CreateService = () => {
         "/experts/services/",
         {
           action: 1,
-
           service_name: serviceTitle,
           service_img: image,
           category: selectedCategory.id,
@@ -634,170 +628,7 @@ export default CreateService;
 
 export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
   
-
-
-  // const localizer = momentLocalizer(moment);
-  // const [events, setEvents] = useState([]);
-  // const [notifyBefore, setNotifyBefore] = useState(false);
-  // const [notifyAfter, setNotifyAfter] = useState(false);
-  // const [notifyBeforeTime, setNotifyBeforeTime] = useState(0);
-  // const [notifyAfterTime, setNotifyAfterTime] = useState(0);
-  // const [startInputDate, setStartInputDate] = useState('');
-  // const [startInputTime, setStartInputTime] = useState('');
-  // const [endInputDate, setEndInputDate] = useState('');
-  // const [endInputTime, setEndInputTime] = useState('');
-
-  // const handlePostEvent = async (e) => {
-  //   e.preventDefault();
-  //   const cookies = document.cookie.split('; ');
-  //   const jsonData = {};
-  //   cookies.forEach((item) => {
-  //     const [key, value] = item.split('=');
-  //     jsonData[key] = value;
-  //   });
-
-  //   try {
-  //     const res = await axios.post(
-  //       '/experts/services/',
-  //       {
-  //         action: 5,
-  //         service_id: serviceId,
-  //         notify_before: notifyBefore,
-  //         notify_before_time: notifyBeforeTime,
-  //         notify_after: notifyAfter,
-  //         notify_after_time: notifyAfterTime,
-  //         time_slots: convertEventsToAPIFormat(events), // Convert events to API format
-  //       },
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           Authorization: `Bearer ${jsonData.access_token}`,
-  //         },
-  //       }
-  //     );
-  //     const data = res.data;
-  //     console.log(data);
-  //     if (!data || data.status === 400 || data.status === 401) {
-  //       console.log('Something went wrong');
-  //       return;
-  //     }
-  //     setServiceTitle('');
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const handleCreateEvent = () => {
-  //   const startDate = moment(startInputDate, 'YYYY-MM-DD');
-  //   const endDate = moment(endInputDate, 'YYYY-MM-DD');
-  //   const startTime = moment(startInputTime, 'HH:mm');
-  //   const endTime = moment(endInputTime, 'HH:mm');
-
-  //   if (
-  //     startDate.isValid() &&
-  //     endDate.isValid() &&
-  //     endTime.isValid() &&
-  //     endTime.isSameOrAfter(startTime) &&
-  //     serviceTitle.trim() !== ''
-  //   ) {
-  //     if (startTime.isSame(endTime)) {
-  //       alert('Start time and end time for an event should not be the same.');
-  //       return;
-  //     }
-  //     const newEvents = [];
-  //     let currentDate = startDate.clone();
-  //     while (currentDate.isSameOrBefore(endDate, 'day')) {
-  //       const newEvent = {
-  //         id: events.length + 1,
-  //         title: serviceTitle.trim(),
-  //         start: currentDate
-  //           .clone()
-  //           .hour(startTime.hour())
-  //           .minute(startTime.minute())
-  //           .toDate(),
-  //         end: currentDate
-  //           .clone()
-  //           .hour(endTime.hour())
-  //           .minute(endTime.minute())
-  //           .toDate(),
-  //       };
-
-  //       // Generate unique ID for the slot
-  //       const slotId = `${newEvent.id}-${uuidv4()}`;
-
-  //       newEvents.push({ ...newEvent, id: slotId });
-  //       currentDate.add(1, 'day');
-  //     }
-  //     setEvents([...events, ...newEvents]);
-
-  //     setStartInputDate('');
-  //     setStartInputTime('');
-  //     setEndInputDate('');
-  //     setEndInputTime('');
-  //   } else {
-  //     alert('Please enter valid start and end dates, time, and a non-empty title.');
-  //   }
-  // };
-
-
-
-  // const convertEventToAPIFormat = (event) => {
-  //   const startDate = moment(event.start);
-  //   const endDate = moment(event.end);
-
-  //   return {
-  //     day: `${startDate.format('ddd DD MMM')}`,
-  //     start_time: startDate.format('h:mm A'),
-  //     end_time: endDate.format('h:mm A'),
-  //     timezone: 'IST',
-  //     duration: endDate.diff(startDate, 'seconds'),
-  //   };
-  // };
-
-  // const convertEventsToAPIFormat = (events) => {
-  //   const timeSlotsByDay = {};
-
-  //   events.forEach((event) => {
-  //     const startDate = moment(event.start);
-  //     const dayKey = startDate.format('ddd DD MMM');
-
-  //     if (!timeSlotsByDay[dayKey]) {
-  //       timeSlotsByDay[dayKey] = {
-  //         day: dayKey,
-  //         event_id: event.id,
-  //         notify_after: notifyAfter,
-  //         notify_after_time: notifyAfterTime,
-  //         notify_before: notifyBefore,
-  //         notify_before_time: notifyBeforeTime,
-  //         slot_timezone: 'IST',
-  //         slots: [],
-  //       };
-  //     }
-
-  //     timeSlotsByDay[dayKey].slots.push({
-  //       slot_start_time: moment(event.start).format('h:mm A'),
-  //       slot_end_time: moment(event.end).format('h:mm A'),
-  //       slot_duration: event.duration || 3600,
-  //     });
-  //   });
-
-  //   return Object.values(timeSlotsByDay);
-  // };
-  // const myEvents = convertEventsToAPIFormat(events);
-  // console.log(events);
-  // console.log(myEvents);
-
-  // const handleDeleteSlot = (slotId) => {
-  //   // Find the event containing the slot with the given slotId
-  //   const updatedEvents = events.filter(event => event.id !== slotId.split("-")[0]);
-  //   console.log(slotId.split("-")[0])
-  //   console.log(events)
-  //   setEvents(updatedEvents);
-  //   console.log(events)
-  // };
-
-
-
+  const navigate = useNavigate();
   const localizer = momentLocalizer(moment);
   const [notifyBefore, setNotifyBefore] = useState(false);
   const [notifyAfter, setNotifyAfter] = useState(false);
@@ -844,6 +675,7 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
         return;
       }
       setServiceTitle("");
+      navigate("/expertdashboard/myservices");
     } catch (error) {
       console.log(error);
     }
@@ -1024,7 +856,7 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
           Create Event
         </button>
         <button
-          onClick={handlePostEvent}
+          onClick={(e)=>handlePostEvent(e)}
           className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
         >
           Post event
