@@ -53,6 +53,8 @@ import {
   ResponsiveContainer,
   ComposedChart,
   LineChart,
+  BarChart,
+  Rectangle,
   Line,
   Area,
   Bar,
@@ -670,6 +672,16 @@ export const Dashboard = () => {
     setAvgRating(false);
     setRatingDistribution(true);
   };
+  const [basicStats, setBasicStats] = useState(true);
+  const [extraStats, setExtraStats] = useState(false);
+  const HandleBasicStats = () => {
+    setBasicStats(true);
+    setExtraStats(false);
+  };
+  const HandleExtraStats = () => {
+    setBasicStats(false);
+    setExtraStats(true);
+  };
 
   //heatmap data
   const values = generateRandomData();
@@ -685,80 +697,6 @@ export const Dashboard = () => {
     });
     setValues(updatedValues);
   };
-  const userProfileData = [
-    {
-      month: "Jan",
-      views: 3962,
-      followers: 2289,
-      blogs: 3095,
-    },
-    {
-      month: "Feb",
-      views: 4527,
-      followers: 3429,
-      blogs: 2790,
-    },
-    {
-      month: "Mar",
-      views: 4669,
-      followers: 3209,
-      blogs: 2277,
-    },
-    {
-      month: "Apr",
-      views: 3211,
-      followers: 2321,
-      blogs: 2798,
-    },
-    {
-      month: "May",
-      views: 4578,
-      followers: 3243,
-      blogs: 3191,
-    },
-    {
-      month: "Jun",
-      views: 3506,
-      followers: 2834,
-      blogs: 3599,
-    },
-    {
-      month: "Jul",
-      views: 4623,
-      followers: 2397,
-      blogs: 3120,
-    },
-    {
-      month: "Aug",
-      views: 4251,
-      followers: 2856,
-      blogs: 2368,
-    },
-    {
-      month: "Sep",
-      views: 4713,
-      followers: 2623,
-      blogs: 2212,
-    },
-    {
-      month: "Oct",
-      views: 4138,
-      followers: 2310,
-      blogs: 3783,
-    },
-    {
-      month: "Nov",
-      views: 3801,
-      followers: 3492,
-      blogs: 3939,
-    },
-    {
-      month: "Dec",
-      views: 3365,
-      followers: 3053,
-      blogs: 3640,
-    },
-  ];
   return (
     <section className="w-full md:w-[68%] h-full flex flex-col gap-[4.5vw] xs:gap-[3vw] md:gap-[2vw]">
       <div className="block md:hidden w-full h-auto px-[0.8vw] py-[4.5vw] xs:py-[3vw] border-b-[0.01px] border-[#dcdcdc] border-solid">
@@ -805,57 +743,117 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div className="w-full h-[36vw] xs:h-[28vw] md:h-[16vw] lg:h-[18vw]  text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] border border-[#c7c7c7] border-solid rounded-lg py-[3vw] xs:py-[2vw] md:py-[1vw] overflow-hidden">
-        <div className="text-[3.45vw] xs:text-[2.65vw] md:text-[1.8vw] lg:text-[1.35vw] font-bold px-[2vw]  pb-[0.4vw]">
-          Statistics
-        </div>
-        <div className="w-full h-full flex flex-col md:flex-row justify-between overflow-hidden">
-          <ResponsiveContainer
-            className="-ml-[2vw] mb-[1vw] overflow-hidden"
-            width="75%"
-            height="90%"
-          >
-            <LineChart
-              className="overflow-hidden"
-              data={expertStatistics}
-              margin={{
-                top: 20,
-                right: 50,
-                left: 20,
-                bottom: 5,
-              }}
+      <div className="w-full h-[36vw] xs:h-[28vw] md:h-[18vw] lg:h-[20vw]  text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] border border-[#c7c7c7] border-solid rounded-lg py-[3vw] xs:py-[2vw] md:py-[1vw] flex justify-between">
+        <div className="w-[72%] h-full px-2">
+          <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-4 mb-4 text-sm md:text-base overflow-x-scroll px-2">
+            <div
+              className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+                basicStats && `bg-[#ececec] rounded-sm`
+              }`}
+              onClick={() => HandleBasicStats()}
             >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                dataKey="month"
-                interval={0}
-              />
-              <YAxis
-                className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                dataKey="profile_view_count"
-                interval={0}
-              />
-              <Tooltip />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="profile_view_count"
-                stroke="#8884d8"
-              />
-              <Line
-                type="monotone"
-                dataKey="service_view_count"
-                stroke="#82ca9d"
-              />
-              <Line
-                type="monotone"
-                dataKey="blog_views_count"
-                stroke="#f2e426"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-          <div className="flex md:flex-col justify-between md:justify-around h-[80%] mt-[1.4vw] md:mt-[1vw] lg:mt-[0.2vw] text-[#575757] text-[2.65vw] xs:text-[1.8vw] md:text-[1.2vw] lg:text-[1vw] mb-[1vw] md:mb-[0.4vw] lg:mb-0 px-[2vw] md:border-l border-[#2e2e2e] border-solid">
+              Basic Stats
+            </div>
+            <div
+              className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+                extraStats && `bg-[#ececec] rounded-sm`
+              }`}
+              onClick={() => HandleExtraStats()}
+            >
+              Other Stats
+            </div>
+          </div>
+          {basicStats && (
+            <ResponsiveContainer
+              className="-ml-[2vw] mb-[1vw] overflow-hidden"
+              width="110%"
+              height="70%"
+            >
+              <LineChart
+                className="overflow-hidden"
+                data={expertStatistics}
+                margin={{
+                  top: 20,
+                  right: 50,
+                  left: 2,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                  dataKey="month"
+                  interval={0}
+                />
+                <YAxis
+                  className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                  dataKey="profile_view_count"
+                  interval={0}
+                />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="profile_view_count"
+                  stroke="#8884d8"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="service_view_count"
+                  stroke="#82ca9d"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="blog_views_count"
+                  stroke="#f2e426"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
+          {extraStats && (
+            <ResponsiveContainer width="105%" height="70%">
+              <BarChart
+                width={500}
+                height={300}
+                data={expertStatistics}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: -20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" interval={0} />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar
+                  dataKey="followers_count"
+                  fill="#8884d8"
+                  activeBar={<Rectangle fill="pink" stroke="blue" />}
+                />
+                <Bar
+                  dataKey="avg_score"
+                  fill="#82ca9d"
+                  activeBar={<Rectangle fill="gold" stroke="purple" />}
+                />
+                <Bar
+                  dataKey="service_count"
+                  fill="#822a9d"
+                  activeBar={<Rectangle fill="red" stroke="purple" />}
+                />
+                <Bar
+                  dataKey="rating_count"
+                  fill="#82fa9d"
+                  activeBar={<Rectangle fill="blue" stroke="purple" />}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+        <div className="w-[28%] h-full md:border-l border-[#2e2e2e] border-solid">
+          <div className="flex md:flex-col justify-between md:justify-around h-[80%] mt-[1.4vw] md:mt-[1vw] lg:mt-[0.2vw] text-[#575757] text-[2.65vw] xs:text-[1.8vw] md:text-[1.2vw] lg:text-[1vw] mb-[1vw] md:mb-[0.4vw] lg:mb-0 px-[2vw]">
             <div className="flex items-center gap-[1.2vw] ">
               <IoEyeSharp className="text-[#FF5E18] text-[3.65vw] xs:text-[2.65vw] md:text-[1.65vw] lg:text-[1.45vw]" />{" "}
               Views <span>{expertData.profile_view_count}</span>
@@ -866,7 +864,7 @@ export const Dashboard = () => {
             </div>
             <div className="flex items-center gap-[1.2vw]">
               <RiPagesFill className="text-[#EF0064] text-[3.65vw] xs:text-[2.65vw] md:text-[1.65vw] lg:text-[1.45vw]" />{" "}
-              Blogs <span>{expert.viewCount}</span>
+              Blogs <span>{expertData.blog_views_count}</span>
             </div>
           </div>
         </div>
@@ -882,14 +880,14 @@ export const Dashboard = () => {
             >
               Average Rating
             </div>
-            <div
+            {/* <div
               className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
                 ratingDistribution && `bg-[#ececec] rounded-sm`
               }`}
               onClick={() => HandleRatingDistribution()}
             >
               Rating Distribution
-            </div>
+            </div> */}
           </div>
           {avgRating && (
             <div className="flex justify-between px-[1vw]">
@@ -919,7 +917,7 @@ export const Dashboard = () => {
               </div>
             </div>
           )}
-          {ratingDistribution && (
+          {/* {ratingDistribution && (
             <div className="flex w-full  justify-between items-center text-[3vw] xs:text-[1.6vw] md:text-[1.15vw] lg:text-[0.85vw] overflow-hidden">
               <PieChart
                 width={200}
@@ -963,7 +961,7 @@ export const Dashboard = () => {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
       <div className="w-full flex flex-col gap-[1vw] border border-[#c7c7c7] border-solid rounded-lg px-[1.8vw] py-[3vw] xs:py-[2vw] md:py-[1.25vw]">
@@ -971,13 +969,13 @@ export const Dashboard = () => {
           Skills
         </div>
         <div className="flex flex-wrap gap-[2vw] xs:gap-[1.6vw] md:gap-[1vw]">
-          {expert.allskils.map((item, index) => {
+          {expertData.skills?.map((item, index) => {
             return (
               <div
                 key={index}
                 className="px-[3vw] md:px-[2vw] lg:px-[1.6vw] py-[1vw] md:py-[0.6vw] rounded-sm xs:rounded bg-[#ececec] mt-[1.45vw] xs:mt-[1vw] md:mt-auto text-[2.8vw] xs:text-[1.8vw] md:text-[1.18vw] lg:text-[1vw]"
               >
-                {item}
+                {item.technology_name}
               </div>
             );
           })}

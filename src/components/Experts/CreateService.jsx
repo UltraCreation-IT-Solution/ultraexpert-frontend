@@ -12,7 +12,7 @@ import {
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
-import { v4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 // slots
 import { Calendar, momentLocalizer } from "react-big-calendar";
@@ -51,7 +51,7 @@ const CreateService = () => {
       setImage(URL.createObjectURL(e.target.files[0]));
       const file = e.target.files[0];
       if (file) {
-        const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
+        const imgRef = ref(imageDB, `UltraXpertImgFiles/${uuidv4()}`);
         const uploadTask = uploadBytesResumable(imgRef, file);
         uploadTask.on(
           "state_changed",
@@ -489,32 +489,36 @@ const CreateService = () => {
               <label htmlFor="tags" className="text-lg mb-1 font-bold">
                 Tags
               </label>
-              <div className="border border-solid border-gray-300 px-2 rounded-md mb-2">
-                <div className="flex flex-wrap gap-2">
-                  {selectedSkill.length > 0 ? (
-                    selectedSkill.map((skill, ind) => {
-                      return (
-                        <div
-                          key={ind}
-                          className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
-                        >
-                          {skill}
+              {selectedSkill.length > 0 ? (
+                <div className="border border-solid border-gray-300 px-2 rounded-md mb-2">
+                  <div className="flex flex-wrap gap-2">
+                    {selectedSkill.length > 0 ? (
+                      selectedSkill.map((skill, ind) => {
+                        return (
                           <div
-                            className="cursor-pointer"
-                            onClick={() => handleTagRemove(skill)}
+                            key={ind}
+                            className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
                           >
-                            x
+                            {skill}
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => handleTagRemove(skill)}
+                            >
+                              x
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <p className="text-gray-300 text-sm">
-                      Select skills of your interest from below.
-                    </p>
-                  )}
+                        );
+                      })
+                    ) : (
+                      <p className="text-gray-300 text-sm">
+                        Select skills of your interest from below.
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <></>
+              )}
               <input
                 type="text"
                 id="tags"
@@ -633,6 +637,164 @@ const CreateService = () => {
 export default CreateService;
 
 export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
+  // const localizer = momentLocalizer(moment);
+  // const [events, setEvents] = useState([]);
+  // const [notifyBefore, setNotifyBefore] = useState(false);
+  // const [notifyAfter, setNotifyAfter] = useState(false);
+  // const [notifyBeforeTime, setNotifyBeforeTime] = useState(0);
+  // const [notifyAfterTime, setNotifyAfterTime] = useState(0);
+  // const [startInputDate, setStartInputDate] = useState('');
+  // const [startInputTime, setStartInputTime] = useState('');
+  // const [endInputDate, setEndInputDate] = useState('');
+  // const [endInputTime, setEndInputTime] = useState('');
+
+  // const handlePostEvent = async (e) => {
+  //   e.preventDefault();
+  //   const cookies = document.cookie.split('; ');
+  //   const jsonData = {};
+  //   cookies.forEach((item) => {
+  //     const [key, value] = item.split('=');
+  //     jsonData[key] = value;
+  //   });
+
+  //   try {
+  //     const res = await axios.post(
+  //       '/experts/services/',
+  //       {
+  //         action: 5,
+  //         service_id: serviceId,
+  //         notify_before: notifyBefore,
+  //         notify_before_time: notifyBeforeTime,
+  //         notify_after: notifyAfter,
+  //         notify_after_time: notifyAfterTime,
+  //         time_slots: convertEventsToAPIFormat(events), // Convert events to API format
+  //       },
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Authorization: `Bearer ${jsonData.access_token}`,
+  //         },
+  //       }
+  //     );
+  //     const data = res.data;
+  //     console.log(data);
+  //     if (!data || data.status === 400 || data.status === 401) {
+  //       console.log('Something went wrong');
+  //       return;
+  //     }
+  //     setServiceTitle('');
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const handleCreateEvent = () => {
+  //   const startDate = moment(startInputDate, 'YYYY-MM-DD');
+  //   const endDate = moment(endInputDate, 'YYYY-MM-DD');
+  //   const startTime = moment(startInputTime, 'HH:mm');
+  //   const endTime = moment(endInputTime, 'HH:mm');
+
+  //   if (
+  //     startDate.isValid() &&
+  //     endDate.isValid() &&
+  //     endTime.isValid() &&
+  //     endTime.isSameOrAfter(startTime) &&
+  //     serviceTitle.trim() !== ''
+  //   ) {
+  //     if (startTime.isSame(endTime)) {
+  //       alert('Start time and end time for an event should not be the same.');
+  //       return;
+  //     }
+  //     const newEvents = [];
+  //     let currentDate = startDate.clone();
+  //     while (currentDate.isSameOrBefore(endDate, 'day')) {
+  //       const newEvent = {
+  //         id: events.length + 1,
+  //         title: serviceTitle.trim(),
+  //         start: currentDate
+  //           .clone()
+  //           .hour(startTime.hour())
+  //           .minute(startTime.minute())
+  //           .toDate(),
+  //         end: currentDate
+  //           .clone()
+  //           .hour(endTime.hour())
+  //           .minute(endTime.minute())
+  //           .toDate(),
+  //       };
+
+  //       // Generate unique ID for the slot
+  //       const slotId = `${newEvent.id}-${uuidv4()}`;
+
+  //       newEvents.push({ ...newEvent, id: slotId });
+  //       currentDate.add(1, 'day');
+  //     }
+  //     setEvents([...events, ...newEvents]);
+
+  //     setStartInputDate('');
+  //     setStartInputTime('');
+  //     setEndInputDate('');
+  //     setEndInputTime('');
+  //   } else {
+  //     alert('Please enter valid start and end dates, time, and a non-empty title.');
+  //   }
+  // };
+
+  // const convertEventToAPIFormat = (event) => {
+  //   const startDate = moment(event.start);
+  //   const endDate = moment(event.end);
+
+  //   return {
+  //     day: `${startDate.format('ddd DD MMM')}`,
+  //     start_time: startDate.format('h:mm A'),
+  //     end_time: endDate.format('h:mm A'),
+  //     timezone: 'IST',
+  //     duration: endDate.diff(startDate, 'seconds'),
+  //   };
+  // };
+
+  // const convertEventsToAPIFormat = (events) => {
+  //   const timeSlotsByDay = {};
+
+  //   events.forEach((event) => {
+  //     const startDate = moment(event.start);
+  //     const dayKey = startDate.format('ddd DD MMM');
+
+  //     if (!timeSlotsByDay[dayKey]) {
+  //       timeSlotsByDay[dayKey] = {
+  //         day: dayKey,
+  //         event_id: event.id,
+  //         notify_after: notifyAfter,
+  //         notify_after_time: notifyAfterTime,
+  //         notify_before: notifyBefore,
+  //         notify_before_time: notifyBeforeTime,
+  //         slot_timezone: 'IST',
+  //         slots: [],
+  //       };
+  //     }
+
+  //     timeSlotsByDay[dayKey].slots.push({
+  //       slot_start_time: moment(event.start).format('h:mm A'),
+  //       slot_end_time: moment(event.end).format('h:mm A'),
+  //       slot_duration: event.duration || 3600,
+  //     });
+  //   });
+
+  //   return Object.values(timeSlotsByDay);
+  // };
+  // const myEvents = convertEventsToAPIFormat(events);
+  // console.log(events);
+  // console.log(myEvents);
+
+  // const handleDeleteSlot = (slotId) => {
+  //   // Find the event containing the slot with the given slotId
+  //   const updatedEvents = events.filter(event => event.id !== slotId.split("-")[0]);
+  //   console.log(slotId.split("-")[0])
+  //   console.log(events)
+  //   setEvents(updatedEvents);
+  //   console.log(events)
+  // };
+
   const localizer = momentLocalizer(moment);
   const [notifyBefore, setNotifyBefore] = useState(false);
   const [notifyAfter, setNotifyAfter] = useState(false);
@@ -678,6 +840,7 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
         console.log("Something went wrong");
         return;
       }
+      setServiceTitle("");
     } catch (error) {
       console.log(error);
     }
@@ -726,7 +889,6 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
       setStartInputTime("");
       setEndInputDate("");
       setEndInputTime("");
-      setServiceTitle("");
     } else {
       alert(
         "Please enter valid start and end dates, time, and a non-empty title."
@@ -739,7 +901,7 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
     const endDate = moment(event.end);
 
     return {
-      day: startDate.format("DD MMM"), // Format the date as "DD MMM" (e.g., "29 Jan")
+      day: `${startDate.format("ddd DD MMM")}`, // Include day of the week (e.g., "Mon 29 Jan")
       start_time: startDate.format("h:mm A"), // Format the start time as "h:mm A" (e.g., "9:00 AM")
       end_time: endDate.format("h:mm A"), // Format the end time as "h:mm A" (e.g., "1:00 PM")
       timezone: "IST", // Assuming the timezone is always IST
@@ -858,7 +1020,7 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
           Create Event
         </button>
         <button
-          onClick={(e)=>handlePostEvent(e)}
+          onClick={(e) => handlePostEvent(e)}
           className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
         >
           Post event
@@ -871,6 +1033,13 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 500 }}
+        onSelectEvent={(slot) => {
+          if (
+            window.confirm("Are you sure you want to delete this time slot?")
+          ) {
+            handleDeleteSlot(slot.id);
+          }
+        }}
       />
     </div>
   );

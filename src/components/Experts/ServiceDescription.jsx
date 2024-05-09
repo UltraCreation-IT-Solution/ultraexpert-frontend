@@ -10,7 +10,8 @@ import { ExpertRatings } from "./ExpertProfile";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../../axios";
-import {RatingCard} from "../Experts/ExpertProfile";
+import { BiLike } from "react-icons/bi";
+import { BiDislike } from "react-icons/bi";
 
 export const ServiceProfileCard = ({ item }) => {
   console.log(item);
@@ -54,9 +55,230 @@ export const ServiceProfileCard = ({ item }) => {
   );
 };
 
-const ServiceDescription = () => {
-  const [currentDateClick, setCurrentDateClick] = useState("");
+const CommentCard = ({ temp }) => {
+  console.log(temp);
 
+  const date = temp?.timestamp.split("T")[0];
+  const commentDate = date;
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedComment, setEditedComment] = useState(temp?.content);
+
+  const deleteComment = async () => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 9,
+          comment_id: temp?.id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const cancelEdit = () => {
+    setIsEditing(false);
+    setEditedComment(temp?.content);
+  };
+
+  const saveEdit = async () => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 12,
+          comment_id: temp?.id,
+          new_content: editedComment,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      setIsEditing(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const likeComment = async () => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 10,
+          comment_id: temp?.id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const dislikeComment = async () => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 11,
+          comment_id: temp?.id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className="my-[5vw] md:my-[2vw] pb-[1vw] border-b-[1px] border-slate-400 border-solid">
+      <div className="flex gap-[2.5vw] sm:gap-[2vw]">
+        <img
+          className="h-12 w-12 sm:h-14 sm:w-14 xl:h-14 xl:w-14 shrink-0 object-cover rounded-full"
+          src={temp?.user_profile_img}
+          alt=""
+        />
+        <div>
+          <div className="text-lg sm:text-xl font-semibold">
+            {temp?.user_first_name} {temp?.user_last_name}
+          </div>
+          <div className="mt-[2vw] md:mt-[0.9vw] text-xs sm:text-base text-slate-400">
+            {commentDate}
+          </div>
+          {isEditing ? (
+            <textarea
+              value={editedComment}
+              onChange={(e) => setEditedComment(e.target.value)}
+              className="text-xs sm:text-base font-montserrat w-full h-20 border border-gray-300 rounded-md p-2"
+            />
+          ) : (
+            <p className="text-xs sm:text-base font-montserrat">
+              {editedComment}
+            </p>
+          )}
+          <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
+            <div className="flex items-center gap-1" onClick={likeComment}>
+              <BiLike />
+              <div>{temp?.likes}</div>
+            </div>
+            <div className="flex items-center gap-1" onClick={dislikeComment}>
+              <BiDislike />
+              <div>{temp?.dislikes}</div>
+            </div>
+          </div>
+          {!isEditing && (
+            <div>
+              <button
+                onClick={handleEdit}
+                className="text-blue-500 p-2 border border-solid border-blue-500 rounded-lg"
+              >
+                Edit
+              </button>
+              <button
+                onClick={deleteComment}
+                className="text-red-500 p-2 border border-solid border-red-500 rounded-lg ml-2"
+              >
+                Delete
+              </button>
+            </div>
+          )}
+
+          {isEditing && (
+            <div>
+              <button
+                onClick={saveEdit}
+                className="text-green-500 p-2 border border-solid border-green-500 rounded-lg"
+              >
+                Save
+              </button>
+              <button
+                onClick={cancelEdit}
+                className="text-gray-500 p-2 border border-solid border-gray-500 rounded-lg ml-2"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ServiceDescription = () => {
   const [showChat, setShowChat] = useState(false);
   const params = useParams();
   const { id } = params;
@@ -98,7 +320,7 @@ const ServiceDescription = () => {
   const [comments, setComments] = useState({
     comment: "",
   });
-  const postNewComment = async() =>{
+  const postNewComment = async () => {
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -106,31 +328,36 @@ const ServiceDescription = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    try{
-      const res = await axios.post("/customers/connect/",{
-        action: 8,
-        service_id: id,
-        content: comments.comment
-      },{
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 8,
+          service_id: id,
+          content: comments.comment,
         },
-      })
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
       const json = res.data;
-      if(!json){
+      if (!json) {
         console.log("no data");
         return;
       }
       console.log(json);
-    }catch(error){
+      getAllServiceComments();
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  const [blogComments, setBlogComments] = useState([]);
+  const [serviceComments, setServiceComments] = useState([]);
 
-  const getAllBlogComments = async() =>{
+  const getAllServiceComments = async () => {
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -138,29 +365,31 @@ const ServiceDescription = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    try{
-      const res = await axios.get(`/customers/connect/?action=5&service_id=${id}`,{
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      })
+    try {
+      const res = await axios.get(
+        `/customers/connect/?action=5&service_id=${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
       const json = res.data;
-      if(!json){
+      if (!json) {
         console.log("no data");
         return;
       }
       console.log(json);
-      setBlogComments(json.data);
-    }catch(error){
+      setServiceComments(json.data);
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
-    getAllBlogComments();
+    getAllServiceComments();
   }, []);
-
 
   return (
     <>
@@ -206,7 +435,7 @@ const ServiceDescription = () => {
                 My projects
               </div>
               <div id="projects">
-                <ProjectsCarousel  />
+                <ProjectsCarousel projectsArray={servDesc?.expert_projects} />
               </div>
             </div>
             <div className="lg:hidden w-full">
@@ -215,58 +444,63 @@ const ServiceDescription = () => {
               </div>
             </div>
             <div id="ratings" className="mt-10">
-            <div className="px-1 xs:px-5 mb-10 lg:mb-0">
-            <div className="border-b border-solid border-slate-300 pb-10">
-              <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
-                50 reviews
-              </div>
-              <div className=" mt-6">
-                <input
-                  type="text"
-                  name="comment"
-                  id="comment"
-                  value={comments.comment}
-                  onChange={(e) => setComments({ ...comments, comment: e.target.value })}
-                  placeholder="Write a comment"
-                  className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
-                />
-                <button onClick={postNewComment} className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0">
-                  Comment
+              <div className="px-1 xs:px-5 mb-10 lg:mb-0">
+                <div className="border-b border-solid border-slate-300 pb-10">
+                  <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
+                    50 reviews
+                  </div>
+                  <div className=" mt-6">
+                    <input
+                      type="text"
+                      name="comment"
+                      id="comment"
+                      value={comments.comment}
+                      onChange={(e) =>
+                        setComments({ ...comments, comment: e.target.value })
+                      }
+                      placeholder="Write a comment"
+                      className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
+                    />
+                    <button
+                      onClick={postNewComment}
+                      className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0"
+                    >
+                      Comment
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <div className="mt-8 mb-12 flex items-center justify-between">
+                    <div className="text-xl md:text-2xl font-semibold ">
+                      Top Reviews
+                    </div>
+                    <select
+                      name="Sort by"
+                      id=""
+                      className="px-4 py-2 text-sm md:text-lg border border-solid border-slate-300 outline-none"
+                    >
+                      <option
+                        value="newest"
+                        className="text-xs md:text-sm px-4 py-2"
+                      >
+                        Newest
+                      </option>
+                      <option
+                        value="oldest"
+                        className="text-xs md:text-sm px-4 py-2"
+                      >
+                        Oldest
+                      </option>
+                    </select>
+                  </div>
+                  {serviceComments?.map((temp, idx) => (
+                    <CommentCard key={idx} temp={temp} />
+                  ))}
+                </div>
+                <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
+                  Show more
                 </button>
               </div>
-            </div>
-            <div>
-              <div className="mt-8 mb-12 flex items-center justify-between">
-                <div className="text-xl md:text-2xl font-semibold ">
-                  Top Reviews
-                </div>
-                <select
-                  name="Sort by"
-                  id=""
-                  className="px-4 py-2 text-sm md:text-lg border border-solid border-slate-300 outline-none"
-                >
-                  <option
-                    value="newest"
-                    className="text-xs md:text-sm px-4 py-2"
-                  >
-                    Newest
-                  </option>
-                  <option
-                    value="oldest"
-                    className="text-xs md:text-sm px-4 py-2"
-                  >
-                    Oldest
-                  </option>
-                </select>
-              </div>
-              {blogComments?.map((temp, idx) => (
-                <RatingCard key={idx} temp={temp} />
-              ))}
-            </div>
-            <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
-              Show more
-            </button>
-          </div>
             </div>
           </div>
         </div>

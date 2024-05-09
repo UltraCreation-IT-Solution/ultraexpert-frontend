@@ -83,7 +83,7 @@ export const BlogBody = ({ allBlogsArray }) => {
                 <div className="px-[0.8vw] pt-2 md:pt-0">
                   <div className="flex justify-between font-semibold text-sm text-[#808080]">
                     <div>{item?.author_name}</div>
-                    <div>{formatDate(item?.date_created)}</div>
+                    <div>{formatDate(item?.updated_on)}</div>
                   </div>
                   <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
                     {item?.title}
@@ -109,51 +109,53 @@ export const BlogBody = ({ allBlogsArray }) => {
 
       {/* Related to tech */}
       <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
-        {blogsCategory.filter(([category]) => category !== "all").map(([category, item]) => (
-          <>
-            <div className="text-xl lg:text-3xl font-extrabold ">
-              Related to {category}
-            </div>
-            <div className="mt-4 w-full h-auto flex gap-[1.5vw] overflow-scroll pb-4">
+        {blogsCategory
+          .filter(([category]) => category !== "all")
+          .map(([category, item]) => (
+            <>
+              <div className="text-xl lg:text-3xl font-extrabold ">
+                Related to {category}
+              </div>
               <div className="mt-4 w-full h-auto flex gap-[1.5vw] overflow-scroll pb-4">
-                {item.map((blog) => (
-                  <div
-                    key={blog.id}
-                    className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
-                  >
-                    <img
-                      src={blog.images[0]} // Assuming images is an array and you want the first image
-                      className="w-full h-[200px] object-cover  shrink-0 md:mb-[0.7vw]"
-                      alt=""
-                    />
-                    <div className="px-[0.8vw] pt-2 md:pt-0">
-                      <div className="flex justify-between font-semibold text-sm text-[#808080]">
-                        <div>{blog.author_name}</div>
-                        <div>{blog.date}</div>
-                      </div>
-                      <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
-                        {blog.title}
-                      </div>
-                      <div className="text-sm line-clamp-3 md:mb-[1vw]">
-                        {blog.content}
-                      </div>
-                      <div className="w-full flex text-white justify-between items-center my-2">
-                        {/* Link should point to the specific blog detail page */}
-                        <Link
-                          to={`/blogdetail/${blog.id}`}
-                          className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
-                        >
-                          Read More
-                        </Link>
-                        <CiBookmark className="text-4xl xs:text-5xl text-black" />
+                <div className="mt-4 w-full h-auto flex gap-[1.5vw] overflow-scroll pb-4">
+                  {item.map((blog) => (
+                    <div
+                      key={blog.id}
+                      className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
+                    >
+                      <img
+                        src={blog.images[0]} // Assuming images is an array and you want the first image
+                        className="w-full h-[200px] object-cover  shrink-0 md:mb-[0.7vw]"
+                        alt=""
+                      />
+                      <div className="px-[0.8vw] pt-2 md:pt-0">
+                        <div className="flex justify-between font-semibold text-sm text-[#808080]">
+                          <div>{blog.author_name}</div>
+                          <div>{blog.date}</div>
+                        </div>
+                        <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
+                          {blog.title}
+                        </div>
+                        <div className="text-sm line-clamp-3 md:mb-[1vw]">
+                          {blog.content}
+                        </div>
+                        <div className="w-full flex text-white justify-between items-center my-2">
+                          {/* Link should point to the specific blog detail page */}
+                          <Link
+                            to={`/blogdetail/${blog.id}`}
+                            className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
+                          >
+                            Read More
+                          </Link>
+                          <CiBookmark className="text-4xl xs:text-5xl text-black" />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          </>
-        ))}
+            </>
+          ))}
       </div>
       {/* Hot topics */}
       <div className="bg-[#F2F2F2] px-[2vw] py-[3vw] mt-20">
@@ -335,7 +337,9 @@ const Blogs = () => {
   const [allBlogsArray, setAllBlogsArray] = useState([]);
   const [filterAllBlogsArray, setFilterAllBlogsArray] = useState([]);
   const [featuredBlogsArray, setFeaturedBlogsArray] = useState([]);
-
+  {
+    console.log(featuredBlogsArray);
+  }
   const SearchBlogs = (e) => {
     setSearchText(e.target.value);
     setFilterAllBlogsArray(
@@ -491,6 +495,7 @@ const Blogs = () => {
       });
       const allData = res.data.data.all;
       setAllBlogsArray(allData);
+      console.log(allBlogsArray);
       setFilterAllBlogsArray(allData);
       console.log(...data);
     } catch (error) {
@@ -501,6 +506,11 @@ const Blogs = () => {
     getBlogArray();
   }, []);
   //api call for all blogs
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  }
   return (
     <div className="mt-[90px]">
       {/* Featured Blogs */}
@@ -523,7 +533,7 @@ const Blogs = () => {
                 {item?.title}
               </div>
               <div className="my-2 md:my-4 text-xs md:text-base">
-                {item?.author?.name} | {"date"}
+                {item?.author?.name} | {formatDate(item?.updated_on)}
               </div>
               <Link to={`blogdetail/${item?.blog_id}`}>
                 <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs md:text-base font-semibold cursor-pointer">
