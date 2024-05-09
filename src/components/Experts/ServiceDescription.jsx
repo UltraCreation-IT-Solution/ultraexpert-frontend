@@ -10,7 +10,7 @@ import { ExpertRatings } from "./ExpertProfile";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../../axios";
-import {RatingCard} from "../Experts/ExpertProfile";
+import { RatingCard } from "../Experts/ExpertProfile";
 
 export const ServiceProfileCard = ({ item }) => {
   console.log(item);
@@ -55,7 +55,6 @@ export const ServiceProfileCard = ({ item }) => {
 };
 
 const ServiceDescription = () => {
-
   const [showChat, setShowChat] = useState(false);
   const params = useParams();
   const { id } = params;
@@ -97,7 +96,7 @@ const ServiceDescription = () => {
   const [comments, setComments] = useState({
     comment: "",
   });
-  const postNewComment = async() =>{
+  const postNewComment = async () => {
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -105,32 +104,36 @@ const ServiceDescription = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    try{
-      const res = await axios.post("/customers/connect/",{
-        action: 8,
-        service_id: id,
-        content: comments.comment
-      },{
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 8,
+          service_id: id,
+          content: comments.comment,
         },
-      })
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
       const json = res.data;
-      if(!json){
+      if (!json) {
         console.log("no data");
         return;
       }
       console.log(json);
       getAllServiceComments();
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const [serviceComments, setServiceComments] = useState([]);
 
-  const getAllServiceComments = async() =>{
+  const getAllServiceComments = async () => {
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -138,28 +141,66 @@ const ServiceDescription = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    try{
-      const res = await axios.get(`/customers/connect/?action=5&service_id=${id}`,{
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      })
+    try {
+      const res = await axios.get(
+        `/customers/connect/?action=5&service_id=${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
       const json = res.data;
-      if(!json){
+      if (!json) {
         console.log("no data");
         return;
       }
       console.log(json);
       setServiceComments(json.data);
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     getAllServiceComments();
   }, []);
+
+  // const handleBookService = async () => {
+  //   const cookies = document.cookie.split("; ");
+  //   const jsonData = {};
+  //   console.log("booking service")
+  //   cookies.forEach((item) => {
+  //     const [key, value] = item.split("=");
+  //     jsonData[key] = value;
+  //   });
+  //   try {
+  //     const res = await axios.post(
+  //       "/booking/",
+  //       {
+  //         action:1,
+  //         expert_id: servDesc?.expert_data?.id,
+  //         service_id: servDesc?.id,
+  //         slot_id: 248
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${jsonData.access_token}`,
+  //         },
+  //       }
+  //     );
+  //     const json = res.data;
+  //     if (!json) {
+  //       console.log("no data")
+  //       return;
+  //     }
+  //     console.log(json)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
 
   return (
@@ -211,62 +252,67 @@ const ServiceDescription = () => {
             </div>
             <div className="lg:hidden w-full">
               <div className="my-8">
-                <ShowSchedule price={servDesc?.price} id={servDesc?.id} />
+                <ShowSchedule price={servDesc?.price} id={servDesc?.id}/>
               </div>
             </div>
             <div id="ratings" className="mt-10">
-            <div className="px-1 xs:px-5 mb-10 lg:mb-0">
-            <div className="border-b border-solid border-slate-300 pb-10">
-              <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
-                50 reviews
-              </div>
-              <div className=" mt-6">
-                <input
-                  type="text"
-                  name="comment"
-                  id="comment"
-                  value={comments.comment}
-                  onChange={(e) => setComments({ ...comments, comment: e.target.value })}
-                  placeholder="Write a comment"
-                  className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
-                />
-                <button onClick={postNewComment} className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0">
-                  Comment
+              <div className="px-1 xs:px-5 mb-10 lg:mb-0">
+                <div className="border-b border-solid border-slate-300 pb-10">
+                  <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
+                    50 reviews
+                  </div>
+                  <div className=" mt-6">
+                    <input
+                      type="text"
+                      name="comment"
+                      id="comment"
+                      value={comments.comment}
+                      onChange={(e) =>
+                        setComments({ ...comments, comment: e.target.value })
+                      }
+                      placeholder="Write a comment"
+                      className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
+                    />
+                    <button
+                      onClick={postNewComment}
+                      className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0"
+                    >
+                      Comment
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <div className="mt-8 mb-12 flex items-center justify-between">
+                    <div className="text-xl md:text-2xl font-semibold ">
+                      Top Reviews
+                    </div>
+                    <select
+                      name="Sort by"
+                      id=""
+                      className="px-4 py-2 text-sm md:text-lg border border-solid border-slate-300 outline-none"
+                    >
+                      <option
+                        value="newest"
+                        className="text-xs md:text-sm px-4 py-2"
+                      >
+                        Newest
+                      </option>
+                      <option
+                        value="oldest"
+                        className="text-xs md:text-sm px-4 py-2"
+                      >
+                        Oldest
+                      </option>
+                    </select>
+                  </div>
+                  {serviceComments?.map((temp, idx) => (
+                    <RatingCard key={idx} temp={temp} />
+                  ))}
+                </div>
+                <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
+                  Show more
                 </button>
               </div>
-            </div>
-            <div>
-              <div className="mt-8 mb-12 flex items-center justify-between">
-                <div className="text-xl md:text-2xl font-semibold ">
-                  Top Reviews
-                </div>
-                <select
-                  name="Sort by"
-                  id=""
-                  className="px-4 py-2 text-sm md:text-lg border border-solid border-slate-300 outline-none"
-                >
-                  <option
-                    value="newest"
-                    className="text-xs md:text-sm px-4 py-2"
-                  >
-                    Newest
-                  </option>
-                  <option
-                    value="oldest"
-                    className="text-xs md:text-sm px-4 py-2"
-                  >
-                    Oldest
-                  </option>
-                </select>
-              </div>
-              {serviceComments?.map((temp, idx) => (
-                <RatingCard key={idx} temp={temp} />
-              ))}
-            </div>
-            <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
-              Show more
-            </button>
-          </div>
             </div>
           </div>
         </div>
