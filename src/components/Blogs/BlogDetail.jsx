@@ -10,7 +10,7 @@ import axios from "../../axios";
 import { useParams } from "react-router-dom";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
-const CommentCard = ({ temp, getAllComments }) => {
+const CommentCard = ({ blogData, temp, getAllComments }) => {
   const [options, setOptions] = useState(false);
   console.log(temp);
   const date = temp?.timestamp.split("T")[0];
@@ -161,6 +161,45 @@ const CommentCard = ({ temp, getAllComments }) => {
     }
   };
 
+  const [replyComm, setReplyComm] = useState(false);
+  const [replyComment, setReplyComment] = useState("");
+
+  const handleReplyComment = async (id) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 8,
+          blog_id: blogData?.id,
+          content: replyComment,
+          reply_to: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      getAllComments();
+      console.log(json);
+      setReplyComm(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="my-[5vw] md:my-[2vw] pb-[1vw] border-b-[1px] border-slate-400 border-solid">
       <div className="flex gap-[2.5vw] sm:gap-[2vw]">
@@ -169,7 +208,7 @@ const CommentCard = ({ temp, getAllComments }) => {
           src={temp?.user_profile_img}
           alt=""
         />
-        <div>
+        <div className="w-full">
           <div className="text-lg sm:text-xl font-semibold">
             {temp?.user_first_name} {temp?.user_last_name}
           </div>
@@ -180,12 +219,28 @@ const CommentCard = ({ temp, getAllComments }) => {
             <textarea
               value={editedComment}
               onChange={(e) => setEditedComment(e.target.value)}
-              className="text-xs sm:text-base font-montserrat w-full h-20 border border-gray-300 rounded-md p-2"
+              className="text-xs sm:text-base font-montserrat w-full h-20 border border-gray-300 rounded-md p-2 outline-none"
             />
           ) : (
             <p className="text-xs sm:text-base font-montserrat">
               {editedComment}
             </p>
+          )}
+          {temp?.is_authenticated_user && isEditing && (
+            <div className="mb-2">
+              <button
+                onClick={saveEdit}
+                className="text-green-500 px-3 py-1 border border-solid border-green-500 rounded-md"
+              >
+                Save
+              </button>
+              <button
+                onClick={cancelEdit}
+                className="text-gray-500 px-3 py-1 border border-solid border-gray-500 rounded-md ml-2"
+              >
+                Cancel
+              </button>
+            </div>
           )}
           <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
             <div className="flex items-center gap-1" onClick={likeComment}>
@@ -196,26 +251,43 @@ const CommentCard = ({ temp, getAllComments }) => {
               <BiDislike />
               <div>{temp?.dislike_count}</div>
             </div>
+            {!replyComm && ( // Render reply button if replyComm is false
+              <button
+                className="text-xs sm:text-base cursor-pointer px-2 py-1 rounded-sm sm:rounded-md"
+                onClick={() => setReplyComm(true)}
+              >
+                Reply
+              </button>
+            )}
           </div>
+          {replyComm && ( // Render reply input and save button if replyComm is true
+            <div className="w-full">
+              <input
+                type="text"
+                value={replyComment}
+                onChange={(e) => setReplyComment(e.target.value)}
+                onBlur={() => setReplyComm(false)}
+                className="text-xs sm:text-base font-montserrat w-full border-b border-gray-300 p-2 outline-none"
+              />
+              <div className="mt-3">
+                <button
+                  className="text-xs sm:text-base cursor-pointer px-4 py-1 rounded-sm sm:rounded-md"
+                  onClick={() => handleReplyComment(temp?.id)}
+                >
+                  Save
+                </button>
+                <button
+                  className="text-xs sm:text-base cursor-pointer px-4 py-1 ml-2 rounded-sm sm:rounded-md"
+                  onClick={() => (setReplyComm(false), setReplyComment(""))}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-        {temp?.is_authenticated_user && isEditing && (
-          <div>
-            <button
-              onClick={saveEdit}
-              className="text-green-500 px-3 py-1 border border-solid border-green-500 rounded-md"
-            >
-              Save
-            </button>
-            <button
-              onClick={cancelEdit}
-              className="text-gray-500 px-3 py-1 border border-solid border-gray-500 rounded-md ml-2"
-            >
-              Cancel
-            </button>
-          </div>
-        )}
         {temp?.is_authenticated_user && !isEditing && (
-          <div className="relative overflow-visible flex flex-col ml-auto text-3xl cursor-pointer">
+          <div className="relative overflow-visible flex flex-col ml-auto text-xl sm:text-3xl cursor-pointer">
             <PiDotsThreeCircleVertical onClick={() => setOptions(!options)} />
             {options && (
               <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
@@ -471,6 +543,7 @@ const BlogDetails = () => {
               {console.log(blogComments)}
               {blogComments?.map((temp, idx) => (
                 <CommentCard
+                  blogData={currBlogData}
                   key={idx}
                   temp={temp}
                   getAllComments={getAllBlogComments}
@@ -487,5 +560,3 @@ const BlogDetails = () => {
   );
 };
 export default BlogDetails;
-
-

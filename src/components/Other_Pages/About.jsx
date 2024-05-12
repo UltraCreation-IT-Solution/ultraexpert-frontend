@@ -85,7 +85,7 @@ const About = () => {
           <div className="text-sm sm:text-[1.7vw] md:text-[1.5vw] lg:text-[1.1vw] mt-3 text-balance">
             By fostering a vibrant community of mentors and mentees, we strive
             to:
-            <ul className="">
+            <ul className="list-inside">
               <li className="mb-2">
                 <span className="font-bold">Bridge the knowledge gap: </span>We
                 connect aspiring individuals with experienced mentors who can

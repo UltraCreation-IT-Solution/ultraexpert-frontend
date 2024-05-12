@@ -1,27 +1,24 @@
 import React, { useEffect, useState } from "react";
-import {
-  featuredBlogs,
-  recentBlog,
-  hotTopics,
-  allBlogs,
-} from "../../../constant";
-import { BlogCardHorizontal } from "../../../subsitutes/ShowBlogs";
+import {hotTopics,} from "../../../constant";
 import { CiBookmark } from "react-icons/ci";
-import { FaTags, FaForward, FaBackward } from "react-icons/fa";
+import { FaTags, FaForward, FaBackward, FaRegComment } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
 import { BiSolidLike } from "react-icons/bi";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../../../subsitutes/Pagination";
+import { FaBookmark } from "react-icons/fa6";
 import axios from "../../../axios";
 
 export const BlogBody = ({ allBlogsArray }) => {
+  console.log(allBlogsArray)
   function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { day: "numeric", month: "short", year: "numeric" };
     return date.toLocaleDateString("en-US", options);
   }
+  const [favBlog, setFavBlog] = useState(false);
   const [blogsCategory, setBlogsCategory] = useState([]);
   const fetchBlogs = async () => {
     const cookie = document.cookie.split(";");
@@ -46,6 +43,7 @@ export const BlogBody = ({ allBlogsArray }) => {
           author_name: blog.author_name,
           content: blog.content,
           images: blog.images,
+          is_fav: blog.is_favorite,
           views: blog.blog_view_count,
           comments: blog.comment_count,
           reactions: blog.reaction_count,
@@ -63,6 +61,72 @@ export const BlogBody = ({ allBlogsArray }) => {
   }, []);
 
   console.log(blogsCategory);
+  const [favoriteBlogs, setFavoriteBlogs] = useState([]);
+  const handleAddFavBlog = async (id) => {
+    console.log(id);
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 6,
+          blog_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRemoveFavBlog = async (id) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 7,
+          blog_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       {/* Recent Blogs */}
@@ -98,7 +162,16 @@ export const BlogBody = ({ allBlogsArray }) => {
                     >
                       Read More
                     </Link>
-                    <CiBookmark className="text-4xl xs:text-5xl text-black" />
+                    {localStorage.getItem("isExpert") === "true" ? (
+                      <></>
+                    ) : item?.is_favorite ? (
+                      <FaBookmark onClick={()=>handleRemoveFavBlog(item.id)} className="text-black mx-2" size={35} />
+                    ) : (
+                      <CiBookmark
+                        onClick={() => handleAddFavBlog(item.id)}
+                        className="text-4xl xs:text-5xl text-black"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -131,7 +204,10 @@ export const BlogBody = ({ allBlogsArray }) => {
                       <div className="px-[0.8vw] pt-2 md:pt-0">
                         <div className="flex justify-between font-semibold text-sm text-[#808080]">
                           <div>{blog.author_name}</div>
-                          <div>{blog.date}</div>
+                          <div>
+                          {formatDate(blog.date)}
+                          </div>
+                          
                         </div>
                         <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
                           {blog.title}
@@ -142,12 +218,21 @@ export const BlogBody = ({ allBlogsArray }) => {
                         <div className="w-full flex text-white justify-between items-center my-2">
                           {/* Link should point to the specific blog detail page */}
                           <Link
-                            to={`/blogdetail/${blog.id}`}
+                            to={`blogdetail/${blog.id}`}
                             className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
                           >
                             Read More
                           </Link>
-                          <CiBookmark className="text-4xl xs:text-5xl text-black" />
+                          {localStorage.getItem("isExpert") === "true" ? (
+                            <></>
+                          ) : blog.is_fav ? (
+                            <FaBookmark  onClick={()=>handleRemoveFavBlog(blog.id)} className="text-black mx-2" size={35} />
+                          ) : (
+                            <CiBookmark
+                              onClick={() => handleAddFavBlog(blog.id)}
+                              className="text-4xl xs:text-5xl text-black"
+                            />
+                          )}
                         </div>
                       </div>
                     </div>
@@ -182,6 +267,7 @@ export const BlogBody = ({ allBlogsArray }) => {
         </div>
       </div>
       {/* All blogs */}
+      {console.log(allBlogsArray)}
       <div>
         <div className="text-xl lg:text-3xl font-bold mt-16 text-center ">
           All Blogs
@@ -276,6 +362,7 @@ export const BlogCard = ({
   views,
   likes,
   image,
+  items,
 }) => {
   const navigate = useNavigate();
   return (
@@ -294,7 +381,7 @@ export const BlogCard = ({
         />
         <div className="text-[#575757]">
           <div
-            className="text-base font-semibold line-clamp-2 text-ellipsis "
+            className="text-base font-semibold line-clamp-2 text-ellipsis cursor-pointer"
             onClick={() => navigate(`/blog/blogdetail/${id}`)}
           >
             {title}
@@ -315,11 +402,11 @@ export const BlogCard = ({
           </div>
           <div className="flex gap-[3vw] sm:gap-0 sm:flex-col">
             <div className="mt-3 text-xs flex items-center gap-2">
-              <IoEyeSharp /> {views > 0 ? views : "no views"}
+              <IoEyeSharp /> {items?.blog_view_count > 0 ? items?.blog_view_count : "no views"}
             </div>
             <div className="mt-3 flex items-center gap-4">
               <div className=" text-xs flex items-center gap-1 sm:gap-2">
-                <BiSolidLike /> {likes > 0 ? likes + "likes" : "no likes"}
+                <FaRegComment /> {items?.comment_count > 0 ? items?.comment_count + " comments" : "no comments"}
               </div>
               <div className="border border-solid border-slate-400 text-[10px] rounded-full px-3 py-0.5 flex items-center cursor-pointer gap-1">
                 <FaPlus /> Add to Fav
@@ -344,7 +431,6 @@ const Blogs = () => {
   const [allBlogsArray, setAllBlogsArray] = useState([]);
   const [filterAllBlogsArray, setFilterAllBlogsArray] = useState([]);
   const [featuredBlogsArray, setFeaturedBlogsArray] = useState([]);
-
   const SearchBlogs = (e) => {
     setSearchText(e.target.value);
     setFilterAllBlogsArray(
@@ -503,6 +589,7 @@ const Blogs = () => {
       );
       setLastPage(res.data.total_pages);
       const allData = res.data.data.all;
+      console.log(res.data);
       setAllBlogsArray(allData);
       setFilterAllBlogsArray(allData);
     } catch (error) {

@@ -136,14 +136,15 @@ export const ShowSchedule = ({ id }) => {
           {selectedDaySlots.length===0 ? <div>Select a date to see available slots</div> :selectedDaySlots.map((slot, index) => (
             <>
             
-            <div
+            <button
+              disabled={slot.booked}
               key={index}
-              className={` relative text-xs max-w-28 text-center py-3 px-6 shrink-0 shadow-sm rounded-md cursor-pointer ${selectedSlotIndex === index ?"border border-solid border-red-400 ":"border border-solid border-slate-300 hover:border-blue-400"} `}
+              className={`relative text-xs max-w-28 text-center py-3 px-6 bg-white shrink-0 shadow-sm rounded-md  ${selectedSlotIndex === index ?"border border-solid border-red-400 ":"border border-solid border-slate-300 hover:border-blue-400"} ${slot.booked ? "cursor-not-allowed":"cursor-pointer" } } `}
               onClick={() => handleSlotClick(slot.slot_start_time,slot.slot_end_time, slot.slot_duration, slot.slot_id, index)}
             >
               {slot.booked && <div className="text-xs text-green-500 absolute top-0 left-0">Booked</div>}
               {slot.slot_start_time}
-            </div>
+            </button>
             </>
           ))}
         </div>
