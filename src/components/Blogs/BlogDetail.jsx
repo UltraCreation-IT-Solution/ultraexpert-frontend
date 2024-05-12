@@ -276,7 +276,7 @@
 // export default BlogDetails;
 
 import { PiCaretLeftLight } from "react-icons/pi";
-import { PiCaretRightLight } from "react-icons/pi";
+import { PiCaretRightLight, PiDotsThreeCircleVertical } from "react-icons/pi";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { ExpertRatings } from "../Experts/ExpertProfile";
@@ -287,10 +287,9 @@ import axios from "../../axios";
 import { useParams } from "react-router-dom";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
-
-const CommentCard = ({ temp }) => {
+const CommentCard = ({blogData, temp, getAllComments }) => {
+  const [options, setOptions] = useState(false);
   console.log(temp);
-
   const date = temp?.timestamp.split("T")[0];
   const commentDate = date;
 
@@ -323,6 +322,7 @@ const CommentCard = ({ temp }) => {
         console.log("no data");
         return;
       }
+      getAllComments();
       console.log(json);
     } catch (error) {
       console.log(error);
@@ -399,6 +399,7 @@ const CommentCard = ({ temp }) => {
         return;
       }
       console.log(json);
+      getAllComments();
     } catch (error) {
       console.log(error);
     }
@@ -430,7 +431,47 @@ const CommentCard = ({ temp }) => {
         console.log("no data");
         return;
       }
+      getAllComments();
       console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [replyComm, setReplyComm] = useState(false);
+  const [replyComment, setReplyComment] = useState("");
+
+  const handleReplyComment = async (id) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 8,
+          blog_id: blogData?.id,
+          content: replyComment,
+          reply_to: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      getAllComments();
+      console.log(json);
+      setReplyComm(false);
     } catch (error) {
       console.log(error);
     }
@@ -471,41 +512,65 @@ const CommentCard = ({ temp }) => {
               <BiDislike />
               <div>{temp?.dislike_count}</div>
             </div>
+            {!replyComm && ( // Render reply button if replyComm is false
+              <button
+                className="cursor-pointer p-2"
+                onClick={() => setReplyComm(true)}
+              >
+                Reply
+              </button>
+            )}
           </div>
-          {!isEditing && (
-            <div>
-              <button
-                onClick={handleEdit}
-                className="text-blue-500 p-2 border border-solid border-blue-500 rounded-lg"
-              >
-                Edit
-              </button>
-              <button
-                onClick={deleteComment}
-                className="text-red-500 p-2 border border-solid border-red-500 rounded-lg ml-2"
-              >
-                Delete
-              </button>
-            </div>
-          )}
-
-          {isEditing && (
-            <div>
-              <button
-                onClick={saveEdit}
-                className="text-green-500 p-2 border border-solid border-green-500 rounded-lg"
-              >
-                Save
-              </button>
-              <button
-                onClick={cancelEdit}
-                className="text-gray-500 p-2 border border-solid border-gray-500 rounded-lg ml-2"
-              >
-                Cancel
-              </button>
+          {replyComm && ( // Render reply input and save button if replyComm is true
+            <div className="flex gap-2 w-full">
+              <input
+                type="text"
+                value={replyComment}
+                onChange={(e) => setReplyComment(e.target.value)}
+                className="text-xs sm:text-base font-montserrat w-full border border-gray-300 rounded-md p-2"
+              />
+              <button className="cursor-pointer mx-2 w-[25%]" onClick={() => handleReplyComment(temp?.id)}>Save</button>
+              <button className="cursor-pointer mx-2 w-[25%]" onClick={() => setReplyComm(false)}>Cancel</button>
             </div>
           )}
         </div>
+        {temp?.is_authenticated_user && isEditing && (
+          <div>
+            <button
+              onClick={saveEdit}
+              className="text-green-500 px-3 py-1 border border-solid border-green-500 rounded-md"
+            >
+              Save
+            </button>
+            <button
+              onClick={cancelEdit}
+              className="text-gray-500 px-3 py-1 border border-solid border-gray-500 rounded-md ml-2"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+        {temp?.is_authenticated_user && !isEditing && (
+          <div className="relative overflow-visible flex flex-col ml-auto text-3xl cursor-pointer">
+            <PiDotsThreeCircleVertical onClick={() => setOptions(!options)} />
+            {options && (
+              <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
+                <div
+                  className="transition-all hover:bg-gray-300 px-3"
+                  onClick={handleEdit}
+                >
+                  Edit
+                </div>
+                <div
+                  className="transition-all hover:bg-gray-300 px-3"
+                  onClick={deleteComment}
+                >
+                  Delete
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -610,7 +675,7 @@ const BlogDetails = () => {
   useEffect(() => {
     getAllBlogComments();
   }, []);
-
+  console.log(currBlogData);
   return (
     <>
       <div className="px-[6vw] md:px-[10vw] mt-[110px] md:mt-[12vw]">
@@ -685,31 +750,36 @@ const BlogDetails = () => {
         <div className="mt-10 md:mt-20">
           {/* <ExpertRatings /> */}
           <div className="px-1 xs:px-5 mb-10 lg:mb-0">
-            <div className="border-b border-solid border-slate-300 pb-10">
-              <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
-                50 reviews
+            {localStorage.getItem("profile") ===
+            currBlogData?.author_data?.profile_img ? (
+              <></>
+            ) : (
+              <div className="border-b border-solid border-slate-300 pb-10">
+                <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
+                  50 reviews
+                </div>
+                <div className=" mt-6">
+                  <input
+                    type="text"
+                    name="comment"
+                    id="comment"
+                    value={comments.comment}
+                    onChange={(e) =>
+                      setComments({ ...comments, comment: e.target.value })
+                    }
+                    placeholder="Write a comment"
+                    className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
+                  />
+                  <button
+                    onClick={postNewComment}
+                    className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0"
+                  >
+                    Comment
+                  </button>
+                </div>
               </div>
+            )}
 
-              <div className=" mt-6">
-                <input
-                  type="text"
-                  name="comment"
-                  id="comment"
-                  value={comments.comment}
-                  onChange={(e) =>
-                    setComments({ ...comments, comment: e.target.value })
-                  }
-                  placeholder="Write a comment"
-                  className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
-                />
-                <button
-                  onClick={postNewComment}
-                  className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0"
-                >
-                  Comment
-                </button>
-              </div>
-            </div>
             <div>
               <div className="mt-8 mb-12 flex items-center justify-between">
                 <div className="text-xl md:text-2xl font-semibold ">
@@ -736,7 +806,12 @@ const BlogDetails = () => {
               </div>
               {console.log(blogComments)}
               {blogComments?.map((temp, idx) => (
-                <CommentCard key={idx} temp={temp} />
+                <CommentCard
+                  blogData = {currBlogData}
+                  key={idx}
+                  temp={temp}
+                  getAllComments={getAllBlogComments}
+                />
               ))}
             </div>
             <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">

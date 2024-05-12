@@ -8,12 +8,42 @@ import SearchByCategoriesSlider from "../../utilities/SearchByCategoriesSlider";
 import axios from "../../axios";
 import { useNavigate } from "react-router-dom";
 
-export const ServiceCard = ({ item, addToFavorites }) => {
+export const ServiceCard = ({ item }) => {
   const [FavService, setFavService] = useState(false);
-  const handleAddToFavorites = () => {
-    addToFavorites(item.id);
-    setFavService(true);
+  console.log(item);
+  const navigate = useNavigate();
+  const handleAddToFavorites = async(id) => {
+    const cookie = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post("/customers/connect/", {
+        action: 5,
+        service_id: id
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`
+        }
+      });
+      const json = res.data;
+      if (!json) {
+        console.log("no data found");
+        return;
+      }
+      console.log(json);
+      setFavService(true);
+    } catch (error) {
+      console.log(error)
+    }
   };
+  const handleGotoService = (serviceId) => {
+    navigate(`/experts/service/${serviceId}`);
+  }
   // console.log(item);
   // const cookie = document.cookie.split(";");
   // const jsonData = {};
@@ -45,13 +75,44 @@ export const ServiceCard = ({ item, addToFavorites }) => {
   //     console.log(error)
   //   }
   // }
+  const handleRemoveFromFavorites = async(id) =>{
+    const cookie = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post("/customers/connect/", {
+        action: 5,
+        service_id: id
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`
+        }
+      });
+      const json = res.data;
+      if (!json) {
+        console.log("no data found");
+        return;
+      }
+      console.log(json);
+      setFavService(false);
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className="relative min-w-[300px] max-w-[300px] md:min-w-[350px] md:max-w-[350px] rounded-xl bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0 pb-4">
       <div className="absolute top-2 right-2 z-10 text-white text-3xl py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid cursor-pointer">
-        {FavService ? (
-          <FaHeart onClick={() => setFavService(false)} />
-        ) : (
-          <FaRegHeart onClick={handleAddToFavorites} />
+        {localStorage.getItem("isAuthor") === "true" ? (<></>) :(
+          item?.is_fav ? (
+            <FaHeart onClick={() => handleRemoveFromFavorites(item.id)} />
+          ) : (
+            <FaRegHeart onClick={()=>handleAddToFavorites(item?.id)} />
+          )
         )}
       </div>
       <img
@@ -59,7 +120,7 @@ export const ServiceCard = ({ item, addToFavorites }) => {
         className="w-full h-[200px] object-cover shrink-0 md:mb-[0.7vw]"
         alt=""
       />
-      <div className="px-2 md:px-[0.8vw] pt-2 md:pt-0">
+      <div onClick={() => handleGotoService(item?.id)} className="px-2 md:px-[0.8vw] pt-2 md:pt-0">
         <div className="flex items-center gap-4 font-semibold text-lg text-[#808080]">
           <img
             src={item?.profile_img}
@@ -122,6 +183,7 @@ const Service = () => {
           last_name: service.expert_data.last_name,
           title: service.service_name,
           img: service.service_img,
+          is_fav: service.is_favorite,
           profile_img: service.expert_data.profile_img,
           category: service.category.name,
           price: service.price,
@@ -143,9 +205,6 @@ const Service = () => {
 
   console.log(serviceObjects);
 
-  const handleGoToService = (serviceId) => {
-    navigate(`/experts/service/${serviceId}`);
-  };
   const [allService, setAllService] = useState([]);
   const getAllServices = async () => {
     const cookie = document.cookie.split(";");
@@ -194,7 +253,6 @@ const Service = () => {
                 {services.map((service) => (
                   <div
                     key={service?.id}
-                    onClick={() => handleGoToService(service?.id)}
                     className="cursor-pointer  min-w-[300px] max-w-[300px] md:min-w-[350px] md:max-w-[350px]"
                   >
                     <ServiceCard item={service} />

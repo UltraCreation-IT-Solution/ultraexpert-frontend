@@ -13,15 +13,18 @@ import { IoEyeSharp } from "react-icons/io5";
 import { BiSolidLike } from "react-icons/bi";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
+import { FaBookmark } from "react-icons/fa6";
 
 import axios from "../../../axios";
 
 export const BlogBody = ({ allBlogsArray }) => {
+  console.log(allBlogsArray)
   function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { day: "numeric", month: "short", year: "numeric" };
     return date.toLocaleDateString("en-US", options);
   }
+  const [favBlog, setFavBlog] = useState(false);
   const [blogsCategory, setBlogsCategory] = useState([]);
   const fetchBlogs = async () => {
     const cookie = document.cookie.split(";");
@@ -46,6 +49,7 @@ export const BlogBody = ({ allBlogsArray }) => {
           author_name: blog.author_name,
           content: blog.content,
           images: blog.images,
+          is_fav: blog.is_favorite,
           views: blog.blog_view_count,
           comments: blog.comment_count,
           reactions: blog.reaction_count,
@@ -63,6 +67,72 @@ export const BlogBody = ({ allBlogsArray }) => {
   }, []);
 
   console.log(blogsCategory);
+  const [favoriteBlogs, setFavoriteBlogs] = useState([]);
+  const handleAddFavBlog = async (id) => {
+    console.log(id);
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 6,
+          blog_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRemoveFavBlog = async (id) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 7,
+          blog_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       {/* Recent Blogs */}
@@ -98,7 +168,16 @@ export const BlogBody = ({ allBlogsArray }) => {
                     >
                       Read More
                     </Link>
-                    <CiBookmark className="text-4xl xs:text-5xl text-black" />
+                    {localStorage.getItem("isExpert") === "true" ? (
+                      <></>
+                    ) : item?.is_favorite ? (
+                      <FaBookmark onClick={()=>handleRemoveFavBlog(item.id)} className="text-black mx-2" size={35} />
+                    ) : (
+                      <CiBookmark
+                        onClick={() => handleAddFavBlog(item.id)}
+                        className="text-4xl xs:text-5xl text-black"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -147,7 +226,16 @@ export const BlogBody = ({ allBlogsArray }) => {
                           >
                             Read More
                           </Link>
-                          <CiBookmark className="text-4xl xs:text-5xl text-black" />
+                          {localStorage.getItem("isExpert") === "true" ? (
+                            <></>
+                          ) : blog.is_fav ? (
+                            <FaBookmark  onClick={()=>handleRemoveFavBlog(blog.id)} className="text-black mx-2" size={35} />
+                          ) : (
+                            <CiBookmark
+                              onClick={() => handleAddFavBlog(blog.id)}
+                              className="text-4xl xs:text-5xl text-black"
+                            />
+                          )}
                         </div>
                       </div>
                     </div>
@@ -337,9 +425,6 @@ const Blogs = () => {
   const [allBlogsArray, setAllBlogsArray] = useState([]);
   const [filterAllBlogsArray, setFilterAllBlogsArray] = useState([]);
   const [featuredBlogsArray, setFeaturedBlogsArray] = useState([]);
-  {
-    console.log(featuredBlogsArray);
-  }
   const SearchBlogs = (e) => {
     setSearchText(e.target.value);
     setFilterAllBlogsArray(
@@ -494,11 +579,10 @@ const Blogs = () => {
         },
       });
       const allData = res.data.data.all;
-      console.log(res.data)
+      console.log(res.data);
       setAllBlogsArray(allData);
       console.log(allBlogsArray);
       setFilterAllBlogsArray(allData);
-      console.log(...data);
     } catch (error) {
       console.log(error);
     }

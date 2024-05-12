@@ -18,7 +18,7 @@ import {
 import ExpertCardShimmer from "../../subsitutes/Shimmers/ExpertCardShimmer";
 
 export const ExpertCard = ({ item }) => {
-  const [FavExpert, setFavExpert] = useState(false);
+  console.log(item)
   const cookie = document.cookie.split(";");
   const jsonData = {};
 
@@ -47,7 +47,7 @@ export const ExpertCard = ({ item }) => {
         return;
       }
       console.log(json);
-      setFavExpert(true);
+      // setFavExpert(true);
     } catch (error) {
       console.log(error);
     }
@@ -78,11 +78,12 @@ export const ExpertCard = ({ item }) => {
       console.log(error);
     }
   };
+  console.log(item.is_favorite);
   return (
     <div className="relative w-[90vw] h-[81vw] xs:w-[84vw] xs:h-[66vw] sm:w-[42vw] sm:h-[46vw] md:w-[38vw]  lg:w-[25vw] lg:h-[33vw] rounded-md md:rounded-lg shadow-lg my-[2vw] md:my-[0.65vw] border-[0.001vw] border-[#dbdbdb] border-solid overflow-hidden">
       <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  ">
         {
-          localStorage.getItem("isExpert")===false ? (<></>):(FavExpert ? (
+          localStorage.getItem("isExpert")==="true" ? (<></>):(item?.is_favorite ? (
             <FaHeart onClick={() => remFav()} />
           ) : (
             <FaRegHeart onClick={() => addFav()} />
@@ -181,7 +182,6 @@ const AllExperts = () => {
       console.log(res.data.data);
       setAllExpertsList(res.data.data);
       setLastPage(res.data.total_pages)
-      console.log(allExpertsList);
     } catch (error) {
       console.log(error);
     }
@@ -189,7 +189,8 @@ const AllExperts = () => {
   useEffect(() => {
     getAllExperts();
   }, [currentPage]);
-
+  console.log(allExpertsList);
+  
   if (!allExpertsList.length)
     return (
       <div className=" px-[3vw] xs:px-[6vw] md:px-[10vw] w-full flex flex-wrap gap-[3vw] md:gap-[2vw] pb-[2vw]  justify-center sm:justify-normal  items-center ">
