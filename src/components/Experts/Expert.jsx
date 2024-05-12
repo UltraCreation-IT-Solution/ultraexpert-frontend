@@ -78,6 +78,7 @@ export const ExpertCard = ({ item }) => {
       console.log(error);
     }
   };
+
   return (
     <div className="relative w-[90vw] h-[81vw] xs:w-[84vw] xs:h-[66vw] sm:w-[42vw] sm:h-[46vw] md:w-[38vw]  lg:w-[25vw] lg:h-[33vw] rounded-md md:rounded-lg shadow-lg my-[2vw] md:my-[0.65vw] border-[0.001vw] border-[#dbdbdb] border-solid overflow-hidden">
       <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  ">
@@ -160,7 +161,7 @@ export const ExpertCard = ({ item }) => {
 };
 const AllExperts = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPage] = useState(6);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
   const [lastPage,setLastPage] =  useState(0);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -209,36 +210,36 @@ const AllExperts = () => {
           return <ExpertCard key={item?.expert?.id} item={item} />;
         })}
       </div>
-      <div className="mt-[3vw] flex items-center justify-center xs:justify-between gap-[4vw] text-white">
-        <div
-          className={`text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-md bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer ${
-            currentPage < 2 && "opacity-80"
-          } `}
-          onClick={() => {
-            currentPage > 1 && setCurrentPage(currentPage - 1);
-          }}
-        >
-          <FaBackward />
-          Prev
+      <div className="mt-[3vw] flex items-center justify-between gap-[4vw] text-white">
+          <div
+            className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
+              currentPage < 2 && "opacity-80"
+            } `}
+            onClick={() => {
+              currentPage > 1 && setCurrentPage(currentPage - 1);
+            }}
+          >
+            <FaBackward />
+            <span className="hidden sm:block">Prev</span>
+          </div>
+          <Pagination
+            lastPage={lastPage}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+          <div
+            className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
+              currentPage === lastPage && "opacity-80"
+            } `}
+            onClick={() => {
+              currentPage < lastPage && setCurrentPage(currentPage + 1);
+            }}
+          >
+            <span className="hidden sm:block">Next</span>
+            <FaForward />
+          </div>
         </div>
-        <Pagination
-          lastPage={lastPage}
-          itemsPerPage={itemsPerPage}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-        <div
-          className={`text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-lg bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer ${
-            currentPage === lastPage && "opacity-80"
-          } `}
-          onClick={() => {
-            currentPage < lastPage && setCurrentPage(currentPage + 1);
-          }}
-        >
-          Next
-          <FaForward />
-        </div>
-      </div>
     </div>
   );
 };

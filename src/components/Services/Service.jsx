@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { allServiceObject, serviceObjects } from "../../constant";
 import { GrStar } from "react-icons/gr";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaForward, FaBackward } from "react-icons/fa";
 import { ServiceCategory } from "../Landing/Landing";
 import Subheader from "../../utilities/Subheader";
 import SearchByCategoriesSlider from "../../utilities/SearchByCategoriesSlider";
 import axios from "../../axios";
 import { useNavigate } from "react-router-dom";
+import Pagination from "../../subsitutes/Pagination";
 
 export const ServiceCard = ({ item, addToFavorites }) => {
+  const navigate = useNavigate();
   const [FavService, setFavService] = useState(false);
   const handleAddToFavorites = () => {
     addToFavorites(item.id);
     setFavService(true);
+  };
+  const handleGoToService = (serviceId) => {
+    navigate(`/experts/service/${serviceId}`);
   };
   // console.log(item);
   // const cookie = document.cookie.split(";");
@@ -59,7 +64,9 @@ export const ServiceCard = ({ item, addToFavorites }) => {
         className="w-full h-[200px] object-cover shrink-0 md:mb-[0.7vw]"
         alt=""
       />
-      <div className="px-2 md:px-[0.8vw] pt-2 md:pt-0">
+      <div className="px-2 md:px-[0.8vw] pt-2 md:pt-0"
+      onClick={() => handleGoToService(item.id)}
+      >
         <div className="flex items-center gap-4 font-semibold text-lg text-[#808080]">
           <img
             src={item?.profile_img}
@@ -93,6 +100,11 @@ export const allServiceData = [];
 const Service = () => {
   const navigate = useNavigate();
   const [serviceObjects, setServiceObjects] = useState([]);
+   // for pagination
+   const [currentPage, setCurrentPage] = useState(1);
+   const [itemsPerPage, setItemsPerPage] = useState(6);
+   const [lastPage, setLastPage] = useState(0);
+   // for pagination
 
   const fetchData = async () => {
     const cookie = document.cookie.split(";");
@@ -143,9 +155,7 @@ const Service = () => {
 
   console.log(serviceObjects);
 
-  const handleGoToService = (serviceId) => {
-    navigate(`/experts/service/${serviceId}`);
-  };
+  
   const [allService, setAllService] = useState([]);
   const getAllServices = async () => {
     const cookie = document.cookie.split(";");
@@ -156,12 +166,14 @@ const Service = () => {
       jsonData[key] = value;
     });
     try {
-      const res = await axios.get("/customers/services/?action=1", {
+      const res = await axios.get(`/customers/services/?action=1&page=${currentPage}&records_number=${itemsPerPage}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
+      console.log(res)
+      setLastPage(res.data.total_pages)
       const data = res.data.data.all;
       console.log(data);
       setAllService(data);
@@ -171,7 +183,7 @@ const Service = () => {
   };
   useEffect(() => {
     getAllServices();
-  }, []);
+  }, [currentPage]);
   console.log(allService);
   return (
     <>
@@ -194,7 +206,7 @@ const Service = () => {
                 {services.map((service) => (
                   <div
                     key={service?.id}
-                    onClick={() => handleGoToService(service?.id)}
+                    
                     className="cursor-pointer  min-w-[300px] max-w-[300px] md:min-w-[350px] md:max-w-[350px]"
                   >
                     <ServiceCard item={service} />
@@ -208,16 +220,19 @@ const Service = () => {
         <div className="text-xl md:text-2xl lg:text-3xl font-bold mb-5 mt-10 lg:px-[10vw]">
           All Services
         </div>
-        <div className="flex flex-col lg:flex-row lg:flex-wrap items-center justify-center gap-x-[2.5vw] gap-y-8">
+        <div className="flex flex-col lg:flex-row lg:flex-wrap items-center justify-center gap-x-[2.5vw] gap-y-8"
+        >
           {allService.map((item) => (
-            <div className="flex flex-col xs:flex-row xs:items-center gap-5 w-full lg:w-[40vw] rounded-xl bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0 p-2">
+            <div className="flex flex-col xs:flex-row xs:items-center gap-5 w-full lg:w-[40vw] rounded-xl bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0 p-2"
+            onClick={()=>navigate(`/experts/service/${item?.id}`)}
+            >
               <img
-                className="w-full h-48 xs:min-h-32 xs:min-w-36 xs:h-[10vw] xs:w-[12vw] object-fill shrink-0 rounded-lg"
+                className="w-full h-48 xs:min-h-32 xs:min-w-36 xs:h-[10vw] xs:w-[12vw] object-fill object-center shrink-0 rounded-lg"
                 src={item?.service_img}
                 alt=""
               />
               <div>
-                <div className="flex items-center gap-2  font-semibold text-base text-[#808080]">
+                <div className="flex items-center gap-2 font-semibold text-base text-[#808080]">
                   <img
                     src={item?.expert_data?.profile_img}
                     className="h-7 w-7 rounded-full object-cover shrink-0"
@@ -245,6 +260,38 @@ const Service = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div className="px-[8vw] md:px-[10vw]">
+        <div className="mt-[3vw] flex items-center justify-between gap-[4vw] text-white">
+          <div
+            className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
+              currentPage < 2 && "opacity-80"
+            } `}
+            onClick={() => {
+              currentPage > 1 && setCurrentPage(currentPage - 1);
+            }}
+          >
+            <FaBackward />
+            <span className="hidden sm:block">Prev</span>
+          </div>
+          <Pagination
+            lastPage={lastPage}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+          <div
+            className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
+              currentPage === lastPage && "opacity-80"
+            } `}
+            onClick={() => {
+              currentPage < lastPage && setCurrentPage(currentPage + 1);
+            }}
+          >
+            <span className="hidden sm:block">Next</span>
+            <FaForward />
+          </div>
+        </div>
         </div>
       </div>
     </>

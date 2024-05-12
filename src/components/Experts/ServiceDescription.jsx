@@ -1,25 +1,25 @@
 import React, { useEffect } from "react";
 import { RiFlowChart } from "react-icons/ri";
 import { GoArrowLeft } from "react-icons/go";
-import { PiDotsThreeVerticalBold } from "react-icons/pi";
+import { PiDotsThreeVerticalBold,PiDotsThreeCircleVertical } from "react-icons/pi";
 import { CiSquarePlus } from "react-icons/ci";
 import { IoMdSend } from "react-icons/io";
 import { FcVideoCall } from "react-icons/fc";
-import { ProjectsCarousel, ShowSchedule } from "../../constant";
+import { ProjectsCarousel } from "../../constant";
 import { ExpertRatings } from "./ExpertProfile";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "../../axios";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
+import ShowSchedule from "../../subsitutes/Schedule";
 
 export const ServiceProfileCard = ({ item }) => {
-  console.log(item);
   return (
     <div
       className={`w-full px-3 py-5 bg-[#EDEDED] flex justify-between items-center shadow-sm drop-shadow-md rounded-md`}
     >
-      <div className="flex gap-3 items-center">
+      <Link to={`/experts/expertprofile/${item?.expert_data?.id}`} className="flex gap-3 items-center decoration-transparent text-black">
         <img
           className="h-10 w-10 rounded-full shrink-0 object-cover"
           src={item?.expert_data?.profile_img}
@@ -30,7 +30,7 @@ export const ServiceProfileCard = ({ item }) => {
             {item?.expert_data?.first_name} {item?.expert_data?.last_name}
           </div>
         </div>
-      </div>
+      </Link>
 
       <div className="flex items-center gap-10">
         <div className="text-base text-gray-600 cursor-pointer shrink-0">
@@ -55,7 +55,8 @@ export const ServiceProfileCard = ({ item }) => {
   );
 };
 
-const CommentCard = ({ temp }) => {
+const CommentCard = ({ temp, getAllComments }) => {
+  const [options, setOptions] = useState(false);
   console.log(temp);
 
   const date = temp?.timestamp.split("T")[0];
@@ -90,6 +91,7 @@ const CommentCard = ({ temp }) => {
         console.log("no data");
         return;
       }
+      getAllComments();
       console.log(json);
     } catch (error) {
       console.log(error);
@@ -165,6 +167,7 @@ const CommentCard = ({ temp }) => {
         console.log("no data");
         return;
       }
+      getAllComments();
       console.log(json);
     } catch (error) {
       console.log(error);
@@ -197,6 +200,7 @@ const CommentCard = ({ temp }) => {
         console.log("no data");
         return;
       }
+      getAllComments();
       console.log(json);
     } catch (error) {
       console.log(error);
@@ -239,22 +243,6 @@ const CommentCard = ({ temp }) => {
               <div>{temp?.dislikes}</div>
             </div>
           </div>
-          {!isEditing && (
-            <div>
-              <button
-                onClick={handleEdit}
-                className="text-blue-500 p-2 border border-solid border-blue-500 rounded-lg"
-              >
-                Edit
-              </button>
-              <button
-                onClick={deleteComment}
-                className="text-red-500 p-2 border border-solid border-red-500 rounded-lg ml-2"
-              >
-                Delete
-              </button>
-            </div>
-          )}
 
           {isEditing && (
             <div>
@@ -272,6 +260,14 @@ const CommentCard = ({ temp }) => {
               </button>
             </div>
           )}
+           
+        </div>
+        <div className="relative overflow-visible flex flex-col ml-auto text-3xl cursor-pointer">
+          <PiDotsThreeCircleVertical onClick={()=>setOptions(!options)}/>
+          {options && <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
+            <div className="transition-all hover:bg-gray-300 px-3" onClick={handleEdit}>Edit</div>
+            <div className="transition-all hover:bg-gray-300 px-3" onClick={deleteComment}>Delete</div>
+          </div>}
         </div>
       </div>
     </div>
@@ -284,6 +280,7 @@ const ServiceDescription = () => {
   const { id } = params;
 
   const [servDesc, setServDesc] = useState({});
+  const [scheduleData, setScheduleData] = useState({});
 
   const getServiceDesc = async () => {
     const cookie = document.cookie.split(";");
@@ -303,17 +300,19 @@ const ServiceDescription = () => {
         }
       );
       const json = res.data;
-      console.log(json);
       setServDesc(json.data);
+      setScheduleData(
+        json.data
+      );
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
+    getAllServiceComments();
     getServiceDesc();
   }, []);
-
   // const service = services.find(service => service.id === id);
 
   // if (!service) return null;
@@ -380,53 +379,13 @@ const ServiceDescription = () => {
         console.log("no data");
         return;
       }
-      console.log(json);
       setServiceComments(json.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    getAllServiceComments();
-  }, []);
-
-  // const handleBookService = async () => {
-  //   const cookies = document.cookie.split("; ");
-  //   const jsonData = {};
-  //   console.log("booking service")
-  //   cookies.forEach((item) => {
-  //     const [key, value] = item.split("=");
-  //     jsonData[key] = value;
-  //   });
-  //   try {
-  //     const res = await axios.post(
-  //       "/booking/",
-  //       {
-  //         action:1,
-  //         expert_id: servDesc?.expert_data?.id,
-  //         service_id: servDesc?.id,
-  //         slot_id: 248
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${jsonData.access_token}`,
-  //         },
-  //       }
-  //     );
-  //     const json = res.data;
-  //     if (!json) {
-  //       console.log("no data")
-  //       return;
-  //     }
-  //     console.log(json)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
-
+  console.log({...servDesc});
   return (
     <>
       <div className="lg:flex mt-[100px] ">
@@ -437,16 +396,15 @@ const ServiceDescription = () => {
               <RiFlowChart className="mt-1" />
               <div>{servDesc?.service_name}</div>
             </div>
-            {/* <div className="flex items-center gap-6 overflow-x-scroll mt-[2vw] shadow-sm drop-shadow-md">
-              {servDesc?.banners?.map((temp, idx) => (
+            <div className="flex items-center gap-6 overflow-x-scroll mt-[2vw] shadow-sm drop-shadow-md">
+              
                 <img
-                  key={idx}
                   className="h-[12rem] w-[17rem] lg:h-[17vw] lg:w-[24vw] shrink-0 object-cover"
-                  src={temp}
+                  src={servDesc?.service_img}
                   alt=""
                 />
-              ))}
-            </div> */}
+              
+            </div>
             <div className="mt-[3vw] text-base xl:text-lg text-gray-500">
               <b className="text-black">Description: </b>
               {servDesc?.description}
@@ -476,7 +434,7 @@ const ServiceDescription = () => {
             </div>
             <div className="lg:hidden w-full">
               <div className="my-8">
-                <ShowSchedule price={servDesc?.price} id={servDesc?.id}/>
+                <ShowSchedule id={servDesc?.id}   />
               </div>
             </div>
             <div id="ratings" className="mt-10">
@@ -530,7 +488,7 @@ const ServiceDescription = () => {
                     </select>
                   </div>
                   {serviceComments?.map((temp, idx) => (
-                    <CommentCard key={idx} temp={temp} />
+                    <CommentCard key={idx} temp={temp} getAllComments={getAllServiceComments} />
                   ))}
                 </div>
                 <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
