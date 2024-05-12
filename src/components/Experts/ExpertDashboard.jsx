@@ -69,7 +69,7 @@ import {
 } from "recharts";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import UpdateProject from "./UpdateProjeect";
 import EditProfileExpert from "../Auth/EditProfileExpert";
@@ -1176,6 +1176,8 @@ export const Dashboard = () => {
 };
 
 export const MyServices = () => {
+
+  const navigate = useNavigate();
   const services = Array.from({ length: 3 });
   const [myServices, setMyServices] = useState([]);
   const getMyServices = async () => {
@@ -1198,6 +1200,7 @@ export const MyServices = () => {
       }
       const json = res.data;
       setMyServices(json.data);
+      console.log(myServices)
     } catch (error) {
       if (error.response.status === 404) {
         setMyServices([]);
@@ -1228,6 +1231,7 @@ export const MyServices = () => {
       console.log(res);
       if (!res.data || res.data.status === 400 || res.data.status === 401) {
         console.log(res.data);
+        return;
       } else {
         getMyServices();
       }
@@ -1240,8 +1244,18 @@ export const MyServices = () => {
   }, []);
   return (
     <div className="w-full md:w-[68%] ">
-      <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
+      <div className="flex justify-between border-b border-solid border-slate-200 pb-3">
+
+      <div className="text-xl font-bold">
         My services
+      </div>
+      <div className="text-base cursor-pointer bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md text-white"
+      onClick={() => {
+        navigate("/expertdashboard/createservice");
+      }}
+      >
+        Create a new service
+      </div>
       </div>
       <div>
         {myServices.map((service, index) => (
@@ -1250,17 +1264,19 @@ export const MyServices = () => {
             className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md"
           >
             <div className="flex items-center gap-3">
-              <button className="bg-green-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">
+              <button className="bg-green-500 hover:bg-green-600 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">
                 Edit service
               </button>
               <button
                 onClick={() => deleteService(service.id)}
-                className="bg-red-500 text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
+                className="bg-red-500 hover:bg-red-600 text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
               >
                 Delete service
               </button>
             </div>
-            <div className="text-base sm:text-lg font-bold mt-2 line-clamp-3">
+            <div className="text-base sm:text-lg font-bold mt-2 line-clamp-3 cursor-pointer"
+            onClick={()=>navigate(`/experts/service/${service.id}`)}
+            >
               {service.service_name}
             </div>
             <div className="mt-2 text-sm text-gray-500 line-clamp-3">

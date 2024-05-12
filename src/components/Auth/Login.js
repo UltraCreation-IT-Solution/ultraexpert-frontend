@@ -73,7 +73,12 @@ const Login = () => {
           localStorage.setItem("profile", `${res.data.profile_img}`);
           localStorage.setItem("isExpert", `${res.data.is_expert}`);
           localStorage.setItem("isAuthor", `${res.data.is_author}`);
-          window.location.href = "/";
+          if(localStorage.getItem("isExpert") === "true"){
+            window.location.href = "/expertdashboard";
+          }
+          else{
+            window.location.href = "/";
+          }
         }
       } catch (error) {
         console.error(error);

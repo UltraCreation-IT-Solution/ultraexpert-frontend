@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import { RiFlowChart } from "react-icons/ri";
 import { GoArrowLeft } from "react-icons/go";
-import { PiDotsThreeVerticalBold } from "react-icons/pi";
+import {
+  PiDotsThreeVerticalBold,
+  PiDotsThreeCircleVertical,
+} from "react-icons/pi";
 import { CiSquarePlus } from "react-icons/ci";
 import { IoMdSend } from "react-icons/io";
 import { FcVideoCall } from "react-icons/fc";
@@ -55,7 +58,8 @@ export const ServiceProfileCard = ({ item }) => {
   );
 };
 
-const CommentCard = ({ temp }) => {
+const CommentCard = ({ servId, temp, getAllComments }) => {
+  const [options, setOptions] = useState(false);
   console.log(temp);
 
   const date = temp?.timestamp.split("T")[0];
@@ -90,6 +94,7 @@ const CommentCard = ({ temp }) => {
         console.log("no data");
         return;
       }
+      getAllComments();
       console.log(json);
     } catch (error) {
       console.log(error);
@@ -165,6 +170,7 @@ const CommentCard = ({ temp }) => {
         console.log("no data");
         return;
       }
+      getAllComments();
       console.log(json);
     } catch (error) {
       console.log(error);
@@ -197,7 +203,47 @@ const CommentCard = ({ temp }) => {
         console.log("no data");
         return;
       }
+      getAllComments();
       console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [replyComm, setReplyComm] = useState(false);
+  const [replyComment, setReplyComment] = useState("");
+
+  const handleReplyComment = async (id) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 8,
+          service_id: servId,
+          content: replyComment,
+          reply_to: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      getAllComments();
+      console.log(json);
+      setReplyComm(false);
     } catch (error) {
       console.log(error);
     }
@@ -238,41 +284,65 @@ const CommentCard = ({ temp }) => {
               <BiDislike />
               <div>{temp?.dislikes}</div>
             </div>
+            {!replyComm && ( // Render reply button if replyComm is false
+              <button
+                className="cursor-pointer p-2"
+                onClick={() => setReplyComm(true)}
+              >
+                Reply
+              </button>
+            )}
           </div>
-          {!isEditing && (
-            <div>
-              <button
-                onClick={handleEdit}
-                className="text-blue-500 p-2 border border-solid border-blue-500 rounded-lg"
-              >
-                Edit
-              </button>
-              <button
-                onClick={deleteComment}
-                className="text-red-500 p-2 border border-solid border-red-500 rounded-lg ml-2"
-              >
-                Delete
-              </button>
-            </div>
-          )}
-
-          {isEditing && (
-            <div>
-              <button
-                onClick={saveEdit}
-                className="text-green-500 p-2 border border-solid border-green-500 rounded-lg"
-              >
-                Save
-              </button>
-              <button
-                onClick={cancelEdit}
-                className="text-gray-500 p-2 border border-solid border-gray-500 rounded-lg ml-2"
-              >
-                Cancel
-              </button>
+          {replyComm && ( // Render reply input and save button if replyComm is true
+            <div className="flex gap-2 w-full">
+              <input
+                type="text"
+                value={replyComment}
+                onChange={(e) => setReplyComment(e.target.value)}
+                className="text-xs sm:text-base font-montserrat w-full border border-gray-300 rounded-md p-2"
+              />
+              <button className="cursor-pointer mx-2 w-[25%]" onClick={() => handleReplyComment(temp?.id)}>Save</button>
+              <button className="cursor-pointer mx-2 w-[25%]" onClick={() => setReplyComm(false)}>Cancel</button>
             </div>
           )}
         </div>
+        {temp?.is_authenticated_user && isEditing && (
+          <div>
+            <button
+              onClick={saveEdit}
+              className="text-green-500 p-2 border border-solid border-green-500 rounded-lg"
+            >
+              Save
+            </button>
+            <button
+              onClick={cancelEdit}
+              className="text-gray-500 p-2 border border-solid border-gray-500 rounded-lg ml-2"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+        {temp?.is_authenticated_user && !isEditing && (
+          <div className="relative overflow-visible flex flex-col ml-auto text-3xl cursor-pointer">
+            <PiDotsThreeCircleVertical onClick={() => setOptions(!options)} />
+            {options && (
+              <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
+                <div
+                  className="transition-all hover:bg-gray-300 px-3"
+                  onClick={handleEdit}
+                >
+                  Edit
+                </div>
+                <div
+                  className="transition-all hover:bg-gray-300 px-3"
+                  onClick={deleteComment}
+                >
+                  Delete
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -391,6 +461,41 @@ const ServiceDescription = () => {
     getAllServiceComments();
   }, []);
 
+  // const handleBookService = async () => {
+  //   const cookies = document.cookie.split("; ");
+  //   const jsonData = {};
+  //   console.log("booking service")
+  //   cookies.forEach((item) => {
+  //     const [key, value] = item.split("=");
+  //     jsonData[key] = value;
+  //   });
+  //   try {
+  //     const res = await axios.post(
+  //       "/booking/",
+  //       {
+  //         action:1,
+  //         expert_id: servDesc?.expert_data?.id,
+  //         service_id: servDesc?.id,
+  //         slot_id: 248
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${jsonData.access_token}`,
+  //         },
+  //       }
+  //     );
+  //     const json = res.data;
+  //     if (!json) {
+  //       console.log("no data")
+  //       return;
+  //     }
+  //     console.log(json)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
   return (
     <>
       <div className="lg:flex mt-[100px] ">
@@ -445,30 +550,33 @@ const ServiceDescription = () => {
             </div>
             <div id="ratings" className="mt-10">
               <div className="px-1 xs:px-5 mb-10 lg:mb-0">
-                <div className="border-b border-solid border-slate-300 pb-10">
-                  <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
-                    50 reviews
+                {localStorage.getItem("isExpert") === "false" && (
+                  <div className="border-b border-solid border-slate-300 pb-10">
+                    <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
+                      50 reviews
+                    </div>
+                    <div className=" mt-6">
+                      <input
+                        type="text"
+                        name="comment"
+                        id="comment"
+                        value={comments.comment}
+                        onChange={(e) =>
+                          setComments({ ...comments, comment: e.target.value })
+                        }
+                        placeholder="Write a comment"
+                        className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
+                      />
+                      <button
+                        onClick={postNewComment}
+                        className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0"
+                      >
+                        Comment
+                      </button>
+                    </div>
                   </div>
-                  <div className=" mt-6">
-                    <input
-                      type="text"
-                      name="comment"
-                      id="comment"
-                      value={comments.comment}
-                      onChange={(e) =>
-                        setComments({ ...comments, comment: e.target.value })
-                      }
-                      placeholder="Write a comment"
-                      className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
-                    />
-                    <button
-                      onClick={postNewComment}
-                      className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0"
-                    >
-                      Comment
-                    </button>
-                  </div>
-                </div>
+                )}
+
                 <div>
                   <div className="mt-8 mb-12 flex items-center justify-between">
                     <div className="text-xl md:text-2xl font-semibold ">
@@ -494,7 +602,12 @@ const ServiceDescription = () => {
                     </select>
                   </div>
                   {serviceComments?.map((temp, idx) => (
-                    <CommentCard key={idx} temp={temp} />
+                    <CommentCard
+                      servId={servDesc?.id}
+                      key={idx}
+                      temp={temp}
+                      getAllComments={getAllServiceComments}
+                    />
                   ))}
                 </div>
                 <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">

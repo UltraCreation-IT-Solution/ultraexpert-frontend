@@ -3353,12 +3353,7 @@ export const BookingCard = ({ item }) => {
 // };
 
 export const ShowSchedule = ({ price, id }) => {
-  const Nevigate = useNavigate();
-  console.log(id);
-  const goToServiceBooking = () => {
-    Nevigate("experts/expertprofile/booking/:" + id);
-  };
-  console.log(price);
+  const navigate = useNavigate();
   var monthNames = [
     "Jan",
     "Feb",
@@ -3424,14 +3419,15 @@ export const ShowSchedule = ({ price, id }) => {
           ))}
         </div>
       </div>
-      <Link
-        to={`/experts/expertprofile/booking/${id}`}
+       <div
         className="no-underline"
       >
-        <div className="mt-6 bg-[#007AFF] text-white text-lg font-semibold text-center p-3 rounded-lg cursor-pointer no-underline">
+        <div className="mt-6 bg-[#007AFF] text-white text-lg font-semibold text-center p-3 rounded-lg cursor-pointer no-underline"
+       onClick={()=>navigate(`/experts/expertprofile/booking/${id}`)}
+        >
           Book a slot
         </div>
-      </Link>
+      </div>
     </div>
   );
 };

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import Marquee from "react-fast-marquee";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { landingImgRow1, landingImgRow2 } from "../../constant";
 
 export const WhatWeDo = () => {
+  const navigate = useNavigate();
   return (
     <div className="relative px-[5vw] md:px-[10vw] pb-[20vw] py-[10vw] lg:py-[6vw] my-20 lg:my-0">
       <div className="bg-[#E9F2FF] h-36 w-36 md:h-44 md:w-44 absolute top-0 lg:top-24 -left-28 sm:-left-20 rounded-full"></div>
@@ -75,7 +77,7 @@ export const WhatWeDo = () => {
         <div className="text-xl md:text-2xl font-bold">
           Extended design services
         </div>
-        <div className="ml-auto text-2xl md:text-3xl cursor-pointer shrink-0">
+        <div className="ml-auto text-2xl md:text-3xl cursor-pointer shrink-0" onClick={() => navigate('/services')}>
           <FaArrowRightLong />
         </div>
       </div>
