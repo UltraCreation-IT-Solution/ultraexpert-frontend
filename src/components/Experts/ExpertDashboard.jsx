@@ -1176,7 +1176,6 @@ export const Dashboard = () => {
 };
 
 export const MyServices = () => {
-
   const navigate = useNavigate();
   const services = Array.from({ length: 3 });
   const [myServices, setMyServices] = useState([]);
@@ -1200,7 +1199,7 @@ export const MyServices = () => {
       }
       const json = res.data;
       setMyServices(json.data);
-      console.log(myServices)
+      console.log(myServices);
     } catch (error) {
       if (error.response.status === 404) {
         setMyServices([]);
@@ -1245,17 +1244,15 @@ export const MyServices = () => {
   return (
     <div className="w-full md:w-[68%] ">
       <div className="flex justify-between border-b border-solid border-slate-200 pb-3">
-
-      <div className="text-xl font-bold">
-        My services
-      </div>
-      <div className="text-base cursor-pointer bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md text-white"
-      onClick={() => {
-        navigate("/expertdashboard/createservice");
-      }}
-      >
-        Create a new service
-      </div>
+        <div className="text-xl font-bold">My services</div>
+        <div
+          className="text-base cursor-pointer bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md text-white"
+          onClick={() => {
+            navigate("/expertdashboard/createservice");
+          }}
+        >
+          Create a new service
+        </div>
       </div>
       <div>
         {myServices.map((service, index) => (
@@ -1274,8 +1271,9 @@ export const MyServices = () => {
                 Delete service
               </button>
             </div>
-            <div className="text-base sm:text-lg font-bold mt-2 line-clamp-3 cursor-pointer"
-            onClick={()=>navigate(`/experts/service/${service.id}`)}
+            <div
+              className="text-base sm:text-lg font-bold mt-2 line-clamp-3 cursor-pointer"
+              onClick={() => navigate(`/experts/service/${service.id}`)}
             >
               {service.service_name}
             </div>
@@ -1517,9 +1515,10 @@ export const Leaderboard = () => {
   );
 };
 
-export const MyBookings = () => {
-  const params= useParams();
-  console.log(params)
+export const MyBookings = (props) => {
+  console.log(props);
+  const params = useParams();
+  console.log(params);
   const [myBookings, setMyBookings] = useState([]);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -1533,14 +1532,17 @@ export const MyBookings = () => {
 
   const getMyBookings = async () => {
     try {
-      const res = await axios.get(`/experts/services/?action=4&expert_id=${expert_id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
+      const res = await axios.get(
+        `/experts/services/?action=4&expert_id=${17}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
       setMyBookings(res.data.data);
-      console.log(myBookings)
+      console.log(myBookings);
     } catch (error) {
       console.log(error);
     }
@@ -1568,7 +1570,8 @@ export const MyBookings = () => {
 const ExpertDashboard = () => {
   const [showEditProfile, setShowEditProfile] = useState(false);
 
-  const [expertData, setExpertData] = useState({});
+  const [expertData, setExpertData] = useState(null);
+  const [expertid, setExpertId] = useState(null);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
 
@@ -1595,6 +1598,7 @@ const ExpertDashboard = () => {
       }
       console.log(response.data);
       setExpertData(response.data.data);
+      setExpertId(response.data.data.id);
     } catch (error) {
       console.log(error);
     }
@@ -1621,27 +1625,27 @@ const ExpertDashboard = () => {
             <div className="flex justify-between">
               <div className="flex gap-[0.75vw]">
                 <img
-                  src={expertData.profile_img}
+                  src={expertData?.profile_img}
                   className="w-[6.5vw] h-[6.5vw] rounded-lg shrink-0 object-cover object-center"
                   alt="profileImg"
                 />
                 <div className="flex flex-col justify-between py-[0.2vw]">
                   <div className=" flex flex-col gap-[0.5vw] ">
                     <div className="font-bold text-[1.4vw]">
-                      {expertData.first_name} {expertData.last_name}
+                      {expertData?.first_name} {expertData?.last_name}
                     </div>
                     <div className="font-medium text-[1vw] text-[#8F8F8F]">
                       UltraXpert
                     </div>
                   </div>
                   <div className="font-semibold text-[1.3vw] text-black/60">
-                    {expertData.profession}
+                    {expertData?.profession}
                   </div>
                 </div>
               </div>
             </div>
             <div className=" mt-[1.6vw] w-full text-sm text-[#525252] line-clamp-3">
-              {expertData.about_me}
+              {expertData?.about_me}
             </div>
             <div className="mt-[1.25vw] flex flex-col gap-[1vw]">
               <div className="flex gap-[1.25vw] items-center text-[1.25vw] text-[#515151]">
@@ -1739,7 +1743,8 @@ const ExpertDashboard = () => {
         <Chats />
         <Leaderboard />
         <SkillList />
-        <MyBookings expert_id={expertData?.id} />
+        {expertData !== null && <MyBookings {...expertData} />}
+
         {console.log(expertData?.id)}
       </Outlet>
       {showEditProfile === true && (
