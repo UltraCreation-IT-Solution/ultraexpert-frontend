@@ -69,7 +69,7 @@ import {
 } from "recharts";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, Link, useNavigate, useParams } from "react-router-dom";
 import axios from "../../axios";
 import UpdateProject from "./UpdateProjeect";
 import EditProfileExpert from "../Auth/EditProfileExpert";
@@ -1518,6 +1518,34 @@ export const Leaderboard = () => {
 };
 
 export const MyBookings = () => {
+  const params= useParams();
+  console.log(params)
+  const [myBookings, setMyBookings] = useState([]);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  useEffect(() => {
+    getMyBookings();
+  }, []);
+
+  const getMyBookings = async () => {
+    try {
+      const res = await axios.get(`/experts/services/?action=4&expert_id=${expert_id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      setMyBookings(res.data.data);
+      console.log(myBookings)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-full md:w-[68%]">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
@@ -1531,7 +1559,7 @@ export const MyBookings = () => {
         </div>
         <div className="shrink-0 text-right w-[60px] "></div>
       </div>
-      {expertDashInfo?.myBookings.map((item, index) => (
+      {myBookings?.map((item, index) => (
         <BookingCard item={item} key={index} />
       ))}
     </div>
@@ -1579,7 +1607,6 @@ const ExpertDashboard = () => {
   const handleShowEditProfile = () => {
     setShowEditProfile(false);
   };
-
   return (
     <div
       className={`${
@@ -1712,7 +1739,8 @@ const ExpertDashboard = () => {
         <Chats />
         <Leaderboard />
         <SkillList />
-        <MyBookings />
+        <MyBookings expert_id={expertData?.id} />
+        {console.log(expertData?.id)}
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />
