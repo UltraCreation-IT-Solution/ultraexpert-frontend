@@ -1518,8 +1518,6 @@ export const Leaderboard = () => {
 };
 
 export const MyBookings = () => {
-  const params= useParams();
-  console.log(params)
   const [myBookings, setMyBookings] = useState([]);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -1529,18 +1527,17 @@ export const MyBookings = () => {
   });
   useEffect(() => {
     getMyBookings();
-  }, []);
+  }, [myBookings]);
 
   const getMyBookings = async () => {
     try {
-      const res = await axios.get(`/experts/services/?action=4&expert_id=${expert_id}`, {
+      const res = await axios.get(`/experts/services/?action=4&expert_id=${17}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
       setMyBookings(res.data.data);
-      console.log(myBookings)
     } catch (error) {
       console.log(error);
     }

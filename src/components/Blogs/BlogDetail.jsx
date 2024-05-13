@@ -266,8 +266,7 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
                 type="text"
                 value={replyComment}
                 onChange={(e) => setReplyComment(e.target.value)}
-                onBlur={() => setReplyComm(false)}
-                className="text-xs sm:text-base font-montserrat w-full border-b border-gray-300 p-2 outline-none"
+                className="text-xs sm:text-base font-montserrat w-full border border-gray-300 rounded-md p-2"
               />
               <div className="mt-3">
                 <button
@@ -285,6 +284,30 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
               </div>
             </div>
           )}
+          {/* {replyComm && ( // Render reply input and save button if replyComm is true
+            <div className="w-full">
+              <input
+                type="text"
+                value={replyComment}
+                onChange={(e) => setReplyComment(e.target.value)}
+                className="text-xs sm:text-base font-montserrat w-full border-b border-gray-300 p-2 outline-none"
+              />
+              <div className="mt-3">
+                <button
+                  className="text-xs sm:text-base cursor-pointer px-4 py-1 rounded-sm sm:rounded-md"
+                  onClick={() => handleReplyComment(temp?.id)}
+                >
+                  Save
+                </button>
+                <button
+                  className="text-xs sm:text-base cursor-pointer px-4 py-1 ml-2 rounded-sm sm:rounded-md"
+                  onClick={() => (setReplyComm(false), setReplyComment(""))}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )} */}
         </div>
         {temp?.is_authenticated_user && !isEditing && (
           <div className="relative overflow-visible flex flex-col ml-auto text-xl sm:text-3xl cursor-pointer">
