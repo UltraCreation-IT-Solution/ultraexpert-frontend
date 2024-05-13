@@ -81,14 +81,13 @@ export const ExpertCard = ({ item }) => {
   return (
     <div className="relative w-[90vw] h-[81vw] xs:w-[84vw] xs:h-[66vw] sm:w-[42vw] sm:h-[46vw] md:w-[38vw]  lg:w-[25vw] lg:h-[33vw] rounded-md md:rounded-lg shadow-lg my-[2vw] md:my-[0.65vw] border-[0.001vw] border-[#dbdbdb] border-solid overflow-hidden">
       <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  ">
-        {
-          localStorage.getItem("isExpert")===false ? (<></>):(FavExpert ? (
-            <FaHeart onClick={() => remFav()} />
-          ) : (
-            <FaRegHeart onClick={() => addFav()} />
-          ))
-        }
-        
+        {localStorage.getItem("isExpert") === false ? (
+          <></>
+        ) : FavExpert ? (
+          <FaHeart onClick={() => remFav()} />
+        ) : (
+          <FaRegHeart onClick={() => addFav()} />
+        )}
       </div>
       <img
         className="absolute top-0 w-full h-[36%] sm:h-[30%] lg:h-1/4 object-cover opacity-80"
@@ -161,7 +160,7 @@ export const ExpertCard = ({ item }) => {
 const AllExperts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPage] = useState(6);
-  const [lastPage,setLastPage] =  useState(0);
+  const [lastPage, setLastPage] = useState(0);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
   const [allExpertsList, setAllExpertsList] = useState([]);
@@ -172,15 +171,18 @@ const AllExperts = () => {
   });
   const getAllExperts = async () => {
     try {
-      const res = await axios.get(`/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}`, {
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
+      const res = await axios.get(
+        `/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
       console.log(res.data.data);
       setAllExpertsList(res.data.data);
-      setLastPage(res.data.total_pages)
+      setLastPage(res.data.total_pages);
       console.log(allExpertsList);
     } catch (error) {
       console.log(error);
