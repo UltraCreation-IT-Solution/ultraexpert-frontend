@@ -1,6 +1,7 @@
 import { FaLinkedin, FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
 import React, { useState,useEffect } from "react";
 import axios from "../../axios";
+import { Link } from "react-router-dom";
 // export const Footer = () => {
 //   return (
 //     <div className="relative w-full h-auto bg-[#2A2A2A] mt-[3vw] px-[8vw] py-[3vw] sm:py-[2vw] text-white">
@@ -164,12 +165,12 @@ const Footer = () => {
               <div className="text-[3.2vw] xs:text-base md:text-sm xl:text-lg text-[#F0F0F0] font-bold">
                 NAVIGATE TO THE TOP
               </div>
-              <div className="text-[3.2vw] xs:text-sm sm:text-base md:text-sm xl:text-base">
-                <div className="mt-5">Home</div>
-                <div className="mt-2">Experts</div>
-                <div className="mt-2">Services</div>
-                <div className="mt-2">Blogs</div>
-                <div className="mt-2">Contact us</div>
+              <div className="flex flex-col text-[3.2vw] xs:text-sm sm:text-base md:text-sm xl:text-base">
+                <Link to={"/"} className="font-medium duration-200 mt-5 relative no-underline text-white">Home</Link>
+                <Link to={"/experts"} className="font-medium duration-200 mt-2 relative no-underline text-white">Experts</Link>
+                <Link to={"/services"} className="font-medium duration-200 mt-2 relative no-underline text-white">Services</Link>
+                <Link to={"/blog"} className="font-medium duration-200 mt-2 relative no-underline text-white">Blogs</Link>
+                <Link to={"/about"} className="font-medium duration-200 mt-2 relative no-underline text-white">About</Link>
               </div>
             </div>
             <div className="mt-10">

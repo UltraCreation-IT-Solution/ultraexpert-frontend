@@ -347,278 +347,296 @@ const CreateService = () => {
 
   return (
     <>
-      <div className="mt-[100px] flex flex-col bg-white h-auto">
-        <div className="flex w-[60%] mx-auto">
-          <div
-            onClick={() => handleBack()}
-            className="flex gap-2 text-lg font-bold cursor-pointer hover:bg-[#e2e2e2] py-2 px-1 rounded-md duration-200"
-          >
-            <MdOutlineKeyboardBackspace size={25} />
-            Add a service
+      {!showSlots ? (
+        <div className="mt-[100px] flex flex-col bg-white h-auto">
+          <div className="flex w-[60%] mx-auto">
+            <div
+              onClick={() => handleBack()}
+              className="flex gap-2 text-lg font-bold cursor-pointer hover:bg-[#e2e2e2] py-2 px-1 rounded-md duration-200"
+            >
+              <MdOutlineKeyboardBackspace size={25} />
+              Add a service
+            </div>
           </div>
-        </div>
-        <div className="w-[60%] flex flex-col border border-solid border-slate-300 mx-auto items-center justify-center rounded-lg shadow-lg">
-          <div className="text-4xl text-[#3E5676] font-bold my-4">
-            Create a serivce
-          </div>
-          <u className="border border-[#d8d8d8] border-solid w-[90%] mb-8"></u>
-          <form
-            onSubmit={(event) => event.preventDefault()}
-            className="w-[60%] flex flex-col mb-5"
-          >
-            <label htmlFor="title" className="text-lg mb-1">
-              Service Title
-            </label>
-            <input
-              placeholder="Service Title"
-              value={serviceTitle}
-              onChange={(e) => setServiceTitle(e.target.value)}
-              type="text"
-              id="title"
-              name="title"
-              className="border border-solid border-slate-300 rounded-md px-4 py-2 mb-4"
-            />
-            <label htmlFor="desc" className="text-lg mb-1">
-              Service Description
-            </label>
-            <textarea
-              placeholder="Service Description"
-              name="desc"
-              id="desc"
-              value={createService.desc}
-              onChange={(e) =>
-                setCreateService({ ...createService, desc: e.target.value })
-              }
-              className="border border-solid resize-none h-32 border-slate-300 rounded-md px-4 py-2 mb-4"
-            />
-            <label htmlFor="category" className="text-lg mb-1">
-              Service Category
-            </label>
-            <input
-              type="text"
-              id="category"
-              name="category"
-              className="border border-solid border-slate-300 rounded-md px-4 py-2 mb-4"
-              placeholder="Enter Category"
-              value={selectedCategory.name}
-              onFocus={() => getServiceCategory()}
-              onChange={(e) => {
-                handleCategoryChange(e);
-              }}
-            />
+          <div className="w-[60%] flex flex-col border border-solid border-slate-300 mx-auto items-center justify-center rounded-lg shadow-lg">
+            <div className="text-4xl text-[#3E5676] font-bold my-4">
+              Create a serivce
+            </div>
+            <u className="border border-[#d8d8d8] border-solid w-[90%] mb-8"></u>
+            <form
+              onSubmit={(event) => event.preventDefault()}
+              className="w-[60%] flex flex-col mb-5"
+            >
+              <label htmlFor="title" className="text-lg mb-1">
+                Service Title
+              </label>
+              <input
+                placeholder="Service Title"
+                value={serviceTitle}
+                onChange={(e) => setServiceTitle(e.target.value)}
+                type="text"
+                id="title"
+                name="title"
+                className="border border-solid border-slate-300 rounded-md px-4 py-2 mb-4"
+              />
+              <label htmlFor="desc" className="text-lg mb-1">
+                Service Description
+              </label>
+              <textarea
+                placeholder="Service Description"
+                name="desc"
+                id="desc"
+                value={createService.desc}
+                onChange={(e) =>
+                  setCreateService({ ...createService, desc: e.target.value })
+                }
+                className="border border-solid resize-none h-32 border-slate-300 rounded-md px-4 py-2 mb-4"
+              />
+              <label htmlFor="category" className="text-lg mb-1">
+                Service Category
+              </label>
+              <input
+                type="text"
+                id="category"
+                name="category"
+                className="border border-solid border-slate-300 rounded-md px-4 py-2 mb-4"
+                placeholder="Enter Category"
+                value={selectedCategory.name}
+                onFocus={() => getServiceCategory()}
+                onChange={(e) => {
+                  handleCategoryChange(e);
+                }}
+              />
 
-            {categoriesArray.length > 0 && (
-              <div
-                className={` px-1 text-sm rounded-sm mb-4 w-fit min-h-auto max-h-[150px] overflow-y-auto ${
-                  filterCategoriesArray.length > 0
-                    ? "border border-solid border-slate-300 "
-                    : ""
-                }`}
-              >
-                {filterCategoriesArray.map((item, index) => (
-                  <div
-                    key={index}
-                    className="text-sm text-center text-gray-600 px-3 py-2 border-b border-solid border-slate-300 pb-2 cursor-pointer"
-                    onClick={() => {
-                      setSelectedCategory({
-                        ...selectedCategory,
-                        name: item.name,
-                        id: item.id,
-                      });
-                      setFilterCategoriesArray([]);
-                      setCategoryInputValue("");
-                    }}
-                  >
-                    {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
-                  </div>
-                ))}
-                {filterCategoriesArray.length === 0 &&
-                  categoryInputValue.trim() !== "" && (
-                    <div
-                      className="bg-blue-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer "
-                      onClick={(e) => {
-                        setNewCategory(e);
-                        setSelectedCategory({
-                          ...selectedCategory,
-                          id: categoriesArray.length + 1,
-                        });
-                      }}
-                    >
-                      Add Category
-                    </div>
-                  )}
-              </div>
-            )}
-            <label htmlFor="skill" className="text-lg mb-1">
-              Served Skill
-            </label>
-            <input
-              type="text"
-              id="skill"
-              name="skill"
-              className={`border border-solid border-slate-300 rounded-md px-4 py-2 mb-4`}
-              placeholder="Enter Skill"
-              value={val}
-              onFocus={allTrueSKill}
-              onChange={(e) => handleSkillChange(e)}
-            />
-            {skill?.length > 0 && (
-              <div
-                className={`px-1 text-sm rounded-sm w-fit min-h-auto max-h-[150px] overflow-y-auto border border-solid border-slate-300 mb-4`}
-              >
-                {skill?.map((item, index) => {
-                  return (
+              {categoriesArray.length > 0 && (
+                <div
+                  className={` px-1 text-sm rounded-sm mb-4 w-fit min-h-auto max-h-[150px] overflow-y-auto ${
+                    filterCategoriesArray.length > 0
+                      ? "border border-solid border-slate-300 "
+                      : ""
+                  }`}
+                >
+                  {filterCategoriesArray.map((item, index) => (
                     <div
                       key={index}
                       className="text-sm text-center text-gray-600 px-3 py-2 border-b border-solid border-slate-300 pb-2 cursor-pointer"
-                      onClick={() => handleSkillSelection(item)}
+                      onClick={() => {
+                        setSelectedCategory({
+                          ...selectedCategory,
+                          name: item.name,
+                          id: item.id,
+                        });
+                        setFilterCategoriesArray([]);
+                        setCategoryInputValue("");
+                      }}
                     >
-                      {item.charAt(0).toUpperCase() + item.slice(1)}
+                      {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
                     </div>
-                  );
-                })}
-              </div>
-            )}
-            <div className="flex justify-center mx-auto flex-col w-full mb-4">
-              <label htmlFor="tags" className="text-lg mb-1 font-bold">
-                Tags
-              </label>
-              <div className="border border-solid border-gray-300 px-2 rounded-md mb-2">
-                <div className="flex flex-wrap gap-2">
-                  {selectedSkill.length > 0 ? (
-                    selectedSkill.map((skill, ind) => {
-                      return (
-                        <div
-                          key={ind}
-                          className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
-                        >
-                          {skill}
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => handleTagRemove(skill)}
-                          >
-                            x
-                          </div>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <p className="text-gray-300 text-sm">
-                      Select skills of your interest from below.
-                    </p>
-                  )}
-                </div>
-              </div>
-              <input
-                type="text"
-                id="tags"
-                name="tags"
-                value={inputTagValue}
-                onChange={handleTagChange}
-                className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none"
-                placeholder="Enter Tags for the service"
-              />
-              {suggestions.length > 0
-                ? inputTagValue.length > 0 && (
-                    <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-                      <div>
-                        {suggestions.map((suggestion, ind) => (
-                          <div
-                            key={suggestion.id}
-                            onClick={() => handleSuggestionClick(suggestion)}
-                            className="cursor-pointer hover:bg-gray-100 px-4 py-1"
-                          >
-                            {suggestion.name}
-                          </div>
-                        ))}
+                  ))}
+                  {filterCategoriesArray.length === 0 &&
+                    categoryInputValue.trim() !== "" && (
+                      <div
+                        className="bg-blue-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer "
+                        onClick={(e) => {
+                          setNewCategory(e);
+                          setSelectedCategory({
+                            ...selectedCategory,
+                            id: categoriesArray.length + 1,
+                          });
+                        }}
+                      >
+                        Add Category
                       </div>
-                    </div>
-                  )
-                : inputTagValue.length > 0 && (
-                    <button
-                      onClick={() => handleNewSkillAdd(inputTagValue)}
-                      className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none bg-blue-500 text-white w-[30%] mt-2 mb-4"
-                    >
-                      Add Interest
-                    </button>
-                  )}
-            </div>
-            <label htmlFor="imageSelector" className="text-lg mb-1">
-              Service Images
-            </label>
-            <div
-              onClick={() => document.querySelector("#imageSelector").click()}
-              className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
-            >
-              <input
-                type="file"
-                id="imageSelector"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-              {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
-                <p>Upload Progress: {uploadProfileProgress}%</p>
-              ) : image ? (
-                <div className="relative w-full h-full flex justify-center items-center">
-                  <img
-                    src={image}
-                    alt="Preview"
-                    className="max-h-28 max-w-44 object-cover rounded"
-                  />
-                  <button
-                    onClick={handleImageRemove}
-                    className="absolute top-2 right-2 bg-slate-400 text-white p-1 rounded hover:bg-gray-600 flex justify-center items-center"
-                  >
-                    <FiX className="w-4 h-4" />
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center justify-center w-full h-full text-gray-600">
-                  <FiUpload className="w-10 h-10" />
-                  <span className="ml-2">Upload Image</span>
+                    )}
                 </div>
               )}
-            </div>
-            <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
-            <label htmlFor="price" className="text-lg mb-1">
-              Service Price
-            </label>
-            <div className="flex">
-              <div className="border border-solid border-slate-300 rounded-s-md p-2 mb-4">
-                <FaIndianRupeeSign />
-              </div>
+              <label htmlFor="skill" className="text-lg mb-1">
+                Served Skill
+              </label>
               <input
-                placeholder="Service Price"
-                type="number"
-                id="price"
-                name="price"
-                value={createService.price}
-                onChange={(e) => {
-                  setCreateService({ ...createService, price: e.target.value });
-                }}
-                className="border border-solid border-slate-300 rounded-e-md px-4 py-2 mb-4 w-full"
+                type="text"
+                id="skill"
+                name="skill"
+                className={`border border-solid border-slate-300 rounded-md px-4 py-2 mb-4`}
+                placeholder="Enter Skill"
+                value={val}
+                onFocus={allTrueSKill}
+                onChange={(e) => handleSkillChange(e)}
               />
-            </div>
-            <div className="flex justify-center mb-4">
-              <button
-                type="submit"
-                onClick={(e) => handleServiceCreate(e)}
-                className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md shadow-md"
+              {skill?.length > 0 && (
+                <div
+                  className={`px-1 text-sm rounded-sm w-fit min-h-auto max-h-[150px] overflow-y-auto border border-solid border-slate-300 mb-4`}
+                >
+                  {skill?.map((item, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="text-sm text-center text-gray-600 px-3 py-2 border-b border-solid border-slate-300 pb-2 cursor-pointer"
+                        onClick={() => handleSkillSelection(item)}
+                      >
+                        {item.charAt(0).toUpperCase() + item.slice(1)}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+              <div className="flex justify-center mx-auto flex-col w-full mb-4">
+                <label htmlFor="tags" className="text-lg mb-1 font-bold">
+                  Tags
+                </label>
+                {selectedSkill.length > 0 ? (
+                  <div className="border border-solid border-gray-300 px-2 rounded-md mb-2">
+                    <div className="flex flex-wrap gap-2">
+                      {selectedSkill.length > 0 ? (
+                        selectedSkill.map((skill, ind) => {
+                          return (
+                            <div
+                              key={ind}
+                              className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
+                            >
+                              {skill}
+                              <div
+                                className="cursor-pointer"
+                                onClick={() => handleTagRemove(skill)}
+                              >
+                                x
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <p className="text-gray-300 text-sm">
+                          Select skills of your interest from below.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                <input
+                  type="text"
+                  id="tags"
+                  name="tags"
+                  value={inputTagValue}
+                  onChange={handleTagChange}
+                  className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none"
+                  placeholder="Enter Tags for the service"
+                />
+                {suggestions.length > 0
+                  ? inputTagValue.length > 0 && (
+                      <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
+                        <div>
+                          {suggestions.map((suggestion, ind) => (
+                            <div
+                              key={suggestion.id}
+                              onClick={() => handleSuggestionClick(suggestion)}
+                              className="cursor-pointer hover:bg-gray-100 px-4 py-1"
+                            >
+                              {suggestion.name}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  : inputTagValue.length > 0 && (
+                      <button
+                        onClick={() => handleNewSkillAdd(inputTagValue)}
+                        className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none bg-blue-500 text-white w-[30%] mt-2 mb-4"
+                      >
+                        Add Interest
+                      </button>
+                    )}
+              </div>
+              <label htmlFor="imageSelector" className="text-lg mb-1">
+                Service Images
+              </label>
+              <div
+                onClick={() => document.querySelector("#imageSelector").click()}
+                className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
               >
-                Create time slots
-              </button>
-            </div>
-          </form>
+                <input
+                  type="file"
+                  id="imageSelector"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+                {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
+                  <p>Upload Progress: {uploadProfileProgress}%</p>
+                ) : image ? (
+                  <div className="relative w-full h-full flex justify-center items-center">
+                    <img
+                      src={image}
+                      alt="Preview"
+                      className="max-h-28 max-w-44 object-cover rounded"
+                    />
+                    <button
+                      onClick={handleImageRemove}
+                      className="absolute top-2 right-2 bg-slate-400 text-white p-1 rounded hover:bg-gray-600 flex justify-center items-center"
+                    >
+                      <FiX className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center w-full h-full text-gray-600">
+                    <FiUpload className="w-10 h-10" />
+                    <span className="ml-2">Upload Image</span>
+                  </div>
+                )}
+              </div>
+              <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
+              <label htmlFor="price" className="text-lg mb-1">
+                Service Price
+              </label>
+              <div className="flex">
+                <div className="border border-solid border-slate-300 rounded-s-md p-2 mb-4">
+                  <FaIndianRupeeSign />
+                </div>
+                <input
+                  placeholder="Service Price"
+                  type="number"
+                  id="price"
+                  name="price"
+                  value={createService.price}
+                  onChange={(e) => {
+                    setCreateService({
+                      ...createService,
+                      price: e.target.value,
+                    });
+                  }}
+                  className="border border-solid border-slate-300 rounded-e-md px-4 py-2 mb-4 w-full"
+                />
+              </div>
+              <div className="flex justify-center mb-4">
+                <button
+                  type="submit"
+                  onClick={(e) => handleServiceCreate(e)}
+                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md shadow-md"
+                >
+                  Create time slots
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-
-      {showSlots && (
-        <MyBigCalendar
-          serviceId={serviceId}
-          serviceTitle={serviceTitle}
-          setServiceTitle={setServiceTitle}
-        />
+      ) : (
+        showSlots && (
+          <div className="mt-[100px] px-[10vw] m-auto">
+            <div
+              onClick={() => setShowSlots(!showSlots)}
+              className="w-fit flex gap-2 text-lg font-bold cursor-pointer hover:bg-[#e2e2e2] py-2 px-1 rounded-md duration-200"
+            >
+              <MdOutlineKeyboardBackspace size={25} />
+              Back
+            </div>
+            <MyBigCalendar
+              serviceId={serviceId}
+              serviceTitle={serviceTitle}
+              setServiceTitle={setServiceTitle}
+            />
+          </div>
+        )
       )}
     </>
   );
@@ -627,7 +645,6 @@ const CreateService = () => {
 export default CreateService;
 
 export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
-  
   const navigate = useNavigate();
   const localizer = momentLocalizer(moment);
   const [notifyBefore, setNotifyBefore] = useState(false);
@@ -736,9 +753,9 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
     const endDate = moment(event.end);
 
     return {
-      day: `${startDate.format('ddd DD MMM')}`, // Include day of the week (e.g., "Mon 29 Jan")
+      day: `${startDate.format("ddd DD MMM")}`, // Include day of the week (e.g., "Mon 29 Jan")
       start_time: startDate.format("h:mm A"), // Format the start time as "h:mm A" (e.g., "9:00 AM")
-      end_time: endDate.format("h:mm A"), // Format the end time as "h:mm A" (e.g., "1:00 PM")  
+      end_time: endDate.format("h:mm A"), // Format the end time as "h:mm A" (e.g., "1:00 PM")
       timezone: "IST", // Assuming the timezone is always IST
       duration: endDate.diff(startDate, "seconds"), // Calculate the duration in seconds
     };
@@ -751,9 +768,8 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
   console.log(events);
   console.log(myEvents);
 
-
   return (
-    <div className="calendar-container mt-[100px] px-[10vw] m-auto">
+    <div className="calendar-container ">
       <div className="flex gap-10 flex-wrap">
         <div className="flex flex-col gap-1">
           <label className="text-base text-gray-600">Start Date</label>
@@ -856,22 +872,23 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
           Create Event
         </button>
         <button
-          onClick={(e)=>handlePostEvent(e)}
+          onClick={(e) => handlePostEvent(e)}
           className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
         >
           Post event
         </button>
       </div>
       <Calendar
-        className="mt-[100px] "
+      className="mt-4"
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
-       
         style={{ height: 500 }}
         onSelectEvent={(slot) => {
-          if (window.confirm('Are you sure you want to delete this time slot?')) {
+          if (
+            window.confirm("Are you sure you want to delete this time slot?")
+          ) {
             handleDeleteSlot(slot.id);
           }
         }}
@@ -879,10 +896,3 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
     </div>
   );
 };
-
-
-
-
-
-
-
