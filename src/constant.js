@@ -3254,14 +3254,15 @@ export const BookingCard = ({ item }) => {
         <div className="flex items-center xs:gap-[4vw] text-sm">
           <div className="flex items-center gap-2 w-[200px] ">
             <img
-              src={item?.customer_profile_img}
+            
+              src={localStorage.getItem("isExpert")==="true"? item?.customer_profile_img:item?.expert_profile_img}
               className="h-9 w-9 rounded-full shrink-0 object-cover"
               alt=""
             />
-            <div>{item?.customer_first_name} {item?.customer_last_name}</div>
+            <div>{localStorage.getItem("isExpert")==="true"? item?.customer_first_name :item?.expert_first_name  } {localStorage.getItem("isExpert")==="true"? item?.customer_last_name :item?.expert_last_name}</div>
           </div>
           <div className="hidden sm:block w-[120px]">
-            {item?.scheduledDate}{" "}
+            {item?.scheduledDate}{" "} 
           </div>
           <div className="w-[60px] flex items-center justify-center shrink-0">
             <FaRegTrashAlt className="shrink-0" />
@@ -3282,13 +3283,13 @@ export const BookingCard = ({ item }) => {
       {open && (
         <div>
           <div className="text-sm line-clamp-2">
-            Service Title: {item?.service_name}{" "}
+            Service Title: {localStorage.getItem("isExpert")==="true"? item?.service_name :item?.service_name }{" "}
           </div>
           <div className="text-sm mt-2">Booking Date: {item?.updated_on} </div>
           <div className="block sm:hidden mt-2 shrink-0  text-sm">
-            Scheduled date: {item?.scheduledDate}{" "}
+            Scheduled date: {localStorage.getItem("isExpert")==="true"? item?.scheduledDate :item?.scheduledDate  }{" "}
           </div>
-          <div className="text-sm mt-2">Start Time: {item?.time_slot} </div>
+          <div className="text-sm mt-2">Start Time: {localStorage.getItem("isExpert")==="true"?  item?.time_slot:item?.time_slot   } </div>
           <div className="text-sm mt-2">End Time: {item?.endTime} </div>
         </div>
       )}

@@ -542,7 +542,32 @@ export const CustomerChats = () => {
     </div>
   );
 };
-export const CustomerBookings = () => {
+export const CustomerBookings = ({id}) => {
+  const [myBookings, setMyBookings] = useState([]);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  useEffect(() => {
+    getMyBookings();
+  }, []);
+
+  const getMyBookings = async () => {
+    try {
+      const res = await axios.get(`/customers/connect/?action=6&customer_id=${1}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const json=res.data;
+      setMyBookings(json.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="w-full md:w-[68%]">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
@@ -557,7 +582,7 @@ export const CustomerBookings = () => {
         <div className="shrink-0 text-right w-[60px] "></div>
       </div>
 
-      {customerDashboardInfo?.myBookings.map((item, index) => (
+      {myBookings.map((item, index) => (
         <BookingCard item={item} key={index} />
       ))}
     </div>
@@ -773,7 +798,7 @@ const CustomerDashboard = () => {
         <CustomerProfile />
         <CustomerChats />
         <ShowBlogs />
-        <CustomerBookings />
+        <CustomerBookings id={userData?.id} />
         <CustomerRecentMeetngs />
         <CustomerTransactionHistory />
       </Outlet>
