@@ -7,7 +7,7 @@ import {
 } from "../../../constant";
 import { BlogCardHorizontal } from "../../../subsitutes/ShowBlogs";
 import { CiBookmark } from "react-icons/ci";
-import { FaTags } from "react-icons/fa";
+import { FaMinus, FaTags } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
 import { BiSolidLike } from "react-icons/bi";
@@ -354,6 +354,7 @@ const Author = ({ createAuthor }) => {
   );
 };
 export const BlogCard = ({
+  items,
   index,
   id,
   title,
@@ -364,6 +365,69 @@ export const BlogCard = ({
   image,
 }) => {
   const navigate = useNavigate();
+  const addFav = async (id) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 6,
+          blog_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const remFav = async(id)=>{
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 7,
+          blog_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  console.log(items)
   return (
     <div
       className={`w-full px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
@@ -389,12 +453,12 @@ export const BlogCard = ({
           <div className="mt-3 text-xs flex items-center gap-2">
             <FaTags />
             <div className="flex items-center flex-wrap gap-2">
-              {tags?.map((item, index) => (
+              {tags?.map((tag, index) => (
                 <div
                   key={index}
                   className="text-[10px] shrink-0 border border-solid border-slate-300 px-2 py-1 rounded-xl cursor-pointer"
                 >
-                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                  {tag.charAt(0).toUpperCase() + tag.slice(1)}
                 </div>
               ))}
             </div>
@@ -408,7 +472,7 @@ export const BlogCard = ({
                 <BiSolidLike /> {likes > 0 ? likes + "likes" : "no likes"}
               </div>
               <div className="border border-solid border-slate-400 text-[10px] rounded-full px-3 py-0.5 flex items-center cursor-pointer gap-1">
-                <FaPlus /> Add to Fav
+                {items.is_favorite ? (<div className="flex gap-2 items-center" onClick={()=>remFav(id)}><FaMinus/>Added to Fav</div>):(<div className="flex gap-2 items-center" onClick={()=>addFav(id)}><FaPlus/> Add to Fav</div>)}
               </div>
             </div>
           </div>
