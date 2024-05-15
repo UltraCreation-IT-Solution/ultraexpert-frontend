@@ -177,8 +177,7 @@ const AllExperts = () => {
         `/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}/`,
         {
           headers: {
-            "Content-Type": "application/json",
-            // Authorization: `Bearer ${jsonData.access_token}`,
+            Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );

@@ -22,7 +22,10 @@ export const ServiceProfileCard = ({ item }) => {
     <div
       className={`w-full px-3 py-5 bg-[#EDEDED] flex justify-between items-center shadow-sm drop-shadow-md rounded-md`}
     >
-      <Link to={`/experts/expertprofile/${item?.expert_data?.id}`} className="flex gap-3 items-center decoration-transparent text-black">
+      <Link
+        to={`/experts/expertprofile/${item?.expert_data?.id}`}
+        className="flex gap-3 items-center decoration-transparent text-black"
+      >
         <img
           className="h-10 w-10 rounded-full shrink-0 object-cover"
           src={item?.expert_data?.profile_img}
@@ -275,6 +278,22 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
               {editedComment}
             </p>
           )}
+          {temp?.is_authenticated_user && isEditing && (
+            <div className="mb-2">
+              <button
+                onClick={saveEdit}
+                className="text-green-500 p-2 border border-solid border-green-500 rounded-lg"
+              >
+                Save
+              </button>
+              <button
+                onClick={cancelEdit}
+                className="text-gray-500 p-2 border border-solid border-gray-500 rounded-lg ml-2"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
           <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
             <div className="flex items-center gap-1" onClick={likeComment}>
               <BiLike />
@@ -286,7 +305,7 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
             </div>
             {!replyComm && ( // Render reply button if replyComm is false
               <button
-                className="cursor-pointer p-2"
+                className="text-xs sm:text-base cursor-pointer px-2 py-1 rounded-sm sm:rounded-md"
                 onClick={() => setReplyComm(true)}
               >
                 Reply
@@ -294,42 +313,30 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
             )}
           </div>
           {replyComm && ( // Render reply input and save button if replyComm is true
-            <div className="flex gap-2 w-full">
+            <div className="w-full">
               <input
                 type="text"
                 value={replyComment}
                 onChange={(e) => setReplyComment(e.target.value)}
                 className="text-xs sm:text-base font-montserrat w-full border border-gray-300 rounded-md p-2"
               />
-              <button className="cursor-pointer mx-2 w-[25%]" onClick={() => handleReplyComment(temp?.id)}>Save</button>
-              <button className="cursor-pointer mx-2 w-[25%]" onClick={() => setReplyComm(false)}>Cancel</button>
+              <div className="mt-3">
+                <button
+                  className="text-xs sm:text-base cursor-pointer px-4 py-1 rounded-sm sm:rounded-md"
+                  onClick={() => handleReplyComment(temp?.id)}
+                >
+                  Save
+                </button>
+                <button
+                  className="text-xs sm:text-base cursor-pointer px-4 py-1 ml-2 rounded-sm sm:rounded-md"
+                  onClick={() => (setReplyComm(false), setReplyComment(""))}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           )}
-           
         </div>
-        <div className="relative overflow-visible flex flex-col ml-auto text-3xl cursor-pointer">
-          <PiDotsThreeCircleVertical onClick={()=>setOptions(!options)}/>
-          {options && <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
-            <div className="transition-all hover:bg-gray-300 px-3" onClick={handleEdit}>Edit</div>
-            <div className="transition-all hover:bg-gray-300 px-3" onClick={deleteComment}>Delete</div>
-          </div>}
-        </div>
-        {temp?.is_authenticated_user && isEditing && (
-          <div>
-            <button
-              onClick={saveEdit}
-              className="text-green-500 p-2 border border-solid border-green-500 rounded-lg"
-            >
-              Save
-            </button>
-            <button
-              onClick={cancelEdit}
-              className="text-gray-500 p-2 border border-solid border-gray-500 rounded-lg ml-2"
-            >
-              Cancel
-            </button>
-          </div>
-        )}
         {temp?.is_authenticated_user && !isEditing && (
           <div className="relative overflow-visible flex flex-col ml-auto text-3xl cursor-pointer">
             <PiDotsThreeCircleVertical onClick={() => setOptions(!options)} />
@@ -383,9 +390,7 @@ const ServiceDescription = () => {
       );
       const json = res.data;
       setServDesc(json.data);
-      setScheduleData(
-        json.data
-      );
+      setScheduleData(json.data);
     } catch (error) {
       console.log(error);
     }
@@ -482,13 +487,11 @@ const ServiceDescription = () => {
               <div>{servDesc?.service_name}</div>
             </div>
             <div className="flex items-center gap-6 overflow-x-scroll mt-[2vw] shadow-sm drop-shadow-md">
-              
-                <img
-                  className="h-[12rem] w-[17rem] lg:h-[17vw] lg:w-[24vw] shrink-0 object-cover"
-                  src={servDesc?.service_img}
-                  alt=""
-                />
-              
+              <img
+                className="h-[12rem] w-[17rem] lg:h-[17vw] lg:w-[24vw] shrink-0 object-cover"
+                src={servDesc?.service_img}
+                alt=""
+              />
             </div>
             <div className="mt-[3vw] text-base xl:text-lg text-gray-500">
               <b className="text-black">Description: </b>
@@ -519,7 +522,7 @@ const ServiceDescription = () => {
             </div>
             <div className="lg:hidden w-full">
               <div className="my-8">
-                <ShowSchedule id={servDesc?.id}   />
+                <ShowSchedule id={servDesc?.id} />
               </div>
             </div>
             <div id="ratings" className="mt-10">
