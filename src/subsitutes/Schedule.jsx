@@ -151,12 +151,13 @@ export const ShowSchedule = ({ id }) => {
       </div>
 
       <div className="no-underline">
-        <div
-          className="mt-6 bg-[#007AFF] text-white text-lg font-semibold text-center p-3 rounded-lg cursor-pointer no-underline"
+        <button
+          disabled={(slotData.date==="" || slotData.slotStartTime==="" || slotData.slotEndTime==="" || slotData.slotDuration==="" || slotData.slotId==="")?true:false}
+          className={`mt-6 bg-[#007AFF] text-white text-lg font-semibold text-center p-3 rounded-lg  no-underline w-full ${(slotData.date===""|| slotData.slotStartTime==="" || slotData.slotEndTime==="" || slotData.slotDuration==="" || slotData.slotId==="") ? "cursor-not-allowed opacity-75" : "cursor-pointer"} `}
           onClick={() => goToBooking()}
         >
           Book a slot
-        </div>
+        </button>
       </div>
     </div>
   );

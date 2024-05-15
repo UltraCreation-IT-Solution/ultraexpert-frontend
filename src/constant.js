@@ -3248,20 +3248,25 @@ export const ProjectsCarousel = ({ projectsArray }) => {
 
 export const BookingCard = ({ item }) => {
   const [open, setOpen] = useState(false);
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  }
   return (
     <>
       <div className="text-sm flex items-center justify-between  border-t border-solid border-slate-300 my-5 py-3 overflow-x-scroll">
         <div className="flex items-center xs:gap-[4vw] text-sm">
           <div className="flex items-center gap-2 w-[200px] ">
             <img
-              src={item?.customer_profile_img}
+              src={localStorage.getItem("isExpert")==="true"? item?.customer_profile_img:item?.expert_profile_img}
               className="h-9 w-9 rounded-full shrink-0 object-cover"
               alt=""
             />
-            <div>{item?.customer_first_name} {item?.customer_last_name}</div>
+            <div>{localStorage.getItem("isExpert")==="true"? item?.customer_first_name :item?.expert_first_name  } {localStorage.getItem("isExpert")==="true"? item?.customer_last_name :item?.expert_last_name}</div>
           </div>
           <div className="hidden sm:block w-[120px]">
-            {item?.scheduledDate}{" "}
+            {item?.time_slot_day}{" "} 
           </div>
           <div className="w-[60px] flex items-center justify-center shrink-0">
             <FaRegTrashAlt className="shrink-0" />
@@ -3282,14 +3287,16 @@ export const BookingCard = ({ item }) => {
       {open && (
         <div>
           <div className="text-sm line-clamp-2">
-            Service Title: {item?.service_name}{" "}
+            Service Title: {localStorage.getItem("isExpert")==="true"? item?.service_name :item?.service_name }{" "}
           </div>
-          <div className="text-sm mt-2">Booking Date: {item?.updated_on} </div>
-          <div className="block sm:hidden mt-2 shrink-0  text-sm">
-            Scheduled date: {item?.scheduledDate}{" "}
+          <div className="text-sm mt-2">Booking Date: {localStorage.getItem("isExpert")==="true"?formatDate(item?.updated_on):formatDate(item?.updated_on)} </div>
+          <div className="text-sm mt-2">Start Time: {localStorage.getItem("isExpert")==="true"?  item?.time_slot_start:item?.time_slot_start   } </div>
+          <div className="text-sm mt-2">End Time: {localStorage.getItem("isExpert")==="true"?  item?.time_slot_end:item?.time_slot_end   }</div>
+          <div className="flex items-center gap-3">
+          <div className="text-sm mt-2 text-red-500 underline cursor-pointer">Disable service</div>
+          <div className="text-sm mt-2 text-red-500 underline cursor-pointer">Join meeting</div>
+
           </div>
-          <div className="text-sm mt-2">Start Time: {item?.time_slot} </div>
-          <div className="text-sm mt-2">End Time: {item?.endTime} </div>
         </div>
       )}
     </>

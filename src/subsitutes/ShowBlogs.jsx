@@ -144,7 +144,10 @@ const ShowBlogs = ({
           My Blogs
         </div>
       )}
-      {blogArray?.map((item, idx) => (
+      {blogArray?.length === 0 && (
+        <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">No blogs found</div>
+      )}
+      {blogArray?.length > 0 && blogArray?.map((item, idx) => (
         <BlogCardHorizontal
           key={item?.id}
           index={idx}

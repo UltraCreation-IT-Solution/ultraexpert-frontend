@@ -10,6 +10,7 @@ import axios from "../../axios";
 import { useParams } from "react-router-dom";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
+import { Link } from "react-router-dom";
 const CommentCard = ({ blogData, temp, getAllComments }) => {
   const [options, setOptions] = useState(false);
   console.log(temp);
@@ -266,8 +267,7 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
                 type="text"
                 value={replyComment}
                 onChange={(e) => setReplyComment(e.target.value)}
-                onBlur={() => setReplyComm(false)}
-                className="text-xs sm:text-base font-montserrat w-full border-b border-gray-300 p-2 outline-none"
+                className="text-xs sm:text-base font-montserrat w-full border border-gray-300 rounded-md p-2"
               />
               <div className="mt-3">
                 <button
@@ -285,6 +285,30 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
               </div>
             </div>
           )}
+          {/* {replyComm && ( // Render reply input and save button if replyComm is true
+            <div className="w-full">
+              <input
+                type="text"
+                value={replyComment}
+                onChange={(e) => setReplyComment(e.target.value)}
+                className="text-xs sm:text-base font-montserrat w-full border-b border-gray-300 p-2 outline-none"
+              />
+              <div className="mt-3">
+                <button
+                  className="text-xs sm:text-base cursor-pointer px-4 py-1 rounded-sm sm:rounded-md"
+                  onClick={() => handleReplyComment(temp?.id)}
+                >
+                  Save
+                </button>
+                <button
+                  className="text-xs sm:text-base cursor-pointer px-4 py-1 ml-2 rounded-sm sm:rounded-md"
+                  onClick={() => (setReplyComm(false), setReplyComment(""))}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )} */}
         </div>
         {temp?.is_authenticated_user && !isEditing && (
           <div className="relative overflow-visible flex flex-col ml-auto text-xl sm:text-3xl cursor-pointer">
@@ -419,22 +443,27 @@ const BlogDetails = () => {
           <div className="text-xs md:text-sm text-gray-500 font-semibold">
             {currBlogData?.publish_date}
           </div>
-          <div className=" text-3xl overflow-hidden xs:text-4xl lg:text-5xl font-bold md:px-[7vw] my-5 md:my-4 tracking-wide">
+          <div className=" text-3xl overflow-hidden xs:text-4xl lg:text-5xl font-bold md:px-[7vw] my-5 md:my-4 tracking-wide pb-2">
             {currBlogData?.title}
           </div>
-          <div className="flex items-center justify-center gap-3">
-            <img
-              src={currBlogData?.author_data?.profile_img}
-              alt="profile"
-              className="h-10 w-10 rounded-full shrink-0 object-cover "
-            />
-            <div className="text-sm md:text-base text-gray-500">
-              Blog - By{" "}
-              {currBlogData?.author_data?.first_name +
-                " " +
-                currBlogData?.author_data?.last_name}
+          {console.log(currBlogData?.author_data?.id)}
+          <Link to={`/experts/expertprofile/${currBlogData?.author_data?.id} `}
+          className="no-underline"
+          >
+            <div className="flex items-center justify-center gap-3">
+              <img
+                src={currBlogData?.author_data?.profile_img}
+                alt="profile"
+                className="h-10 w-10 rounded-full shrink-0 object-cover "
+              />
+              <div className="text-sm md:text-base text-gray-500">
+                Blog - By{" "}
+                {currBlogData?.author_data?.first_name +
+                  " " +
+                  currBlogData?.author_data?.last_name}
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
 
         <div className="my-[3vw]">

@@ -20,6 +20,7 @@ import ExpertCardShimmer from "../../subsitutes/Shimmers/ExpertCardShimmer";
 export const ExpertCard = ({ item }) => {
   console.log(item);
   const [favExpert, setFavExpert] = useState(false);
+  const [following, setFollowing] = useState(item.is_following);
   const cookie = document.cookie.split(";");
   const jsonData = {};
 
@@ -79,7 +80,59 @@ export const ExpertCard = ({ item }) => {
       console.log(error);
     }
   };
-  console.log(item.is_favorite);
+  const followExpert = async (id) => {  
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 1,
+          expert_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      getAllExperts();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const unfollowExpert = async (id) => { 
+    console.log(id)
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 2,
+          expert_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      getAllExperts();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="relative w-[90vw] h-[81vw] xs:w-[84vw] xs:h-[66vw] sm:w-[42vw] sm:h-[46vw] md:w-[38vw]  lg:w-[25vw] lg:h-[33vw] rounded-md md:rounded-lg shadow-lg my-[2vw] md:my-[0.65vw] border-[0.001vw] border-[#dbdbdb] border-solid overflow-hidden">
       <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  ">
@@ -151,9 +204,19 @@ export const ExpertCard = ({ item }) => {
           >
             Visit Profile
           </Link>
-          <div className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2">
+       
+          {item.is_following===false ?
+            <div className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2 cursor-pointer"
+            onClick={()=>followExpert(item?.expert?.id)}
+            >
             Follow Expert
-          </div>
+          </div>:
+          <div className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2 cursor-pointer"
+          onClick={()=>unfollowExpert(item?.expert?.id)}
+          >
+          Unfollow
+        </div>
+          }
         </div>
       </div>
     </div>
@@ -181,7 +244,7 @@ const AllExperts = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${jsonData.access_token}`,
+            Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );
@@ -213,7 +276,7 @@ const AllExperts = () => {
       </div>
       <div className="w-full flex flex-wrap gap-[3vw] md:gap-[2vw] pb-[2vw]  justify-center sm:justify-normal  items-center">
         {allExpertsList.map((item) => {
-          return <ExpertCard key={item?.expert?.id} item={item} />;
+          return <ExpertCard key={item?.expert?.id} item={item} getAllExperts={getAllExperts} />;
         })}
       </div>
       <div className="mt-[3vw] flex items-center justify-between gap-[4vw] text-white">

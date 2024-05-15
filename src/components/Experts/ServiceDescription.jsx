@@ -22,7 +22,10 @@ export const ServiceProfileCard = ({ item }) => {
     <div
       className={`w-full px-3 py-5 bg-[#EDEDED] flex justify-between items-center shadow-sm drop-shadow-md rounded-md`}
     >
-      <Link to={`/experts/expertprofile/${item?.expert_data?.id}`} className="flex gap-3 items-center decoration-transparent text-black">
+      <Link
+        to={`/experts/expertprofile/${item?.expert_data?.id}`}
+        className="flex gap-3 items-center decoration-transparent text-black"
+      >
         <img
           className="h-10 w-10 rounded-full shrink-0 object-cover"
           src={item?.expert_data?.profile_img}
@@ -275,6 +278,22 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
               {editedComment}
             </p>
           )}
+          {temp?.is_authenticated_user && isEditing && (
+            <div className="mb-2">
+              <button
+                onClick={saveEdit}
+                className="text-green-500 p-2 border border-solid border-green-500 rounded-lg"
+              >
+                Save
+              </button>
+              <button
+                onClick={cancelEdit}
+                className="text-gray-500 p-2 border border-solid border-gray-500 rounded-lg ml-2"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
           <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
             <div className="flex items-center gap-1" onClick={likeComment}>
               <BiLike />
@@ -286,7 +305,7 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
             </div>
             {/* {!replyComm && ( // Render reply button if replyComm is false
               <button
-                className="cursor-pointer p-2"
+                className="text-xs sm:text-base cursor-pointer px-2 py-1 rounded-sm sm:rounded-md"
                 onClick={() => setReplyComm(true)}
               >
                 Reply
@@ -301,8 +320,20 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
                 onChange={(e) => setReplyComment(e.target.value)}
                 className="text-xs sm:text-base font-montserrat w-full border border-gray-300 rounded-md p-2"
               />
-              <button className="cursor-pointer mx-2 w-[25%]" onClick={() => handleReplyComment(temp?.id)}>Save</button>
-              <button className="cursor-pointer mx-2 w-[25%]" onClick={() => setReplyComm(false)}>Cancel</button>
+              <div className="mt-3">
+                <button
+                  className="text-xs sm:text-base cursor-pointer px-4 py-1 rounded-sm sm:rounded-md"
+                  onClick={() => handleReplyComment(temp?.id)}
+                >
+                  Save
+                </button>
+                <button
+                  className="text-xs sm:text-base cursor-pointer px-4 py-1 ml-2 rounded-sm sm:rounded-md"
+                  onClick={() => (setReplyComm(false), setReplyComment(""))}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           )} */}
            
@@ -383,9 +414,7 @@ const ServiceDescription = () => {
       );
       const json = res.data;
       setServDesc(json.data);
-      setScheduleData(
-        json.data
-      );
+      setScheduleData(json.data);
     } catch (error) {
       console.log(error);
     }
@@ -483,13 +512,11 @@ const ServiceDescription = () => {
               <div>{servDesc?.service_name}</div>
             </div>
             <div className="flex items-center gap-6 overflow-x-scroll mt-[2vw] shadow-sm drop-shadow-md">
-              
-                <img
-                  className="h-[12rem] w-[17rem] lg:h-[17vw] lg:w-[24vw] shrink-0 object-cover"
-                  src={servDesc?.service_img}
-                  alt=""
-                />
-              
+              <img
+                className="h-[12rem] w-[17rem] lg:h-[17vw] lg:w-[24vw] shrink-0 object-cover"
+                src={servDesc?.service_img}
+                alt=""
+              />
             </div>
             <div className="mt-[3vw] text-base xl:text-lg text-gray-500">
               <b className="text-black">Description: </b>
@@ -520,7 +547,7 @@ const ServiceDescription = () => {
             </div>
             <div className="lg:hidden w-full">
               <div className="my-8">
-                <ShowSchedule id={servDesc?.id}   />
+                <ShowSchedule id={servDesc?.id} />
               </div>
             </div>
             <div id="ratings" className="mt-10">
@@ -594,61 +621,6 @@ const ServiceDescription = () => {
         </div>
 
         <div className="hidden lg:w-[30%] px-[2.5vw] lg:flex flex-col items-center">
-          {/* {!showChat && (
-            <div className="px-6 py-5 h-fit rounded-2xl border-2 border-solid border-slate-300 sticky top-0">
-              <div className="flex items-center gap-5 ">
-                <img
-                  className="h-16 w-16 rounded-full shrink-0 object-cover"
-                  src="https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt=""
-                />
-                <div className="flex flex-col">
-                  <div className="text-xl font-semibold">Antony Phobes</div>
-                  <div className="text-green-600 text-base">Online</div>
-                </div>
-              </div>
-              <div onClick={() => setShowChat(true)}>
-                <button className="flex gap-3 items-center justify-center w-full mt-8 cursor-pointer bg-[#2A2A2A] px-6 py-1 md:px-[1.5vw] md:py-[0.5vw] text-base text-white font-semibold border rounded-sm sm:rounded-md">
-                  <IoChatboxOutline />
-                  Chat with me
-                </button>
-              </div>
-            </div>
-          )}  */}
-
-          {/* {showChat && (
-            <div className="flex flex-col border border-solid border-slate-300 w-full">
-              <div className="flex justify-between items-center border-b border-solid border-slate-300 p-2">
-                <div className="flex items-center gap-2">
-                  <GoArrowLeft
-                    onClick={() => setShowChat(false)}
-                    className="text-3xl"
-                  />
-                  <div className="flex items-center gap-2 ">
-                    <img
-                      className="h-12 w-12 rounded-full shrink-0 object-cover"
-                      src="https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                      alt=""
-                    />
-                    <div className="flex flex-col">
-                      <div className="text-xl font-semibold">Antony Phobes</div>
-                      <div className="text-xs">last seen- 2 min ago</div>
-                    </div>
-                  </div>
-                </div>
-                <PiDotsThreeVerticalBold className="text-3xl" />
-              </div>
-              <div className="h-[20vw] border-b border-solid border-slate-300"></div>
-              <div className="flex items-center justify-between p-2">
-                <CiSquarePlus className="text-3xl" />
-                <input
-                  type="text"
-                  className="outline-none border border-solid border-slate-500 rounded-lg px-2 py-3"
-                />
-                <IoMdSend className="text-3xl" />
-              </div>
-            </div>
-          )}  */}
           {/* <div className="mt-[2vw] flex flex-col ">
             <div className="text-3xl font-semibold">
               Service Price: ₹{services[params?.id - 1]?.price}

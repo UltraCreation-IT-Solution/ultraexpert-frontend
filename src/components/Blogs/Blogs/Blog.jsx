@@ -91,6 +91,7 @@ export const BlogBody = ({ allBlogsArray,getBlogArray }) => {
       }
       console.log(json);
       getBlogArray();
+      fetchBlogs();
     } catch (error) {
       console.log(error);
     }
@@ -124,6 +125,7 @@ export const BlogBody = ({ allBlogsArray,getBlogArray }) => {
       }
       console.log(json);
       getBlogArray();
+      fetchBlogs();
     } catch (error) {
       console.log(error);
     }
@@ -274,7 +276,6 @@ export const BlogBody = ({ allBlogsArray,getBlogArray }) => {
         </div>
       </div>
       {/* All blogs */}
-      {console.log(allBlogsArray)}
       <div>
         <div className="text-xl lg:text-3xl font-bold mt-16 text-center ">
           All Blogs
@@ -294,6 +295,7 @@ export const BlogBody = ({ allBlogsArray,getBlogArray }) => {
                 image={item.images[0]}
                 date={formatDate(item.date_created.split("T")[0])}
                 getBlogArray={getBlogArray}
+                fetchBlogs={fetchBlogs}
               />
             ))
           )}
@@ -371,7 +373,8 @@ export const BlogCard = ({
   views,
   likes,
   image,
-  getBlogArray
+  getBlogArray,
+  fetchBlogs
 }) => {
   const navigate = useNavigate();
   const addFav = async (id) => {
@@ -402,6 +405,7 @@ export const BlogCard = ({
       }
       console.log(json);
       getBlogArray();
+      fetchBlogs();
     } catch (error) {
       console.log(error);
     }
@@ -434,6 +438,7 @@ export const BlogCard = ({
       }
       console.log(json);
       getBlogArray();
+      fetchBlogs();
     } catch (error) {
       console.log(error);
     }
