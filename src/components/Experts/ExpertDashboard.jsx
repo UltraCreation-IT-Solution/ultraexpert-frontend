@@ -1515,10 +1515,7 @@ export const Leaderboard = () => {
   );
 };
 
-export const MyBookings = (props) => {
-  console.log(props);
-  const params = useParams();
-  console.log(params);
+export const MyBookings = () => {
   const [myBookings, setMyBookings] = useState([]);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -1528,7 +1525,7 @@ export const MyBookings = (props) => {
   });
   useEffect(() => {
     getMyBookings();
-  }, []);
+  }, [myBookings]);
 
   const getMyBookings = async () => {
     try {
@@ -1542,7 +1539,6 @@ export const MyBookings = (props) => {
         }
       );
       setMyBookings(res.data.data);
-      console.log(myBookings);
     } catch (error) {
       console.log(error);
     }
