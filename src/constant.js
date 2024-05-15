@@ -10,12 +10,8 @@ import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
-import { BiSolidLike } from "react-icons/bi";
-import { RiArrowRightSLine } from "react-icons/ri";
-import { IoEyeSharp } from "react-icons/io5";
-import { FaTags, FaPlus, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
 export const topExpertsBar = [
@@ -3150,102 +3146,102 @@ export const favBlogs = [
   },
 ];
 
-export const ProjectsCarousel = ({projectsArray}) => {
+export const ProjectsCarousel = ({ projectsArray }) => {
   const [slider, setSlider] = useState(0);
   return (
     <>
-     
-    <div className="">
-      <div className="flex justify-center items-center ">
-        {projectsArray?.length > 0 && projectsArray?.map((item, idx) => (
-          <div key={idx}>
-            <div className="relative w-[95%] m-auto">
-              <div
-                className={
-                  slider === idx
-                    ? "absolute top-1 left-1 w-fit px-4 sm:px-8 py-1 sm:py-2 btnBlack text-white rounded-sm rounded-r-full border border-solid border-white "
-                    : "hidden"
-                }
-              >
-                <div className="text-center text-xs sm:text-sm">
-                  {item?.type} Project
+      <div className="">
+        <div className="flex justify-center items-center ">
+          {projectsArray?.length > 0 &&
+            projectsArray?.map((item, idx) => (
+              <div key={idx}>
+                <div className="relative w-[95%] m-auto">
+                  <div
+                    className={
+                      slider === idx
+                        ? "absolute top-1 left-1 w-fit px-4 sm:px-8 py-1 sm:py-2 btnBlack text-white rounded-sm rounded-r-full border border-solid border-white "
+                        : "hidden"
+                    }
+                  >
+                    <div className="text-center text-xs sm:text-sm">
+                      {item?.type} Project
+                    </div>
+                    <div className="text-center text-xs text-gray-300 ">
+                      {item?.role}{" "}
+                    </div>
+                  </div>
+                  <div
+                    className={
+                      slider === idx
+                        ? "absolute bottom-0 w-full flex items-center justify-center h-[8vw] md:h-[5.5vw] bg-black/45 tracking-wider text-[2.5vw] md:text-[1.5vw] text-white font-bold"
+                        : "hidden"
+                    }
+                  >
+                    {item?.title}
+                  </div>
+                  <MdOutlineKeyboardArrowLeft
+                    className={`absolute left-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] rounded-full ${
+                      slider === 0
+                        ? ` border-slate-400 border-solid text-slate-400`
+                        : `border-white border-solid text-white`
+                    } bg-black/50 `}
+                    onClick={() =>
+                      slider === 0 ? setSlider(0) : setSlider(slider - 1)
+                    }
+                  />
+                  <MdOutlineKeyboardArrowRight
+                    className={`absolute right-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] ${
+                      slider === projectsArray?.length - 1
+                        ? ` border-slate-400 border-solid text-slate-400`
+                        : `border-white border-solid text-white`
+                    } bg-black/50 rounded-full`}
+                    onClick={() =>
+                      slider === projectsArray?.length - 1
+                        ? setSlider(projectsArray?.length - 1)
+                        : setSlider(slider + 1)
+                    }
+                  />
+                  <img
+                    src={item?.image}
+                    key={idx}
+                    className={
+                      slider === idx
+                        ? "h-[50vw] md:h-[30vw] w-[100%] object-cover shrink-0 flex"
+                        : "hidden"
+                    }
+                  />
                 </div>
-                <div className="text-center text-xs text-gray-300 ">
-                  {item?.role}{" "}
-                </div>
-              </div>
-              <div
-                className={
-                  slider === idx
-                    ? "absolute bottom-0 w-full flex items-center justify-center h-[8vw] md:h-[5.5vw] bg-black/45 tracking-wider text-[2.5vw] md:text-[1.5vw] text-white font-bold"
-                    : "hidden"
-                }
-              >
-                {item?.title}
-              </div>
-              <MdOutlineKeyboardArrowLeft
-                className={`absolute left-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] rounded-full ${
-                  slider === 0
-                    ? ` border-slate-400 border-solid text-slate-400`
-                    : `border-white border-solid text-white`
-                } bg-black/50 `}
-                onClick={() =>
-                  slider === 0 ? setSlider(0) : setSlider(slider - 1)
-                }
-              />
-              <MdOutlineKeyboardArrowRight
-                className={`absolute right-2 top-[24vw] md:top-[14vw] w-8 h-8 sm:w-[5vw] sm:h-[5vw] md:w-[3vw] md:h-[3vw] border-[1.5px] md:border-[3px] ${
-                  slider === projectsArray?.length - 1
-                    ? ` border-slate-400 border-solid text-slate-400`
-                    : `border-white border-solid text-white`
-                } bg-black/50 rounded-full`}
-                onClick={() =>
-                  slider === projectsArray?.length - 1
-                    ? setSlider(projectsArray?.length - 1)
-                    : setSlider(slider + 1)
-                }
-              />
-              <img
-                src={item?.image}
-                key={idx}
-                className={
-                  slider === idx
-                    ? "h-[50vw] md:h-[30vw] w-[100%] object-cover shrink-0 flex"
-                    : "hidden"
-                }
-              />
-            </div>
 
-            <div
-              className={
-                slider === idx
-                  ? "mt-3 flex items-center gap-1 flex-wrap pl-3 sm:pl-5"
-                  : "hidden"
-              }
-            >
-              {item?.tags?.map((item, index) => (
                 <div
-                  key={index}
-                  className="border border-solid border-slate-300 rounded-sm px-3 py-[6px] text-xs"
+                  className={
+                    slider === idx
+                      ? "mt-3 flex items-center gap-1 flex-wrap pl-3 sm:pl-5"
+                      : "hidden"
+                  }
                 >
-                  {item}
+                  {item?.tags?.map((item, index) => (
+                    <div
+                      key={index}
+                      className="border border-solid border-slate-300 rounded-sm px-3 py-[6px] text-xs"
+                    >
+                      {item}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
 
-            <p
-              className={
-                slider === idx
-                  ? "flex w-[95%] m-auto mt-4 text-sm md:text-base font-montserrat"
-                  : "hidden"
-              }
-            >
-              {item?.description}
-            </p>
-          </div>
-        ))}
+                <p
+                  className={
+                    slider === idx
+                      ? "flex w-[95%] m-auto mt-4 text-sm md:text-base font-montserrat"
+                      : "hidden"
+                  }
+                >
+                  {item?.description}
+                </p>
+              </div>
+            ))}
+        </div>
       </div>
-    </div>
     </>
   );
 };
@@ -3258,11 +3254,11 @@ export const BookingCard = ({ item }) => {
         <div className="flex items-center xs:gap-[4vw] text-sm">
           <div className="flex items-center gap-2 w-[200px] ">
             <img
-              src={item?.customerProfile}
+              src={item?.customer_profile_img}
               className="h-9 w-9 rounded-full shrink-0 object-cover"
               alt=""
             />
-            <div>{item?.customerName}</div>
+            <div>{item?.customer_first_name} {item?.customer_last_name}</div>
           </div>
           <div className="hidden sm:block w-[120px]">
             {item?.scheduledDate}{" "}
@@ -3286,13 +3282,13 @@ export const BookingCard = ({ item }) => {
       {open && (
         <div>
           <div className="text-sm line-clamp-2">
-            Service Title: Learn API integration using Postman{" "}
+            Service Title: {item?.service_name}{" "}
           </div>
-          <div className="text-sm mt-2">Booking Date: {item?.bookingDate} </div>
+          <div className="text-sm mt-2">Booking Date: {item?.updated_on} </div>
           <div className="block sm:hidden mt-2 shrink-0  text-sm">
             Scheduled date: {item?.scheduledDate}{" "}
           </div>
-          <div className="text-sm mt-2">Start Time: {item?.startTime} </div>
+          <div className="text-sm mt-2">Start Time: {item?.time_slot} </div>
           <div className="text-sm mt-2">End Time: {item?.endTime} </div>
         </div>
       )}
@@ -3351,83 +3347,3 @@ export const BookingCard = ({ item }) => {
 //     </div>
 //   );
 // };
-
-export const ShowSchedule = ({ price, id }) => {
-  const navigate = useNavigate();
-  var monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sept",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-  let today = "";
-  let nextDay = "";
-  return (
-    <div className="w-full px-2 py-6 border border-solid border-slate-300 rounded-lg">
-      <div className="pb-3 font-semibold">Book a 1:1 meeting with Antony</div>
-      <div className="pt-3 border-t border-solid border-slate-200 mt-3 text-3xl font-semibold ">
-        ₹ {price}
-      </div>
-      <div className="my-3 py-4 border-y border-solid border-slate-200">
-        <div>Available Dates</div>
-        <div className="flex gap-3 overflow-x-auto pt-3">
-          {[...Array(7)].map((item, index) => {
-            today = new Date();
-            nextDay = new Date(today);
-            nextDay.setDate(today.getDate() + index);
-            return (
-              <div
-                key={index}
-                className="h-24 w-[5rem] text-center border border-solid border-slate-300 shrink-0 shadow-sm rounded-md cursor-pointer hover:border-blue-400"
-              >
-                <div className="text-xs mt-3 text-gray-500">
-                  {" "}
-                  {dayNames[nextDay.getDay()]}{" "}
-                </div>
-                <div className="mt-2 text-base font-semibold">
-                  {" "}
-                  {nextDay.getDate()} {monthNames[nextDay.getMonth()]}{" "}
-                </div>
-                <div className="mt-2 text-xs text-green-600 font-semibold">
-                  {" "}
-                  5 slots{" "}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div>
-        <div>Available Slots</div>
-        <div className="flex gap-3 overflow-x-auto pt-3">
-          {[...Array(7)].map((item, index) => (
-            <div
-              key={index}
-              className="text-xs max-w-28 text-center border border-solid border-slate-300 hover:border-blue-400 py-3 px-6 shrink-0 shadow-sm rounded-md cursor-pointer"
-            >
-              7:00 AM
-            </div>
-          ))}
-        </div>
-      </div>
-       <div
-        className="no-underline"
-      >
-        <div className="mt-6 bg-[#007AFF] text-white text-lg font-semibold text-center p-3 rounded-lg cursor-pointer no-underline"
-       onClick={()=>navigate(`/experts/expertprofile/booking/${id}`)}
-        >
-          Book a slot
-        </div>
-      </div>
-    </div>
-  );
-};

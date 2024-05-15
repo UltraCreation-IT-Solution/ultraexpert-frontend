@@ -1,280 +1,3 @@
-// import { PiCaretLeftLight } from "react-icons/pi";
-// import { PiCaretRightLight } from "react-icons/pi";
-// import { AiOutlineLike } from "react-icons/ai";
-// import { AiOutlineDislike } from "react-icons/ai";
-// import { ExpertRatings } from "../Experts/ExpertProfile";
-// import { RatingCard } from "../Experts/ExpertProfile";
-// import { expertDetailsObj } from "../../constant";
-// import { useEffect, useState } from "react";
-// import axios from "../../axios";
-// import { useParams } from "react-router-dom";
-
-// const BlogDetails = () => {
-//   const params = useParams();
-//   console.log(params);
-//   const [currBlogData, setCurrBlogData] = useState({});
-//   const getData = async () => {
-//     const cookies = document.cookie.split("; ");
-//     const jsonData = {};
-
-//     cookies.forEach((item) => {
-//       const [key, value] = item.split("=");
-//       jsonData[key] = value;
-//     });
-//     try {
-//       const res = await axios.get(`/blogs/?action=3&blog_id=${params.id}`, {
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${jsonData.access_token}`,
-//         },
-//       });
-//       const allData = res.data.data;
-//       setCurrBlogData(allData);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-//   useEffect(() => {
-//     getData();
-//   }, []);
-
-//   return (
-//     <>
-//       <div className="px-[6vw] md:px-[10vw] mt-[110px] md:mt-[12vw]">
-//         <div className="text-center">
-//           <div className="text-xs md:text-sm text-gray-500 font-semibold">
-//             {currBlogData?.publish_date}
-//           </div>
-//           <div className=" text-3xl overflow-hidden xs:text-4xl lg:text-5xl font-bold md:px-[7vw] my-5 md:my-4 tracking-wide">
-//             {currBlogData?.title}
-//           </div>
-//           <div className="flex items-center justify-center gap-3">
-//             <img
-//               src={currBlogData?.author_data?.profile_img}
-//               alt="profile"
-//               className="h-10 w-10 rounded-full shrink-0 object-cover "
-//             />
-//             <div className="text-sm md:text-base text-gray-500">
-//               Blog - By{" "}
-//               {currBlogData?.author_data?.first_name +
-//                 " " +
-//                 currBlogData?.author_data?.last_name}
-//             </div>
-//           </div>
-//         </div>
-
-//         <div className="my-[3vw]">
-//           <div>
-//             {currBlogData?.images_list?.length && (
-//               <img
-//                 className="w-[100%] h-[45vw] object-cover shrink-0"
-//                 src={currBlogData?.images_list[0]}
-//                 alt=""
-//               />
-//             )}
-//           </div>
-//           <div dangerouslySetInnerHTML={{ __html: currBlogData?.content }} />
-//         </div>
-//         {currBlogData?.tags_list?.length > 0 && (
-//           <div className="flex items-center gap-2 flex-wrap my-2">
-//             {currBlogData?.tags_list.map((tag, index) => (
-//               <div
-//                 key={index}
-//                 className="text-[10px] sm:text-sm shrink-0 bg-[#D9D9D9] text-gray-500 border border-solid border-slate-300 rounded-sm px-3 py-1 "
-//               >
-//                 {tag}{" "}
-//               </div>
-//             ))}
-//           </div>
-//         )}
-//         <div className="flex justify-between border-t border-b border-solid border-slate-300 py-[2.5vw] mt-[10vw] md:mt-0 text-[2.2vw] md:text-base">
-//           <div className="flex items-center gap-[1.5vw] md:gap-[1vw] cursor-pointer">
-//             <div className="text-xs md:text-[2vw] xl:text-[1.5vw]">
-//               <PiCaretLeftLight />
-//             </div>
-//             <div className="">
-//               <div>Previous Post</div>
-//               <div>How to Clean Stainess Steel</div>
-//             </div>
-//           </div>
-//           <div className="flex items-center gap-[1.5vw] md:gap-[1vw] cursor-pointer">
-//             <div className="">
-//               <div className="text-right">Next Post</div>
-//               <div>How to Clean Stainess Steel</div>
-//             </div>
-//             <div className="text-xs md:text-[2vw] xl:text-[1.5vw]">
-//               <PiCaretRightLight />
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Ratings of particular blog */}
-//         <div className="mt-10 md:mt-20">
-//           {/* <ExpertRatings /> */}
-//           <div className="px-1 xs:px-5 mb-10 lg:mb-0">
-//             <div className="border-b border-solid border-slate-300 pb-10">
-//               <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
-//                 50 reviews
-//               </div>
-//               {/* <div className="mt-6 text-base md:text-lg">Rating Breakdown</div>
-//               <div className="flex items-center gap-[4vw]">
-//                 <div className="w-80 text-base">
-//                   <div className="my-4 flex flex-col">
-//                     <div className="flex justify-between text-xs xs:text-sm md:text-base">
-//                       <div>Availability</div>
-//                       <div>
-//                         <MdStar /> {expert?.expert?.avg_availability}
-//                       </div>
-//                     </div>
-//                     <div className=" bg-red-100 rounded-full">
-//                       <div
-//                         className="border-[3px] border-solid border-red-500 rounded-full"
-//                         style={{
-//                           width: `${
-//                             (expert?.expert?.avg_availability / 5) * 100
-//                           }%`,
-//                         }}
-//                       ></div>
-//                     </div>
-//                   </div>
-//                   <div className="my-4 flex flex-col">
-//                     <div className="flex justify-between text-xs xs:text-sm md:text-base">
-//                       <div>Skills</div>
-//                       <div>
-//                         <MdStar /> {expert?.expert?.avg_skills}
-//                       </div>
-//                     </div>
-//                     <div className=" bg-blue-100 rounded-full">
-//                       <div
-//                         className="border-[3px] border-solid border-blue-500 rounded-full"
-//                         style={{
-//                           width: `${(expert?.expert?.avg_skills / 5) * 100}%`,
-//                         }}
-//                       ></div>
-//                     </div>
-//                   </div>
-//                   <div className="my-4 flex flex-col ">
-//                     <div className="flex justify-between text-xs xs:text-sm md:text-base">
-//                       <div>Coorporation</div>
-//                       <div>
-//                         <MdStar /> {expert?.expert?.avg_cooperation}
-//                       </div>
-//                     </div>
-//                     <div className=" bg-purple-100 rounded-full">
-//                       <div
-//                         className="border-[3px] border-solid border-purple-500 rounded-full"
-//                         style={{
-//                           width: `${
-//                             (expert?.expert?.avg_cooperation / 5) * 100
-//                           }%`,
-//                         }}
-//                       ></div>
-//                     </div>
-//                   </div>
-//                 </div>
-//                 <div className="w-80 text-base">
-//                   <div className="my-4 flex flex-col">
-//                     <div className="flex justify-between text-xs xs:text-sm md:text-base">
-//                       <div>Deadline</div>
-//                       <div>
-//                         <MdStar /> {expert?.expert?.avg_deadline}
-//                       </div>
-//                     </div>
-//                     <div className=" bg-red-100 rounded-full">
-//                       <div
-//                         className="border-[3px] border-solid border-red-500 rounded-full"
-//                         style={{
-//                           width: `${(expert?.expert?.avg_deadline / 5) * 100}%`,
-//                         }}
-//                       ></div>
-//                     </div>
-//                   </div>
-//                   <div className="my-4 flex flex-col">
-//                     <div className="flex justify-between text-xs xs:text-sm md:text-base">
-//                       <div>Quality</div>
-//                       <div>
-//                         <MdStar /> {expert?.expert?.avg_quality}
-//                       </div>
-//                     </div>
-//                     <div className=" bg-blue-100 rounded-full">
-//                       <div
-//                         className="border-[3px] border-solid border-blue-500 rounded-full"
-//                         style={{
-//                           width: `${(expert?.expert?.avg_quality / 5) * 100}%`,
-//                         }}
-//                       ></div>
-//                     </div>
-//                   </div>
-//                   <div className="my-4 flex flex-col ">
-//                     <div className="flex justify-between text-xs xs:text-sm md:text-base">
-//                       <div>Communication</div>
-//                       <div>
-//                         <MdStar /> {expert?.expert?.avg_communication}
-//                       </div>
-//                     </div>
-//                     <div className=" bg-purple-100 rounded-full">
-//                       <div
-//                         className="border-[3px] border-solid border-purple-500 rounded-full"
-//                         style={{
-//                           width: `${
-//                             (expert?.expert?.avg_communication / 5) * 100
-//                           }%`,
-//                         }}
-//                       ></div>
-//                     </div>
-//                   </div>
-//                 </div>
-//               </div> */}
-//               <div className=" mt-6">
-//                 <input
-//                   type="text"
-//                   placeholder="Write a comment"
-//                   className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
-//                 />
-//                 <button className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0">
-//                   Comment
-//                 </button>
-//               </div>
-//             </div>
-//             <div>
-//               <div className="mt-8 mb-12 flex items-center justify-between">
-//                 <div className="text-xl md:text-2xl font-semibold ">
-//                   Top Reviews
-//                 </div>
-//                 <select
-//                   name="Sort by"
-//                   id=""
-//                   className="px-4 py-2 text-sm md:text-lg border border-solid border-slate-300 outline-none"
-//                 >
-//                   <option
-//                     value="newest"
-//                     className="text-xs md:text-sm px-4 py-2"
-//                   >
-//                     Newest
-//                   </option>
-//                   <option
-//                     value="oldest"
-//                     className="text-xs md:text-sm px-4 py-2"
-//                   >
-//                     Oldest
-//                   </option>
-//                 </select>
-//               </div>
-//               {expertDetailsObj.ratings.map((temp, idx) => (
-//                 <RatingCard key={idx} {...temp} />
-//               ))}
-//             </div>
-//             <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
-//               Show more
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-// export default BlogDetails;
-
 import { PiCaretLeftLight } from "react-icons/pi";
 import { PiCaretRightLight, PiDotsThreeCircleVertical } from "react-icons/pi";
 import { AiOutlineLike } from "react-icons/ai";
@@ -287,7 +10,7 @@ import axios from "../../axios";
 import { useParams } from "react-router-dom";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
-const CommentCard = ({blogData, temp, getAllComments }) => {
+const CommentCard = ({ blogData, temp, getAllComments }) => {
   const [options, setOptions] = useState(false);
   console.log(temp);
   const date = temp?.timestamp.split("T")[0];
@@ -485,7 +208,7 @@ const CommentCard = ({blogData, temp, getAllComments }) => {
           src={temp?.user_profile_img}
           alt=""
         />
-        <div>
+        <div className="w-full">
           <div className="text-lg sm:text-xl font-semibold">
             {temp?.user_first_name} {temp?.user_last_name}
           </div>
@@ -496,12 +219,28 @@ const CommentCard = ({blogData, temp, getAllComments }) => {
             <textarea
               value={editedComment}
               onChange={(e) => setEditedComment(e.target.value)}
-              className="text-xs sm:text-base font-montserrat w-full h-20 border border-gray-300 rounded-md p-2"
+              className="text-xs sm:text-base font-montserrat w-full h-20 border border-gray-300 rounded-md p-2 outline-none"
             />
           ) : (
             <p className="text-xs sm:text-base font-montserrat">
               {editedComment}
             </p>
+          )}
+          {temp?.is_authenticated_user && isEditing && (
+            <div className="mb-2">
+              <button
+                onClick={saveEdit}
+                className="text-green-500 px-3 py-1 border border-solid border-green-500 rounded-md"
+              >
+                Save
+              </button>
+              <button
+                onClick={cancelEdit}
+                className="text-gray-500 px-3 py-1 border border-solid border-gray-500 rounded-md ml-2"
+              >
+                Cancel
+              </button>
+            </div>
           )}
           <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
             <div className="flex items-center gap-1" onClick={likeComment}>
@@ -514,7 +253,7 @@ const CommentCard = ({blogData, temp, getAllComments }) => {
             </div>
             {!replyComm && ( // Render reply button if replyComm is false
               <button
-                className="cursor-pointer p-2"
+                className="text-xs sm:text-base cursor-pointer px-2 py-1 rounded-sm sm:rounded-md"
                 onClick={() => setReplyComm(true)}
               >
                 Reply
@@ -522,36 +261,33 @@ const CommentCard = ({blogData, temp, getAllComments }) => {
             )}
           </div>
           {replyComm && ( // Render reply input and save button if replyComm is true
-            <div className="flex gap-2 w-full">
+            <div className="w-full">
               <input
                 type="text"
                 value={replyComment}
                 onChange={(e) => setReplyComment(e.target.value)}
-                className="text-xs sm:text-base font-montserrat w-full border border-gray-300 rounded-md p-2"
+                onBlur={() => setReplyComm(false)}
+                className="text-xs sm:text-base font-montserrat w-full border-b border-gray-300 p-2 outline-none"
               />
-              <button className="cursor-pointer mx-2 w-[25%]" onClick={() => handleReplyComment(temp?.id)}>Save</button>
-              <button className="cursor-pointer mx-2 w-[25%]" onClick={() => setReplyComm(false)}>Cancel</button>
+              <div className="mt-3">
+                <button
+                  className="text-xs sm:text-base cursor-pointer px-4 py-1 rounded-sm sm:rounded-md"
+                  onClick={() => handleReplyComment(temp?.id)}
+                >
+                  Save
+                </button>
+                <button
+                  className="text-xs sm:text-base cursor-pointer px-4 py-1 ml-2 rounded-sm sm:rounded-md"
+                  onClick={() => (setReplyComm(false), setReplyComment(""))}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           )}
         </div>
-        {temp?.is_authenticated_user && isEditing && (
-          <div>
-            <button
-              onClick={saveEdit}
-              className="text-green-500 px-3 py-1 border border-solid border-green-500 rounded-md"
-            >
-              Save
-            </button>
-            <button
-              onClick={cancelEdit}
-              className="text-gray-500 px-3 py-1 border border-solid border-gray-500 rounded-md ml-2"
-            >
-              Cancel
-            </button>
-          </div>
-        )}
         {temp?.is_authenticated_user && !isEditing && (
-          <div className="relative overflow-visible flex flex-col ml-auto text-3xl cursor-pointer">
+          <div className="relative overflow-visible flex flex-col ml-auto text-xl sm:text-3xl cursor-pointer">
             <PiDotsThreeCircleVertical onClick={() => setOptions(!options)} />
             {options && (
               <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
@@ -807,7 +543,7 @@ const BlogDetails = () => {
               {console.log(blogComments)}
               {blogComments?.map((temp, idx) => (
                 <CommentCard
-                  blogData = {currBlogData}
+                  blogData={currBlogData}
                   key={idx}
                   temp={temp}
                   getAllComments={getAllBlogComments}

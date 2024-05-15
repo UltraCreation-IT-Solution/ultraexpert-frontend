@@ -19,6 +19,7 @@ import ExpertCardShimmer from "../../subsitutes/Shimmers/ExpertCardShimmer";
 
 export const ExpertCard = ({ item }) => {
   console.log(item);
+  const [favExpert, setFavExpert] = useState(false);
   const cookie = document.cookie.split(";");
   const jsonData = {};
 
@@ -47,7 +48,7 @@ export const ExpertCard = ({ item }) => {
         return;
       }
       console.log(json);
-      // setFavExpert(true);
+      setFavExpert(true);
     } catch (error) {
       console.log(error);
     }
@@ -160,8 +161,10 @@ export const ExpertCard = ({ item }) => {
 };
 const AllExperts = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPage] = useState(6);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
   const [lastPage, setLastPage] = useState(0);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
   const [allExpertsList, setAllExpertsList] = useState([]);
 
   const getAllExperts = async () => {
@@ -174,7 +177,7 @@ const AllExperts = () => {
     });
     try {
       const res = await axios.get(
-        `/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}`,
+        `/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}/`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -182,7 +185,6 @@ const AllExperts = () => {
           },
         }
       );
-      console.log(res.data);
       console.log(res.data.data);
       setAllExpertsList(res.data.data);
       setLastPage(res.data.total_pages);
@@ -214,9 +216,9 @@ const AllExperts = () => {
           return <ExpertCard key={item?.expert?.id} item={item} />;
         })}
       </div>
-      <div className="mt-[3vw] flex items-center justify-center xs:justify-between gap-[4vw] text-white">
+      <div className="mt-[3vw] flex items-center justify-between gap-[4vw] text-white">
         <div
-          className={`text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-md bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer ${
+          className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
             currentPage < 2 && "opacity-80"
           } `}
           onClick={() => {
@@ -224,7 +226,7 @@ const AllExperts = () => {
           }}
         >
           <FaBackward />
-          Prev
+          <span className="hidden sm:block">Prev</span>
         </div>
         <Pagination
           lastPage={lastPage}
@@ -233,14 +235,14 @@ const AllExperts = () => {
           setCurrentPage={setCurrentPage}
         />
         <div
-          className={`text-base md:text-lg lg:text-xl justify-center items-center px-[2vw] py-[1vw] font-bold rounded-sm md:rounded-lg bg-[#262626] flex gap-2 sm:gap-3 lg:gap-4 cursor-pointer ${
+          className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
             currentPage === lastPage && "opacity-80"
           } `}
           onClick={() => {
             currentPage < lastPage && setCurrentPage(currentPage + 1);
           }}
         >
-          Next
+          <span className="hidden sm:block">Next</span>
           <FaForward />
         </div>
       </div>

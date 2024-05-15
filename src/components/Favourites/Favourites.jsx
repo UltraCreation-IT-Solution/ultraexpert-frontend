@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { favServices, favExperts, favBlogs } from "../../constant";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { FaStar, FaHeart, FaRegHeart } from "react-icons/fa";
-import { FaBookmark } from "react-icons/fa";
-import { GrStar } from "react-icons/gr";
+import { FaStar, FaHeart, FaRegHeart, FaBookmark } from "react-icons/fa";
+import { FaArrowRightLong } from "react-icons/fa6";
 import axios from "../../axios";
 
-export const FavExpertCard = ({ item }) => {
+export const FavExpertCard = ({ item, getFavExpData }) => {
   const [FavExpert, setFavExpert] = useState(true);
   const cookie = document.cookie.split(";");
   const jsonData = {};
@@ -65,6 +63,7 @@ export const FavExpertCard = ({ item }) => {
       }
       console.log(json);
       setFavExpert(false);
+      getFavExpData()
     } catch (error) {
       console.log(error);
     }
@@ -100,7 +99,7 @@ export const FavExpertCard = ({ item }) => {
           <FaStar />
           <div>{item?.rating} </div>
         </div>
-        <Link to={"expertprofile"} className="no-underline">
+        <Link to={`/experts/expertprofile/${item?.id}`} className="no-underline">
           <div className="mt-2 w-full bg-[#2A2A2A] text-sm md:text-base py-2 md:py-3 text-white rounded-md sm:rounded no-underline text-center ">
             Visit Profile
           </div>
@@ -109,7 +108,7 @@ export const FavExpertCard = ({ item }) => {
     </div>
   );
 };
-export const AllFavExpertCard = ({ item }) => {
+export const AllFavExpertCard = ({ item, getFavExp }) => {
   const [FavExpert, setFavExpert] = useState(true);
   const cookie = document.cookie.split(";");
   const jsonData = {};
@@ -168,6 +167,7 @@ export const AllFavExpertCard = ({ item }) => {
       }
       console.log(json);
       setFavExpert(false);
+      getFavExp();
     } catch (error) {
       console.log(error);
     }
@@ -199,7 +199,7 @@ export const AllFavExpertCard = ({ item }) => {
           <FaStar />
           <div>{item?.rating} </div>
         </div>
-        <Link to={"expertprofile"} className="no-underline">
+        <Link to={`/experts/expertprofile/${item?.id}`} className="no-underline">
           <div className="mt-2 w-full bg-[#2A2A2A] text-sm md:text-base py-2 md:py-3 text-white rounded-md sm:rounded no-underline text-center ">
             Visit Profile
           </div>
@@ -208,7 +208,7 @@ export const AllFavExpertCard = ({ item }) => {
     </div>
   );
 };
-export const FavServiceCard = ({ item }) => {
+export const FavServiceCard = ({ item, getFavServ }) => {
   const [FavExpert, setFavExpert] = useState(true);
   const remFav = async (id) => {
     const cookie = document.cookie.split(";");
@@ -239,6 +239,7 @@ export const FavServiceCard = ({ item }) => {
       }
       console.log(json);
       setFavExpert(false);
+      getFavServ();
     } catch (error) {
       console.log(error);
     }
@@ -257,8 +258,9 @@ export const FavServiceCard = ({ item }) => {
         className="h-[100px] w-full md:h-[150px] object-cover shrink-0 md:mb-[0.7vw]"
         alt=""
       />
-      <div className="px-2 md:px-[0.8vw] pt-2 md:pt-0">
-        <div className="flex items-center gap-4 font-semibold text-lg text-[#808080]">
+      <Link className="no-underline text-black" to={`/experts/service/${item?.id}`}>
+        <div  className="px-2 md:px-[0.8vw] pt-2 md:pt-0">
+        <div className="flex items-center gap-4 font-semibold text-lg ">
           {/* <img
             src={item?.profile_img}
             className="h-7 w-7 md:h-9 md:w-9 rounded-full "
@@ -270,7 +272,7 @@ export const FavServiceCard = ({ item }) => {
           {item?.tags?.map((tag, ind) => {
             return (
               <div
-                className="border border-solid border-slate-500 px-2 py-1 text-sm rounded-lg"
+                className="border border-solid border-slate-500 text-gray-500 px-2 py-1 text-sm rounded-lg"
                 key={ind}
               >
                 {tag}
@@ -279,9 +281,9 @@ export const FavServiceCard = ({ item }) => {
           })}
         </div>
         <div className="line-clamp-2 mt-2">
-          <div className="text-sm md:text-base">{item?.description}</div>
+          <div className="text-sm md:text-base line-clamp-2 text-gray-500">{item?.description}</div>
         </div>
-        <div className="text-base md:text-lg my-2">{item?.price}</div>
+        <div className="text-base md:text-lg my-2">₹ {item?.price}</div>
         {/* <div className="flex items-center gap-6 text-sm md:text-base mt-2">
           <div className="flex items-center gap-1">
             <GrStar />
@@ -289,11 +291,12 @@ export const FavServiceCard = ({ item }) => {
           </div>
           <div>Reviews: {item?.score}</div>
         </div> */}
-      </div>
+        </div>
+      </Link>
     </div>
   );
 };
-export const FavBlogsCard = ({ item }) => {
+export const FavBlogsCard = ({ item, getFavBlog }) => {
   console.log(item);
   const handleRemFav = async (id) => {
     const cookie = document.cookie.split(";");
@@ -321,6 +324,7 @@ export const FavBlogsCard = ({ item }) => {
         console.log("no data");
         return;
       }
+      getFavBlog();
       console.log(json);
     } catch (error) {
       console.log(error);
@@ -346,7 +350,7 @@ export const FavBlogsCard = ({ item }) => {
         <div className="line-clamp-2 text-sm">{item.content}</div>
         <div className="w-full flex text-white justify-between items-center my-2">
           <Link
-            to={"blogdetail"}
+            to={`/blog/blogdetail/${item.id}`}
             className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
           >
             Read More
@@ -456,7 +460,7 @@ export const AllFav = () => {
         {/* Favourate Experts */}
         <div className="flex overflow-x-scroll gap-5 mt-5">
           {allFavExp.map((item, index) => (
-            <AllFavExpertCard key={index} item={item} />
+            <AllFavExpertCard key={index} item={item} getFavExp={getFavExp} />
           ))}
         </div>
       </div>
@@ -465,7 +469,7 @@ export const AllFav = () => {
         <div className="font-bold text-2xl md:text-3xl ">Services</div>
         <div className="flex items-center overflow-x-scroll gap-5 mt-5">
           {allFavServ.map((item, index) => (
-            <FavServiceCard key={index} item={item} />
+            <FavServiceCard key={index} item={item} getFavServ = {getFavServ} />
           ))}
         </div>
       </div>
@@ -474,7 +478,7 @@ export const AllFav = () => {
         <div className="font-bold text-2xl md:text-3xl ">Blogs</div>
         <div className="flex items-center overflow-x-scroll gap-5 mt-5">
           {allFavBlog.map((item, index) => (
-            <FavBlogsCard key={index} item={item} />
+            <FavBlogsCard key={index} item={item} getFavBlog = {getFavBlog} />
           ))}
         </div>
       </div>
@@ -536,10 +540,17 @@ export const FavExperts = () => {
     <div className="mt-10">
       <div className="font-bold text-xl md:text-3xl ">Experts</div>
       <div className="flex items-center overflow-x-scroll gap-5 mt-5">
-        {favExpertsData.map((item, index) => (
-          <FavExpertCard key={index} item={item} />
+        {favExpertsData.length===0? <div className="text-center text-base ">Add blogs to favourates</div>: favExpertsData.map((item, index) => (
+          <FavExpertCard key={index} item={item} getFavExpData={getFavExpData} />
         ))}
       </div>
+      <Link to="/experts" >
+      <div className="text-center font-semibold text-gray-600 text-sm md:text-xl mt-10 flex gap-2 items-center justify-center">
+      
+       Go to experts <FaArrowRightLong />
+       </div>
+       
+       </Link>
     </div>
   );
 };
@@ -578,11 +589,19 @@ export const FavServices = () => {
   return (
     <div className="mt-10">
       <div className="font-bold text-xl md:text-3xl ">Services</div>
-      <div className="flex items-center overflow-x-scroll gap-5 mt-5">
+      <div
+       className="flex items-center overflow-x-scroll gap-5 mt-5">
         {favServicesData.map((item, index) => (
-          <FavServiceCard key={index} item={item} />
+          <FavServiceCard key={index} item={item} getFavServ = {getFavServData} />
         ))}
       </div>
+      <Link to="/services" >
+      <div className="text-center font-semibold text-gray-600 text-sm md:text-xl mt-10 flex gap-2 items-center justify-center">
+      
+       Go to services <FaArrowRightLong />
+       </div>
+       
+       </Link>
     </div>
   );
 };
@@ -623,9 +642,16 @@ export const FavBlogs = () => {
       <div className="font-bold text-xl md:text-3xl ">Blogs</div>
       <div className="flex items-center overflow-x-scroll gap-5 mt-5">
         {favBlogs.map((item, index) => (
-          <FavBlogsCard key={index} item={item} />
+          <FavBlogsCard key={index} item={item} getFavBlog = {getFavBlogData} />
         ))}
       </div>
+      <Link to="/blog" >
+      <div className="text-center font-semibold text-gray-600 text-sm md:text-xl mt-10 flex gap-2 items-center justify-center">
+      
+       Go to blogs <FaArrowRightLong />
+       </div>
+       
+       </Link>
     </div>
   );
 };

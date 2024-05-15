@@ -16,6 +16,7 @@ import {
   MdInsertPageBreak,
   MdOutlineStarBorderPurple500,
   MdOpenInNew,
+  MdOutlineContentCopy,
 } from "react-icons/md";
 import {
   BsFillPersonLinesFill,
@@ -69,7 +70,7 @@ import {
 } from "recharts";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, Link, useNavigate, useParams } from "react-router-dom";
 import axios from "../../axios";
 import UpdateProject from "./UpdateProjeect";
 import EditProfileExpert from "../Auth/EditProfileExpert";
@@ -1176,7 +1177,6 @@ export const Dashboard = () => {
 };
 
 export const MyServices = () => {
-
   const navigate = useNavigate();
   const services = Array.from({ length: 3 });
   const [myServices, setMyServices] = useState([]);
@@ -1200,7 +1200,7 @@ export const MyServices = () => {
       }
       const json = res.data;
       setMyServices(json.data);
-      console.log(myServices)
+      console.log(myServices);
     } catch (error) {
       if (error.response.status === 404) {
         setMyServices([]);
@@ -1245,17 +1245,15 @@ export const MyServices = () => {
   return (
     <div className="w-full md:w-[68%] ">
       <div className="flex justify-between border-b border-solid border-slate-200 pb-3">
-
-      <div className="text-xl font-bold">
-        My services
-      </div>
-      <div className="text-base cursor-pointer bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md text-white"
-      onClick={() => {
-        navigate("/expertdashboard/createservice");
-      }}
-      >
-        Create a new service
-      </div>
+        <div className="text-xl font-bold">My services</div>
+        <div
+          className="text-base cursor-pointer bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md text-white"
+          onClick={() => {
+            navigate("/expertdashboard/createservice");
+          }}
+        >
+          Create a new service
+        </div>
       </div>
       <div>
         {myServices.map((service, index) => (
@@ -1274,8 +1272,9 @@ export const MyServices = () => {
                 Delete service
               </button>
             </div>
-            <div className="text-base sm:text-lg font-bold mt-2 line-clamp-3 cursor-pointer"
-            onClick={()=>navigate(`/experts/service/${service.id}`)}
+            <div
+              className="text-base sm:text-lg font-bold mt-2 line-clamp-3 cursor-pointer"
+              onClick={() => navigate(`/experts/service/${service.id}`)}
             >
               {service.service_name}
             </div>
@@ -1518,6 +1517,37 @@ export const Leaderboard = () => {
 };
 
 export const MyBookings = () => {
+  const params = useParams();
+  console.log(params);
+  const [myBookings, setMyBookings] = useState([]);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  useEffect(() => {
+    getMyBookings();
+  }, []);
+
+  const getMyBookings = async () => {
+    try {
+      const res = await axios.get(
+        `/experts/services/?action=4&expert_id=${expert_id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      setMyBookings(res.data.data);
+      console.log(myBookings);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-full md:w-[68%]">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
@@ -1531,7 +1561,7 @@ export const MyBookings = () => {
         </div>
         <div className="shrink-0 text-right w-[60px] "></div>
       </div>
-      {expertDashInfo?.myBookings.map((item, index) => (
+      {myBookings?.map((item, index) => (
         <BookingCard item={item} key={index} />
       ))}
     </div>
@@ -1580,6 +1610,16 @@ const ExpertDashboard = () => {
     setShowEditProfile(false);
   };
 
+  const handleCopyToClipboard = () => {
+    navigator.clipboard
+      .writeText(expertData.refer_code)
+      .then(() => {
+        alert("Referral code copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  };
   return (
     <div
       className={`${
@@ -1632,6 +1672,14 @@ const ExpertDashboard = () => {
                   })}
                 </div>
               </div>
+            </div>
+            <div className="flex mt-[1.25vw] gap-1 items-center">
+              <div className="font-bold text-sm">Referal code: </div>
+              <span className="text-sm">{expertData.refer_code}</span>
+              <MdOutlineContentCopy
+                className="cursor-pointer"
+                onClick={handleCopyToClipboard}
+              />
             </div>
           </div>
           <div>
@@ -1689,7 +1737,7 @@ const ExpertDashboard = () => {
                 <BsFillPatchCheckFill className="text-[1.55vw]" />
                 Get Certified
               </Link>
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+              {/* <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                 <BsFillPersonLinesFill className="text-[1.55vw]" />
                 Go to Experts
               </li>
@@ -1700,7 +1748,7 @@ const ExpertDashboard = () => {
               <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                 <IoSettings className="text-[1.55vw]" />
                 Settings
-              </li>
+              </li> */}
             </ul>
           </div>
         </section>
@@ -1712,7 +1760,8 @@ const ExpertDashboard = () => {
         <Chats />
         <Leaderboard />
         <SkillList />
-        <MyBookings />
+        <MyBookings expert_id={expertData?.id} />
+        {console.log(expertData?.id)}
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />

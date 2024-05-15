@@ -1,9 +1,47 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
+import axios from "../../axios";
 const ServiceBooking = () => {
+  const location = useLocation();
+  console.log(location)
+  const serviceData= location.state;
   const params= useParams();
-  const {id} = params;
-  {console.log(id);}
+  
+  const handleBookService = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+    console.log("booking service")
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/booking/",
+        {
+          action:1,
+          expert_id: serviceData?.servDesc?.expert_data?.id,
+          service_id: serviceData?.servDesc?.id,
+          slot_id: serviceData?.slotData?.slotId
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data")
+        return;
+      }
+      console.log(json)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="px-[5vw] py-[2vw]">
 
@@ -13,17 +51,16 @@ const ServiceBooking = () => {
             Confirm Your Booking!
           </div>
           <p className="text-gray-700 my-6 text-center text-sm md:text-base">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-            laborum dolores nulla, iste perferendis accusantium, fugiat
-            architecto molestiae itaque fugit, voluptatibus officia doloribus.
+            {serviceData?.servDesc?.description}
           </p>
           <div className="flex gap-[1vw] md:gap-2">
-            <Link to="">
-              <button className="px-4 py-[2vw] md:px-[2vw] md:py-[0.6vw] text-white  bg-[#2A2A2A] rounded-sm md:rounded-md text-xs md:text-base">
+            <Link to={`/experts/service/${serviceData?.servDesc?.id}`}>
+              <button className="px-4 py-[2vw] md:px-[2vw] md:py-[0.6vw] text-white  bg-[#2A2A2A] rounded-sm md:rounded-md text-xs md:text-base"
+              >
                 View service
               </button>
-            </Link>
-            <Link to="/experts/expertprofile">
+              </Link>
+            <Link to="/services">
               <button className="px-4 py-[2vw] md:px-[2vw] md:py-[0.6vw] text-black bg-white border font-semibold rounded-sm md:rounded-md text-xs md:text-base cursor-pointer">
                 Back to services
               </button>
@@ -40,30 +77,34 @@ const ServiceBooking = () => {
             <div className="mt-[2.5vw] border-b border-gray-300 border-solid text-gray-600">
               <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg">
                 <span>Service Name</span>
-                <span className="text-right">Website Development using MERN</span>
+                <span className="text-right"> {serviceData?.servDesc?.service_name}</span>
               </div>
               <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
                 <span>Expert Name</span>
-                <span className="text-right">Antony joe singh kushwah</span>
+                <span className="text-right">{serviceData?.servDesc?.expert_data?.first_name} {serviceData?.servDesc?.expert_data?.last_name} </span>
               </div>
               <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
                 <span>Service Duration</span>
-                <span>1 hour</span>
+                <span>{serviceData?.slotData?.slotDuration} </span>
               </div>
               <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
                 <span>Date</span>
-                <span>Jan 25, 2023 </span>
+                <span>{serviceData?.slotData?.date} </span>
               </div>
               <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
-                <span>Time</span>
-                <span>05:35 PM </span>
+                <span>Start Time</span>
+                <span>{serviceData?.slotData?.slotStartTime} </span>
+              </div>
+              <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
+                <span>End Time</span>
+                <span>{serviceData?.slotData?.slotEndTime} </span>
               </div>
             </div>
 
             <div className="mt-[2vw] border-b border-gray-300 border-solid text-gray-600">
                 <div className="flex justify-between text-xs sm:text-base md:text-lg mt-2">
                   <span>Expert Charge</span>
-                  <span>1500/-</span>
+                  <span>₹{serviceData?.servDesc?.price} </span>
                 </div>
                 <div className="flex justify-between text-xs sm:text-base md:text-lg mt-2">
                   <span>Platform Charge</span>
@@ -80,7 +121,9 @@ const ServiceBooking = () => {
               <span>1610/-</span>
             </div>
             <div className="flex justify-center">
-              <button className="text-white text-sm md:text-base bg-[#2A2A2A] mt-[2.5vw] px-[2.7vw] py-[1.5vw] md:px-[2vw] md:py-[0.6vw] rounded-sm md:rounded-md w-[50%]">
+              <button 
+              onClick={()=> handleBookService()}
+              className="text-white text-sm md:text-base bg-[#2A2A2A] mt-[2.5vw] px-[2.7vw] py-[1.5vw] md:px-[2vw] md:py-[0.6vw] rounded-sm md:rounded-md w-[50%]">
                 Proceed to Pay
               </button>
             </div>
