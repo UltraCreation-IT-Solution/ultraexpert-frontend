@@ -17,8 +17,8 @@ import {
 } from "react-icons/fa";
 import ExpertCardShimmer from "../../subsitutes/Shimmers/ExpertCardShimmer";
 
-export const ExpertCard = ({ item, getAllExperts }) => {
-  console.log(item)
+export const ExpertCard = ({ item }) => {
+  console.log(item);
   const [favExpert, setFavExpert] = useState(false);
   const [following, setFollowing] = useState(item.is_following);
   const cookie = document.cookie.split(";");
@@ -136,14 +136,13 @@ export const ExpertCard = ({ item, getAllExperts }) => {
   return (
     <div className="relative w-[90vw] h-[81vw] xs:w-[84vw] xs:h-[66vw] sm:w-[42vw] sm:h-[46vw] md:w-[38vw]  lg:w-[25vw] lg:h-[33vw] rounded-md md:rounded-lg shadow-lg my-[2vw] md:my-[0.65vw] border-[0.001vw] border-[#dbdbdb] border-solid overflow-hidden">
       <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  ">
-        {
-          localStorage.getItem("isExpert")==="true" ? (<></>):(item?.is_favorite ? (
-            <FaHeart onClick={() => remFav()} />
-          ) : (
-            <FaRegHeart onClick={() => addFav()} />
-          ))
-        }
-        
+        {localStorage.getItem("isExpert") === "true" ? (
+          <></>
+        ) : item?.is_favorite ? (
+          <FaHeart onClick={() => remFav()} />
+        ) : (
+          <FaRegHeart onClick={() => addFav()} />
+        )}
       </div>
       <img
         className="absolute top-0 w-full h-[36%] sm:h-[30%] lg:h-1/4 object-cover opacity-80"
@@ -226,35 +225,41 @@ export const ExpertCard = ({ item, getAllExperts }) => {
 const AllExperts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
-  const [lastPage,setLastPage] =  useState(0);
+  const [lastPage, setLastPage] = useState(0);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
   const [allExpertsList, setAllExpertsList] = useState([]);
 
-  cookies.forEach((item) => {
-    const [key, value] = item.split("=");
-    jsonData[key] = value;
-  });
   const getAllExperts = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
     try {
-      const res = await axios.get(`/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}`, {
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
+      const res = await axios.get(
+        `/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
       console.log(res.data.data);
       setAllExpertsList(res.data.data);
-      setLastPage(res.data.total_pages)
+      setLastPage(res.data.total_pages);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     getAllExperts();
-  }, [currentPage]);
+  }, []);
   console.log(allExpertsList);
-  
+
   if (!allExpertsList.length)
     return (
       <div className=" px-[3vw] xs:px-[6vw] md:px-[10vw] w-full flex flex-wrap gap-[3vw] md:gap-[2vw] pb-[2vw]  justify-center sm:justify-normal  items-center ">
@@ -275,35 +280,35 @@ const AllExperts = () => {
         })}
       </div>
       <div className="mt-[3vw] flex items-center justify-between gap-[4vw] text-white">
-          <div
-            className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
-              currentPage < 2 && "opacity-80"
-            } `}
-            onClick={() => {
-              currentPage > 1 && setCurrentPage(currentPage - 1);
-            }}
-          >
-            <FaBackward />
-            <span className="hidden sm:block">Prev</span>
-          </div>
-          <Pagination
-            lastPage={lastPage}
-            itemsPerPage={itemsPerPage}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
-          <div
-            className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
-              currentPage === lastPage && "opacity-80"
-            } `}
-            onClick={() => {
-              currentPage < lastPage && setCurrentPage(currentPage + 1);
-            }}
-          >
-            <span className="hidden sm:block">Next</span>
-            <FaForward />
-          </div>
+        <div
+          className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
+            currentPage < 2 && "opacity-80"
+          } `}
+          onClick={() => {
+            currentPage > 1 && setCurrentPage(currentPage - 1);
+          }}
+        >
+          <FaBackward />
+          <span className="hidden sm:block">Prev</span>
         </div>
+        <Pagination
+          lastPage={lastPage}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+        <div
+          className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
+            currentPage === lastPage && "opacity-80"
+          } `}
+          onClick={() => {
+            currentPage < lastPage && setCurrentPage(currentPage + 1);
+          }}
+        >
+          <span className="hidden sm:block">Next</span>
+          <FaForward />
+        </div>
+      </div>
     </div>
   );
 };

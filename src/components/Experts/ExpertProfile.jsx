@@ -43,7 +43,7 @@ export const ExpertSummary = ({ experienceArray, projectsArray }) => {
                   >
                     {/* 1st portion */}
                     <div className="text-sm flex md:flex-col order-2 md:order-1 md:w-[150px] pt-2 md:py-5 md:text-right">
-                      {item.present ? (
+                      {item.is_present ? (
                         <>
                           <div>Present</div>
                           <div className="block md:hidden"> - </div>

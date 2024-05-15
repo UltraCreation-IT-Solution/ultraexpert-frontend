@@ -144,7 +144,7 @@ const CreateBlog = () => {
         {
           action: 1,
           category_name: value2.name,
-          img_url: "abc.jpg",
+          img_url: "",
         },
         {
           headers: {
@@ -159,6 +159,7 @@ const CreateBlog = () => {
         return;
       }
       console.log(data);
+      
     } catch (error) {
       console.log(error);
     }

@@ -10,12 +10,13 @@ import {
   FaChalkboardTeacher,
 } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
-import { FaLocationDot } from "react-icons/fa6";
+import { IoMdShareAlt } from "react-icons/io";
 import {
   MdSpaceDashboard,
   MdInsertPageBreak,
   MdOutlineStarBorderPurple500,
   MdOpenInNew,
+  MdOutlineContentCopy,
 } from "react-icons/md";
 import {
   BsFillPersonLinesFill,
@@ -1384,7 +1385,7 @@ export const Leaderboard = () => {
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
         Leaderboard
       </div>
-      <div className="flex self-center gap-[10vw] bg-[#ececec] p-2 rounded-xl w-fit mt-10">
+      {/* <div className="flex self-center gap-[10vw] bg-[#ececec] p-2 rounded-xl w-fit mt-10">
         <div
           className={`px-3 py-2 text-center text-sm sm:text-base rounded-xl cursor-pointer ${
             weeklyLeaderboard ? "bg-[#bdb8b8]" : "bg-[#ececec]"
@@ -1424,7 +1425,7 @@ export const Leaderboard = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="border border-solid border-slate-300 flex flex-col items-center justify-center rounded-xl mt-10 px-4">
         <div className="relative flex h-[50vw] sm:h-[280px] items-end mt-12">
@@ -1442,7 +1443,6 @@ export const Leaderboard = () => {
               <div className="text-[3vw] sm:text-base">
                 {leaderBoardData[1]?.expert_first_name} {leaderBoardData[1]?.expert_last_name}
               </div>
-              <div className="text-[#009BD6] my-[1.3vw] sm:my-0">1847</div>
               <div className="text-[#009BD6]">
                 {/* {leaderBoardData[1].avg_score}{" "}  */}
                 {"1"}
@@ -1466,7 +1466,6 @@ export const Leaderboard = () => {
               <div className="text-[3vw] sm:text-base text-white">
               {leaderBoardData[0]?.expert_first_name} {leaderBoardData[0]?.expert_last_name}
               </div>
-              <div className="my-[1.3vw] sm:my-0">2430</div>
               <div className="text-[#FFAA00]">
                 {/* {leaderBoardData[0].avg_score}{" "} */}
                 {"1"}
@@ -1487,7 +1486,6 @@ export const Leaderboard = () => {
               <div className="text-[3vw] sm:text-base">
               {leaderBoardData[2]?.expert_first_name} {leaderBoardData[2]?.expert_last_name}
               </div>
-              <div className="text-[#00D95F] my-[1.3vw] sm:my-0">1847</div>
               <div className="text-[#00D95F]">
                 {/* {leaderBoardData[2]?.avg_score} */}
                 {"1"}
@@ -1660,6 +1658,17 @@ const ExpertDashboard = () => {
   const handleShowEditProfile = () => {
     setShowEditProfile(false);
   };
+
+  const handleCopyToClipboard = () => {
+    navigator.clipboard
+      .writeText(expertData.refer_code)
+      .then(() => {
+        alert("Referral code copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  };
   return (
     <div
       className={`${
@@ -1712,6 +1721,15 @@ const ExpertDashboard = () => {
                   })}
                 </div>
               </div>
+            </div>
+            <div className="flex mt-[1.25vw] gap-2 items-center">
+              <div className="font-bold text-sm">Referal code: </div>
+              <span className="text-sm">{expertData.refer_code}</span>
+              <MdOutlineContentCopy
+                className="cursor-pointer"
+                onClick={handleCopyToClipboard}
+              />
+              <IoMdShareAlt />
             </div>
           </div>
           <div>
@@ -1769,7 +1787,7 @@ const ExpertDashboard = () => {
                 <BsFillPatchCheckFill className="text-[1.55vw]" />
                 Get Certified
               </Link>
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+              {/* <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                 <BsFillPersonLinesFill className="text-[1.55vw]" />
                 Go to Experts
               </li>
@@ -1780,7 +1798,7 @@ const ExpertDashboard = () => {
               <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                 <IoSettings className="text-[1.55vw]" />
                 Settings
-              </li>
+              </li> */}
             </ul>
           </div>
         </section>
