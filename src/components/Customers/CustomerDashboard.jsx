@@ -736,12 +736,12 @@ const CustomerDashboard = () => {
                   Chat
                 </li>
               </Link>
-              <Link to="showblogs" className="no-underline">
+              {/* <Link to="showblogs" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center  font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <BsFillChatSquareTextFill className="text-[1.55vw]" />
                   My Blogs
                 </li>
-              </Link>
+              </Link> */}
               <Link to="mybookings" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <IoBookmarksSharp className="text-[1.55vw]" />

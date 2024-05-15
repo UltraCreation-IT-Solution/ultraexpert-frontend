@@ -52,7 +52,7 @@ const SignUp = () => {
       firstName: "",
       lastName: "",
       mobileNumber: "",
-      refBy: "",
+      refCode: "",
     };
 
     if (!firstStep.firstName.trim() || !nameRegex.test(firstStep.firstName)) {
@@ -104,6 +104,7 @@ const SignUp = () => {
         nextStep();
       } catch (error) {
         console.log(error.message);
+        alert("Already Registered Email!");
         setLoading(false);
       }
     }
@@ -149,6 +150,7 @@ const SignUp = () => {
         nextStep();
       } catch (error) {
         console.log(error.message);
+        alert("Invalid OTP");
         setLoading(false);
       }
     }
@@ -188,7 +190,7 @@ const SignUp = () => {
             first_name: firstStep.firstName,
             last_name: firstStep.lastName,
             mobile: firstStep.mobileNumber,
-            reffered_by: firstStep.refBy,
+            reffered_by: firstStep.refCode,
             email: secondStep.email,
             password1: forthStep.password,
             password2: forthStep.confirmPassword,
@@ -238,11 +240,13 @@ const SignUp = () => {
             navigate("/signUpAs");
           } catch (error) {
             console.error(error);
+            alert(error.message);
             setLoading(false);
           }
         }
       } catch (error) {
         console.error(error);
+        alert("SignUp Failed");
         setLoading(false);
       }
     }
@@ -299,6 +303,16 @@ const SignUp = () => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const otpRegex = /^\d{6}$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}$/;
+
+  const [checked, setChecked] = useState({ checkbox1: false, checkbox2: false });
+
+  const handleChange = (checkbox) => {
+    if (checkbox === 'checkbox1') {
+      setChecked({ checkbox1: true, checkbox2: false });
+    } else {
+      setChecked({ checkbox1: false, checkbox2: true });
+    }
+  };
 
   return (
     <div className="md:h-screen mt-[80px] bg-white">
@@ -367,22 +381,49 @@ const SignUp = () => {
                   {errors.mobileNumber}
                 </div>
 
-                <label
-                  htmlFor="refBy"
-                  className="block mb-1 font-semibold text-base md:text-lg"
-                >
-                  Reffered By:
-                </label>
-                <input
-                  type="text"
-                  name="refBy"
-                  id="refBy"
-                  placeholder="Enter refference"
-                  className="border rounded-sm p-2 w-full mb-3"
-                  value={firstStep.refBy}
-                  onChange={handleChange1}
+                <div className="text-base md:text-lg font-semibold mb-1">
+                  Do you have a refferal code?
+                </div>
+                <input className="mb-3"
+                  type="checkbox"
+                  id="yes"
+                  name="yes"
+                  value="Yes"
+                  checked={checked.checkbox1}
+                  onClick={() => handleChange('checkbox1')}
                 />
-                <div className="text-red-500 mb-1 text-sm">{errors.refBy}</div>
+                <label className="mr-2 font-medium text-lg" htmlFor="yes">Yes</label>
+                <input
+                  type="checkbox"
+                  id="no"
+                  name="no"
+                  value="No"
+                  checked={checked.checkbox2}
+                  onClick={() => handleChange('checkbox2')}
+                />
+                <label htmlFor="no" className="mr-2 font-medium text-lg">No</label>
+                {checked.checkbox1 && (
+                  <>
+                    <label
+                      htmlFor="refBy"
+                      className="block mb-1 font-semibold text-base md:text-lg"
+                    >
+                      Refferal Code:
+                    </label>
+                    <input
+                      type="text"
+                      name="refBy"
+                      id="refBy"
+                      placeholder="Enter Refferal Code"
+                      className="border rounded-sm p-2 w-full mb-3"
+                      value={firstStep.refBy}
+                      onChange={handleChange1}
+                    />
+                    <div className="text-red-500 mb-1 text-sm">
+                      {errors.refBy}
+                    </div>
+                  </>
+                )}
 
                 <p
                   onClick={handleGoogleLink}
