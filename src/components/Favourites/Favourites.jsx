@@ -540,7 +540,7 @@ export const FavExperts = () => {
     <div className="mt-10">
       <div className="font-bold text-xl md:text-3xl ">Experts</div>
       <div className="flex items-center overflow-x-scroll gap-5 mt-5">
-        {favExpertsData.length===0? <div className="text-center text-base ">Add blogs to favourates</div>: favExpertsData.map((item, index) => (
+        {favExpertsData.length===0? <div className="text-center text-base ">Add Experts to favourates</div>: favExpertsData.map((item, index) => (
           <FavExpertCard key={index} item={item} getFavExpData={getFavExpData} />
         ))}
       </div>

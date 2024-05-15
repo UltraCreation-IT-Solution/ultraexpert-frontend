@@ -43,7 +43,7 @@ export const ExpertSummary = ({ experienceArray, projectsArray }) => {
                   >
                     {/* 1st portion */}
                     <div className="text-sm flex md:flex-col order-2 md:order-1 md:w-[150px] pt-2 md:py-5 md:text-right">
-                      {item.present ? (
+                      {item.is_present ? (
                         <>
                           <div>Present</div>
                           <div className="block md:hidden"> - </div>
@@ -430,7 +430,7 @@ export const AboutExpert = ({ ...expert }) => {
               <div className="py-2 flex gap-[0.3vw] justify-center items-center">
                 <MdStar color="#FF5E18" />
 
-                <div>{expertDetailsObj?.personalDetails?.rating}</div>
+                <div>{expert?.expert?.rating_count}</div>
               </div>
               <div className="py-2 flex gap-[0.3vw] justify-center items-center">
                 <MdGroupAdd />
@@ -442,7 +442,7 @@ export const AboutExpert = ({ ...expert }) => {
               <div className="py-2 flex gap-[0.3vw] justify-center items-center">
                 <FaUserCheck />
 
-                <div>{expertDetailsObj?.personalDetails?.followerCount}</div>
+                <div>{expert?.expert?.followers_count}</div>
               </div>
             </div>
             <div className="hidden lg:block mt-8 md:mt-4">

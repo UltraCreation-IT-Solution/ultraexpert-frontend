@@ -2169,11 +2169,10 @@ const SignUpAsExpert = () => {
               </div>
               <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
-                  disabled={loading}
                   type="submit"
                   className={`${
-                    loading ? "cursor-not-allowed" : ""
-                  }  cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
+                    loading ? "cursor-not-allowed bg-gray-300" : "bg-inherit"
+                  }  cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white rounded-md shadow-md`}
                 >
                   Submit
                 </button>
