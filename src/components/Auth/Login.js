@@ -44,19 +44,10 @@ const Login = () => {
     if (validateForm()) {
       setLoading(true);
       try {
-        const res = await axios.post(
-          "/login/",
-          {
-            email: userData.email,
-            password: userData.password,
-          },
-
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const res = await axios.post("/login/", {
+          email: userData.email,
+          password: userData.password,
+        });
         // const json = await res.json();
         if (res.status === 200) {
           console.log("Login successful");
@@ -73,16 +64,14 @@ const Login = () => {
           localStorage.setItem("profile", `${res.data.profile_img}`);
           localStorage.setItem("isExpert", `${res.data.is_expert}`);
           localStorage.setItem("isAuthor", `${res.data.is_author}`);
-          if(localStorage.getItem("isExpert") === "true"){
+          if (localStorage.getItem("isExpert") === "true") {
             window.location.href = "/expertdashboard";
-          }
-          else{
+          } else {
             window.location.href = "/";
           }
         }
       } catch (error) {
         console.error(error);
-        alert("Invalid email or password");
         setLoading(false);
       }
     }
