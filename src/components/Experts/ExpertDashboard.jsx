@@ -10,12 +10,13 @@ import {
   FaChalkboardTeacher,
 } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
-import { FaLocationDot } from "react-icons/fa6";
+import { IoMdShareAlt } from "react-icons/io";
 import {
   MdSpaceDashboard,
   MdInsertPageBreak,
   MdOutlineStarBorderPurple500,
   MdOpenInNew,
+  MdOutlineContentCopy,
 } from "react-icons/md";
 import {
   BsFillPersonLinesFill,
@@ -1157,7 +1158,7 @@ export const Dashboard = () => {
         )}
         {/* Testimonials section of dashboard */}
         {testimonials &&
-          expertAllTestimonials.length > 0 &&
+          expertAllTestimonials.length === 0 ? <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">No testimonials found</div> :
           expertAllTestimonials?.map((item, index) => (
             <TestimonialsCard
               key={index}
@@ -1255,7 +1256,9 @@ export const MyServices = () => {
         </div>
       </div>
       <div>
-        {myServices.map((service, index) => (
+       
+        {myServices.length===0?<div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">No services created yet</div>:
+         myServices.map((service, index) => (
           <div
             key={index}
             className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md"
@@ -1344,6 +1347,7 @@ export const Leaderboard = () => {
   const [weeklyLeaderboard, setWeeklyLeaderboard] = useState(true);
   const [monthlyLeaderboard, setMonthlyLeaderboard] = useState(false);
   const [leaderBoardData, setLeaderBoardData] = useState([]);
+  const [userData, setUserData] = useState({});
   const cookies = document.cookie.split("; ");
   const jsonData = {};
   cookies.forEach((item) => {
@@ -1365,6 +1369,7 @@ export const Leaderboard = () => {
       const expData = response.data.data;
       console.log(expData);
       setLeaderBoardData(expData);
+      setUserData(response.data.user_data);
       setWeeklyLeaderboard(true);
       setMonthlyLeaderboard(false);
     } catch (error) {
@@ -1380,7 +1385,7 @@ export const Leaderboard = () => {
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
         Leaderboard
       </div>
-      <div className="flex self-center gap-[10vw] bg-[#ececec] p-2 rounded-xl w-fit mt-10">
+      {/* <div className="flex self-center gap-[10vw] bg-[#ececec] p-2 rounded-xl w-fit mt-10">
         <div
           className={`px-3 py-2 text-center text-sm sm:text-base rounded-xl cursor-pointer ${
             weeklyLeaderboard ? "bg-[#bdb8b8]" : "bg-[#ececec]"
@@ -1420,13 +1425,14 @@ export const Leaderboard = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="border border-solid border-slate-300 flex flex-col items-center justify-center rounded-xl mt-10 px-4">
         <div className="relative flex h-[50vw] sm:h-[280px] items-end mt-12">
+          {/* Rank 2 card */}
           <div className="w-[25vw] min-h-[28vw] max-h-[28vw] sm:w-36 sm:min-h-36 sm:max-h-36 bg-[#1E2237] text-white text-center rounded-l-lg sm:rounded-l-xl">
             <img
-              src="https://images.unsplash.com/photo-1611095973763-414019e72400?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fHdvcmt8ZW58MHwwfDB8fHww"
+              src={leaderBoardData[1]?.profile_img}
               className="absolute top-[12vw] left-[5vw] sm:top-20 sm:left-8 h-[15vw] w-[15vw] sm:h-20 sm:w-20 rounded-full object-cover shrink-0 border-2 border-solid border-[#009BD6]"
               alt=""
             />
@@ -1434,17 +1440,22 @@ export const Leaderboard = () => {
               <div className="-rotate-45">2</div>
             </div>
             <div className="text-[2.7vw] sm:text-sm text-white text-center font-semibold mt-[8vw] sm:mt-10">
-              <div className="text-[3vw] sm:text-base">Jackson</div>
-              <div className="text-[#009BD6] my-[1.3vw] sm:my-0">1847</div>
-              <div className="text-[#009BD6]">@username</div>
+              <div className="text-[3vw] sm:text-base">
+                {leaderBoardData[1]?.expert_first_name} {leaderBoardData[1]?.expert_last_name}
+              </div>
+              <div className="text-[#009BD6]">
+                {/* {leaderBoardData[1].avg_score}{" "}  */}
+                {"1"}
+              </div>
             </div>
           </div>
+          {/* Rank 1 card */}
           <div className="w-[27vw] min-h-[33vw] max-h-[33vw] sm:w-36 sm:min-h-44 sm:max-h-44 bg-[#252A40] text-white text-center rounded-t-lg sm:rounded-t-xl">
             <div className="text-[#FFAA00] absolute text-[6.5vw] sm:text-4xl top-0 left-[35vw] sm:top-0 sm:left-[12.6rem]">
               <PiCrownFill />
             </div>
             <img
-              src="https://images.unsplash.com/photo-1513258496099-48168024aec0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTMwfHx3b3JrfGVufDB8MHwwfHx8MA%3D%3D"
+              src={leaderBoardData[0]?.profile_img}
               className="absolute top-[6vw] left-[30vw] h-[17vw] w-[17vw] sm:top-8 sm:left-[170px] sm:h-24 sm:w-24 rounded-full object-cover shrink-0 border-2 border-solid border-[#FFAA00]"
               alt=""
             />
@@ -1452,14 +1463,19 @@ export const Leaderboard = () => {
               <div className="-rotate-45">1</div>
             </div>
             <div className="text-[2.7vw] sm:text-sm text-[#FFAA00] text-center font-semibold mt-[9vw] sm:mt-10">
-              <div className="text-[3vw] sm:text-base text-white">Eiden</div>
-              <div className="my-[1.3vw] sm:my-0">2430</div>
-              <div className="text-[#FFAA00]">@username</div>
+              <div className="text-[3vw] sm:text-base text-white">
+              {leaderBoardData[0]?.expert_first_name} {leaderBoardData[0]?.expert_last_name}
+              </div>
+              <div className="text-[#FFAA00]">
+                {/* {leaderBoardData[0].avg_score}{" "} */}
+                {"1"}
+              </div>
             </div>
           </div>
+          {/* Rank 3 card */}
           <div className="w-[25vw] min-h-[28vw] max-h-[28vw] sm:w-32 sm:min-h-32 sm:max-h-32 bg-[#1E2237] text-white text-center rounded-r-lg sm:rounded-r-xl">
             <img
-              src="https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src={leaderBoardData[2]?.profile_img}
               className="absolute top-[12vw] right-[5vw] sm:top-24 sm:right-8 h-[15vw] w-[15vw] sm:h-20 sm:w-20 rounded-full object-cover shrink-0 border-2 border-solid border-[#00D95F]"
               alt=""
             />
@@ -1467,9 +1483,13 @@ export const Leaderboard = () => {
               <div className="-rotate-45">3</div>
             </div>
             <div className="text-[2.7vw] sm:text-sm text-white font-semibold mt-[8vw] sm:mt-10">
-              <div className="text-[3vw] sm:text-base">Jackson</div>
-              <div className="text-[#00D95F] my-[1.3vw] sm:my-0">1847</div>
-              <div className="text-[#00D95F]">@username</div>
+              <div className="text-[3vw] sm:text-base">
+              {leaderBoardData[2]?.expert_first_name} {leaderBoardData[2]?.expert_last_name}
+              </div>
+              <div className="text-[#00D95F]">
+                {/* {leaderBoardData[2]?.avg_score} */}
+                {"1"}
+              </div>
             </div>
           </div>
         </div>
@@ -1482,6 +1502,28 @@ export const Leaderboard = () => {
             </div>
             <div>Score</div>
           </div>
+          {/* user data */}
+          <div className="flex items-center justify-between gap-1 py-2 my-5 border-y border-solid border-slate-400">
+            <div className="flex items-center gap-[8vw]">
+              <div className="text-sm sm:text-base shrink-0">
+                {userData.rank}
+              </div>
+              <div className="flex gap-3 sm:gap-6 items-center w-[300px] ">
+                <img
+                  src={userData.profile_img}
+                  alt="Profile"
+                  className="h-10 w-10 sm:h-14 sm:w-14 rounded-full object-center object-cover shrink-0"
+                />
+                <div className="text-sm sm:text-base shrink-0">
+                  {userData.expert_name}
+                </div>
+              </div>
+            </div>
+            <div className="text-sm sm:text-base shrink-0">
+              {userData.avg_score}
+            </div>
+          </div>
+
           <div>
             {leaderBoardData.map((item, idx) => (
               <div
@@ -1499,7 +1541,7 @@ export const Leaderboard = () => {
                       className="h-10 w-10 sm:h-14 sm:w-14 rounded-full object-center object-cover shrink-0"
                     />
                     <div className="text-sm sm:text-base shrink-0">
-                      {item.expert_name}
+                      {item.expert_first_name} {item.expert_last_name}
                     </div>
                   </div>
                 </div>
@@ -1515,7 +1557,8 @@ export const Leaderboard = () => {
   );
 };
 
-export const MyBookings = () => {
+export const MyBookings = (props) => {
+  console.log(props);
   const [myBookings, setMyBookings] = useState([]);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -1525,7 +1568,7 @@ export const MyBookings = () => {
   });
   useEffect(() => {
     getMyBookings();
-  }, [myBookings]);
+  }, []);
 
   const getMyBookings = async () => {
     try {
@@ -1543,31 +1586,39 @@ export const MyBookings = () => {
       console.log(error);
     }
   };
-
+  console.log(myBookings);
   return (
     <div className="w-full md:w-[68%]">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
         Active Bookings
       </div>
-      <div className="flex items-center justify-between text-sm text-gray-600 font-bold my-5 overflow-x-scroll">
-        <div className="flex items-center xs:gap-[4vw] shrink-0">
-          <div className="w-[200px]">Client Name</div>
-          <div className="hidden sm:block w-[120px] ">Scheduled Date</div>
-          <div className="shrink-0 w-[60px]">Action</div>
+      {myBookings.length === 0 ? (
+        <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600">
+          No Active Bookings
         </div>
-        <div className="shrink-0 text-right w-[60px] "></div>
-      </div>
-      {myBookings?.map((item, index) => (
-        <BookingCard item={item} key={index} />
-      ))}
+      ) : (
+        <div>
+          <div className="flex items-center justify-between text-sm text-gray-600 font-bold my-5 overflow-x-scroll">
+            <div className="flex items-center xs:gap-[4vw] shrink-0">
+              <div className="w-[200px]">Client Name</div>
+              <div className="hidden sm:block w-[120px] ">Scheduled Date</div>
+              <div className="shrink-0 w-[60px]">Action</div>
+            </div>
+            <div className="shrink-0 text-right w-[60px] "></div>
+          </div>
+          {myBookings?.map((item, index) => (
+            <BookingCard item={item} key={index} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 const ExpertDashboard = () => {
   const [showEditProfile, setShowEditProfile] = useState(false);
 
-  const [expertData, setExpertData] = useState(null);
-  const [expertid, setExpertId] = useState(null);
+  const [expertData, setExpertData] = useState({});
+  const [expertId, setExpertId] = useState(null);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
 
@@ -1607,6 +1658,17 @@ const ExpertDashboard = () => {
   const handleShowEditProfile = () => {
     setShowEditProfile(false);
   };
+
+  const handleCopyToClipboard = () => {
+    navigator.clipboard
+      .writeText(expertData.refer_code)
+      .then(() => {
+        alert("Referral code copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  };
   return (
     <div
       className={`${
@@ -1621,27 +1683,27 @@ const ExpertDashboard = () => {
             <div className="flex justify-between">
               <div className="flex gap-[0.75vw]">
                 <img
-                  src={expertData?.profile_img}
+                  src={expertData.profile_img}
                   className="w-[6.5vw] h-[6.5vw] rounded-lg shrink-0 object-cover object-center"
                   alt="profileImg"
                 />
                 <div className="flex flex-col justify-between py-[0.2vw]">
                   <div className=" flex flex-col gap-[0.5vw] ">
                     <div className="font-bold text-[1.4vw]">
-                      {expertData?.first_name} {expertData?.last_name}
+                      {expertData.first_name} {expertData.last_name}
                     </div>
                     <div className="font-medium text-[1vw] text-[#8F8F8F]">
                       UltraXpert
                     </div>
                   </div>
                   <div className="font-semibold text-[1.3vw] text-black/60">
-                    {expertData?.profession}
+                    {expertData.profession}
                   </div>
                 </div>
               </div>
             </div>
             <div className=" mt-[1.6vw] w-full text-sm text-[#525252] line-clamp-3">
-              {expertData?.about_me}
+              {expertData.about_me}
             </div>
             <div className="mt-[1.25vw] flex flex-col gap-[1vw]">
               <div className="flex gap-[1.25vw] items-center text-[1.25vw] text-[#515151]">
@@ -1659,6 +1721,15 @@ const ExpertDashboard = () => {
                   })}
                 </div>
               </div>
+            </div>
+            <div className="flex mt-[1.25vw] gap-2 items-center">
+              <div className="font-bold text-sm">Referal code: </div>
+              <span className="text-sm">{expertData.refer_code}</span>
+              <MdOutlineContentCopy
+                className="cursor-pointer"
+                onClick={handleCopyToClipboard}
+              />
+              <IoMdShareAlt />
             </div>
           </div>
           <div>
@@ -1716,7 +1787,7 @@ const ExpertDashboard = () => {
                 <BsFillPatchCheckFill className="text-[1.55vw]" />
                 Get Certified
               </Link>
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+              {/* <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                 <BsFillPersonLinesFill className="text-[1.55vw]" />
                 Go to Experts
               </li>
@@ -1727,7 +1798,7 @@ const ExpertDashboard = () => {
               <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                 <IoSettings className="text-[1.55vw]" />
                 Settings
-              </li>
+              </li> */}
             </ul>
           </div>
         </section>
@@ -1739,9 +1810,8 @@ const ExpertDashboard = () => {
         <Chats />
         <Leaderboard />
         <SkillList />
-        {expertData !== null && <MyBookings {...expertData} />}
-
-        {console.log(expertData?.id)}
+        {/* {expertData.length!==0 && <MyBookings {...expertData} />} */}
+        <MyBookings id={expertId} />
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />
