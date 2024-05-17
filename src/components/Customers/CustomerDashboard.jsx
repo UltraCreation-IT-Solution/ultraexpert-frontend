@@ -542,7 +542,7 @@ export const CustomerChats = () => {
     </div>
   );
 };
-export const CustomerBookings = ({id}) => {
+export const CustomerBookings = ({ id }) => {
   const [myBookings, setMyBookings] = useState([]);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -556,35 +556,47 @@ export const CustomerBookings = ({id}) => {
 
   const getMyBookings = async () => {
     try {
-      const res = await axios.get(`/customers/connect/?action=6&customer_id=${1}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
-      const json=res.data;
+      const res = await axios.get(
+        `/customers/connect/?action=6&customer_id=${2}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
       setMyBookings(json.data);
     } catch (error) {
       console.log(error);
     }
   };
+  console.log(myBookings);
   return (
     <div className="w-full md:w-[68%]">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
         Active Bookings
       </div>
-      <div className="flex items-center justify-between text-sm text-gray-600 font-bold my-5 overflow-x-scroll">
-        <div className="flex items-center xs:gap-[4vw] shrink-0">
-          <div className="w-[200px]">Expert Name</div>
-          <div className="hidden sm:block w-[120px] ">Scheduled Date</div>
-          <div className="shrink-0 w-[60px]">Action</div>
-        </div>
-        <div className="shrink-0 text-right w-[60px] "></div>
-      </div>
 
-      {myBookings.map((item, index) => (
-        <BookingCard item={item} key={index} />
-      ))}
+      {myBookings.length === 0 ? (
+        <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
+          No Active Bookings
+        </div>
+      ) : (
+        <div>
+          <div className="flex items-center justify-between text-sm text-gray-600 font-bold my-5 overflow-x-scroll">
+            <div className="flex items-center xs:gap-[4vw] shrink-0">
+              <div className="w-[200px]">Expert Name</div>
+              <div className="hidden sm:block w-[120px] ">Scheduled Date</div>
+              <div className="shrink-0 w-[60px]">Action</div>
+            </div>
+            <div className="shrink-0 text-right w-[60px] "></div>
+          </div>
+          {myBookings.map((item, index) => (
+            <BookingCard item={item} key={index} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -761,12 +773,12 @@ const CustomerDashboard = () => {
                   Chat
                 </li>
               </Link>
-              <Link to="showblogs" className="no-underline">
+              {/* <Link to="showblogs" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center  font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <BsFillChatSquareTextFill className="text-[1.55vw]" />
                   My Blogs
                 </li>
-              </Link>
+              </Link> */}
               <Link to="mybookings" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <IoBookmarksSharp className="text-[1.55vw]" />

@@ -53,23 +53,31 @@ export const ServiceProfileCard = ({ item }) => {
             Ratings
           </div>
         </a>
+        {item?.expert_data?.is_following_expert ? 
+          
         <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
           Follow
+        </button>:
+
+        <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
+          Unfollow
         </button>
+          
+        }
       </div>
     </div>
   );
 };
 
 const CommentCard = ({ servId, temp, getAllComments }) => {
-  const [options, setOptions] = useState(false);
   console.log(temp);
+  const [options, setOptions] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedComment, setEditedComment] = useState(temp?.content);
 
   const date = temp?.timestamp.split("T")[0];
   const commentDate = date;
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedComment, setEditedComment] = useState(temp?.content);
 
   const deleteComment = async () => {
     const cookie = document.cookie.split(";");
@@ -303,17 +311,17 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
               <BiDislike />
               <div>{temp?.dislikes}</div>
             </div>
-            {!replyComm && ( // Render reply button if replyComm is false
+            {/* {!replyComm && ( // Render reply button if replyComm is false
               <button
                 className="text-xs sm:text-base cursor-pointer px-2 py-1 rounded-sm sm:rounded-md"
                 onClick={() => setReplyComm(true)}
               >
                 Reply
               </button>
-            )}
+            )} */}
           </div>
-          {replyComm && ( // Render reply input and save button if replyComm is true
-            <div className="w-full">
+          {/* {replyComm && ( // Render reply input and save button if replyComm is true
+            <div className="flex gap-2 w-full">
               <input
                 type="text"
                 value={replyComment}
@@ -335,8 +343,32 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
+           
         </div>
+        {/* <div className="relative overflow-visible flex flex-col ml-auto text-3xl cursor-pointer">
+          <PiDotsThreeCircleVertical onClick={()=>setOptions(!options)}/>
+          {options && <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
+            <div className="transition-all hover:bg-gray-300 px-3" onClick={handleEdit}>Edit</div>
+            <div className="transition-all hover:bg-gray-300 px-3" onClick={deleteComment}>Delete</div>
+          </div>} */}
+        {/* </div> */}
+        {temp?.is_authenticated_user && isEditing && (
+          <div>
+            <button
+              onClick={saveEdit}
+              className="text-green-500 p-2 border border-solid border-green-500 rounded-lg"
+            >
+              Save
+            </button>
+            <button
+              onClick={cancelEdit}
+              className="text-gray-500 p-2 border border-solid border-gray-500 rounded-lg ml-2"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
         {temp?.is_authenticated_user && !isEditing && (
           <div className="relative overflow-visible flex flex-col ml-auto text-3xl cursor-pointer">
             <PiDotsThreeCircleVertical onClick={() => setOptions(!options)} />
@@ -368,7 +400,7 @@ const ServiceDescription = () => {
   const params = useParams();
   const { id } = params;
 
-  const [servDesc, setServDesc] = useState({});
+  const [servDesc, setServDesc] = useState(null);
   const [scheduleData, setScheduleData] = useState({});
 
   const getServiceDesc = async () => {
@@ -436,6 +468,7 @@ const ServiceDescription = () => {
       }
       console.log(json);
       getAllServiceComments();
+      setComments({ comment: "" });
     } catch (error) {
       console.log(error);
     }
@@ -475,7 +508,7 @@ const ServiceDescription = () => {
   useEffect(() => {
     getAllServiceComments();
   }, []);
-
+  if(servDesc===null) return <div className="mt-100">wait</div>
   return (
     <>
       <div className="lg:flex mt-[100px] ">
@@ -596,61 +629,6 @@ const ServiceDescription = () => {
         </div>
 
         <div className="hidden lg:w-[30%] px-[2.5vw] lg:flex flex-col items-center">
-          {/* {!showChat && (
-            <div className="px-6 py-5 h-fit rounded-2xl border-2 border-solid border-slate-300 sticky top-0">
-              <div className="flex items-center gap-5 ">
-                <img
-                  className="h-16 w-16 rounded-full shrink-0 object-cover"
-                  src="https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt=""
-                />
-                <div className="flex flex-col">
-                  <div className="text-xl font-semibold">Antony Phobes</div>
-                  <div className="text-green-600 text-base">Online</div>
-                </div>
-              </div>
-              <div onClick={() => setShowChat(true)}>
-                <button className="flex gap-3 items-center justify-center w-full mt-8 cursor-pointer bg-[#2A2A2A] px-6 py-1 md:px-[1.5vw] md:py-[0.5vw] text-base text-white font-semibold border rounded-sm sm:rounded-md">
-                  <IoChatboxOutline />
-                  Chat with me
-                </button>
-              </div>
-            </div>
-          )}  */}
-
-          {/* {showChat && (
-            <div className="flex flex-col border border-solid border-slate-300 w-full">
-              <div className="flex justify-between items-center border-b border-solid border-slate-300 p-2">
-                <div className="flex items-center gap-2">
-                  <GoArrowLeft
-                    onClick={() => setShowChat(false)}
-                    className="text-3xl"
-                  />
-                  <div className="flex items-center gap-2 ">
-                    <img
-                      className="h-12 w-12 rounded-full shrink-0 object-cover"
-                      src="https://plus.unsplash.com/premium_photo-1661664742981-6691f002a466?q=80&w=1771&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                      alt=""
-                    />
-                    <div className="flex flex-col">
-                      <div className="text-xl font-semibold">Antony Phobes</div>
-                      <div className="text-xs">last seen- 2 min ago</div>
-                    </div>
-                  </div>
-                </div>
-                <PiDotsThreeVerticalBold className="text-3xl" />
-              </div>
-              <div className="h-[20vw] border-b border-solid border-slate-300"></div>
-              <div className="flex items-center justify-between p-2">
-                <CiSquarePlus className="text-3xl" />
-                <input
-                  type="text"
-                  className="outline-none border border-solid border-slate-500 rounded-lg px-2 py-3"
-                />
-                <IoMdSend className="text-3xl" />
-              </div>
-            </div>
-          )}  */}
           {/* <div className="mt-[2vw] flex flex-col ">
             <div className="text-3xl font-semibold">
               Service Price: ₹{services[params?.id - 1]?.price}

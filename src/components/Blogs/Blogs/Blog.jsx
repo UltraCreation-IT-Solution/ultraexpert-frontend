@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {hotTopics,} from "../../../constant";
+import { hotTopics } from "../../../constant";
 import { CiBookmark } from "react-icons/ci";
-import { FaTags, FaForward, FaBackward, FaRegComment } from "react-icons/fa";
+import {
+  FaTags,
+  FaForward,
+  FaBackward,
+  FaRegComment,
+  FaMinus,
+} from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
 import { BiSolidLike } from "react-icons/bi";
@@ -10,9 +16,10 @@ import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../../../subsitutes/Pagination";
 import { FaBookmark } from "react-icons/fa6";
 import axios from "../../../axios";
+import BlogCardShimmer from "../../../subsitutes/Shimmers/BlogCardShimmer";
 
-export const BlogBody = ({ allBlogsArray }) => {
-  console.log(allBlogsArray)
+export const BlogBody = ({ allBlogsArray, getBlogArray }) => {
+  console.log(allBlogsArray);
   function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { day: "numeric", month: "short", year: "numeric" };
@@ -90,6 +97,8 @@ export const BlogBody = ({ allBlogsArray }) => {
         return;
       }
       console.log(json);
+      getBlogArray();
+      fetchBlogs();
     } catch (error) {
       console.log(error);
     }
@@ -122,10 +131,12 @@ export const BlogBody = ({ allBlogsArray }) => {
         return;
       }
       console.log(json);
+      getBlogArray();
+      fetchBlogs();
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <>
@@ -165,7 +176,11 @@ export const BlogBody = ({ allBlogsArray }) => {
                     {localStorage.getItem("isExpert") === "true" ? (
                       <></>
                     ) : item?.is_favorite ? (
-                      <FaBookmark onClick={()=>handleRemoveFavBlog(item.id)} className="text-black mx-2" size={35} />
+                      <FaBookmark
+                        onClick={() => handleRemoveFavBlog(item.id)}
+                        className="text-black mx-2"
+                        size={35}
+                      />
                     ) : (
                       <CiBookmark
                         onClick={() => handleAddFavBlog(item.id)}
@@ -204,10 +219,7 @@ export const BlogBody = ({ allBlogsArray }) => {
                       <div className="px-[0.8vw] pt-2 md:pt-0">
                         <div className="flex justify-between font-semibold text-sm text-[#808080]">
                           <div>{blog.author_name}</div>
-                          <div>
-                          {formatDate(blog.date)}
-                          </div>
-                          
+                          <div>{formatDate(blog.date)}</div>
                         </div>
                         <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
                           {blog.title}
@@ -226,7 +238,11 @@ export const BlogBody = ({ allBlogsArray }) => {
                           {localStorage.getItem("isExpert") === "true" ? (
                             <></>
                           ) : blog.is_fav ? (
-                            <FaBookmark  onClick={()=>handleRemoveFavBlog(blog.id)} className="text-black mx-2" size={35} />
+                            <FaBookmark
+                              onClick={() => handleRemoveFavBlog(blog.id)}
+                              className="text-black mx-2"
+                              size={35}
+                            />
                           ) : (
                             <CiBookmark
                               onClick={() => handleAddFavBlog(blog.id)}
@@ -267,28 +283,29 @@ export const BlogBody = ({ allBlogsArray }) => {
         </div>
       </div>
       {/* All blogs */}
-      {console.log(allBlogsArray)}
       <div>
         <div className="text-xl lg:text-3xl font-bold mt-16 text-center ">
           All Blogs
         </div>
         <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
-          {allBlogsArray.length === 0 ? (
-            <div>no blogs</div>
-          ) : (
-            allBlogsArray?.map((item, index) => (
-              <BlogCard
-                key={item.id}
-                index={index}
-                id={item.id}
-                items={item}
-                title={item.title}
-                tags={item.tags}
-                image={item.images[0]}
-                date={formatDate(item.date_created.split("T")[0])}
-              />
-            ))
-          )}
+          {allBlogsArray.length === 0
+            ? Array.from({ length: 4 }).map((_, index) => (
+                <BlogCardShimmer key={index} />
+              ))
+            : allBlogsArray?.map((item, index) => (
+                <BlogCard
+                  key={item.id}
+                  index={index}
+                  id={item.id}
+                  items={item}
+                  title={item.title}
+                  tags={item.tags}
+                  image={item.images[0]}
+                  date={formatDate(item.date_created.split("T")[0])}
+                  getBlogArray={getBlogArray}
+                  fetchBlogs={fetchBlogs}
+                />
+              ))}
         </div>
       </div>
     </>
@@ -354,6 +371,7 @@ const Author = ({ createAuthor }) => {
   );
 };
 export const BlogCard = ({
+  items,
   index,
   id,
   title,
@@ -362,9 +380,77 @@ export const BlogCard = ({
   views,
   likes,
   image,
-  items,
+  getBlogArray,
+  fetchBlogs,
 }) => {
   const navigate = useNavigate();
+  const addFav = async (id) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 6,
+          blog_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      getBlogArray();
+      fetchBlogs();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const remFav = async (id) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 7,
+          blog_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      getBlogArray();
+      fetchBlogs();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(items);
   return (
     <div
       className={`w-full px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
@@ -390,27 +476,50 @@ export const BlogCard = ({
           <div className="mt-3 text-xs flex items-center gap-2">
             <FaTags />
             <div className="flex items-center flex-wrap gap-2">
-              {tags?.map((item, index) => (
+              {tags?.map((tag, index) => (
                 <div
                   key={index}
                   className="text-[10px] shrink-0 border border-solid border-slate-300 px-2 py-1 rounded-xl cursor-pointer"
                 >
-                  {item.charAt(0).toUpperCase() + item.slice(1)}
+                  {tag.charAt(0).toUpperCase() + tag.slice(1)}
                 </div>
               ))}
             </div>
           </div>
           <div className="flex gap-[3vw] sm:gap-0 sm:flex-col">
             <div className="mt-3 text-xs flex items-center gap-2">
-              <IoEyeSharp /> {items?.blog_view_count > 0 ? items?.blog_view_count : "no views"}
+              <IoEyeSharp />{" "}
+              {items?.blog_view_count > 0 ? items?.blog_view_count : "no views"}
             </div>
             <div className="mt-3 flex items-center gap-4">
               <div className=" text-xs flex items-center gap-1 sm:gap-2">
-                <FaRegComment /> {items?.comment_count > 0 ? items?.comment_count + " comments" : "no comments"}
+                <FaRegComment />{" "}
+                {items?.comment_count > 0
+                  ? items?.comment_count + " comments"
+                  : "no comments"}
               </div>
-              <div className="border border-solid border-slate-400 text-[10px] rounded-full px-3 py-0.5 flex items-center cursor-pointer gap-1">
-                <FaPlus /> Add to Fav
-              </div>
+              {localStorage.getItem("isExpert") === "true" ? (
+                <></>
+              ) : (
+                <div className="border border-solid border-slate-400 text-[10px] rounded-full px-3 py-0.5 flex items-center cursor-pointer gap-1">
+                  {items.is_favorite ? (
+                    <div
+                      className="flex gap-2 items-center"
+                      onClick={() => remFav(id)}
+                    >
+                      <FaMinus />
+                      Added to Fav
+                    </div>
+                  ) : (
+                    <div
+                      className="flex gap-2 items-center"
+                      onClick={() => addFav(id)}
+                    >
+                      <FaPlus /> Add to Fav
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -456,7 +565,6 @@ const Blogs = () => {
       const res = await axios.get("/topfive/?action=4", {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
       const allData = res.data.data;
@@ -652,7 +760,7 @@ const Blogs = () => {
       ) : null}
 
       {searchText.length === 0 ? (
-        <BlogBody allBlogsArray={allBlogsArray} />
+        <BlogBody allBlogsArray={allBlogsArray} getBlogArray={getBlogArray} />
       ) : (
         <SearchedBlog allBlogsArray={filterAllBlogsArray} />
       )}
