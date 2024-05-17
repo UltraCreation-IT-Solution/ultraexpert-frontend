@@ -12,69 +12,69 @@ import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { Link } from "react-router-dom";
 const CommentCard = ({ blogData, temp, getAllComments }) => {
-  const [options, setOptions] = useState(false);
-  console.log(temp);
-  const date = temp?.timestamp.split("T")[0];
-  const commentDate = date;
-
   const [isEditing, setIsEditing] = useState(false);
-  const [editedComment, setEditedComment] = useState(temp?.content);
+  const [editedComment, setEditedComment] = useState("");
+  const [replyComm, setReplyComm] = useState(false);
+  const [replyComment, setReplyComment] = useState("");
+  const [showOptions, setShowOptions] = useState(false);
+  const [replies, setReplies] = useState([]);
+  const [activeReplyOptions, setActiveReplyOptions] = useState(false);
 
-  const deleteComment = async () => {
+  useEffect(() => {
+    fetchReplies();
+  }, [temp?.id]);
+
+  const fetchReplies = async () => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
     cookie.forEach((item) => {
       const [key, value] = item.split("=");
-      jsonData[key] = value;
+      jsonData[key.trim()] = value;
     });
     try {
-      const res = await axios.post(
-        "/blogs/",
-        {
-          action: 9,
-          comment_id: temp?.id,
+      const res = await axios.get(`/blogs/?action=7&comment_id=${temp?.id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
+      });
       const json = res.data;
       if (!json) {
         console.log("no data");
         return;
       }
-      getAllComments();
       console.log(json);
+      setReplies(json.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleEdit = () => {
+  console.log(replies);
+
+  const handleEditClick = (content) => {
     setIsEditing(true);
+    setEditedComment(content);
   };
 
   const cancelEdit = () => {
     setIsEditing(false);
-    setEditedComment(temp?.content);
+    setEditedComment("");
   };
 
-  const saveEdit = async () => {
+  const saveEdit = async (commentId) => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
     cookie.forEach((item) => {
       const [key, value] = item.split("=");
-      jsonData[key] = value;
+      jsonData[key.trim()] = value;
     });
     try {
       const res = await axios.post(
         "/blogs/",
         {
           action: 12,
-          comment_id: temp?.id,
+          comment_id: commentId,
           new_content: editedComment,
         },
         {
@@ -91,24 +91,59 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
       }
       console.log(json);
       setIsEditing(false);
+      setEditedComment("");
+      getAllComments();
     } catch (error) {
       console.log(error);
     }
   };
 
-  const likeComment = async () => {
+  const deleteComment = async (commentId) => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
     cookie.forEach((item) => {
       const [key, value] = item.split("=");
-      jsonData[key] = value;
+      jsonData[key.trim()] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 9,
+          comment_id: commentId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      getAllComments();
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const likeComment = async (commentId) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key.trim()] = value;
     });
     try {
       const res = await axios.post(
         "/blogs/",
         {
           action: 10,
-          comment_id: temp?.id,
+          comment_id: commentId,
         },
         {
           headers: {
@@ -129,19 +164,19 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
     }
   };
 
-  const dislikeComment = async () => {
+  const dislikeComment = async (commentId) => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
     cookie.forEach((item) => {
       const [key, value] = item.split("=");
-      jsonData[key] = value;
+      jsonData[key.trim()] = value;
     });
     try {
       const res = await axios.post(
         "/blogs/",
         {
           action: 11,
-          comment_id: temp?.id,
+          comment_id: commentId,
         },
         {
           headers: {
@@ -162,15 +197,12 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
     }
   };
 
-  const [replyComm, setReplyComm] = useState(false);
-  const [replyComment, setReplyComment] = useState("");
-
-  const handleReplyComment = async (id) => {
+  const handleReplyComment = async (commentId) => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
     cookie.forEach((item) => {
       const [key, value] = item.split("=");
-      jsonData[key] = value;
+      jsonData[key.trim()] = value;
     });
     try {
       const res = await axios.post(
@@ -179,7 +211,7 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
           action: 8,
           blog_id: blogData?.id,
           content: replyComment,
-          reply_to: id,
+          reply_to: commentId,
         },
         {
           headers: {
@@ -193,13 +225,161 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
         console.log("no data");
         return;
       }
-      getAllComments();
       console.log(json);
       setReplyComm(false);
+      setReplyComment("");
+      fetchReplies();
     } catch (error) {
       console.log(error);
     }
   };
+
+  const [replyEdit, setReplyEdit] = useState(false);
+  const [editedReply, setEditedReply] = useState("");
+
+  const saveEdit2 = async (commentId) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key.trim()] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 12,
+          comment_id: commentId,
+          new_content: editedReply,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      setActiveReply({ ...activeReply, [commentId]: false });
+      setEditedReply("");
+      fetchReplies();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const dislikeComment2 = async (commentId) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key.trim()] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 11,
+          comment_id: commentId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      fetchReplies();
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const likeComment2 = async (commentId) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key.trim()] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 10,
+          comment_id: commentId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      fetchReplies();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [activeReply, setActiveReply] = useState({});
+
+  const handleEditClick2 = (replyContent, replyId) => {
+    setActiveReply({ ...activeReply, [replyId]: true });
+    setEditedReply(replyContent);
+  };
+
+  const deleteComment2 = async (commentId) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key.trim()] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/blogs/",
+        {
+          action: 9,
+          comment_id: commentId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      fetchReplies();
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [activeReplyMenu, setActiveReplyMenu] = useState({});
 
   return (
     <div className="my-[5vw] md:my-[2vw] pb-[1vw] border-b-[1px] border-slate-400 border-solid">
@@ -214,7 +394,7 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
             {temp?.user_first_name} {temp?.user_last_name}
           </div>
           <div className="mt-[2vw] md:mt-[0.9vw] text-xs sm:text-base text-slate-400">
-            {commentDate}
+            {temp?.timestamp.split("T")[0]}
           </div>
           {isEditing ? (
             <textarea
@@ -224,13 +404,13 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
             />
           ) : (
             <p className="text-xs sm:text-base font-montserrat">
-              {editedComment}
+              {temp?.content}
             </p>
           )}
           {temp?.is_authenticated_user && isEditing && (
             <div className="mb-2">
               <button
-                onClick={saveEdit}
+                onClick={() => saveEdit(temp?.id)}
                 className="text-green-500 px-3 py-1 border border-solid border-green-500 rounded-md"
               >
                 Save
@@ -244,11 +424,17 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
             </div>
           )}
           <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
-            <div className="flex items-center gap-1" onClick={likeComment}>
+            <div
+              className="flex items-center gap-1"
+              onClick={() => likeComment(temp?.id)}
+            >
               <BiLike />
               <div>{temp?.like_count}</div>
             </div>
-            <div className="flex items-center gap-1" onClick={dislikeComment}>
+            <div
+              className="flex items-center gap-1"
+              onClick={() => dislikeComment(temp?.id)}
+            >
               <BiDislike />
               <div>{temp?.dislike_count}</div>
             </div>
@@ -261,7 +447,7 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
               </button>
             )}
           </div>
-          {replyComm && ( // Render reply input and save button if replyComm is true
+          {replyComm && (
             <div className="w-full">
               <input
                 type="text"
@@ -278,52 +464,144 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
                 </button>
                 <button
                   className="text-xs sm:text-base cursor-pointer px-4 py-1 ml-2 rounded-sm sm:rounded-md"
-                  onClick={() => (setReplyComm(false), setReplyComment(""))}
+                  onClick={() => {
+                    setReplyComm(false), setReplyComment("");
+                  }}
                 >
                   Cancel
                 </button>
               </div>
             </div>
           )}
-          {/* {replyComm && ( // Render reply input and save button if replyComm is true
-            <div className="w-full">
-              <input
-                type="text"
-                value={replyComment}
-                onChange={(e) => setReplyComment(e.target.value)}
-                className="text-xs sm:text-base font-montserrat w-full border-b border-gray-300 p-2 outline-none"
-              />
-              <div className="mt-3">
-                <button
-                  className="text-xs sm:text-base cursor-pointer px-4 py-1 rounded-sm sm:rounded-md"
-                  onClick={() => handleReplyComment(temp?.id)}
-                >
-                  Save
-                </button>
-                <button
-                  className="text-xs sm:text-base cursor-pointer px-4 py-1 ml-2 rounded-sm sm:rounded-md"
-                  onClick={() => (setReplyComm(false), setReplyComment(""))}
-                >
-                  Cancel
-                </button>
+          {replies?.map((reply) => (
+            <div key={reply.id} className="ml-8 mt-2">
+              <div className="flex gap-2">
+                <img
+                  className="h-10 w-10 object-cover rounded-full"
+                  src={reply.user_profile_img}
+                  alt=""
+                />
+                <div>
+                  <div className="text-sm font-semibold">
+                    {reply.user_first_name} {reply.user_last_name}
+                  </div>
+                  <div className="text-xs text-slate-400">
+                    {reply.timestamp.split("T")[0]}
+                  </div>
+                  {reply?.is_authenticated_user && activeReply[reply?.id] ? (
+                    <textarea
+                      value={editedReply}
+                      onChange={(e) => setEditedReply(e.target.value)}
+                      className="text-xs sm:text-base font-montserrat w-full h-20 border border-gray-300 rounded-md p-2 outline-none"
+                    />
+                  ) : (
+                    <p className="text-xs">{reply.content}</p>
+                  )}
+                  {reply?.is_authenticated_user && activeReply[reply?.id] && (
+                    <div className="mb-2">
+                      <button
+                        onClick={() => saveEdit2(reply?.id)}
+                        className="text-green-500 px-3 py-1 border border-solid border-green-500 rounded-md"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditedReply(""),
+                            setActiveReply({
+                              ...activeReply,
+                              [reply?.id]: false,
+                            });
+                        }}
+                        className="text-gray-500 px-3 py-1 border border-solid border-gray-500 rounded-md ml-2"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
+                  <div className="text-xs mt-1 flex gap-2">
+                    <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
+                      <div
+                        className="flex items-center gap-1"
+                        onClick={() => likeComment2(reply?.id)}
+                      >
+                        <BiLike />
+                        <div>{reply?.like_count}</div>
+                      </div>
+                      <div
+                        className="flex items-center gap-1"
+                        onClick={() => dislikeComment2(reply?.id)}
+                      >
+                        <BiDislike />
+                        <div>{reply?.dislike_count}</div>
+                      </div>
+
+                      {!replyComm && (
+                        <button
+                          className="text-xs sm:text-base cursor-pointer px-2 py-1 rounded-sm sm:rounded-md"
+                          onClick={() => setReplyComm(true)}
+                        >
+                          Reply
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {reply?.is_authenticated_user && !activeReply[reply?.id] && (
+                  <div className="relative overflow-visible flex flex-col ml-auto text-xl sm:text-3xl cursor-pointer">
+                    <PiDotsThreeCircleVertical
+                      onClick={() =>
+                        setActiveReplyMenu({
+                          ...activeReplyMenu,
+                          [reply?.id]: !activeReplyMenu[reply?.id],
+                        })
+                      }
+                    />
+
+                    {activeReplyMenu[reply?.id] && (
+                      <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
+                        <div
+                          className="transition-all hover:bg-gray-300 px-3"
+                          onClick={() => {
+                            setEditedReply(reply.content),
+                              setActiveReply({
+                                ...activeReply,
+                                [reply?.id]: true,
+                              });
+                          }}
+                        >
+                          Edit
+                        </div>
+                        <div
+                          className="transition-all hover:bg-gray-300 px-3"
+                          onClick={() => deleteComment2(reply.id)}
+                        >
+                          Delete
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
-          )} */}
+          ))}
         </div>
         {temp?.is_authenticated_user && !isEditing && (
           <div className="relative overflow-visible flex flex-col ml-auto text-xl sm:text-3xl cursor-pointer">
-            <PiDotsThreeCircleVertical onClick={() => setOptions(!options)} />
-            {options && (
+            <PiDotsThreeCircleVertical
+              onClick={() => setShowOptions(!showOptions)}
+            />
+            {showOptions && (
               <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
                 <div
                   className="transition-all hover:bg-gray-300 px-3"
-                  onClick={handleEdit}
+                  onClick={() => handleEditClick(temp?.content)}
                 >
                   Edit
                 </div>
                 <div
                   className="transition-all hover:bg-gray-300 px-3"
-                  onClick={deleteComment}
+                  onClick={() => deleteComment(temp?.id)}
                 >
                   Delete
                 </div>
@@ -397,6 +675,7 @@ const BlogDetails = () => {
         return;
       }
       console.log(json);
+      setComments({ ...comments, comment: "" });
       getAllBlogComments();
     } catch (error) {
       console.log(error);
@@ -406,6 +685,29 @@ const BlogDetails = () => {
   const [blogComments, setBlogComments] = useState([]);
 
   const getAllBlogComments = async () => {
+    const organizeComments = (comments) => {
+      const commentMap = {};
+      const nestedComments = [];
+
+      // Create a map of comments by their IDs
+      comments.forEach((comment) => {
+        comment.replies = [];
+        commentMap[comment.id] = comment;
+      });
+
+      // Populate the replies array for each comment
+      comments.forEach((comment) => {
+        if (comment.reply_to) {
+          if (commentMap[comment.reply_to]) {
+            commentMap[comment.reply_to].replies.push(comment);
+          }
+        } else {
+          nestedComments.push(comment);
+        }
+      });
+
+      return nestedComments;
+    };
     const cookies = document.cookie.split("; ");
     const jsonData = {};
 
@@ -426,7 +728,8 @@ const BlogDetails = () => {
         return;
       }
       console.log(json);
-      setBlogComments(json.data);
+      const organizedComments = organizeComments(json.data);
+      setBlogComments(organizedComments);
     } catch (error) {
       console.log(error);
     }
@@ -447,8 +750,9 @@ const BlogDetails = () => {
             {currBlogData?.title}
           </div>
           {console.log(currBlogData?.author_data?.id)}
-          <Link to={`/experts/expertprofile/${currBlogData?.author_data?.id} `}
-          className="no-underline"
+          <Link
+            to={`/experts/expertprofile/${currBlogData?.author_data?.id} `}
+            className="no-underline"
           >
             <div className="flex items-center justify-center gap-3">
               <img
@@ -515,35 +819,30 @@ const BlogDetails = () => {
         <div className="mt-10 md:mt-20">
           {/* <ExpertRatings /> */}
           <div className="px-1 xs:px-5 mb-10 lg:mb-0">
-            {localStorage.getItem("profile") ===
-            currBlogData?.author_data?.profile_img ? (
-              <></>
-            ) : (
-              <div className="border-b border-solid border-slate-300 pb-10">
-                <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
-                  50 reviews
-                </div>
-                <div className=" mt-6">
-                  <input
-                    type="text"
-                    name="comment"
-                    id="comment"
-                    value={comments.comment}
-                    onChange={(e) =>
-                      setComments({ ...comments, comment: e.target.value })
-                    }
-                    placeholder="Write a comment"
-                    className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
-                  />
-                  <button
-                    onClick={postNewComment}
-                    className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0"
-                  >
-                    Comment
-                  </button>
-                </div>
+            <div className="border-b border-solid border-slate-300 pb-10">
+              <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
+                50 reviews
               </div>
-            )}
+              <div className=" mt-6">
+                <input
+                  type="text"
+                  name="comment"
+                  id="comment"
+                  value={comments.comment}
+                  onChange={(e) =>
+                    setComments({ ...comments, comment: e.target.value })
+                  }
+                  placeholder="Write a comment"
+                  className="w-full bg-[#F4F4F4] py-2 px-2 md:py-[0.7vw] rounded-sm text-xs xs:text-sm outline-none"
+                />
+                <button
+                  onClick={postNewComment}
+                  className="mt-2 md:mt-4 px-[3vw] py-2 md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-base font-semibold cursor-pointer shrink-0"
+                >
+                  Comment
+                </button>
+              </div>
+            </div>
 
             <div>
               <div className="mt-8 mb-12 flex items-center justify-between">
