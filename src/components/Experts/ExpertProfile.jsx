@@ -369,7 +369,66 @@ export const ExpertRatings = ({expert}) => {
   );
 };
 
-export const AboutExpert = ({ ...expert }) => {
+export const AboutExpert = ({ getExpertDetails, ...expert }) => {
+  const cookie = document.cookie.split(";");
+  const jsonData = {};
+  cookie.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  const followExpert = async (id) => {  
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 1,
+          expert_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      getExpertDetails();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const unfollowExpert = async (id) => { 
+    console.log(id)
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 2,
+          expert_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      getExpertDetails();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
       <div className=" px-[2.5vw] lg:border-r border-solid border-slate-300">
@@ -394,9 +453,18 @@ export const AboutExpert = ({ ...expert }) => {
                 {expert?.expert?.expert?.user?.last_name}
               </div>
               <div className="hidden md:flex gap-2">
-                <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white btnBlack rounded-sm text-xs xs:text-base font-semibold cursor-pointer">
+
+                {expert?.expert?.is_following===false? <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white btnBlack rounded-sm text-xs xs:text-base font-semibold cursor-pointer"
+                onClick={()=>followExpert(expert?.expert?.expert?.id)}
+                >
                   Follow
-                </button>
+                </button>:
+                 <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white btnBlack rounded-sm text-xs xs:text-base font-semibold cursor-pointer"
+                 onClick={()=>unfollowExpert(expert?.expert?.expert?.id)}
+                 >
+                   Unfollow
+                 </button>
+                }
                 <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm flex items-center justify-center gap-2 cursor-pointer">
                   <div className="text-2xl text-[#565454]">
                     <IoIosChatboxes />
@@ -899,7 +967,7 @@ const ExpertProfile = () => {
     <div>
       <div className="lg:flex mt-[90px] md:mt-[80px]">
         <div className="lg:w-[70%] h-[88vh]">
-          <AboutExpert expert={expertDetail} />
+          <AboutExpert expert={expertDetail} getExpertDetails={getExpertDetails} />
           <ExpertInfo expert={expertDetail} />
         </div>
         <div className="hidden lg:block w-[30%]">

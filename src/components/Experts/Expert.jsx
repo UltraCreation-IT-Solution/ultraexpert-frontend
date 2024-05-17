@@ -229,8 +229,6 @@ const AllExperts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const [lastPage, setLastPage] = useState(0);
-  const cookies = document.cookie.split("; ");
-  const jsonData = {};
   const [allExpertsList, setAllExpertsList] = useState([]);
 
   const getAllExperts = async () => {
@@ -260,7 +258,7 @@ const AllExperts = () => {
   };
   useEffect(() => {
     getAllExperts();
-  }, []);
+  }, [currentPage]);
   console.log(allExpertsList);
 
   if (!allExpertsList.length)
