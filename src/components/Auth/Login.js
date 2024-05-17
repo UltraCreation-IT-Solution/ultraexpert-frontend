@@ -60,6 +60,7 @@ const Login = () => {
           document.cookie = `refresh_token=${
             res.data.refresh_token
           };expires=${expirationDate.toUTCString()};  SameSite=Lax;`;
+          // localStorage.setItem("userId", `${res.data.id}`);
           localStorage.setItem("username", `${res.data.first_name}`);
           localStorage.setItem("profile", `${res.data.profile_img}`);
           localStorage.setItem("isExpert", `${res.data.is_expert}`);
@@ -72,6 +73,7 @@ const Login = () => {
         }
       } catch (error) {
         console.error(error);
+        alert("Invalid email or password");
         setLoading(false);
       }
     }

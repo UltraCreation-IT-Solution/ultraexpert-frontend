@@ -1157,8 +1157,11 @@ export const Dashboard = () => {
           />
         )}
         {/* Testimonials section of dashboard */}
-        {testimonials &&
-          expertAllTestimonials.length === 0 ? <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">No testimonials found</div> :
+        {testimonials && expertAllTestimonials.length === 0 ? (
+          <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
+            No testimonials found
+          </div>
+        ) : (
           expertAllTestimonials?.map((item, index) => (
             <TestimonialsCard
               key={index}
@@ -1168,7 +1171,8 @@ export const Dashboard = () => {
               HandleTestimonials={HandleTestimonials}
               getExpertAllTestimonials={getExpertAllTestimonials}
             />
-          ))}
+          ))
+        )}
         {/* Project section of dashboard */}
         {projects && <ShowMyProjects />}
       </div>
@@ -1256,43 +1260,47 @@ export const MyServices = () => {
         </div>
       </div>
       <div>
-       
-        {myServices.length===0?<div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">No services created yet</div>:
-         myServices.map((service, index) => (
-          <div
-            key={index}
-            className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md"
-          >
-            <div className="flex items-center gap-3">
-              <button className="bg-green-500 hover:bg-green-600 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">
-                Edit service
-              </button>
-              <button
-                onClick={() => deleteService(service.id)}
-                className="bg-red-500 hover:bg-red-600 text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
-              >
-                Delete service
-              </button>
-            </div>
-            <div
-              className="text-base sm:text-lg font-bold mt-2 line-clamp-3 cursor-pointer"
-              onClick={() => navigate(`/experts/service/${service.id}`)}
-            >
-              {service.service_name}
-            </div>
-            <div className="mt-2 text-sm text-gray-500 line-clamp-3">
-              {service.description}
-            </div>
-            <div className="flex items-center mt-3 gap-3 text-sm sm:text-base">
-              <div className="flex items-center gap-1">
-                <AiOutlineLike /> {service.service_view_count} views
-              </div>
-              <div className="flex items-center gap-1">
-                <IoStar /> rating
-              </div>
-            </div>
+        {myServices.length === 0 ? (
+          <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
+            No services created yet
           </div>
-        ))}
+        ) : (
+          myServices.map((service, index) => (
+            <div
+              key={index}
+              className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md"
+            >
+              <div className="flex items-center gap-3">
+                <button className="bg-green-500 hover:bg-green-600 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">
+                  Edit service
+                </button>
+                <button
+                  onClick={() => deleteService(service.id)}
+                  className="bg-red-500 hover:bg-red-600 text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
+                >
+                  Delete service
+                </button>
+              </div>
+              <div
+                className="text-base sm:text-lg font-bold mt-2 line-clamp-3 cursor-pointer"
+                onClick={() => navigate(`/experts/service/${service.id}`)}
+              >
+                {service.service_name}
+              </div>
+              <div className="mt-2 text-sm text-gray-500 line-clamp-3">
+                {service.description}
+              </div>
+              <div className="flex items-center mt-3 gap-3 text-sm sm:text-base">
+                <div className="flex items-center gap-1">
+                  <AiOutlineLike /> {service.service_view_count} views
+                </div>
+                <div className="flex items-center gap-1">
+                  <IoStar /> rating
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
@@ -1441,7 +1449,8 @@ export const Leaderboard = () => {
             </div>
             <div className="text-[2.7vw] sm:text-sm text-white text-center font-semibold mt-[8vw] sm:mt-10">
               <div className="text-[3vw] sm:text-base">
-                {leaderBoardData[1]?.expert_first_name} {leaderBoardData[1]?.expert_last_name}
+                {leaderBoardData[1]?.expert_first_name}{" "}
+                {leaderBoardData[1]?.expert_last_name}
               </div>
               <div className="text-[#009BD6]">
                 {/* {leaderBoardData[1].avg_score}{" "}  */}
@@ -1464,7 +1473,8 @@ export const Leaderboard = () => {
             </div>
             <div className="text-[2.7vw] sm:text-sm text-[#FFAA00] text-center font-semibold mt-[9vw] sm:mt-10">
               <div className="text-[3vw] sm:text-base text-white">
-              {leaderBoardData[0]?.expert_first_name} {leaderBoardData[0]?.expert_last_name}
+                {leaderBoardData[0]?.expert_first_name}{" "}
+                {leaderBoardData[0]?.expert_last_name}
               </div>
               <div className="text-[#FFAA00]">
                 {/* {leaderBoardData[0].avg_score}{" "} */}
@@ -1484,7 +1494,8 @@ export const Leaderboard = () => {
             </div>
             <div className="text-[2.7vw] sm:text-sm text-white font-semibold mt-[8vw] sm:mt-10">
               <div className="text-[3vw] sm:text-base">
-              {leaderBoardData[2]?.expert_first_name} {leaderBoardData[2]?.expert_last_name}
+                {leaderBoardData[2]?.expert_first_name}{" "}
+                {leaderBoardData[2]?.expert_last_name}
               </div>
               <div className="text-[#00D95F]">
                 {/* {leaderBoardData[2]?.avg_score} */}
@@ -1557,8 +1568,7 @@ export const Leaderboard = () => {
   );
 };
 
-export const MyBookings = (props) => {
-  console.log(props);
+export const MyBookings = ({ expertData, expertId }) => {
   const [myBookings, setMyBookings] = useState([]);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -1587,6 +1597,9 @@ export const MyBookings = (props) => {
     }
   };
   console.log(myBookings);
+
+  console.log({expertData});
+  console.log(expertId);
   return (
     <div className="w-full md:w-[68%]">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
@@ -1643,9 +1656,11 @@ const ExpertDashboard = () => {
         console.log(response.data.message);
         return;
       }
-      console.log(response.data);
-      setExpertData(response.data.data);
-      setExpertId(response.data.data.id);
+      const json = response.data;
+      console.log(json);
+      console.log(json.data);
+      setExpertData(json.data);
+      setExpertId(json.data.id);
     } catch (error) {
       console.log(error);
     }
@@ -1654,6 +1669,8 @@ const ExpertDashboard = () => {
   useEffect(() => {
     getCurrentExpert();
   }, []);
+
+  console.log(expertId);
 
   const handleShowEditProfile = () => {
     setShowEditProfile(false);
@@ -1811,7 +1828,10 @@ const ExpertDashboard = () => {
         <Leaderboard />
         <SkillList />
         {/* {expertData.length!==0 && <MyBookings {...expertData} />} */}
-        <MyBookings id={expertId} />
+
+        {expertData && expertId && <MyBookings expertData={{...expertData}} expertId={expertId} />}
+
+        {/* <MyBookings id={expertId} /> */}
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />

@@ -171,7 +171,6 @@ const Service = () => {
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const [lastPage, setLastPage] = useState(0);
   // for pagination
-
   const fetchData = async () => {
     const cookie = document.cookie.split(";");
 
@@ -185,7 +184,6 @@ const Service = () => {
       const res = await axios.get("/customers/services/?action=1", {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
       const data = res.data.data;
@@ -237,7 +235,6 @@ const Service = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );

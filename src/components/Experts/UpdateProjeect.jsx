@@ -200,10 +200,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
           </button>
           <button
             onClick={handleSubmit}
-            disabled={projects.length === 0}
-            className={`bg-blue-500 text-white px-6 py-2 rounded ${
-              projects.length === 0 && "opacity-50 cursor-not-allowed"
-            }`}
+            className={`bg-blue-500 text-white px-6 py-2 rounded`}
           >
             Submit Projects
           </button>

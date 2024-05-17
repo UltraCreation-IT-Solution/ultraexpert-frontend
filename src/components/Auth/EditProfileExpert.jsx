@@ -46,16 +46,15 @@ const GeneralDetails = () => {
         banner_img: response.data.data.banner_img,
         gender: response.data.data.gender,
       });
-      console.log(generalInfo);
     } catch (error) {
       console.log(error);
     }
   };
-
+  
   useEffect(() => {
     getGenInfo();
   }, []);
-
+  
   const [generalInfo, setGeneralInfo] = useState({
     first_name: "",
     last_name: "",
@@ -65,7 +64,7 @@ const GeneralDetails = () => {
     banner_img: "",
     gender: "Male",
   });
-
+  
   const handleSubmit1 = async (e) => {
     e.preventDefault();
     const cookies = document.cookie.split("; ");
@@ -210,7 +209,8 @@ const GeneralDetails = () => {
   const handleRemoveBanner = () => {
     setSelectedBanner(null);
   };
-
+  
+  console.log(generalInfo);
   return (
     <form onSubmit={handleSubmit1} className="grow flex flex-col h-full">
       <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
@@ -695,7 +695,7 @@ const EducationDetails = () => {
       const response = await axios.post(
         "/experts/update/",
         {
-          action: 3,
+          action: 2,
           education_json: educationData,
         },
         {
@@ -1252,7 +1252,7 @@ const SkillDetails = () => {
       const response = await axios.post(
         "/experts/update/",
         {
-          action: 4,
+          action: 3,
           skill_json: skillData,
         },
         {
@@ -1777,7 +1777,7 @@ const ExperienceDetails = () => {
       const response = await axios.post(
         "/experts/update/",
         {
-          action: 5,
+          action: 4,
           experience_json: experienceData,
         },
         {
@@ -1826,7 +1826,7 @@ const ExperienceDetails = () => {
       expData.forEach((form) => {
         updatedCompName.push(form.company_name);
         updatedStartDate.push(form.start_date);
-        updatedEndDate.push(form.end_date);
+        updatedEndDate.push(form.is_present ? '' : form.end_date);
         updatedDesignation.push(form.designation);
       });
 
@@ -2038,7 +2038,7 @@ const AccDetails = () => {
       const response = await axios.post(
         "/experts/update/",
         {
-          action: 6,
+          action: 5,
           account_holder: accInfo.account_holder,
           bank_name: accInfo.bank_name,
           account_number: accInfo.account_number,
