@@ -238,7 +238,7 @@ const AllExperts = () => {
     });
     try {
       const res = await axios.get(
-        `/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}/`,
+        `/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -255,7 +255,7 @@ const AllExperts = () => {
   };
   useEffect(() => {
     getAllExperts();
-  }, []);
+  }, [currentPage]);
   console.log(allExpertsList);
 
   if (!allExpertsList.length)

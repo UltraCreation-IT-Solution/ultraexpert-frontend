@@ -447,7 +447,7 @@ const BlogDetails = () => {
             {currBlogData?.title}
           </div>
           {console.log(currBlogData?.author_data?.id)}
-          <Link to={`/experts/expertprofile/${currBlogData?.author_data?.id} `}
+          <Link to={`/experts/expertprofile/${currBlogData?.expert_id} `}
           className="no-underline"
           >
             <div className="flex items-center justify-center gap-3">

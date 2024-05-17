@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { hotTopics } from "../../../constant";
 import { CiBookmark } from "react-icons/ci";
-import { FaTags, FaForward, FaBackward, FaRegComment, FaMinus} from "react-icons/fa";
+import {
+  FaTags,
+  FaForward,
+  FaBackward,
+  FaRegComment,
+  FaMinus,
+} from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
 import { BiSolidLike } from "react-icons/bi";
@@ -10,8 +16,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../../../subsitutes/Pagination";
 import { FaBookmark } from "react-icons/fa6";
 import axios from "../../../axios";
+import BlogCardShimmer from "../../../subsitutes/Shimmers/BlogCardShimmer";
 
-export const BlogBody = ({ allBlogsArray,getBlogArray }) => {
+export const BlogBody = ({ allBlogsArray, getBlogArray }) => {
   console.log(allBlogsArray);
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -281,24 +288,24 @@ export const BlogBody = ({ allBlogsArray,getBlogArray }) => {
           All Blogs
         </div>
         <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
-          {allBlogsArray.length === 0 ? (
-            <div>no blogs</div>
-          ) : (
-            allBlogsArray?.map((item, index) => (
-              <BlogCard
-                key={item.id}
-                index={index}
-                id={item.id}
-                items={item}
-                title={item.title}
-                tags={item.tags}
-                image={item.images[0]}
-                date={formatDate(item.date_created.split("T")[0])}
-                getBlogArray={getBlogArray}
-                fetchBlogs={fetchBlogs}
-              />
-            ))
-          )}
+          {allBlogsArray.length === 0
+            ? Array.from({ length: 4 }).map((_, index) => (
+                <BlogCardShimmer key={index} />
+              ))
+            : allBlogsArray?.map((item, index) => (
+                <BlogCard
+                  key={item.id}
+                  index={index}
+                  id={item.id}
+                  items={item}
+                  title={item.title}
+                  tags={item.tags}
+                  image={item.images[0]}
+                  date={formatDate(item.date_created.split("T")[0])}
+                  getBlogArray={getBlogArray}
+                  fetchBlogs={fetchBlogs}
+                />
+              ))}
         </div>
       </div>
     </>
@@ -374,7 +381,7 @@ export const BlogCard = ({
   likes,
   image,
   getBlogArray,
-  fetchBlogs
+  fetchBlogs,
 }) => {
   const navigate = useNavigate();
   const addFav = async (id) => {
@@ -558,7 +565,6 @@ const Blogs = () => {
       const res = await axios.get("/topfive/?action=4", {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
       const allData = res.data.data;
@@ -754,7 +760,7 @@ const Blogs = () => {
       ) : null}
 
       {searchText.length === 0 ? (
-        <BlogBody allBlogsArray={allBlogsArray} getBlogArray={getBlogArray}/>
+        <BlogBody allBlogsArray={allBlogsArray} getBlogArray={getBlogArray} />
       ) : (
         <SearchedBlog allBlogsArray={filterAllBlogsArray} />
       )}

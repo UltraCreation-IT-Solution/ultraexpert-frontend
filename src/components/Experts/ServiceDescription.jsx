@@ -53,9 +53,17 @@ export const ServiceProfileCard = ({ item }) => {
             Ratings
           </div>
         </a>
+        {item?.expert_data?.is_following_expert ? 
+          
         <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
           Follow
+        </button>:
+
+        <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
+          Unfollow
         </button>
+          
+        }
       </div>
     </div>
   );
@@ -392,7 +400,7 @@ const ServiceDescription = () => {
   const params = useParams();
   const { id } = params;
 
-  const [servDesc, setServDesc] = useState({});
+  const [servDesc, setServDesc] = useState(null);
   const [scheduleData, setScheduleData] = useState({});
 
   const getServiceDesc = async () => {
@@ -500,7 +508,7 @@ const ServiceDescription = () => {
   useEffect(() => {
     getAllServiceComments();
   }, []);
-
+  if(servDesc===null) return <div className="mt-100">wait</div>
   return (
     <>
       <div className="lg:flex mt-[100px] ">
