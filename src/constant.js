@@ -150,6 +150,9 @@ export const searchCategories = [
   "Product Photography",
   "Video Editing",
   "Creative Design",
+  "Figma",
+  "Canva",
+  "Designing"
 ];
 export const profileObj = [
   {
