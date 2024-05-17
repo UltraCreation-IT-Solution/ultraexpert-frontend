@@ -184,23 +184,15 @@ const SignUp = () => {
     if (validatePassword()) {
       setLoading(true);
       try {
-        const response = await axios.post(
-          "/register/",
-          {
-            first_name: firstStep.firstName,
-            last_name: firstStep.lastName,
-            mobile: firstStep.mobileNumber,
-            reffered_by: firstStep.refCode,
-            email: secondStep.email,
-            password1: forthStep.password,
-            password2: forthStep.confirmPassword,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await axios.post("/register/", {
+          first_name: firstStep.firstName,
+          last_name: firstStep.lastName,
+          mobile: firstStep.mobileNumber,
+          reffered_by: firstStep.refCode,
+          email: secondStep.email,
+          password1: forthStep.password,
+          password2: forthStep.confirmPassword,
+        });
         const data = response.data;
         if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid Registration");
@@ -246,7 +238,6 @@ const SignUp = () => {
         }
       } catch (error) {
         console.error(error);
-        alert("SignUp Failed");
         setLoading(false);
       }
     }
@@ -304,10 +295,13 @@ const SignUp = () => {
   const otpRegex = /^\d{6}$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}$/;
 
-  const [checked, setChecked] = useState({ checkbox1: false, checkbox2: false });
+  const [checked, setChecked] = useState({
+    checkbox1: false,
+    checkbox2: false,
+  });
 
   const handleChange = (checkbox) => {
-    if (checkbox === 'checkbox1') {
+    if (checkbox === "checkbox1") {
       setChecked({ checkbox1: true, checkbox2: false });
     } else {
       setChecked({ checkbox1: false, checkbox2: true });
@@ -384,24 +378,29 @@ const SignUp = () => {
                 <div className="text-base md:text-lg font-semibold mb-1">
                   Do you have a refferal code?
                 </div>
-                <input className="mb-3"
+                <input
+                  className="mb-3"
                   type="checkbox"
                   id="yes"
                   name="yes"
                   value="Yes"
                   checked={checked.checkbox1}
-                  onClick={() => handleChange('checkbox1')}
+                  onClick={() => handleChange("checkbox1")}
                 />
-                <label className="mr-2 font-medium text-lg" htmlFor="yes">Yes</label>
+                <label className="mr-2 font-medium text-lg" htmlFor="yes">
+                  Yes
+                </label>
                 <input
                   type="checkbox"
                   id="no"
                   name="no"
                   value="No"
                   checked={checked.checkbox2}
-                  onClick={() => handleChange('checkbox2')}
+                  onClick={() => handleChange("checkbox2")}
                 />
-                <label htmlFor="no" className="mr-2 font-medium text-lg">No</label>
+                <label htmlFor="no" className="mr-2 font-medium text-lg">
+                  No
+                </label>
                 {checked.checkbox1 && (
                   <>
                     <label
