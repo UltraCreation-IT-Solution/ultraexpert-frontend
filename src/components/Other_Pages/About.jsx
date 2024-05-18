@@ -13,9 +13,11 @@ const About = () => {
     const [key, value] = item.split("=");
     jsonData[key] = value;
   });
+  const [loading, setLoading] = useState(false);
   const [writeTestimonial, setWriteTestimonial] = useState("");
   console.log(writeTestimonial);
   const handleTestimonialSubmit = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
         "/testimonial/",
@@ -36,9 +38,11 @@ const About = () => {
         return;
       }
       console.log(response.data);
+      setLoading(false);
       setWriteTestimonial("");
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   return (
@@ -192,7 +196,7 @@ const About = () => {
             className="min-w-full max-w-full border border-solid border-slate-400 text-base rounded-md p-2"
           ></textarea>
           <div
-            className="px-6 py-2 mt-3 text-white bg-[#2A2A2A] rounded-sm w-fit ml-auto cursor-pointer"
+            className={loading ? `text-gray-500 bg-gray-300 px-6 py-3 mt-3 rounded-sm w-fit ml-auto` : `px-6 py-2 mt-3 text-white bg-[#2A2A2A] rounded-sm w-fit ml-auto cursor-pointer`}
             onClick={() => handleTestimonialSubmit()}
           >
             Submit
