@@ -2157,39 +2157,39 @@ export const featuredBlogs = [
 ];
 export const hotTopics = [
   {
-    topicName: "Sports",
+    topicName: "Reactjs",
     img: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    topicName: "Science",
+    topicName: "Python",
     img: "https://images.unsplash.com/photo-1554475900-0a0350e3fc7b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c2NpZW5jZXxlbnwwfHwwfHx8MA%3D%3D",
   },
   {
-    topicName: "Entertainment",
+    topicName: "Django",
     img: "https://plus.unsplash.com/premium_photo-1682125528836-9f652947350f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDF8fGVudGVydGFpbm1lbnR8ZW58MHwxfDB8fHww",
   },
   {
-    topicName: "Politics",
+    topicName: "Designing",
     img: "https://images.unsplash.com/photo-1523995462485-3d171b5c8fa9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8UG9saXRpY3N8ZW58MHwxfDB8fHww",
   },
   {
-    topicName: "World",
+    topicName: "Figma",
     img: "https://images.unsplash.com/photo-1555005245-5c29a5faccb7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8V29ybGR8ZW58MHwxfDB8fHww",
   },
   {
-    topicName: "Startup",
+    topicName: "Node JS",
     img: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHN0YXJ0dXB8ZW58MHwxfDB8fHww",
   },
   {
-    topicName: "Movies",
+    topicName: "Express JS",
     img: "https://images.unsplash.com/photo-1584905066893-7d5c142ba4e1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8TW92aWVzfGVufDB8MXwwfHx8MA%3D%3D",
   },
   {
-    topicName: "Gadgets",
+    topicName: "Mongo DB",
     img: "https://images.unsplash.com/photo-1554116154-e733de92fe4b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGdhZGdldHN8ZW58MHwxfDB8fHww",
   },
   {
-    topicName: "Technology",
+    topicName: "Database",
     img: "https://plus.unsplash.com/premium_photo-1683120974913-1ef17fdec2a8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8dGVjaG5vbG9neXxlbnwwfDF8MHx8fDA%3D",
   },
 ];

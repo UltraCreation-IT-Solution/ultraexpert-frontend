@@ -7,6 +7,7 @@ import {
   FaForward,
   FaBackward,
   FaPlus,
+  FaSearch,
   FaMinus,
 } from "react-icons/fa";
 import { ServiceCategory } from "../Landing/Landing";
@@ -178,6 +179,7 @@ const Service = () => {
   const [lastPage, setLastPage] = useState(0);
   // for pagination
   const [searchedServices, setSearchedServices] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const [showSearchedServices, setShowSearchedServices] = useState(false);
 
   const fetchData = async () => {
@@ -327,22 +329,63 @@ const Service = () => {
       console.log(error);
     }
   };
+
+  const getServicesByTag = async (item, searchText) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get(
+        `/customers/services/?action=3&service_tag=${item}&service_title=${searchText} `,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = res.data.data;
+      setSearchedServices(data);
+      setShowSearchedServices(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="mt-[90px] px-[7vw] md:px-[10vw]">
         <Subheader heading={"Services"} />
       </div>
-      <SearchByCategoriesSlider
-        setSearchedServices={setSearchedServices}
-        setShowSearchedServices={setShowSearchedServices}
-      />
+      <SearchByCategoriesSlider getServicesByTag={getServicesByTag} />
       {console.log(searchedServices)}
+      <div className="my-10 flex justify-center items-center h-[8vh]">
+        <input
+          className="h-full w-[84vw] sm:w-[66vw] md:w-[60vw] bg-[#ECECEC] rounded-r-none rounded-md pl-3 sm:pl-6 py-2 xs:text-sm  sm:text-base md:text-lg outline-none focus:border-blue-200 border-solid focus:border-[0.8px]"
+          type="text"
+          placeholder="Search for any services"
+          value={searchText}
+          onChange={(e) => 
+            setSearchText(e.target.value)
+            }
+        />
+        <div
+          className="h-full w-[6vw] py-2 bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all  xs:text-sm sm:text-base md:text-lg rounded-l-none rounded-md flex justify-center items-center"
+          onClick={() => getServicesByTag(null, searchText)}
+        >
+          <FaSearch />
+        </div>
+      </div>
+     
       {showSearchedServices && (
         <div className="w-full px-[7vw] md:px-[10vw]">
           <div
-            className="text-lg sm:text-xl font-semibold text-red-500 underline my-5 cursor-pointer flex gap-2 items-center"
+            className="text-lg sm:text-xl font-semibold text-red-500 my-5 cursor-pointer flex gap-2 items-center no-underline ml-2 hover:ml-0 hover:gap-3 hover:underline transition-all w-fit"
             onClick={() => (
-              setShowSearchedServices(false), setSearchedServices([])
+              setShowSearchedServices(false), setSearchedServices([]), setSearchText("")
             )}
           >
             <IoMdArrowRoundBack />
@@ -444,7 +487,7 @@ const Service = () => {
                         key={service?.id}
                         className="cursor-pointer  min-w-[300px] max-w-[300px] md:min-w-[350px] md:max-w-[350px]"
                       >
-                        <ServiceCard item={service} />
+                        <ServiceCard item={service}/>
                       </div>
                     ))}
                   </div>

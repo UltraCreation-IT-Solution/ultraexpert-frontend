@@ -326,7 +326,6 @@ const Expert = () => {
       <div className="mt-[80px] px-[7vw] md:px-[10vw]">
         <Subheader heading={"Experts"} />
       </div>
-      <SearchByCategoriesSlider />
       <TopExperts />
       <AllExperts />
     </>
