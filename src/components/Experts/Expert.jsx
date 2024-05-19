@@ -80,7 +80,7 @@ export const ExpertCard = ({ item }) => {
       console.log(error);
     }
   };
-  const followExpert = async (id) => {  
+  const followExpert = async (id) => {
     try {
       const res = await axios.post(
         "/customers/connect/",
@@ -106,8 +106,8 @@ export const ExpertCard = ({ item }) => {
       console.log(error);
     }
   };
-  const unfollowExpert = async (id) => { 
-    console.log(id)
+  const unfollowExpert = async (id) => {
+    console.log(id);
     try {
       const res = await axios.post(
         "/customers/connect/",
@@ -204,19 +204,22 @@ export const ExpertCard = ({ item }) => {
           >
             Visit Profile
           </Link>
-       
-          {item.is_following===false ?
-            <div className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2 cursor-pointer"
-            onClick={()=>followExpert(item?.expert?.id)}
+
+          {item.is_following === false ? (
+            <div
+              className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2 cursor-pointer"
+              onClick={() => followExpert(item?.expert?.id)}
             >
-            Follow Expert
-          </div>:
-          <div className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2 cursor-pointer"
-          onClick={()=>unfollowExpert(item?.expert?.id)}
-          >
-          Unfollow
-        </div>
-          }
+              Follow Expert
+            </div>
+          ) : (
+            <div
+              className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2 cursor-pointer"
+              onClick={() => unfollowExpert(item?.expert?.id)}
+            >
+              Unfollow
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -274,7 +277,13 @@ const AllExperts = () => {
       </div>
       <div className="w-full flex flex-wrap gap-[3vw] md:gap-[2vw] pb-[2vw]  justify-center sm:justify-normal  items-center">
         {allExpertsList.map((item) => {
-          return <ExpertCard key={item?.expert?.id} item={item} getAllExperts={getAllExperts} />;
+          return (
+            <ExpertCard
+              key={item?.expert?.id}
+              item={item}
+              getAllExperts={getAllExperts}
+            />
+          );
         })}
       </div>
       <div className="mt-[3vw] flex items-center justify-between gap-[4vw] text-white">
@@ -317,7 +326,6 @@ const Expert = () => {
       <div className="mt-[80px] px-[7vw] md:px-[10vw]">
         <Subheader heading={"Experts"} />
       </div>
-      <SearchByCategoriesSlider />
       <TopExperts />
       <AllExperts />
     </>
