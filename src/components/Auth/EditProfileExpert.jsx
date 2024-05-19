@@ -22,7 +22,9 @@ cookies.forEach((item) => {
 });
 
 const GeneralDetails = () => {
+  const [loading,setLoading]  = useState(false);
   const getGenInfo = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("/experts/?action=1", {
         headers: {
@@ -36,6 +38,7 @@ const GeneralDetails = () => {
         return;
       }
       console.log(response.data.data);
+      setLoading(false);
       setGeneralInfo({
         ...generalInfo,
         first_name: response.data.data.first_name,
@@ -48,6 +51,7 @@ const GeneralDetails = () => {
       });
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   
@@ -74,7 +78,7 @@ const GeneralDetails = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-
+    setLoading(true);
     try {
       const response = await axios.post(
         "/user_details/?action=1",
@@ -101,10 +105,12 @@ const GeneralDetails = () => {
         return;
       }
       console.log(data, generalInfo);
+      setLoading(false);
       localStorage.setItem("profile", generalInfo.profile_img);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -138,6 +144,8 @@ const GeneralDetails = () => {
           console.log("Upload complete");
         }
       );
+
+      setLoading(true);
       try {
         await uploadTask;
         const url = await getDownloadURL(uploadTask.snapshot.ref);
@@ -151,6 +159,7 @@ const GeneralDetails = () => {
         // Handle error if needed
         alert("Something went wrong");
       }
+      setLoading(false);
       reader.onload = () => {
         const imageData = reader.result;
         setSelectedProfile(imageData);
@@ -182,6 +191,7 @@ const GeneralDetails = () => {
           console.log("Upload complete");
         }
       );
+      setLoading(true);
       try {
         await uploadTask;
         const url = await getDownloadURL(uploadTask.snapshot.ref);
@@ -195,6 +205,7 @@ const GeneralDetails = () => {
         // Handle error if needed
         alert("Something went wrong");
       }
+      setLoading(false);
       reader.onload = () => {
         const imageData = reader.result;
         setSelectedBanner(imageData);
@@ -408,7 +419,7 @@ const GeneralDetails = () => {
       <div className="flex justify-end mx-20 mb-8">
         <button
           type="submit"
-          className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+          className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
           Submit
         </button>
@@ -418,7 +429,9 @@ const GeneralDetails = () => {
 };
 
 const PersonalDetails = () => {
+  const [loading, setLoading] = useState(false);
   const getPerInfo = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("/experts/?action=1", {
         headers: {
@@ -432,6 +445,7 @@ const PersonalDetails = () => {
         return;
       }
       console.log(response.data.data);
+      setLoading(false);
       setPersonalInfo({
         ...personalInfo,
         level: response.data.data.level,
@@ -441,6 +455,7 @@ const PersonalDetails = () => {
       });
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -464,6 +479,7 @@ const PersonalDetails = () => {
       jsonData[key] = value;
     });
     console.log(jsonData);
+    setLoading(true);
     try {
       // const response = await fetch("http://localhost:8000/experts/update/", {
       //   method: "POST",
@@ -502,9 +518,11 @@ const PersonalDetails = () => {
         return;
       }
       console.log(data);
+      setLoading(false);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -597,7 +615,7 @@ const PersonalDetails = () => {
       <div className="flex justify-end mx-20 mb-8">
         <button
           type="submit"
-          className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+          className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
           Submit
         </button>
@@ -608,12 +626,14 @@ const PersonalDetails = () => {
 
 const EducationDetails = () => {
   const [educationForms, setEducationForms] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const addEducationForm = () => {
     setEducationForms([...educationForms, { id: educationForms.length + 1 }]);
   };
 
   const getEduInfo = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("/experts/?action=1", {
         headers: {
@@ -627,6 +647,7 @@ const EducationDetails = () => {
         return;
       }
       console.log(response.data.data);
+      setLoading(false);
       const eduData = response.data.data.education;
       console.log(eduData);
 
@@ -663,6 +684,7 @@ const EducationDetails = () => {
       });
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -682,6 +704,7 @@ const EducationDetails = () => {
 
   const handleSubmit3 = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const educationData = educationForms.map((form, index) => ({
         type: eduInfo.type[index],
@@ -710,10 +733,12 @@ const EducationDetails = () => {
         alert(data.message);
         return;
       }
+      setLoading(false);
       console.log(data, educationData);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -1222,7 +1247,7 @@ const EducationDetails = () => {
       <div className="flex justify-end mx-20 mb-8">
         <button
           type="submit"
-          className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+          className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
           Submit
         </button>
@@ -1237,6 +1262,8 @@ const SkillDetails = () => {
     ratings: [],
   });
 
+  const [loading, setLoading] = useState(false);
+
   const [skillForms, setSkillForms] = useState([]);
 
   const addSkillForm = () => {
@@ -1244,6 +1271,7 @@ const SkillDetails = () => {
   };
   const handleSubmit4 = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const skillData = skillForms.map((form, index) => ({
         technology_name: selectedSkill.technology_name[index],
@@ -1263,6 +1291,7 @@ const SkillDetails = () => {
         }
       );
       const data = response.data;
+      setLoading(false);
       if (!data || data.status === 400 || data.status === 401) {
         alert(data.message);
         return;
@@ -1271,10 +1300,12 @@ const SkillDetails = () => {
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   const getSkillInfo = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("/experts/?action=1", {
         headers: {
@@ -1283,6 +1314,7 @@ const SkillDetails = () => {
         },
       });
       const data = response.data;
+      setLoading(false);
       if (!data || data.status === 400 || data.status === 401) {
         alert(data.message);
         return;
@@ -1306,6 +1338,7 @@ const SkillDetails = () => {
       });
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -1396,7 +1429,7 @@ const SkillDetails = () => {
       <div className="flex justify-end mx-20 mb-8">
         <button
           type="submit"
-          className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+          className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
           Submit
         </button>
@@ -1406,6 +1439,7 @@ const SkillDetails = () => {
 };
 
 const AchDetails = () => {
+  const [loading, setLoading] = useState(false);
   const [achInfo, setAchInfo] = useState({
     name: [],
     year: [],
@@ -1454,9 +1488,11 @@ const AchDetails = () => {
         async () => {
           // Upload completed successfully
           console.log("Upload complete");
+          setLoading(true);
           try {
             const url = await getDownloadURL(uploadTask.snapshot.ref);
             console.log(url);
+            setLoading(false);
             setImageUrl((prevUrls) => {
               const updatedUrls = prevUrls ? [...prevUrls] : [];
               updatedUrls[ind] = url;
@@ -1479,6 +1515,7 @@ const AchDetails = () => {
             console.error("Error uploading image: ", error);
             // Handle error if needed
             alert("Something went wrong");
+            setLoading(false);
           }
         }
       );
@@ -1507,6 +1544,7 @@ const AchDetails = () => {
   };
 
   const getAchForm = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("/experts/?action=1", {
         headers: {
@@ -1520,6 +1558,7 @@ const AchDetails = () => {
         return;
       }
       console.log(response.data.data);
+      setLoading(false);
       const achData = response.data.data.achievements;
       console.log(achData);
 
@@ -1544,6 +1583,7 @@ const AchDetails = () => {
       setSelectedCertificate(selectedCertificate);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -1555,6 +1595,7 @@ const AchDetails = () => {
     console.log(achInfo);
     console.log(selectedCertificate);
     e.preventDefault();
+    setLoading(true);
     try {
       const achData = achForms.map((form, index) => ({
         name: achInfo.name[index],
@@ -1575,6 +1616,7 @@ const AchDetails = () => {
         }
       );
       const data = response.data;
+      setLoading(false);
       if (!data || data.status === 400 || data.status === 401) {
         console.log(data.message);
         return;
@@ -1583,6 +1625,7 @@ const AchDetails = () => {
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -1720,7 +1763,7 @@ const AchDetails = () => {
       <div className="flex justify-end mx-20 mb-8">
         <button
           type="submit"
-          className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+          className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
           Submit
         </button>
@@ -1730,6 +1773,7 @@ const AchDetails = () => {
 };
 
 const ExperienceDetails = () => {
+  const [loading, setLoading] = useState(false);
   const [expInfo, setExpInfo] = useState({
     company_name: [],
     start_date: [],
@@ -1747,6 +1791,7 @@ const ExperienceDetails = () => {
   };
   const handleSubmit6 = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       // const response = await fetch("http://localhost:8000/experts/update/", {
       //   method: "POST",
@@ -1788,6 +1833,7 @@ const ExperienceDetails = () => {
         }
       );
       const data = response.data;
+      setLoading(false);
       if (!data || data.status === 400 || data.status === 401) {
         alert(data.message);
         return;
@@ -1796,10 +1842,12 @@ const ExperienceDetails = () => {
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   const getExpInfo = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("/experts/?action=1", {
         headers: {
@@ -1808,6 +1856,7 @@ const ExperienceDetails = () => {
         },
       });
       const data = response.data;
+      setLoading(false);
       if (!data || data.status === 400 || data.status === 401) {
         alert(data);
         return;
@@ -1838,6 +1887,7 @@ const ExperienceDetails = () => {
       });
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -1993,7 +2043,7 @@ const ExperienceDetails = () => {
       <div className="flex justify-end mx-20 mb-8">
         <button
           type="submit"
-          className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+          className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
           Submit
         </button>
@@ -2009,6 +2059,9 @@ const AccDetails = () => {
     account_number: "",
     ifsc_code: "",
   });
+
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit7 = async (e) => {
     e.preventDefault();
     const cookies = document.cookie.split("; ");
@@ -2018,6 +2071,8 @@ const AccDetails = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+
+    setLoading(true);
     try {
       // const response = await fetch("http://localhost:8000/experts/update/", {
       //   method: "POST",
@@ -2052,6 +2107,7 @@ const AccDetails = () => {
         }
       );
       const data = response.data;
+      setLoading(false);
       if (!data || data.status === 400 || data.status === 401) {
         alert(data.message);
         return;
@@ -2060,10 +2116,12 @@ const AccDetails = () => {
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   const getAccInfo = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("/experts/?action=1", {
         headers: {
@@ -2072,6 +2130,7 @@ const AccDetails = () => {
         },
       });
       const data = response.data;
+      setLoading(false);
       if (!data || data.status === 400 || data.status === 401) {
         alert(data.message);
         return;
@@ -2086,6 +2145,7 @@ const AccDetails = () => {
       });
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -2154,7 +2214,7 @@ const AccDetails = () => {
       <div className="flex justify-end mx-20 mb-8">
         <button
           type="submit"
-          className="cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md"
+          className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
           Submit
         </button>
