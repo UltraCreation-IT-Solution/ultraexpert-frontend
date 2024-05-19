@@ -5,6 +5,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import axios from "../../axios";
 
 export const FavExpertCard = ({ item, getFavExpData }) => {
+  console.log(item)
   const [FavExpert, setFavExpert] = useState(true);
   const cookie = document.cookie.split(";");
   const jsonData = {};
@@ -111,106 +112,7 @@ export const FavExpertCard = ({ item, getFavExpData }) => {
     </div>
   );
 };
-// export const AllFavExpertCard = ({ item, getFavExp }) => {
-//   const [FavExpert, setFavExpert] = useState(true);
-//   const cookie = document.cookie.split(";");
-//   const jsonData = {};
 
-//   cookie.forEach((item) => {
-//     const [key, value] = item.split("=");
-//     jsonData[key] = value;
-//   });
-//   console.log(item);
-//   const addFav = async () => {
-//     console.log(item.expert.id);
-//     try {
-//       const res = await axios.post(
-//         "/customers/connect/",
-//         {
-//           action: 3,
-//           expert_id: item.id,
-//         },
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: `Bearer ${jsonData.access_token}`,
-//           },
-//         }
-//       );
-//       const json = res.data;
-//       if (!json) {
-//         console.log("no data");
-//         return;
-//       }
-//       console.log(json);
-//       setFavExpert(true);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-//   const remFav = async () => {
-//     try {
-//       const res = await axios.post(
-//         "/customers/connect/",
-//         {
-//           action: 4,
-//           expert_id: item.id,
-//         },
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: `Bearer ${jsonData.access_token}`,
-//           },
-//         }
-//       );
-//       const json = res.data;
-//       if (!json) {
-//         console.log("no data");
-//         return;
-//       }
-//       console.log(json);
-//       setFavExpert(false);
-//       getFavExp();
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-//   return (
-//     <div className="relative min-w-[250px] h-[250px] md:min-w-[310px] md:h-[300px] flex flex-col shadow-lg border border-[#dbdbdb] border-solid rounded-lg">
-//       <img
-//         src={item?.user?.profile_img}
-//         className="h-16 w-16 md:h-20 md:w-20 object-cover shrink-0 rounded-full absolute top-11 left-24 md:top-14 md:left-28 border-2 border-solid border-white"
-//         alt=""
-//       />
-//       <div className="absolute top-1 right-2 z-10 text-white text-2xl md:text-3xl py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  ">
-//         {FavExpert ? <FaHeart onClick={() => remFav()} /> : <FaRegHeart />}
-//       </div>
-//       <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  "></div>
-//       <img
-//         src={item?.user?.banner_img}
-//         className="h-[5rem] md:h-[6rem] object-cover shrink-0"
-//         alt=""
-//       />
-//       <div className="text-center mt-9 md:mt-12 px-2">
-//         <div className="text-lg md:text-xl font-bold">
-//           {item?.user?.first_name} {item?.user?.last_name}
-//         </div>
-//         <div className="text-gray-500 text-sm md:text-base">
-//           {item?.profession}{" "}
-//         </div>
-//         <div className="mt-2 text-sm md:text-base flex items-center justify-center gap-1 ">
-//           <FaStar />
-//           <div>{item?.rating} </div>
-//         </div>
-//         <Link to={`/experts/expertprofile/${item?.id}`} className="no-underline">
-//           <div className="mt-2 w-full bg-[#2A2A2A] text-sm md:text-base py-2 md:py-3 text-white rounded-md sm:rounded no-underline text-center ">
-//             Visit Profile
-//           </div>
-//         </Link>
-//       </div>
-//     </div>
-//   );
-// };
 export const FavServiceCard = ({ item, getFavServ }) => {
   const [FavExpert, setFavExpert] = useState(true);
   const remFav = async (id) => {
@@ -514,6 +416,7 @@ export const FavExperts = () => {
           id: item.id,
           profession: item.profession,
           about_me: item.about_me,
+          rating: item.expert_rating
         }))
       );
     } catch (error) {

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TopExperts } from "../Landing/Landing";
 import Subheader from "../../utilities/Subheader";
-import SearchByCategoriesSlider from "../../utilities/SearchByCategoriesSlider";
 import { Link } from "react-router-dom";
-import { profileObj } from "../../constant";
 import axios from "../../axios";
 import Pagination from "../../subsitutes/Pagination";
 import {
@@ -14,13 +12,14 @@ import {
   FaHeart,
   FaBackward,
   FaForward,
+  FaSearch,
 } from "react-icons/fa";
+import { IoMdArrowRoundBack } from "react-icons/io";
 import ExpertCardShimmer from "../../subsitutes/Shimmers/ExpertCardShimmer";
 
-export const ExpertCard = ({ item }) => {
+export const ExpertCard = ({ item, getAllExperts }) => {
   console.log(item);
   const [favExpert, setFavExpert] = useState(false);
-  const [following, setFollowing] = useState(item.is_following);
   const cookie = document.cookie.split(";");
   const jsonData = {};
 
@@ -50,6 +49,7 @@ export const ExpertCard = ({ item }) => {
       }
       console.log(json);
       setFavExpert(true);
+      getAllExperts();
     } catch (error) {
       console.log(error);
     }
@@ -76,6 +76,7 @@ export const ExpertCard = ({ item }) => {
       }
       console.log(json);
       setFavExpert(false);
+      getAllExperts();
     } catch (error) {
       console.log(error);
     }
@@ -197,27 +198,30 @@ export const ExpertCard = ({ item }) => {
             )}
           </div>
         </div>
-        <div className="w-full text-[3.25vw] xs:text-[2.6vw] sm:text-[1.6vw] lg:text-[1.1vw]  py-[1vw] flex justify-between mt-[2.4vw] xs:mt-[1.6vw] lg:mt-[1vw] font-bold">
+        <div className="w-full text-[3.25vw] xs:text-[2.6vw] sm:text-[1.6vw] lg:text-[1.1vw] py-[1vw] flex items-center justify-between mt-[2.4vw] xs:mt-[1.6vw] lg:mt-[1vw] font-bold">
           <Link
             to={"expertprofile" + "/" + item?.expert?.id}
-            className="bg-black px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2.2vw] xs:py-[1.6vw] sm:py-[1vw]  text-white rounded-sm sm:rounded no-underline"
+            className="bg-black px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2.2vw] xs:py-[1.6vw] sm:py-[1vw] text-white rounded-sm sm:rounded no-underline text-center "
           >
             Visit Profile
           </Link>
-
-          {item.is_following === false ? (
-            <div
-              className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2 cursor-pointer"
-              onClick={() => followExpert(item?.expert?.id)}
-            >
-              Follow Expert
-            </div>
-          ) : (
-            <div
-              className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2 cursor-pointer"
-              onClick={() => unfollowExpert(item?.expert?.id)}
-            >
-              Unfollow
+          {localStorage.getItem("isExpert") === "false" && (
+            <div>
+              {item.is_following === false ? (
+                <div
+                  className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2 cursor-pointer"
+                  onClick={() => followExpert(item?.expert?.id)}
+                >
+                  Follow Expert
+                </div>
+              ) : (
+                <div
+                  className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2 cursor-pointer"
+                  onClick={() => unfollowExpert(item?.expert?.id)}
+                >
+                  Unfollow
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -230,6 +234,9 @@ const AllExperts = () => {
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const [lastPage, setLastPage] = useState(0);
   const [allExpertsList, setAllExpertsList] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchedExperts, setSearchedExperts] = useState([]);
+  const [showSearchedExperts, setShowSearchedExperts] = useState(false);
 
   const getAllExperts = async () => {
     const cookies = document.cookie.split("; ");
@@ -261,6 +268,32 @@ const AllExperts = () => {
   }, [currentPage]);
   console.log(allExpertsList);
 
+  const searchExperts = async (searchQuery) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get(
+        `/customers/experts?action=5&query=${searchQuery}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = res.data.data;
+      setSearchedExperts(data);
+      console.log(searchedExperts);
+      setShowSearchedExperts(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   if (!allExpertsList.length)
     return (
       <div className=" px-[3vw] xs:px-[6vw] md:px-[10vw] w-full flex flex-wrap gap-[3vw] md:gap-[2vw] pb-[2vw]  justify-center sm:justify-normal  items-center ">
@@ -270,21 +303,57 @@ const AllExperts = () => {
 
   return (
     <div className="mt-[40px] md:mt-[100px] relative w-full h-auto py-[5vw] sm:py-[3vw] px-[3vw] xs:px-[6vw] md:px-[10vw] flex flex-col">
-      <div className="flex w-full justify-center sm:justify-between">
+      <div className="flex w-full justify-center sm:justify-between flex-wrap-reverse sm:flex-nowrap">
         <div className="text-3xl md:text-4xl font-bold mb-[3vw] md:mb-[1.5vw]">
           Experts
         </div>
+        <div className="flex items-center h-10 px-5 mb-5 sm:mb-0">
+          <input
+            type="text"
+            className="w-72 md:w-96 h-full bg-[#ECECEC] text-base rounded-l-full outline-none focus:border border-solid border-blue-300 pl-4 "
+            placeholder="Search for experts"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <div
+            className="rounded-r-full h-full bg-[#ECECEC] text-center flex justify-center items-center cursor-pointer pr-4"
+            onClick={() => searchExperts(searchQuery)}
+          >
+            <FaSearch />
+          </div>
+        </div>
       </div>
       <div className="w-full flex flex-wrap gap-[3vw] md:gap-[2vw] pb-[2vw]  justify-center sm:justify-normal  items-center">
-        {allExpertsList.map((item) => {
-          return (
-            <ExpertCard
-              key={item?.expert?.id}
-              item={item}
-              getAllExperts={getAllExperts}
-            />
-          );
-        })}
+        {showSearchedExperts === true
+          ? searchedExperts.map((item) => 
+              <div>
+                <div
+                  className="text-lg sm:text-xl font-semibold text-red-500 my-5 cursor-pointer flex gap-2 items-center no-underline ml-2 hover:ml-0 hover:gap-3 hover:underline transition-all w-fit"
+                  onClick={() => (
+                    setShowSearchedExperts(false),
+                    setSearchedExperts([]),
+                    setSearchQuery("")
+                  )}
+                >
+                  <IoMdArrowRoundBack />
+                  Back
+                </div>
+                <ExpertCard
+                  key={item?.expert?.id}
+                  item={item}
+                  getAllExperts={getAllExperts}
+                />
+              </div>
+            )
+          : allExpertsList.map((item) => {
+              return (
+                <ExpertCard
+                  key={item?.expert?.id}
+                  item={item}
+                  getAllExperts={getAllExperts}
+                />
+              );
+            })}
       </div>
       <div className="mt-[3vw] flex items-center justify-between gap-[4vw] text-white">
         <div

@@ -1,14 +1,9 @@
 import React, { useEffect } from "react";
 import { RiFlowChart } from "react-icons/ri";
-import { GoArrowLeft } from "react-icons/go";
 import {
-  PiDotsThreeVerticalBold,
   PiDotsThreeCircleVertical,
 } from "react-icons/pi";
-import { CiSquarePlus } from "react-icons/ci";
-import { IoMdSend } from "react-icons/io";
-import { FcVideoCall } from "react-icons/fc";
-import { ProjectsCarousel } from "../../constant";
+import ProjectsCarousel from "../../subsitutes/ProjectCarousel";
 import { ExpertRatings } from "./ExpertProfile";
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";

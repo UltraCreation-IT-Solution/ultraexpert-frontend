@@ -17,7 +17,7 @@ import axios from "../../axios";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../subsitutes/Pagination";
 
-export const ServiceCard = ({ item }) => {
+export const ServiceCard = ({ item, getAllServices, fetchData }) => {
   const [FavService, setFavService] = useState(false);
   const navigate = useNavigate();
   const handleAddToFavorites = async (id) => {
@@ -49,6 +49,8 @@ export const ServiceCard = ({ item }) => {
       }
       console.log(json);
       setFavService(true);
+      getAllServices();
+      fetchData();
     } catch (error) {
       console.log(error);
     }
@@ -116,6 +118,8 @@ export const ServiceCard = ({ item }) => {
       }
       console.log(json);
       setFavService(false);
+      getAllServices();
+      fetchData();
     } catch (error) {
       console.log(error);
     }
@@ -233,6 +237,7 @@ const Service = () => {
 
   const [allService, setAllService] = useState([]);
   const getAllServices = async () => {
+    console.log("first")
     const cookie = document.cookie.split(";");
     const jsonData = {};
 
@@ -264,6 +269,7 @@ const Service = () => {
   console.log(allService);
 
   const addFav = async (id) => {
+    console.log("first")
     const cookie = document.cookie.split(";");
     const jsonData = {};
     cookie.forEach((item) => {
@@ -368,24 +374,24 @@ const Service = () => {
           type="text"
           placeholder="Search for any services"
           value={searchText}
-          onChange={(e) => 
-            setSearchText(e.target.value)
-            }
+          onChange={(e) => setSearchText(e.target.value)}
         />
         <div
-          className="h-full w-[6vw] py-2 bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all  xs:text-sm sm:text-base md:text-lg rounded-l-none rounded-md flex justify-center items-center"
+          className="h-full w-[6vw] py-2 bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all xs:text-sm sm:text-base md:text-lg rounded-l-none rounded-md flex justify-center items-center"
           onClick={() => getServicesByTag(null, searchText)}
         >
           <FaSearch />
         </div>
       </div>
-     
+
       {showSearchedServices && (
         <div className="w-full px-[7vw] md:px-[10vw]">
           <div
             className="text-lg sm:text-xl font-semibold text-red-500 my-5 cursor-pointer flex gap-2 items-center no-underline ml-2 hover:ml-0 hover:gap-3 hover:underline transition-all w-fit"
             onClick={() => (
-              setShowSearchedServices(false), setSearchedServices([]), setSearchText("")
+              setShowSearchedServices(false),
+              setSearchedServices([]),
+              setSearchText("")
             )}
           >
             <IoMdArrowRoundBack />
@@ -487,7 +493,7 @@ const Service = () => {
                         key={service?.id}
                         className="cursor-pointer  min-w-[300px] max-w-[300px] md:min-w-[350px] md:max-w-[350px]"
                       >
-                        <ServiceCard item={service}/>
+                        <ServiceCard item={service} getAllServices={getAllServices} fetchData={fetchData} />
                       </div>
                     ))}
                   </div>
@@ -556,7 +562,7 @@ const Service = () => {
                               onClick={() => remFav(item.id)}
                             >
                               <FaMinus />
-                              Added to Fav
+                              Rem from Fav
                             </div>
                           ) : (
                             <div
@@ -573,36 +579,34 @@ const Service = () => {
                 </div>
               ))}
             </div>
-            <div className="px-[8vw] md:px-[10vw]">
-              <div className="mt-[3vw] flex items-center justify-between gap-[4vw] text-white">
-                <div
-                  className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
-                    currentPage < 2 && "opacity-80"
-                  } `}
-                  onClick={() => {
-                    currentPage > 1 && setCurrentPage(currentPage - 1);
-                  }}
-                >
-                  <FaBackward />
-                  <span className="hidden sm:block">Prev</span>
-                </div>
-                <Pagination
-                  lastPage={lastPage}
-                  itemsPerPage={itemsPerPage}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                />
-                <div
-                  className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
-                    currentPage === lastPage && "opacity-80"
-                  } `}
-                  onClick={() => {
-                    currentPage < lastPage && setCurrentPage(currentPage + 1);
-                  }}
-                >
-                  <span className="hidden sm:block">Next</span>
-                  <FaForward />
-                </div>
+            <div className="mt-[3vw] flex items-center justify-between gap-[4vw] text-white px-[3vw] md:px-[10vw]">
+              <div
+                className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
+                  currentPage < 2 && "opacity-80"
+                } `}
+                onClick={() => {
+                  currentPage > 1 && setCurrentPage(currentPage - 1);
+                }}
+              >
+                <FaBackward />
+                <span className="hidden sm:block">Prev</span>
+              </div>
+              <Pagination
+                lastPage={lastPage}
+                itemsPerPage={itemsPerPage}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+              <div
+                className={`text-sm md:text-lg justify-center items-center px-4 md:px-5 py-2 md:font-semibold rounded-sm md:rounded-md bg-[#262626] flex gap-3 cursor-pointer ${
+                  currentPage === lastPage && "opacity-80"
+                } `}
+                onClick={() => {
+                  currentPage < lastPage && setCurrentPage(currentPage + 1);
+                }}
+              >
+                <span className="hidden sm:block">Next</span>
+                <FaForward />
               </div>
             </div>
           </div>
