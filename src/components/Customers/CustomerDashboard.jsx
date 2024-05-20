@@ -7,7 +7,8 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BsFillChatSquareTextFill } from "react-icons/bs";
 import { Link, Outlet } from "react-router-dom";
-import { BookingCard, customerDashboardInfo } from "../../constant";
+import { customerDashboardInfo } from "../../constant";
+import  BookingCard  from "../../subsitutes/BookingCard";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import axios from "../../axios";
 import { imageDB } from "../firebase/config";
@@ -23,6 +24,7 @@ export const CustomerProfile = () => {
   const [userData, setUserData] = useState({});
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
   // const [currData, setCurrData] = useState({
   //   first_name: "",
   //   last_name: "",
@@ -40,6 +42,7 @@ export const CustomerProfile = () => {
   });
   useEffect(() => {
     const getUserData = async () => {
+      setLoading(true);
       try {
         const response = await axios.get("/customers/?action=1", {
           headers: {
@@ -55,11 +58,13 @@ export const CustomerProfile = () => {
           console.log(response.data.message);
           return;
         }
+        setLoading(false);
         setUserData(response.data.data);
         console.log("ander wala", response.data.data);
         setImage(response.data.data.profile_img);
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     };
     getUserData();
@@ -88,10 +93,12 @@ export const CustomerProfile = () => {
           console.log("Upload complete");
         }
       );
+      setLoading(true);
       try {
         await uploadTask;
         const url = await getDownloadURL(uploadTask.snapshot.ref);
         console.log(url);
+        setLoading(false);
         setImage(url);
         setUserData({
           ...userData,
@@ -99,6 +106,7 @@ export const CustomerProfile = () => {
         });
       } catch (error) {
         console.error("Error uploading image: ", error);
+        setLoading(false);
         // Handle error if needed
         alert("Something went wrong");
       }
@@ -150,6 +158,7 @@ export const CustomerProfile = () => {
       jsonData[key] = value;
     });
     console.log(jsonData);
+    setLoading(true);
     try {
       const response = await axios.post(
         "/user_details/",
@@ -178,6 +187,8 @@ export const CustomerProfile = () => {
         return;
       }
       console.log(response.data);
+      setLoading(false);
+      setLoading(true);
       try {
         const res = await axios.post(
           "/customers/",
@@ -202,6 +213,8 @@ export const CustomerProfile = () => {
           return;
         }
         console.log(res.data);
+        setLoading(false);
+        setLoading(true);
         try {
           const res2 = await axios.post(
             "/customers/",
@@ -225,15 +238,19 @@ export const CustomerProfile = () => {
             return;
           }
           console.log(res2.data);
+          setLoading(false);
           alert("Profile updated successfully!");
         } catch (error) {
           console.log(error);
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   const getSkillInfo = async () => {
@@ -245,6 +262,7 @@ export const CustomerProfile = () => {
       jsonData[key] = value;
     });
     console.log(jsonData);
+    setLoading(true);
     try {
       const response = await axios.get("/customers/?action=2", {
         headers: {
@@ -258,9 +276,11 @@ export const CustomerProfile = () => {
         return;
       }
       console.log(data.data.interest_list);
+      setLoading(false);
       setSelectedSkill(data.data.interest_list);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -284,7 +304,7 @@ export const CustomerProfile = () => {
         <div className="text-xl font-bold ">Profile</div>
         <div
           onClick={() => saveProfile()}
-          className="text-base bg-green-500 px-4 py-2 rounded-md cursor-pointer text-white"
+          className={loading ? `bg-gray-300 px-4 py-2 rounded-md text-gray-500 cursor-not-allowed text-base` : `text-base bg-green-500 px-4 py-2 rounded-md cursor-pointer text-white`}
         >
           Save Profile
         </div>
