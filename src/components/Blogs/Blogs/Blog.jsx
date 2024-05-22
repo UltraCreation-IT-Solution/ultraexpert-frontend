@@ -686,7 +686,7 @@ const Blogs = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
+             Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );
