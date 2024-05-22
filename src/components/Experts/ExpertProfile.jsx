@@ -11,15 +11,15 @@ import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { BsBookmarkPlusFill, BsBookmarkDashFill } from "react-icons/bs";
 
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { expertDetailsObj, ProjectsCarousel } from "../../constant";
+import { useNavigate, useParams } from "react-router-dom";
+import { expertDetailsObj } from "../../constant";
+import ProjectsCarousel from "../../subsitutes/ProjectCarousel";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import { BlogCard } from "../Blogs/Blogs/Blog";
 import ExpertProfileShimmer from "../../subsitutes/Shimmers/ExpertProfileShimmer";
 import axios from "../../axios";
 
 export const ExpertSummary = ({ experienceArray, projectsArray }) => {
-
   function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { day: "numeric", month: "short", year: "numeric" };
@@ -81,10 +81,9 @@ export const ExpertSummary = ({ experienceArray, projectsArray }) => {
       )}
       <div>
         <div className="mb-5 text-xl md:text-2xl font-semibold font-montserrat">
-         My projects
-       </div>
-       <ProjectsCarousel projectsArray={projectsArray} />
-
+          My projects
+        </div>
+        <ProjectsCarousel projectsArray={projectsArray} />
       </div>
     </div>
   );
@@ -179,11 +178,11 @@ export const ExpertServices = () => {
   );
 };
 
-export const RatingCard = ({temp}) => {
+export const RatingCard = ({ temp }) => {
   console.log(temp);
 
   const date = temp?.timestamp.split("T")[0];
-  const commentDate = date
+  const commentDate = date;
 
   return (
     <div className="my-[5vw] md:my-[2vw] pb-[1vw] border-b-[1px] border-slate-400 border-solid">
@@ -194,12 +193,16 @@ export const RatingCard = ({temp}) => {
           alt=""
         />
         <div>
-          <div className="text-lg sm:text-xl font-semibold">{temp?.user_first_name} {temp?.user_last_name}</div>
+          <div className="text-lg sm:text-xl font-semibold">
+            {temp?.user_first_name} {temp?.user_last_name}
+          </div>
           <div className="mt-[2vw] md:mt-[0.9vw] text-xs sm:text-base text-slate-400">
             {commentDate}
           </div>
 
-          <p className="text-xs sm:text-base font-montserrat">{temp?.content}</p>
+          <p className="text-xs sm:text-base font-montserrat">
+            {temp?.content}
+          </p>
           <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
             <div className="flex items-center gap-1">
               <BiLike />
@@ -216,7 +219,7 @@ export const RatingCard = ({temp}) => {
   );
 };
 
-export const ExpertRatings = ({expert}) => {
+export const ExpertRatings = ({ expert }) => {
   return (
     <div className="px-1 xs:px-5 mb-10 lg:mb-0">
       <div className="border-b border-solid border-slate-300 pb-10">
@@ -237,10 +240,7 @@ export const ExpertRatings = ({expert}) => {
                 <div
                   className="border-[3px] border-solid border-red-500 rounded-full"
                   style={{
-                    width: `${
-                      (expert?.expert?.avg_availability / 5) *
-                      100
-                    }%`,
+                    width: `${(expert?.expert?.avg_availability / 5) * 100}%`,
                   }}
                 ></div>
               </div>
@@ -256,9 +256,7 @@ export const ExpertRatings = ({expert}) => {
                 <div
                   className="border-[3px] border-solid border-blue-500 rounded-full"
                   style={{
-                    width: `${
-                      (expert?.expert?.avg_skills / 5) * 100
-                    }%`,
+                    width: `${(expert?.expert?.avg_skills / 5) * 100}%`,
                   }}
                 ></div>
               </div>
@@ -274,10 +272,7 @@ export const ExpertRatings = ({expert}) => {
                 <div
                   className="border-[3px] border-solid border-purple-500 rounded-full"
                   style={{
-                    width: `${
-                      (expert?.expert?.avg_cooperation / 5) *
-                      100
-                    }%`,
+                    width: `${(expert?.expert?.avg_cooperation / 5) * 100}%`,
                   }}
                 ></div>
               </div>
@@ -295,9 +290,7 @@ export const ExpertRatings = ({expert}) => {
                 <div
                   className="border-[3px] border-solid border-red-500 rounded-full"
                   style={{
-                    width: `${
-                      (expert?.expert?.avg_deadline / 5) * 100
-                    }%`,
+                    width: `${(expert?.expert?.avg_deadline / 5) * 100}%`,
                   }}
                 ></div>
               </div>
@@ -313,9 +306,7 @@ export const ExpertRatings = ({expert}) => {
                 <div
                   className="border-[3px] border-solid border-blue-500 rounded-full"
                   style={{
-                    width: `${
-                      (expert?.expert?.avg_quality/ 5) * 100
-                    }%`,
+                    width: `${(expert?.expert?.avg_quality / 5) * 100}%`,
                   }}
                 ></div>
               </div>
@@ -331,10 +322,7 @@ export const ExpertRatings = ({expert}) => {
                 <div
                   className="border-[3px] border-solid border-purple-500 rounded-full"
                   style={{
-                    width: `${
-                      (expert?.expert?.avg_communication / 5) *
-                      100
-                    }%`,
+                    width: `${(expert?.expert?.avg_communication / 5) * 100}%`,
                   }}
                 ></div>
               </div>
@@ -376,7 +364,7 @@ export const AboutExpert = ({ getExpertDetails, ...expert }) => {
     const [key, value] = item.split("=");
     jsonData[key] = value;
   });
-  const followExpert = async (id) => {  
+  const followExpert = async (id) => {
     try {
       const res = await axios.post(
         "/customers/connect/",
@@ -402,8 +390,8 @@ export const AboutExpert = ({ getExpertDetails, ...expert }) => {
       console.log(error);
     }
   };
-  const unfollowExpert = async (id) => { 
-    console.log(id)
+  const unfollowExpert = async (id) => {
+    console.log(id);
     try {
       const res = await axios.post(
         "/customers/connect/",
@@ -453,18 +441,28 @@ export const AboutExpert = ({ getExpertDetails, ...expert }) => {
                 {expert?.expert?.expert?.user?.last_name}
               </div>
               <div className="hidden md:flex gap-2">
+                {localStorage.getItem("isExpert") === "false" && (
+                  <div>
+                    {expert?.expert?.is_following === false ? (
+                      <button
+                        className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white btnBlack rounded-sm text-xs xs:text-base font-semibold cursor-pointer"
+                        onClick={() => followExpert(expert?.expert?.expert?.id)}
+                      >
+                        Follow
+                      </button>
+                    ) : (
+                      <button
+                        className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white btnBlack rounded-sm text-xs xs:text-base font-semibold cursor-pointer"
+                        onClick={() =>
+                          unfollowExpert(expert?.expert?.expert?.id)
+                        }
+                      >
+                        Unfollow
+                      </button>
+                    )}
+                  </div>
+                )}
 
-                {expert?.expert?.is_following===false? <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white btnBlack rounded-sm text-xs xs:text-base font-semibold cursor-pointer"
-                onClick={()=>followExpert(expert?.expert?.expert?.id)}
-                >
-                  Follow
-                </button>:
-                 <button className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white btnBlack rounded-sm text-xs xs:text-base font-semibold cursor-pointer"
-                 onClick={()=>unfollowExpert(expert?.expert?.expert?.id)}
-                 >
-                   Unfollow
-                 </button>
-                }
                 <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm flex items-center justify-center gap-2 cursor-pointer">
                   <div className="text-2xl text-[#565454]">
                     <IoIosChatboxes />
@@ -706,7 +704,7 @@ export const ExpertInfo = ({ ...expert }) => {
             />
           )}
           {services && <ExpertServices />}
-          {ratings && <ExpertRatings  />}
+          {ratings && <ExpertRatings />}
           {blogs &&
             blogArray.map((item, idx) => (
               <BlogCard
@@ -961,13 +959,16 @@ const ExpertProfile = () => {
   useEffect(() => {
     console.log(expertDetail);
   }, [expertDetail]);
-  if (!expertDetail) return <ExpertProfileShimmer/> ;
+  if (!expertDetail) return <ExpertProfileShimmer />;
 
   return (
     <div>
       <div className="lg:flex mt-[90px] md:mt-[80px]">
         <div className="lg:w-[70%] h-[88vh]">
-          <AboutExpert expert={expertDetail} getExpertDetails={getExpertDetails} />
+          <AboutExpert
+            expert={expertDetail}
+            getExpertDetails={getExpertDetails}
+          />
           <ExpertInfo expert={expertDetail} />
         </div>
         <div className="hidden lg:block w-[30%]">

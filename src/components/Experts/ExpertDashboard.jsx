@@ -8,6 +8,7 @@ import {
   FaRegTrashAlt,
   FaUser,
   FaChalkboardTeacher,
+  FaPlus,
 } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
 import { IoMdShareAlt } from "react-icons/io";
@@ -43,12 +44,9 @@ import {
 } from "react-icons/ri";
 import { PiCrownFill } from "react-icons/pi";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
+import  BookingCard  from "../../subsitutes/BookingCard";
 import {
-  BookingCard,
   expertDashInfo as expert,
-  expertDashInfo,
-  expertDetailsObj,
-  leaderboardRanking,
 } from "../../constant";
 import {
   ResponsiveContainer,

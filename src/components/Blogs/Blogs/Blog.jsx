@@ -7,9 +7,11 @@ import {
   FaBackward,
   FaRegComment,
   FaMinus,
+  FaSearch,
 } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
+import { IoMdArrowRoundBack } from "react-icons/io";
 import { BiSolidLike } from "react-icons/bi";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,8 +19,9 @@ import Pagination from "../../../subsitutes/Pagination";
 import { FaBookmark } from "react-icons/fa6";
 import axios from "../../../axios";
 import BlogCardShimmer from "../../../subsitutes/Shimmers/BlogCardShimmer";
+import SearchByCategoriesSlider from "../../../utilities/SearchByCategoriesSlider";
 
-export const BlogBody = ({ allBlogsArray, getBlogArray }) => {
+export const BlogBody = ({ getBlogsBySearch, allBlogsArray, getBlogArray }) => {
   console.log(allBlogsArray);
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -269,7 +272,8 @@ export const BlogBody = ({ allBlogsArray, getBlogArray }) => {
           {hotTopics.map((temp, index) => (
             <div
               key={index}
-              className="relative flex items-center justify-center w-[150px] h-[200px] md:w-[280px] md:h-[300px] shrink-0 object-cover rounded-md "
+              className="relative flex items-center justify-center w-[150px] h-[200px] md:w-[280px] md:h-[300px] shrink-0 object-cover rounded-md cursor-pointer"
+              onClick={() => getBlogsBySearch(temp.topicName, null)}
             >
               <img
                 src={temp.img}
@@ -311,9 +315,7 @@ export const BlogBody = ({ allBlogsArray, getBlogArray }) => {
     </>
   );
 };
-export const SearchedBlog = ({ allBlogsArray }) => {
-  console.log(allBlogsArray);
-
+export const SearchedBlog = ({ searchedBlogs }) => {
   function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { day: "numeric", month: "short", year: "numeric" };
@@ -322,7 +324,7 @@ export const SearchedBlog = ({ allBlogsArray }) => {
 
   return (
     <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
-      {allBlogsArray?.map((item, index) => (
+      {searchedBlogs?.map((item, index) => (
         <BlogCard
           key={item.id}
           index={index}
@@ -536,21 +538,14 @@ const Blogs = () => {
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const [lastPage, setLastPage] = useState(0);
   // for pagination
-  const [searchText, setSearchText] = useState("");
+
   const [allBlogsArray, setAllBlogsArray] = useState([]);
-  const [filterAllBlogsArray, setFilterAllBlogsArray] = useState([]);
   const [featuredBlogsArray, setFeaturedBlogsArray] = useState([]);
-  const SearchBlogs = (e) => {
-    setSearchText(e.target.value);
-    setFilterAllBlogsArray(
-      allBlogsArray.filter((item) =>
-        item?.tags?.some((item2) =>
-          item2?.toLowerCase()?.includes(searchText.toLowerCase())
-        )
-      )
-    );
-    console.log(allBlogsArray);
-  };
+
+  //search for blogs
+  const [searchedBlogs, setSearchedBlogs] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [showSearchedBlogs, setShowSearchedBlogs] = useState(false);
 
   //api call for all Featured blogs
   const getFeaturedBlogs = async () => {
@@ -691,7 +686,7 @@ const Blogs = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
+             Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );
@@ -699,7 +694,6 @@ const Blogs = () => {
       const allData = res.data.data.all;
       console.log(res.data);
       setAllBlogsArray(allData);
-      setFilterAllBlogsArray(allData);
     } catch (error) {
       console.log(error);
     }
@@ -713,6 +707,31 @@ const Blogs = () => {
     const options = { day: "numeric", month: "short", year: "numeric" };
     return date.toLocaleDateString("en-US", options);
   }
+
+  const getBlogsBySearch = async (item, searchText) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    console.log("first");
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get(
+        `/blogs/?action=8&blog_tag=${item}&blog_title=${searchText} `,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = res.data.data;
+      setSearchedBlogs(data);
+      setShowSearchedBlogs(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="mt-[90px]">
       {/* Featured Blogs */}
@@ -746,23 +765,48 @@ const Blogs = () => {
           </div>
         ))}
       </div>
-      <div className="mt-8 px-[8vw] text-center">
+      
+      <div className="my-10 flex justify-center items-center h-[8vh]">
         <input
+          className="h-full w-[84vw] sm:w-[66vw] md:w-[60vw] bg-[#ECECEC] rounded-r-none rounded-md pl-3 sm:pl-6 py-2 xs:text-sm  sm:text-base md:text-lg outline-none focus:border-blue-200 border-solid focus:border-[0.8px]"
           type="text"
-          placeholder="Search for the blog...."
+          placeholder="Search for any blog"
           value={searchText}
-          onChange={(e) => SearchBlogs(e)}
-          className="bg-[#ECECEC] w-[70%] p-3 outline-none rounded-md text-base"
+          onChange={(e) => setSearchText(e.target.value)}
         />
+        <div
+          className="h-full w-[6vw] py-2 bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all xs:text-sm sm:text-base md:text-lg rounded-l-none rounded-md flex justify-center items-center"
+          onClick={() => getBlogsBySearch(null, searchText)}
+        >
+          <FaSearch />
+        </div>
       </div>
       {localStorage.getItem("isExpert") === "true" ? (
         <Author createAuthor={createAuthor} />
       ) : null}
 
-      {searchText.length === 0 ? (
-        <BlogBody allBlogsArray={allBlogsArray} getBlogArray={getBlogArray} />
+      {!showSearchedBlogs ? (
+          
+          <BlogBody
+            getBlogsBySearch={getBlogsBySearch}
+            allBlogsArray={allBlogsArray}
+            getBlogArray={getBlogArray}
+          />
       ) : (
-        <SearchedBlog allBlogsArray={filterAllBlogsArray} />
+        <>
+        <div
+            className="text-lg sm:text-xl font-semibold text-red-500  mt-10 md:mt-15 cursor-pointer flex gap-2 items-center px-[7vw] md:px-[10vw] no-underline ml-2 hover:ml-0 hover:gap-3 hover:underline transition-all w-fit"
+            onClick={() => (
+              setShowSearchedBlogs(false),
+              setSearchedBlogs([]),
+              setSearchText("")
+            )}
+          >
+            <IoMdArrowRoundBack />
+            Back
+          </div>
+        <SearchedBlog searchedBlogs={searchedBlogs} />
+        </>
       )}
       <div className="px-[8vw] md:px-[10vw]">
         <div className="mt-[3vw] flex items-center justify-between gap-[4vw] text-white">
