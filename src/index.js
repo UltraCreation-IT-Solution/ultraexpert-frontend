@@ -59,6 +59,11 @@ import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
 import SkillList from "./components/GetCertified/Instructions.js";
 import UpdateService from "./components/Services/UpdateService.jsx";
+import Payment from "./components/Payments/Payment";
+
+const userId = "user123"; // Replace with actual user ID
+const amount = 1000; // Replace with actual amount
+const callbackUrl = "/"; // Replace with actual callback URL
 const Layout = () => {
   const action = useNavigationType();
   const pathname = useLocation().pathname;
@@ -90,6 +95,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/",
         element: <Landing />,
+      },
+      {
+        path: "/payment",
+        element: <Payment />,
       },
       {
         path: "/login",
@@ -151,7 +160,6 @@ const appRouter = createBrowserRouter([
                 path: "",
                 element: <ExpertProfile />,
               },
-              
             ],
           },
         ],
@@ -162,9 +170,9 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "experts/service/:id",
-        element: <ServiceDescription/>,
+        element: <ServiceDescription />,
       },
-      
+
       {
         path: "/test/:skill_Name",
         element: <Test />,

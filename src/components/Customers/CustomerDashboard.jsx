@@ -577,7 +577,7 @@ export const CustomerBookings = ({ id }) => {
   const getMyBookings = async () => {
     try {
       const res = await axios.get(
-        `/customers/connect/?action=6&customer_id=${2}`,
+        `/customers/connect/?action=6&customer_id=${4}`,
         {
           headers: {
             "Content-Type": "application/json",
