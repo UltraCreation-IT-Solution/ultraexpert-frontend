@@ -510,7 +510,7 @@ export const Dashboard = () => {
     jsonData[key] = value;
   });
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -534,7 +534,7 @@ export const Dashboard = () => {
   const [expertData, setExpertData] = useState({});
   const [expertStatistics, setExpertStatistics] = useState([]);
   const getCurrentExpert = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const response = await axios.get("/experts/?action=1", {
         headers: {
@@ -551,15 +551,15 @@ export const Dashboard = () => {
         return;
       }
       console.log(response.data);
-      setLoading(false);
+      // setLoading(false);
       setExpertData(response.data.data);
     } catch (error) {
       console.log(error);
-      setLoading(false);
+      // setLoading(false);
     }
   };
   const getExpertStatistics = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const response = await axios.get("/experts/?action=3", {
         headers: {
@@ -576,11 +576,11 @@ export const Dashboard = () => {
         return;
       }
       console.log("statistics", response.data);
-      setLoading(false);
+      // setLoading(false);
       setExpertStatistics(response.data.data);
     } catch (error) {
       console.log(error);
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -592,7 +592,7 @@ export const Dashboard = () => {
   // API integration for testimonials of expert start--->>>
   const [expertAllTestimonials, setExpertAllTestimonials] = useState([]);
   const getExpertAllTestimonials = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const response = await axios.get(`/testimonial/?action=3`, {
         headers: {
@@ -610,11 +610,11 @@ export const Dashboard = () => {
         return;
       }
       console.log(response.data.data);
-      setLoading(false);
+      // setLoading(false);
       setExpertAllTestimonials(response.data.data);
     } catch (error) {
       console.log(error);
-      setLoading(false);
+      // setLoading(false);
       setExpertAllTestimonials([]);
     }
   };
@@ -650,7 +650,7 @@ export const Dashboard = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    setLoading(true);
+    // setLoading(true);
     try {
       const res = await axios.get("/blogs/?action=2", {
         headers: {
@@ -660,11 +660,11 @@ export const Dashboard = () => {
       });
       const allData = res.data.data;
       console.log(allData);
-      setLoading(false);
+      // setLoading(false);
       setBlogData(allData);
     } catch (error) {
       console.log(error);
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -691,16 +691,16 @@ export const Dashboard = () => {
   const [basicStats, setBasicStats] = useState(true);
   const [extraStats, setExtraStats] = useState(false);
   const HandleBasicStats = () => {
-    setLoading(true);
+    // setLoading(true);
     setBasicStats(true);
     setExtraStats(false);
-    setLoading(false);
+    // setLoading(false);
   };
   const HandleExtraStats = () => {
-    setLoading(true);
+    // setLoading(true);
     setBasicStats(false);
     setExtraStats(true);
-    setLoading(false);
+    // setLoading(false);
   };
 
   //heatmap data
@@ -769,7 +769,7 @@ export const Dashboard = () => {
         <div className="w-[72%] h-full px-2">
           <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-4 mb-4 text-sm md:text-base overflow-x-scroll px-2">
             <div
-              className={loading ? `text-gray-300` : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+              className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
                 basicStats && `bg-[#ececec] rounded-sm`
               }`}
               onClick={() => HandleBasicStats()}
@@ -777,7 +777,7 @@ export const Dashboard = () => {
               Basic Stats
             </div>
             <div
-              className={loading ? `text-gray-300` : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+              className={ `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
                 extraStats && `bg-[#ececec] rounded-sm`
               }`}
               onClick={() => HandleExtraStats()}
