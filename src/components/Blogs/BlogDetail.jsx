@@ -43,7 +43,6 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
         console.log("no data");
         return;
       }
-      console.log(json);
       setReplies(json.data);
     } catch (error) {
       console.log(error);
@@ -614,7 +613,6 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
 
 const BlogDetails = () => {
   const params = useParams();
-  console.log(params);
   const [currBlogData, setCurrBlogData] = useState({});
   const getData = async () => {
     const cookies = document.cookie.split("; ");
@@ -725,7 +723,6 @@ const BlogDetails = () => {
         console.log("no data");
         return;
       }
-      console.log(json);
       const organizedComments = organizeComments(json.data);
       setBlogComments(organizedComments);
     } catch (error) {
@@ -747,9 +744,8 @@ const BlogDetails = () => {
           <div className=" text-3xl overflow-hidden xs:text-4xl lg:text-5xl font-bold md:px-[7vw] my-5 md:my-4 tracking-wide pb-2">
             {currBlogData?.title}
           </div>
-          {console.log(currBlogData?.author_data?.id)}
           <Link
-            to={`/experts/expertprofile/${currBlogData?.author_data?.id} `}
+            to={`/experts/expertprofile/${currBlogData?.expert_id} `}
             className="no-underline"
           >
             <div className="flex items-center justify-center gap-3">
@@ -780,12 +776,12 @@ const BlogDetails = () => {
           </div>
           <div dangerouslySetInnerHTML={{ __html: currBlogData?.content }} />
         </div>
-        {currBlogData?.tags_list?.length > 0 && (
+        {currBlogData?.tags_list?.length === 0 ? null : (
           <div className="flex items-center gap-2 flex-wrap my-2">
-            {currBlogData?.tags_list.map((tag, index) => (
+            {currBlogData?.tags_list?.map((tag, index) => (
               <div
                 key={index}
-                className="text-[10px] sm:text-sm shrink-0 bg-[#D9D9D9] text-gray-500 border border-solid border-slate-300 rounded-sm px-3 py-1 "
+                className="text-[10px] sm:text-sm shrink-0 bg-[#D9D9D9] text-gray-500 border border-solid border-slate-300 rounded-sm px-3 py-1"
               >
                 {tag}{" "}
               </div>

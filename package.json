@@ -14,6 +14,7 @@
     "dompurify": "^3.1.0",
     "firebase": "^10.10.0",
     "framer-motion": "^10.16.16",
+    "razorpay": "^2.9.4",
     "react": "^18.2.0",
     "react-big-calendar": "^1.11.6",
     "react-calendar-heatmap": "^1.9.0",
