@@ -8,10 +8,11 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { BsFillChatSquareTextFill } from "react-icons/bs";
 import { Link, Outlet } from "react-router-dom";
 import { customerDashboardInfo } from "../../constant";
-import  BookingCard  from "../../subsitutes/BookingCard";
+import BookingCard from "../../subsitutes/BookingCard";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import axios from "../../axios";
 import { imageDB } from "../firebase/config";
+import TextShimmer from "../../subsitutes/Shimmers/TextShimmer";
 import {
   ref,
   uploadBytesResumable,
@@ -304,7 +305,11 @@ export const CustomerProfile = () => {
         <div className="text-xl font-bold ">Profile</div>
         <div
           onClick={() => saveProfile()}
-          className={loading ? `bg-gray-300 px-4 py-2 rounded-md text-gray-500 cursor-not-allowed text-base` : `text-base bg-green-500 px-4 py-2 rounded-md cursor-pointer text-white`}
+          className={
+            loading
+              ? `bg-gray-300 px-4 py-2 rounded-md text-gray-500 cursor-not-allowed text-base`
+              : `text-base bg-green-500 px-4 py-2 rounded-md cursor-pointer text-white`
+          }
         >
           Save Profile
         </div>
@@ -564,6 +569,7 @@ export const CustomerChats = () => {
 };
 export const CustomerBookings = ({ id }) => {
   const [myBookings, setMyBookings] = useState([]);
+  const [shimmer, setShimmer] = useState(false);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
   cookies.forEach((item) => {
@@ -575,6 +581,7 @@ export const CustomerBookings = ({ id }) => {
   }, []);
 
   const getMyBookings = async () => {
+    setShimmer(true);
     try {
       const res = await axios.get(
         `/customers/connect/?action=6&customer_id=${4}`,
@@ -585,10 +592,21 @@ export const CustomerBookings = ({ id }) => {
           },
         }
       );
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        setShimmer(false);
+        return;
+      }
       const json = res.data;
       setMyBookings(json.data);
+      setShimmer(false);
     } catch (error) {
       console.log(error);
+      setShimmer(false);
     }
   };
   console.log(myBookings);
@@ -598,7 +616,13 @@ export const CustomerBookings = ({ id }) => {
         Active Bookings
       </div>
 
-      {myBookings.length === 0 ? (
+      {shimmer ? (
+        <div className="w-full flex flex-col items-center gap-10 mt-5">
+          {Array.from({ length: 4 }).map((item, index) => (
+            <TextShimmer key={index} />
+          ))}
+        </div>
+      ) : myBookings.length === 0 ? (
         <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
           No Active Bookings
         </div>

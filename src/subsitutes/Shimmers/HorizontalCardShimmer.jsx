@@ -1,6 +1,6 @@
 import React from "react";
 
-const BlogCardShimmer = () => {
+const HorizontalCardShimmer = () => {
   return (
     <div
       role="status"
@@ -30,4 +30,4 @@ const BlogCardShimmer = () => {
   );
 };
 
-export default BlogCardShimmer;
+export default HorizontalCardShimmer;
