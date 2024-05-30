@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TopExperts } from "../Landing/Landing";
 import Subheader from "../../utilities/Subheader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import Pagination from "../../subsitutes/Pagination";
 import {
@@ -18,6 +18,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import ExpertCardShimmer from "../../subsitutes/Shimmers/ExpertCardShimmer";
 
 export const ExpertCard = ({ item, getAllExperts }) => {
+  const navigate = useNavigate();
   const [favExpert, setFavExpert] = useState(false);
   const cookie = document.cookie.split(";");
   const jsonData = {};
@@ -27,6 +28,7 @@ export const ExpertCard = ({ item, getAllExperts }) => {
     jsonData[key] = value;
   });
   const addFav = async () => {
+    // console.log(getAllExperts)
     try {
       const res = await axios.post(
         "/customers/connect/",
@@ -141,7 +143,7 @@ export const ExpertCard = ({ item, getAllExperts }) => {
         ) : item?.is_favorite ? (
           <FaHeart onClick={() => remFav()} />
         ) : (
-          <FaRegHeart onClick={() => addFav()} />
+          <FaRegHeart onClick={() => localStorage.getItem("username")? addFav():navigate("/login")} />
         )}
       </div>
       <img
@@ -246,6 +248,31 @@ const AllExperts = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+    try {
+      const res = await axios.get(
+        `/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      console.log(res.data.data);
+      setAllExpertsList(res.data.data);
+      setLastPage(res.data.total_pages);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getAllExpertsWithToken = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
     setShimmer(true);
     try {
       const res = await axios.get(
@@ -277,7 +304,8 @@ const AllExperts = () => {
     }
   };
   useEffect(() => {
-    getAllExperts();
+    localStorage.getItem("username")?
+    getAllExpertsWithToken():getAllExperts();
   }, [currentPage]);
 
   const searchExperts = async (searchQuery) => {

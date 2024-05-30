@@ -584,7 +584,7 @@ export const CustomerBookings = ({ id }) => {
     setShimmer(true);
     try {
       const res = await axios.get(
-        `/customers/connect/?action=6&customer_id=${2}`,
+        `/customers/connect/?action=6&customer_id=${4}`,
         {
           headers: {
             "Content-Type": "application/json",
