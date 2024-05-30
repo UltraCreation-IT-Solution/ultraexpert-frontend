@@ -59,7 +59,7 @@ import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
 import SkillList from "./components/GetCertified/Instructions.js";
 import UpdateService from "./components/Services/UpdateService.jsx";
-import Payment from "./components/Payments/Payment";
+import TestElement from "./TestElement.jsx";
 
 const userId = "user123"; // Replace with actual user ID
 const amount = 1000; // Replace with actual amount
@@ -97,8 +97,8 @@ const appRouter = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: "/payment",
-        element: <Payment />,
+        path: "/testelement",
+        element: <TestElement />,
       },
       {
         path: "/login",

@@ -39,7 +39,6 @@ const CreateService = () => {
     setInterest(updatedInterest);
   };
   const [serviceTitle, setServiceTitle] = useState("");
-  const [selectedFiles, setSelectedFiles] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
   const [imageUrl, setImageUrl] = useState(null);
