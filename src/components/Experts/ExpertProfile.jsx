@@ -10,14 +10,14 @@ import { GiAchievement } from "react-icons/gi";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { BsBookmarkPlusFill, BsBookmarkDashFill } from "react-icons/bs";
-
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { expertDetailsObj } from "../../constant";
 import ProjectsCarousel from "../../subsitutes/ProjectCarousel";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import { BlogCard } from "../Blogs/Blogs/Blog";
 import ExpertProfileShimmer from "../../subsitutes/Shimmers/ExpertProfileShimmer";
 import axios from "../../axios";
+import HorizontalCardShimmer from "../../subsitutes/Shimmers/HorizontalCardShimmer";
 
 export const ExpertSummary = ({ experienceArray, projectsArray }) => {
   function formatDate(dateString) {
@@ -28,62 +28,70 @@ export const ExpertSummary = ({ experienceArray, projectsArray }) => {
 
   return (
     <div className="mt-3">
-      {experienceArray?.length !== 0 && (
-        <>
-          <div className="border border-solid border-slate-300 rounded-md p-4 mb-6">
-            <div className="text-xl md:text-2xl font-semibold ">
-              Carrer Journey
-            </div>
-            <div className="mt-6">
-              {experienceArray?.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="relative flex flex-col md:flex-row md:items-center md:gap-10 py-6 md:py-0 border-t border-solid border-slate-200"
-                  >
-                    {/* 1st portion */}
-                    <div className="text-sm flex md:flex-col order-2 md:order-1 md:w-[150px] pt-2 md:py-5 md:text-right">
-                      {item.is_present ? (
-                        <>
-                          <div>Present</div>
-                          <div className="block md:hidden"> - </div>
-                        </>
-                      ) : (
-                        <>
-                          <div>{formatDate(item?.end_date)}</div>
-                          <div className="block md:hidden"> - </div>
-                        </>
-                      )}
-                      <div>{formatDate(item?.start_date)}</div>
-                    </div>
-                    {/* 2nd portion */}
-                    <div
-                      className={`hidden md:block ${
-                        item?.present ? "bg-emerald-300" : "bg-slate-200"
-                      } absolute left-[180px] h-5 w-5 rounded-full `}
-                    ></div>
+      {console.log(experienceArray?.length)}
 
-                    {/* 3rd portion */}
-                    <div className="md:pl-10 flex flex-col order-1 md:order-2 md:border-l border-solid border-slate-200 md:py-5">
-                      <div className="text-base font-semibold">
-                        {item?.designation}
-                      </div>
-                      <div className="text-sm text-slate-500">
-                        {item?.company_name}
-                      </div>
+      <div className="border border-solid border-slate-300 rounded-md p-4 mb-6">
+        <div className="text-xl md:text-2xl font-semibold ">Carrer Journey</div>
+        <div className="mt-6">
+          {experienceArray?.length === 0 ? (
+            <div className="text-center font-bold text-lg md:text-2xl text-gray-600 my-10 md:my-15">
+              No information provided by the expert
+            </div>
+          ) : (
+            experienceArray?.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className="relative flex flex-col md:flex-row md:items-center md:gap-10 py-6 md:py-0 border-t border-solid border-slate-200"
+                >
+                  {/* 1st portion */}
+                  <div className="text-sm flex md:flex-col order-2 md:order-1 md:w-[150px] pt-2 md:py-5 md:text-right">
+                    {item.is_present ? (
+                      <>
+                        <div>Present</div>
+                        <div className="block md:hidden"> - </div>
+                      </>
+                    ) : (
+                      <>
+                        <div>{formatDate(item?.end_date)}</div>
+                        <div className="block md:hidden"> - </div>
+                      </>
+                    )}
+                    <div>{formatDate(item?.start_date)}</div>
+                  </div>
+                  {/* 2nd portion */}
+                  <div
+                    className={`hidden md:block ${
+                      item?.present ? "bg-emerald-300" : "bg-slate-200"
+                    } absolute left-[180px] h-5 w-5 rounded-full `}
+                  ></div>
+
+                  {/* 3rd portion */}
+                  <div className="md:pl-10 flex flex-col order-1 md:order-2 md:border-l border-solid border-slate-200 md:py-5">
+                    <div className="text-base font-semibold">
+                      {item?.designation}
+                    </div>
+                    <div className="text-sm text-slate-500">
+                      {item?.company_name}
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        </>
-      )}
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
       <div>
         <div className="mb-5 text-xl md:text-2xl font-semibold font-montserrat">
           My projects
         </div>
-        <ProjectsCarousel projectsArray={projectsArray} />
+        {projectsArray?.length === 0 || projectsArray === undefined ? (
+          <div className="text-center font-bold text-lg md:text-2xl text-gray-600 my-10 md:my-15">
+            No projects found
+          </div>
+        ) : (
+          <ProjectsCarousel projectsArray={projectsArray} />
+        )}
       </div>
     </div>
   );
@@ -130,6 +138,7 @@ export const ExpertProfileServiceCard = ({ item }) => {
 };
 export const ExpertServices = () => {
   const [services, setServices] = useState([]);
+  const [shimmer, setShimmer] = useState(false);
   const params = useParams();
   const { id } = params;
   console.log(id);
@@ -141,6 +150,7 @@ export const ExpertServices = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+    setShimmer(true);
     try {
       const res = await axios.get(
         `/customers/services/?action=1&expert_id=${id}`,
@@ -151,25 +161,40 @@ export const ExpertServices = () => {
           },
         }
       );
+      console.log(res);
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 500
+      ) {
+        setShimmer(false);
+        return;
+      }
       const json = res.data.data.all;
       console.log(json);
       setServices(json);
+      setShimmer(false);
     } catch (error) {
       console.log(error);
+      setShimmer(false);
     }
   };
   useEffect(() => {
     getExpServices();
   }, []);
 
-  if (services?.length === 0) {
-    return (
-      <div className="text-center text-xl sm:text-2xl lg:text-3xl text-[#2e2e2e] font-semibold px-3 mt-10 mb-10 lg:mb-0 ">
-        No services provided by the expert yet!
-      </div>
-    );
-  }
-  return (
+  return shimmer === true ? (
+    <div className="px-[2.5vw] flex flex-wrap justify-center gap-[2vw]">
+      {Array.from({ length: 4 }).map((_, index) => (
+        <HorizontalCardShimmer key={index} />
+      ))}
+    </div>
+  ) : services?.length === 0 ? (
+    <div className="text-center text-xl sm:text-2xl lg:text-3xl text-[#2e2e2e] font-semibold px-3 mt-10 mb-10 lg:mb-0 ">
+      No services provided by the expert yet!
+    </div>
+  ) : (
     <div className="mb-10 lg:mb-0">
       {services.map((item, index) => (
         <ExpertProfileServiceCard item={item} key={index} />
@@ -474,24 +499,26 @@ export const AboutExpert = ({ getExpertDetails, ...expert }) => {
             <div className="text-base md:text-lg text-[#565454] mt-3">
               {expert?.expert?.expert?.profession}
             </div>
-            <div className="flex flex-col mt-4">
-              <div className="flex items-center gap-2 text-lg md:text-xl text-[#565454] font-semibold">
-                <IoDiamondSharp />
-                <div>Top skills</div>
+            {expert?.expert?.skills?.skills_json?.length === 0 ? null : (
+              <div className="flex flex-col mt-4">
+                <div className="flex items-center gap-2 text-lg md:text-xl text-[#565454] font-semibold">
+                  <IoDiamondSharp />
+                  <div>Top skills</div>
+                </div>
+                <div className="flex items-center gap-3 mt-4">
+                  {expert?.expert?.skills?.skills_json
+                    ?.slice(0, 3)
+                    ?.map((item, index) => (
+                      <div
+                        key={index}
+                        className="bg-[#E7E7E7] px-4 py-1 text-sm rounded-sm"
+                      >
+                        {item?.technology_name}
+                      </div>
+                    ))}
+                </div>
               </div>
-              <div className="flex items-center gap-3 mt-4">
-                {expert?.expert?.skills?.skills_json
-                  ?.slice(0, 3)
-                  ?.map((item, index) => (
-                    <div
-                      key={index}
-                      className="bg-[#E7E7E7] px-4 py-1 text-sm rounded-sm"
-                    >
-                      {item?.technology_name}
-                    </div>
-                  ))}
-              </div>
-            </div>
+            )}
             <div className="flex items-center gap-5 text-[#565454] text-lg xs:text-xl mt-5">
               <div className="py-2 flex gap-[0.3vw] justify-center items-center">
                 <MdStar color="#FF5E18" />
@@ -525,19 +552,24 @@ export const AboutExpert = ({ getExpertDetails, ...expert }) => {
       </div>
 
       <div className="lg:hidden px-[2.5vw] mt-4 sm:mt-0">
-        <div className="text-base md:text-lg lg:text-xl font-semibold mt-5 lg:mt-0">
-          Skills
-        </div>
-        <div className="flex flex-wrap gap-2 md:gap-[1vw] mt-3 pb-1">
-          {expert?.expert?.skills?.skills_json?.map((item, idx) => (
-            <div
-              key={idx}
-              className="px-2 py-1 text-xs md:text-sm border border-solid border-[#dedede] font-semibold rounded-sm cursor-pointer shadow-sm drop-shadow-sm"
-            >
-              {item?.technology_name}
+        {expert?.expert?.skills?.skills_json?.length === 0 ? null : (
+          <>
+            <div className="text-base md:text-lg lg:text-xl font-semibold mt-5 lg:mt-0">
+              Skills
             </div>
-          ))}
-        </div>
+            <div className="flex flex-wrap gap-2 md:gap-[1vw] mt-3 pb-1">
+              {expert?.expert?.skills?.skills_json?.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="px-2 py-1 text-xs md:text-sm border border-solid border-[#dedede] font-semibold rounded-sm cursor-pointer shadow-sm drop-shadow-sm"
+                >
+                  {item?.technology_name}
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
         <div className="mt-8 md:mt-4">
           <div className="text-base md:text-lg lg:text-xl font-semibold">
             About me
@@ -588,6 +620,9 @@ export const AchievementCard = ({ name, year, certificate }) => {
 };
 
 export const ExpertInfo = ({ ...expert }) => {
+  const location = useLocation();
+  console.log(location)
+
   const [summary, setSummary] = useState(true);
   const [services, setServices] = useState(false);
   const [ratings, setRatings] = useState(false);
@@ -622,6 +657,14 @@ export const ExpertInfo = ({ ...expert }) => {
           Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        return;
+      }
       const allData = res.data.data;
       setExpertBlogsArray(allData);
     } catch (error) {
@@ -631,6 +674,12 @@ export const ExpertInfo = ({ ...expert }) => {
 
   useEffect(() => {
     getBlogData();
+    if(location.state!==null && location.state.check===true){
+      setSummary(false);
+      setServices(true);
+      setRatings(false);
+      setBlogs(false);
+    }
   }, []);
 
   const MakeSummaryTrue = () => {
@@ -676,8 +725,10 @@ export const ExpertInfo = ({ ...expert }) => {
               services ? "font-semibold bg-[#EDEDED] " : null
             }`}
             onClick={() => MakeServicesTrue()}
+            
           >
-            Services
+           Services
+            
           </div>
           <div
             className={`cursor-pointer text-base sm:text-lg md:text-xl px-6 py-2 shrink-0 ${
@@ -706,19 +757,25 @@ export const ExpertInfo = ({ ...expert }) => {
           {services && <ExpertServices />}
           {ratings && <ExpertRatings />}
           {blogs &&
-            blogArray.map((item, idx) => (
-              <BlogCard
-                key={item?.id}
-                index={idx}
-                items={item}
-                likes={item?.reaction_count}
-                views={item?.blog_view_count}
-                title={item?.title}
-                tags={item?.tags}
-                image={item?.images[0]}
-                id={item?.id}
-                date={formatDate(item.date_created.split("T")[0])}
-              />
+            (blogArray?.length === 0 ? (
+              <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
+                No blogs found
+              </div>
+            ) : (
+              blogArray.map((item, idx) => (
+                <BlogCard
+                  key={item?.id}
+                  index={idx}
+                  items={item}
+                  likes={item?.reaction_count}
+                  views={item?.blog_view_count}
+                  title={item?.title}
+                  tags={item?.tags}
+                  image={item?.images[0]}
+                  id={item?.id}
+                  date={formatDate(item.date_created.split("T")[0])}
+                />
+              ))
             ))}
         </div>
       </div>
@@ -835,14 +892,20 @@ export const SideComponent = ({ ...expert }) => {
           Skills
         </div>
         <div className="flex flex-wrap gap-2 md:gap-[1vw] mt-3 pb-1">
-          {expert?.expert?.skills?.skills_json?.map((item, index) => (
-            <div
-              key={index}
-              className="px-2 py-1 text-xs md:text-sm border border-solid border-[#dedede] font-semibold rounded-sm cursor-pointer shadow-sm drop-shadow-sm"
-            >
-              {item?.technology_name}
+          {expert?.expert?.skills?.skills_json?.length === 0 ? (
+            <div className="text-xs xs:text-base pb-[1vw]">
+              No information provided by the expert
             </div>
-          ))}
+          ) : (
+            expert?.expert?.skills?.skills_json?.map((item, index) => (
+              <div
+                key={index}
+                className="px-2 py-1 text-xs md:text-sm border border-solid border-[#dedede] font-semibold rounded-sm cursor-pointer shadow-sm drop-shadow-sm"
+              >
+                {item?.technology_name}
+              </div>
+            ))
+          )}
         </div>
       </div>
 
@@ -919,6 +982,7 @@ export const SideComponent = ({ ...expert }) => {
 const ExpertProfile = () => {
   const params = useParams();
   const { id } = params;
+  const [shimmer, setShimmer] = useState(false);
   const [expertDetail, setExpertDetail] = useState(null);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -927,6 +991,7 @@ const ExpertProfile = () => {
     jsonData[key] = value;
   });
   const getExpertDetails = async () => {
+    setShimmer(true);
     try {
       const res = await axios.get(
         `/customers/experts/?action=2&expert_id=${id} `,
@@ -941,16 +1006,18 @@ const ExpertProfile = () => {
         !res.data ||
         res.data.status === 400 ||
         res.data.status === 401 ||
-        res.status === 500 ||
         res.data.status === 404
       ) {
-        console.log(response.data.message);
+        console.log(res.data.message);
+        setShimmer(false);
         return;
       }
       const data = res.data.data;
       setExpertDetail(data);
+      setShimmer(false);
     } catch (error) {
       console.log(error);
+      setShimmer(false);
     }
   };
   useEffect(() => {
@@ -959,9 +1026,15 @@ const ExpertProfile = () => {
   useEffect(() => {
     console.log(expertDetail);
   }, [expertDetail]);
-  if (!expertDetail) return <ExpertProfileShimmer />;
 
-  return (
+  if (shimmer === true) {
+    return <ExpertProfileShimmer />;
+  }
+  return !expertDetail ? (
+    <div className="text-center font-bold text-lg md:text-2xl text-gray-600 my-10 md:my-15">
+      Expert details not found{" "}
+    </div>
+  ) : (
     <div>
       <div className="lg:flex mt-[90px] md:mt-[80px]">
         <div className="lg:w-[70%] h-[88vh]">

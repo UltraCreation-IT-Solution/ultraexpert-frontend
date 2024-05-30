@@ -1,62 +1,81 @@
 import React, { useEffect } from "react";
 import { RiFlowChart } from "react-icons/ri";
-import {
-  PiDotsThreeCircleVertical,
-} from "react-icons/pi";
+import { PiDotsThreeCircleVertical } from "react-icons/pi";
 import ProjectsCarousel from "../../subsitutes/ProjectCarousel";
-import { ExpertRatings } from "./ExpertProfile";
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import ShowSchedule from "../../subsitutes/Schedule";
 
 export const ServiceProfileCard = ({ item }) => {
+  const navigate = useNavigate();
   return (
     <div
-      className={`w-full px-3 py-5 bg-[#EDEDED] flex justify-between items-center shadow-sm drop-shadow-md rounded-md`}
+      className={`w-full px-3 py-5 bg-[#EDEDED] flex flex-col md:flex-row justify-between md:items-center shadow-sm drop-shadow-md rounded-md`}
     >
-      <Link
-        to={`/experts/expertprofile/${item?.expert_data?.id}`}
-        className="flex gap-3 items-center decoration-transparent text-black"
-      >
-        <img
-          className="h-10 w-10 rounded-full shrink-0 object-cover"
-          src={item?.expert_data?.profile_img}
-          alt=""
-        />
-        <div className="flex flex-col">
-          <div className="text-lg font-semibold">
-            {item?.expert_data?.first_name} {item?.expert_data?.last_name}
+      <div className="flex justify-between items-center">
+        <Link
+          to={`/experts/expertprofile/${item?.expert_data?.id}`}
+          className="flex gap-2 sm:gap-3 items-center decoration-transparent text-black"
+        >
+          <img
+            className="h-8 w-8 sm:h-10 sm:w-10 rounded-full shrink-0 object-cover"
+            src={item?.expert_data?.profile_img}
+            alt=""
+          />
+          <div className="flex flex-col">
+            <div className="text-sm sm:text-lg font-semibold">
+              {item?.expert_data?.first_name} {item?.expert_data?.last_name}
+            </div>
           </div>
+        </Link>
+        <div className="block md:hidden">
+          {item?.expert_data?.is_following_expert ? (
+            <button className="bg-white px-4 sm:px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-xs sm:text-sm text-black font-semibold border rounded-sm sm:rounded-md">
+              Follow
+            </button>
+          ) : (
+            <button className="bg-white px-4 sm:px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-xs sm:text-sm text-black font-semibold border rounded-sm sm:rounded-md">
+              Unfollow
+            </button>
+          )}
         </div>
-      </Link>
+      </div>
 
-      <div className="flex items-center gap-10">
-        <div className="text-base text-gray-600 cursor-pointer shrink-0">
+      <div className="flex items-center gap-8 lg:gap-10 mt-5 md:mt-0">
+        <div
+          className="text-sm md:text-base text-gray-600 cursor-pointer shrink-0"
+          onClick={
+            () => navigate( `/experts/expertprofile/${item?.expert_data?.id}`,
+            { state: { check: true } })
+          }
+        >
           Services
         </div>
         <a href="#projects" className="decoration-transparent">
-          <div className="text-base text-gray-600 cursor-pointer shrink-0">
+          <div className="text-sm md:text-base text-gray-600 cursor-pointer shrink-0">
             Projects
           </div>
         </a>
         <a href="#ratings" className="decoration-transparent">
-          <div className="text-base text-gray-600 cursor-pointer shrink-0">
+          <div className="text-sm md:text-base text-gray-600 cursor-pointer shrink-0">
             {" "}
-            Ratings
+            Reviews
           </div>
         </a>
-        {item?.expert_data?.is_following_expert ? (
-          <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
-            Follow
-          </button>
-        ) : (
-          <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
-            Unfollow
-          </button>
-        )}
+        <div className="hidden md:block">
+          {item?.expert_data?.is_following_expert ? (
+            <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
+              Follow
+            </button>
+          ) : (
+            <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
+              Unfollow
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

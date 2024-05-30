@@ -18,10 +18,16 @@ import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../../../subsitutes/Pagination";
 import { FaBookmark } from "react-icons/fa6";
 import axios from "../../../axios";
-import BlogCardShimmer from "../../../subsitutes/Shimmers/BlogCardShimmer";
+import HorizontalCardShimmer from "../../../subsitutes/Shimmers/HorizontalCardShimmer";
 import SearchByCategoriesSlider from "../../../utilities/SearchByCategoriesSlider";
 
-export const BlogBody = ({ getBlogsBySearch, allBlogsArray, getBlogArray }) => {
+export const BlogBody = ({
+  getBlogsBySearch,
+  allBlogsArray,
+  getBlogArray,
+  shimmer,
+  itemsPerPage,
+}) => {
   console.log(allBlogsArray);
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -273,7 +279,7 @@ export const BlogBody = ({ getBlogsBySearch, allBlogsArray, getBlogArray }) => {
             <div
               key={index}
               className="relative flex items-center justify-center w-[150px] h-[200px] md:w-[280px] md:h-[300px] shrink-0 object-cover rounded-md cursor-pointer"
-              onClick={() => getBlogsBySearch(temp.topicName, null)}
+              onClick={() => getBlogsBySearch(temp?.topicName)}
             >
               <img
                 src={temp.img}
@@ -287,16 +293,25 @@ export const BlogBody = ({ getBlogsBySearch, allBlogsArray, getBlogArray }) => {
         </div>
       </div>
       {/* All blogs */}
+
       <div>
         <div className="text-xl lg:text-3xl font-bold mt-16 text-center ">
           All Blogs
         </div>
-        <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
-          {allBlogsArray.length === 0
-            ? Array.from({ length: 4 }).map((_, index) => (
-                <BlogCardShimmer key={index} />
-              ))
-            : allBlogsArray?.map((item, index) => (
+        {shimmer === true ? (
+          <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
+            {Array.from({ length: itemsPerPage }).map((_, index) => (
+              <HorizontalCardShimmer key={index} />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-6 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
+            {allBlogsArray.length === 0 ? (
+              <div className="text-center font-bold text-lg md:text-2xl text-gray-600 my-10 md:my-15">
+                Currently no blogs available
+              </div>
+            ) : (
+              allBlogsArray?.map((item, index) => (
                 <BlogCard
                   key={item.id}
                   index={index}
@@ -309,8 +324,10 @@ export const BlogBody = ({ getBlogsBySearch, allBlogsArray, getBlogArray }) => {
                   getBlogArray={getBlogArray}
                   fetchBlogs={fetchBlogs}
                 />
-              ))}
-        </div>
+              ))
+            )}
+          </div>
+        )}
       </div>
     </>
   );
@@ -324,18 +341,24 @@ export const SearchedBlog = ({ searchedBlogs }) => {
 
   return (
     <div className="mt-6 lg:mt-10 px-[8vw] md:px-[10vw] flex flex-wrap justify-center gap-[2vw]">
-      {searchedBlogs?.map((item, index) => (
-        <BlogCard
-          key={item.id}
-          index={index}
-          id={item.id}
-          items={item}
-          title={item.title}
-          tags={item.tags}
-          image={item.images[0]}
-          date={formatDate(item.date_created.split("T")[0])}
-        />
-      ))}
+      {searchedBlogs.length === 0 ? (
+        <div className="text-center font-bold text-lg md:text-2xl text-gray-600 my-10 md:my-15">
+          No blogs found
+        </div>
+      ) : (
+        searchedBlogs?.map((item, index) => (
+          <BlogCard
+            key={item.id}
+            index={index}
+            id={item.id}
+            items={item}
+            title={item.title}
+            tags={item.tags}
+            image={item.images[0]}
+            date={formatDate(item.date_created.split("T")[0])}
+          />
+        ))
+      )}
     </div>
   );
 };
@@ -533,6 +556,7 @@ export const BlogCard = ({
   );
 };
 const Blogs = () => {
+  const [shimmer, setShimmer] = useState(false);
   // for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(3);
@@ -544,7 +568,7 @@ const Blogs = () => {
 
   //search for blogs
   const [searchedBlogs, setSearchedBlogs] = useState([]);
-  const [searchText, setSearchText] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [showSearchedBlogs, setShowSearchedBlogs] = useState(false);
 
   //api call for all Featured blogs
@@ -680,6 +704,7 @@ const Blogs = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+    setShimmer(true);
     try {
       const res = await axios.get(
         `/blogs/?action=1&page=${currentPage}&records_number=${itemsPerPage}`,
@@ -690,17 +715,30 @@ const Blogs = () => {
           },
         }
       );
+
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        setShimmer(false);
+        return;
+      }
       setLastPage(res.data.total_pages);
       const allData = res.data.data.all;
       console.log(res.data);
       setAllBlogsArray(allData);
+      setShimmer(false);
     } catch (error) {
       console.log(error);
+      setShimmer(false);
     }
   };
   useEffect(() => {
     getBlogArray();
   }, [currentPage]);
+
   //api call for all blogs
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -708,29 +746,42 @@ const Blogs = () => {
     return date.toLocaleDateString("en-US", options);
   }
 
-  const getBlogsBySearch = async (item, searchText) => {
+  const getBlogsBySearch = async (searchQuery) => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
-    console.log("first");
     cookie.forEach((item) => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+    setSearchedBlogs([]);
+    setShimmer(true);
+    if (searchQuery === "") {
+      setShimmer(false);
+      setShowSearchedBlogs(false);
+      return;
+    }
     try {
-      const res = await axios.get(
-        `/blogs/?action=8&blog_tag=${item}&blog_title=${searchText} `,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const res = await axios.get(`/blogs/?action=8&query=${searchQuery} `, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        return;
+      }
       const data = res.data.data;
-      setSearchedBlogs(data);
       setShowSearchedBlogs(true);
+      setSearchedBlogs(data);
     } catch (error) {
       console.log(error);
     }
+    setShimmer(false);
+    setShowSearchedBlogs(true);
   };
   return (
     <div className="mt-[90px]">
@@ -765,18 +816,19 @@ const Blogs = () => {
           </div>
         ))}
       </div>
-      
+
       <div className="my-10 flex justify-center items-center h-[8vh]">
         <input
-          className="h-full w-[84vw] sm:w-[66vw] md:w-[60vw] bg-[#ECECEC] rounded-r-none rounded-md pl-3 sm:pl-6 py-2 xs:text-sm  sm:text-base md:text-lg outline-none focus:border-blue-200 border-solid focus:border-[0.8px]"
+          className="h-full w-[84vw] sm:w-[66vw] md:w-[60vw] bg-[#ECECEC] rounded-r-none rounded-md pl-3 sm:pl-6 py-2 xs:text-sm sm:text-base md:text-lg outline-none"
           type="text"
           placeholder="Search for any blog"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && getBlogsBySearch(searchQuery)}
         />
         <div
           className="h-full w-[6vw] py-2 bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all xs:text-sm sm:text-base md:text-lg rounded-l-none rounded-md flex justify-center items-center"
-          onClick={() => getBlogsBySearch(null, searchText)}
+          onClick={() => getBlogsBySearch(searchQuery)}
         >
           <FaSearch />
         </div>
@@ -785,28 +837,36 @@ const Blogs = () => {
         <Author createAuthor={createAuthor} />
       ) : null}
 
-      {!showSearchedBlogs ? (
-          
-          <BlogBody
-            getBlogsBySearch={getBlogsBySearch}
-            allBlogsArray={allBlogsArray}
-            getBlogArray={getBlogArray}
-          />
-      ) : (
-        <>
-        <div
-            className="text-lg sm:text-xl font-semibold text-red-500  mt-10 md:mt-15 cursor-pointer flex gap-2 items-center px-[7vw] md:px-[10vw] no-underline ml-2 hover:ml-0 hover:gap-3 hover:underline transition-all w-fit"
-            onClick={() => (
-              setShowSearchedBlogs(false),
-              setSearchedBlogs([]),
-              setSearchText("")
-            )}
-          >
-            <IoMdArrowRoundBack />
-            Back
+      {showSearchedBlogs === true ? (
+        shimmer ? (
+          <div className="w-full space-y-4">
+            {Array.from({ length: itemsPerPage }).map((_, index) => (
+              <HorizontalCardShimmer key={index} />
+            ))}
           </div>
-        <SearchedBlog searchedBlogs={searchedBlogs} />
-        </>
+        ) : (
+          <>
+            <div
+              className="text-lg sm:text-xl font-semibold text-red-500 mt-10 md:mt-15 cursor-pointer flex gap-2 items-center px-[7vw] md:px-[10vw] no-underline ml-2 hover:ml-0 hover:gap-3 hover:underline transition-all w-fit"
+              onClick={() => (
+                setShowSearchedBlogs(false), setSearchedBlogs([])
+              )}
+            >
+              <IoMdArrowRoundBack />
+              Back
+            </div>
+
+            <SearchedBlog searchedBlogs={searchedBlogs} />
+          </>
+        )
+      ) : (
+        <BlogBody
+          getBlogsBySearch={getBlogsBySearch}
+          allBlogsArray={allBlogsArray}
+          getBlogArray={getBlogArray}
+          shimmer={shimmer}
+          itemsPerPage={itemsPerPage}
+        />
       )}
       <div className="px-[8vw] md:px-[10vw]">
         <div className="mt-[3vw] flex items-center justify-between gap-[4vw] text-white">

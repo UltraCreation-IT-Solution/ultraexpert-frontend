@@ -61,8 +61,9 @@ const TestimonialCard = ({expert_id, id, user, content, date_created }) => {
   );
 };
 export const ServiceCategory = () => {
+  const location=useLocation();
   return (
-    <div className="relative flex flex-col md:flex-row gap-4 overflow-hidden  px-[6vw] md:px-[11vw] pt-[8.5vw] sm:pt-[10vh] w-full min-h-[88vh] md:min-h-[55vw] mb-[3vw] md:mb-[1vw] lg:mb-[5vw]">
+    <div className={`relative flex flex-col md:flex-row gap-4 overflow-hidden  ${location.pathname==="/services"?"px-[2vw]":" px-[6vw] md:px-[11vw]"} pt-[8.5vw] sm:pt-[10vh] w-full min-h-[88vh] md:min-h-[55vw] mb-[3vw] md:mb-[1vw] lg:mb-[5vw]`}>
       <div className="w-full md:w-2/4 flex flex-row md:flex-col gap-4 h-full flex-wrap ">
         <div className="w-full h-2/5  flex flex-row gap-4 ">
           <div className="w-full md:w-1/2 h-full  flex flex-row md:flex-col gap-6 md:gap-2 overflow-hidden">
