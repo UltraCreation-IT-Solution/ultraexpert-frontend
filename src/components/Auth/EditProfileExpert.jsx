@@ -421,7 +421,7 @@ const GeneralDetails = () => {
           type="submit"
           className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
-          Submit
+          Update
         </button>
       </div>
     </form>
@@ -617,7 +617,7 @@ const PersonalDetails = () => {
           type="submit"
           className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
-          Submit
+          Update
         </button>
       </div>
     </form>
@@ -782,7 +782,7 @@ const EducationDetails = () => {
             e.preventDefault();
             addEducationForm();
           }}
-          className="underline cursor-pointer text-gray-400 bg-inherit"
+          className="underline cursor-pointer text-gray-400 bg-inherit hover:text-gray-700"
         >
           + Add Education
         </button>
@@ -792,7 +792,7 @@ const EducationDetails = () => {
               <p className="font-bold text-lg">Education {ind + 1}</p>
               <button
                 onClick={() => removeEducationForm(form.id)}
-                className="underline cursor-pointer text-red-400 bg-inherit"
+                className="underline cursor-pointer text-red-400 bg-inherit hover:text-red-600"
               >
                 - Remove Education
               </button>
@@ -1249,7 +1249,7 @@ const EducationDetails = () => {
           type="submit"
           className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
-          Submit
+          Update
         </button>
       </div>
     </form>
@@ -1370,7 +1370,7 @@ const SkillDetails = () => {
             e.preventDefault();
             addSkillForm();
           }}
-          className="underline cursor-pointer text-gray-400 bg-inherit"
+          className="underline cursor-pointer text-gray-400 bg-inherit hover:text-gray-700"
         >
           + Add Skill
         </button>
@@ -1380,7 +1380,7 @@ const SkillDetails = () => {
               <p className="font-bold text-lg">Skill {ind + 1}</p>
               <button
                 onClick={() => removeSkillForm(form.id)}
-                className="underline cursor-pointer text-red-400 bg-inherit"
+                className="underline cursor-pointer text-red-400 bg-inherit hover:text-red-600"
               >
                 - Remove Skill
               </button>
@@ -1431,7 +1431,7 @@ const SkillDetails = () => {
           type="submit"
           className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
-          Submit
+          Update
         </button>
       </div>
     </form>
@@ -1658,7 +1658,7 @@ const AchDetails = () => {
             e.preventDefault();
             addAchForm();
           }}
-          className="underline cursor-pointer text-gray-400 bg-inherit"
+          className="underline cursor-pointer text-gray-400 bg-inherit hover:text-gray-700"
         >
           + Add Achievment
         </button>
@@ -1668,7 +1668,7 @@ const AchDetails = () => {
               <p className="font-bold text-lg">Achievement {ind + 1}</p>
               <button
                 onClick={() => removeAchForm(form.id)}
-                className="underline cursor-pointer text-red-400 bg-inherit"
+                className="underline cursor-pointer text-red-400 bg-inherit hover:text-red-600"
               >
                 - Remove Achievement
               </button>
@@ -1765,7 +1765,7 @@ const AchDetails = () => {
           type="submit"
           className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
-          Submit
+          Update
         </button>
       </div>
     </form>
@@ -1926,7 +1926,7 @@ const ExperienceDetails = () => {
             e.preventDefault();
             addExperienceForm();
           }}
-          className="underline cursor-pointer text-gray-400 bg-inherit"
+          className="underline cursor-pointer text-gray-400 bg-inherit hover:text-gray-700"
         >
           + Add Experience
         </button>
@@ -1936,7 +1936,7 @@ const ExperienceDetails = () => {
               <p className="font-bold text-lg">Experience {ind + 1}</p>
               <button
                 onClick={() => removeExpForm(form.id)}
-                className="underline cursor-pointer text-red-400 bg-inherit"
+                className="underline cursor-pointer text-red-400 bg-inherit hover:text-red-600"
               >
                 - Remove Experience
               </button>
@@ -2045,7 +2045,7 @@ const ExperienceDetails = () => {
           type="submit"
           className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
-          Submit
+          Update
         </button>
       </div>
     </form>
@@ -2216,7 +2216,7 @@ const AccDetails = () => {
           type="submit"
           className={loading ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit` : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`}
         >
-          Submit
+          Update
         </button>
       </div>
     </form>

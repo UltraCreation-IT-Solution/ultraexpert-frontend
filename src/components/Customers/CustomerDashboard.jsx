@@ -783,7 +783,61 @@ const CustomerDashboard = () => {
       console.log(error);
     }
   };
+  const changeAuth = async () => {
+    const getCookie = (name) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(";").shift();
+    };
+    const refresh_token = getCookie("refresh_token");
+    if (!refresh_token) {
+      //clear local storage and go back to login
+      localStorage.clear();
+      navigate("/login");
+    } else {
+      try {
+        const res = await axios.post(
+          "/refresh/",
+          {
+            refresh: `${refresh_token}`,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(res);
+        const expirationDateforAccess = new Date();
+        const expirationDateforRefresh = new Date();
+        expirationDateforAccess.setDate(expirationDateforAccess.getDate() + 7);
+        expirationDateforRefresh.setDate(
+          expirationDateforRefresh.getDate() + 8
+        );
+        document.cookie = `access_token=${
+          res.data.access
+        };expires=${expirationDateforAccess.toUTCString()};  SameSite=Lax;`;
+        document.cookie = `refresh_token=${
+          res.data.refresh
+        };expires=${expirationDateforRefresh.toUTCString()};  SameSite=Lax;`;
+        // localStorage.setItem("userId", `${res.data.id}`);
+        localStorage.setItem("username", `${res.data.user.first_name}`);
+        localStorage.setItem("profile", `${res.data.user.profile_img}`);
+        localStorage.setItem("isExpert", `${res.data.user.is_expert}`);
+        localStorage.setItem("isAuthor", `${res.data.user.is_author}`);
+        localStorage.setItem("isCustomer", `${res.data.user.is_customer}`);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
   useEffect(() => {
+    const isAuthChecked = sessionStorage.getItem("isAuthChecked");
+    if (!isAuthChecked) {
+      // If not, call the function and set the flag in sessionStorage
+      changeAuth();
+      sessionStorage.setItem("isAuthChecked", "true");
+    }
     getUserData();
   }, []);
   return (
