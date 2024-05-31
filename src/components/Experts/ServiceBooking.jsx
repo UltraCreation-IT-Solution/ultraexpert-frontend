@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import axios from "../../axios";
 const ServiceBooking = () => {
@@ -7,40 +7,138 @@ const ServiceBooking = () => {
   const serviceData= location.state;
   const params= useParams();
   
-  const handleBookService = async () => {
-    const cookies = document.cookie.split("; ");
-    const jsonData = {};
-    console.log("booking service")
-    cookies.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    try {
-      const res = await axios.post(
-        "/booking/",
-        {
-          action:1,
-          expert_id: serviceData?.servDesc?.expert_data?.id,
-          service_id: serviceData?.servDesc?.id,
-          slot_id: serviceData?.slotData?.slotId
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
+  // const handleBookService = async () => {
+    
+  //   try {
+  //     const res = await axios.post(
+  //       "/booking/",
+  //       {
+  //         action:1,
+  //         expert_id: serviceData?.servDesc?.expert_data?.id,
+  //         service_id: serviceData?.servDesc?.id,
+  //         slot_id: serviceData?.slotData?.slotId
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${jsonData.access_token}`,
+  //         },
+  //       }
+  //     );
+  //     const json = res.data;
+  //     if (!json) {
+  //       console.log("no data")
+  //       return;
+  //     }
+  //     console.log(json)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+  const cookie = document.cookie.split(";");
+  const jsonData = {};
+
+  cookie.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key.trim()] = value;
+  });
+
+  const [amount, setAmount] = useState(500);
+  const [serviceId, setServiceId] = useState("");
+  const [slotId, setSlotId] = useState("");
+  const [expertId, setExpertId] = useState("");
+
+  // complete order
+  const complete_order = (paymentID, orderID, signature) => {
+    console.log(signature);
+    axios({
+      method: "post",
+      headers: {
+        Authorization: `Bearer ${jsonData.access_token}`,
+      },
+      url: "https://api.ultraxpert.in/booking/",
+      data: {
+        action: 2,
+        payment_id: paymentID,
+        order_id: orderID,
+        payment_signature: signature,
+        expert_id: serviceData?.servDesc?.expert_data?.id,
+        service_id: serviceData?.servDesc?.id,
+        slot_id: serviceData?.slotData?.slotId
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+  };
+
+  const razorPay = () => {
+    // create order
+    axios({
+      method: "post",
+      headers: {
+        Authorization: `Bearer ${jsonData.access_token}`,
+      },
+      url: "https://api.ultraxpert.in/booking/",
+      data: {
+        action:1,
+        expert_id: serviceData?.servDesc?.expert_data?.id,
+        service_id: serviceData?.servDesc?.id,
+        slot_id: serviceData?.slotData?.slotId
+      },
+    })
+      .then((response) => {
+        // get order id
+        const order_id = response.data.data.order_id;
+
+        // handle payment
+        const options = {
+          key: "rzp_test_ykgbM4br3OsYRL", // Enter the Key ID generated from the Dashboard
+          name: "Ultraxpert",
+          description: "Test Transaction",
+          image: "https://example.com/your_logo",
+          order_id: order_id, // This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
+          handler: function (response) {
+            console.log(response);
+            // complete order
+            complete_order(
+              response.razorpay_payment_id,
+              response.razorpay_order_id,
+              response.razorpay_signature
+            );
           },
-        }
-      );
-      const json = res.data;
-      if (!json) {
-        console.log("no data")
-        return;
-      }
-      console.log(json)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+          prefill: {
+            name: "Piyush Garg",
+            email: "youremail@example.com",
+            contact: "9999999999",
+          },
+          notes: {
+            address: "Razorpay Corporate Office",
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+
+        const rzp1 = new window.Razorpay(options);
+        rzp1.on("payment.failed", function (response) {
+          alert(response.error.code);
+          alert(response.error.description);
+          alert(response.error.source);
+          alert(response.error.step);
+          alert(response.error.reason);
+          alert(response.error.metadata.order_id);
+          alert(response.error.metadata.payment_id);
+        });
+        rzp1.open();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="px-[5vw] py-[2vw]">
@@ -122,7 +220,7 @@ const ServiceBooking = () => {
             </div>
             <div className="flex justify-center">
               <button 
-              onClick={()=> handleBookService()}
+              onClick={()=> razorPay()}
               className="text-white text-sm md:text-base bg-[#2A2A2A] mt-[2.5vw] px-[2.7vw] py-[1.5vw] md:px-[2vw] md:py-[0.6vw] rounded-sm md:rounded-md w-[50%]">
                 Proceed to Pay
               </button>

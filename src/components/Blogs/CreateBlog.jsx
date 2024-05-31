@@ -31,6 +31,8 @@ const CreateBlog = () => {
     image: [],
   });
 
+  const [loading, setLoading] = useState(false);
+
   // code for uploading image for blog starts
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
@@ -159,7 +161,6 @@ const CreateBlog = () => {
         return;
       }
       console.log(data);
-      
     } catch (error) {
       console.log(error);
     }
@@ -178,6 +179,7 @@ const CreateBlog = () => {
     console.log(value);
     console.log(blogData.title);
     console.log(blogData.service_ll);
+    setLoading(true);
     try {
       const res = await axios.post(
         "/blogs/",
@@ -203,7 +205,11 @@ const CreateBlog = () => {
         return;
       }
       console.log(data);
+      setLoading(false);
+      alert("Blog created successfully!");
+      navigate("/blogs");
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -310,8 +316,27 @@ const CreateBlog = () => {
                     {item.name}
                   </div>
                 ))}
+
+                {/* {filterCategoriesArray.length === 0 &&
+                categoryInputValue.length === 0
+                  ? null
+                  : filterCategoriesArray.length === 0 &&
+                    categoryInputValue.length > 0 && (
+                      <div
+                        className="bg-green-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer mt-2"
+                        onClick={(e) => {
+                          setNewCategory(e);
+                          setValue2({
+                            ...value2,
+                            number: categoriesArray.length + 1,
+                          });
+                        }}
+                      >
+                        Add Category
+                      </div>
+                    )} */}
                 {filterCategoriesArray.length === 0 &&
-                  categoryInputValue.trim() !== "" && (
+                  categoryInputValue.trim().length > 0 && (
                     <div
                       className="bg-green-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer mt-2"
                       onClick={(e) => {

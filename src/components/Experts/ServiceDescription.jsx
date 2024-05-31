@@ -1,61 +1,81 @@
 import React, { useEffect } from "react";
 import { RiFlowChart } from "react-icons/ri";
-import { GoArrowLeft } from "react-icons/go";
-import {
-  PiDotsThreeVerticalBold,
-  PiDotsThreeCircleVertical,
-} from "react-icons/pi";
-import { CiSquarePlus } from "react-icons/ci";
-import { IoMdSend } from "react-icons/io";
-import { FcVideoCall } from "react-icons/fc";
-import { ProjectsCarousel } from "../../constant";
-import { ExpertRatings } from "./ExpertProfile";
+import { PiDotsThreeCircleVertical } from "react-icons/pi";
+import ProjectsCarousel from "../../subsitutes/ProjectCarousel";
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import ShowSchedule from "../../subsitutes/Schedule";
 
 export const ServiceProfileCard = ({ item }) => {
+  const navigate = useNavigate();
   return (
     <div
-      className={`w-full px-3 py-5 bg-[#EDEDED] flex justify-between items-center shadow-sm drop-shadow-md rounded-md`}
+      className={`w-full px-3 py-5 bg-[#EDEDED] flex flex-col md:flex-row justify-between md:items-center shadow-sm drop-shadow-md rounded-md`}
     >
-      <Link
-        to={`/experts/expertprofile/${item?.expert_data?.id}`}
-        className="flex gap-3 items-center decoration-transparent text-black"
-      >
-        <img
-          className="h-10 w-10 rounded-full shrink-0 object-cover"
-          src={item?.expert_data?.profile_img}
-          alt=""
-        />
-        <div className="flex flex-col">
-          <div className="text-lg font-semibold">
-            {item?.expert_data?.first_name} {item?.expert_data?.last_name}
+      <div className="flex justify-between items-center">
+        <Link
+          to={`/experts/expertprofile/${item?.expert_data?.id}`}
+          className="flex gap-2 sm:gap-3 items-center decoration-transparent text-black"
+        >
+          <img
+            className="h-8 w-8 sm:h-10 sm:w-10 rounded-full shrink-0 object-cover"
+            src={item?.expert_data?.profile_img}
+            alt=""
+          />
+          <div className="flex flex-col">
+            <div className="text-sm sm:text-lg font-semibold">
+              {item?.expert_data?.first_name} {item?.expert_data?.last_name}
+            </div>
           </div>
+        </Link>
+        <div className="block md:hidden">
+          {item?.expert_data?.is_following_expert ? (
+            <button className="bg-white px-4 sm:px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-xs sm:text-sm text-black font-semibold border rounded-sm sm:rounded-md">
+              Follow
+            </button>
+          ) : (
+            <button className="bg-white px-4 sm:px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-xs sm:text-sm text-black font-semibold border rounded-sm sm:rounded-md">
+              Unfollow
+            </button>
+          )}
         </div>
-      </Link>
+      </div>
 
-      <div className="flex items-center gap-10">
-        <div className="text-base text-gray-600 cursor-pointer shrink-0">
+      <div className="flex items-center gap-8 lg:gap-10 mt-5 md:mt-0">
+        <div
+          className="text-sm md:text-base text-gray-600 cursor-pointer shrink-0"
+          onClick={
+            () => navigate( `/experts/expertprofile/${item?.expert_data?.id}`,
+            { state: { check: true } })
+          }
+        >
           Services
         </div>
         <a href="#projects" className="decoration-transparent">
-          <div className="text-base text-gray-600 cursor-pointer shrink-0">
+          <div className="text-sm md:text-base text-gray-600 cursor-pointer shrink-0">
             Projects
           </div>
         </a>
         <a href="#ratings" className="decoration-transparent">
-          <div className="text-base text-gray-600 cursor-pointer shrink-0">
+          <div className="text-sm md:text-base text-gray-600 cursor-pointer shrink-0">
             {" "}
-            Ratings
+            Reviews
           </div>
         </a>
-        <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
-          Follow
-        </button>
+        <div className="hidden md:block">
+          {item?.expert_data?.is_following_expert ? (
+            <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
+              Follow
+            </button>
+          ) : (
+            <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
+              Unfollow
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -84,12 +104,15 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
       jsonData[key.trim()] = value;
     });
     try {
-      const res = await axios.get(`/customers/connect/?action=7&comment_id=${temp?.id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
+      const res = await axios.get(
+        `/customers/connect/?action=7&comment_id=${temp?.id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
       const json = res.data;
       if (!json) {
         console.log("no data");
@@ -101,8 +124,6 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
       console.log(error);
     }
   };
-
-
 
   const deleteComment = async (commentId) => {
     const cookie = document.cookie.split(";");
@@ -473,11 +494,17 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
             </div>
           )}
           <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
-            <div className="flex items-center gap-1" onClick={() => likeComment(temp?.id)}>
+            <div
+              className="flex items-center gap-1"
+              onClick={() => likeComment(temp?.id)}
+            >
               <BiLike />
               <div>{temp?.likes}</div>
             </div>
-            <div className="flex items-center gap-1" onClick={() => dislikeComment(temp?.id)}>
+            <div
+              className="flex items-center gap-1"
+              onClick={() => dislikeComment(temp?.id)}
+            >
               <BiDislike />
               <div>{temp?.dislikes}</div>
             </div>
@@ -514,132 +541,132 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
               </div>
             </div>
           )}
-          {replies.map((reply)=>(
-            <div key={reply.id} className="ml-8 mt-2">
-            <div className="flex gap-2">
-              <img
-                className="h-10 w-10 object-cover rounded-full"
-                src={reply.user_profile_img}
-                alt=""
-              />
-              <div>
-                <div className="text-sm font-semibold">
-                  {reply.user_first_name} {reply.user_last_name}
-                </div>
-                <div className="text-xs text-slate-400">
-                  {reply.timestamp.split("T")[0]}
-                </div>
-                {reply?.is_authenticated_user && activeReply[reply?.id] ? (
-                  <textarea
-                    value={editedReply}
-                    onChange={(e) => setEditedReply(e.target.value)}
-                    className="text-xs sm:text-base font-montserrat w-full h-20 border border-gray-300 rounded-md p-2 outline-none"
-                  />
-                ) : (
-                  <p className="text-xs">{reply.content}</p>
-                )}
-                {reply?.is_authenticated_user && activeReply[reply?.id] && (
-                  <div className="mb-2">
-                    <button
-                      onClick={() => saveEdit2(reply?.id)}
-                      className="text-green-500 px-3 py-1 border border-solid border-green-500 rounded-md"
-                    >
-                      Save
-                    </button>
-                    <button
-                      onClick={() => {
-                        setEditedReply(""),
-                          setActiveReply({
-                            ...activeReply,
-                            [reply?.id]: false,
-                          });
-                      }}
-                      className="text-gray-500 px-3 py-1 border border-solid border-gray-500 rounded-md ml-2"
-                    >
-                      Cancel
-                    </button>
+          {replies.map((reply) => (
+            <div key={reply.id} className="ml-2 sm:ml-4 md:ml-8 my-5">
+              <div className="flex gap-2">
+                <img
+                  className="h-10 w-10 object-cover rounded-full"
+                  src={reply.user_profile_img}
+                  alt=""
+                />
+                <div>
+                  <div className="text-sm font-semibold">
+                    {reply.user_first_name} {reply.user_last_name}
                   </div>
-                )}
-                <div className="text-xs mt-1 flex gap-2">
-                  <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
-                    <div
-                      className="flex items-center gap-1"
-                      onClick={() => likeComment2(reply?.id)}
-                    >
-                      <BiLike />
-                      <div>{reply?.likes}</div>
-                    </div>
-                    <div
-                      className="flex items-center gap-1"
-                      onClick={() => dislikeComment2(reply?.id)}
-                    >
-                      <BiDislike />
-                      <div>{reply?.dislikes}</div>
-                    </div>
-
-                    {!replyComm && (
+                  <div className="text-xs text-slate-400">
+                    {reply.timestamp.split("T")[0]}
+                  </div>
+                  {reply?.is_authenticated_user && activeReply[reply?.id] ? (
+                    <textarea
+                      value={editedReply}
+                      onChange={(e) => setEditedReply(e.target.value)}
+                      className="text-xs sm:text-base font-montserrat w-full h-20 border border-gray-300 rounded-md p-2 outline-none"
+                    />
+                  ) : (
+                    <p className="text-xs">{reply.content}</p>
+                  )}
+                  {reply?.is_authenticated_user && activeReply[reply?.id] && (
+                    <div className="mb-2">
                       <button
-                        className="text-xs sm:text-base cursor-pointer px-2 py-1 rounded-sm sm:rounded-md"
-                        onClick={() => setReplyComm(true)}
+                        onClick={() => saveEdit2(reply?.id)}
+                        className="text-green-500 px-3 py-1 border border-solid border-green-500 rounded-md"
                       >
-                        Reply
+                        Save
                       </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-              {reply?.is_authenticated_user && !activeReply[reply?.id] && (
-                <div className="relative overflow-visible flex flex-col ml-auto text-xl sm:text-3xl cursor-pointer">
-                  <PiDotsThreeCircleVertical
-                    onClick={() =>
-                      setActiveReplyMenu({
-                        ...activeReplyMenu,
-                        [reply?.id]: !activeReplyMenu[reply?.id],
-                      })
-                    }
-                  />
-
-                  {activeReplyMenu[reply?.id] && (
-                    <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
-                      <div
-                        className="transition-all hover:bg-gray-300 px-3"
+                      <button
                         onClick={() => {
-                          setEditedReply(reply.content),
+                          setEditedReply(""),
                             setActiveReply({
                               ...activeReply,
-                              [reply?.id]: true,
+                              [reply?.id]: false,
                             });
                         }}
+                        className="text-gray-500 px-3 py-1 border border-solid border-gray-500 rounded-md ml-2"
                       >
-                        Edit
-                      </div>
-                      <div
-                        className="transition-all hover:bg-gray-300 px-3"
-                        onClick={() => deleteComment2(reply.id)}
-                      >
-                        Delete
-                      </div>
+                        Cancel
+                      </button>
                     </div>
                   )}
+                  <div className="text-xs mt-1 flex gap-2">
+                    <div className="mb-2 flex items-center gap-5 text-xs sm:text-base md:text-lg">
+                      <div
+                        className="flex items-center gap-1"
+                        onClick={() => likeComment2(reply?.id)}
+                      >
+                        <BiLike />
+                        <div>{reply?.likes}</div>
+                      </div>
+                      <div
+                        className="flex items-center gap-1"
+                        onClick={() => dislikeComment2(reply?.id)}
+                      >
+                        <BiDislike />
+                        <div>{reply?.dislikes}</div>
+                      </div>
+
+                      {!replyComm && (
+                        <button
+                          className="text-xs sm:text-base cursor-pointer px-2 py-1 rounded-sm sm:rounded-md"
+                          onClick={() => setReplyComm(true)}
+                        >
+                          Reply
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              )}
+                {reply?.is_authenticated_user && !activeReply[reply?.id] && (
+                  <div className="relative overflow-visible flex flex-col ml-auto text-xl sm:text-3xl cursor-pointer">
+                    <PiDotsThreeCircleVertical
+                      onClick={() =>
+                        setActiveReplyMenu({
+                          ...activeReplyMenu,
+                          [reply?.id]: !activeReplyMenu[reply?.id],
+                        })
+                      }
+                    />
+
+                    {activeReplyMenu[reply?.id] && (
+                      <div className="bg-white shadow-md absolute top-5 sm:top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-sm sm:text-base text-center">
+                        <div
+                          className="px-3 hover:bg-[#ECECEC] transition-all"
+                          onClick={() => {
+                            setEditedReply(reply.content),
+                              setActiveReply({
+                                ...activeReply,
+                                [reply?.id]: true,
+                              });
+                          }}
+                        >
+                          Edit
+                        </div>
+                        <div
+                          className="px-3 hover:bg-[#ECECEC] transition-all"
+                          onClick={() => deleteComment2(reply.id)}
+                        >
+                          Delete
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
           ))}
         </div>
         {temp?.is_authenticated_user && !isEditing && (
-          <div className="relative overflow-visible flex flex-col ml-auto text-3xl cursor-pointer">
+          <div className="relative overflow-visible flex flex-col ml-auto text-xl sm:text-3xl cursor-pointer">
             <PiDotsThreeCircleVertical onClick={() => setOptions(!options)} />
             {options && (
-              <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
+              <div className="bg-white shadow-md absolute top-5 sm:top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-sm sm:text-base text-center">
                 <div
-                  className="transition-all hover:bg-gray-300 px-3"
+                  className="px-3 hover:bg-[#ECECEC] transition-all "
                   onClick={handleEdit}
                 >
                   Edit
                 </div>
                 <div
-                  className="transition-all hover:bg-gray-300 px-3"
+                  className="px-3 hover:bg-[#ECECEC] transition-all"
                   onClick={deleteComment}
                 >
                   Delete
@@ -658,7 +685,7 @@ const ServiceDescription = () => {
   const params = useParams();
   const { id } = params;
 
-  const [servDesc, setServDesc] = useState({});
+  const [servDesc, setServDesc] = useState(null);
   const [scheduleData, setScheduleData] = useState({});
 
   const getServiceDesc = async () => {
@@ -791,7 +818,7 @@ const ServiceDescription = () => {
   useEffect(() => {
     getAllServiceComments();
   }, []);
-
+  if (servDesc === null) return <div className="mt-100">wait</div>;
   return (
     <>
       <div className="lg:flex mt-[100px] ">
@@ -871,29 +898,6 @@ const ServiceDescription = () => {
                 )}
 
                 <div>
-                  <div className="mt-8 mb-12 flex items-center justify-between">
-                    <div className="text-xl md:text-2xl font-semibold ">
-                      Top Reviews
-                    </div>
-                    <select
-                      name="Sort by"
-                      id=""
-                      className="px-4 py-2 text-sm md:text-lg border border-solid border-slate-300 outline-none"
-                    >
-                      <option
-                        value="newest"
-                        className="text-xs md:text-sm px-4 py-2"
-                      >
-                        Newest
-                      </option>
-                      <option
-                        value="oldest"
-                        className="text-xs md:text-sm px-4 py-2"
-                      >
-                        Oldest
-                      </option>
-                    </select>
-                  </div>
                   {serviceComments?.map((temp, idx) => (
                     <CommentCard
                       servId={servDesc?.id}
@@ -903,9 +907,6 @@ const ServiceDescription = () => {
                     />
                   ))}
                 </div>
-                <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
-                  Show more
-                </button>
               </div>
             </div>
           </div>
