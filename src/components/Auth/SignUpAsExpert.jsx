@@ -95,6 +95,7 @@ const SignUpAsExpert = () => {
       setIsLoading(false);
       console.log(data, personalInfo);
       localStorage.setItem("isExpert", `true`);
+      localStorage.setItem("isCustomer", `false`);
       localStorage.setItem("profile", `${personalInfo.profile_img}`);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);

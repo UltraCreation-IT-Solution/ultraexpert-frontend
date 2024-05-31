@@ -17,7 +17,7 @@ import { motion } from "framer-motion";
 import PreLoader from "../../subsitutes/PreLoader";
 import axios from "../../axios";
 
-const TestimonialCard = ({expert_id, id, user, content, date_created }) => {
+const TestimonialCard = ({ expert_id, id, user, content, date_created }) => {
   const navigate = useNavigate();
   const val = id % 5;
   return (
@@ -37,8 +37,10 @@ const TestimonialCard = ({expert_id, id, user, content, date_created }) => {
             : "bg-[#EA7794]"
         }   rounded-xl  border-white border flex flex-col`}
       >
-        <div className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw] cursor-pointer"
-        onClick={() => navigate(`/experts/expertprofile/${expert_id}`)}      >
+        <div
+          className="w-full h-1/3 flex flex-row items-center justify-start gap-[1.4vw] sm:gap-[0.8vw] px-[1.15vw] cursor-pointer"
+          onClick={() => navigate(`/experts/expertprofile/${expert_id}`)}
+        >
           <img
             className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
             src={user?.profile_img}
@@ -61,9 +63,15 @@ const TestimonialCard = ({expert_id, id, user, content, date_created }) => {
   );
 };
 export const ServiceCategory = () => {
-  const location=useLocation();
+  const location = useLocation();
   return (
-    <div className={`relative flex flex-col md:flex-row gap-4 overflow-hidden  ${location.pathname==="/services"?"px-[2vw]":" px-[6vw] md:px-[11vw]"} pt-[8.5vw] sm:pt-[10vh] w-full min-h-[88vh] md:min-h-[55vw] mb-[3vw] md:mb-[1vw] lg:mb-[5vw]`}>
+    <div
+      className={`relative flex flex-col md:flex-row gap-4 overflow-hidden  ${
+        location.pathname === "/services"
+          ? "px-[2vw]"
+          : " px-[6vw] md:px-[11vw]"
+      } pt-[8.5vw] sm:pt-[10vh] w-full min-h-[88vh] md:min-h-[55vw] mb-[3vw] md:mb-[1vw] lg:mb-[5vw]`}
+    >
       <div className="w-full md:w-2/4 flex flex-row md:flex-col gap-4 h-full flex-wrap ">
         <div className="w-full h-2/5  flex flex-row gap-4 ">
           <div className="w-full md:w-1/2 h-full  flex flex-row md:flex-col gap-6 md:gap-2 overflow-hidden">
@@ -211,10 +219,11 @@ export const TopExperts = () => {
                   </h3>
                   <div
                     className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3 cursor-pointer"
-                    onClick={()=>navigate(`/experts/expertprofile/${expert?.expert_id}`)}
+                    onClick={() =>
+                      navigate(`/experts/expertprofile/${expert?.expert_id}`)
+                    }
                   >
-                    <span className="underline  text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]"
-                     >
+                    <span className="underline  text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]">
                       See More
                     </span>
                     <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.1vw]" />
@@ -231,11 +240,11 @@ export const TopExperts = () => {
                   </h3>
                   <div
                     className="flex items-center justify-end mt-2 md:mt-4 text-white mb-3 cursor-pointer"
-                    onClick={()=>navigate(`/experts/expertprofile/${expert?.expert_id}`)}
+                    onClick={() =>
+                      navigate(`/experts/expertprofile/${expert?.expert_id}`)
+                    }
                   >
-                    <span className="underline text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]"
-                    
-                    >
+                    <span className="underline text-[2.8vw] sm:text-[1.4vw]  md:text-[1.1vw]">
                       See More
                     </span>{" "}
                     <GrFormNextLink className="text-[3.2vw] sm:text-[1.8vw] md:text-[1.4vw] mt-[0.4vw] sm:mt-[0.7vw]" />
@@ -430,11 +439,67 @@ export const Blog = () => {
   );
 };
 const Landing = () => {
+  const navigate = useNavigate();
+  const changeAuth = async () => {
+    const getCookie = (name) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(";").shift();
+    };
+    const refresh_token = getCookie("refresh_token");
+    if (!refresh_token) {
+      //clear local storage and go back to login
+      localStorage.clear();
+      navigate("/login");
+    } else {
+      try {
+        const res = await axios.post(
+          "/refresh/",
+          {
+            refresh: `${refresh_token}`,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(res);
+        const expirationDateforAccess = new Date();
+        const expirationDateforRefresh = new Date();
+        expirationDateforAccess.setDate(expirationDateforAccess.getDate() + 7);
+        expirationDateforRefresh.setDate(
+          expirationDateforRefresh.getDate() + 8
+        );
+        document.cookie = `access_token=${
+          res.data.access
+        };expires=${expirationDateforAccess.toUTCString()};  SameSite=Lax;`;
+        document.cookie = `refresh_token=${
+          res.data.refresh
+        };expires=${expirationDateforRefresh.toUTCString()};  SameSite=Lax;`;
+        // localStorage.setItem("userId", `${res.data.id}`);
+        localStorage.setItem("username", `${res.data.user.first_name}`);
+        localStorage.setItem("profile", `${res.data.user.profile_img}`);
+        localStorage.setItem("isExpert", `${res.data.user.is_expert}`);
+        localStorage.setItem("isAuthor", `${res.data.user.is_author}`);
+        localStorage.setItem("isCustomer", `${res.data.user.is_customer}`);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const [preLoader, setPreLoder] = useState(true);
   useEffect(() => {
     setTimeout(() => {
       setPreLoder(false);
     }, 2500);
+    const isAuthChecked = sessionStorage.getItem("isAuthChecked");
+    if (!isAuthChecked) {
+      // If not, call the function and set the flag in sessionStorage
+      changeAuth();
+      sessionStorage.setItem("isAuthChecked", "true");
+    }
   }, []);
   if (preLoader) {
     return <PreLoader />;

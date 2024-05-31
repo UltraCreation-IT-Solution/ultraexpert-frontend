@@ -208,20 +208,27 @@ const SignUp = () => {
             });
             // const json = await res.json();
             const data = res.data;
-            const expirationDate = new Date();
-            expirationDate.setDate(expirationDate.getDate() + 5);
+            const expirationDateforAccess = new Date();
+            const expirationDateforRefresh = new Date();
+            expirationDateforAccess.setDate(
+              expirationDateforAccess.getDate() + 7
+            );
+            expirationDateforRefresh.setDate(
+              expirationDateforRefresh.getDate() + 8
+            );
             document.cookie = `access_token=${
               res.data.access_token
-            };expires=${expirationDate.toUTCString()};  SameSite=Lax;`;
+            };expires=${expirationDateforAccess.toUTCString()};  SameSite=Lax;`;
             document.cookie = `refresh_token=${
               res.data.refresh_token
-            };expires=${expirationDate.toUTCString()};  SameSite=Lax;`;
+            };expires=${expirationDateforRefresh.toUTCString()};  SameSite=Lax;`;
 
             // localStorage.setItem("userId", `${res.data.id}`);
             localStorage.setItem("username", `${res.data.first_name}`);
             localStorage.setItem("profile", `${res.data.profile_img}`);
             localStorage.setItem("isExpert", `${res.data.is_expert}`);
             localStorage.setItem("isAuthor", `${res.data.is_author}`);
+            localStorage.setItem("isCustomer", `${res.data.is_customer}`);
             if (!data || data.status === 400 || data.status === 401) {
               window.alert("Invalid Credentials");
               setLoading(false);
