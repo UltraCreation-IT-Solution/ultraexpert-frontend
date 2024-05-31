@@ -7,7 +7,8 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BsFillChatSquareTextFill } from "react-icons/bs";
 import { Link, Outlet } from "react-router-dom";
-import { BookingCard, customerDashboardInfo } from "../../constant";
+import { customerDashboardInfo } from "../../constant";
+import  BookingCard  from "../../subsitutes/BookingCard";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import axios from "../../axios";
 import { imageDB } from "../firebase/config";
@@ -576,7 +577,7 @@ export const CustomerBookings = ({ id }) => {
   const getMyBookings = async () => {
     try {
       const res = await axios.get(
-        `/customers/connect/?action=6&customer_id=${2}`,
+        `/customers/connect/?action=6&customer_id=${4}`,
         {
           headers: {
             "Content-Type": "application/json",

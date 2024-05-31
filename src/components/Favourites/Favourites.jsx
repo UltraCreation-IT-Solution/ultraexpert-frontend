@@ -5,6 +5,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import axios from "../../axios";
 
 export const FavExpertCard = ({ item, getFavExpData }) => {
+  console.log(item)
   const [FavExpert, setFavExpert] = useState(true);
   const cookie = document.cookie.split(";");
   const jsonData = {};
@@ -63,7 +64,7 @@ export const FavExpertCard = ({ item, getFavExpData }) => {
       }
       console.log(json);
       setFavExpert(false);
-      getFavExpData()
+      getFavExpData();
     } catch (error) {
       console.log(error);
     }
@@ -99,7 +100,10 @@ export const FavExpertCard = ({ item, getFavExpData }) => {
           <FaStar />
           <div>{item?.rating} </div>
         </div>
-        <Link to={`/experts/expertprofile/${item?.id}`} className="no-underline">
+        <Link
+          to={`/experts/expertprofile/${item?.id}`}
+          className="no-underline"
+        >
           <div className="mt-2 w-full bg-[#2A2A2A] text-sm md:text-base py-2 md:py-3 text-white rounded-md sm:rounded no-underline text-center ">
             Visit Profile
           </div>
@@ -108,106 +112,7 @@ export const FavExpertCard = ({ item, getFavExpData }) => {
     </div>
   );
 };
-export const AllFavExpertCard = ({ item, getFavExp }) => {
-  const [FavExpert, setFavExpert] = useState(true);
-  const cookie = document.cookie.split(";");
-  const jsonData = {};
 
-  cookie.forEach((item) => {
-    const [key, value] = item.split("=");
-    jsonData[key] = value;
-  });
-  console.log(item);
-  const addFav = async () => {
-    console.log(item.expert.id);
-    try {
-      const res = await axios.post(
-        "/customers/connect/",
-        {
-          action: 3,
-          expert_id: item.id,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      const json = res.data;
-      if (!json) {
-        console.log("no data");
-        return;
-      }
-      console.log(json);
-      setFavExpert(true);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const remFav = async () => {
-    try {
-      const res = await axios.post(
-        "/customers/connect/",
-        {
-          action: 4,
-          expert_id: item.id,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      const json = res.data;
-      if (!json) {
-        console.log("no data");
-        return;
-      }
-      console.log(json);
-      setFavExpert(false);
-      getFavExp();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  return (
-    <div className="relative min-w-[250px] h-[250px] md:min-w-[310px] md:h-[300px] flex flex-col shadow-lg border border-[#dbdbdb] border-solid rounded-lg">
-      <img
-        src={item?.user?.profile_img}
-        className="h-16 w-16 md:h-20 md:w-20 object-cover shrink-0 rounded-full absolute top-11 left-24 md:top-14 md:left-28 border-2 border-solid border-white"
-        alt=""
-      />
-      <div className="absolute top-1 right-2 z-10 text-white text-2xl md:text-3xl py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  ">
-        {FavExpert ? <FaHeart onClick={() => remFav()} /> : <FaRegHeart />}
-      </div>
-      <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  "></div>
-      <img
-        src={item?.user?.banner_img}
-        className="h-[5rem] md:h-[6rem] object-cover shrink-0"
-        alt=""
-      />
-      <div className="text-center mt-9 md:mt-12 px-2">
-        <div className="text-lg md:text-xl font-bold">
-          {item?.user?.first_name} {item?.user?.last_name}
-        </div>
-        <div className="text-gray-500 text-sm md:text-base">
-          {item?.profession}{" "}
-        </div>
-        <div className="mt-2 text-sm md:text-base flex items-center justify-center gap-1 ">
-          <FaStar />
-          <div>{item?.rating} </div>
-        </div>
-        <Link to={`/experts/expertprofile/${item?.id}`} className="no-underline">
-          <div className="mt-2 w-full bg-[#2A2A2A] text-sm md:text-base py-2 md:py-3 text-white rounded-md sm:rounded no-underline text-center ">
-            Visit Profile
-          </div>
-        </Link>
-      </div>
-    </div>
-  );
-};
 export const FavServiceCard = ({ item, getFavServ }) => {
   const [FavExpert, setFavExpert] = useState(true);
   const remFav = async (id) => {
@@ -258,33 +163,38 @@ export const FavServiceCard = ({ item, getFavServ }) => {
         className="h-[100px] w-full md:h-[150px] object-cover shrink-0 md:mb-[0.7vw]"
         alt=""
       />
-      <Link className="no-underline text-black" to={`/experts/service/${item?.id}`}>
-        <div  className="px-2 md:px-[0.8vw] pt-2 md:pt-0">
-        <div className="flex items-center gap-4 font-semibold text-lg ">
-          {/* <img
+      <Link
+        className="no-underline text-black"
+        to={`/experts/service/${item?.id}`}
+      >
+        <div className="px-2 md:px-[0.8vw] pt-2 md:pt-0">
+          <div className="flex items-center gap-4 font-semibold text-lg ">
+            {/* <img
             src={item?.profile_img}
             className="h-7 w-7 md:h-9 md:w-9 rounded-full "
             alt=""
           /> */}
-          <div className="text-base md:text-lg">{item?.service_name}</div>
-        </div>
-        <div className="flex flex-wrap gap-2 my-2 mb-[0.2vw]">
-          {item?.tags?.map((tag, ind) => {
-            return (
-              <div
-                className="border border-solid border-slate-500 text-gray-500 px-2 py-1 text-sm rounded-lg"
-                key={ind}
-              >
-                {tag}
-              </div>
-            );
-          })}
-        </div>
-        <div className="line-clamp-2 mt-2">
-          <div className="text-sm md:text-base line-clamp-2 text-gray-500">{item?.description}</div>
-        </div>
-        <div className="text-base md:text-lg my-2">₹ {item?.price}</div>
-        {/* <div className="flex items-center gap-6 text-sm md:text-base mt-2">
+            <div className="text-base md:text-lg">{item?.service_name}</div>
+          </div>
+          <div className="flex flex-wrap gap-2 my-2 mb-[0.2vw]">
+            {item?.tags?.map((tag, ind) => {
+              return (
+                <div
+                  className="border border-solid border-slate-500 text-gray-500 px-2 py-1 text-sm rounded-lg"
+                  key={ind}
+                >
+                  {tag}
+                </div>
+              );
+            })}
+          </div>
+          <div className="line-clamp-2 mt-2">
+            <div className="text-sm md:text-base line-clamp-2 text-gray-500">
+              {item?.description}
+            </div>
+          </div>
+          <div className="text-base md:text-lg my-2">₹ {item?.price}</div>
+          {/* <div className="flex items-center gap-6 text-sm md:text-base mt-2">
           <div className="flex items-center gap-1">
             <GrStar />
             {item?.ratings}
@@ -455,33 +365,12 @@ export const AllFav = () => {
 
   return (
     <div>
-      <div className="mt-10">
-        <div className="font-bold text-2xl md:text-3xl ">Experts</div>
-        {/* Favourate Experts */}
-        <div className="flex overflow-x-scroll gap-5 mt-5">
-          {allFavExp.map((item, index) => (
-            <AllFavExpertCard key={index} item={item} getFavExp={getFavExp} />
-          ))}
-        </div>
-      </div>
+      {/* Favourate Experts */}
+      <FavExperts />
       {/* Favourate services */}
-      <div className="mt-10">
-        <div className="font-bold text-2xl md:text-3xl ">Services</div>
-        <div className="flex items-center overflow-x-scroll gap-5 mt-5">
-          {allFavServ.map((item, index) => (
-            <FavServiceCard key={index} item={item} getFavServ = {getFavServ} />
-          ))}
-        </div>
-      </div>
+      <FavServices />
       {/* Favourate Blogs */}
-      <div className="mt-10">
-        <div className="font-bold text-2xl md:text-3xl ">Blogs</div>
-        <div className="flex items-center overflow-x-scroll gap-5 mt-5">
-          {allFavBlog.map((item, index) => (
-            <FavBlogsCard key={index} item={item} getFavBlog = {getFavBlog} />
-          ))}
-        </div>
-      </div>
+      <FavBlogs />
     </div>
   );
 };
@@ -527,6 +416,7 @@ export const FavExperts = () => {
           id: item.id,
           profession: item.profession,
           about_me: item.about_me,
+          rating: item.expert_rating
         }))
       );
     } catch (error) {
@@ -540,17 +430,25 @@ export const FavExperts = () => {
     <div className="mt-10">
       <div className="font-bold text-xl md:text-3xl ">Experts</div>
       <div className="flex items-center overflow-x-scroll gap-5 mt-5">
-        {favExpertsData.length===0? <div className="text-center text-base ">Add Experts to favourates</div>: favExpertsData.map((item, index) => (
-          <FavExpertCard key={index} item={item} getFavExpData={getFavExpData} />
-        ))}
+        {favExpertsData.length === 0 ? (
+          <div className="text-center text-base ">
+            Add Experts to favourates
+          </div>
+        ) : (
+          favExpertsData.map((item, index) => (
+            <FavExpertCard
+              key={index}
+              item={item}
+              getFavExpData={getFavExpData}
+            />
+          ))
+        )}
       </div>
-      <Link to="/experts" >
-      <div className="text-center font-semibold text-gray-600 text-sm md:text-xl mt-10 flex gap-2 items-center justify-center">
-      
-       Go to experts <FaArrowRightLong />
-       </div>
-       
-       </Link>
+      <Link to="/experts">
+        <div className="text-center font-semibold text-gray-600 text-sm md:text-xl mt-10 flex gap-2 items-center justify-center">
+          Go to experts <FaArrowRightLong />
+        </div>
+      </Link>
     </div>
   );
 };
@@ -589,19 +487,16 @@ export const FavServices = () => {
   return (
     <div className="mt-10">
       <div className="font-bold text-xl md:text-3xl ">Services</div>
-      <div
-       className="flex items-center overflow-x-scroll gap-5 mt-5">
+      <div className="flex items-center overflow-x-scroll gap-5 mt-5">
         {favServicesData.map((item, index) => (
-          <FavServiceCard key={index} item={item} getFavServ = {getFavServData} />
+          <FavServiceCard key={index} item={item} getFavServ={getFavServData} />
         ))}
       </div>
-      <Link to="/services" >
-      <div className="text-center font-semibold text-gray-600 text-sm md:text-xl mt-10 flex gap-2 items-center justify-center">
-      
-       Go to services <FaArrowRightLong />
-       </div>
-       
-       </Link>
+      <Link to="/services">
+        <div className="text-center font-semibold text-gray-600 text-sm md:text-xl mt-10 flex gap-2 items-center justify-center">
+          Go to services <FaArrowRightLong />
+        </div>
+      </Link>
     </div>
   );
 };
@@ -642,16 +537,14 @@ export const FavBlogs = () => {
       <div className="font-bold text-xl md:text-3xl ">Blogs</div>
       <div className="flex items-center overflow-x-scroll gap-5 mt-5">
         {favBlogs.map((item, index) => (
-          <FavBlogsCard key={index} item={item} getFavBlog = {getFavBlogData} />
+          <FavBlogsCard key={index} item={item} getFavBlog={getFavBlogData} />
         ))}
       </div>
-      <Link to="/blog" >
-      <div className="text-center font-semibold text-gray-600 text-sm md:text-xl mt-10 flex gap-2 items-center justify-center">
-      
-       Go to blogs <FaArrowRightLong />
-       </div>
-       
-       </Link>
+      <Link to="/blog">
+        <div className="text-center font-semibold text-gray-600 text-sm md:text-xl mt-10 flex gap-2 items-center justify-center">
+          Go to blogs <FaArrowRightLong />
+        </div>
+      </Link>
     </div>
   );
 };

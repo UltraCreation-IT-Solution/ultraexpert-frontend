@@ -44,12 +44,9 @@ import {
 } from "react-icons/ri";
 import { PiCrownFill } from "react-icons/pi";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
+import  BookingCard  from "../../subsitutes/BookingCard";
 import {
-  BookingCard,
   expertDashInfo as expert,
-  expertDashInfo,
-  expertDetailsObj,
-  leaderboardRanking,
 } from "../../constant";
 import {
   ResponsiveContainer,
@@ -510,8 +507,6 @@ export const Dashboard = () => {
     jsonData[key] = value;
   });
 
-  // const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     setTimeout(() => {
       seta(
@@ -534,7 +529,6 @@ export const Dashboard = () => {
   const [expertData, setExpertData] = useState({});
   const [expertStatistics, setExpertStatistics] = useState([]);
   const getCurrentExpert = async () => {
-    // setLoading(true);
     try {
       const response = await axios.get("/experts/?action=1", {
         headers: {
@@ -551,15 +545,12 @@ export const Dashboard = () => {
         return;
       }
       console.log(response.data);
-      // setLoading(false);
       setExpertData(response.data.data);
     } catch (error) {
       console.log(error);
-      // setLoading(false);
     }
   };
   const getExpertStatistics = async () => {
-    // setLoading(true);
     try {
       const response = await axios.get("/experts/?action=3", {
         headers: {
@@ -576,11 +567,9 @@ export const Dashboard = () => {
         return;
       }
       console.log("statistics", response.data);
-      // setLoading(false);
       setExpertStatistics(response.data.data);
     } catch (error) {
       console.log(error);
-      // setLoading(false);
     }
   };
 
@@ -592,7 +581,6 @@ export const Dashboard = () => {
   // API integration for testimonials of expert start--->>>
   const [expertAllTestimonials, setExpertAllTestimonials] = useState([]);
   const getExpertAllTestimonials = async () => {
-    // setLoading(true);
     try {
       const response = await axios.get(`/testimonial/?action=3`, {
         headers: {
@@ -610,11 +598,9 @@ export const Dashboard = () => {
         return;
       }
       console.log(response.data.data);
-      // setLoading(false);
       setExpertAllTestimonials(response.data.data);
     } catch (error) {
       console.log(error);
-      // setLoading(false);
       setExpertAllTestimonials([]);
     }
   };
@@ -650,7 +636,6 @@ export const Dashboard = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    // setLoading(true);
     try {
       const res = await axios.get("/blogs/?action=2", {
         headers: {
@@ -660,11 +645,9 @@ export const Dashboard = () => {
       });
       const allData = res.data.data;
       console.log(allData);
-      // setLoading(false);
       setBlogData(allData);
     } catch (error) {
       console.log(error);
-      // setLoading(false);
     }
   };
 
@@ -691,16 +674,12 @@ export const Dashboard = () => {
   const [basicStats, setBasicStats] = useState(true);
   const [extraStats, setExtraStats] = useState(false);
   const HandleBasicStats = () => {
-    // setLoading(true);
     setBasicStats(true);
     setExtraStats(false);
-    // setLoading(false);
   };
   const HandleExtraStats = () => {
-    // setLoading(true);
     setBasicStats(false);
     setExtraStats(true);
-    // setLoading(false);
   };
 
   //heatmap data
@@ -717,8 +696,6 @@ export const Dashboard = () => {
     });
     setValues(updatedValues);
   };
-
-  const navigate = useNavigate();
   return (
     <section className="w-full md:w-[68%] h-full flex flex-col gap-[4.5vw] xs:gap-[3vw] md:gap-[2vw]">
       <div className="block md:hidden w-full h-auto px-[0.8vw] py-[4.5vw] xs:py-[3vw] border-b-[0.01px] border-[#dcdcdc] border-solid">
@@ -777,7 +754,7 @@ export const Dashboard = () => {
               Basic Stats
             </div>
             <div
-              className={ `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+              className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
                 extraStats && `bg-[#ececec] rounded-sm`
               }`}
               onClick={() => HandleExtraStats()}
@@ -987,9 +964,8 @@ export const Dashboard = () => {
         </div>
       </div>
       <div className="w-full flex flex-col gap-[1vw] border border-[#c7c7c7] border-solid rounded-lg px-[1.8vw] py-[3vw] xs:py-[2vw] md:py-[1.25vw]">
-        <div className="font-bold flex justify-between text-[3.45vw] xs:text-[2.65vw] md:text-[1.8vw] lg:text-[1.45vw]">
-          <div>Skills</div>
-          <div onClick={() => navigate("/expertdashboard/editprofile")} className="text-sm underline cursor-pointer font-light"><FaPlus size={10}/> Add Skills</div>
+        <div className="font-bold text-[3.45vw] xs:text-[2.65vw] md:text-[1.8vw] lg:text-[1.45vw]">
+          Skills
         </div>
         <div className="flex flex-wrap gap-[2vw] xs:gap-[1.6vw] md:gap-[1vw]">
           {expertData.skills?.map((item, index) => {

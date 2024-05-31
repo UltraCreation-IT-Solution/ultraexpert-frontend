@@ -50,8 +50,6 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
     }
   };
 
-  console.log(replies);
-
   const handleEditClick = (content) => {
     setIsEditing(true);
     setEditedComment(content);
@@ -474,10 +472,10 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
             </div>
           )}
           {replies?.map((reply) => (
-            <div key={reply.id} className="ml-8 mt-2">
+            <div key={reply.id} className="ml-2 sm:ml-4 md:ml-8 my-5">
               <div className="flex gap-2">
                 <img
-                  className="h-10 w-10 object-cover rounded-full"
+                  className="w-8 h-8 md:h-10 md:w-10 object-cover rounded-full shrink-0"
                   src={reply.user_profile_img}
                   alt=""
                 />
@@ -485,7 +483,7 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
                   <div className="text-sm font-semibold">
                     {reply.user_first_name} {reply.user_last_name}
                   </div>
-                  <div className="text-xs text-slate-400">
+                  <div className="text-xs text-slate-400 mt-1">
                     {reply.timestamp.split("T")[0]}
                   </div>
                   {reply?.is_authenticated_user && activeReply[reply?.id] ? (
@@ -495,7 +493,7 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
                       className="text-xs sm:text-base font-montserrat w-full h-20 border border-gray-300 rounded-md p-2 outline-none"
                     />
                   ) : (
-                    <p className="text-xs">{reply.content}</p>
+                    <p className="text-xs sm:text-base">{reply.content}</p>
                   )}
                   {reply?.is_authenticated_user && activeReply[reply?.id] && (
                     <div className="mb-2">
@@ -559,9 +557,9 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
                     />
 
                     {activeReplyMenu[reply?.id] && (
-                      <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
+                      <div className="bg-white shadow-md absolute top-5 sm:top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-sm sm:text-base text-center ">
                         <div
-                          className="transition-all hover:bg-gray-300 px-3"
+                          className="transition-all px-3 hover:bg-[#ECECEC]"
                           onClick={() => {
                             setEditedReply(reply.content),
                               setActiveReply({
@@ -573,7 +571,7 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
                           Edit
                         </div>
                         <div
-                          className="transition-all hover:bg-gray-300 px-3"
+                          className="transition-all px-3 hover:bg-[#ECECEC]"
                           onClick={() => deleteComment2(reply.id)}
                         >
                           Delete
@@ -592,15 +590,15 @@ const CommentCard = ({ blogData, temp, getAllComments }) => {
               onClick={() => setShowOptions(!showOptions)}
             />
             {showOptions && (
-              <div className="absolute top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-base text-center">
+              <div className="bg-white shadow-md absolute top-5 sm:top-9 right-0 border border-solid border-slate-300 rounded-md py-1 space-y-1 text-sm sm:text-base text-center">
                 <div
-                  className="transition-all hover:bg-gray-300 px-3"
+                  className="transition-all px-3 hover:bg-[#ECECEC]"
                   onClick={() => handleEditClick(temp?.content)}
                 >
                   Edit
                 </div>
                 <div
-                  className="transition-all hover:bg-gray-300 px-3"
+                  className="transition-all px-3 hover:bg-[#ECECEC]"
                   onClick={() => deleteComment(temp?.id)}
                 >
                   Delete
@@ -821,7 +819,7 @@ const BlogDetails = () => {
           <div className="px-1 xs:px-5 mb-10 lg:mb-0">
             <div className="border-b border-solid border-slate-300 pb-10">
               <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
-                50 reviews
+                {currBlogData?.total_comments_count} reviews
               </div>
               <div className=" mt-6">
                 <input
@@ -845,29 +843,6 @@ const BlogDetails = () => {
             </div>
 
             <div>
-              <div className="mt-8 mb-12 flex items-center justify-between">
-                <div className="text-xl md:text-2xl font-semibold ">
-                  Top Reviews
-                </div>
-                <select
-                  name="Sort by"
-                  id=""
-                  className="px-4 py-2 text-sm md:text-lg border border-solid border-slate-300 outline-none"
-                >
-                  <option
-                    value="newest"
-                    className="text-xs md:text-sm px-4 py-2"
-                  >
-                    Newest
-                  </option>
-                  <option
-                    value="oldest"
-                    className="text-xs md:text-sm px-4 py-2"
-                  >
-                    Oldest
-                  </option>
-                </select>
-              </div>
               {console.log(blogComments)}
               {blogComments?.map((temp, idx) => (
                 <CommentCard
@@ -878,9 +853,6 @@ const BlogDetails = () => {
                 />
               ))}
             </div>
-            <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
-              Show more
-            </button>
           </div>
         </div>
       </div>
