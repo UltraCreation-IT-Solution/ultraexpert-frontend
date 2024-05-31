@@ -143,7 +143,11 @@ export const ExpertCard = ({ item, getAllExperts }) => {
         ) : item?.is_favorite ? (
           <FaHeart onClick={() => remFav()} />
         ) : (
-          <FaRegHeart onClick={() => localStorage.getItem("username")? addFav():navigate("/login")} />
+          <FaRegHeart
+            onClick={() =>
+              localStorage.getItem("username") ? addFav() : navigate("/login")
+            }
+          />
         )}
       </div>
       <img
@@ -202,7 +206,9 @@ export const ExpertCard = ({ item, getAllExperts }) => {
         <div className="w-full text-[3.25vw] xs:text-[2.6vw] sm:text-[1.6vw] lg:text-[1.1vw] py-[1vw] flex items-center justify-between mt-[2.4vw] xs:mt-[1.6vw] lg:mt-[1vw] font-bold">
           <Link
             to={"expertprofile" + "/" + item?.expert?.id}
-            className={`bg-black px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2.2vw] xs:py-[1.6vw] sm:py-[1vw] text-white rounded-sm sm:rounded no-underline text-center ${localStorage.getItem("isExpert") === "true" && "w-full"}`}
+            className={`bg-black px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2.2vw] xs:py-[1.6vw] sm:py-[1vw] text-white rounded-sm sm:rounded no-underline text-center ${
+              localStorage.getItem("isExpert") === "true" && "w-full"
+            }`}
           >
             Visit Profile
           </Link>
@@ -304,8 +310,13 @@ const AllExperts = () => {
     }
   };
   useEffect(() => {
-    localStorage.getItem("username")?
-    getAllExpertsWithToken():getAllExperts();
+    {
+      !showSearchedExperts
+        ? localStorage.getItem("username")
+          ? getAllExpertsWithToken()
+          : getAllExperts()
+        : searchExperts(searchQuery);
+    }
   }, [currentPage]);
 
   const searchExperts = async (searchQuery) => {
@@ -318,14 +329,14 @@ const AllExperts = () => {
     });
     setShimmer(true);
     setSearchedExperts([]);
-    if(searchQuery === "") {
+    if (searchQuery === "") {
       setShimmer(false);
       setShowSearchedExperts(false);
       return;
     }
     try {
       const res = await axios.get(
-        `/customers/experts?action=5&query=${searchQuery}`,
+        `/customers/experts?action=5&query=${searchQuery}&page_size=${itemsPerPage}&page=${currentPage}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -341,10 +352,12 @@ const AllExperts = () => {
         console.log(res.data.message);
         return;
       }
+      console.log(res);
       const data = res.data.data;
       setSearchedExperts(data);
       console.log(searchedExperts);
       setShowSearchedExperts(true);
+      setLastPage(res.data.pagination.total_pages);
     } catch (error) {
       console.log(error);
       setShimmer(false);
@@ -352,15 +365,12 @@ const AllExperts = () => {
     setShimmer(false);
     setShowSearchedExperts(true);
   };
+  console.log(searchedExperts);
   const handleKeyPress = (event) => {
-    console.log(event);
     if (event.key === "Enter") {
       searchExperts(searchQuery);
     }
   };
-  console.log(searchedExperts.length);
-
-  
 
   return (
     <div className="mt-[40px] md:mt-[100px] relative w-full h-auto py-[5vw] sm:py-[3vw] px-[3vw] xs:px-[6vw] md:px-[10vw] flex flex-col">
@@ -393,7 +403,10 @@ const AllExperts = () => {
           onClick={() => (
             setShowSearchedExperts(false),
             setSearchedExperts([]),
-            setSearchQuery("")
+            setSearchQuery(""),
+            localStorage.getItem("username")
+              ? getAllExpertsWithToken()
+              : getAllExperts()
           )}
         >
           <IoMdArrowRoundBack />
@@ -472,7 +485,7 @@ const AllExperts = () => {
 const Expert = () => {
   return (
     <>
-      <div className="mt-[80px] px-[7vw] md:px-[10vw]">
+      <div className="mt-[80px] mb-5 md:mb-10 px-[7vw] md:px-[10vw]">
         <Subheader heading={"Experts"} />
       </div>
       <TopExperts />

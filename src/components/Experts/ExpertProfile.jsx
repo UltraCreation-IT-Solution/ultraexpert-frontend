@@ -1031,7 +1031,7 @@ const ExpertProfile = () => {
     return <ExpertProfileShimmer />;
   }
   return !expertDetail ? (
-    <div className="text-center font-bold text-lg md:text-2xl text-gray-600 my-10 md:my-15">
+    <div className="text-center font-bold text-lg md:text-2xl text-gray-600  mt-[100px]">
       Expert details not found{" "}
     </div>
   ) : (
