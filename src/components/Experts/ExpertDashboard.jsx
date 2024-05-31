@@ -18,6 +18,7 @@ import {
   MdOutlineStarBorderPurple500,
   MdOpenInNew,
   MdOutlineContentCopy,
+  MdOutlineEdit,
 } from "react-icons/md";
 import {
   BsFillPersonLinesFill,
@@ -41,6 +42,7 @@ import {
   RiPagesFill,
   RiArrowRightSLine,
   RiCustomerService2Fill,
+  RiDeleteBin6Fill,
 } from "react-icons/ri";
 import { PiCrownFill } from "react-icons/pi";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
@@ -393,10 +395,10 @@ export const TestimonialsCard = ({
         <div className="flex items-center justify-between text-sm font-semibold">
           <div className="text-sm ">{item?.date_created?.split("T")[0]}</div>
           <div className="flex items-center gap-3">
-            <FaEdit className="text-xl" onClick={handleEdit} />
+            <FaEdit className="text-xl text-blue-800" onClick={handleEdit} />
             <FaRegTrashAlt
               onClick={() => handleDeleteTestimonial(item.id)}
-              className="text-xl"
+              className="text-xl text-red-500"
             />
           </div>
         </div>
@@ -454,7 +456,7 @@ const ShowMyProjects = () => {
       {!addProjectOpen && (
         <div
           onClick={() => setAddProjectOpen(true)}
-          className="text-sm md:text-base text-white bg-emerald-500 rounded-md px-4 py-2 w-fit flex items-center gap-2 cursor-pointer"
+          className="text-sm md:text-base text-white btnBlack rounded-sm px-4 py-2 w-fit flex items-center gap-2 cursor-pointer"
         >
           Add or Edit a project <MdOpenInNew className="text-base ms:text-xl" />
         </div>
@@ -1249,7 +1251,7 @@ export const MyServices = () => {
       <div className="flex justify-between border-b border-solid border-slate-200 pb-3">
         <div className="text-xl font-bold">My services</div>
         <div
-          className="text-base cursor-pointer bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md text-white"
+          className="text-base cursor-pointer btnBlack px-4 py-2 rounded-sm text-white"
           onClick={() => {
             navigate("/expertdashboard/createservice");
           }}
@@ -1269,14 +1271,14 @@ export const MyServices = () => {
               className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md"
             >
               <div className="flex items-center gap-3">
-                <button className="bg-green-500 hover:bg-green-600 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">
-                  Edit service
+                <button className="flex items-center gap-2 bg-white text-sm px-3 py-1 rounded-sm text-black cursor-pointer border border-solid border-black">
+                <MdOutlineEdit size={18}/> Edit
                 </button>
                 <button
                   onClick={() => deleteService(service.id)}
-                  className="bg-red-500 hover:bg-red-600 text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
+                  className="flex gap-2 items-center btnBlack text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
                 >
-                  Delete service
+                  <RiDeleteBin6Fill size={15}/> Delete
                 </button>
               </div>
               <div

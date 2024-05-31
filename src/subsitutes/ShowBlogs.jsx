@@ -66,13 +66,15 @@ export const BlogCardHorizontal = ({
     >
       <div className="flex items-center gap-3">
         <FaEdit
-          className="text-xl shrink-0"
+          title="Edit"
+          className="text-xl shrink-0 text-blue-800"
           onClick={() => navigate(`/blog/editblog/${id}`)}
         />
 
         <FaRegTrashAlt
+          title="Delete"
           onClick={() => handleDeleteBlogs(id)}
-          className="text-xl shrink-0"
+          className="text-xl shrink-0 text-red-500"
         />
       </div>
       <div className="sm:flex justify-between gap-5">
