@@ -5,7 +5,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import axios from "../../axios";
 
 export const FavExpertCard = ({ item, getFavExpData }) => {
-  console.log(item)
+  console.log(item);
   const [FavExpert, setFavExpert] = useState(true);
   const cookie = document.cookie.split(";");
   const jsonData = {};
@@ -416,7 +416,7 @@ export const FavExperts = () => {
           id: item.id,
           profession: item.profession,
           about_me: item.about_me,
-          rating: item.expert_rating
+          rating: item.expert_rating,
         }))
       );
     } catch (error) {
@@ -430,19 +430,13 @@ export const FavExperts = () => {
     <div className="mt-10">
       <div className="font-bold text-xl md:text-3xl ">Experts</div>
       <div className="flex items-center overflow-x-scroll gap-5 mt-5">
-        {favExpertsData.length === 0 ? (
-          <div className="text-center text-base ">
-            Add Experts to favourates
-          </div>
-        ) : (
-          favExpertsData.map((item, index) => (
-            <FavExpertCard
-              key={index}
-              item={item}
-              getFavExpData={getFavExpData}
-            />
-          ))
-        )}
+        {favExpertsData.map((item, index) => (
+          <FavExpertCard
+            key={index}
+            item={item}
+            getFavExpData={getFavExpData}
+          />
+        ))}
       </div>
       <Link to="/experts">
         <div className="text-center font-semibold text-gray-600 text-sm md:text-xl mt-10 flex gap-2 items-center justify-center">
@@ -558,9 +552,6 @@ const Favourites = () => {
         <div className="w-fit">
           <div className="text-3xl font-bold">Favourites</div>
           <div className="w-[70%] border border-solid border-slate-400"></div>
-        </div>
-        <div className="border border-solid border-slate-300 px-3 py-1 text-sm">
-          Sort by
         </div>
       </div>
       <div className="mt-14 flex items-center overflow-x-scroll gap-10 md:gap-16 border-b border-solid border-slate-300 pb-8 drop-shadow-lg ">

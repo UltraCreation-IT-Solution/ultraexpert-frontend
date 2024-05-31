@@ -46,10 +46,8 @@ import {
 } from "react-icons/ri";
 import { PiCrownFill } from "react-icons/pi";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
-import  BookingCard  from "../../subsitutes/BookingCard";
-import {
-  expertDashInfo as expert,
-} from "../../constant";
+import BookingCard from "../../subsitutes/BookingCard";
+import { expertDashInfo as expert } from "../../constant";
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -75,6 +73,7 @@ import axios from "../../axios";
 import UpdateProject from "./UpdateProjeect";
 import EditProfileExpert from "../Auth/EditProfileExpert";
 import SkillList from "../GetCertified/Instructions";
+import TextShimmer from "../../subsitutes/Shimmers/TextShimmer";
 
 const generateRandomData = () => {
   const today = new Date();
@@ -509,6 +508,8 @@ export const Dashboard = () => {
     jsonData[key] = value;
   });
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setTimeout(() => {
       seta(
@@ -531,6 +532,7 @@ export const Dashboard = () => {
   const [expertData, setExpertData] = useState({});
   const [expertStatistics, setExpertStatistics] = useState([]);
   const getCurrentExpert = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("/experts/?action=1", {
         headers: {
@@ -547,12 +549,15 @@ export const Dashboard = () => {
         return;
       }
       console.log(response.data);
+      setLoading(false);
       setExpertData(response.data.data);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   const getExpertStatistics = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("/experts/?action=3", {
         headers: {
@@ -569,9 +574,11 @@ export const Dashboard = () => {
         return;
       }
       console.log("statistics", response.data);
+      setLoading(false);
       setExpertStatistics(response.data.data);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -583,6 +590,7 @@ export const Dashboard = () => {
   // API integration for testimonials of expert start--->>>
   const [expertAllTestimonials, setExpertAllTestimonials] = useState([]);
   const getExpertAllTestimonials = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`/testimonial/?action=3`, {
         headers: {
@@ -600,9 +608,11 @@ export const Dashboard = () => {
         return;
       }
       console.log(response.data.data);
+      setLoading(false);
       setExpertAllTestimonials(response.data.data);
     } catch (error) {
       console.log(error);
+      setLoading(false);
       setExpertAllTestimonials([]);
     }
   };
@@ -638,6 +648,7 @@ export const Dashboard = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+    setLoading(true);
     try {
       const res = await axios.get("/blogs/?action=2", {
         headers: {
@@ -647,9 +658,11 @@ export const Dashboard = () => {
       });
       const allData = res.data.data;
       console.log(allData);
+      setLoading(false);
       setBlogData(allData);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -676,12 +689,16 @@ export const Dashboard = () => {
   const [basicStats, setBasicStats] = useState(true);
   const [extraStats, setExtraStats] = useState(false);
   const HandleBasicStats = () => {
+    setLoading(true);
     setBasicStats(true);
     setExtraStats(false);
+    setLoading(false);
   };
   const HandleExtraStats = () => {
+    setLoading(true);
     setBasicStats(false);
     setExtraStats(true);
+    setLoading(false);
   };
 
   //heatmap data
@@ -698,6 +715,8 @@ export const Dashboard = () => {
     });
     setValues(updatedValues);
   };
+
+  const navigate = useNavigate();
   return (
     <section className="w-full md:w-[68%] h-full flex flex-col gap-[4.5vw] xs:gap-[3vw] md:gap-[2vw]">
       <div className="block md:hidden w-full h-auto px-[0.8vw] py-[4.5vw] xs:py-[3vw] border-b-[0.01px] border-[#dcdcdc] border-solid">
@@ -748,17 +767,25 @@ export const Dashboard = () => {
         <div className="w-[72%] h-full px-2">
           <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-4 mb-4 text-sm md:text-base overflow-x-scroll px-2">
             <div
-              className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
-                basicStats && `bg-[#ececec] rounded-sm`
-              }`}
+              className={
+                loading
+                  ? `text-gray-300`
+                  : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+                      basicStats && `bg-[#ececec] rounded-sm`
+                    }`
+              }
               onClick={() => HandleBasicStats()}
             >
               Basic Stats
             </div>
             <div
-              className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
-                extraStats && `bg-[#ececec] rounded-sm`
-              }`}
+              className={
+                loading
+                  ? `text-gray-300`
+                  : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+                      extraStats && `bg-[#ececec] rounded-sm`
+                    }`
+              }
               onClick={() => HandleExtraStats()}
             >
               Other Stats
@@ -966,8 +993,14 @@ export const Dashboard = () => {
         </div>
       </div>
       <div className="w-full flex flex-col gap-[1vw] border border-[#c7c7c7] border-solid rounded-lg px-[1.8vw] py-[3vw] xs:py-[2vw] md:py-[1.25vw]">
-        <div className="font-bold text-[3.45vw] xs:text-[2.65vw] md:text-[1.8vw] lg:text-[1.45vw]">
-          Skills
+        <div className="font-bold flex justify-between text-[3.45vw] xs:text-[2.65vw] md:text-[1.8vw] lg:text-[1.45vw]">
+          <div>Skills</div>
+          <div
+            onClick={() => navigate("/expertdashboard/editprofile")}
+            className="text-sm underline cursor-pointer font-light"
+          >
+            <FaPlus size={10} /> Add Skills
+          </div>
         </div>
         <div className="flex flex-wrap gap-[2vw] xs:gap-[1.6vw] md:gap-[1vw]">
           {expertData.skills?.map((item, index) => {
@@ -1183,6 +1216,7 @@ export const Dashboard = () => {
 export const MyServices = () => {
   const navigate = useNavigate();
   const services = Array.from({ length: 3 });
+  const [shimmer, setShimmer] = useState(false);
   const [myServices, setMyServices] = useState([]);
   const getMyServices = async () => {
     const cookie = document.cookie.split(";");
@@ -1191,6 +1225,7 @@ export const MyServices = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+    setShimmer(true);
     try {
       const res = await axios.get("/experts/services/?action=1", {
         headers: {
@@ -1200,15 +1235,25 @@ export const MyServices = () => {
       });
       if (res.data.status === 404) {
         setMyServices([]);
+        setShimmer(false);
+        return;
+      }
+      if (!res.data || res.data.status === 400 || res.data.status === 401) {
+        console.log(res.data.message);
+        setShimmer(false);
         return;
       }
       const json = res.data;
       setMyServices(json.data);
+      setShimmer(false);
       console.log(myServices);
     } catch (error) {
+      setShimmer(false);
       if (error.response.status === 404) {
         setMyServices([]);
-      } else console.log(error);
+      } else {
+        console.log(error);
+      }
     }
   };
   const deleteService = async (id) => {
@@ -1260,7 +1305,13 @@ export const MyServices = () => {
         </div>
       </div>
       <div>
-        {myServices.length === 0 ? (
+        {shimmer ? (
+          <div className="w-full flex flex-col items-center gap-10 mt-5">
+            {Array.from({ length: 4 }).map((item, index) => (
+              <TextShimmer key={index} />
+            ))}
+          </div>
+        ) : myServices.length === 0 ? (
           <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
             No services created yet
           </div>
@@ -1569,6 +1620,7 @@ export const Leaderboard = () => {
 };
 
 export const MyBookings = ({ expertData, expertId }) => {
+  const [shimmer, setShimmer] = useState(false);
   const [myBookings, setMyBookings] = useState([]);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -1581,6 +1633,7 @@ export const MyBookings = ({ expertData, expertId }) => {
   }, []);
 
   const getMyBookings = async () => {
+    setShimmer(true);
     try {
       const res = await axios.get(
         `/experts/services/?action=4&expert_id=${17}`,
@@ -1591,21 +1644,35 @@ export const MyBookings = ({ expertData, expertId }) => {
           },
         }
       );
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        console.log(res.data.message);
+        setShimmer(false);
+        return;
+      }
       setMyBookings(res.data.data);
+      setShimmer(false);
     } catch (error) {
       console.log(error);
+      setShimmer(false);
     }
   };
-  console.log(myBookings);
-
-  console.log({expertData});
-  console.log(expertId);
   return (
     <div className="w-full md:w-[68%]">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
         Active Bookings
       </div>
-      {myBookings.length === 0 ? (
+      {shimmer ? (
+        <div className="w-full flex flex-col items-center gap-10 mt-5">
+          {Array.from({ length: 4 }).map((item, index) => (
+            <TextShimmer key={index} />
+          ))}
+        </div>
+      ) : myBookings.length === 0 ? (
         <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600">
           No Active Bookings
         </div>
@@ -1722,23 +1789,25 @@ const ExpertDashboard = () => {
             <div className=" mt-[1.6vw] w-full text-sm text-[#525252] line-clamp-3">
               {expertData.about_me}
             </div>
-            <div className="mt-[1.25vw] flex flex-col gap-[1vw]">
-              <div className="flex gap-[1.25vw] items-center text-[1.25vw] text-[#515151]">
-                <FaTags />
-                <div className="flex">
-                  {expertData?.skills?.slice(0, 3)?.map((item, idx) => {
-                    return (
-                      <div
-                        key={idx}
-                        className="px-[2.65vw] xs:px-[2.2vw] sm:px-[1.8vw] lg:px-[1vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] text-[2.85vw] xs:text-[2.25vw] sm:text-[1.45vw] lg:text-[1vw] border border-[#cdcdcd] border-solid"
-                      >
-                        {item.technology_name}
-                      </div>
-                    );
-                  })}
+            {expertData?.skills?.length !== 0 && (
+              <div className="mt-[1.25vw] flex flex-col gap-[1vw]">
+                <div className="flex gap-[1.25vw] items-center text-[1.25vw] text-[#515151]">
+                  <FaTags />
+                  <div className="flex">
+                    {expertData?.skills?.slice(0, 3)?.map((item, idx) => {
+                      return (
+                        <div
+                          key={idx}
+                          className="px-[2.65vw] xs:px-[2.2vw] sm:px-[1.8vw] lg:px-[1vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] text-[2.85vw] xs:text-[2.25vw] sm:text-[1.45vw] lg:text-[1vw] border border-[#cdcdcd] border-solid"
+                        >
+                          {item.technology_name}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
             <div className="flex mt-[1.25vw] gap-2 items-center">
               <div className="font-bold text-sm">Referal code: </div>
               <span className="text-sm">{expertData.refer_code}</span>
@@ -1829,7 +1898,9 @@ const ExpertDashboard = () => {
         <SkillList />
         {/* {expertData.length!==0 && <MyBookings {...expertData} />} */}
 
-        {expertData && expertId && <MyBookings expertData={{...expertData}} expertId={expertId} />}
+        {expertData && expertId && (
+          <MyBookings expertData={{ ...expertData }} expertId={expertId} />
+        )}
 
         {/* <MyBookings id={expertId} /> */}
       </Outlet>
