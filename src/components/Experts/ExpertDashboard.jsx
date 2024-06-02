@@ -392,12 +392,12 @@ export const TestimonialsCard = ({
   return isDeleting ? (
     <div className="absolute">
       <div className="fixed z-50 bg-gray-300 bg-opacity-75 px-4 md:px-8 w-full inset-0 flex items-center justify-center">
-        <div className="relative w-full max-w-md mt-4 shadow-lg rounded-sm bg-white p-6 md:p-8">
-          <h1 className="text-center text-xl font-bold">Are you sure?</h1>
-          <p className="text-gray-600 mt-2">
+        <div className="relative w-full max-w-md shadow-lg rounded-sm bg-white p-6 md:p-8">
+          <div className="text-center text-xl font-bold mb-6">Are you sure?</div>
+          <div className="text-gray-600 mb-6 text-center">
             Do you want to delete this testimonial?
-          </p>
-          <div className="flex justify-end space-x-4 mt-4">
+          </div>
+          <div className="flex justify-end space-x-4 mt-6">
             <button
               type="button"
               className="inline-flex items-center px-4 py-2 bg-white text-black rounded-sm border border-solid border-black"
@@ -1411,12 +1411,12 @@ export const MyServices = () => {
       {isDeleting ? (
         <div className="absolute">
           <div className="fixed z-50 bg-gray-300 bg-opacity-75 px-4 md:px-8 w-full inset-0 flex items-center justify-center">
-            <div className="relative w-full max-w-md mt-4 shadow-lg rounded-sm bg-white p-6 md:p-8">
-              <h1 className="text-center text-xl font-bold">Are you sure?</h1>
-              <p className="text-gray-600 mt-2">
+            <div className="relative w-full max-w-md shadow-lg rounded-sm bg-white p-6 md:p-8">
+              <h1 className="text-center text-xl font-bold mb-6">Are you sure?</h1>
+              <p className="text-gray-600 mb-6 text-center">
                 Do you want to delete this service?
               </p>
-              <div className="flex justify-end space-x-4 mt-4">
+              <div className="flex justify-end space-x-4 mt-6">
                 <button
                   type="button"
                   className="inline-flex items-center px-4 py-2 bg-white text-black rounded-sm border border-solid border-black"

@@ -20,6 +20,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
+import { FiUpload } from "react-icons/fi";
 
 export const CustomerProfile = () => {
   const [userData, setUserData] = useState({});
@@ -271,7 +272,7 @@ export const CustomerProfile = () => {
           className={
             loading
               ? `bg-gray-300 px-4 py-2 rounded-md text-gray-500 cursor-not-allowed text-base`
-              : `text-base bg-green-500 px-4 py-2 rounded-md cursor-pointer text-white`
+              : `text-base btnBlack px-4 py-2 rounded-sm cursor-pointer text-white`
           }
         >
           Save Profile
@@ -394,30 +395,33 @@ export const CustomerProfile = () => {
               <div className="flex w-full h-full items-center justify-center text-center">
                 <span>Loading...</span>
               </div>
+            ) : image ? (
+              <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
+                <img
+                  src={image}
+                  alt="Preview"
+                  className="w-auto h-40 shrink-0 object-cover object-center m-2"
+                />
+              </div>
             ) : (
-              image && (
-                <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
-                  <img
-                    src={image}
-                    alt="Preview"
-                    className="w-auto h-40 shrink-0 object-cover object-center m-2"
-                  />
-                </div>
-              )
+              <div className="flex items-center justify-center w-full h-full text-gray-600">
+                <FiUpload className="w-10 h-10" />
+                <span className="ml-2">Upload Image</span>
+              </div>
             )}
           </div>
           <div className="flex justify-center mx-auto flex-col w-full my-8">
             <label htmlFor="interests" className="text-lg mb-1">
               Interests
             </label>
-            <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-              <div className="flex flex-wrap gap-2">
-                {selectedSkill.length > 0 ? (
-                  selectedSkill.map((skill, ind) => {
+            {selectedSkill.length > 0 && (
+              <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
+                <div className="flex flex-wrap gap-2">
+                  {selectedSkill.map((skill, ind) => {
                     return (
                       <div
                         key={ind}
-                        className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black"
+                        className="flex gap-2 px-4 py-1 text-sm rounded-lg bg-inherit border border-solid border-gray-300"
                       >
                         {skill}
                         <div
@@ -428,14 +432,10 @@ export const CustomerProfile = () => {
                         </div>
                       </div>
                     );
-                  })
-                ) : (
-                  <p className="text-gray-300 text-sm">
-                    Select skills of your interest from below.
-                  </p>
-                )}
+                  })}
+                </div>
               </div>
-            </div>
+            )}
             <input
               type="text"
               id="interests"

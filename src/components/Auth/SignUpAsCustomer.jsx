@@ -10,6 +10,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
+import { handleUploadImage } from "../../constant";
 
 const CHECKOUT_STEPS = [
   { name: "Personal Details" },
@@ -248,52 +249,17 @@ const SignUpAsCustomer = () => {
   };
 
   const [selectedProfile, setSelectedProfile] = useState(null);
-  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
+  const [imageLoading, setImageLoading] = useState(false);
 
-  const handleProfileChange = async (event) => {
-    const file = event.target.files[0]; // Get the first selected file
-    if (file) {
-      const reader = new FileReader();
-      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-      const uploadTask = uploadBytesResumable(imgRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Get upload progress as a percentage
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setUploadProfileProgress(progress);
-        },
-        (error) => {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-        },
-        () => {
-          // Upload completed successfully
-          console.log("Upload complete");
-        }
-      );
-      setLoading(true);
-      try {
-        await uploadTask;
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log(url);
-        setLoading(false);
-        setPersonalInfo({
-          ...personalInfo,
-          profile_img: url, // Store the image data in an array
-        });
-      } catch (error) {
-        console.error("Error uploading image: ", error);
-        setLoading(false);
-        // Handle error if needed
-      }
-      reader.onload = () => {
-        setSelectedProfile(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleProfileChange = async (e) => {
+    setImageLoading(true);
+    const url = await handleUploadImage(
+      e.target.files[0],
+      e.target.files[0].name
+    );
+    console.log(url);
+    setSelectedProfile(url);
+    setImageLoading(false);
   };
 
   const handleRemoveProfile = () => {
@@ -465,38 +431,6 @@ const SignUpAsCustomer = () => {
                   }
                   className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-[50%] mx-auto cursor-pointer rounded-lg"
                 >
-                  {uploadProfileProgress > 0 && uploadProfileProgress < 100 && (
-                    <p>Upload Progress: {uploadProfileProgress}%</p>
-                  )}
-                  {selectedProfile ? (
-                    <div className="relative">
-                      <img
-                        src={selectedProfile}
-                        alt="Selected Profile"
-                        className="w-32 h-32 object-cover rounded-lg"
-                      />
-                      <div
-                        onClick={handleRemoveProfile}
-                        className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
-                      >
-                        <BsX
-                          size={20}
-                          className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center">
-                      {uploadProfileProgress === 0 && (
-                        <>
-                          <BsUpload size={20} />
-                          <div className="text-sm text-[#1475cf] mt-2 text-center">
-                            Click here to upload a profile photo
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
                   <input
                     type="file"
                     accept="image/*"
@@ -505,6 +439,24 @@ const SignUpAsCustomer = () => {
                     onChange={handleProfileChange}
                     className="hidden"
                   />
+                  {imageLoading ? (
+                    <div className="flex w-full h-full items-center justify-center text-center">
+                      <span>Loading...</span>
+                    </div>
+                  ) : selectedProfile ? (
+                    <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
+                      <img
+                        src={selectedProfile}
+                        alt="Preview"
+                        className="w-auto h-40 shrink-0 object-cover object-center m-2"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center w-full h-full text-gray-600">
+                      <FiUpload className="w-10 h-10" />
+                      <span className="ml-2">Upload Image</span>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">

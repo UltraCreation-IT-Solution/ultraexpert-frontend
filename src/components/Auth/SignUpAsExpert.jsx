@@ -10,6 +10,8 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
+import { handleUploadImage } from "../../constant";
+import { FiUpload } from "react-icons/fi";
 
 const CHECKOUT_STEPS = [
   { name: "Personal Details" },
@@ -319,64 +321,21 @@ const SignUpAsExpert = () => {
     }));
   };
 
-  const [selectedCertificate, setSelectedCertificate] = useState(
-    Array.from({ length: achForms.length }, () => null)
-  );
+  const [selectedCertificate, setSelectedCertificate] = useState(null);
+  const [imageLoading, setImageLoading] = useState(false);
 
-  const handleCertificateChange = async (event, ind) => {
-    setIsLoading(true);
-    const file = event.target.files[0]; // Get the first selected file
-    if (file) {
-      if (!file.type.match("image/.*")) {
-        alert("Only image files are allowed!");
-        return;
-      }
-      const reader = new FileReader();
-      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-      const uploadTask = uploadBytesResumable(imgRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Get upload progress as a percentage
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          // setUploadCertificateProgress(progress);
-        },
-        (error) => {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-        },
-        () => {
-          // Upload completed successfully
-          console.log("Upload complete");
-        }
-      );
-      try {
-        await uploadTask;
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log(url);
-        setImageUrl(url);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error uploading image: ", error);
-        setIsLoading(false);
-        // Handle error if needed
-        alert("Something went wrong");
-      }
-      reader.onload = () => {
-        const updatedSelectedCertificates = [...selectedCertificate];
-        updatedSelectedCertificates[ind] = reader.result;
-        setSelectedCertificate(updatedSelectedCertificates);
-      };
-      reader.readAsDataURL(file);
-      const updatedCertificates = [...achInfo.certificate];
-      updatedCertificates[ind] = imageUrl;
-      setAchInfo({
-        ...achInfo,
-        certificate: updatedCertificates,
-      });
-    }
+  const handleCertificateChange = async (e, ind) => {
+    setImageLoading(true);
+    const url = await handleUploadImage(
+      e.target.files[0],
+      e.target.files[0].name
+    );
+    console.log(url);
+    setSelectedCertificate(url);
+    setImageLoading(false);
+    const updatedCertificates = [...achInfo.certificate];
+    updatedCertificates[ind] = url;
+    setAchInfo({ ...achInfo, certificate: updatedCertificates });
   };
 
   const handleRemoveCertificate = (ind) => {
@@ -598,126 +557,28 @@ const SignUpAsExpert = () => {
 
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [selectedBanner, setSelectedBanner] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
-  const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [bannerLoading, setBannerLoading] = useState(false);
 
-  const handleDeleteProfile = async () => {
-    if (!imageUrl) return;
-
-    try {
-      // Extract the file path from the URL
-      const filePath = imageUrl.split("/").pop();
-      console.log(filePath);
-      // Construct a reference to the file
-      const imgRef = ref(
-        imageDB,
-        `gs://ultracreation-b6a11.appspot.com/UltraXpertImgFiles/${filePath}`
-      );
-      // Delete the file from Firebase Storage
-      await deleteObject(imgRef);
-      // Reset the imageUrl state
-      setImageUrl(null);
-    } catch (error) {
-      console.error("Error deleting image: ", error);
-      // Handle error if needed
-      alert("Something went wrong");
-    }
+  const handleProfileChange = async (e) => {
+    setProfileLoading(true);
+    const url = await handleUploadImage(
+      e.target.files[0],
+      e.target.files[0].name
+    );
+    console.log(url);
+    setSelectedProfile(url);
+    setProfileLoading(false);
   };
-
-  const handleProfileChange = async (event) => {
-    setIsLoading(true);
-    const file = event.target.files[0]; // Get the first selected file
-    if (file) {
-      const reader = new FileReader();
-      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-      const uploadTask = uploadBytesResumable(imgRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Get upload progress as a percentage
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setUploadProfileProgress(progress);
-        },
-        (error) => {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-        },
-        () => {
-          // Upload completed successfully
-          console.log("Upload complete");
-        }
-      );
-      try {
-        await uploadTask;
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log(url);
-        setImageUrl(url);
-        setIsLoading(false);
-        setPersonalInfo({
-          ...personalInfo,
-          profile_img: url, // Store the image data in an array
-        });
-      } catch (error) {
-        console.error("Error uploading image: ", error);
-        setIsLoading(false);
-        // Handle error if needed
-        alert("Something went wrong");
-      }
-      reader.onload = () => {
-        setSelectedProfile(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  const handleBannerChange = async (event) => {
-    setIsLoading(true);
-    const file = event.target.files[0]; // Get the first selected file
-    if (file) {
-      const reader = new FileReader();
-      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-      const uploadTask = uploadBytesResumable(imgRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Get upload progress as a percentage
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setUploadBannerProgress(progress);
-        },
-        (error) => {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-        },
-        () => {
-          // Upload completed successfully
-          console.log("Upload complete");
-        }
-      );
-      try {
-        await uploadTask;
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log(url);
-        setImageUrl(url);
-        setIsLoading(false);
-        setPersonalInfo({
-          ...personalInfo,
-          banner_img: url, // Store the image data in an array
-        });
-      } catch (error) {
-        console.error("Error uploading image: ", error);
-        setIsLoading(false);
-        // Handle error if needed
-        alert("Something went wrong");
-      }
-      reader.onload = () => {
-        setSelectedBanner(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleBannerChange = async (e) => {
+    setBannerLoading(true);
+    const url = await handleUploadImage(
+      e.target.files[0],
+      e.target.files[0].name
+    );
+    console.log(url);
+    setSelectedBanner(url);
+    setBannerLoading(false);
   };
 
   const handleRemoveProfile = () => {
@@ -886,40 +747,6 @@ const SignUpAsExpert = () => {
                       }
                       className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
                     >
-                      {uploadProfileProgress > 0 &&
-                        uploadProfileProgress < 100 && (
-                          <p>Upload Progress: {uploadProfileProgress}%</p>
-                        )}
-                      {selectedProfile ? (
-                        <div className="relative">
-                          <img
-                            src={selectedProfile}
-                            alt="Selected Profile"
-                            className="w-28 h-28 object-cover rounded-lg"
-                          />
-                          <div
-                            onClick={handleRemoveProfile}
-                            className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
-                          >
-                            <BsX
-                              className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"
-                              size={20}
-                              onClick={() => setUploadProfileProgress(0)}
-                            />
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex flex-col items-center">
-                          {uploadProfileProgress === 0 && (
-                            <>
-                              <BsUpload size={20} />
-                              <div className="text-sm text-[#1475cf] mt-2">
-                                Click here to upload a profile photo
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      )}
                       <input
                         type="file"
                         id="profileSelector"
@@ -927,6 +754,24 @@ const SignUpAsExpert = () => {
                         onChange={handleProfileChange}
                         className="hidden"
                       />
+                      {profileLoading ? (
+                        <div className="flex w-full h-full items-center justify-center text-center">
+                          <span>Loading...</span>
+                        </div>
+                      ) : selectedProfile ? (
+                        <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
+                          <img
+                            src={selectedProfile}
+                            alt="Preview"
+                            className="w-auto h-40 shrink-0 object-cover object-center m-2"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center w-full h-full text-gray-600">
+                          <FiUpload className="w-10 h-10" />
+                          <span className="ml-2">Upload Image</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="flex flex-col w-full">
@@ -939,43 +784,6 @@ const SignUpAsExpert = () => {
                       }
                       className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
                     >
-                      {uploadBannerProgress > 0 &&
-                        uploadBannerProgress < 100 && (
-                          <p>Upload Progress: {uploadBannerProgress}%</p>
-                        )}
-                      {selectedBanner ? (
-                        <div className="relative">
-                          <img
-                            src={selectedBanner}
-                            alt="Selected Banner"
-                            className="w-28 h-28 object-cover rounded-lg"
-                          />
-                          <div
-                            onClick={handleRemoveBanner}
-                            className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
-                          >
-                            <BsX
-                              size={20}
-                              className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"
-                              onClick={() => setUploadBannerProgress(0)}
-                            />
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex flex-col items-center">
-                          {uploadBannerProgress === 0 && (
-                            <>
-                              <BsUpload
-                                size={20}
-                                onClick={() => setUploadBannerProgress(0)}
-                              />
-                              <div className="text-sm text-[#1475cf] mt-2">
-                                Click here to upload a banner photo
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      )}
                       <input
                         type="file"
                         id="bannerSelector"
@@ -984,6 +792,24 @@ const SignUpAsExpert = () => {
                         onChange={handleBannerChange}
                         className="hidden"
                       />
+                      {bannerLoading ? (
+                        <div className="flex w-full h-full items-center justify-center text-center">
+                          <span>Loading...</span>
+                        </div>
+                      ) : selectedBanner ? (
+                        <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
+                          <img
+                            src={selectedBanner}
+                            alt="Preview"
+                            className="w-auto h-40 shrink-0 object-cover object-center m-2"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center w-full h-full text-gray-600">
+                          <FiUpload className="w-10 h-10" />
+                          <span className="ml-2">Upload Image</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1849,44 +1675,36 @@ const SignUpAsExpert = () => {
                       }
                       className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-[50%] mx-auto cursor-pointer rounded-lg"
                     >
-                      {selectedCertificate[ind] &&
-                      selectedCertificate[ind].startsWith("data:") ? (
-                        <div className="relative">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        id={`certificate${form.id}`}
+                        name={`certificate${form.id}`}
+                        onChange={(e) => {
+                          handleCertificateChange(e, ind);
+                        }}
+                        className="hidden"
+                        aria-label="Upload certificate for achievement"
+                      />
+                      {imageLoading ? (
+                        <div className="flex w-full h-full items-center justify-center text-center">
+                          <span>Loading...</span>
+                        </div>
+                      ) : selectedCertificate[ind] ? (
+                        <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                           <img
                             src={selectedCertificate[ind]}
-                            alt="Certificate"
-                            className="w-32 h-32 object-cover rounded-lg"
+                            alt="Preview"
+                            className="w-auto h-40 shrink-0 object-cover object-center m-2"
                           />
-                          <div
-                            onClick={() => handleRemoveCertificate(ind)}
-                            className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
-                          >
-                            <BsX
-                              size={20}
-                              className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full"
-                            />
-                          </div>
                         </div>
                       ) : (
-                        <div className="flex flex-col items-center">
-                          <BsUpload size={20} />
-                          <div className="text-sm text-[#1475cf] mt-2">
-                            Click here to upload a profile photo
-                          </div>
+                        <div className="flex items-center justify-center w-full h-full text-gray-600">
+                          <FiUpload className="w-10 h-10" />
+                          <span className="ml-2">Upload Image</span>
                         </div>
                       )}
                     </div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      id={`certificate${form.id}`}
-                      name={`certificate${form.id}`}
-                      onChange={(e) => {
-                        handleCertificateChange(e, ind);
-                      }}
-                      className="hidden"
-                      aria-label="Upload certificate for achievement"
-                    />
                   </>
                 ))}
               </div>

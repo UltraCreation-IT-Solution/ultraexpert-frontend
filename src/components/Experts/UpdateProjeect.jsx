@@ -10,6 +10,7 @@ import {
 import { v4 } from "uuid";
 import axios from "../../axios";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { handleUploadImage } from "../../constant";
 
 const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
   const [projects, setProjects] = useState([]);
@@ -123,45 +124,17 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
     setProjects(updatedProjects);
   };
 
-  const handleImageUpload = async (e) => {
-    if (e.target.files.length > 0) {
-      setImage(URL.createObjectURL(e.target.files[0]));
-      const file = e.target.files[0];
-      if (file) {
-        const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-        const uploadTask = uploadBytesResumable(imgRef, file);
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            // Get upload progress as a percentage
-            const progress = Math.round(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            );
-            setUploadProfileProgress(progress);
-          },
-          (error) => {
-            console.error("Error uploading image: ", error);
-            // Handle error if needed
-          },
-          () => {
-            // Upload completed successfully
-            console.log("Upload complete");
-          }
-        );
+  const [imageLoading, setImageLoading] = useState(false);
 
-        try {
-          await uploadTask;
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
-          console.log(url);
-          setImageUrl(url);
-          setImage(url);
-        } catch (error) {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-          alert("Something went wrong");
-        }
-      }
-    }
+  const handleImageUpload = async (e) => {
+    setImageLoading(true);
+    const url = await handleUploadImage(
+      e.target.files[0],
+      e.target.files[0].name
+    );
+    console.log(url);
+    setImage(url);
+    setImageLoading(false);
   };
   const handleImageRemove = () => {
     setImage("");
@@ -206,7 +179,11 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
           </button>
           <button
             onClick={handleSubmit}
-            className={loading ? `bg-gray-600 text-white px-6 py-2 rounded-sm` : `btnBlack text-white px-6 py-2 rounded-sm`}
+            className={
+              loading
+                ? `bg-gray-600 text-white px-6 py-2 rounded-sm`
+                : `btnBlack text-white px-6 py-2 rounded-sm`
+            }
           >
             Submit Projects
           </button>
@@ -246,21 +223,17 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
                 onChange={handleImageUpload}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
-                <p>Upload Progress: {uploadProfileProgress}%</p>
+              {imageLoading ? (
+                <div className="flex w-full h-full items-center justify-center text-center">
+                  <span>Loading...</span>
+                </div>
               ) : image ? (
-                <div className="relative w-full h-full flex justify-center items-center">
+                <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                   <img
                     src={image}
                     alt="Preview"
-                    className="max-h-28 max-w-44 object-cover rounded"
+                    className="w-auto h-40 shrink-0 object-cover object-center m-2"
                   />
-                  <button
-                    onClick={handleImageRemove}
-                    className="absolute top-2 right-2 bg-slate-400 text-white p-1 rounded hover:bg-gray-600 flex justify-center items-center"
-                  >
-                    <FiX className="w-4 h-4" />
-                  </button>
                 </div>
               ) : (
                 <div className="flex items-center justify-center w-full h-full text-gray-600">
