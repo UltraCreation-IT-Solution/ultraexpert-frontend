@@ -14,8 +14,6 @@ import { AiOutlineLike } from "react-icons/ai";
 import { IoMdShareAlt } from "react-icons/io";
 import {
   MdSpaceDashboard,
-  MdInsertPageBreak,
-  MdOutlineStarBorderPurple500,
   MdOpenInNew,
   MdOutlineContentCopy,
   MdOutlineEdit,
@@ -48,7 +46,6 @@ import {
 import { PiCrownFill } from "react-icons/pi";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import BookingCard from "../../subsitutes/BookingCard";
-import { expertDashInfo as expert } from "../../constant";
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -1246,7 +1243,7 @@ export const Dashboard = () => {
         </div>
 
         {/* Meetings section of dashboard */}
-        {meetings && (
+        {/* {meetings && (
           <div>
             {expert?.recentMeetings?.map((item, idx) => (
               <div
@@ -1277,7 +1274,7 @@ export const Dashboard = () => {
               </div>
             ))}
           </div>
-        )}
+        )} */}
         {/* Blogs section of dashboard */}
         {blogs && (
           <ShowBlogs
@@ -1511,7 +1508,7 @@ export const Chats = () => {
       </div>
       <div className="mt-6 flex gap-5">
         <div className="w-full">
-          {expert?.chats.map((item) => (
+          {/* {expert?.chats.map((item) => (
             <div
               className="cursor-default px-2 py-3 flex items-center gap-4 border border-solid border-slate-200"
               onClick={() =>
@@ -1531,7 +1528,7 @@ export const Chats = () => {
               </div>
               <div className="ml-auto text-xs shrink-0">{item?.lastSeen}</div>
             </div>
-          ))}
+          ))} */}
         </div>
         {chatDetail && (
           <div className="w-[100%] bg-red-600">
