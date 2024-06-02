@@ -435,7 +435,7 @@ const CreateService = () => {
                   {filterCategoriesArray.length === 0 &&
                     categoryInputValue.trim().length > 0 && (
                       <div
-                        className="bg-blue-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer "
+                        className="btnBlack text-white rounded-sm px-4 py-2 w-fit cursor-pointer "
                         onClick={(e) => {
                           setNewCategory(e);
                           setSelectedCategory({
@@ -444,12 +444,12 @@ const CreateService = () => {
                           });
                         }}
                       >
-                        Add Category
+                        + Add Category
                       </div>
                     )}
                 </div>
               )}
-              {/* <label htmlFor="skill" className="text-lg mb-1">
+              <label htmlFor="skill" className="text-lg mb-1">
                 Served Skill
               </label>
               <input
@@ -478,7 +478,7 @@ const CreateService = () => {
                     );
                   })}
                 </div>
-              )} */}
+              )}
               <div className="flex justify-center mx-auto flex-col w-full mb-4">
                 <label htmlFor="tags" className="text-lg mb-1 font-bold">
                   Tags
@@ -541,9 +541,9 @@ const CreateService = () => {
                   : inputTagValue.length > 0 && (
                       <button
                         onClick={() => handleNewSkillAdd(inputTagValue)}
-                        className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none bg-blue-500 text-white w-[30%] mt-2 mb-4"
+                        className="px-4 py-2 text-sm rounded-sm focus:outline-none btnBlack text-white w-fit mt-2 mb-4"
                       >
-                        Add Interest
+                       + Add Interest
                       </button>
                     )}
               </div>
@@ -611,7 +611,7 @@ const CreateService = () => {
                 <button
                   type="submit"
                   onClick={(e) => handleServiceCreate(e)}
-                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md shadow-md"
+                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white btnBlack rounded-sm"
                 >
                   Create time slots
                 </button>

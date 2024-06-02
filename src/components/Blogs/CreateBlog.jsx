@@ -338,7 +338,7 @@ const CreateBlog = () => {
                 {filterCategoriesArray.length === 0 &&
                   categoryInputValue.trim().length > 0 && (
                     <div
-                      className="bg-green-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer mt-2"
+                      className="btnBlack text-white rounded-sm px-4 py-2 w-fit cursor-pointer mt-2"
                       onClick={(e) => {
                         setNewCategory(e);
                         setValue2({
@@ -347,7 +347,7 @@ const CreateBlog = () => {
                         });
                       }}
                     >
-                      Add Category
+                     + Add Category
                     </div>
                   )}
               </div>
@@ -414,9 +414,9 @@ const CreateBlog = () => {
               : inputValue.length > 0 && (
                   <button
                     onClick={() => handleNewSkillAdd(inputValue)}
-                    className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none bg-green-500 text-white w-[30%] mt-2"
+                    className="py-2 px-4 text-sm rounded-sm focus:outline-none btnBlack text-white w-fit mt-2"
                   >
-                    Add Interest
+                    + Add Interest
                   </button>
                 )}
           </div>
