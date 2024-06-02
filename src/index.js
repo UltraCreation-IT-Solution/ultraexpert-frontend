@@ -45,7 +45,6 @@ import SignUpAs from "./components/Auth/SignUpAs";
 import SignUpAsExpert from "./components/Auth/SignUpAsExpert";
 import SignUpAsCustomer from "./components/Auth/SignUpAsCustomer";
 import ForgotPassword from "./components/Auth/ForgotPassword";
-import EditProfileCustomer from "./components/Auth/EditProfileCustomer";
 import EditProfileExpert from "./components/Auth/EditProfileExpert";
 import CreateService from "./components/Experts/CreateService";
 import CustomerDashboard, {
@@ -138,10 +137,10 @@ const appRouter = createBrowserRouter([
         path: "/loginiwthotp",
         element: <LoginWithOTP />,
       },
-      {
-        path: "/editprofilecustomer",
-        element: <EditProfileCustomer />,
-      },
+      // {
+      //   path: "/editprofilecustomer",
+      //   element: <EditProfileCustomer />,
+      // },
       {
         path: "/editprofileexpert",
         element: <EditProfileExpert />,
