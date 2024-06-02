@@ -14,10 +14,9 @@ import { AiOutlineLike } from "react-icons/ai";
 import { IoMdShareAlt } from "react-icons/io";
 import {
   MdSpaceDashboard,
-  MdInsertPageBreak,
-  MdOutlineStarBorderPurple500,
   MdOpenInNew,
   MdOutlineContentCopy,
+  MdOutlineEdit,
 } from "react-icons/md";
 import {
   BsFillPersonLinesFill,
@@ -27,25 +26,21 @@ import { IoIosArrowUp, IoIosArrowDown, IoMdSettings } from "react-icons/io";
 import {
   IoEyeSharp,
   IoPersonAdd,
-  IoSettings,
-  IoLocationOutline,
   IoBookmarksSharp,
   IoStar,
 } from "react-icons/io5";
 import {
   BsFillPatchCheckFill,
-  BsGlobe,
   BsThreeDotsVertical,
 } from "react-icons/bs";
 import {
   RiPagesFill,
-  RiArrowRightSLine,
   RiCustomerService2Fill,
+  RiDeleteBin6Fill,
 } from "react-icons/ri";
 import { PiCrownFill } from "react-icons/pi";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import BookingCard from "../../subsitutes/BookingCard";
-import { expertDashInfo as expert } from "../../constant";
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -66,7 +61,7 @@ import {
 } from "recharts";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import { Outlet, Link, useNavigate, useParams } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import UpdateProject from "./UpdateProjeect";
 import EditProfileExpert from "../Auth/EditProfileExpert";
@@ -392,10 +387,10 @@ export const TestimonialsCard = ({
         <div className="flex items-center justify-between text-sm font-semibold">
           <div className="text-sm ">{item?.date_created?.split("T")[0]}</div>
           <div className="flex items-center gap-3">
-            <FaEdit className="text-xl" onClick={handleEdit} />
+            <FaEdit className="text-xl text-blue-800" onClick={handleEdit} />
             <FaRegTrashAlt
               onClick={() => handleDeleteTestimonial(item.id)}
-              className="text-xl"
+              className="text-xl text-red-500"
             />
           </div>
         </div>
@@ -453,7 +448,7 @@ const ShowMyProjects = () => {
       {!addProjectOpen && (
         <div
           onClick={() => setAddProjectOpen(true)}
-          className="text-sm md:text-base text-white bg-emerald-500 rounded-md px-4 py-2 w-fit flex items-center gap-2 cursor-pointer"
+          className="text-sm md:text-base text-white btnBlack rounded-sm px-4 py-2 w-fit flex items-center gap-2 cursor-pointer"
         >
           Add or Edit a project <MdOpenInNew className="text-base ms:text-xl" />
         </div>
@@ -527,6 +522,62 @@ export const Dashboard = () => {
       );
     }, 500);
   }, [a, b, c]);
+  const changeAuth = async () => {
+    const getCookie = (name) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(";").shift();
+    };
+    const refresh_token = getCookie("refresh_token");
+    if (!refresh_token) {
+      //clear local storage and go back to login
+      localStorage.clear();
+      navigate("/login");
+    } else {
+      try {
+        const res = await axios.post(
+          "/refresh/",
+          {
+            refresh: `${refresh_token}`,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(res);
+        const expirationDateforAccess = new Date();
+        const expirationDateforRefresh = new Date();
+        expirationDateforAccess.setDate(expirationDateforAccess.getDate() + 7);
+        expirationDateforRefresh.setDate(
+          expirationDateforRefresh.getDate() + 8
+        );
+        document.cookie = `access_token=${
+          res.data.access
+        };expires=${expirationDateforAccess.toUTCString()};  SameSite=Lax;`;
+        document.cookie = `refresh_token=${
+          res.data.refresh
+        };expires=${expirationDateforRefresh.toUTCString()};  SameSite=Lax;`;
+        // localStorage.setItem("userId", `${res.data.id}`);
+        localStorage.setItem("username", `${res.data.user.first_name}`);
+        localStorage.setItem("profile", `${res.data.user.profile_img}`);
+        localStorage.setItem("isExpert", `${res.data.user.is_expert}`);
+        localStorage.setItem("isAuthor", `${res.data.user.is_author}`);
+        localStorage.setItem("isCustomer", `${res.data.user.is_customer}`);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+  useEffect(() => {
+    const isAuthChecked = sessionStorage.getItem("isAuthChecked");
+    if (!isAuthChecked) {
+      // If not, call the function and set the flag in sessionStorage
+      changeAuth();
+      sessionStorage.setItem("isAuthChecked", "true");
+    }
+  }, []);
   const [expertData, setExpertData] = useState({});
   const [expertStatistics, setExpertStatistics] = useState([]);
   const getCurrentExpert = async () => {
@@ -1146,7 +1197,7 @@ export const Dashboard = () => {
         </div>
 
         {/* Meetings section of dashboard */}
-        {meetings && (
+        {/* {meetings && (
           <div>
             {expert?.recentMeetings?.map((item, idx) => (
               <div
@@ -1177,7 +1228,7 @@ export const Dashboard = () => {
               </div>
             ))}
           </div>
-        )}
+        )} */}
         {/* Blogs section of dashboard */}
         {blogs && (
           <ShowBlogs
@@ -1294,7 +1345,7 @@ export const MyServices = () => {
       <div className="flex justify-between border-b border-solid border-slate-200 pb-3">
         <div className="text-xl font-bold">My services</div>
         <div
-          className="text-base cursor-pointer bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md text-white"
+          className="text-base cursor-pointer btnBlack px-4 py-2 rounded-sm text-white"
           onClick={() => {
             navigate("/expertdashboard/createservice");
           }}
@@ -1320,14 +1371,14 @@ export const MyServices = () => {
               className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md"
             >
               <div className="flex items-center gap-3">
-                <button className="bg-green-500 hover:bg-green-600 text-sm px-3 py-1 rounded-sm text-white cursor-pointer">
-                  Edit service
+                <button className="flex items-center gap-2 bg-white text-sm px-3 py-1 rounded-sm text-black cursor-pointer border border-solid border-black">
+                  <MdOutlineEdit size={18} /> Edit
                 </button>
                 <button
                   onClick={() => deleteService(service.id)}
-                  className="bg-red-500 hover:bg-red-600 text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
+                  className="flex gap-2 items-center btnBlack text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
                 >
-                  Delete service
+                  <RiDeleteBin6Fill size={15} /> Delete
                 </button>
               </div>
               <div
@@ -1368,7 +1419,7 @@ export const Chats = () => {
       </div>
       <div className="mt-6 flex gap-5">
         <div className="w-full">
-          {expert?.chats.map((item) => (
+          {/* {expert?.chats.map((item) => (
             <div
               className="cursor-default px-2 py-3 flex items-center gap-4 border border-solid border-slate-200"
               onClick={() =>
@@ -1388,7 +1439,7 @@ export const Chats = () => {
               </div>
               <div className="ml-auto text-xs shrink-0">{item?.lastSeen}</div>
             </div>
-          ))}
+          ))} */}
         </div>
         {chatDetail && (
           <div className="w-[100%] bg-red-600">
@@ -1423,10 +1474,10 @@ export const Leaderboard = () => {
         },
       });
       console.log(response.data);
-      const expData = response.data.data;
+      const expData = response.data;
       console.log(expData);
-      setLeaderBoardData(expData);
-      setUserData(response.data.user_data);
+      setLeaderBoardData(expData?.data);
+      setUserData(expData?.user_data);
       setWeeklyLeaderboard(true);
       setMonthlyLeaderboard(false);
     } catch (error) {
@@ -1502,8 +1553,7 @@ export const Leaderboard = () => {
                 {leaderBoardData[1]?.expert_last_name}
               </div>
               <div className="text-[#009BD6]">
-                {/* {leaderBoardData[1].avg_score}{" "}  */}
-                {"1"}
+                {leaderBoardData[1]?.avg_score}{" "} 
               </div>
             </div>
           </div>
@@ -1526,8 +1576,7 @@ export const Leaderboard = () => {
                 {leaderBoardData[0]?.expert_last_name}
               </div>
               <div className="text-[#FFAA00]">
-                {/* {leaderBoardData[0].avg_score}{" "} */}
-                {"1"}
+                {leaderBoardData[0]?.avg_score}{" "}
               </div>
             </div>
           </div>
@@ -1547,8 +1596,7 @@ export const Leaderboard = () => {
                 {leaderBoardData[2]?.expert_last_name}
               </div>
               <div className="text-[#00D95F]">
-                {/* {leaderBoardData[2]?.avg_score} */}
-                {"1"}
+                {leaderBoardData[2]?.avg_score}
               </div>
             </div>
           </div>

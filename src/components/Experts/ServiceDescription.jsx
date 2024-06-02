@@ -8,6 +8,7 @@ import axios from "../../axios";
 import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import ShowSchedule from "../../subsitutes/Schedule";
+import ExpertProfileShimmer from "../../subsitutes/Shimmers/ExpertProfileShimmer";
 
 export const ServiceProfileCard = ({ item }) => {
   const navigate = useNavigate();
@@ -681,7 +682,7 @@ const CommentCard = ({ servId, temp, getAllComments }) => {
 };
 
 const ServiceDescription = () => {
-  const [showChat, setShowChat] = useState(false);
+  const [shimmer, setShimmer] = useState(false);
   const params = useParams();
   const { id } = params;
 
@@ -695,6 +696,7 @@ const ServiceDescription = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+    setShimmer(true);
     try {
       const res = await axios.get(
         `/customers/services/?action=2&service_id=${id}`,
@@ -705,12 +707,24 @@ const ServiceDescription = () => {
           },
         }
       );
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        console.log(res.data.message);
+        setShimmer(false);
+        return;
+      }
       const json = res.data;
       setServDesc(json.data);
       setScheduleData(json.data);
+      setShimmer(false);
     } catch (error) {
       console.log(error);
     }
+    setShimmer(false);
   };
 
   useEffect(() => {
@@ -818,7 +832,13 @@ const ServiceDescription = () => {
   useEffect(() => {
     getAllServiceComments();
   }, []);
-  if (servDesc === null) return <div className="mt-100">wait</div>;
+  if(shimmer===true){
+    return (
+      <ExpertProfileShimmer/>
+    )
+  }
+  if (servDesc === null) return <div className="text-center font-bold text-lg md:text-2xl text-gray-600 mt-[100px]">Service description not found</div>;
+
   return (
     <>
       <div className="lg:flex mt-[100px] ">

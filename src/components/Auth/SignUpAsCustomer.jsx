@@ -74,6 +74,7 @@ const SignUpAsCustomer = () => {
       setLoading(false);
       console.log(data, personalInfo);
       localStorage.setItem("isExpert", `false`);
+      localStorage.setItem("isCustomer", `true`);
       localStorage.setItem("profile", `${personalInfo.profile_img}`);
       handleNext();
     } catch (error) {

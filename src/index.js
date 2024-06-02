@@ -45,7 +45,6 @@ import SignUpAs from "./components/Auth/SignUpAs";
 import SignUpAsExpert from "./components/Auth/SignUpAsExpert";
 import SignUpAsCustomer from "./components/Auth/SignUpAsCustomer";
 import ForgotPassword from "./components/Auth/ForgotPassword";
-import EditProfileCustomer from "./components/Auth/EditProfileCustomer";
 import EditProfileExpert from "./components/Auth/EditProfileExpert";
 import CreateService from "./components/Experts/CreateService";
 import CustomerDashboard, {
@@ -59,7 +58,7 @@ import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
 import SkillList from "./components/GetCertified/Instructions.js";
 import UpdateService from "./components/Services/UpdateService.jsx";
-import Payment from "./components/Payments/Payment";
+import TestElement from "./TestElement.jsx";
 
 const userId = "user123"; // Replace with actual user ID
 const amount = 1000; // Replace with actual amount
@@ -97,8 +96,8 @@ const appRouter = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: "/payment",
-        element: <Payment />,
+        path: "/testelement",
+        element: <TestElement />,
       },
       {
         path: "/login",
@@ -138,10 +137,10 @@ const appRouter = createBrowserRouter([
         path: "/loginiwthotp",
         element: <LoginWithOTP />,
       },
-      {
-        path: "/editprofilecustomer",
-        element: <EditProfileCustomer />,
-      },
+      // {
+      //   path: "/editprofilecustomer",
+      //   element: <EditProfileCustomer />,
+      // },
       {
         path: "/editprofileexpert",
         element: <EditProfileExpert />,

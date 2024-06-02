@@ -122,19 +122,20 @@ const EditBlog = () => {
           Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
+      console.log(res.data);
       console.log(res.data.data);
+      const json = res.data.data;
       setAllBlogData({
-        ...allBlogData,
-        title: res.data.data.title,
+        title: json.title,
         id: Number(params.id),
-        image: res.data.data.images_list,
-        content: res.data.data.content,
+        image: json.images_list,
+        content: json.content,
       });
       setValue2({
         ...value2,
-        name: res.data.data.blog_category.category,
+        name: json.blog_category.category,
       });
-      setSelectedSkill(res.data.data.tags_list);
+      setSelectedSkill(json.tags_list);
     } catch (error) {
       console.log(error);
     }
@@ -542,7 +543,7 @@ const EditBlog = () => {
         />
       </div>
       <div
-        className="text-base w-fit px-4 py-1 rounded-md bg-blue-500 text-white cursor-pointer hover:bg-blue-600"
+        className="text-base w-fit px-4 py-2 rounded-sm btnBlack text-white cursor-pointer"
         onClick={() => {
           setPreview(true);
           console.log(allBlogData.content);
@@ -566,14 +567,14 @@ const EditBlog = () => {
           />
           <div className="flex items-center gap-5 ">
             <div
-              className="text-base bg-blue-500 hover:bg-blue-600 rounded-md px-4 py-1 text-white w-fit cursor-pointer"
+              className="text-base bg-white rounded-sm px-4 py-2 text-black w-fit cursor-pointer border border-solid border-black"
               onClick={() => setPreview(false)}
             >
               Edit
             </div>
             <div
               onClick={blogCreated}
-              className="text-base bg-green-500 hover:bg-green-600 rounded-md px-4 py-1 text-white w-fit cursor-pointer"
+              className="text-base btnBlack rounded-sm px-4 py-2 text-white w-fit cursor-pointer"
             >
               Submit
             </div>

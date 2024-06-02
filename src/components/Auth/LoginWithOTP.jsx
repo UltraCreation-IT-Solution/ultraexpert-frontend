@@ -58,11 +58,6 @@ const LoginWithOTP = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        // const res = await fetch(
-        //   `http://localhost:8000/login/?email=${userEmail.email}`
-        // );
-        // const json = await res.json();
-        // console.log(json);
         const response = await axios.get(`/login/?email=${userEmail.email}`);
         const data = response.data;
         if (!data || data.status === 400 || data.status === 401) {
@@ -81,32 +76,37 @@ const LoginWithOTP = () => {
     setUserOtp({ ...userOtp, email: userEmail.email });
     if (validateForm2()) {
       try {
-        // const res = await fetch("http://localhost:8000/login/", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({ email: userEmail.email, otp: userOtp.otp }),
-        // });
-        const response = await axios.post(
+        const res = await axios.post(
           "/login/",
           { email: userEmail.email, otp: userOtp.otp },
           {
             headers: {
               "Content-Type": "application/json",
             },
-            // withCredentials: true,
           }
         );
-        const data = response.data;
-        // const json = await res.json();
-        // console.log(json);
+        const data = res.data;
         if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid OTP");
           return;
         }
-        document.cookie = `access_token=${response.data.access_token};  SameSite=Lax;`;
-        document.cookie = `refresh_token=${response.data.refresh_token};  SameSite=Lax;`;
+        const expirationDateforAccess = new Date();
+        const expirationDateforRefresh = new Date();
+        expirationDateforAccess.setDate(expirationDateforAccess.getDate() + 7);
+        expirationDateforRefresh.setDate(
+          expirationDateforRefresh.getDate() + 8
+        );
+        document.cookie = `access_token=${
+          res.data.access_token
+        };expires=${expirationDateforAccess.toUTCString()};  SameSite=Lax;`;
+        document.cookie = `refresh_token=${
+          res.data.refresh_token
+        };expires=${expirationDateforRefresh.toUTCString()};  SameSite=Lax;`;
+        localStorage.setItem("username", `${res.data.first_name}`);
+        localStorage.setItem("profile", `${res.data.profile_img}`);
+        localStorage.setItem("isExpert", `${res.data.is_expert}`);
+        localStorage.setItem("isAuthor", `${res.data.is_author}`);
+        localStorage.setItem("isCustomer", `${res.data.is_customer}`);
         alert("Login Successfull!");
         navigate("/");
         // console.log(data);

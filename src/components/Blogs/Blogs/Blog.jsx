@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { hotTopics } from "../../../constant";
 import { CiBookmark } from "react-icons/ci";
 import {
   FaTags,
@@ -12,14 +11,12 @@ import {
 import { FaPlus } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { BiSolidLike } from "react-icons/bi";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../../../subsitutes/Pagination";
 import { FaBookmark } from "react-icons/fa6";
 import axios from "../../../axios";
 import HorizontalCardShimmer from "../../../subsitutes/Shimmers/HorizontalCardShimmer";
-import SearchByCategoriesSlider from "../../../utilities/SearchByCategoriesSlider";
 
 export const BlogBody = ({
   getBlogsBySearch,
@@ -150,7 +147,7 @@ export const BlogBody = ({
   return (
     <>
       {/* Recent Blogs */}
-      <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
+     {!shimmer && <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
         <div className="text-xl lg:text-3xl font-extrabold ">Recent Blogs</div>
         <div className="mt-4 w-full h-auto flex gap-[2vw] overflow-scroll pb-4">
           {allBlogsArray.map((item) => {
@@ -202,7 +199,7 @@ export const BlogBody = ({
             );
           })}
         </div>
-      </div>
+      </div>}
 
       {/* blogs category wise */}
       <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
@@ -275,7 +272,7 @@ export const BlogBody = ({
           Hot Topics
         </div>
         <div className="mt-6 md:mt-[3vw] flex items-center gap-[2vw] overflow-x-scroll">
-          {hotTopics.map((temp, index) => (
+          {/* {hotTopics.map((temp, index) => (
             <div
               key={index}
               className="relative flex items-center justify-center w-[150px] h-[200px] md:w-[280px] md:h-[300px] shrink-0 object-cover rounded-md cursor-pointer"
@@ -289,7 +286,7 @@ export const BlogBody = ({
                 {temp?.topicName}
               </div>
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
       {/* All blogs */}
@@ -312,7 +309,7 @@ export const BlogBody = ({
               </div>
             ) : (
               allBlogsArray?.map((item, index) => (
-                <BlogCard
+                <BlogCardHorizontal
                   key={item.id}
                   index={index}
                   id={item.id}
@@ -347,7 +344,7 @@ export const SearchedBlog = ({ searchedBlogs }) => {
         </div>
       ) : (
         searchedBlogs?.map((item, index) => (
-          <BlogCard
+          <BlogCardHorizontal
             key={item.id}
             index={index}
             id={item.id}
@@ -367,35 +364,19 @@ const Author = ({ createAuthor }) => {
     console.log("author");
   }, [localStorage.getItem("isAuthor")]);
   return localStorage.getItem("isAuthor") === "true" ? (
-    <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
-      <div className="text-xl lg:text-3xl font-bold text-center px-5">
-        Write a Blog
-      </div>
-      <Link
-        to="createblog"
-        className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
-      >
-        Write a Blog
-      </Link>
+    <div className=" shrink-0 px-5 py-2 text-white bg-[#2A2A2A] text-xs sm:text-sm md:text-base font-semibold rounded-sm cursor-pointer w-fit">
+      <Link to="createblog">Write a Blog</Link>
     </div>
   ) : (
-    <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
-      <div className="flex flex-col px-5">
-        <div className="text-xl lg:text-3xl font-bold text-center">
-          Become an Author
-        </div>
-        <div className="text-center text-sm">(If you want to write a blog)</div>
-      </div>
-      <button
-        onClick={(e) => createAuthor(e)}
-        className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
-      >
-        Become an Author
-      </button>
+    <div
+      className="shrink-0 px-5 py-2 bg-[#2A2A2A] text-white text-xs sm:text-sm md:text-base font-semibold rounded-sm cursor-pointer w-fit"
+      onClick={(e) => createAuthor(e)}
+    >
+      Become an Author
     </div>
   );
 };
-export const BlogCard = ({
+export const BlogCardHorizontal = ({
   items,
   index,
   id,
@@ -475,7 +456,6 @@ export const BlogCard = ({
       console.log(error);
     }
   };
-  console.log(items);
   return (
     <div
       className={`w-full px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
@@ -559,7 +539,7 @@ const Blogs = () => {
   const [shimmer, setShimmer] = useState(false);
   // for pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(3);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
   const [lastPage, setLastPage] = useState(0);
   // for pagination
 
@@ -704,6 +684,7 @@ const Blogs = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+    setSearchedBlogs([]);
     setShimmer(true);
     try {
       const res = await axios.get(
@@ -711,7 +692,7 @@ const Blogs = () => {
         {
           headers: {
             "Content-Type": "application/json",
-             Authorization: `Bearer ${jsonData.access_token}`,
+            Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );
@@ -736,7 +717,7 @@ const Blogs = () => {
     }
   };
   useEffect(() => {
-    getBlogArray();
+    !showSearchedBlogs ? getBlogArray() : getBlogsBySearch(searchQuery);
   }, [currentPage]);
 
   //api call for all blogs
@@ -761,11 +742,14 @@ const Blogs = () => {
       return;
     }
     try {
-      const res = await axios.get(`/blogs/?action=8&query=${searchQuery} `, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await axios.get(
+        `/blogs/?action=8&query=${searchQuery}&page=${currentPage}&page_size=${itemsPerPage} `,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (
         !res.data ||
         res.data.status === 400 ||
@@ -774,9 +758,11 @@ const Blogs = () => {
       ) {
         return;
       }
-      const data = res.data.data;
+      console.log(res);
+      const data = res.data;
       setShowSearchedBlogs(true);
-      setSearchedBlogs(data);
+      setSearchedBlogs(data.data);
+      setLastPage(data.pagination.total_pages);
     } catch (error) {
       console.log(error);
     }
@@ -817,29 +803,33 @@ const Blogs = () => {
         ))}
       </div>
 
-      <div className="my-10 flex justify-center items-center h-[8vh]">
-        <input
-          className="h-full w-[84vw] sm:w-[66vw] md:w-[60vw] bg-[#ECECEC] rounded-r-none rounded-md pl-3 sm:pl-6 py-2 xs:text-sm sm:text-base md:text-lg outline-none"
-          type="text"
-          placeholder="Search for any blog"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && getBlogsBySearch(searchQuery)}
-        />
-        <div
-          className="h-full w-[6vw] py-2 bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all xs:text-sm sm:text-base md:text-lg rounded-l-none rounded-md flex justify-center items-center"
-          onClick={() => getBlogsBySearch(searchQuery)}
-        >
-          <FaSearch />
+      <div className="my-10 flex flex-col sm:flex-row justify-center sm:justify-between sm:items-center gap-5 sm:gap-10 sm:h-14 px-[8vw] md:px-[10vw]">
+        {localStorage.getItem("isExpert") === "true" ? (
+          <Author createAuthor={createAuthor} />
+        ) : null}
+        <div className="flex items-center w-[50rem] h-full">
+          <input
+            className="h-full w-[80vw] sm:w-[66vw] md:w-[60vw] bg-[#ECECEC] rounded-r-none rounded-md pl-3 sm:pl-6 py-2 xs:text-sm sm:text-base md:text-lg outline-none"
+            type="text"
+            placeholder="Search for any blog"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) =>
+              e.key === "Enter" &&
+              (getBlogsBySearch(searchQuery), setCurrentPage(1))
+            }
+          />
+          <div
+            className="h-full w-[6vw] py-2 bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all xs:text-sm sm:text-base md:text-lg rounded-l-none rounded-md flex justify-center items-center"
+            onClick={() => (getBlogsBySearch(searchQuery), setCurrentPage(1))}
+          >
+            <FaSearch />
+          </div>
         </div>
       </div>
-      {localStorage.getItem("isExpert") === "true" ? (
-        <Author createAuthor={createAuthor} />
-      ) : null}
-
       {showSearchedBlogs === true ? (
         shimmer ? (
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-4 px-[8vw] md:px-[10vw]">
             {Array.from({ length: itemsPerPage }).map((_, index) => (
               <HorizontalCardShimmer key={index} />
             ))}
@@ -849,13 +839,16 @@ const Blogs = () => {
             <div
               className="text-lg sm:text-xl font-semibold text-red-500 mt-10 md:mt-15 cursor-pointer flex gap-2 items-center px-[7vw] md:px-[10vw] no-underline ml-2 hover:ml-0 hover:gap-3 hover:underline transition-all w-fit"
               onClick={() => (
-                setShowSearchedBlogs(false), setSearchedBlogs([])
+                setShowSearchedBlogs(false),
+                setSearchedBlogs([]),
+                getBlogArray(),
+                setSearchQuery(""),
+                setCurrentPage(1)
               )}
             >
               <IoMdArrowRoundBack />
               Back
             </div>
-
             <SearchedBlog searchedBlogs={searchedBlogs} />
           </>
         )
