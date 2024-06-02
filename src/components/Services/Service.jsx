@@ -25,7 +25,6 @@ export const ServiceCard = ({ item }) => {
     navigate(`/experts/service/${serviceId}`);
   };
 
-
   const handleAddToFavorites = async (id) => {
     const cookie = document.cookie.split("; ");
     const jsonData = {};
@@ -101,7 +100,13 @@ export const ServiceCard = ({ item }) => {
         ) : FavService ? (
           <FaHeart onClick={() => handleRemoveFromFavorites(item.id)} />
         ) : (
-          <FaRegHeart onClick={() => handleAddToFavorites(item?.id)} />
+          <FaRegHeart
+            onClick={() =>
+              localStorage.getItem("username")
+                ? handleAddToFavorites(item?.id)
+                : navigate("/login")
+            }
+          />
         )}
       </div>
       <img
@@ -380,12 +385,13 @@ const Service = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={(e) =>
-            e.key === "Enter" && (getServicesByQuery(searchQuery),setCurrentPage(1))
+            e.key === "Enter" &&
+            (getServicesByQuery(searchQuery), setCurrentPage(1))
           }
         />
         <div
           className="h-full w-[6vw] py-2 bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all xs:text-sm sm:text-base md:text-lg rounded-l-none rounded-md flex justify-center items-center"
-          onClick={() => (getServicesByQuery(searchQuery),setCurrentPage(1))}
+          onClick={() => (getServicesByQuery(searchQuery), setCurrentPage(1))}
         >
           <FaSearch />
         </div>
@@ -477,12 +483,16 @@ const Service = () => {
                               onClick={() => remFav(item.id)}
                             >
                               <FaMinus />
-                              Added to Fav
+                              Remove from Fav
                             </div>
                           ) : (
                             <div
                               className="flex gap-2 items-center"
-                              onClick={() => addFav(item.id)}
+                              onClick={() =>
+                                localStorage.getItem("username")
+                                  ? addFav(item.id)
+                                  : navigate("/login")
+                              }
                             >
                               <FaPlus /> Add to Fav
                             </div>
@@ -515,9 +525,7 @@ const Service = () => {
                         key={service?.id}
                         className="cursor-pointer  min-w-[300px] max-w-[300px] md:min-w-[350px] md:max-w-[350px]"
                       >
-                        <ServiceCard
-                          item={service}
-                        />
+                        <ServiceCard item={service} />
                       </div>
                     ))}
                   </div>
@@ -599,12 +607,16 @@ const Service = () => {
                                 onClick={() => remFav(item.id)}
                               >
                                 <FaMinus />
-                                Rem from Fav
+                                Remove from Fav
                               </div>
                             ) : (
                               <div
                                 className="flex gap-2 items-center"
-                                onClick={() => addFav(item.id)}
+                                onClick={() =>
+                                  localStorage.getItem("username")
+                                    ? addFav(item.id)
+                                    : navigate("/login")
+                                }
                               >
                                 <FaPlus /> Add to Fav
                               </div>

@@ -44,6 +44,41 @@ export const BlogBody = ({
       const res = await axios.get("/blogs/?action=1", {
         headers: {
           "Content-Type": "application/json",
+          // Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const json = res.data.data;
+      const categorizedBlogs = {};
+      for (const category in json) {
+        categorizedBlogs[category] = json[category].map((blog) => ({
+          id: blog.id,
+          title: blog.title,
+          author_name: blog.author_name,
+          content: blog.content,
+          images: blog.images,
+          is_fav: blog.is_favorite,
+          views: blog.blog_view_count,
+          comments: blog.comment_count,
+          reactions: blog.reaction_count,
+          date: blog.date_created,
+        }));
+      }
+      setBlogsCategory(Object.entries(categorizedBlogs));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchBlogsByToken = async () => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get("/blogs/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
@@ -70,7 +105,7 @@ export const BlogBody = ({
   };
 
   useEffect(() => {
-    fetchBlogs();
+    localStorage.getItem("username") ? fetchBlogsByToken() : fetchBlogs();
   }, []);
 
   console.log(blogsCategory);
@@ -143,63 +178,72 @@ export const BlogBody = ({
       console.log(error);
     }
   };
+  const navigate = useNavigate();
 
   return (
     <>
       {/* Recent Blogs */}
-     {!shimmer && <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
-        <div className="text-xl lg:text-3xl font-extrabold ">Recent Blogs</div>
-        <div className="mt-4 w-full h-auto flex gap-[2vw] overflow-scroll pb-4">
-          {allBlogsArray.map((item) => {
-            return (
-              <div
-                key={item?.id}
-                className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
-              >
-                <img
-                  src={item?.images[0]}
-                  className="w-full h-[200px] object-cover shrink-0 md:mb-[0.7vw]"
-                  alt=""
-                />
-                <div className="px-[0.8vw] pt-2 md:pt-0">
-                  <div className="flex justify-between font-semibold text-sm text-[#808080]">
-                    <div>{item?.author_name}</div>
-                    <div>{formatDate(item?.updated_on)}</div>
-                  </div>
-                  <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
-                    {item?.title}
-                  </div>
-                  <div className="text-sm line-clamp-3 md:mb-[1vw]">
-                    {item?.content}
-                  </div>
-                  <div className="w-full flex text-white justify-between items-center my-2">
-                    <Link
-                      to={"blogdetail/" + item?.id}
-                      className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
-                    >
-                      Read More
-                    </Link>
-                    {localStorage.getItem("isExpert") === "true" ? (
-                      <></>
-                    ) : item?.is_favorite ? (
-                      <FaBookmark
-                        onClick={() => handleRemoveFavBlog(item.id)}
-                        className="text-black mx-2"
-                        size={35}
-                      />
-                    ) : (
-                      <CiBookmark
-                        onClick={() => handleAddFavBlog(item.id)}
-                        className="text-4xl xs:text-5xl text-black"
-                      />
-                    )}
+      {!shimmer && (
+        <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
+          <div className="text-xl lg:text-3xl font-extrabold ">
+            Recent Blogs
+          </div>
+          <div className="mt-4 w-full h-auto flex gap-[2vw] overflow-scroll pb-4">
+            {allBlogsArray.map((item) => {
+              return (
+                <div
+                  key={item?.id}
+                  className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
+                >
+                  <img
+                    src={item?.images[0]}
+                    className="w-full h-[200px] object-cover shrink-0 md:mb-[0.7vw]"
+                    alt=""
+                  />
+                  <div className="px-[0.8vw] pt-2 md:pt-0">
+                    <div className="flex justify-between font-semibold text-sm text-[#808080]">
+                      <div>{item?.author_name}</div>
+                      <div>{formatDate(item?.updated_on)}</div>
+                    </div>
+                    <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
+                      {item?.title}
+                    </div>
+                    <div className="text-sm line-clamp-3 md:mb-[1vw]">
+                      {item?.content}
+                    </div>
+                    <div className="w-full flex text-white justify-between items-center my-2">
+                      <Link
+                        to={"blogdetail/" + item?.id}
+                        className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
+                      >
+                        Read More
+                      </Link>
+                      {localStorage.getItem("isExpert") === "true" ? (
+                        <></>
+                      ) : item?.is_favorite ? (
+                        <FaBookmark
+                          onClick={() => handleRemoveFavBlog(item.id)}
+                          className="text-black mx-2"
+                          size={35}
+                        />
+                      ) : (
+                        <CiBookmark
+                          onClick={() =>
+                            localStorage.getItem("username")
+                              ? handleAddFavBlog(item.id)
+                              : navigate("/login")
+                          }
+                          className="text-4xl xs:text-5xl text-black"
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>}
+      )}
 
       {/* blogs category wise */}
       <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
@@ -251,7 +295,11 @@ export const BlogBody = ({
                             />
                           ) : (
                             <CiBookmark
-                              onClick={() => handleAddFavBlog(blog.id)}
+                              onClick={() =>
+                                localStorage.getItem("username")
+                                  ? handleAddFavBlog(blog.id)
+                                  : navigate("/login")
+                              }
                               className="text-4xl xs:text-5xl text-black"
                             />
                           )}
@@ -268,9 +316,9 @@ export const BlogBody = ({
 
       {/* Hot topics */}
       <div className="bg-[#F2F2F2] px-[2vw] py-[3vw] mt-20">
-        <div className="text-xl lg:text-3xl font-bold mt-4 text-center ">
+        {/* <div className="text-xl lg:text-3xl font-bold mt-4 text-center ">
           Hot Topics
-        </div>
+        </div> */}
         <div className="mt-6 md:mt-[3vw] flex items-center gap-[2vw] overflow-x-scroll">
           {/* {hotTopics.map((temp, index) => (
             <div
@@ -513,12 +561,16 @@ export const BlogCardHorizontal = ({
                       onClick={() => remFav(id)}
                     >
                       <FaMinus />
-                      Added to Fav
+                      Remove from Fav
                     </div>
                   ) : (
                     <div
                       className="flex gap-2 items-center"
-                      onClick={() => addFav(id)}
+                      onClick={() =>
+                        localStorage.getItem("username")
+                          ? addFav(id)
+                          : navigate("/login")
+                      }
                     >
                       <FaPlus /> Add to Fav
                     </div>
@@ -692,6 +744,46 @@ const Blogs = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            // Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        setShimmer(false);
+        return;
+      }
+      setLastPage(res.data.total_pages);
+      const allData = res.data.data.all;
+      console.log(res.data);
+      setAllBlogsArray(allData);
+      setShimmer(false);
+    } catch (error) {
+      console.log(error);
+      setShimmer(false);
+    }
+  };
+  const getBlogArrayByToken = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    setSearchedBlogs([]);
+    setShimmer(true);
+    try {
+      const res = await axios.get(
+        `/blogs/?action=1&page=${currentPage}&records_number=${itemsPerPage}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
@@ -717,7 +809,11 @@ const Blogs = () => {
     }
   };
   useEffect(() => {
-    !showSearchedBlogs ? getBlogArray() : getBlogsBySearch(searchQuery);
+    !showSearchedBlogs
+      ? localStorage.getItem("username")
+        ? getBlogArrayByToken()
+        : getBlogArray()
+      : getBlogsBySearch(searchQuery);
   }, [currentPage]);
 
   //api call for all blogs
