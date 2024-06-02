@@ -48,8 +48,8 @@ const BookingCard = ({ item }) => {
             <div className="text-sm mt-2">Start Time: {localStorage.getItem("isExpert")==="true"?  item?.time_slot_start:item?.time_slot_start   } </div>
             <div className="text-sm mt-2">End Time: {localStorage.getItem("isExpert")==="true"?  item?.time_slot_end:item?.time_slot_end   }</div>
             <div className="flex items-center gap-3">
-            <div className="text-sm mt-2 text-red-500 underline cursor-pointer">Disable service</div>
-            <div className="text-sm mt-2 text-red-500 underline cursor-pointer">Join meeting</div>
+            <button className="text-sm mt-2 btnBlack text-white cursor-pointer px-3 py-1">Disable service</button>
+            <button className="text-sm mt-2 text-black bg-white border border-solid border-black cursor-pointer px-3 py-1">Join meeting</button>
   
             </div>
           </div>

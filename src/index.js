@@ -36,7 +36,7 @@ import ExpertDashboard, {
   Chats,
   Dashboard,
   Leaderboard,
-  MyBookings,
+  MyBooking,
   MyServices,
 } from "./components/Experts/ExpertDashboard";
 import About from "./components/Other_Pages/About.jsx";
@@ -256,8 +256,8 @@ const appRouter = createBrowserRouter([
             element: <Leaderboard />,
           },
           {
-            path: "mybookings",
-            element: <MyBookings />,
+            path: "myBookings",
+            element: <MyBooking />,
           },
           {
             path: "getcertified",
