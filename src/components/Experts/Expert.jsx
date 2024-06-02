@@ -19,16 +19,22 @@ import ExpertCardShimmer from "../../subsitutes/Shimmers/ExpertCardShimmer";
 
 export const ExpertCard = ({ item, getAllExperts }) => {
   const navigate = useNavigate();
-  const [favExpert, setFavExpert] = useState(false);
+  const [favExpert, setFavExpert] = useState(item?.is_favorite || false);
+  
+  // useEffect(() => {
+  //   // This will log whenever favExpert changes, confirming the re-render
+  //   console.log("Favorite status changed:", favExpert); 
+  // }, [favExpert]);
+
   const cookie = document.cookie.split(";");
   const jsonData = {};
 
   cookie.forEach((item) => {
     const [key, value] = item.split("=");
-    jsonData[key] = value;
+    jsonData[key.trim()] = value;
   });
+
   const addFav = async () => {
-    // console.log(getAllExperts)
     try {
       const res = await axios.post(
         "/customers/connect/",
@@ -50,11 +56,11 @@ export const ExpertCard = ({ item, getAllExperts }) => {
       }
       console.log(json);
       setFavExpert(true);
-      getAllExperts();
     } catch (error) {
       console.log(error);
     }
   };
+
   const remFav = async () => {
     try {
       const res = await axios.post(
@@ -77,11 +83,11 @@ export const ExpertCard = ({ item, getAllExperts }) => {
       }
       console.log(json);
       setFavExpert(false);
-      getAllExperts();
     } catch (error) {
       console.log(error);
     }
   };
+
   const followExpert = async (id) => {
     try {
       const res = await axios.post(
@@ -108,6 +114,7 @@ export const ExpertCard = ({ item, getAllExperts }) => {
       console.log(error);
     }
   };
+
   const unfollowExpert = async (id) => {
     console.log(id);
     try {
@@ -135,19 +142,16 @@ export const ExpertCard = ({ item, getAllExperts }) => {
       console.log(error);
     }
   };
+
   return (
-    <div className="relative w-[90vw] h-[81vw] xs:w-[84vw] xs:h-[66vw] sm:w-[42vw] sm:h-[46vw] md:w-[38vw]  lg:w-[25vw] lg:h-[33vw] rounded-md md:rounded-lg shadow-lg my-[2vw] md:my-[0.65vw] border-[0.001vw] border-[#dbdbdb] border-solid overflow-hidden">
-      <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  ">
+    <div className="relative w-[90vw] h-[81vw] xs:w-[84vw] xs:h-[66vw] sm:w-[42vw] sm:h-[46vw] md:w-[38vw] lg:w-[25vw] lg:h-[33vw] rounded-md md:rounded-lg shadow-lg my-[2vw] md:my-[0.65vw] border-[0.001vw] border-[#dbdbdb] border-solid overflow-hidden">
+      <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid">
         {localStorage.getItem("isExpert") === "true" ? (
           <></>
-        ) : item?.is_favorite ? (
-          <FaHeart onClick={() => remFav()} />
+        ) : favExpert ? (
+          <FaHeart onClick={remFav} />
         ) : (
-          <FaRegHeart
-            onClick={() =>
-              localStorage.getItem("username") ? addFav() : navigate("/login")
-            }
-          />
+          <FaRegHeart onClick={() => (localStorage.getItem("username") ? addFav() : navigate("/login"))} />
         )}
       </div>
       <img
@@ -161,7 +165,7 @@ export const ExpertCard = ({ item, getAllExperts }) => {
         alt="profile"
       />
       <div className="absolute bottom-0 w-full h-[56%] sm:h-[65%] lg:h-4/6 px-[1.8vw] xs:px-[1.4vw] sm:px-[0.8vw]">
-        <div className=" font-semibold flex gap-[0.4vw] justify-end items-center text-[3vw] xs:text-[2.2vw] sm:text-[1.65vw] lg:text-[1.2vw] w-full text-[#434343]">
+        <div className="font-semibold flex gap-[0.4vw] justify-end items-center text-[3vw] xs:text-[2.2vw] sm:text-[1.65vw] lg:text-[1.2vw] w-full text-[#434343]">
           <FaStar className="text-yellow-400" /> {item?.avg_rating}/5
         </div>
         <div className="text-left flex flex-col gap-[0.75vw]">
@@ -178,27 +182,23 @@ export const ExpertCard = ({ item, getAllExperts }) => {
         <div className="w-full text-[#434343] text-[2.85vw] xs:text-[2.45vw] sm:text-[1.6vw] lg:text-[1vw] mt-[2vw] sm:mt-[1.45vw] lg:mt-[1vw] line-clamp-3">
           {item?.expert?.about_me}
         </div>
-        <div className="w-full mt-[2.8vw] sm:mt-[1.6vw] lg:mt-[1vw] flex flex-row sm:flex-col  justify-between gap-[1.6vw] lg:gap-[1vw] ">
-          <div className=" flex gap-[1vw] text-[3.2vw] xs:text-[2.5vw] sm:text-[1.65vw] lg:text-[1.12vw] items-center font-semibold">
+        <div className="w-full mt-[2.8vw] sm:mt-[1.6vw] lg:mt-[1vw] flex flex-row sm:flex-col justify-between gap-[1.6vw] lg:gap-[1vw]">
+          <div className="flex gap-[1vw] text-[3.2vw] xs:text-[2.5vw] sm:text-[1.65vw] lg:text-[1.12vw] items-center font-semibold">
             <FaVideo className="text-[3.6vw] xs:text-[2.8vw] sm:text-[1.85vw] lg:text-[1.25vw]" />
             {"60 meetings"}
           </div>
           <div className="flex gap-[1vw] items-center">
-            <FaTags className="text-[4.2vw] xs:text-[3vw] sm:text-[2vw] md:text-[1.8vw] lg:text-[1.25vw]" />{" "}
+            <FaTags className="text-[4.2vw] xs:text-[3vw] sm:text-[2vw] md:text-[1.8vw] lg:text-[1.25vw]" />
             {item?.skills_data?.skills_json && (
               <span className="flex">
-                {item?.skills_data?.skills_json
-                  ?.slice(0, 3)
-                  ?.map((skill, idx) => {
-                    return (
-                      <div
-                        key={idx}
-                        className="px-[2.65vw] xs:px-[2.2vw] sm:px-[1.8vw] lg:px-[1vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] text-[2.85vw] xs:text-[2.25vw] sm:text-[1.45vw] lg:text-[1vw] border border-[#e2e2e2] border-solid line-clamp-1"
-                      >
-                        {skill?.technology_name}
-                      </div>
-                    );
-                  })}
+                {item?.skills_data?.skills_json?.slice(0, 3)?.map((skill, idx) => (
+                  <div
+                    key={idx}
+                    className="px-[2.65vw] xs:px-[2.2vw] sm:px-[1.8vw] lg:px-[1vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] text-[2.85vw] xs:text-[2.25vw] sm:text-[1.45vw] lg:text-[1vw] border border-[#e2e2e2] border-solid line-clamp-1"
+                  >
+                    {skill?.technology_name}
+                  </div>
+                ))}
               </span>
             )}
           </div>
@@ -246,14 +246,16 @@ const AllExperts = () => {
   const [searchedExperts, setSearchedExperts] = useState([]);
   const [showSearchedExperts, setShowSearchedExperts] = useState(false);
 
-  const getAllExperts = async () => {
-    const cookies = document.cookie.split("; ");
+  const cookies = document.cookie.split("; ");
     const jsonData = {};
 
     cookies.forEach((item) => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+
+  const getAllExperts = async () => {
+    
     try {
       const res = await axios.get(
         `/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}`,
@@ -340,6 +342,7 @@ const AllExperts = () => {
         {
           headers: {
             "Content-Type": "application/json",
+             Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );
@@ -381,17 +384,17 @@ const AllExperts = () => {
         <div className="flex items-center h-10 px-5 mb-5 sm:mb-0">
           <input
             type="text"
-            className="w-72 md:w-96 h-full bg-[#ECECEC] text-base rounded-l-full outline-none  pl-4 "
+            className="w-72 md:w-[25rem] h-full bg-[#ECECEC] text-base rounded-l-full outline-none  pl-4 "
             placeholder="Search for experts"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => {
-              handleKeyPress(e);
+              handleKeyPress(e),setCurrentPage(1)
             }}
           />
           <div
-            className="rounded-r-full h-full bg-[#ECECEC] text-center flex justify-center items-center cursor-pointer pr-4"
-            onClick={() => searchExperts(searchQuery)}
+            className="rounded-r-full h-full bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all text-center flex justify-center items-center cursor-pointer pr-5"
+            onClick={() => (searchExperts(searchQuery),setCurrentPage(1))}
           >
             <FaSearch />
           </div>
@@ -406,7 +409,8 @@ const AllExperts = () => {
             setSearchQuery(""),
             localStorage.getItem("username")
               ? getAllExpertsWithToken()
-              : getAllExperts()
+              : getAllExperts(),
+            setCurrentPage(1)
           )}
         >
           <IoMdArrowRoundBack />

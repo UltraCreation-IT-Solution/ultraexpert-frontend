@@ -14,7 +14,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { expertDetailsObj } from "../../constant";
 import ProjectsCarousel from "../../subsitutes/ProjectCarousel";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
-import { BlogCard } from "../Blogs/Blogs/Blog";
+import { BlogCardHorizontal } from "../Blogs/Blogs/Blog";
 import ExpertProfileShimmer from "../../subsitutes/Shimmers/ExpertProfileShimmer";
 import axios from "../../axios";
 import HorizontalCardShimmer from "../../subsitutes/Shimmers/HorizontalCardShimmer";
@@ -763,7 +763,7 @@ export const ExpertInfo = ({ ...expert }) => {
               </div>
             ) : (
               blogArray.map((item, idx) => (
-                <BlogCard
+                <BlogCardHorizontal
                   key={item?.id}
                   index={idx}
                   items={item}

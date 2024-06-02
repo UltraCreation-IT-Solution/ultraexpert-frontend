@@ -1,10 +1,9 @@
 import React from "react";
-import { expertDetailsObj } from "../constant";
 import { IoEyeSharp } from "react-icons/io5";
 import { BiSolidLike } from "react-icons/bi";
 import { FaPlus, FaEdit, FaRegTrashAlt, FaTags, FaMinus } from "react-icons/fa";
 import { RiArrowRightSLine } from "react-icons/ri";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../axios";
 
 export const BlogCardHorizontal = ({

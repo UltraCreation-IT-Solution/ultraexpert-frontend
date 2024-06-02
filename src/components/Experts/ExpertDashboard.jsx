@@ -28,19 +28,15 @@ import { IoIosArrowUp, IoIosArrowDown, IoMdSettings } from "react-icons/io";
 import {
   IoEyeSharp,
   IoPersonAdd,
-  IoSettings,
-  IoLocationOutline,
   IoBookmarksSharp,
   IoStar,
 } from "react-icons/io5";
 import {
   BsFillPatchCheckFill,
-  BsGlobe,
   BsThreeDotsVertical,
 } from "react-icons/bs";
 import {
   RiPagesFill,
-  RiArrowRightSLine,
   RiCustomerService2Fill,
   RiDeleteBin6Fill,
 } from "react-icons/ri";
@@ -68,7 +64,7 @@ import {
 } from "recharts";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import { Outlet, Link, useNavigate, useParams } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import UpdateProject from "./UpdateProjeect";
 import EditProfileExpert from "../Auth/EditProfileExpert";
@@ -1481,10 +1477,10 @@ export const Leaderboard = () => {
         },
       });
       console.log(response.data);
-      const expData = response.data.data;
+      const expData = response.data;
       console.log(expData);
-      setLeaderBoardData(expData);
-      setUserData(response.data.user_data);
+      setLeaderBoardData(expData?.data);
+      setUserData(expData?.user_data);
       setWeeklyLeaderboard(true);
       setMonthlyLeaderboard(false);
     } catch (error) {
@@ -1560,8 +1556,7 @@ export const Leaderboard = () => {
                 {leaderBoardData[1]?.expert_last_name}
               </div>
               <div className="text-[#009BD6]">
-                {/* {leaderBoardData[1].avg_score}{" "}  */}
-                {"1"}
+                {leaderBoardData[1]?.avg_score}{" "} 
               </div>
             </div>
           </div>
@@ -1584,8 +1579,7 @@ export const Leaderboard = () => {
                 {leaderBoardData[0]?.expert_last_name}
               </div>
               <div className="text-[#FFAA00]">
-                {/* {leaderBoardData[0].avg_score}{" "} */}
-                {"1"}
+                {leaderBoardData[0]?.avg_score}{" "}
               </div>
             </div>
           </div>
@@ -1605,8 +1599,7 @@ export const Leaderboard = () => {
                 {leaderBoardData[2]?.expert_last_name}
               </div>
               <div className="text-[#00D95F]">
-                {/* {leaderBoardData[2]?.avg_score} */}
-                {"1"}
+                {leaderBoardData[2]?.avg_score}
               </div>
             </div>
           </div>
