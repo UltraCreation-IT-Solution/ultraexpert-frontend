@@ -1,51 +1,24 @@
 // src/components/FileUpload.js
 import React, { useState } from "react";
-import axios from "./axios";
+import { handleUploadImage } from "./constant";
 
 const FileUpload = () => {
-  const [file, setFile] = useState(null);
-  const [message, setMessage] = useState("");
-  const [imageURL, setImageURL] = useState("");
-
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+  const handleFileChange = async (e) => {
+    const url = await handleUploadImage(
+      e.target.files[0],
+      e.target.files[0].name
+    );
+    console.log(url);
   };
 
   //
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const cookies = document.cookie.split("; ");
-    const jsonData = {};
-    cookies.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const res = await axios.post("/image_upload/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
-      setImageURL(res.data.image_url);
-      setMessage("File uploaded successfully!");
-    } catch (err) {
-      console.error(err);
-      setMessage("Failed to upload file.");
-    }
-  };
 
   return (
     <div className="m-32">
-      <form onSubmit={handleSubmit}>
+      <form>
         <input type="file" onChange={handleFileChange} />
-        <button type="submit">Upload</button>
       </form>
-      {message && <p>{message}</p>}
-      {imageURL && <img src={imageURL} alt="Uploaded" />}
+      <img src="https://ultraxpert.s3.ap-south-1.amazonaws.com/3-Bhavesh-Bhanusali/06-02-2024/1234_20240602025951.png" />
     </div>
   );
 };

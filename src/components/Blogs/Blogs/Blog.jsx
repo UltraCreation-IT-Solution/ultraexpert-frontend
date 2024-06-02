@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { hotTopics } from "../../../constant";
 import { CiBookmark } from "react-icons/ci";
 import {
   FaTags,
@@ -273,7 +272,7 @@ export const BlogBody = ({
           Hot Topics
         </div>
         <div className="mt-6 md:mt-[3vw] flex items-center gap-[2vw] overflow-x-scroll">
-          {hotTopics.map((temp, index) => (
+          {/* {hotTopics.map((temp, index) => (
             <div
               key={index}
               className="relative flex items-center justify-center w-[150px] h-[200px] md:w-[280px] md:h-[300px] shrink-0 object-cover rounded-md cursor-pointer"
@@ -287,7 +286,7 @@ export const BlogBody = ({
                 {temp?.topicName}
               </div>
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
       {/* All blogs */}
