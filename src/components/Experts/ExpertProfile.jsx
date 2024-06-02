@@ -11,9 +11,7 @@ import { BiLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { BsBookmarkPlusFill, BsBookmarkDashFill } from "react-icons/bs";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { expertDetailsObj } from "../../constant";
 import ProjectsCarousel from "../../subsitutes/ProjectCarousel";
-import ShowBlogs from "../../subsitutes/ShowBlogs";
 import { BlogCard } from "../Blogs/Blogs/Blog";
 import ExpertProfileShimmer from "../../subsitutes/Shimmers/ExpertProfileShimmer";
 import axios from "../../axios";
@@ -371,9 +369,9 @@ export const ExpertRatings = ({ expert }) => {
             </option>
           </select>
         </div>
-        {expertDetailsObj.ratings.map((temp, idx) => (
+        {/* {expertDetailsObj.ratings.map((temp, idx) => (
           <RatingCard key={idx} {...temp} />
-        ))}
+        ))} */}
       </div>
       <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
         Show more
@@ -529,7 +527,7 @@ export const AboutExpert = ({ getExpertDetails, ...expert }) => {
                 <MdGroupAdd />
 
                 <div>
-                  {expertDetailsObj?.personalDetails?.meetingCount} Meetings
+                  {/* {expertDetailsObj?.personalDetails?.meetingCount} Meetings */}
                 </div>
               </div>
               <div className="py-2 flex gap-[0.3vw] justify-center items-center">
@@ -621,7 +619,7 @@ export const AchievementCard = ({ name, year, certificate }) => {
 
 export const ExpertInfo = ({ ...expert }) => {
   const location = useLocation();
-  console.log(location)
+  console.log(location);
 
   const [summary, setSummary] = useState(true);
   const [services, setServices] = useState(false);
@@ -674,7 +672,7 @@ export const ExpertInfo = ({ ...expert }) => {
 
   useEffect(() => {
     getBlogData();
-    if(location.state!==null && location.state.check===true){
+    if (location.state !== null && location.state.check === true) {
       setSummary(false);
       setServices(true);
       setRatings(false);
@@ -725,10 +723,8 @@ export const ExpertInfo = ({ ...expert }) => {
               services ? "font-semibold bg-[#EDEDED] " : null
             }`}
             onClick={() => MakeServicesTrue()}
-            
           >
-           Services
-            
+            Services
           </div>
           <div
             className={`cursor-pointer text-base sm:text-lg md:text-xl px-6 py-2 shrink-0 ${
