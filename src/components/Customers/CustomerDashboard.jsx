@@ -7,12 +7,12 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BsFillChatSquareTextFill } from "react-icons/bs";
 import { Link, Outlet } from "react-router-dom";
-import { customerDashboardInfo } from "../../constant";
 import BookingCard from "../../subsitutes/BookingCard";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import axios from "../../axios";
 import { imageDB } from "../firebase/config";
 import TextShimmer from "../../subsitutes/Shimmers/TextShimmer";
+import { handleUploadImage } from "../../constant";
 import {
   ref,
   uploadBytesResumable,
@@ -20,20 +20,14 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
+import { FiUpload } from "react-icons/fi";
 
 export const CustomerProfile = () => {
   const [userData, setUserData] = useState({});
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
-  // const [currData, setCurrData] = useState({
-  //   first_name: "",
-  //   last_name: "",
-  //   mobile_number: "",
-  //   profile_img: "",
-  //   gender: "",
-  //   marital_status: "",
-  // });
+  const [imageLoading, setImageLoading] = useState(false);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
 
@@ -71,49 +65,18 @@ export const CustomerProfile = () => {
     getUserData();
   }, []);
   const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-      const uploadTask = uploadBytesResumable(imgRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Get upload progress as a percentage
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setProgress(progress);
-        },
-        (error) => {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-        },
-        () => {
-          // Upload completed successfully
-          console.log("Upload complete");
-        }
-      );
-      setLoading(true);
-      try {
-        await uploadTask;
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log(url);
-        setLoading(false);
-        setImage(url);
-        setUserData({
-          ...userData,
-          profile_img: url,
-        });
-      } catch (error) {
-        console.error("Error uploading image: ", error);
-        setLoading(false);
-        // Handle error if needed
-        alert("Something went wrong");
-      }
-
-      reader.readAsDataURL(file);
-    }
+    setImageLoading(true);
+    const url = await handleUploadImage(
+      e.target.files[0],
+      e.target.files[0].name
+    );
+    console.log(url);
+    setImage(url);
+    setUserData({
+      ...userData,
+      profile_img: url,
+    });
+    setImageLoading(false);
   };
 
   const interest = [
@@ -190,6 +153,7 @@ export const CustomerProfile = () => {
       console.log(response.data);
       setLoading(false);
       setLoading(true);
+      localStorage.setItem("profile", userData.profile_img);
       try {
         const res = await axios.post(
           "/customers/",
@@ -308,7 +272,7 @@ export const CustomerProfile = () => {
           className={
             loading
               ? `bg-gray-300 px-4 py-2 rounded-md text-gray-500 cursor-not-allowed text-base`
-              : `text-base bg-green-500 px-4 py-2 rounded-md cursor-pointer text-white`
+              : `text-base btnBlack px-4 py-2 rounded-sm cursor-pointer text-white`
           }
         >
           Save Profile
@@ -427,7 +391,11 @@ export const CustomerProfile = () => {
               onChange={handleImageChange}
               className="hidden"
             />
-            {image && (
+            {imageLoading ? (
+              <div className="flex w-full h-full items-center justify-center text-center">
+                <span>Loading...</span>
+              </div>
+            ) : image ? (
               <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                 <img
                   src={image}
@@ -435,20 +403,25 @@ export const CustomerProfile = () => {
                   className="w-auto h-40 shrink-0 object-cover object-center m-2"
                 />
               </div>
+            ) : (
+              <div className="flex items-center justify-center w-full h-full text-gray-600">
+                <FiUpload className="w-10 h-10" />
+                <span className="ml-2">Upload Image</span>
+              </div>
             )}
           </div>
           <div className="flex justify-center mx-auto flex-col w-full my-8">
             <label htmlFor="interests" className="text-lg mb-1">
               Interests
             </label>
-            <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-              <div className="flex flex-wrap gap-2">
-                {selectedSkill.length > 0 ? (
-                  selectedSkill.map((skill, ind) => {
+            {selectedSkill.length > 0 && (
+              <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
+                <div className="flex flex-wrap gap-2">
+                  {selectedSkill.map((skill, ind) => {
                     return (
                       <div
                         key={ind}
-                        className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black"
+                        className="flex gap-2 px-4 py-1 text-sm rounded-lg bg-inherit border border-solid border-gray-300"
                       >
                         {skill}
                         <div
@@ -459,14 +432,10 @@ export const CustomerProfile = () => {
                         </div>
                       </div>
                     );
-                  })
-                ) : (
-                  <p className="text-gray-300 text-sm">
-                    Select skills of your interest from below.
-                  </p>
-                )}
+                  })}
+                </div>
               </div>
-            </div>
+            )}
             <input
               type="text"
               id="interests"
@@ -536,7 +505,7 @@ export const CustomerChats = () => {
       </div>
       <div className="mt-6 flex gap-5">
         <div className="w-full">
-          {customerDashboardInfo?.chats.map((item) => (
+          {/* {customerDashboardInfo?.chats.map((item) => (
             <div
               className="cursor-default px-2 py-3 flex items-center gap-4 border border-solid border-slate-200"
               onClick={() =>
@@ -556,7 +525,7 @@ export const CustomerChats = () => {
               </div>
               <div className="ml-auto text-xs shrink-0">{item?.lastSeen}</div>
             </div>
-          ))}
+          ))} */}
         </div>
         {chatDetail && (
           <div className="w-[100%] bg-red-600">
@@ -783,7 +752,61 @@ const CustomerDashboard = () => {
       console.log(error);
     }
   };
+  const changeAuth = async () => {
+    const getCookie = (name) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(";").shift();
+    };
+    const refresh_token = getCookie("refresh_token");
+    if (!refresh_token) {
+      //clear local storage and go back to login
+      localStorage.clear();
+      navigate("/login");
+    } else {
+      try {
+        const res = await axios.post(
+          "/refresh/",
+          {
+            refresh: `${refresh_token}`,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(res);
+        const expirationDateforAccess = new Date();
+        const expirationDateforRefresh = new Date();
+        expirationDateforAccess.setDate(expirationDateforAccess.getDate() + 7);
+        expirationDateforRefresh.setDate(
+          expirationDateforRefresh.getDate() + 8
+        );
+        document.cookie = `access_token=${
+          res.data.access
+        };expires=${expirationDateforAccess.toUTCString()};  SameSite=Lax;`;
+        document.cookie = `refresh_token=${
+          res.data.refresh
+        };expires=${expirationDateforRefresh.toUTCString()};  SameSite=Lax;`;
+        // localStorage.setItem("userId", `${res.data.id}`);
+        localStorage.setItem("username", `${res.data.user.first_name}`);
+        localStorage.setItem("profile", `${res.data.user.profile_img}`);
+        localStorage.setItem("isExpert", `${res.data.user.is_expert}`);
+        localStorage.setItem("isAuthor", `${res.data.user.is_author}`);
+        localStorage.setItem("isCustomer", `${res.data.user.is_customer}`);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
   useEffect(() => {
+    const isAuthChecked = sessionStorage.getItem("isAuthChecked");
+    if (!isAuthChecked) {
+      // If not, call the function and set the flag in sessionStorage
+      changeAuth();
+      sessionStorage.setItem("isAuthChecked", "true");
+    }
     getUserData();
   }, []);
   return (

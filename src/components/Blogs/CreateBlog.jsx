@@ -15,6 +15,8 @@ import {
 } from "firebase/storage";
 import { v4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import { handleUploadImage } from "../../constant";
+import { FiUpload } from "react-icons/fi";
 
 const CreateBlog = () => {
   const [value, setValue] = useState("");
@@ -35,52 +37,17 @@ const CreateBlog = () => {
 
   // code for uploading image for blog starts
   const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-      const uploadTask = uploadBytesResumable(imgRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Get upload progress as a percentage
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setUploadBannerProgress(progress);
-        },
-        (error) => {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-        },
-        () => {
-          // Upload completed successfully
-          console.log("Upload complete");
-        }
-      );
-      try {
-        await uploadTask;
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log(url);
-        setBlogData({ ...blogData, image: [url] });
-        setSelectedFile(url);
-        console.log(blogData);
-      } catch (error) {
-        console.error("Error uploading image: ", error);
-        // Handle error if needed
-        alert("Something went wrong");
-      }
-
-      reader.onload = () => {
-        setSelectedFile(reader.result);
-        reader.readAsDataURL(file);
-      };
-    } else {
-      // Handle the case where the user cancels the file selection
-      setSelectedFile(null);
-    }
+  const [imageLoading, setImageLoading] = useState(false);
+  const handleFileChange = async (e) => {
+    setImageLoading(true);
+    const url = await handleUploadImage(
+      e.target.files[0],
+      e.target.files[0].name
+    );
+    console.log(url);
+    setSelectedFile(url);
+    setBlogData({ ...blogData, image: url });
+    setImageLoading(false);
   };
   const removeImage = () => {
     setSelectedFile(null);
@@ -207,7 +174,7 @@ const CreateBlog = () => {
       console.log(data);
       setLoading(false);
       alert("Blog created successfully!");
-      navigate("/blogs");
+      navigate("/blog");
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -338,7 +305,7 @@ const CreateBlog = () => {
                 {filterCategoriesArray.length === 0 &&
                   categoryInputValue.trim().length > 0 && (
                     <div
-                      className="bg-green-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer mt-2"
+                      className="btnBlack text-white rounded-sm px-4 py-2 w-fit cursor-pointer mt-2"
                       onClick={(e) => {
                         setNewCategory(e);
                         setValue2({
@@ -347,7 +314,7 @@ const CreateBlog = () => {
                         });
                       }}
                     >
-                      Add Category
+                     + Add Category
                     </div>
                   )}
               </div>
@@ -414,9 +381,9 @@ const CreateBlog = () => {
               : inputValue.length > 0 && (
                   <button
                     onClick={() => handleNewSkillAdd(inputValue)}
-                    className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none bg-green-500 text-white w-[30%] mt-2"
+                    className="py-2 px-4 text-sm rounded-sm focus:outline-none btnBlack text-white w-fit mt-2"
                   >
-                    Add Interest
+                    + Add Interest
                   </button>
                 )}
           </div>
@@ -434,32 +401,22 @@ const CreateBlog = () => {
               onChange={handleFileChange}
               className="hidden"
             />
-            {selectedFile ? (
-              <div className="relative">
+            {imageLoading ? (
+              <div className="flex w-full h-full items-center justify-center text-center">
+              <span>Loading...</span>
+            </div>
+            ): selectedFile ?(
+              <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                 <img
                   src={selectedFile}
-                  alt="Selected preview"
-                  className="w-28 h-28 object-cover shrink-0 brightness-95 "
+                  alt="Preview"
+                  className="w-auto h-40 shrink-0 object-cover object-center m-2"
                 />
-                <div
-                  onClick={removeImage}
-                  className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
-                >
-                  <BsX className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full " />
-                </div>
               </div>
-            ) : (
-              <div className="flex flex-col items-center">
-                {uploadBannerProgress > 0 && uploadBannerProgress < 100 ? (
-                  <div>current progress: {uploadBannerProgress}%</div>
-                ) : (
-                  <>
-                    <BsUpload size={20} />
-                    <div className="text-sm text-[#1475cf] mt-2 text-center text-balance">
-                      Click here to attach or upload an image
-                    </div>
-                  </>
-                )}
+            ):(
+              <div className="flex items-center justify-center w-full h-full text-gray-600">
+                <FiUpload className="w-10 h-10" />
+                <span className="ml-2">Upload Image</span>
               </div>
             )}
           </div>
