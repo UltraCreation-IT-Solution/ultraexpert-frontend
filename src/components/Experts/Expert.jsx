@@ -20,6 +20,7 @@ import ExpertCardShimmer from "../../subsitutes/Shimmers/ExpertCardShimmer";
 export const ExpertCard = ({ item, getAllExperts }) => {
   const navigate = useNavigate();
   const [favExpert, setFavExpert] = useState(item?.is_favorite || false);
+  const [isFollowing, setIsFollowing] = useState(item?.is_following || false);
   
   // useEffect(() => {
   //   // This will log whenever favExpert changes, confirming the re-render
@@ -109,7 +110,7 @@ export const ExpertCard = ({ item, getAllExperts }) => {
         return;
       }
       console.log(json);
-      getAllExperts();
+      setIsFollowing(true);
     } catch (error) {
       console.log(error);
     }
@@ -137,7 +138,7 @@ export const ExpertCard = ({ item, getAllExperts }) => {
         return;
       }
       console.log(json);
-      getAllExperts();
+      setIsFollowing(false);
     } catch (error) {
       console.log(error);
     }
@@ -214,7 +215,7 @@ export const ExpertCard = ({ item, getAllExperts }) => {
           </Link>
           {localStorage.getItem("isExpert") === "false" && (
             <div>
-              {item.is_following === false ? (
+              {isFollowing === false ? (
                 <div
                   className="px-[4vw] xs:px-[3vw] sm:px-[2vw] py-[2vw] xs:py-[1.4vw] sm:py-[0.8vw] border-[0.02vw] border-[#a9a9a9] border-solid text-black rounded-sm sm:rounded lg:underline underline-offset-2 cursor-pointer"
                   onClick={() => followExpert(item?.expert?.id)}
