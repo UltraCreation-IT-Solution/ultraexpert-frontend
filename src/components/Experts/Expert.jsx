@@ -20,10 +20,10 @@ import ExpertCardShimmer from "../../subsitutes/Shimmers/ExpertCardShimmer";
 export const ExpertCard = ({ item, getAllExperts }) => {
   const navigate = useNavigate();
   const [favExpert, setFavExpert] = useState(item?.is_favorite || false);
-  
+
   // useEffect(() => {
   //   // This will log whenever favExpert changes, confirming the re-render
-  //   console.log("Favorite status changed:", favExpert); 
+  //   console.log("Favorite status changed:", favExpert);
   // }, [favExpert]);
 
   const cookie = document.cookie.split(";");
@@ -151,7 +151,11 @@ export const ExpertCard = ({ item, getAllExperts }) => {
         ) : favExpert ? (
           <FaHeart onClick={remFav} />
         ) : (
-          <FaRegHeart onClick={() => (localStorage.getItem("username") ? addFav() : navigate("/login"))} />
+          <FaRegHeart
+            onClick={() =>
+              localStorage.getItem("username") ? addFav() : navigate("/login")
+            }
+          />
         )}
       </div>
       <img
@@ -191,14 +195,16 @@ export const ExpertCard = ({ item, getAllExperts }) => {
             <FaTags className="text-[4.2vw] xs:text-[3vw] sm:text-[2vw] md:text-[1.8vw] lg:text-[1.25vw]" />
             {item?.skills_data?.skills_json && (
               <span className="flex">
-                {item?.skills_data?.skills_json?.slice(0, 3)?.map((skill, idx) => (
-                  <div
-                    key={idx}
-                    className="px-[2.65vw] xs:px-[2.2vw] sm:px-[1.8vw] lg:px-[1vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] text-[2.85vw] xs:text-[2.25vw] sm:text-[1.45vw] lg:text-[1vw] border border-[#e2e2e2] border-solid line-clamp-1"
-                  >
-                    {skill?.technology_name}
-                  </div>
-                ))}
+                {item?.skills_data?.skills_json
+                  ?.slice(0, 3)
+                  ?.map((skill, idx) => (
+                    <div
+                      key={idx}
+                      className="px-[2.65vw] xs:px-[2.2vw] sm:px-[1.8vw] lg:px-[1vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] text-[2.85vw] xs:text-[2.25vw] sm:text-[1.45vw] lg:text-[1vw] border border-[#e2e2e2] border-solid line-clamp-1"
+                    >
+                      {skill?.technology_name}
+                    </div>
+                  ))}
               </span>
             )}
           </div>
@@ -247,15 +253,14 @@ const AllExperts = () => {
   const [showSearchedExperts, setShowSearchedExperts] = useState(false);
 
   const cookies = document.cookie.split("; ");
-    const jsonData = {};
+  const jsonData = {};
 
-    cookies.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
 
   const getAllExperts = async () => {
-    
     try {
       const res = await axios.get(
         `/customers/experts?action=1&page=${currentPage}&records_number=${itemsPerPage}`,
@@ -342,7 +347,7 @@ const AllExperts = () => {
         {
           headers: {
             "Content-Type": "application/json",
-             Authorization: `Bearer ${jsonData.access_token}`,
+            Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );
@@ -389,12 +394,12 @@ const AllExperts = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => {
-              handleKeyPress(e),setCurrentPage(1)
+              handleKeyPress(e), setCurrentPage(1);
             }}
           />
           <div
             className="rounded-r-full h-full bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all text-center flex justify-center items-center cursor-pointer pr-5"
-            onClick={() => (searchExperts(searchQuery),setCurrentPage(1))}
+            onClick={() => (searchExperts(searchQuery), setCurrentPage(1))}
           >
             <FaSearch />
           </div>

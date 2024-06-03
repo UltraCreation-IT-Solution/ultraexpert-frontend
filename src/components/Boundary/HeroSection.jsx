@@ -77,7 +77,10 @@ export const WhatWeDo = () => {
         <div className="text-xl md:text-2xl font-bold">
           Extended design services
         </div>
-        <div className="ml-auto text-2xl md:text-3xl cursor-pointer shrink-0" onClick={() => navigate('/services')}>
+        <div
+          className="ml-auto text-2xl md:text-3xl cursor-pointer shrink-0"
+          onClick={() => navigate("/services")}
+        >
           <FaArrowRightLong />
         </div>
       </div>

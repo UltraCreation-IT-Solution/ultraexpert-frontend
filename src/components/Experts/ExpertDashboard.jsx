@@ -30,10 +30,7 @@ import {
   IoBookmarksSharp,
   IoStar,
 } from "react-icons/io5";
-import {
-  BsFillPatchCheckFill,
-  BsThreeDotsVertical,
-} from "react-icons/bs";
+import { BsFillPatchCheckFill, BsThreeDotsVertical } from "react-icons/bs";
 import {
   RiPagesFill,
   RiCustomerService2Fill,
@@ -389,7 +386,9 @@ export const TestimonialsCard = ({
     <div className="absolute">
       <div className="fixed z-50 bg-gray-300 bg-opacity-75 px-4 md:px-8 w-full inset-0 flex items-center justify-center">
         <div className="relative w-full max-w-md shadow-lg rounded-sm bg-white p-6 md:p-8">
-          <div className="text-center text-xl font-bold mb-6">Are you sure?</div>
+          <div className="text-center text-xl font-bold mb-6">
+            Are you sure?
+          </div>
           <div className="text-gray-600 mb-6 text-center">
             Do you want to delete this testimonial?
           </div>
@@ -1408,7 +1407,9 @@ export const MyServices = () => {
         <div className="absolute">
           <div className="fixed z-50 bg-gray-300 bg-opacity-75 px-4 md:px-8 w-full inset-0 flex items-center justify-center">
             <div className="relative w-full max-w-md shadow-lg rounded-sm bg-white p-6 md:p-8">
-              <h1 className="text-center text-xl font-bold mb-6">Are you sure?</h1>
+              <h1 className="text-center text-xl font-bold mb-6">
+                Are you sure?
+              </h1>
               <p className="text-gray-600 mb-6 text-center">
                 Do you want to delete this service?
               </p>
@@ -1638,7 +1639,7 @@ export const Leaderboard = () => {
                 {leaderBoardData[1]?.expert_last_name}
               </div>
               <div className="text-[#009BD6]">
-                {leaderBoardData[1]?.avg_score}{" "} 
+                {leaderBoardData[1]?.avg_score}{" "}
               </div>
             </div>
           </div>
@@ -1758,12 +1759,11 @@ export const Leaderboard = () => {
 };
 
 // export const MyBookings = ({ expertData, expertId }) => {
-  
+
 //   return (
-    
+
 //   );
 // };
-
 
 export const MyBooking = (expertData) => {
   const [shimmer, setShimmer] = useState(false);
@@ -1844,7 +1844,6 @@ export const MyBooking = (expertData) => {
   );
 };
 
-
 const ExpertDashboard = () => {
   const [showEditProfile, setShowEditProfile] = useState(false);
 
@@ -1904,8 +1903,6 @@ const ExpertDashboard = () => {
         console.error("Failed to copy: ", err);
       });
   };
-
-  
 
   return (
     <div
@@ -2052,9 +2049,7 @@ const ExpertDashboard = () => {
         <SkillList />
         {/* {expertData.length!==0 && <MyBookings {...expertData} />} */}
 
-        {expertData && expertId && (
-          <MyBooking expertData={expertData} />
-        )}
+        {expertData && expertId && <MyBooking expertData={expertData} />}
 
         {/* <MyBookings id={expertId} /> */}
       </Outlet>
