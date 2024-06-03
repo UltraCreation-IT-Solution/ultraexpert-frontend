@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { FiUpload, FiX, FiEdit } from "react-icons/fi";
-import { imageDB } from "../firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
 import axios from "../../axios";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { handleUploadImage } from "../../constant";

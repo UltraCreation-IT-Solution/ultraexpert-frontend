@@ -10,16 +10,8 @@ import { Link, Outlet } from "react-router-dom";
 import BookingCard from "../../subsitutes/BookingCard";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import axios from "../../axios";
-import { imageDB } from "../firebase/config";
 import TextShimmer from "../../subsitutes/Shimmers/TextShimmer";
 import { handleUploadImage } from "../../constant";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
 import { FiUpload } from "react-icons/fi";
 
 export const CustomerProfile = () => {

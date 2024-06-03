@@ -1,15 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
-import { BsUpload, BsX } from "react-icons/bs";
-import { imageDB } from "../firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
 import { handleUploadImage } from "../../constant";
 import { FiUpload } from "react-icons/fi";
 

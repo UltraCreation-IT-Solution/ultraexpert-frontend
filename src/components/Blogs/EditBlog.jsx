@@ -2,18 +2,8 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import QuillToolbar, { modules, formats } from "../../subsitutes/EditorToolbar";
-import { BsUpload } from "react-icons/bs";
-import { BsX } from "react-icons/bs";
 import axios from "../../axios";
 import DOMPurify from "dompurify";
-import { imageDB } from "../firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { handleUploadImage } from "../../constant";
 import { FiUpload } from "react-icons/fi";
@@ -22,61 +12,6 @@ const EditBlog = () => {
   const [preview, setPreview] = useState(false);
   const params = useParams();
   console.log(params.id);
-  // code for uploading image for blog starts
-  //   const [selectedFile, setSelectedFile] = useState(null);
-  //   const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
-  //   const handleFileChange = async (event) => {
-  //     const file = event.target.files[0];
-  //     if (file) {
-  //       const reader = new FileReader();
-  //       const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-  //       const uploadTask = uploadBytesResumable(imgRef, file);
-  //       uploadTask.on(
-  //         "state_changed",
-  //         (snapshot) => {
-  //           // Get upload progress as a percentage
-  //           const progress = Math.round(
-  //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-  //           );
-  //           setUploadBannerProgress(progress);
-  //         },
-  //         (error) => {
-  //           console.error("Error uploading image: ", error);
-  //           // Handle error if needed
-  //         },
-  //         () => {
-  //           // Upload completed successfully
-  //           console.log("Upload complete");
-  //         }
-  //       );
-  //       try {
-  //         await uploadTask;
-  //         const url = await getDownloadURL(uploadTask.snapshot.ref);
-  //         console.log(url);
-  //         setBlogData({ ...blogData, image: [url] });
-  //         setSelectedFile(url);
-  //         console.log(blogData);
-  //       } catch (error) {
-  //         console.error("Error uploading image: ", error);
-  //         // Handle error if needed
-  //         alert("Something went wrong");
-  //       }
-
-  //       reader.onload = () => {
-  //         setSelectedFile(reader.result);
-  //         reader.readAsDataURL(file);
-  //       };
-  //     } else {
-  //       // Handle the case where the user cancels the file selection
-  //       setSelectedFile(null);
-  //     }
-  //   };
-  //   const removeImage = () => {
-  //     setSelectedFile(null);
-  //     setUploadBannerProgress(0);
-  //     setBlogData({ ...blogData, image: [] });
-  //   };
-  // code for uploading image for blog ends
 
   const [categoriesArray, setCategoriesArray] = useState([]);
   const [filterCategoriesArray, setFilterCategoriesArray] = useState([]);
@@ -314,7 +249,7 @@ const EditBlog = () => {
     }
   };
 
-  const[loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   console.log(allBlogData);
 
@@ -418,7 +353,7 @@ const EditBlog = () => {
                   })}
                 </div>
               </div>
-            ) }
+            )}
 
             <input
               type="text"
@@ -469,9 +404,9 @@ const EditBlog = () => {
             />
             {imageLoading ? (
               <div className="flex w-full h-full items-center justify-center text-center">
-              <span>Loading...</span>
-            </div>
-            ): selectedFile ? (
+                <span>Loading...</span>
+              </div>
+            ) : selectedFile ? (
               <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                 <img
                   src={selectedFile}
@@ -479,7 +414,7 @@ const EditBlog = () => {
                   className="w-auto h-40 shrink-0 object-cover object-center m-2"
                 />
               </div>
-            ):(
+            ) : (
               <div className="flex items-center justify-center w-full h-full text-gray-600">
                 <FiUpload className="w-10 h-10" />
                 <span className="ml-2">Upload Image</span>
@@ -536,7 +471,11 @@ const EditBlog = () => {
             </div>
             <div
               onClick={blogCreated}
-              className={loading ? `text-base bg-gray-600 rounded-sm px-4 py-2 text-white w-fit cursor-pointer`:`text-base btnBlack rounded-sm px-4 py-2 text-white w-fit cursor-pointer`}
+              className={
+                loading
+                  ? `text-base bg-gray-600 rounded-sm px-4 py-2 text-white w-fit cursor-pointer`
+                  : `text-base btnBlack rounded-sm px-4 py-2 text-white w-fit cursor-pointer`
+              }
             >
               Submit
             </div>

@@ -1,18 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "../../axios";
-import { BsArrowLeftSquare, BsUpload, BsX } from "react-icons/bs";
 import {
   BiSolidCaretLeftSquare,
   BiSolidCaretRightSquare,
 } from "react-icons/bi";
-import { imageDB } from "../firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
 import { handleUploadImage } from "../../constant";
 import { FiUpload } from "react-icons/fi";
 
@@ -61,11 +52,10 @@ const GeneralDetails = () => {
     }
   };
 
-  
   useEffect(() => {
     getGenInfo();
   }, []);
-  
+
   const [generalInfo, setGeneralInfo] = useState({
     first_name: "",
     last_name: "",
@@ -75,7 +65,7 @@ const GeneralDetails = () => {
     banner_img: "",
     gender: "Male",
   });
-  
+
   const handleSubmit1 = async (e) => {
     e.preventDefault();
     const cookies = document.cookie.split("; ");
@@ -1487,7 +1477,7 @@ const AchDetails = () => {
       const updatedCertificates = [...prevAchInfo.certificate];
       updatedCertificates[ind] = url;
       return { ...prevAchInfo, certificate: updatedCertificates };
-    })
+    });
     setImageLoading(false);
   };
 
