@@ -136,6 +136,7 @@ const SignUpAsExpert = () => {
       );
 
       const data = response.data;
+      localStorage.setItem("expert_id", `${response.data.expert_id}`);
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
         setIsLoading(false);

@@ -48,7 +48,7 @@ const TestElement = () => {
           handleUploadImage={handleUploadImage}
           filename="cropped_image.jpg"
           onCropped={handleCroppedImage}
-          aspectRatio={9 / 16} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+          aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
         />
       </Modal>
     </div>

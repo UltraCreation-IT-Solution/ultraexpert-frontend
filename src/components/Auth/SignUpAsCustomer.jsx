@@ -115,6 +115,7 @@ const SignUpAsCustomer = () => {
         }
       );
       const data = response.data;
+      localStorage.setItem("customer_id", `${response.data.customer_id}`);
       if (!data) {
         console.log("Something went wrong");
         setLoading(false);
