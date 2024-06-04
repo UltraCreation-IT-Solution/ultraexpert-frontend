@@ -13,13 +13,15 @@ import axios from "../../axios";
 import TextShimmer from "../../subsitutes/Shimmers/TextShimmer";
 import { handleUploadImage } from "../../constant";
 import { FiUpload } from "react-icons/fi";
+import Modal from "../../Modal";
+import ImageUploader from "../../ImageUploader";
 
 export const CustomerProfile = () => {
   const [userData, setUserData] = useState({});
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [imageLoading, setImageLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const cookies = document.cookie.split("; ");
   const jsonData = {};
 
@@ -57,18 +59,30 @@ export const CustomerProfile = () => {
     getUserData();
   }, []);
   const handleImageChange = async (e) => {
-    setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setImage(url);
+    e.preventDefault();
+    if(e.target.files && e.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () =>{
+        setImage(reader.result);
+        setShowModal(true);
+      }
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
     setUserData({
       ...userData,
       profile_img: url,
-    });
-    setImageLoading(false);
+    })
+    setImage(null);
+    setShowModal(false);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setImage(null);
   };
 
   const interest = [
@@ -383,14 +397,13 @@ export const CustomerProfile = () => {
               onChange={handleImageChange}
               className="hidden"
             />
-            {imageLoading ? (
-              <div className="flex w-full h-full items-center justify-center text-center">
-                <span>Loading...</span>
-              </div>
-            ) : image ? (
+            <Modal show={showModal} onClose={closeModal}>
+              <ImageUploader image={image} handleUploadImage={handleUploadImage} filename="cropped_image.jpg" onCropped={handleCroppedImage} aspectRatio={1}/>
+            </Modal>
+            {userData?.profile_img ? (
               <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                 <img
-                  src={image}
+                  src={userData?.profile_img}
                   alt="Preview"
                   className="w-auto h-40 shrink-0 object-cover object-center m-2"
                 />
