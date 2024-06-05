@@ -3,6 +3,8 @@ import { FiUpload, FiX, FiEdit } from "react-icons/fi";
 import axios from "../../axios";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { handleUploadImage } from "../../constant";
+import ImageUploader from "../../ImageUploader";
+import Modal from "../../Modal";
 
 const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
   const [projects, setProjects] = useState([]);
@@ -15,7 +17,31 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
   const [tags, setTags] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [tagInput, setTagInput] = useState("");
+  const [myImage, setMyImage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
+
+  const onSelectFile = (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImage(reader.result);
+        setShowModal(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModal(false); // Close the modal after getting the URL
+    setMyImage(null); // Reset the image state
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setMyImage(null); // Reset the image state when modal is closed
+  };
 
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -212,10 +238,10 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleImageUpload}
+                onChange={onSelectFile}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              {imageLoading ? (
+              {/* {imageLoading ? (
                 <div className="flex w-full h-full items-center justify-center text-center">
                   <span>Loading...</span>
                 </div>
@@ -232,8 +258,17 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
                   <FiUpload className="w-10 h-10" />
                   <span className="ml-2">Upload Image</span>
                 </div>
-              )}
+              )} */}
             </div>
+            <Modal show={showModal} onClose={closeModal}>
+              <ImageUploader
+                image={myImage}
+                handleUploadImage={handleUploadImage}
+                filename="cropped_image.jpg"
+                onCropped={handleCroppedImage}
+                aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+              />
+            </Modal>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}

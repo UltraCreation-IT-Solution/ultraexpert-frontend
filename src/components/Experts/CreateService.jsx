@@ -5,12 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import axios from "../../axios";
 import { FiUpload } from "react-icons/fi";
+import ImageUploader from "../../ImageUploader";
+import Modal from "../../Modal";
+import { handleUploadImage } from "../../constant";
 
 // slots
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { handleUploadImage } from "../../constant";
+// import { handleUploadImage } from "../../constant";
 //slots
 
 const CreateService = () => {
@@ -18,7 +21,28 @@ const CreateService = () => {
 
   const [interest, setInterest] = useState([]);
   const [interestInput, setInterestInput] = useState("");
+  const [myImage, setMyImage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const onSelectFile = (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImage(reader.result);
+        setShowModal(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
 
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModal(false); // Close the modal after getting the URL
+    setMyImage(null); // Reset the image state
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    setMyImage(null); // Reset the image state when modal is closed
+  };
   const addInterest = () => {
     if (interestInput.trim() !== "") {
       setInterest([...interest, interestInput.trim()]);
@@ -33,23 +57,22 @@ const CreateService = () => {
   };
   const [serviceTitle, setServiceTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
   const [imageUrl, setImageUrl] = useState(null);
   const [image, setImage] = useState(null);
 
   const [imageLoading, setImageLoading] = useState(false);
 
-  const handleFileChange = async (e) => {
-    setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setImage(url);
-    setImageUrl(url);
-    setImageLoading(false);
-  };
+  // const handleFileChange = async (e) => {
+  //   setImageLoading(true);
+  //   const url = await handleUploadImage(
+  //     e.target.files[0],
+  //     e.target.files[0].name
+  //   );
+  //   console.log(url);
+  //   setImage(url);
+  //   setImageUrl(url);
+  //   setImageLoading(false);
+  // };
   const handleImageRemove = () => {
     setImage("");
   };
@@ -525,7 +548,7 @@ const CreateService = () => {
                   id="imageSelector"
                   name="imageSelector"
                   accept="image/*"
-                  onChange={handleFileChange}
+                  onChange={onSelectFile}
                   className="hidden"
                 />
                 {/* {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
@@ -547,7 +570,7 @@ const CreateService = () => {
                 ) : (
                   
                 )} */}
-                {imageLoading ? (
+                {/* {imageLoading ? (
                   <div className="flex w-full h-full items-center justify-center text-center">
                     <span>Loading...</span>
                   </div>
@@ -564,8 +587,22 @@ const CreateService = () => {
                     <FiUpload className="w-10 h-10" />
                     <span className="ml-2">Upload Image</span>
                   </div>
-                )}
+                )} */}
               </div>
+              <Modal
+                className="w-full h-full overflow-scroll"
+                show={showModal}
+                onClose={closeModal}
+              >
+                <ImageUploader
+                  image={myImage}
+                  handleUploadImage={handleUploadImage}
+                  filename="cropped_image.jpg"
+                  onCropped={handleCroppedImage}
+                  aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                />
+              </Modal>
+
               <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
               <label htmlFor="price" className="text-lg mb-1">
                 Service Price
@@ -637,6 +674,8 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
   const [startInputTime, setStartInputTime] = useState("");
   const [endInputDate, setEndInputDate] = useState("");
   const [endInputTime, setEndInputTime] = useState("");
+
+  
   console.log(serviceId);
   const handlePostEvent = async (e) => {
     e.preventDefault();
@@ -717,7 +756,6 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
         currentDate.add(1, "day");
       }
       setEvents([...events, ...newEvents]);
-
       setStartInputDate("");
       setStartInputTime("");
       setEndInputDate("");
@@ -860,19 +898,12 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
         </button>
       </div>
       <Calendar
-        className="mt-4"
+        className={`mt-4`}
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
         style={{ height: 500 }}
-        onSelectEvent={(slot) => {
-          if (
-            window.confirm("Are you sure you want to delete this time slot?")
-          ) {
-            handleDeleteSlot(slot.id);
-          }
-        }}
       />
     </div>
   );
