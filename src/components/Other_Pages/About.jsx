@@ -85,7 +85,9 @@ const About = () => {
           <div className="text-base sm:text-lg font-bold text-sky-800 ">
             OUR MISSION
           </div>
-          <div className="text-xl sm:text-2xl font-bold ">What do we focus on?</div>
+          <div className="text-xl sm:text-2xl font-bold ">
+            What do we focus on?
+          </div>
           <div className="text-sm sm:text-[1.7vw] md:text-[1.5vw] lg:text-[1.1vw] mt-3 text-balance">
             By fostering a vibrant community of mentors and mentees, we strive
             to:
@@ -96,10 +98,14 @@ const About = () => {
                 share their expertise and insights.
               </li>
               <li className="mb-2">
-                <span className="font-bold">Unlock individual potential: </span>We empower individuals to develop their skills, overcome challenges, and achieve their personal and professional goals.
+                <span className="font-bold">Unlock individual potential: </span>
+                We empower individuals to develop their skills, overcome
+                challenges, and achieve their personal and professional goals.
               </li>
               <li>
-                <span className="font-bold">Drive business growth: </span>We equip businesses with the expert guidance they need to thrive in today's competitive landscape.
+                <span className="font-bold">Drive business growth: </span>We
+                equip businesses with the expert guidance they need to thrive in
+                today's competitive landscape.
               </li>
             </ul>
           </div>
@@ -111,10 +117,15 @@ const About = () => {
             OUR VISION
           </div>
           <div className="text-xl sm:text-2xl font-bold">
-          The Future of Learning - Personalized, Connected, and Empowering
+            The Future of Learning - Personalized, Connected, and Empowering
           </div>
           <div className="text-sm sm:text-[1.7vw] md:text-[1.5vw] lg:text-[1.1vw] mt-3 text-balance">
-          We envision a future where personalized learning is accessible to all, fueled by a global network of expert mentors.  Imagine a world where individuals can readily connect with the perfect mentor, regardless of location, to unlock their potential and achieve their aspirations.In this future, our platform will be the go-to destination for on-demand consulting and mentorship.
+            We envision a future where personalized learning is accessible to
+            all, fueled by a global network of expert mentors. Imagine a world
+            where individuals can readily connect with the perfect mentor,
+            regardless of location, to unlock their potential and achieve their
+            aspirations.In this future, our platform will be the go-to
+            destination for on-demand consulting and mentorship.
           </div>
         </div>
         <img
@@ -129,7 +140,8 @@ const About = () => {
             Special features of our website
           </div>
           <div className="text-sm md:text-base mt-2 md:mt-5 text-center">
-          Our website is designed to provide a seamless and enriching learning experience. 
+            Our website is designed to provide a seamless and enriching learning
+            experience.
           </div>
         </div>
         <div className="md:w-[55%] px-3 md:px-[1.5vw]">
@@ -137,20 +149,24 @@ const About = () => {
             <div className="flex items-start gap-4 my-4">
               <PiCheckCircleLight className="text-4xl shrink-0" />
               <div>
-                <div className="font-bold text-lg">Interactive One-on-One Sessions</div>
+                <div className="font-bold text-lg">
+                  Interactive One-on-One Sessions
+                </div>
                 <div className="text-sm text-gray-500 mt-1">
-                Engage in productive learning experiences through secure online video conferencing.
+                  Engage in productive learning experiences through secure
+                  online video conferencing.
                 </div>
               </div>
             </div>
             <div className="flex items-start gap-4 my-4">
               <PiCheckCircleLight className="text-4xl shrink-0" />
               <div>
-                <div className="font-bold text-lg">
-                Live Mentorship
-                </div>
+                <div className="font-bold text-lg">Live Mentorship</div>
                 <div className="text-sm text-gray-500 mt-1">
-                Experience the power of real-time interaction with your mentor. Ask questions, receive immediate feedback, and participate in dynamic discussions to accelerate your learning curve.
+                  Experience the power of real-time interaction with your
+                  mentor. Ask questions, receive immediate feedback, and
+                  participate in dynamic discussions to accelerate your learning
+                  curve.
                 </div>
               </div>
             </div>
@@ -159,16 +175,22 @@ const About = () => {
               <div>
                 <div className="font-bold text-lg">Progress Tracking</div>
                 <div className="text-sm text-gray-500 mt-1">
-                Monitor your progress and measure your learning outcomes through an integrated progress tracking system.
+                  Monitor your progress and measure your learning outcomes
+                  through an integrated progress tracking system.
                 </div>
               </div>
             </div>
             <div className="flex items-start gap-4 my-4">
               <PiCheckCircleLight className="text-4xl shrink-0" />
               <div>
-                <div className="font-bold text-lg">Effortless Expert Matching</div>
+                <div className="font-bold text-lg">
+                  Effortless Expert Matching
+                </div>
                 <div className="text-sm text-gray-500 mt-1">
-                Find your perfect mentor with our intuitive search and filtering tools. Narrow down your options based on domain expertise, experience level, location, and preferred engagement model.
+                  Find your perfect mentor with our intuitive search and
+                  filtering tools. Narrow down your options based on domain
+                  expertise, experience level, location, and preferred
+                  engagement model.
                 </div>
               </div>
             </div>
@@ -182,7 +204,8 @@ const About = () => {
             Want to add your testimonial ?
           </div>
           <div className="mt-3 text-sm text-gray-600 text-center">
-          Your story can motivate others seeking mentorship to take the first step towards their goals.
+            Your story can motivate others seeking mentorship to take the first
+            step towards their goals.
           </div>
         </div>
         <div className="md:w-[60%] mt-10 md:mt-0">
@@ -196,7 +219,11 @@ const About = () => {
             className="min-w-full max-w-full border border-solid border-slate-400 text-base rounded-md p-2"
           ></textarea>
           <div
-            className={loading ? `text-gray-500 bg-gray-300 px-6 py-3 mt-3 rounded-sm w-fit ml-auto` : `px-6 py-2 mt-3 text-white bg-[#2A2A2A] rounded-sm w-fit ml-auto cursor-pointer`}
+            className={
+              loading
+                ? `text-gray-500 bg-gray-300 px-6 py-3 mt-3 rounded-sm w-fit ml-auto`
+                : `px-6 py-2 mt-3 text-white bg-[#2A2A2A] rounded-sm w-fit ml-auto cursor-pointer`
+            }
             onClick={() => handleTestimonialSubmit()}
           >
             Submit

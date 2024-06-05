@@ -2,79 +2,17 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import QuillToolbar, { modules, formats } from "../../subsitutes/EditorToolbar";
-import { BsUpload } from "react-icons/bs";
-import { BsX } from "react-icons/bs";
 import axios from "../../axios";
 import DOMPurify from "dompurify";
-import { imageDB } from "../firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { handleUploadImage } from "../../constant";
+import { FiUpload } from "react-icons/fi";
 
 const EditBlog = () => {
+  const navigate = useNavigate();
   const [preview, setPreview] = useState(false);
   const params = useParams();
   console.log(params.id);
-  // code for uploading image for blog starts
-  //   const [selectedFile, setSelectedFile] = useState(null);
-  //   const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
-  //   const handleFileChange = async (event) => {
-  //     const file = event.target.files[0];
-  //     if (file) {
-  //       const reader = new FileReader();
-  //       const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-  //       const uploadTask = uploadBytesResumable(imgRef, file);
-  //       uploadTask.on(
-  //         "state_changed",
-  //         (snapshot) => {
-  //           // Get upload progress as a percentage
-  //           const progress = Math.round(
-  //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-  //           );
-  //           setUploadBannerProgress(progress);
-  //         },
-  //         (error) => {
-  //           console.error("Error uploading image: ", error);
-  //           // Handle error if needed
-  //         },
-  //         () => {
-  //           // Upload completed successfully
-  //           console.log("Upload complete");
-  //         }
-  //       );
-  //       try {
-  //         await uploadTask;
-  //         const url = await getDownloadURL(uploadTask.snapshot.ref);
-  //         console.log(url);
-  //         setBlogData({ ...blogData, image: [url] });
-  //         setSelectedFile(url);
-  //         console.log(blogData);
-  //       } catch (error) {
-  //         console.error("Error uploading image: ", error);
-  //         // Handle error if needed
-  //         alert("Something went wrong");
-  //       }
-
-  //       reader.onload = () => {
-  //         setSelectedFile(reader.result);
-  //         reader.readAsDataURL(file);
-  //       };
-  //     } else {
-  //       // Handle the case where the user cancels the file selection
-  //       setSelectedFile(null);
-  //     }
-  //   };
-  //   const removeImage = () => {
-  //     setSelectedFile(null);
-  //     setUploadBannerProgress(0);
-  //     setBlogData({ ...blogData, image: [] });
-  //   };
-  // code for uploading image for blog ends
 
   const [categoriesArray, setCategoriesArray] = useState([]);
   const [filterCategoriesArray, setFilterCategoriesArray] = useState([]);
@@ -100,12 +38,7 @@ const EditBlog = () => {
     number: "",
   });
 
-  const [allBlogData, setAllBlogData] = useState({
-    title: "",
-    id: "",
-    image: [],
-    content: "",
-  });
+  const [allBlogData, setAllBlogData] = useState({});
 
   const getBlogData = async () => {
     const cookie = document.cookie.split("; ");
@@ -125,16 +58,13 @@ const EditBlog = () => {
       console.log(res.data);
       console.log(res.data.data);
       const json = res.data.data;
-      setAllBlogData({
-        title: json.title,
-        id: Number(params.id),
-        image: json.images_list,
-        content: json.content,
-      });
+      setAllBlogData(json);
       setValue2({
         ...value2,
+        number: json.blog_category.category_id,
         name: json.blog_category.category,
       });
+      setSelectedFile(json.images_list);
       setSelectedSkill(json.tags_list);
     } catch (error) {
       console.log(error);
@@ -255,57 +185,22 @@ const EditBlog = () => {
 
   //   const [content, setContent] = useState(allBlogData.content);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
+  const [imageLoading, setImageLoading] = useState(false);
   const removeImage = () => {
     setSelectedFile(null);
     setUploadBannerProgress(0);
-    setAllBlogData({ ...allBlogData, image: [] });
+    setAllBlogData({ ...allBlogData, images_list: [] });
   };
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-      const uploadTask = uploadBytesResumable(imgRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Get upload progress as a percentage
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setUploadBannerProgress(progress);
-        },
-        (error) => {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-        },
-        () => {
-          // Upload completed successfully
-          console.log("Upload complete");
-        }
-      );
-      try {
-        await uploadTask;
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        console.log(url);
-        setAllBlogData({ ...allBlogData, image: [url] });
-        setSelectedFile(url);
-        console.log(allBlogData);
-      } catch (error) {
-        console.error("Error uploading image: ", error);
-        // Handle error if needed
-        alert("Something went wrong");
-      }
-
-      reader.onload = () => {
-        setSelectedFile(reader.result);
-        reader.readAsDataURL(file);
-      };
-    } else {
-      // Handle the case where the user cancels the file selection
-      setSelectedFile(null);
-    }
+  const handleFileChange = async (e) => {
+    setImageLoading(true);
+    const url = await handleUploadImage(
+      e.target.files[0],
+      e.target.files[0].name
+    );
+    console.log(url);
+    setSelectedFile(url);
+    setAllBlogData({ ...allBlogData, images_list: [url] });
+    setImageLoading(false);
   };
   const blogCreated = async (e) => {
     e.preventDefault();
@@ -315,11 +210,7 @@ const EditBlog = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    // console.log(value2?.number);
-    // console.log(blogData);
-    // console.log(value);
-    // console.log(blogData.title);
-    // console.log(blogData.service_ll);
+    setLoading(true);
     try {
       const res = await axios.post(
         "/blogs/",
@@ -330,7 +221,7 @@ const EditBlog = () => {
           content_json: allBlogData.content,
           category_id: value2.number,
           service_link_list: [],
-          image_url_list: allBlogData.image,
+          image_url_list: allBlogData.images_list,
           tags_list: selectedSkill,
         },
         {
@@ -345,15 +236,21 @@ const EditBlog = () => {
         console.log("Something went wrong");
         return;
       }
-      alert("Blog Updated");
+      setLoading(false);
+      alert("Blog Updated Successfully");
       console.log(data);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
+    navigate("/blog");
   };
 
+  const [loading, setLoading] = useState(false);
+
+  console.log(allBlogData);
+
   const [categoryInputValue, setCategoryInputValue] = useState("");
-  const navigate = useNavigate();
   return (
     <div className="mt-[100px] mx-[7vw] ">
       <div className="md:flex items-start gap-10 ">
@@ -367,7 +264,7 @@ const EditBlog = () => {
               onChange={(e) =>
                 setAllBlogData({ ...allBlogData, title: e.target.value })
               }
-              className="w-full mt-1 border border-solid border-slate-300 p-2 text-sm rounded-sm focus:outline-none"
+              className="w-full mt-1 border border-solid border-gray-200 p-2 text-sm rounded-sm focus:outline-none"
             />
           </div>
           <div className="mt-5 relative overflow-visible">
@@ -380,56 +277,65 @@ const EditBlog = () => {
               value={value2?.name}
               onChange={(e) => handleCategoryChange(e)}
               onFocus={() => getCategories()}
-              className="w-full mt-1 border border-solid border-slate-300 p-2 text-sm rounded-sm focus:outline-none"
+              className="w-full mt-1 border border-solid border-gray-200 p-2 text-sm rounded-sm focus:outline-none"
             />
             {categoriesArray.length > 0 && (
-              <div className={`  px-1 text-sm rounded-sm mt-2 w-fit min-h-auto max-h-[150px] overflow-y-auto ${filterCategoriesArray.length > 0 ? "border border-solid border-slate-300" : ""}`}>
-                {
-                  filterCategoriesArray?.map((item, index) => (
-                    <div
-                      key={index}
-                      className="text-sm text-center text-gray-600 px-3 py-2 border-b border-solid border-slate-300 pb-2 cursor-pointer"
-                      onClick={() => {
-                        setValue2({
-                          ...value2,
-                          name: item?.name,
-                          number: item?.number,
-                        });
-
-                        setFilterCategoriesArray([]);
-                        setCategoryInputValue("");
-                      }}
-                    >
-                      {item?.name}
-                    </div>
-                  ))}
-              </div>
-            )}
-            {filterCategoriesArray.length === 0 && categoryInputValue.trim()!=="" && (
               <div
-                className="bg-green-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer mt-2"
-                onClick={(e) => {
-                  setNewCategory(e);
-                  setValue2({ ...value2, number: categoriesArray.length + 1 });
-                  alert("Category Added");
-                }}
+                className={`  px-1 text-sm rounded-sm mt-2 w-fit min-h-auto max-h-[150px] overflow-y-auto ${
+                  filterCategoriesArray.length > 0
+                    ? "border border-solid border-slate-300"
+                    : ""
+                }`}
               >
-                Add Category
+                {filterCategoriesArray?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="text-sm text-center text-gray-600 px-3 py-2 border-b border-solid border-slate-300 pb-2 cursor-pointer"
+                    onClick={() => {
+                      setValue2({
+                        ...value2,
+                        name: item?.name,
+                        number: item?.number,
+                      });
+
+                      setFilterCategoriesArray([]);
+                      setCategoryInputValue("");
+                    }}
+                  >
+                    {item?.name}
+                  </div>
+                ))}
               </div>
             )}
+            {filterCategoriesArray.length === 0 &&
+              categoryInputValue.trim() !== "" && (
+                <div
+                  className="btnBlack text-white rounded-sm px-4 py-2 w-fit cursor-pointer mt-2"
+                  onClick={(e) => {
+                    setNewCategory(e);
+                    setValue2({
+                      ...value2,
+                      number: categoriesArray.length + 1,
+                    });
+                    alert("Category Added");
+                  }}
+                >
+                  + Add Category
+                </div>
+              )}
           </div>
           <div className="flex justify-center mx-auto flex-col w-full mt-5">
             <label htmlFor="tags" className="text-lg mb-1 font-bold">
               Tags
             </label>
-            <div className="border border-solid border-gray-300 px-2 rounded-md mb-4">
-              <div className="flex flex-wrap gap-2">
-                {selectedSkill.length > 0 ? (
-                  selectedSkill.map((skill, ind) => {
+            {selectedSkill.length > 0 && (
+              <div className="border border-solid border-gray-200 px-2 rounded-sm mb-4">
+                <div className="flex flex-wrap gap-2">
+                  {selectedSkill.map((skill, ind) => {
                     return (
                       <div
                         key={ind}
-                        className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
+                        className="flex gap-2 px-4 py-1 text-sm rounded-lg bg-inherit border border-solid border-gray-300 my-2"
                       >
                         {skill}
                         <div
@@ -440,20 +346,17 @@ const EditBlog = () => {
                         </div>
                       </div>
                     );
-                  })
-                ) : (
-                  <p className="text-gray-300 text-sm">
-                    Select skills of your interest from below.
-                  </p>
-                )}
+                  })}
+                </div>
               </div>
-            </div>
+            )}
+
             <input
               type="text"
               id="tags"
               value={inputValue}
               onChange={handleChange}
-              className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none"
+              className="border border-solid border-gray-200 p-2 text-sm rounded-sm focus:outline-none"
               placeholder="Enter your interests"
             />
             {suggestions.length > 0
@@ -475,9 +378,9 @@ const EditBlog = () => {
               : inputValue.length > 0 && (
                   <button
                     onClick={() => handleNewSkillAdd(inputValue)}
-                    className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none bg-green-500 text-white w-[30%] mt-2"
+                    className="px-4 py-2 text-sm rounded-sm focus:outline-none btnBlack text-white w-fit mt-2"
                   >
-                    Add Interest
+                    + Add Interest
                   </button>
                 )}
           </div>
@@ -495,32 +398,22 @@ const EditBlog = () => {
               onChange={handleFileChange}
               className="hidden"
             />
-            {selectedFile ? (
-              <div className="relative">
+            {imageLoading ? (
+              <div className="flex w-full h-full items-center justify-center text-center">
+                <span>Loading...</span>
+              </div>
+            ) : selectedFile ? (
+              <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                 <img
-                  src={allBlogData.image[0]}
-                  alt="Selected preview"
-                  className="w-28 h-28 object-cover shrink-0 brightness-95 "
+                  src={selectedFile}
+                  alt="Preview"
+                  className="w-auto h-40 shrink-0 object-cover object-center m-2"
                 />
-                <div
-                  onClick={removeImage}
-                  className="cursor-pointer absolute top-0 right-0 bg-inherit text-white rounded-full p-1"
-                >
-                  <BsX className="text-white text-xl drop-shadow-sm bg-black border border-solid border-white rounded-full " />
-                </div>
               </div>
             ) : (
-              <div className="flex flex-col items-center">
-                {uploadBannerProgress > 0 && uploadBannerProgress < 100 ? (
-                  <div>current progress: {uploadBannerProgress}%</div>
-                ) : (
-                  <>
-                    <BsUpload size={20} />
-                    <div className="text-sm text-[#1475cf] mt-2 text-center text-balance">
-                      Click here to attach or upload an image
-                    </div>
-                  </>
-                )}
+              <div className="flex items-center justify-center w-full h-full text-gray-600">
+                <FiUpload className="w-10 h-10" />
+                <span className="ml-2">Upload Image</span>
               </div>
             )}
           </div>
@@ -574,7 +467,11 @@ const EditBlog = () => {
             </div>
             <div
               onClick={blogCreated}
-              className="text-base btnBlack rounded-sm px-4 py-2 text-white w-fit cursor-pointer"
+              className={
+                loading
+                  ? `text-base bg-gray-600 rounded-sm px-4 py-2 text-white w-fit cursor-pointer`
+                  : `text-base btnBlack rounded-sm px-4 py-2 text-white w-fit cursor-pointer`
+              }
             >
               Submit
             </div>

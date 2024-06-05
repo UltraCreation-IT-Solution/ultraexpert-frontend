@@ -18,63 +18,14 @@ import { FaBookmark } from "react-icons/fa6";
 import axios from "../../../axios";
 import HorizontalCardShimmer from "../../../subsitutes/Shimmers/HorizontalCardShimmer";
 
-export const BlogBody = ({
-  getBlogsBySearch,
-  allBlogsArray,
-  getBlogArray,
-  shimmer,
-  itemsPerPage,
-}) => {
-  console.log(allBlogsArray);
+export const BlogCard = ({ item }) => {
+  const [favBlog, setFavBlog] = useState(item.is_favorite || false);
+  const navigate = useNavigate();
   function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { day: "numeric", month: "short", year: "numeric" };
     return date.toLocaleDateString("en-US", options);
   }
-  const [favBlog, setFavBlog] = useState(false);
-  const [blogsCategory, setBlogsCategory] = useState([]);
-  const fetchBlogs = async () => {
-    const cookie = document.cookie.split(";");
-    const jsonData = {};
-    cookie.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    try {
-      const res = await axios.get("/blogs/?action=1", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
-      const json = res.data.data;
-      const categorizedBlogs = {};
-      for (const category in json) {
-        categorizedBlogs[category] = json[category].map((blog) => ({
-          id: blog.id,
-          title: blog.title,
-          author_name: blog.author_name,
-          content: blog.content,
-          images: blog.images,
-          is_fav: blog.is_favorite,
-          views: blog.blog_view_count,
-          comments: blog.comment_count,
-          reactions: blog.reaction_count,
-          date: blog.date_created,
-        }));
-      }
-      setBlogsCategory(Object.entries(categorizedBlogs));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchBlogs();
-  }, []);
-
-  console.log(blogsCategory);
-  const [favoriteBlogs, setFavoriteBlogs] = useState([]);
   const handleAddFavBlog = async (id) => {
     console.log(id);
     const cookie = document.cookie.split(";");
@@ -102,14 +53,12 @@ export const BlogBody = ({
         console.log("no data");
         return;
       }
+      setFavBlog(true);
       console.log(json);
-      getBlogArray();
-      fetchBlogs();
     } catch (error) {
       console.log(error);
     }
   };
-
   const handleRemoveFavBlog = async (id) => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
@@ -136,70 +85,159 @@ export const BlogBody = ({
         console.log("no data");
         return;
       }
+      setFavBlog(false);
       console.log(json);
-      getBlogArray();
-      fetchBlogs();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return (
+    <div className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0">
+      <img
+        src={item?.images[0]}
+        className="w-full h-[200px] object-cover shrink-0 md:mb-[0.7vw]"
+        alt=""
+      />
+      <div className="px-[0.8vw] pt-2 md:pt-0">
+        <div className="flex justify-between font-semibold text-sm text-[#808080]">
+          <div>{item?.author_name}</div>
+          <div>{formatDate(item?.updated_on)}</div>
+        </div>
+        <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
+          {item?.title}
+        </div>
+        <div className="text-sm line-clamp-3 md:mb-[1vw]">{item?.content}</div>
+        <div className="w-full flex text-white justify-between items-center my-2">
+          <Link
+            to={"blogdetail/" + item?.id}
+            className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
+          >
+            Read More
+          </Link>
+          {localStorage.getItem("isExpert") === "true" ? (
+            <></>
+          ) : favBlog ? (
+            <FaBookmark
+              onClick={() => handleRemoveFavBlog(item.id)}
+              className="text-black mx-2"
+              size={35}
+            />
+          ) : (
+            <CiBookmark
+              onClick={() =>
+                localStorage.getItem("username")
+                  ? handleAddFavBlog(item.id)
+                  : navigate("/login")
+              }
+              className="text-4xl xs:text-5xl text-black"
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const BlogBody = ({ allBlogsArray, shimmer, itemsPerPage }) => {
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  }
+  const [blogsCategory, setBlogsCategory] = useState([]);
+  const fetchBlogs = async () => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get("/blogs/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const json = res.data.data;
+      const categorizedBlogs = {};
+      for (const category in json) {
+        categorizedBlogs[category] = json[category].map((blog) => ({
+          id: blog.id,
+          title: blog.title,
+          author_name: blog.author_name,
+          content: blog.content,
+          images: blog.images,
+          is_favorite: blog.is_favorite,
+          views: blog.blog_view_count,
+          comments: blog.comment_count,
+          reactions: blog.reaction_count,
+          date: blog.date_created,
+        }));
+      }
+      setBlogsCategory(Object.entries(categorizedBlogs));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchBlogsByToken = async () => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get("/blogs/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const json = res.data.data;
+      console.log(json);
+      const categorizedBlogs = {};
+      for (const category in json) {
+        categorizedBlogs[category] = json[category].map((blog) => ({
+          id: blog.id,
+          title: blog.title,
+          author_name: blog.author_name,
+          content: blog.content,
+          images: blog.images,
+          is_favorite: blog.is_favorite,
+          views: blog.blog_view_count,
+          comments: blog.comment_count,
+          reactions: blog.reaction_count,
+          updated_on: blog.updated_on,
+        }));
+      }
+      setBlogsCategory(Object.entries(categorizedBlogs));
     } catch (error) {
       console.log(error);
     }
   };
 
+  useEffect(() => {
+    localStorage.getItem("username") ? fetchBlogsByToken() : fetchBlogs();
+  }, []);
+
+  console.log(blogsCategory);
+  const [favoriteBlogs, setFavoriteBlogs] = useState([]);
   return (
     <>
       {/* Recent Blogs */}
-     {!shimmer && <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
-        <div className="text-xl lg:text-3xl font-extrabold ">Recent Blogs</div>
-        <div className="mt-4 w-full h-auto flex gap-[2vw] overflow-scroll pb-4">
-          {allBlogsArray.map((item) => {
-            return (
-              <div
-                key={item?.id}
-                className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
-              >
-                <img
-                  src={item?.images[0]}
-                  className="w-full h-[200px] object-cover shrink-0 md:mb-[0.7vw]"
-                  alt=""
-                />
-                <div className="px-[0.8vw] pt-2 md:pt-0">
-                  <div className="flex justify-between font-semibold text-sm text-[#808080]">
-                    <div>{item?.author_name}</div>
-                    <div>{formatDate(item?.updated_on)}</div>
-                  </div>
-                  <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
-                    {item?.title}
-                  </div>
-                  <div className="text-sm line-clamp-3 md:mb-[1vw]">
-                    {item?.content}
-                  </div>
-                  <div className="w-full flex text-white justify-between items-center my-2">
-                    <Link
-                      to={"blogdetail/" + item?.id}
-                      className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
-                    >
-                      Read More
-                    </Link>
-                    {localStorage.getItem("isExpert") === "true" ? (
-                      <></>
-                    ) : item?.is_favorite ? (
-                      <FaBookmark
-                        onClick={() => handleRemoveFavBlog(item.id)}
-                        className="text-black mx-2"
-                        size={35}
-                      />
-                    ) : (
-                      <CiBookmark
-                        onClick={() => handleAddFavBlog(item.id)}
-                        className="text-4xl xs:text-5xl text-black"
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+      {!shimmer && (
+        <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
+          <div className="text-xl lg:text-3xl font-extrabold ">
+            Recent Blogs
+          </div>
+          <div className="mt-4 w-full h-auto flex gap-[2vw] overflow-scroll pb-4">
+            {allBlogsArray.map((item) => {
+              return <BlogCard key={item.id} item={item} />;
+            })}
+          </div>
         </div>
-      </div>}
+      )}
 
       {/* blogs category wise */}
       <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
@@ -212,52 +250,8 @@ export const BlogBody = ({
               </div>
               <div className="mt-4 w-full h-auto flex gap-[1.5vw] overflow-scroll pb-4">
                 <div className="mt-4 w-full h-auto flex gap-[1.5vw] overflow-scroll pb-4">
-                  {item.map((blog) => (
-                    <div
-                      key={blog.id}
-                      className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
-                    >
-                      <img
-                        src={blog.images[0]} // Assuming images is an array and you want the first image
-                        className="w-full h-[200px] object-cover  shrink-0 md:mb-[0.7vw]"
-                        alt=""
-                      />
-                      <div className="px-[0.8vw] pt-2 md:pt-0">
-                        <div className="flex justify-between font-semibold text-sm text-[#808080]">
-                          <div>{blog.author_name}</div>
-                          <div>{formatDate(blog.date)}</div>
-                        </div>
-                        <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
-                          {blog.title}
-                        </div>
-                        <div className="text-sm line-clamp-3 md:mb-[1vw]">
-                          {blog.content}
-                        </div>
-                        <div className="w-full flex text-white justify-between items-center my-2">
-                          {/* Link should point to the specific blog detail page */}
-                          <Link
-                            to={`blogdetail/${blog.id}`}
-                            className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
-                          >
-                            Read More
-                          </Link>
-                          {localStorage.getItem("isExpert") === "true" ? (
-                            <></>
-                          ) : blog.is_fav ? (
-                            <FaBookmark
-                              onClick={() => handleRemoveFavBlog(blog.id)}
-                              className="text-black mx-2"
-                              size={35}
-                            />
-                          ) : (
-                            <CiBookmark
-                              onClick={() => handleAddFavBlog(blog.id)}
-                              className="text-4xl xs:text-5xl text-black"
-                            />
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                  {item.map((item) => (
+                    <BlogCard key={item.id} item={item} />
                   ))}
                 </div>
               </div>
@@ -268,9 +262,9 @@ export const BlogBody = ({
 
       {/* Hot topics */}
       <div className="bg-[#F2F2F2] px-[2vw] py-[3vw] mt-20">
-        <div className="text-xl lg:text-3xl font-bold mt-4 text-center ">
+        {/* <div className="text-xl lg:text-3xl font-bold mt-4 text-center ">
           Hot Topics
-        </div>
+        </div> */}
         <div className="mt-6 md:mt-[3vw] flex items-center gap-[2vw] overflow-x-scroll">
           {/* {hotTopics.map((temp, index) => (
             <div
@@ -318,8 +312,6 @@ export const BlogBody = ({
                   tags={item.tags}
                   image={item.images[0]}
                   date={formatDate(item.date_created.split("T")[0])}
-                  getBlogArray={getBlogArray}
-                  fetchBlogs={fetchBlogs}
                 />
               ))
             )}
@@ -365,7 +357,9 @@ const Author = ({ createAuthor }) => {
   }, [localStorage.getItem("isAuthor")]);
   return localStorage.getItem("isAuthor") === "true" ? (
     <div className=" shrink-0 px-5 py-2 text-white bg-[#2A2A2A] text-xs sm:text-sm md:text-base font-semibold rounded-sm cursor-pointer w-fit">
-      <Link to="createblog">Write a Blog</Link>
+      <Link to="createblog" className="text-white">
+        Write a Blog
+      </Link>
     </div>
   ) : (
     <div
@@ -386,9 +380,8 @@ export const BlogCardHorizontal = ({
   views,
   likes,
   image,
-  getBlogArray,
-  fetchBlogs,
 }) => {
+  const [favBlog, setFavBlog] = useState(items?.is_favorite || false);
   const navigate = useNavigate();
   const addFav = async (id) => {
     const cookie = document.cookie.split(";");
@@ -417,8 +410,7 @@ export const BlogCardHorizontal = ({
         return;
       }
       console.log(json);
-      getBlogArray();
-      fetchBlogs();
+      setFavBlog(true);
     } catch (error) {
       console.log(error);
     }
@@ -450,8 +442,7 @@ export const BlogCardHorizontal = ({
         return;
       }
       console.log(json);
-      getBlogArray();
-      fetchBlogs();
+      setFavBlog(false);
     } catch (error) {
       console.log(error);
     }
@@ -507,18 +498,22 @@ export const BlogCardHorizontal = ({
                 <></>
               ) : (
                 <div className="border border-solid border-slate-400 text-[10px] rounded-full px-3 py-0.5 flex items-center cursor-pointer gap-1">
-                  {items.is_favorite ? (
+                  {favBlog ? (
                     <div
                       className="flex gap-2 items-center"
                       onClick={() => remFav(id)}
                     >
                       <FaMinus />
-                      Added to Fav
+                      Remove from Fav
                     </div>
                   ) : (
                     <div
                       className="flex gap-2 items-center"
-                      onClick={() => addFav(id)}
+                      onClick={() =>
+                        localStorage.getItem("username")
+                          ? addFav(id)
+                          : navigate("/login")
+                      }
                     >
                       <FaPlus /> Add to Fav
                     </div>
@@ -535,6 +530,7 @@ export const BlogCardHorizontal = ({
     </div>
   );
 };
+
 const Blogs = () => {
   const [shimmer, setShimmer] = useState(false);
   // for pagination
@@ -645,6 +641,7 @@ const Blogs = () => {
   }, []);
 
   const [isAuthor, setIsAuthor] = useState(false);
+  const [categoryBlogs, setCategoryBlogs] = useState({});
 
   const createAuthor = async (e) => {
     e.preventDefault();
@@ -692,7 +689,7 @@ const Blogs = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
+            // Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );
@@ -716,8 +713,53 @@ const Blogs = () => {
       setShimmer(false);
     }
   };
+
+  const getBlogArrayByToken = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    setSearchedBlogs([]);
+    setShimmer(true);
+    try {
+      const res = await axios.get(
+        `/blogs/?action=1&page=${currentPage}&records_number=${itemsPerPage}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        setShimmer(false);
+        return;
+      }
+      setLastPage(res.data.total_pages);
+      const allData = res.data.data.all;
+      console.log(res.data.data);
+      setAllBlogsArray(allData);
+      setShimmer(false);
+    } catch (error) {
+      console.log(error);
+      setShimmer(false);
+    }
+  };
   useEffect(() => {
-    !showSearchedBlogs ? getBlogArray() : getBlogsBySearch(searchQuery);
+    !showSearchedBlogs
+      ? localStorage.getItem("username")
+        ? getBlogArrayByToken()
+        : getBlogArray()
+      : getBlogsBySearch(searchQuery);
   }, [currentPage]);
 
   //api call for all blogs
@@ -849,14 +891,12 @@ const Blogs = () => {
               <IoMdArrowRoundBack />
               Back
             </div>
-            <SearchedBlog searchedBlogs={searchedBlogs} />
+            <SearchedBlog searchedBlogs={searchedBlogs}  />
           </>
         )
       ) : (
         <BlogBody
-          getBlogsBySearch={getBlogsBySearch}
           allBlogsArray={allBlogsArray}
-          getBlogArray={getBlogArray}
           shimmer={shimmer}
           itemsPerPage={itemsPerPage}
         />

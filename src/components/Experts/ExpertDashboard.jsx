@@ -17,6 +17,7 @@ import {
   MdOpenInNew,
   MdOutlineContentCopy,
   MdOutlineEdit,
+  MdOutlineVisibility,
 } from "react-icons/md";
 import {
   BsFillPersonLinesFill,
@@ -29,10 +30,7 @@ import {
   IoBookmarksSharp,
   IoStar,
 } from "react-icons/io5";
-import {
-  BsFillPatchCheckFill,
-  BsThreeDotsVertical,
-} from "react-icons/bs";
+import { BsFillPatchCheckFill, BsThreeDotsVertical } from "react-icons/bs";
 import {
   RiPagesFill,
   RiCustomerService2Fill,
@@ -353,8 +351,13 @@ export const TestimonialsCard = ({
     getExpertAllTestimonials();
     HandleTestimonials();
   };
+
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const handleDeleteTestimonial = async (id) => {
     console.log(id);
+    setLoading(true);
     try {
       const response = await axios.post(
         "/testimonial/",
@@ -370,49 +373,87 @@ export const TestimonialsCard = ({
         }
       );
       console.log(response);
+      setLoading(false);
       handleupdates();
+      setIsDeleting(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
+      setIsDeleting(false);
     }
   };
-  return (
-    <>
-      <div
-        className={`px-14 py-4 my-5 rounded-md relative ${
-          index % 2 == 0
-            ? "bg-[#ececec]"
-            : "border border-solid border-[#c7c7c7]"
-        }`}
-      >
-        <div className="flex items-center justify-between text-sm font-semibold">
-          <div className="text-sm ">{item?.date_created?.split("T")[0]}</div>
-          <div className="flex items-center gap-3">
-            <FaEdit className="text-xl text-blue-800" onClick={handleEdit} />
-            <FaRegTrashAlt
+  return isDeleting ? (
+    <div className="absolute">
+      <div className="fixed z-50 bg-gray-300 bg-opacity-75 px-4 md:px-8 w-full inset-0 flex items-center justify-center">
+        <div className="relative w-full max-w-md shadow-lg rounded-sm bg-white p-6 md:p-8">
+          <div className="text-center text-xl font-bold mb-6">
+            Are you sure?
+          </div>
+          <div className="text-gray-600 mb-6 text-center">
+            Do you want to delete this testimonial?
+          </div>
+          <div className="flex justify-end space-x-4 mt-6">
+            <button
+              type="button"
+              className="inline-flex items-center px-4 py-2 bg-white text-black rounded-sm border border-solid border-black"
+              onClick={() => setIsDeleting(false)}
+            >
+              No
+            </button>
+            <button
+              type="button"
+              className={
+                loading
+                  ? `inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-sm`
+                  : `inline-flex items-center px-4 py-2 btnBlack text-white rounded-sm`
+              }
               onClick={() => handleDeleteTestimonial(item.id)}
-              className="text-xl text-red-500"
-            />
+            >
+              Yes
+            </button>
           </div>
         </div>
-        <textarea
-          readOnly={readOnly}
-          value={comment}
-          onChange={handleComment}
-          rows="5"
-          className={`bg-inherit min-w-[100%] max-w-[100%] line-clamp-3 text-sm mt-4 focus:outline-none rounded-md ${
-            editTestimonial ? "border border-solid border-[#c7c7c7] p-1" : ""
-          }`}
-        />
-        {editTestimonial && (
-          <div
-            className="px-3 py-2 mt-4 rounded-sm bg-green-500 text-white w-fit cursor-pointer"
-            onClick={(e) => handleSubmitEditedTestimonial(e, item.id)}
-          >
-            Submit
-          </div>
-        )}
       </div>
-    </>
+    </div>
+  ) : (
+    <div
+      className={`px-14 py-4 my-5 rounded-md relative ${
+        index % 2 == 0 ? "bg-[#ececec]" : "border border-solid border-[#c7c7c7]"
+      }`}
+    >
+      <div className="flex items-center justify-between text-sm font-semibold">
+        <div className="text-sm ">{item?.date_created?.split("T")[0]}</div>
+        <div className="flex items-center gap-3">
+          <FaEdit
+            title="Edit"
+            className="text-xl text-black"
+            onClick={handleEdit}
+          />
+          <FaRegTrashAlt
+            title="Delete"
+            onClick={() => setIsDeleting(true)}
+            className="text-xl text-black"
+          />
+        </div>
+      </div>
+      <textarea
+        readOnly={readOnly}
+        value={comment}
+        onChange={handleComment}
+        rows="5"
+        className={`bg-inherit min-w-[100%] max-w-[100%] line-clamp-3 text-sm mt-4 focus:outline-none rounded-md ${
+          editTestimonial ? "border border-solid border-[#c7c7c7] p-1" : ""
+        }`}
+      />
+      {editTestimonial && (
+        <div
+          className="px-3 py-2 mt-4 rounded-sm bg-green-500 text-white w-fit cursor-pointer"
+          onClick={(e) => handleSubmitEditedTestimonial(e, item.id)}
+        >
+          Submit
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -1239,7 +1280,7 @@ export const Dashboard = () => {
           />
         )}
         {/* Testimonials section of dashboard */}
-        {testimonials && expertAllTestimonials.length === 0 ? (
+        {testimonials && (expertAllTestimonials.length === 0 ? (
           <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
             No testimonials found
           </div>
@@ -1254,7 +1295,7 @@ export const Dashboard = () => {
               getExpertAllTestimonials={getExpertAllTestimonials}
             />
           ))
-        )}
+        ))}
         {/* Project section of dashboard */}
         {projects && <ShowMyProjects />}
       </div>
@@ -1267,6 +1308,8 @@ export const MyServices = () => {
   const services = Array.from({ length: 3 });
   const [shimmer, setShimmer] = useState(false);
   const [myServices, setMyServices] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const getMyServices = async () => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
@@ -1312,6 +1355,7 @@ export const MyServices = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+    setLoading(true);
     try {
       const res = await axios.post(
         "/experts/services/",
@@ -1327,19 +1371,25 @@ export const MyServices = () => {
         }
       );
       console.log(res);
+      setLoading(false);
       if (!res.data || res.data.status === 400 || res.data.status === 401) {
         console.log(res.data);
         return;
       } else {
+        setIsDeleting(false);
         getMyServices();
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
   useEffect(() => {
     getMyServices();
   }, []);
+
+  const [isDeleting, setIsDeleting] = useState(false);
+
   return (
     <div className="w-full md:w-[68%] ">
       <div className="flex justify-between border-b border-solid border-slate-200 pb-3">
@@ -1353,55 +1403,94 @@ export const MyServices = () => {
           Create a new service
         </div>
       </div>
-      <div>
-        {shimmer ? (
-          <div className="w-full flex flex-col items-center gap-10 mt-5">
-            {Array.from({ length: 4 }).map((item, index) => (
-              <TextShimmer key={index} />
-            ))}
-          </div>
-        ) : myServices.length === 0 ? (
-          <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
-            No services created yet
-          </div>
-        ) : (
-          myServices.map((service, index) => (
-            <div
-              key={index}
-              className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md"
-            >
-              <div className="flex items-center gap-3">
-                <button className="flex items-center gap-2 bg-white text-sm px-3 py-1 rounded-sm text-black cursor-pointer border border-solid border-black">
-                  <MdOutlineEdit size={18} /> Edit
+      {isDeleting ? (
+        <div className="absolute">
+          <div className="fixed z-50 bg-gray-300 bg-opacity-75 px-4 md:px-8 w-full inset-0 flex items-center justify-center">
+            <div className="relative w-full max-w-md shadow-lg rounded-sm bg-white p-6 md:p-8">
+              <h1 className="text-center text-xl font-bold mb-6">
+                Are you sure?
+              </h1>
+              <p className="text-gray-600 mb-6 text-center">
+                Do you want to delete this service?
+              </p>
+              <div className="flex justify-end space-x-4 mt-6">
+                <button
+                  type="button"
+                  className="inline-flex items-center px-4 py-2 bg-white text-black rounded-sm border border-solid border-black"
+                  onClick={() => setIsDeleting(false)}
+                >
+                  No
                 </button>
                 <button
-                  onClick={() => deleteService(service.id)}
-                  className="flex gap-2 items-center btnBlack text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
+                  type="button"
+                  className={
+                    loading
+                      ? `inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-sm`
+                      : `inline-flex items-center px-4 py-2 btnBlack text-white rounded-sm`
+                  }
+                  onClick={() => deleteService(myServices[0].id)}
                 >
-                  <RiDeleteBin6Fill size={15} /> Delete
+                  Yes
                 </button>
               </div>
-              <div
-                className="text-base sm:text-lg font-bold mt-2 line-clamp-3 cursor-pointer"
-                onClick={() => navigate(`/experts/service/${service.id}`)}
-              >
-                {service.service_name}
-              </div>
-              <div className="mt-2 text-sm text-gray-500 line-clamp-3">
-                {service.description}
-              </div>
-              <div className="flex items-center mt-3 gap-3 text-sm sm:text-base">
-                <div className="flex items-center gap-1">
-                  <AiOutlineLike /> {service.service_view_count} views
-                </div>
-                <div className="flex items-center gap-1">
-                  <IoStar /> rating
-                </div>
-              </div>
             </div>
-          ))
-        )}
-      </div>
+          </div>
+        </div>
+      ) : (
+        <div>
+          {shimmer ? (
+            <div className="w-full flex flex-col items-center gap-10 mt-5">
+              {Array.from({ length: 4 }).map((item, index) => (
+                <TextShimmer key={index} />
+              ))}
+            </div>
+          ) : myServices.length === 0 ? (
+            <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
+              No services created yet
+            </div>
+          ) : (
+            myServices.map((service, index) => (
+              <div
+                key={index}
+                className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md"
+              >
+                <div className="flex items-center gap-3">
+                  <button
+                    className="flex items-center gap-2 bg-white text-sm px-3 py-1 rounded-sm text-black cursor-pointer border border-solid border-black"
+                    onClick={() => navigate(`/updateservice/${service.id}`)}
+                  >
+                    <MdOutlineEdit size={18} /> Edit
+                  </button>
+                  <button
+                    onClick={() => setIsDeleting(true)}
+                    className="flex gap-2 items-center btnBlack text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
+                  >
+                    <RiDeleteBin6Fill size={15} /> Delete
+                  </button>
+                </div>
+                <div
+                  className="text-base sm:text-lg font-bold mt-2 line-clamp-3 cursor-pointer"
+                  onClick={() => navigate(`/experts/service/${service.id}`)}
+                >
+                  {service.service_name}
+                </div>
+                <div className="mt-2 text-sm text-gray-500 line-clamp-3">
+                  {service.description}
+                </div>
+                <div className="flex items-center mt-3 gap-3 text-sm sm:text-base">
+                  <div className="flex items-center gap-1">
+                    <MdOutlineVisibility /> {service.service_view_count} views
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <IoStar /> {service.ratings && service.ratings.length}{" "}
+                    rating
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 };
@@ -1553,7 +1642,7 @@ export const Leaderboard = () => {
                 {leaderBoardData[1]?.expert_last_name}
               </div>
               <div className="text-[#009BD6]">
-                {leaderBoardData[1]?.avg_score}{" "} 
+                {leaderBoardData[1]?.avg_score}{" "}
               </div>
             </div>
           </div>
@@ -1603,40 +1692,47 @@ export const Leaderboard = () => {
         </div>
 
         <div className="w-full">
-          <div className="flex justify-between mt-10 mb-5 border-b border-solid border-slate-200 pb-3 text-base sm:text-lg">
-            <div className="flex items-center gap-[8vw]">
+          <div className="px-4 font-bold flex justify-between mt-10 mb-5 border-b border-solid border-slate-200 pb-3 text-base sm:text-lg">
+            <div className=" flex gap-[8vw]">
               <div>Rank</div>
               <div>Name</div>
             </div>
             <div>Score</div>
           </div>
           {/* user data */}
-          <div className="flex items-center justify-between gap-1 py-2 my-5 border-y border-solid border-slate-400">
-            <div className="flex items-center gap-[8vw]">
-              <div className="text-sm sm:text-base shrink-0">
-                {userData.rank}
-              </div>
-              <div className="flex gap-3 sm:gap-6 items-center w-[300px] ">
-                <img
-                  src={userData.profile_img}
-                  alt="Profile"
-                  className="h-10 w-10 sm:h-14 sm:w-14 rounded-full object-center object-cover shrink-0"
-                />
+          <div className="px-4 flex flex-col py-2 my-5 bg-[#ECECEC] rounded-sm ">
+            <div className="font-semibold text-base sm:text-lg underline">
+              My Ranking
+            </div>
+            <div className="px-4 flex items-center justify-between gap-1 font-semibold">
+              <div className="flex items-center gap-[8vw]">
                 <div className="text-sm sm:text-base shrink-0">
-                  {userData.expert_name}
+                  {userData.rank}
+                </div>
+                <div className="flex gap-3 sm:gap-6 items-center w-[300px] ">
+                  <img
+                    src={userData.profile_img}
+                    alt="Profile"
+                    className="h-10 w-10 sm:h-14 sm:w-14 rounded-full object-center object-cover shrink-0"
+                  />
+                  <div className="text-sm sm:text-base shrink-0">
+                    {userData.expert_name}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="text-sm sm:text-base shrink-0">
-              {userData.avg_score}
+              <div className="text-sm sm:text-base shrink-0">
+                {userData.avg_score}
+              </div>
             </div>
           </div>
-
+          <div className="px-4 font-semibold text-base sm:text-lg underline">
+            Full List
+          </div>
           <div>
             {leaderBoardData.map((item, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between gap-1 py-3"
+                className="px-8 flex items-center justify-between gap-1 py-3 border-b border-solid border-gray-300"
               >
                 <div className="flex items-center gap-[8vw]">
                   <div className="text-sm sm:text-base shrink-0">
@@ -1665,24 +1761,33 @@ export const Leaderboard = () => {
   );
 };
 
-export const MyBookings = ({ expertData, expertId }) => {
+// export const MyBookings = ({ expertData, expertId }) => {
+
+//   return (
+
+//   );
+// };
+
+export const MyBooking = ({ id }) => {
   const [shimmer, setShimmer] = useState(false);
   const [myBookings, setMyBookings] = useState([]);
+  useEffect(() => {
+    getMyBookings();
+  }, []);
+
   const cookies = document.cookie.split("; ");
   const jsonData = {};
+
   cookies.forEach((item) => {
     const [key, value] = item.split("=");
     jsonData[key] = value;
   });
-  useEffect(() => {
-    getMyBookings();
-  }, []);
 
   const getMyBookings = async () => {
     setShimmer(true);
     try {
       const res = await axios.get(
-        `/experts/services/?action=4&expert_id=${17}`,
+        `/experts/services/?action=4&expert_id=${5}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -1707,6 +1812,7 @@ export const MyBookings = ({ expertData, expertId }) => {
       setShimmer(false);
     }
   };
+  console.log(myBookings);
   return (
     <div className="w-full md:w-[68%]">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
@@ -1723,9 +1829,9 @@ export const MyBookings = ({ expertData, expertId }) => {
           No Active Bookings
         </div>
       ) : (
-        <div>
-          <div className="flex items-center justify-between text-sm text-gray-600 font-bold my-5 overflow-x-scroll">
-            <div className="flex items-center xs:gap-[4vw] shrink-0">
+        <>
+          <div className="flex items-center justify-between text-sm bg-[#ECECEC] text-black font-bold overflow-x-scroll rounded-md px-4">
+            <div className="flex items-center xs:gap-[4vw] shrink-0 my-5">
               <div className="w-[200px]">Client Name</div>
               <div className="hidden sm:block w-[120px] ">Scheduled Date</div>
               <div className="shrink-0 w-[60px]">Action</div>
@@ -1735,11 +1841,12 @@ export const MyBookings = ({ expertData, expertId }) => {
           {myBookings?.map((item, index) => (
             <BookingCard item={item} key={index} />
           ))}
-        </div>
+        </>
       )}
     </div>
   );
 };
+
 const ExpertDashboard = () => {
   const [showEditProfile, setShowEditProfile] = useState(false);
 
@@ -1799,6 +1906,7 @@ const ExpertDashboard = () => {
         console.error("Failed to copy: ", err);
       });
   };
+
   return (
     <div
       className={`${
@@ -1884,7 +1992,7 @@ const ExpertDashboard = () => {
                   Leaderboard
                 </li>
               </Link>
-              <Link to="mybookings" className="no-underline">
+              <Link to="myBookings" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <IoBookmarksSharp className="text-[1.65vw]" />
                   Bookings
@@ -1942,13 +2050,7 @@ const ExpertDashboard = () => {
         <Chats />
         <Leaderboard />
         <SkillList />
-        {/* {expertData.length!==0 && <MyBookings {...expertData} />} */}
-
-        {expertData && expertId && (
-          <MyBookings expertData={{ ...expertData }} expertId={expertId} />
-        )}
-
-        {/* <MyBookings id={expertId} /> */}
+        <MyBooking id={expertData?.id} />
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />

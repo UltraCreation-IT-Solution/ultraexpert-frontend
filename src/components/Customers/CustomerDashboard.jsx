@@ -10,21 +10,16 @@ import { Link, Outlet } from "react-router-dom";
 import BookingCard from "../../subsitutes/BookingCard";
 import ShowBlogs from "../../subsitutes/ShowBlogs";
 import axios from "../../axios";
-import { imageDB } from "../firebase/config";
 import TextShimmer from "../../subsitutes/Shimmers/TextShimmer";
 import { handleUploadImage } from "../../constant";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
+import { FiUpload } from "react-icons/fi";
+import ImageUploader from "../../ImageUploader";
+import Modal from "../../Modal";
 
 export const CustomerProfile = () => {
   const [userData, setUserData] = useState({});
-  const [image, setImage] = useState(null);
-  const [progress, setProgress] = useState(0);
+  const [myImage, setMyImage] = useState(0);
+  const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
   const cookies = document.cookie.split("; ");
@@ -34,50 +29,58 @@ export const CustomerProfile = () => {
     const [key, value] = item.split("=");
     jsonData[key] = value;
   });
-  useEffect(() => {
-    const getUserData = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get("/customers/?action=1", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        });
-        if (
-          !response.data ||
-          response.data.status === 400 ||
-          response.data.status === 401
-        ) {
-          console.log(response.data.message);
-          return;
-        }
-        setLoading(false);
-        setUserData(response.data.data);
-        console.log("ander wala", response.data.data);
-        setImage(response.data.data.profile_img);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
+  const getUserData = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get("/customers/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      if (
+        !response.data ||
+        response.data.status === 400 ||
+        response.data.status === 401
+      ) {
+        console.log(response.data.message);
+        return;
       }
-    };
+      setLoading(false);
+      setUserData(response.data.data);
+      console.log("ander wala", response.data.data);
+      setMyImage(response.data.data.profile_img);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     getUserData();
   }, []);
-  const handleImageChange = async (e) => {
+  const onSelectFile = (event) => {
     setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setImage(url);
-    setUserData({
-      ...userData,
-      profile_img: url,
-    });
-    setImageLoading(false);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImage(reader.result);
+        setShowModal(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
   };
-
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(url); // Reset the image state
+    setUserData({ ...userData, profile_img: url });
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(userData.profile_img); // Reset the image state when modal is closed
+  };
   const interest = [
     { id: 1, name: "Python" },
     { id: 2, name: "C++" },
@@ -271,7 +274,7 @@ export const CustomerProfile = () => {
           className={
             loading
               ? `bg-gray-300 px-4 py-2 rounded-md text-gray-500 cursor-not-allowed text-base`
-              : `text-base bg-green-500 px-4 py-2 rounded-md cursor-pointer text-white`
+              : `text-base btnBlack px-4 py-2 rounded-sm cursor-pointer text-white`
           }
         >
           Save Profile
@@ -387,37 +390,49 @@ export const CustomerProfile = () => {
               accept="image/*"
               id="profileSelector"
               name="profileSelector"
-              onChange={handleImageChange}
+              onChange={onSelectFile}
               className="hidden"
             />
             {imageLoading ? (
               <div className="flex w-full h-full items-center justify-center text-center">
                 <span>Loading...</span>
               </div>
+            ) : myImage ? (
+              <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
+                <img
+                  src={myImage}
+                  alt="Preview"
+                  className="w-auto h-40 shrink-0 object-cover object-center m-2"
+                />
+              </div>
             ) : (
-              image && (
-                <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
-                  <img
-                    src={image}
-                    alt="Preview"
-                    className="w-auto h-40 shrink-0 object-cover object-center m-2"
-                  />
-                </div>
-              )
+              <div className="flex items-center justify-center w-full h-full text-gray-600">
+                <FiUpload className="w-10 h-10" />
+                <span className="ml-2">Upload Image</span>
+              </div>
             )}
           </div>
+          <Modal show={showModal} onClose={closeModal}>
+            <ImageUploader
+              image={myImage}
+              handleUploadImage={handleUploadImage}
+              filename="cropped_image.jpg"
+              onCropped={handleCroppedImage}
+              aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+            />
+          </Modal>
           <div className="flex justify-center mx-auto flex-col w-full my-8">
             <label htmlFor="interests" className="text-lg mb-1">
               Interests
             </label>
-            <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
-              <div className="flex flex-wrap gap-2">
-                {selectedSkill.length > 0 ? (
-                  selectedSkill.map((skill, ind) => {
+            {selectedSkill.length > 0 && (
+              <div className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4">
+                <div className="flex flex-wrap gap-2">
+                  {selectedSkill.map((skill, ind) => {
                     return (
                       <div
                         key={ind}
-                        className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black"
+                        className="flex gap-2 px-4 py-1 text-sm rounded-lg bg-inherit border border-solid border-gray-300"
                       >
                         {skill}
                         <div
@@ -428,14 +443,10 @@ export const CustomerProfile = () => {
                         </div>
                       </div>
                     );
-                  })
-                ) : (
-                  <p className="text-gray-300 text-sm">
-                    Select skills of your interest from below.
-                  </p>
-                )}
+                  })}
+                </div>
               </div>
-            </div>
+            )}
             <input
               type="text"
               id="interests"

@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FiUpload, FiX, FiEdit } from "react-icons/fi";
-import { imageDB } from "../firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
 import axios from "../../axios";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { handleUploadImage } from "../../constant";
 
 const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
   const [projects, setProjects] = useState([]);
@@ -51,6 +45,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await axios.post(
         "/experts/update/",
@@ -66,8 +61,10 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
         }
       );
       console.log(response);
+      setLoading(false);
       setAddProjectOpen(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
     // console.log(projects);
@@ -119,45 +116,17 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
     setProjects(updatedProjects);
   };
 
-  const handleImageUpload = async (e) => {
-    if (e.target.files.length > 0) {
-      setImage(URL.createObjectURL(e.target.files[0]));
-      const file = e.target.files[0];
-      if (file) {
-        const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-        const uploadTask = uploadBytesResumable(imgRef, file);
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            // Get upload progress as a percentage
-            const progress = Math.round(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            );
-            setUploadProfileProgress(progress);
-          },
-          (error) => {
-            console.error("Error uploading image: ", error);
-            // Handle error if needed
-          },
-          () => {
-            // Upload completed successfully
-            console.log("Upload complete");
-          }
-        );
+  const [imageLoading, setImageLoading] = useState(false);
 
-        try {
-          await uploadTask;
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
-          console.log(url);
-          setImageUrl(url);
-          setImage(url);
-        } catch (error) {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-          alert("Something went wrong");
-        }
-      }
-    }
+  const handleImageUpload = async (e) => {
+    setImageLoading(true);
+    const url = await handleUploadImage(
+      e.target.files[0],
+      e.target.files[0].name
+    );
+    console.log(url);
+    setImage(url);
+    setImageLoading(false);
   };
   const handleImageRemove = () => {
     setImage("");
@@ -187,6 +156,8 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
     setTags(updatedTags);
   };
 
+  const [loading, setLoading] = useState(false);
+
   return (
     <div className="max-w-3xl mx-auto mt-2 px-4 border border-gray-500 rounded-lg shadow-lg">
       <div className="flex justify-between items-center bg-[#ebebeb] border border-slate-300 border-solid px-6 py-3 rounded-t-lg">
@@ -194,13 +165,17 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
         <div className="flex flex-wrap justify-between">
           <button
             onClick={handleCancel}
-            className="bg-red-600 text-white px-4 py-2 rounded mr-4  hover:bg-gray-600"
+            className="bg-inherit text-black px-4 py-2 rounded-sm mr-4 border border-solid border-black cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className={`bg-blue-500 text-white px-6 py-2 rounded`}
+            className={
+              loading
+                ? `bg-gray-600 text-white px-6 py-2 rounded-sm`
+                : `btnBlack text-white px-6 py-2 rounded-sm`
+            }
           >
             Submit Projects
           </button>
@@ -240,21 +215,17 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
                 onChange={handleImageUpload}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
-                <p>Upload Progress: {uploadProfileProgress}%</p>
+              {imageLoading ? (
+                <div className="flex w-full h-full items-center justify-center text-center">
+                  <span>Loading...</span>
+                </div>
               ) : image ? (
-                <div className="relative w-full h-full flex justify-center items-center">
+                <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                   <img
                     src={image}
                     alt="Preview"
-                    className="max-h-28 max-w-44 object-cover rounded"
+                    className="w-auto h-40 shrink-0 object-cover object-center m-2"
                   />
-                  <button
-                    onClick={handleImageRemove}
-                    className="absolute top-2 right-2 bg-slate-400 text-white p-1 rounded hover:bg-gray-600 flex justify-center items-center"
-                  >
-                    <FiX className="w-4 h-4" />
-                  </button>
                 </div>
               ) : (
                 <div className="flex items-center justify-center w-full h-full text-gray-600">
@@ -278,7 +249,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
           {tags.map((tag, index) => (
             <div
               key={index}
-              className="flex gap-1 items-center bg-slate-300 text-gray-600 pl-4 pr-2 py-1 rounded-full text-sm mr-2 mb-2"
+              className="flex gap-1 items-center bg-white text-black pl-4 pr-2 py-1 rounded-lg text-sm mr-2 mb-2 border border-solid border-gray-300"
             >
               {tag}
               <FiX
@@ -294,20 +265,20 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
             placeholder="Add Tag"
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
-            className="border border-slate-300 rounded px-4 py-2 mr-2 focus:outline-none focus:border-blue-500"
+            className="border border-slate-300 rounded px-4 py-2 mr-2 focus:outline-none"
           />
           <button
             onClick={addTag}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="btnBlack text-white px-4 py-2 rounded-sm"
           >
-            Add
+            + Add
           </button>
         </div>
         <button
           onClick={handleAddProject}
           disabled={isFormEmpty}
-          className={`bg-blue-500 text-white mt-4 px-6 py-3 rounded block mx-auto ${
-            isFormEmpty && "opacity-50 cursor-not-allowed"
+          className={`btnBlack text-white mt-4 px-6 py-3 rounded-sm block mx-auto ${
+            isFormEmpty ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
           }`}
         >
           {editingIndex !== null ? "Update Project" : "Add Project"}
@@ -351,7 +322,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
                       {project.tags.map((tag, tagIndex) => (
                         <span
                           key={tagIndex}
-                          className="flex gap-1 items-center bg-slate-300 text-gray-600 pl-4 pr-2 py-1 rounded-full text-sm mr-2 mb-2"
+                          className="flex gap-1 items-center bg-inherit text-black pl-4 pr-2 py-1 rounded-md text-sm mr-2 mb-2 border border-solid border-gray-300"
                         >
                           {tag}
                         </span>
@@ -360,15 +331,15 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
                     <div className="flex mt-2">
                       <button
                         onClick={() => handleEditProject(index)}
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2 hover:bg-blue-600"
+                        className="bg-white text-black px-4 py-2 rounded-sm mr-2 border border-black border-solid"
                       >
                         <FiEdit /> Edit
                       </button>
                       <button
                         onClick={() => handleDeleteProject(index)}
-                        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                        className="btnBlack text-white px-4 py-2 rounded-sm"
                       >
-                        Delete
+                        <RiDeleteBin6Line /> Delete
                       </button>
                     </div>
                   </div>
