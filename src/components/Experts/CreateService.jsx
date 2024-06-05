@@ -645,6 +645,8 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
   const [startInputTime, setStartInputTime] = useState("");
   const [endInputDate, setEndInputDate] = useState("");
   const [endInputTime, setEndInputTime] = useState("");
+
+  
   console.log(serviceId);
   const handlePostEvent = async (e) => {
     e.preventDefault();
@@ -725,7 +727,6 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
         currentDate.add(1, "day");
       }
       setEvents([...events, ...newEvents]);
-
       setStartInputDate("");
       setStartInputTime("");
       setEndInputDate("");
@@ -868,19 +869,12 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
         </button>
       </div>
       <Calendar
-        className="mt-4"
+        className={`mt-4`}
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
         style={{ height: 500 }}
-        onSelectEvent={(slot) => {
-          if (
-            window.confirm("Are you sure you want to delete this time slot?")
-          ) {
-            handleDeleteSlot(slot.id);
-          }
-        }}
       />
     </div>
   );

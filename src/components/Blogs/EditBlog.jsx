@@ -14,14 +14,14 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { handleUploadImage } from "../../constant";
 import { FiUpload } from "react-icons/fi";
 
 const EditBlog = () => {
   const [preview, setPreview] = useState(false);
   const params = useParams();
-  console.log(params.id);
+  const navigate = useNavigate();
   // code for uploading image for blog starts
   //   const [selectedFile, setSelectedFile] = useState(null);
   //   const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
@@ -274,11 +274,6 @@ const EditBlog = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    // console.log(value2?.number);
-    // console.log(blogData);
-    // console.log(value);
-    // console.log(blogData.title);
-    // console.log(blogData.service_ll);
     setLoading(true);
     try {
       const res = await axios.post(
@@ -312,6 +307,7 @@ const EditBlog = () => {
       setLoading(false);
       console.log(error);
     }
+    navigate("/blog");
   };
 
   const[loading, setLoading] = useState(false);
@@ -319,7 +315,6 @@ const EditBlog = () => {
   console.log(allBlogData);
 
   const [categoryInputValue, setCategoryInputValue] = useState("");
-  const navigate = useNavigate();
   return (
     <div className="mt-[100px] mx-[7vw] ">
       <div className="md:flex items-start gap-10 ">

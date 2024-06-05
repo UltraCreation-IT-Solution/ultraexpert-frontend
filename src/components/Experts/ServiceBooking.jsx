@@ -200,23 +200,23 @@ const ServiceBooking = () => {
             </div>
 
             <div className="mt-[2vw] border-b border-gray-300 border-solid text-gray-600">
-                <div className="flex justify-between text-xs sm:text-base md:text-lg mt-2">
+                <div className="flex justify-between text-xs sm:text-base md:text-lg my-2">
                   <span>Expert Charge</span>
                   <span>₹{serviceData?.servDesc?.price} </span>
                 </div>
-                <div className="flex justify-between text-xs sm:text-base md:text-lg mt-2">
+                {/* <div className="flex justify-between text-xs sm:text-base md:text-lg mt-2">
                   <span>Platform Charge</span>
                   <span>100/-</span>
                 </div>
                 <div className="flex justify-between text-xs sm:text-base md:text-lg mt-2">
                   <span>Tax</span>
                   <span>10/- </span>
-                </div>
+                </div> */}
               </div>
             
             <div className="flex justify-between mt-[1.5vw] text-xs sm:text-base md:text-lg font-semibold">
               <span>Total:</span>
-              <span>1610/-</span>
+              <span>₹{serviceData?.servDesc?.price}</span>
             </div>
             <div className="flex justify-center">
               <button 
