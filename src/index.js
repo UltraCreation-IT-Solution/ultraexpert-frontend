@@ -36,7 +36,7 @@ import ExpertDashboard, {
   Chats,
   Dashboard,
   Leaderboard,
-  MyBookings,
+  MyBooking,
   MyServices,
 } from "./components/Experts/ExpertDashboard";
 import About from "./components/Other_Pages/About.jsx";
@@ -54,7 +54,6 @@ import CustomerDashboard, {
   CustomerRecentMeetngs,
   CustomerTransactionHistory,
 } from "./components/Customers/CustomerDashboard.jsx";
-import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
 import SkillList from "./components/GetCertified/Instructions.js";
 import UpdateService from "./components/Services/UpdateService.jsx";
@@ -256,8 +255,8 @@ const appRouter = createBrowserRouter([
             element: <Leaderboard />,
           },
           {
-            path: "mybookings",
-            element: <MyBookings />,
+            path: "myBookings",
+            element: <MyBooking />,
           },
           {
             path: "getcertified",
@@ -268,10 +267,6 @@ const appRouter = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
-      },
-      {
-        path: "/firebaseuploadtest",
-        element: <FirebaseImageUpload />,
       },
       {
         path: "editprofile",

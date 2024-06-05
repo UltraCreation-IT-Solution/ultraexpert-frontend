@@ -12,7 +12,8 @@ import { BiDislike } from "react-icons/bi";
 import { BsBookmarkPlusFill, BsBookmarkDashFill } from "react-icons/bs";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ProjectsCarousel from "../../subsitutes/ProjectCarousel";
-import { BlogCard } from "../Blogs/Blogs/Blog";
+import ShowBlogs from "../../subsitutes/ShowBlogs";
+import { BlogCardHorizontal } from "../Blogs/Blogs/Blog";
 import ExpertProfileShimmer from "../../subsitutes/Shimmers/ExpertProfileShimmer";
 import axios from "../../axios";
 import HorizontalCardShimmer from "../../subsitutes/Shimmers/HorizontalCardShimmer";
@@ -759,7 +760,7 @@ export const ExpertInfo = ({ ...expert }) => {
               </div>
             ) : (
               blogArray.map((item, idx) => (
-                <BlogCard
+                <BlogCardHorizontal
                   key={item?.id}
                   index={idx}
                   items={item}
@@ -1027,7 +1028,7 @@ const ExpertProfile = () => {
     return <ExpertProfileShimmer />;
   }
   return !expertDetail ? (
-    <div className="text-center font-bold text-lg md:text-2xl text-gray-600 my-10 md:my-15">
+    <div className="text-center font-bold text-lg md:text-2xl text-gray-600  mt-[100px]">
       Expert details not found{" "}
     </div>
   ) : (

@@ -4,20 +4,13 @@ import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import axios from "../../axios";
-import { FiUpload, FiX } from "react-icons/fi";
-import { imageDB } from "../firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 as uuidv4 } from "uuid";
+import { FiUpload } from "react-icons/fi";
 
 // slots
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { handleUploadImage } from "../../constant";
 //slots
 
 const CreateService = () => {
@@ -44,45 +37,18 @@ const CreateService = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [image, setImage] = useState(null);
 
-  const handleFileChange = async (e) => {
-    if (e.target.files.length > 0) {
-      setImage(URL.createObjectURL(e.target.files[0]));
-      const file = e.target.files[0];
-      if (file) {
-        const imgRef = ref(imageDB, `UltraXpertImgFiles/${uuidv4()}`);
-        const uploadTask = uploadBytesResumable(imgRef, file);
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            // Get upload progress as a percentage
-            const progress = Math.round(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            );
-            setUploadProfileProgress(progress);
-          },
-          (error) => {
-            console.error("Error uploading image: ", error);
-            // Handle error if needed
-          },
-          () => {
-            // Upload completed successfully
-            console.log("Upload complete");
-          }
-        );
+  const [imageLoading, setImageLoading] = useState(false);
 
-        try {
-          await uploadTask;
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
-          console.log(url);
-          setImageUrl(url);
-          setImage(url);
-        } catch (error) {
-          console.error("Error uploading image: ", error);
-          // Handle error if needed
-          alert("Something went wrong");
-        }
-      }
-    }
+  const handleFileChange = async (e) => {
+    setImageLoading(true);
+    const url = await handleUploadImage(
+      e.target.files[0],
+      e.target.files[0].name
+    );
+    console.log(url);
+    setImage(url);
+    setImageUrl(url);
+    setImageLoading(false);
   };
   const handleImageRemove = () => {
     setImage("");
@@ -435,7 +401,7 @@ const CreateService = () => {
                   {filterCategoriesArray.length === 0 &&
                     categoryInputValue.trim().length > 0 && (
                       <div
-                        className="bg-blue-500 text-white rounded-md px-4 py-2 w-fit cursor-pointer "
+                        className="btnBlack text-white rounded-sm px-4 py-2 w-fit cursor-pointer "
                         onClick={(e) => {
                           setNewCategory(e);
                           setSelectedCategory({
@@ -444,12 +410,12 @@ const CreateService = () => {
                           });
                         }}
                       >
-                        Add Category
+                        + Add Category
                       </div>
                     )}
                 </div>
               )}
-              {/* <label htmlFor="skill" className="text-lg mb-1">
+              <label htmlFor="skill" className="text-lg mb-1">
                 Served Skill
               </label>
               <input
@@ -478,7 +444,7 @@ const CreateService = () => {
                     );
                   })}
                 </div>
-              )} */}
+              )}
               <div className="flex justify-center mx-auto flex-col w-full mb-4">
                 <label htmlFor="tags" className="text-lg mb-1 font-bold">
                   Tags
@@ -541,9 +507,9 @@ const CreateService = () => {
                   : inputTagValue.length > 0 && (
                       <button
                         onClick={() => handleNewSkillAdd(inputTagValue)}
-                        className="border border-solid border-slate-300 p-2 text-sm rounded-md focus:outline-none bg-blue-500 text-white w-[30%] mt-2 mb-4"
+                        className="px-4 py-2 text-sm rounded-sm focus:outline-none btnBlack text-white w-fit mt-2 mb-4"
                       >
-                        Add Interest
+                        + Add Interest
                       </button>
                     )}
               </div>
@@ -557,11 +523,12 @@ const CreateService = () => {
                 <input
                   type="file"
                   id="imageSelector"
+                  name="imageSelector"
                   accept="image/*"
                   onChange={handleFileChange}
                   className="hidden"
                 />
-                {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
+                {/* {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
                   <p>Upload Progress: {uploadProfileProgress}%</p>
                 ) : image ? (
                   <div className="relative w-full h-full flex justify-center items-center">
@@ -576,6 +543,21 @@ const CreateService = () => {
                     >
                       <FiX className="w-4 h-4" />
                     </button>
+                  </div>
+                ) : (
+                  
+                )} */}
+                {imageLoading ? (
+                  <div className="flex w-full h-full items-center justify-center text-center">
+                    <span>Loading...</span>
+                  </div>
+                ) : image ? (
+                  <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
+                    <img
+                      src={image}
+                      alt="Preview"
+                      className="w-auto h-40 shrink-0 object-cover object-center m-2"
+                    />
                   </div>
                 ) : (
                   <div className="flex items-center justify-center w-full h-full text-gray-600">
@@ -611,7 +593,7 @@ const CreateService = () => {
                 <button
                   type="submit"
                   onClick={(e) => handleServiceCreate(e)}
-                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white bg-blue-500 hover:bg-blue-600 rounded-md shadow-md"
+                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white btnBlack rounded-sm"
                 >
                   Create time slots
                 </button>
@@ -878,7 +860,7 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
         </button>
       </div>
       <Calendar
-      className="mt-4"
+        className="mt-4"
         localizer={localizer}
         events={events}
         startAccessor="start"

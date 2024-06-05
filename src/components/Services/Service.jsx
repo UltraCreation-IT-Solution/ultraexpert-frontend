@@ -18,9 +18,13 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../../subsitutes/Pagination";
 import HorizontalCardShimmer from "../../subsitutes/Shimmers/HorizontalCardShimmer";
 
-export const ServiceCard = ({ item, getAllServices, fetchData }) => {
-  const [FavService, setFavService] = useState(false);
+export const ServiceCard = ({ item }) => {
+  const [FavService, setFavService] = useState(item?.is_Fav || false);
   const navigate = useNavigate();
+  const handleGotoService = (serviceId) => {
+    navigate(`/experts/service/${serviceId}`);
+  };
+
   const handleAddToFavorites = async (id) => {
     const cookie = document.cookie.split("; ");
     const jsonData = {};
@@ -50,46 +54,11 @@ export const ServiceCard = ({ item, getAllServices, fetchData }) => {
       }
       console.log(json);
       setFavService(true);
-      getAllServices();
-      fetchData();
     } catch (error) {
       console.log(error);
     }
   };
-  const handleGotoService = (serviceId) => {
-    navigate(`/experts/service/${serviceId}`);
-  };
-  // console.log(item);
-  // const cookie = document.cookie.split(";");
-  // const jsonData = {};
 
-  // cookie.forEach((item) => {
-  //   const [key, value] = item.split("=");
-  //   jsonData[key] = value;
-  // });
-  // const addFav = async()=>{
-  //   try{
-  //     const res = await axios.post("",{
-  //       action:5,
-  //       service_id: item.id
-  //     },{
-  //       headers:{
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${jsonData.access_token}`
-  //       }
-  //     });
-
-  //     const json = res.data;
-  //     if(!json){
-  //       console.log("no data found");
-  //       return;
-  //     }
-  //     console.log(json);
-  //     setFavService(true);
-  //   }catch(error){
-  //     console.log(error)
-  //   }
-  // }
   const handleRemoveFromFavorites = async (id) => {
     const cookie = document.cookie.split("; ");
     const jsonData = {};
@@ -119,8 +88,6 @@ export const ServiceCard = ({ item, getAllServices, fetchData }) => {
       }
       console.log(json);
       setFavService(false);
-      getAllServices();
-      fetchData();
     } catch (error) {
       console.log(error);
     }
@@ -130,10 +97,16 @@ export const ServiceCard = ({ item, getAllServices, fetchData }) => {
       <div className="absolute top-2 right-2 z-10 text-white text-3xl py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid cursor-pointer">
         {localStorage.getItem("isAuthor") === "true" ? (
           <></>
-        ) : item?.is_fav ? (
+        ) : FavService ? (
           <FaHeart onClick={() => handleRemoveFromFavorites(item.id)} />
         ) : (
-          <FaRegHeart onClick={() => handleAddToFavorites(item?.id)} />
+          <FaRegHeart
+            onClick={() =>
+              localStorage.getItem("username")
+                ? handleAddToFavorites(item?.id)
+                : navigate("/login")
+            }
+          />
         )}
       </div>
       <img
@@ -191,7 +164,6 @@ const Service = () => {
 
   const fetchData = async () => {
     const cookie = document.cookie.split(";");
-
     const jsonData = {};
 
     cookie.forEach((item) => {
@@ -413,12 +385,13 @@ const Service = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={(e) =>
-            e.key === "Enter" && getServicesByQuery(searchQuery)
+            e.key === "Enter" &&
+            (getServicesByQuery(searchQuery), setCurrentPage(1))
           }
         />
         <div
           className="h-full w-[6vw] py-2 bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all xs:text-sm sm:text-base md:text-lg rounded-l-none rounded-md flex justify-center items-center"
-          onClick={() => getServicesByQuery(searchQuery)}
+          onClick={() => (getServicesByQuery(searchQuery), setCurrentPage(1))}
         >
           <FaSearch />
         </div>
@@ -431,7 +404,9 @@ const Service = () => {
             onClick={() => (
               setShowSearchedServices(false),
               setSearchedServices([]),
-              setSearchQuery("")
+              setSearchQuery(""),
+              getAllServices(),
+              setCurrentPage(1)
             )}
           >
             <IoMdArrowRoundBack />
@@ -508,12 +483,16 @@ const Service = () => {
                               onClick={() => remFav(item.id)}
                             >
                               <FaMinus />
-                              Added to Fav
+                              Remove from Fav
                             </div>
                           ) : (
                             <div
                               className="flex gap-2 items-center"
-                              onClick={() => addFav(item.id)}
+                              onClick={() =>
+                                localStorage.getItem("username")
+                                  ? addFav(item.id)
+                                  : navigate("/login")
+                              }
                             >
                               <FaPlus /> Add to Fav
                             </div>
@@ -546,11 +525,7 @@ const Service = () => {
                         key={service?.id}
                         className="cursor-pointer  min-w-[300px] max-w-[300px] md:min-w-[350px] md:max-w-[350px]"
                       >
-                        <ServiceCard
-                          item={service}
-                          getAllServices={getAllServices}
-                          fetchData={fetchData}
-                        />
+                        <ServiceCard item={service} />
                       </div>
                     ))}
                   </div>
@@ -632,12 +607,16 @@ const Service = () => {
                                 onClick={() => remFav(item.id)}
                               >
                                 <FaMinus />
-                                Rem from Fav
+                                Remove from Fav
                               </div>
                             ) : (
                               <div
                                 className="flex gap-2 items-center"
-                                onClick={() => addFav(item.id)}
+                                onClick={() =>
+                                  localStorage.getItem("username")
+                                    ? addFav(item.id)
+                                    : navigate("/login")
+                                }
                               >
                                 <FaPlus /> Add to Fav
                               </div>

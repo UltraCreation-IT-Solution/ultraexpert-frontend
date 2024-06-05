@@ -11,7 +11,6 @@ import {
 import { FaPlus } from "react-icons/fa6";
 import { IoEyeSharp } from "react-icons/io5";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { BiSolidLike } from "react-icons/bi";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../../../subsitutes/Pagination";
@@ -35,6 +34,41 @@ export const BlogBody = ({
   const [favBlog, setFavBlog] = useState(false);
   const [blogsCategory, setBlogsCategory] = useState([]);
   const fetchBlogs = async () => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get("/blogs/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const json = res.data.data;
+      const categorizedBlogs = {};
+      for (const category in json) {
+        categorizedBlogs[category] = json[category].map((blog) => ({
+          id: blog.id,
+          title: blog.title,
+          author_name: blog.author_name,
+          content: blog.content,
+          images: blog.images,
+          is_fav: blog.is_favorite,
+          views: blog.blog_view_count,
+          comments: blog.comment_count,
+          reactions: blog.reaction_count,
+          date: blog.date_created,
+        }));
+      }
+      setBlogsCategory(Object.entries(categorizedBlogs));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchBlogsByToken = async () => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
     cookie.forEach((item) => {
@@ -71,7 +105,7 @@ export const BlogBody = ({
   };
 
   useEffect(() => {
-    fetchBlogs();
+    localStorage.getItem("username") ? fetchBlogsByToken() : fetchBlogs();
   }, []);
 
   console.log(blogsCategory);
@@ -144,63 +178,72 @@ export const BlogBody = ({
       console.log(error);
     }
   };
+  const navigate = useNavigate();
 
   return (
     <>
       {/* Recent Blogs */}
-      <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
-        <div className="text-xl lg:text-3xl font-extrabold ">Recent Blogs</div>
-        <div className="mt-4 w-full h-auto flex gap-[2vw] overflow-scroll pb-4">
-          {allBlogsArray.map((item) => {
-            return (
-              <div
-                key={item?.id}
-                className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
-              >
-                <img
-                  src={item?.images[0]}
-                  className="w-full h-[200px] object-cover shrink-0 md:mb-[0.7vw]"
-                  alt=""
-                />
-                <div className="px-[0.8vw] pt-2 md:pt-0">
-                  <div className="flex justify-between font-semibold text-sm text-[#808080]">
-                    <div>{item?.author_name}</div>
-                    <div>{formatDate(item?.updated_on)}</div>
-                  </div>
-                  <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
-                    {item?.title}
-                  </div>
-                  <div className="text-sm line-clamp-3 md:mb-[1vw]">
-                    {item?.content}
-                  </div>
-                  <div className="w-full flex text-white justify-between items-center my-2">
-                    <Link
-                      to={"blogdetail/" + item?.id}
-                      className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
-                    >
-                      Read More
-                    </Link>
-                    {localStorage.getItem("isExpert") === "true" ? (
-                      <></>
-                    ) : item?.is_favorite ? (
-                      <FaBookmark
-                        onClick={() => handleRemoveFavBlog(item.id)}
-                        className="text-black mx-2"
-                        size={35}
-                      />
-                    ) : (
-                      <CiBookmark
-                        onClick={() => handleAddFavBlog(item.id)}
-                        className="text-4xl xs:text-5xl text-black"
-                      />
-                    )}
+      {!shimmer && (
+        <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
+          <div className="text-xl lg:text-3xl font-extrabold ">
+            Recent Blogs
+          </div>
+          <div className="mt-4 w-full h-auto flex gap-[2vw] overflow-scroll pb-4">
+            {allBlogsArray.map((item) => {
+              return (
+                <div
+                  key={item?.id}
+                  className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0"
+                >
+                  <img
+                    src={item?.images[0]}
+                    className="w-full h-[200px] object-cover shrink-0 md:mb-[0.7vw]"
+                    alt=""
+                  />
+                  <div className="px-[0.8vw] pt-2 md:pt-0">
+                    <div className="flex justify-between font-semibold text-sm text-[#808080]">
+                      <div>{item?.author_name}</div>
+                      <div>{formatDate(item?.updated_on)}</div>
+                    </div>
+                    <div className="font-bold text-base line-clamp-2 text-ellipsis my-2 mb-[0.2vw]">
+                      {item?.title}
+                    </div>
+                    <div className="text-sm line-clamp-3 md:mb-[1vw]">
+                      {item?.content}
+                    </div>
+                    <div className="w-full flex text-white justify-between items-center my-2">
+                      <Link
+                        to={"blogdetail/" + item?.id}
+                        className="w-full flex justify-center items-center px-[3vw] py-2  text-white bg-[#2A2A2A] rounded-sm text-xs xs:text-sm font-semibold cursor-pointer decoration-transparent"
+                      >
+                        Read More
+                      </Link>
+                      {localStorage.getItem("isExpert") === "true" ? (
+                        <></>
+                      ) : item?.is_favorite ? (
+                        <FaBookmark
+                          onClick={() => handleRemoveFavBlog(item.id)}
+                          className="text-black mx-2"
+                          size={35}
+                        />
+                      ) : (
+                        <CiBookmark
+                          onClick={() =>
+                            localStorage.getItem("username")
+                              ? handleAddFavBlog(item.id)
+                              : navigate("/login")
+                          }
+                          className="text-4xl xs:text-5xl text-black"
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* blogs category wise */}
       <div className="px-[8vw] md:px-[10vw] mt-[8vw] md:mt-[4vw]">
@@ -252,7 +295,11 @@ export const BlogBody = ({
                             />
                           ) : (
                             <CiBookmark
-                              onClick={() => handleAddFavBlog(blog.id)}
+                              onClick={() =>
+                                localStorage.getItem("username")
+                                  ? handleAddFavBlog(blog.id)
+                                  : navigate("/login")
+                              }
                               className="text-4xl xs:text-5xl text-black"
                             />
                           )}
@@ -269,9 +316,9 @@ export const BlogBody = ({
 
       {/* Hot topics */}
       <div className="bg-[#F2F2F2] px-[2vw] py-[3vw] mt-20">
-        <div className="text-xl lg:text-3xl font-bold mt-4 text-center ">
+        {/* <div className="text-xl lg:text-3xl font-bold mt-4 text-center ">
           Hot Topics
-        </div>
+        </div> */}
         <div className="mt-6 md:mt-[3vw] flex items-center gap-[2vw] overflow-x-scroll">
           {/* {hotTopics.map((temp, index) => (
             <div
@@ -310,7 +357,7 @@ export const BlogBody = ({
               </div>
             ) : (
               allBlogsArray?.map((item, index) => (
-                <BlogCard
+                <BlogCardHorizontal
                   key={item.id}
                   index={index}
                   id={item.id}
@@ -345,7 +392,7 @@ export const SearchedBlog = ({ searchedBlogs }) => {
         </div>
       ) : (
         searchedBlogs?.map((item, index) => (
-          <BlogCard
+          <BlogCardHorizontal
             key={item.id}
             index={index}
             id={item.id}
@@ -365,35 +412,19 @@ const Author = ({ createAuthor }) => {
     console.log("author");
   }, [localStorage.getItem("isAuthor")]);
   return localStorage.getItem("isAuthor") === "true" ? (
-    <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
-      <div className="text-xl lg:text-3xl font-bold text-center px-5">
-        Write a Blog
-      </div>
-      <Link
-        to="createblog"
-        className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
-      >
-        Write a Blog
-      </Link>
+    <div className=" shrink-0 px-5 py-2 text-white bg-[#2A2A2A] text-xs sm:text-sm md:text-base font-semibold rounded-sm cursor-pointer w-fit">
+      <Link to="createblog">Write a Blog</Link>
     </div>
   ) : (
-    <div className="w-[75%] h-auto flex justify-between bg-[#ECECEC] mx-auto mt-10 py-5 items-center">
-      <div className="flex flex-col px-5">
-        <div className="text-xl lg:text-3xl font-bold text-center">
-          Become an Author
-        </div>
-        <div className="text-center text-sm">(If you want to write a blog)</div>
-      </div>
-      <button
-        onClick={(e) => createAuthor(e)}
-        className="px-[3vw] py-[1vw] md:px-[2vw] md:py-[0.5vw] text-white bg-[#2A2A2A] mx-5 text-xs md:text-base font-semibold rounded-sm cursor-pointer"
-      >
-        Become an Author
-      </button>
+    <div
+      className="shrink-0 px-5 py-2 bg-[#2A2A2A] text-white text-xs sm:text-sm md:text-base font-semibold rounded-sm cursor-pointer w-fit"
+      onClick={(e) => createAuthor(e)}
+    >
+      Become an Author
     </div>
   );
 };
-export const BlogCard = ({
+export const BlogCardHorizontal = ({
   items,
   index,
   id,
@@ -473,7 +504,6 @@ export const BlogCard = ({
       console.log(error);
     }
   };
-  console.log(items);
   return (
     <div
       className={`w-full px-3 py-4 my-6 rounded-md sm:flex justify-between gap-5  ${
@@ -531,12 +561,16 @@ export const BlogCard = ({
                       onClick={() => remFav(id)}
                     >
                       <FaMinus />
-                      Added to Fav
+                      Remove from Fav
                     </div>
                   ) : (
                     <div
                       className="flex gap-2 items-center"
-                      onClick={() => addFav(id)}
+                      onClick={() =>
+                        localStorage.getItem("username")
+                          ? addFav(id)
+                          : navigate("/login")
+                      }
                     >
                       <FaPlus /> Add to Fav
                     </div>
@@ -557,7 +591,7 @@ const Blogs = () => {
   const [shimmer, setShimmer] = useState(false);
   // for pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(3);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
   const [lastPage, setLastPage] = useState(0);
   // for pagination
 
@@ -702,6 +736,47 @@ const Blogs = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
+    setSearchedBlogs([]);
+    setShimmer(true);
+    try {
+      const res = await axios.get(
+        `/blogs/?action=1&page=${currentPage}&records_number=${itemsPerPage}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        setShimmer(false);
+        return;
+      }
+      setLastPage(res.data.total_pages);
+      const allData = res.data.data.all;
+      console.log(res.data);
+      setAllBlogsArray(allData);
+      setShimmer(false);
+    } catch (error) {
+      console.log(error);
+      setShimmer(false);
+    }
+  };
+  const getBlogArrayByToken = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    setSearchedBlogs([]);
     setShimmer(true);
     try {
       const res = await axios.get(
@@ -734,7 +809,11 @@ const Blogs = () => {
     }
   };
   useEffect(() => {
-    getBlogArray();
+    !showSearchedBlogs
+      ? localStorage.getItem("username")
+        ? getBlogArrayByToken()
+        : getBlogArray()
+      : getBlogsBySearch(searchQuery);
   }, [currentPage]);
 
   //api call for all blogs
@@ -759,11 +838,14 @@ const Blogs = () => {
       return;
     }
     try {
-      const res = await axios.get(`/blogs/?action=8&query=${searchQuery} `, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await axios.get(
+        `/blogs/?action=8&query=${searchQuery}&page=${currentPage}&page_size=${itemsPerPage} `,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (
         !res.data ||
         res.data.status === 400 ||
@@ -772,9 +854,11 @@ const Blogs = () => {
       ) {
         return;
       }
-      const data = res.data.data;
+      console.log(res);
+      const data = res.data;
       setShowSearchedBlogs(true);
-      setSearchedBlogs(data);
+      setSearchedBlogs(data.data);
+      setLastPage(data.pagination.total_pages);
     } catch (error) {
       console.log(error);
     }
@@ -815,29 +899,33 @@ const Blogs = () => {
         ))}
       </div>
 
-      <div className="my-10 flex justify-center items-center h-[8vh]">
-        <input
-          className="h-full w-[84vw] sm:w-[66vw] md:w-[60vw] bg-[#ECECEC] rounded-r-none rounded-md pl-3 sm:pl-6 py-2 xs:text-sm sm:text-base md:text-lg outline-none"
-          type="text"
-          placeholder="Search for any blog"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && getBlogsBySearch(searchQuery)}
-        />
-        <div
-          className="h-full w-[6vw] py-2 bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all xs:text-sm sm:text-base md:text-lg rounded-l-none rounded-md flex justify-center items-center"
-          onClick={() => getBlogsBySearch(searchQuery)}
-        >
-          <FaSearch />
+      <div className="my-10 flex flex-col sm:flex-row justify-center sm:justify-between sm:items-center gap-5 sm:gap-10 sm:h-14 px-[8vw] md:px-[10vw]">
+        {localStorage.getItem("isExpert") === "true" ? (
+          <Author createAuthor={createAuthor} />
+        ) : null}
+        <div className="flex items-center w-[50rem] h-full">
+          <input
+            className="h-full w-[80vw] sm:w-[66vw] md:w-[60vw] bg-[#ECECEC] rounded-r-none rounded-md pl-3 sm:pl-6 py-2 xs:text-sm sm:text-base md:text-lg outline-none"
+            type="text"
+            placeholder="Search for any blog"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) =>
+              e.key === "Enter" &&
+              (getBlogsBySearch(searchQuery), setCurrentPage(1))
+            }
+          />
+          <div
+            className="h-full w-[6vw] py-2 bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all xs:text-sm sm:text-base md:text-lg rounded-l-none rounded-md flex justify-center items-center"
+            onClick={() => (getBlogsBySearch(searchQuery), setCurrentPage(1))}
+          >
+            <FaSearch />
+          </div>
         </div>
       </div>
-      {localStorage.getItem("isExpert") === "true" ? (
-        <Author createAuthor={createAuthor} />
-      ) : null}
-
       {showSearchedBlogs === true ? (
         shimmer ? (
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-4 px-[8vw] md:px-[10vw]">
             {Array.from({ length: itemsPerPage }).map((_, index) => (
               <HorizontalCardShimmer key={index} />
             ))}
@@ -847,13 +935,16 @@ const Blogs = () => {
             <div
               className="text-lg sm:text-xl font-semibold text-red-500 mt-10 md:mt-15 cursor-pointer flex gap-2 items-center px-[7vw] md:px-[10vw] no-underline ml-2 hover:ml-0 hover:gap-3 hover:underline transition-all w-fit"
               onClick={() => (
-                setShowSearchedBlogs(false), setSearchedBlogs([])
+                setShowSearchedBlogs(false),
+                setSearchedBlogs([]),
+                getBlogArray(),
+                setSearchQuery(""),
+                setCurrentPage(1)
               )}
             >
               <IoMdArrowRoundBack />
               Back
             </div>
-
             <SearchedBlog searchedBlogs={searchedBlogs} />
           </>
         )
