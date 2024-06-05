@@ -11,7 +11,68 @@ import ShowSchedule from "../../subsitutes/Schedule";
 import ExpertProfileShimmer from "../../subsitutes/Shimmers/ExpertProfileShimmer";
 
 export const ServiceProfileCard = ({ item }) => {
+
   const navigate = useNavigate();
+  const [isFollowing, setIsFollowing] = useState(item?.expert_data?.is_following_expert || false);
+  const cookie = document.cookie.split(";");
+  const jsonData = {};
+  cookie.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  const followExpert = async (id) => {
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 1,
+          expert_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      setIsFollowing(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const unfollowExpert = async (id) => {
+    console.log(id);
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 2,
+          expert_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      setIsFollowing(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div
       className={`w-full px-3 py-5 bg-[#EDEDED] flex flex-col md:flex-row justify-between md:items-center shadow-sm drop-shadow-md rounded-md`}
@@ -33,15 +94,19 @@ export const ServiceProfileCard = ({ item }) => {
           </div>
         </Link>
         <div className="block md:hidden">
-          {item?.expert_data?.is_following_expert ? (
-            <button className="bg-white px-4 sm:px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-xs sm:text-sm text-black font-semibold border rounded-sm sm:rounded-md">
-              Follow
+          {localStorage.getItem("isExpert") === "false" && (isFollowing ? (
+            <button className="bg-white px-4 sm:px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-xs sm:text-sm text-black font-semibold border rounded-sm sm:rounded-md"
+            onClick={() => unfollowExpert(item?.expert_data?.id)}
+            >
+              unfollow
             </button>
           ) : (
-            <button className="bg-white px-4 sm:px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-xs sm:text-sm text-black font-semibold border rounded-sm sm:rounded-md">
-              Unfollow
+            <button className="bg-white px-4 sm:px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-xs sm:text-sm text-black font-semibold border rounded-sm sm:rounded-md"
+            onClick={() => followExpert(item?.expert_data?.id)}
+            >
+              Follow
             </button>
-          )}
+          ))}
         </div>
       </div>
 
@@ -68,15 +133,20 @@ export const ServiceProfileCard = ({ item }) => {
           </div>
         </a>
         <div className="hidden md:block">
-          {item?.expert_data?.is_following_expert ? (
-            <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
-              Follow
-            </button>
-          ) : (
-            <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md">
+          {localStorage.getItem("isExpert") === "false" &&  (isFollowing ? (
+            <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md"
+            onClick={() => unfollowExpert(item?.expert_data?.id)}
+            
+            >
               Unfollow
             </button>
-          )}
+          ) : (
+            <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md"
+            onClick={() => followExpert(item?.expert_data?.id)}
+            >
+              Follow
+            </button>
+          ))}
         </div>
       </div>
     </div>

@@ -243,10 +243,6 @@ const appRouter = createBrowserRouter([
             element: <MyServices />,
           },
           {
-            path: "myservices/service/updateService/:id",
-            element: <UpdateService />,
-          },
-          {
             path: "chats",
             element: <Chats />,
           },
@@ -267,6 +263,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
+      },
+      {
+        path: "updateservice/:id",
+        element: <UpdateService />,
       },
       {
         path: "editprofile",
