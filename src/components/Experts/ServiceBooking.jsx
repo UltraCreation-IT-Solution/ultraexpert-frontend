@@ -1,14 +1,14 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import axios from "../../axios";
 const ServiceBooking = () => {
   const location = useLocation();
-  console.log(location)
-  const serviceData= location.state;
-  const params= useParams();
-  
+  console.log(location);
+  const serviceData = location.state;
+  const params = useParams();
+
   // const handleBookService = async () => {
-    
+
   //   try {
   //     const res = await axios.post(
   //       "/booking/",
@@ -64,7 +64,7 @@ const ServiceBooking = () => {
         payment_signature: signature,
         expert_id: serviceData?.servDesc?.expert_data?.id,
         service_id: serviceData?.servDesc?.id,
-        slot_id: serviceData?.slotData?.slotId
+        slot_id: serviceData?.slotData?.slotId,
       },
     })
       .then((response) => {
@@ -84,10 +84,10 @@ const ServiceBooking = () => {
       },
       url: "https://api.ultraxpert.in/booking/",
       data: {
-        action:1,
+        action: 1,
         expert_id: serviceData?.servDesc?.expert_data?.id,
         service_id: serviceData?.servDesc?.id,
-        slot_id: serviceData?.slotData?.slotId
+        slot_id: serviceData?.slotData?.slotId,
       },
     })
       .then((response) => {
@@ -142,7 +142,6 @@ const ServiceBooking = () => {
 
   return (
     <div className="px-[5vw] py-[2vw]">
-
       <div className="lg:flex items-center justify-around mt-[80px]">
         <div className="w-full lg:w-[45%] py-5 mt-[4vw] lg:mt-0 flex flex-col items-center">
           <div className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-center overflow-hidden pb-3">
@@ -153,11 +152,10 @@ const ServiceBooking = () => {
           </p>
           <div className="flex gap-[1vw] md:gap-2">
             <Link to={`/experts/service/${serviceData?.servDesc?.id}`}>
-              <button className="px-4 py-[2vw] md:px-[2vw] md:py-[0.6vw] text-white  bg-[#2A2A2A] rounded-sm md:rounded-md text-xs md:text-base"
-              >
+              <button className="px-4 py-[2vw] md:px-[2vw] md:py-[0.6vw] text-white  bg-[#2A2A2A] rounded-sm md:rounded-md text-xs md:text-base">
                 View service
               </button>
-              </Link>
+            </Link>
             <Link to="/services">
               <button className="px-4 py-[2vw] md:px-[2vw] md:py-[0.6vw] text-black bg-white border font-semibold rounded-sm md:rounded-md text-xs md:text-base cursor-pointer">
                 Back to services
@@ -167,37 +165,57 @@ const ServiceBooking = () => {
         </div>
 
         <div className="w-full lg:w-[40%] bg-[#F2F2F2] px-2 py-4 mt-8 lg:mt-0">
+          <div className="text-sm sm:text-lg md:text-lg font-bold">
+            Review Details
+          </div>
 
-            <div className="text-sm sm:text-lg md:text-lg font-bold">
-              Review Details
+          <div className="mt-[2.5vw] border-b border-gray-300 border-solid text-gray-600">
+            <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg">
+              <span>Service Name</span>
+              <span className="text-right">
+                {" "}
+                {serviceData?.servDesc?.service_name}
+              </span>
             </div>
+            <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
+              <span>Expert Name</span>
+              <span className="text-right">
+                {serviceData?.servDesc?.expert_data?.first_name}{" "}
+                {serviceData?.servDesc?.expert_data?.last_name}{" "}
+              </span>
+            </div>
+            <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
+              <span>Service Duration</span>
+              <span>{serviceData?.slotData?.slotDuration} </span>
+            </div>
+            <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
+              <span>Date</span>
+              <span>{serviceData?.slotData?.date} </span>
+            </div>
+            <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
+              <span>Start Time</span>
+              <span>{serviceData?.slotData?.slotStartTime} </span>
+            </div>
+            <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
+              <span>End Time</span>
+              <span>{serviceData?.slotData?.slotEndTime} </span>
+            </div>
+          </div>
 
-            <div className="mt-[2.5vw] border-b border-gray-300 border-solid text-gray-600">
-              <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg">
-                <span>Service Name</span>
-                <span className="text-right"> {serviceData?.servDesc?.service_name}</span>
-              </div>
-              <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
-                <span>Expert Name</span>
-                <span className="text-right">{serviceData?.servDesc?.expert_data?.first_name} {serviceData?.servDesc?.expert_data?.last_name} </span>
-              </div>
-              <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
-                <span>Service Duration</span>
-                <span>{serviceData?.slotData?.slotDuration} </span>
-              </div>
-              <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
-                <span>Date</span>
-                <span>{serviceData?.slotData?.date} </span>
-              </div>
-              <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
-                <span>Start Time</span>
-                <span>{serviceData?.slotData?.slotStartTime} </span>
-              </div>
-              <div className="flex justify-between gap-3 text-xs sm:text-base md:text-lg mt-2">
-                <span>End Time</span>
-                <span>{serviceData?.slotData?.slotEndTime} </span>
-              </div>
+          <div className="mt-[2vw] border-b border-gray-300 border-solid text-gray-600">
+            <div className="flex justify-between text-xs sm:text-base md:text-lg mt-2">
+              <span>Expert Charge</span>
+              <span>₹{serviceData?.servDesc?.price} </span>
             </div>
+            <div className="flex justify-between text-xs sm:text-base md:text-lg mt-2">
+              <span>Platform Charge</span>
+              <span>100/-</span>
+            </div>
+            <div className="flex justify-between text-xs sm:text-base md:text-lg mt-2">
+              <span>Tax</span>
+              <span>10/- </span>
+            </div>
+          </div>
 
             <div className="mt-[2vw] border-b border-gray-300 border-solid text-gray-600">
                 <div className="flex justify-between text-xs sm:text-base md:text-lg my-2">
@@ -227,15 +245,12 @@ const ServiceBooking = () => {
             </div>
           
         </div>
-
       </div>
     </div>
   );
 };
 
 export default ServiceBooking;
-
-
 
 // import React from "react";
 // import { Link } from "react-router-dom";

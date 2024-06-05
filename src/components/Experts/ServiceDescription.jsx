@@ -113,9 +113,10 @@ export const ServiceProfileCard = ({ item }) => {
       <div className="flex items-center gap-8 lg:gap-10 mt-5 md:mt-0">
         <div
           className="text-sm md:text-base text-gray-600 cursor-pointer shrink-0"
-          onClick={
-            () => navigate( `/experts/expertprofile/${item?.expert_data?.id}`,
-            { state: { check: true } })
+          onClick={() =>
+            navigate(`/experts/expertprofile/${item?.expert_data?.id}`, {
+              state: { check: true },
+            })
           }
         >
           Services
@@ -902,12 +903,15 @@ const ServiceDescription = () => {
   useEffect(() => {
     getAllServiceComments();
   }, []);
-  if(shimmer===true){
-    return (
-      <ExpertProfileShimmer/>
-    )
+  if (shimmer === true) {
+    return <ExpertProfileShimmer />;
   }
-  if (servDesc === null) return <div className="text-center font-bold text-lg md:text-2xl text-gray-600 mt-[100px]">Service description not found</div>;
+  if (servDesc === null)
+    return (
+      <div className="text-center font-bold text-lg md:text-2xl text-gray-600 mt-[100px]">
+        Service description not found
+      </div>
+    );
 
   return (
     <>

@@ -54,7 +54,6 @@ import CustomerDashboard, {
   CustomerRecentMeetngs,
   CustomerTransactionHistory,
 } from "./components/Customers/CustomerDashboard.jsx";
-import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
 import SkillList from "./components/GetCertified/Instructions.js";
 import UpdateService from "./components/Services/UpdateService.jsx";

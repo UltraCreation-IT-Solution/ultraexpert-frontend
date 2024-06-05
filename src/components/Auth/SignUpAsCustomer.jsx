@@ -1,15 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
-import { BsUpload, BsX } from "react-icons/bs";
-import { imageDB } from "../firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
 import { handleUploadImage } from "../../constant";
 
 const CHECKOUT_STEPS = [
@@ -119,11 +110,11 @@ const SignUpAsCustomer = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${jsonData.access_token}`,
-            // "X-CSRF-TOKEN": ${jsonData.csrf_token},
           },
         }
       );
       const data = response.data;
+      localStorage.setItem("customer_id", `${response.data.customer_id}`);
       if (!data) {
         console.log("Something went wrong");
         setLoading(false);

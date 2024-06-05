@@ -95,7 +95,10 @@ export const QuillToolbar = (props) => {
   return (
     <>
       {props.toolbarId !== undefined && (
-        <div id={props.toolbarId} className="custom-toolbar overflow-visible min-h-[50px]  " >
+        <div
+          id={props.toolbarId}
+          className="custom-toolbar overflow-visible min-h-[50px]  "
+        >
           <span className="ql-formats">
             <button className="ql-bold" />
             <button className="ql-italic" />

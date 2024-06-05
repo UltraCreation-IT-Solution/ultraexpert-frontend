@@ -2,18 +2,8 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import QuillToolbar, { modules, formats } from "../../subsitutes/EditorToolbar";
-import { BsUpload } from "react-icons/bs";
-import { BsX } from "react-icons/bs";
 import axios from "../../axios";
 import DOMPurify from "dompurify";
-import { imageDB } from "../firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import { handleUploadImage } from "../../constant";
 import { FiUpload } from "react-icons/fi";
@@ -314,7 +304,7 @@ const CreateBlog = () => {
                         });
                       }}
                     >
-                     + Add Category
+                      + Add Category
                     </div>
                   )}
               </div>
@@ -403,9 +393,9 @@ const CreateBlog = () => {
             />
             {imageLoading ? (
               <div className="flex w-full h-full items-center justify-center text-center">
-              <span>Loading...</span>
-            </div>
-            ): selectedFile ?(
+                <span>Loading...</span>
+              </div>
+            ) : selectedFile ? (
               <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                 <img
                   src={selectedFile}
@@ -413,7 +403,7 @@ const CreateBlog = () => {
                   className="w-auto h-40 shrink-0 object-cover object-center m-2"
                 />
               </div>
-            ):(
+            ) : (
               <div className="flex items-center justify-center w-full h-full text-gray-600">
                 <FiUpload className="w-10 h-10" />
                 <span className="ml-2">Upload Image</span>

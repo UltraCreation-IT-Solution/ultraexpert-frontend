@@ -4,15 +4,7 @@ import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import axios from "../../axios";
-import { FiUpload, FiX } from "react-icons/fi";
-import { imageDB } from "../firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 as uuidv4 } from "uuid";
+import { FiUpload } from "react-icons/fi";
 
 // slots
 import { Calendar, momentLocalizer } from "react-big-calendar";
