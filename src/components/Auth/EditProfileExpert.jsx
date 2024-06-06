@@ -55,7 +55,7 @@ const GeneralDetails = () => {
     setGeneralInfo({
       ...generalInfo,
       profile_img: url,
-    })
+    });
   };
   const handleCroppedImageBackground = (url) => {
     console.log("Cropped image URL:", url);
@@ -65,7 +65,7 @@ const GeneralDetails = () => {
     setGeneralInfo({
       ...generalInfo,
       banner_img: url,
-    })
+    });
   };
   const closeModalProfile = () => {
     setShowModalProfile(false);
@@ -177,8 +177,6 @@ const GeneralDetails = () => {
 
   const [profileLoading, setProfileLoading] = useState(false);
   const [bannerLoading, setBannerLoading] = useState(false);
-
-  
 
   console.log(generalInfo);
   return (
@@ -321,18 +319,18 @@ const GeneralDetails = () => {
                   )}
                 </div>
                 <Modal
-                      className="w-full h-full overflow-scroll"
-                      show={showModalProfile}
-                      onClose={closeModalProfile}
-                    >
-                      <ImageUploader
-                        image={myImageProfile}
-                        handleUploadImage={handleUploadImage}
-                        filename="cropped_image.jpg"
-                        onCropped={handleCroppedImageProfile}
-                        aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
-                      />
-                    </Modal>
+                  className="w-full h-full overflow-scroll"
+                  show={showModalProfile}
+                  onClose={closeModalProfile}
+                >
+                  <ImageUploader
+                    image={myImageProfile}
+                    handleUploadImage={handleUploadImage}
+                    filename="cropped_image.jpg"
+                    onCropped={handleCroppedImageProfile}
+                    aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                  />
+                </Modal>
               </div>
               <div className="flex flex-col w-full">
                 <label htmlFor="banner" className="text-lg mb-1">
@@ -372,18 +370,18 @@ const GeneralDetails = () => {
                   )}
                 </div>
                 <Modal
-                      className="w-full h-full overflow-scroll"
-                      show={showModalBackground}
-                      onClose={closeModalBackground}
-                    >
-                      <ImageUploader
-                        image={myImageBackground}
-                        handleUploadImage={handleUploadImage}
-                        filename="cropped_image.jpg"
-                        onCropped={handleCroppedImageBackground}
-                        aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
-                      />
-                    </Modal>
+                  className="w-full h-full overflow-scroll"
+                  show={showModalBackground}
+                  onClose={closeModalBackground}
+                >
+                  <ImageUploader
+                    image={myImageBackground}
+                    handleUploadImage={handleUploadImage}
+                    filename="cropped_image.jpg"
+                    onCropped={handleCroppedImageBackground}
+                    aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                  />
+                </Modal>
               </div>
             </div>
           </div>
@@ -464,21 +462,6 @@ const PersonalDetails = () => {
     console.log(jsonData);
     setLoading(true);
     try {
-      // const response = await fetch("http://localhost:8000/experts/update/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 2,
-      //     level: personalInfo.level,
-      //     profession: personalInfo.profession,
-      //     about_me: personalInfo.about_me,
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = await response.json();
-      // console.log(json);
       const response = await axios.post(
         "/experts/update/",
         {
@@ -579,7 +562,7 @@ const PersonalDetails = () => {
             />
 
             <label htmlFor="about" className="text-lg mb-1">
-              About Me
+              About
             </label>
             <textarea
               required
@@ -593,7 +576,7 @@ const PersonalDetails = () => {
                   about_me: e.target.value,
                 });
               }}
-              className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
+              className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full min-h-20 shrink-0 mb-4"
               placeholder="I want to learn css, html, python with django"
             />
           </div>
