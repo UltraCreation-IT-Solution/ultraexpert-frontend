@@ -54,7 +54,6 @@ import CustomerDashboard, {
   CustomerRecentMeetngs,
   CustomerTransactionHistory,
 } from "./components/Customers/CustomerDashboard.jsx";
-import FirebaseImageUpload from "./components/firebase/FirebaseImageUpload.js";
 import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
 import SkillList from "./components/GetCertified/Instructions.js";
 import UpdateService from "./components/Services/UpdateService.jsx";
@@ -244,10 +243,6 @@ const appRouter = createBrowserRouter([
             element: <MyServices />,
           },
           {
-            path: "myservices/service/updateService/:id",
-            element: <UpdateService />,
-          },
-          {
             path: "chats",
             element: <Chats />,
           },
@@ -270,8 +265,8 @@ const appRouter = createBrowserRouter([
         element: <About />,
       },
       {
-        path: "/firebaseuploadtest",
-        element: <FirebaseImageUpload />,
+        path: "updateservice/:id",
+        element: <UpdateService />,
       },
       {
         path: "editprofile",

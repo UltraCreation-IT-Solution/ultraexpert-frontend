@@ -69,7 +69,7 @@ const SignUp = () => {
       !firstStep.mobileNumber.trim() ||
       !mobileRegex.test(firstStep.mobileNumber)
     ) {
-      newErrors.mobileNumber = "Please enter a valid 10-digit mobile number";
+      newErrors.mobileNumber = "Please enter a valid mobile number";
       isValid = false;
     }
 
@@ -298,7 +298,7 @@ const SignUp = () => {
   };
 
   const nameRegex = /^[a-zA-Z]+$/;
-  const mobileRegex = /^\d{13}$/;
+  const mobileRegex = /^\+?\d{10,13}$/;
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const otpRegex = /^\d{6}$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}$/;

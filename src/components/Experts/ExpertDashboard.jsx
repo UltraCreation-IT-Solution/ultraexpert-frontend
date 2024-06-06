@@ -27,19 +27,12 @@ import { IoIosArrowUp, IoIosArrowDown, IoMdSettings } from "react-icons/io";
 import {
   IoEyeSharp,
   IoPersonAdd,
-  IoSettings,
-  IoLocationOutline,
   IoBookmarksSharp,
   IoStar,
 } from "react-icons/io5";
-import {
-  BsFillPatchCheckFill,
-  BsGlobe,
-  BsThreeDotsVertical,
-} from "react-icons/bs";
+import { BsFillPatchCheckFill, BsThreeDotsVertical } from "react-icons/bs";
 import {
   RiPagesFill,
-  RiArrowRightSLine,
   RiCustomerService2Fill,
   RiDeleteBin6Fill,
 } from "react-icons/ri";
@@ -66,7 +59,7 @@ import {
 } from "recharts";
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import { Outlet, Link, useNavigate, useParams } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import UpdateProject from "./UpdateProjeect";
 import EditProfileExpert from "../Auth/EditProfileExpert";
@@ -393,7 +386,9 @@ export const TestimonialsCard = ({
     <div className="absolute">
       <div className="fixed z-50 bg-gray-300 bg-opacity-75 px-4 md:px-8 w-full inset-0 flex items-center justify-center">
         <div className="relative w-full max-w-md shadow-lg rounded-sm bg-white p-6 md:p-8">
-          <div className="text-center text-xl font-bold mb-6">Are you sure?</div>
+          <div className="text-center text-xl font-bold mb-6">
+            Are you sure?
+          </div>
           <div className="text-gray-600 mb-6 text-center">
             Do you want to delete this testimonial?
           </div>
@@ -1285,7 +1280,7 @@ export const Dashboard = () => {
           />
         )}
         {/* Testimonials section of dashboard */}
-        {testimonials && expertAllTestimonials.length === 0 ? (
+        {testimonials && (expertAllTestimonials.length === 0 ? (
           <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
             No testimonials found
           </div>
@@ -1300,7 +1295,7 @@ export const Dashboard = () => {
               getExpertAllTestimonials={getExpertAllTestimonials}
             />
           ))
-        )}
+        ))}
         {/* Project section of dashboard */}
         {projects && <ShowMyProjects />}
       </div>
@@ -1412,7 +1407,9 @@ export const MyServices = () => {
         <div className="absolute">
           <div className="fixed z-50 bg-gray-300 bg-opacity-75 px-4 md:px-8 w-full inset-0 flex items-center justify-center">
             <div className="relative w-full max-w-md shadow-lg rounded-sm bg-white p-6 md:p-8">
-              <h1 className="text-center text-xl font-bold mb-6">Are you sure?</h1>
+              <h1 className="text-center text-xl font-bold mb-6">
+                Are you sure?
+              </h1>
               <p className="text-gray-600 mb-6 text-center">
                 Do you want to delete this service?
               </p>
@@ -1458,7 +1455,10 @@ export const MyServices = () => {
                 className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md"
               >
                 <div className="flex items-center gap-3">
-                  <button className="flex items-center gap-2 bg-white text-sm px-3 py-1 rounded-sm text-black cursor-pointer border border-solid border-black">
+                  <button
+                    className="flex items-center gap-2 bg-white text-sm px-3 py-1 rounded-sm text-black cursor-pointer border border-solid border-black"
+                    onClick={() => navigate(`/updateservice/${service.id}`)}
+                  >
                     <MdOutlineEdit size={18} /> Edit
                   </button>
                   <button
@@ -1563,10 +1563,10 @@ export const Leaderboard = () => {
         },
       });
       console.log(response.data);
-      const expData = response.data.data;
+      const expData = response.data;
       console.log(expData);
-      setLeaderBoardData(expData);
-      setUserData(response.data.user_data);
+      setLeaderBoardData(expData?.data);
+      setUserData(expData?.user_data);
       setWeeklyLeaderboard(true);
       setMonthlyLeaderboard(false);
     } catch (error) {
@@ -1642,8 +1642,7 @@ export const Leaderboard = () => {
                 {leaderBoardData[1]?.expert_last_name}
               </div>
               <div className="text-[#009BD6]">
-                {/* {leaderBoardData[1].avg_score}{" "}  */}
-                {"1"}
+                {leaderBoardData[1]?.avg_score}{" "}
               </div>
             </div>
           </div>
@@ -1666,8 +1665,7 @@ export const Leaderboard = () => {
                 {leaderBoardData[0]?.expert_last_name}
               </div>
               <div className="text-[#FFAA00]">
-                {/* {leaderBoardData[0].avg_score}{" "} */}
-                {"1"}
+                {leaderBoardData[0]?.avg_score}{" "}
               </div>
             </div>
           </div>
@@ -1687,8 +1685,7 @@ export const Leaderboard = () => {
                 {leaderBoardData[2]?.expert_last_name}
               </div>
               <div className="text-[#00D95F]">
-                {/* {leaderBoardData[2]?.avg_score} */}
-                {"1"}
+                {leaderBoardData[2]?.avg_score}
               </div>
             </div>
           </div>
@@ -1765,14 +1762,13 @@ export const Leaderboard = () => {
 };
 
 // export const MyBookings = ({ expertData, expertId }) => {
-  
+
 //   return (
-    
+
 //   );
 // };
 
-
-export const MyBooking = (expertData) => {
+export const MyBooking = ({ id }) => {
   const [shimmer, setShimmer] = useState(false);
   const [myBookings, setMyBookings] = useState([]);
   useEffect(() => {
@@ -1791,7 +1787,7 @@ export const MyBooking = (expertData) => {
     setShimmer(true);
     try {
       const res = await axios.get(
-        `/experts/services/?action=4&expert_id=${17}`,
+        `/experts/services/?action=4&expert_id=${5}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -1816,7 +1812,7 @@ export const MyBooking = (expertData) => {
       setShimmer(false);
     }
   };
-  console.log(expertData);
+  console.log(myBookings);
   return (
     <div className="w-full md:w-[68%]">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
@@ -1850,7 +1846,6 @@ export const MyBooking = (expertData) => {
     </div>
   );
 };
-
 
 const ExpertDashboard = () => {
   const [showEditProfile, setShowEditProfile] = useState(false);
@@ -1911,8 +1906,6 @@ const ExpertDashboard = () => {
         console.error("Failed to copy: ", err);
       });
   };
-
-  
 
   return (
     <div
@@ -2057,13 +2050,7 @@ const ExpertDashboard = () => {
         <Chats />
         <Leaderboard />
         <SkillList />
-        {/* {expertData.length!==0 && <MyBookings {...expertData} />} */}
-
-        {expertData && expertId && (
-          <MyBooking expertData={expertData} />
-        )}
-
-        {/* <MyBookings id={expertId} /> */}
+        <MyBooking id={expertData?.id} />
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />

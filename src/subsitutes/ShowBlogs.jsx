@@ -4,7 +4,7 @@ import { IoEyeSharp } from "react-icons/io5";
 import { BiSolidLike } from "react-icons/bi";
 import { FaPlus, FaEdit, FaRegTrashAlt, FaTags, FaMinus } from "react-icons/fa";
 import { RiArrowRightSLine } from "react-icons/ri";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../axios";
 
 export const BlogCardHorizontal = ({
@@ -63,13 +63,15 @@ export const BlogCardHorizontal = ({
   };
 
   const [isDeleting, setIsDeleting] = useState(false);
-  const[loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
 
   return isDeleting ? (
     <div className="absolute">
       <div className="fixed z-50 bg-gray-300 bg-opacity-75 px-4 md:px-8 w-full inset-0 flex items-center justify-center">
         <div className="relative w-full max-w-md shadow-lg rounded-sm bg-white p-6 md:p-8">
-          <div className="text-center text-xl font-bold mb-6">Are you sure?</div>
+          <div className="text-center text-xl font-bold mb-6">
+            Are you sure?
+          </div>
           <div className="text-gray-600 mb-6 text-center">
             Do you want to delete this blog?
           </div>

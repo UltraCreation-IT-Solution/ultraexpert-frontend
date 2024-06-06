@@ -1,19 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "../../axios";
-import { BsArrowLeftSquare, BsUpload, BsX } from "react-icons/bs";
 import {
   BiSolidCaretLeftSquare,
   BiSolidCaretRightSquare,
 } from "react-icons/bi";
-import { imageDB } from "../firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
 import { handleUploadImage } from "../../constant";
+import ImageUploader from "../../ImageUploader";
+import Modal from "../../Modal";
 import { FiUpload } from "react-icons/fi";
 
 const cookies = document.cookie.split("; ");
@@ -26,6 +19,65 @@ cookies.forEach((item) => {
 const GeneralDetails = () => {
   const [loading, setLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
+  const [showModalProfile, setShowModalProfile] = useState(false);
+  const [showModalBackground, setShowModalBackground] = useState(false);
+  const [myImageBackground, setMyImageBackground] = useState(null);
+  const [myImageProfile, setMyImageProfile] = useState(null);
+
+  const onSelectFileProfile = (event) => {
+    setProfileLoading(true);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImageProfile(reader.result);
+        setShowModalProfile(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+  const onSelectFileBackground = (event) => {
+    setBannerLoading(true);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImageBackground(reader.result);
+        setShowModalBackground(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+
+  const handleCroppedImageProfile = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModalProfile(false); // Close the modal after getting the URL
+    setProfileLoading(false);
+    setMyImageProfile(url); // Reset the image state
+    setGeneralInfo({
+      ...generalInfo,
+      profile_img: url,
+    })
+  };
+  const handleCroppedImageBackground = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModalBackground(false); // Close the modal after getting the URL
+    setBannerLoading(false);
+    setMyImageBackground(url); // Reset the image state
+    setGeneralInfo({
+      ...generalInfo,
+      banner_img: url,
+    })
+  };
+  const closeModalProfile = () => {
+    setShowModalProfile(false);
+    setProfileLoading(false);
+    setMyImageProfile(generalInfo.profile_img); // Reset the image state when modal is closed
+  };
+  const closeModalBackground = () => {
+    setShowModalBackground(false);
+    setBannerLoading(false);
+    setMyImageBackground(generalInfo.banner_img); // Reset the image state when modal is closed
+  };
+
   const getGenInfo = async () => {
     setLoading(true);
     try {
@@ -52,8 +104,8 @@ const GeneralDetails = () => {
         banner_img: response.data.data.banner_img,
         gender: response.data.data.gender,
       });
-      setSelectedProfileUrl(response.data.data.profile_img);
-      setSelectedBannerUrl(response.data.data.banner_img);
+      setMyImageProfile(response.data.data.profile_img);
+      setMyImageBackground(response.data.data.banner_img);
       setDataLoading(true);
     } catch (error) {
       console.log(error);
@@ -61,11 +113,10 @@ const GeneralDetails = () => {
     }
   };
 
-  
   useEffect(() => {
     getGenInfo();
   }, []);
-  
+
   const [generalInfo, setGeneralInfo] = useState({
     first_name: "",
     last_name: "",
@@ -75,7 +126,7 @@ const GeneralDetails = () => {
     banner_img: "",
     gender: "Male",
   });
-  
+
   const handleSubmit1 = async (e) => {
     e.preventDefault();
     const cookies = document.cookie.split("; ");
@@ -127,41 +178,7 @@ const GeneralDetails = () => {
   const [profileLoading, setProfileLoading] = useState(false);
   const [bannerLoading, setBannerLoading] = useState(false);
 
-  const handleProfileChange = async (e) => {
-    setProfileLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setSelectedProfileUrl(url);
-    setGeneralInfo({
-      ...generalInfo,
-      profile_img: url,
-    });
-    setProfileLoading(false);
-  };
-  const handleBannerChange = async (e) => {
-    setBannerLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setSelectedBannerUrl(url);
-    setGeneralInfo({
-      ...generalInfo,
-      banner_img: url,
-    });
-    setBannerLoading(false);
-  };
-
-  const handleRemoveProfile = () => {
-    setSelectedProfile(null);
-  };
-  const handleRemoveBanner = () => {
-    setSelectedBanner(null);
-  };
+  
 
   console.log(generalInfo);
   return (
@@ -281,17 +298,17 @@ const GeneralDetails = () => {
                     accept="image/*"
                     id="profileSelector"
                     name="profileSelector"
-                    onChange={handleProfileChange}
+                    onChange={onSelectFileProfile}
                     className="hidden"
                   />
                   {profileLoading ? (
                     <div className="flex w-full h-full items-center justify-center text-center">
                       <span>Loading...</span>
                     </div>
-                  ) : selectedProfileUrl ? (
+                  ) : myImageProfile ? (
                     <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                       <img
-                        src={selectedProfileUrl}
+                        src={myImageProfile}
                         alt="Preview"
                         className="w-auto h-40 shrink-0 object-cover object-center m-2"
                       />
@@ -303,6 +320,19 @@ const GeneralDetails = () => {
                     </div>
                   )}
                 </div>
+                <Modal
+                      className="w-full h-full overflow-scroll"
+                      show={showModalProfile}
+                      onClose={closeModalProfile}
+                    >
+                      <ImageUploader
+                        image={myImageProfile}
+                        handleUploadImage={handleUploadImage}
+                        filename="cropped_image.jpg"
+                        onCropped={handleCroppedImageProfile}
+                        aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                      />
+                    </Modal>
               </div>
               <div className="flex flex-col w-full">
                 <label htmlFor="banner" className="text-lg mb-1">
@@ -319,17 +349,17 @@ const GeneralDetails = () => {
                     accept="image/*"
                     id="bannerSelector"
                     name="bannerSelector"
-                    onChange={handleBannerChange}
+                    onChange={onSelectFileBackground}
                     className="hidden"
                   />
                   {bannerLoading ? (
                     <div className="flex w-full h-full items-center justify-center text-center">
                       <span>Loading...</span>
                     </div>
-                  ) : selectedBannerUrl ? (
+                  ) : myImageBackground ? (
                     <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                       <img
-                        src={selectedBannerUrl}
+                        src={myImageBackground}
                         alt="Preview"
                         className="w-auto h-40 shrink-0 object-cover object-center m-2"
                       />
@@ -341,6 +371,19 @@ const GeneralDetails = () => {
                     </div>
                   )}
                 </div>
+                <Modal
+                      className="w-full h-full overflow-scroll"
+                      show={showModalBackground}
+                      onClose={closeModalBackground}
+                    >
+                      <ImageUploader
+                        image={myImageBackground}
+                        handleUploadImage={handleUploadImage}
+                        filename="cropped_image.jpg"
+                        onCropped={handleCroppedImageBackground}
+                        aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                      />
+                    </Modal>
               </div>
             </div>
           </div>
@@ -1487,7 +1530,7 @@ const AchDetails = () => {
       const updatedCertificates = [...prevAchInfo.certificate];
       updatedCertificates[ind] = url;
       return { ...prevAchInfo, certificate: updatedCertificates };
-    })
+    });
     setImageLoading(false);
   };
 

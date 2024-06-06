@@ -5,7 +5,6 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import axios from "../../axios";
 
 export const FavExpertCard = ({ item, getFavExpData }) => {
-  console.log(item);
   const [FavExpert, setFavExpert] = useState(true);
   const cookie = document.cookie.split(";");
   const jsonData = {};
@@ -72,7 +71,7 @@ export const FavExpertCard = ({ item, getFavExpData }) => {
   return (
     <div className="relative min-w-[250px] h-[250px] md:min-w-[310px] md:h-[300px] flex flex-col shadow-lg border border-[#dbdbdb] border-solid rounded-lg">
       <img
-        src={item?.profile_img}
+        src={item?.user?.profile_img}
         className="h-16 w-16 md:h-20 md:w-20 object-cover shrink-0 rounded-full absolute top-11 left-24 md:top-14 md:left-28 border-2 border-solid border-white"
         alt=""
       />
@@ -85,20 +84,20 @@ export const FavExpertCard = ({ item, getFavExpData }) => {
       </div>
       <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  "></div>
       <img
-        src={item?.banner_img}
+        src={item?.user?.banner_img}
         className="h-[5rem] md:h-[6rem] object-cover shrink-0"
         alt=""
       />
       <div className="text-center mt-9 md:mt-12 px-2">
         <div className="text-lg md:text-xl font-bold">
-          {item?.first_name} {item?.last_name}
+          {item?.user?.first_name} {item?.user?.last_name}
         </div>
         <div className="text-gray-500 text-sm md:text-base">
           {item?.profession}{" "}
         </div>
         <div className="mt-2 text-sm md:text-base flex items-center justify-center gap-1 ">
           <FaStar />
-          <div>{item?.rating} </div>
+          <div>{item?.expert_rating} </div>
         </div>
         <Link
           to={`/experts/expertprofile/${item?.id}`}
@@ -366,7 +365,7 @@ export const AllFav = () => {
   return (
     <div>
       {/* Favourate Experts */}
-      <FavExperts />
+      <FavExperts getFavExp={getFavExp} />
       {/* Favourate services */}
       <FavServices />
       {/* Favourate Blogs */}
@@ -375,18 +374,8 @@ export const AllFav = () => {
   );
 };
 
-export const FavExperts = () => {
-  const [favExpertsData, setFavExpertsData] = useState([
-    {
-      first_name: "",
-      last_name: "",
-      banner_img: "",
-      profile_img: "",
-      id: "",
-      profession: "",
-      about_me: "",
-    },
-  ]);
+export const FavExperts = ({ getFavExp }) => {
+  const [favExpertsData, setFavExpertsData] = useState([]);
   const getFavExpData = async () => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
@@ -407,18 +396,7 @@ export const FavExperts = () => {
         return;
       }
       console.log(json);
-      setFavExpertsData(
-        json.map((item) => ({
-          first_name: item.user.first_name,
-          last_name: item.user.last_name,
-          banner_img: item.user.banner_img,
-          profile_img: item.user.profile_img,
-          id: item.id,
-          profession: item.profession,
-          about_me: item.about_me,
-          rating: item.expert_rating,
-        }))
-      );
+      setFavExpertsData(json);
     } catch (error) {
       console.log(error);
     }

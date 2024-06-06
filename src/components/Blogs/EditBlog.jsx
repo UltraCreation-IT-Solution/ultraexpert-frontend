@@ -2,86 +2,52 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import QuillToolbar, { modules, formats } from "../../subsitutes/EditorToolbar";
-import { BsUpload } from "react-icons/bs";
-import { BsX } from "react-icons/bs";
 import axios from "../../axios";
 import DOMPurify from "dompurify";
-import { imageDB } from "../firebase/config";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import { v4 } from "uuid";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { handleUploadImage } from "../../constant";
 import { FiUpload } from "react-icons/fi";
+import ImageUploader from "../../ImageUploader";
+import Modal from "../../Modal";
 
 const EditBlog = () => {
+  const navigate = useNavigate();
   const [preview, setPreview] = useState(false);
   const params = useParams();
   console.log(params.id);
-  // code for uploading image for blog starts
-  //   const [selectedFile, setSelectedFile] = useState(null);
-  //   const [uploadBannerProgress, setUploadBannerProgress] = useState(0);
-  //   const handleFileChange = async (event) => {
-  //     const file = event.target.files[0];
-  //     if (file) {
-  //       const reader = new FileReader();
-  //       const imgRef = ref(imageDB, `UltraXpertImgFiles/${v4()}`);
-  //       const uploadTask = uploadBytesResumable(imgRef, file);
-  //       uploadTask.on(
-  //         "state_changed",
-  //         (snapshot) => {
-  //           // Get upload progress as a percentage
-  //           const progress = Math.round(
-  //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-  //           );
-  //           setUploadBannerProgress(progress);
-  //         },
-  //         (error) => {
-  //           console.error("Error uploading image: ", error);
-  //           // Handle error if needed
-  //         },
-  //         () => {
-  //           // Upload completed successfully
-  //           console.log("Upload complete");
-  //         }
-  //       );
-  //       try {
-  //         await uploadTask;
-  //         const url = await getDownloadURL(uploadTask.snapshot.ref);
-  //         console.log(url);
-  //         setBlogData({ ...blogData, image: [url] });
-  //         setSelectedFile(url);
-  //         console.log(blogData);
-  //       } catch (error) {
-  //         console.error("Error uploading image: ", error);
-  //         // Handle error if needed
-  //         alert("Something went wrong");
-  //       }
-
-  //       reader.onload = () => {
-  //         setSelectedFile(reader.result);
-  //         reader.readAsDataURL(file);
-  //       };
-  //     } else {
-  //       // Handle the case where the user cancels the file selection
-  //       setSelectedFile(null);
-  //     }
-  //   };
-  //   const removeImage = () => {
-  //     setSelectedFile(null);
-  //     setUploadBannerProgress(0);
-  //     setBlogData({ ...blogData, image: [] });
-  //   };
-  // code for uploading image for blog ends
 
   const [categoriesArray, setCategoriesArray] = useState([]);
   const [filterCategoriesArray, setFilterCategoriesArray] = useState([]);
 
   //   console.log(value2);
+  const [myImage, setMyImage] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+
+  const onSelectFile = (event) => {
+    setImageLoading(true);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImage(reader.result);
+        setShowModal(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(url); // Reset the image state
+    // setUserData({ ...userData, profile_img: url });
+    setAllBlogData({ ...allBlogData, images_list: url });
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(allBlogData.images_list); // Reset the image state when modal is closed
+  };
 
   const interest = [
     { id: 1, name: "Python" },
@@ -128,7 +94,7 @@ const EditBlog = () => {
         number: json.blog_category.category_id,
         name: json.blog_category.category,
       });
-      setSelectedFile(json.images_list);
+      setMyImage(json.images_list);
       setSelectedSkill(json.tags_list);
     } catch (error) {
       console.log(error);
@@ -248,24 +214,7 @@ const EditBlog = () => {
   };
 
   //   const [content, setContent] = useState(allBlogData.content);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [imageLoading, setImageLoading] = useState(false);
-  const removeImage = () => {
-    setSelectedFile(null);
-    setUploadBannerProgress(0);
-    setAllBlogData({ ...allBlogData, images_list: [] });
-  };
-  const handleFileChange = async (e) => {
-    setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setSelectedFile(url);
-    setAllBlogData({ ...allBlogData, images_list: [url] });
-    setImageLoading(false);
-  };
+  
   const blogCreated = async (e) => {
     e.preventDefault();
     const cookie = document.cookie.split("; ");
@@ -274,11 +223,6 @@ const EditBlog = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    // console.log(value2?.number);
-    // console.log(blogData);
-    // console.log(value);
-    // console.log(blogData.title);
-    // console.log(blogData.service_ll);
     setLoading(true);
     try {
       const res = await axios.post(
@@ -312,14 +256,14 @@ const EditBlog = () => {
       setLoading(false);
       console.log(error);
     }
+    navigate("/blog");
   };
 
-  const[loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   console.log(allBlogData);
 
   const [categoryInputValue, setCategoryInputValue] = useState("");
-  const navigate = useNavigate();
   return (
     <div className="mt-[100px] mx-[7vw] ">
       <div className="md:flex items-start gap-10 ">
@@ -418,7 +362,7 @@ const EditBlog = () => {
                   })}
                 </div>
               </div>
-            ) }
+            )}
 
             <input
               type="text"
@@ -464,28 +408,37 @@ const EditBlog = () => {
               type="file"
               id="imageSelector"
               accept="image/*"
-              onChange={handleFileChange}
+              onChange={onSelectFile}
               className="hidden"
             />
             {imageLoading ? (
               <div className="flex w-full h-full items-center justify-center text-center">
-              <span>Loading...</span>
-            </div>
-            ): selectedFile ? (
+                <span>Loading...</span>
+              </div>
+            ) : myImage ? (
               <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                 <img
-                  src={selectedFile}
+                  src={myImage}
                   alt="Preview"
                   className="w-auto h-40 shrink-0 object-cover object-center m-2"
                 />
               </div>
-            ):(
+            ) : (
               <div className="flex items-center justify-center w-full h-full text-gray-600">
                 <FiUpload className="w-10 h-10" />
                 <span className="ml-2">Upload Image</span>
               </div>
             )}
           </div>
+          <Modal show={showModal} onClose={closeModal}>
+            <ImageUploader
+              image={myImage}
+              handleUploadImage={handleUploadImage}
+              filename="cropped_image.jpg"
+              onCropped={handleCroppedImage}
+              aspectRatio={16/9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+            />
+          </Modal>
           <div className="text-gray-500 text-sm mt-1 text-center">
             Upload your blog image here
           </div>
@@ -536,7 +489,11 @@ const EditBlog = () => {
             </div>
             <div
               onClick={blogCreated}
-              className={loading ? `text-base bg-gray-600 rounded-sm px-4 py-2 text-white w-fit cursor-pointer`:`text-base btnBlack rounded-sm px-4 py-2 text-white w-fit cursor-pointer`}
+              className={
+                loading
+                  ? `text-base bg-gray-600 rounded-sm px-4 py-2 text-white w-fit cursor-pointer`
+                  : `text-base btnBlack rounded-sm px-4 py-2 text-white w-fit cursor-pointer`
+              }
             >
               Submit
             </div>

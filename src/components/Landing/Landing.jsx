@@ -165,7 +165,6 @@ export const TopExperts = () => {
         console.log(response.data.message);
         return;
       }
-      console.log(response.data.data);
       // set respective data
       setTop5ExpertList(response.data.data);
     } catch (error) {

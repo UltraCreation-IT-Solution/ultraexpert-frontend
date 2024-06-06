@@ -18,9 +18,13 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../../subsitutes/Pagination";
 import HorizontalCardShimmer from "../../subsitutes/Shimmers/HorizontalCardShimmer";
 
-export const ServiceCard = ({ item, getAllServices, fetchData }) => {
-  const [FavService, setFavService] = useState(false);
+export const ServiceCard = ({ item }) => {
+  const [FavService, setFavService] = useState(item?.is_Fav || false);
   const navigate = useNavigate();
+  const handleGotoService = (serviceId) => {
+    navigate(`/experts/service/${serviceId}`);
+  };
+
   const handleAddToFavorites = async (id) => {
     const cookie = document.cookie.split("; ");
     const jsonData = {};
@@ -50,46 +54,11 @@ export const ServiceCard = ({ item, getAllServices, fetchData }) => {
       }
       console.log(json);
       setFavService(true);
-      getAllServices();
-      fetchData();
     } catch (error) {
       console.log(error);
     }
   };
-  const handleGotoService = (serviceId) => {
-    navigate(`/experts/service/${serviceId}`);
-  };
-  // console.log(item);
-  // const cookie = document.cookie.split(";");
-  // const jsonData = {};
 
-  // cookie.forEach((item) => {
-  //   const [key, value] = item.split("=");
-  //   jsonData[key] = value;
-  // });
-  // const addFav = async()=>{
-  //   try{
-  //     const res = await axios.post("",{
-  //       action:5,
-  //       service_id: item.id
-  //     },{
-  //       headers:{
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${jsonData.access_token}`
-  //       }
-  //     });
-
-  //     const json = res.data;
-  //     if(!json){
-  //       console.log("no data found");
-  //       return;
-  //     }
-  //     console.log(json);
-  //     setFavService(true);
-  //   }catch(error){
-  //     console.log(error)
-  //   }
-  // }
   const handleRemoveFromFavorites = async (id) => {
     const cookie = document.cookie.split("; ");
     const jsonData = {};
@@ -119,8 +88,6 @@ export const ServiceCard = ({ item, getAllServices, fetchData }) => {
       }
       console.log(json);
       setFavService(false);
-      getAllServices();
-      fetchData();
     } catch (error) {
       console.log(error);
     }
@@ -130,10 +97,16 @@ export const ServiceCard = ({ item, getAllServices, fetchData }) => {
       <div className="absolute top-2 right-2 z-10 text-white text-3xl py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid cursor-pointer">
         {localStorage.getItem("isAuthor") === "true" ? (
           <></>
-        ) : item?.is_fav ? (
+        ) : FavService ? (
           <FaHeart onClick={() => handleRemoveFromFavorites(item.id)} />
         ) : (
-          <FaRegHeart onClick={() => handleAddToFavorites(item?.id)} />
+          <FaRegHeart
+            onClick={() =>
+              localStorage.getItem("username")
+                ? handleAddToFavorites(item?.id)
+                : navigate("/login")
+            }
+          />
         )}
       </div>
       <img
@@ -173,10 +146,158 @@ export const ServiceCard = ({ item, getAllServices, fetchData }) => {
     </div>
   );
 };
+
+export const HorizontalServiceCard = ({item}) => {
+  const [favService, setFavService] = useState(item?.is_favorite || false);
+  const navigate = useNavigate();
+
+  const addFav = async (id) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 5,
+          service_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      setFavService(true)
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const remFav = async (id) => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/customers/connect/",
+        {
+          action: 6,
+          service_id: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const json = res.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      setFavService(false);
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className="flex flex-col xs:flex-row xs:items-center gap-5 w-full lg:w-[40vw] rounded-xl bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0 p-2">
+      <img
+        className="w-full h-48 xs:min-h-32 xs:min-w-36 xs:h-[10vw] xs:w-[12vw] object-fill object-center shrink-0 rounded-lg"
+        src={item?.service_img}
+        alt=""
+        onClick={() => navigate(`/experts/service/${item?.id}`)}
+      />
+      <div>
+        <div
+          className="flex items-center gap-2 font-semibold text-base text-[#808080]"
+          onClick={() => navigate(`/experts/service/${item?.id}`)}
+        >
+          <img
+            src={item?.expert_data?.profile_img}
+            className="h-7 w-7 rounded-full object-cover shrink-0"
+            alt=""
+          />
+          <div className="line-clamp-1">
+            {item?.expert_data?.first_name} {item?.expert_data?.last_name}
+          </div>
+        </div>
+        <div
+          className="font-bold text-lg line-clamp-2 text-ellipsis my-2 mb-[0.2vw]"
+          onClick={() => navigate(`/experts/service/${item?.id}`)}
+        >
+          {item?.category?.name}
+        </div>
+        <div
+          className="text-base my-1"
+          onClick={() => navigate(`/experts/service/${item?.id}`)}
+        >
+          {item?.price}
+        </div>
+        <div
+          className="text-xs text-gray-500 line-clamp-2 md:mb-[1vw]"
+          onClick={() => navigate(`/experts/service/${item?.id}`)}
+        >
+          {item?.service_name}
+        </div>
+        <div className="flex items-center gap-6 text-sm mt-2">
+          <div className="flex items-center gap-1">
+            <GrStar />
+            {item?.expert_data?.avg_rating}
+          </div>
+          <div>Reviews: {item?.service_view_count}</div>
+          {localStorage.getItem("isExpert") === "true" ? (
+            <></>
+          ) : (
+            <div className="border border-solid border-slate-400 text-[10px] rounded-full px-3 py-0.5 flex items-center cursor-pointer gap-1">
+              {favService ? (
+                <div
+                  className="flex gap-2 items-center"
+                  onClick={() => remFav(item.id)}
+                >
+                  <FaMinus />
+                  Remove from Fav
+                </div>
+              ) : (
+                <div
+                  className="flex gap-2 items-center"
+                  onClick={() =>
+                    localStorage.getItem("username")
+                      ? addFav(item.id)
+                      : navigate("/login")
+                  }
+                >
+                  <FaPlus /> Add to Fav
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const allServiceData = [];
 
 const Service = () => {
-  const navigate = useNavigate();
   const [shimmer, setShimmer] = useState(false);
   const [allService, setAllService] = useState([]);
   const [serviceObjects, setServiceObjects] = useState([]);
@@ -191,7 +312,6 @@ const Service = () => {
 
   const fetchData = async () => {
     const cookie = document.cookie.split(";");
-
     const jsonData = {};
 
     cookie.forEach((item) => {
@@ -286,74 +406,6 @@ const Service = () => {
     }
   }, [currentPage]);
 
-  const addFav = async (id) => {
-    console.log("first");
-    const cookie = document.cookie.split(";");
-    const jsonData = {};
-    cookie.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    try {
-      const res = await axios.post(
-        "/customers/connect/",
-        {
-          action: 5,
-          service_id: id,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      const json = res.data;
-      if (!json) {
-        console.log("no data");
-        return;
-      }
-      console.log(json);
-      getAllServices();
-      fetchData();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const remFav = async (id) => {
-    const cookie = document.cookie.split(";");
-    const jsonData = {};
-    cookie.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    try {
-      const res = await axios.post(
-        "/customers/connect/",
-        {
-          action: 6,
-          service_id: id,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      const json = res.data;
-      if (!json) {
-        console.log("no data");
-        return;
-      }
-      console.log(json);
-      getAllServices();
-      fetchData();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const getServicesByQuery = async (searchQuery) => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
@@ -413,12 +465,13 @@ const Service = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={(e) =>
-            e.key === "Enter" && getServicesByQuery(searchQuery)
+            e.key === "Enter" &&
+            (getServicesByQuery(searchQuery), setCurrentPage(1))
           }
         />
         <div
           className="h-full w-[6vw] py-2 bg-[#ECECEC] hover:bg-[#e4e1e1] transition-all xs:text-sm sm:text-base md:text-lg rounded-l-none rounded-md flex justify-center items-center"
-          onClick={() => getServicesByQuery(searchQuery)}
+          onClick={() => (getServicesByQuery(searchQuery), setCurrentPage(1))}
         >
           <FaSearch />
         </div>
@@ -431,7 +484,9 @@ const Service = () => {
             onClick={() => (
               setShowSearchedServices(false),
               setSearchedServices([]),
-              setSearchQuery("")
+              setSearchQuery(""),
+              getAllServices(),
+              setCurrentPage(1)
             )}
           >
             <IoMdArrowRoundBack />
@@ -452,77 +507,7 @@ const Service = () => {
               </div>
             ) : (
               searchedServices.map((item) => (
-                <div className="flex flex-col xs:flex-row xs:items-center gap-5 w-full lg:w-[40vw] rounded-xl bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0 p-2">
-                  <img
-                    className="w-full h-48 xs:min-h-32 xs:min-w-36 xs:h-[10vw] xs:w-[12vw] object-fill object-center shrink-0 rounded-lg"
-                    src={item?.service_img}
-                    alt=""
-                    onClick={() => navigate(`/experts/service/${item?.id}`)}
-                  />
-                  <div>
-                    <div
-                      className="flex items-center gap-2 font-semibold text-base text-[#808080]"
-                      onClick={() => navigate(`/experts/service/${item?.id}`)}
-                    >
-                      <img
-                        src={item?.expert_data?.profile_img}
-                        className="h-7 w-7 rounded-full object-cover shrink-0"
-                        alt=""
-                      />
-                      <div className="line-clamp-1">
-                        {item?.expert_data?.first_name}{" "}
-                        {item?.expert_data?.last_name}
-                      </div>
-                    </div>
-                    <div
-                      className="font-bold text-lg line-clamp-2 text-ellipsis my-2 mb-[0.2vw]"
-                      onClick={() => navigate(`/experts/service/${item?.id}`)}
-                    >
-                      {item?.category?.name}
-                    </div>
-                    <div
-                      className="text-base my-1"
-                      onClick={() => navigate(`/experts/service/${item?.id}`)}
-                    >
-                      {item?.price}
-                    </div>
-                    <div
-                      className="text-xs text-gray-500 line-clamp-2 md:mb-[1vw]"
-                      onClick={() => navigate(`/experts/service/${item?.id}`)}
-                    >
-                      {item?.service_name}
-                    </div>
-                    <div className="flex items-center gap-6 text-sm mt-2">
-                      <div className="flex items-center gap-1">
-                        <GrStar />
-                        {item?.expert_data?.avg_rating}
-                      </div>
-                      <div>Reviews: {item?.service_view_count}</div>
-                      {localStorage.getItem("isExpert") === "true" ? (
-                        <></>
-                      ) : (
-                        <div className="border border-solid border-slate-400 text-[10px] rounded-full px-3 py-0.5 flex items-center cursor-pointer gap-1">
-                          {item.is_favorite ? (
-                            <div
-                              className="flex gap-2 items-center"
-                              onClick={() => remFav(item.id)}
-                            >
-                              <FaMinus />
-                              Added to Fav
-                            </div>
-                          ) : (
-                            <div
-                              className="flex gap-2 items-center"
-                              onClick={() => addFav(item.id)}
-                            >
-                              <FaPlus /> Add to Fav
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <HorizontalServiceCard key={item.id} item={item} />
               ))
             )}
           </div>
@@ -546,11 +531,7 @@ const Service = () => {
                         key={service?.id}
                         className="cursor-pointer  min-w-[300px] max-w-[300px] md:min-w-[350px] md:max-w-[350px]"
                       >
-                        <ServiceCard
-                          item={service}
-                          getAllServices={getAllServices}
-                          fetchData={fetchData}
-                        />
+                        <ServiceCard item={service} />
                       </div>
                     ))}
                   </div>
@@ -576,77 +557,7 @@ const Service = () => {
                 </div>
               ) : (
                 allService.map((item) => (
-                  <div className="flex flex-col xs:flex-row xs:items-center gap-5 w-full lg:w-[40vw] rounded-xl bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0 p-2">
-                    <img
-                      className="w-full h-48 xs:min-h-32 xs:min-w-36 xs:h-[10vw] xs:w-[12vw] object-fill object-center shrink-0 rounded-lg"
-                      src={item?.service_img}
-                      alt=""
-                      onClick={() => navigate(`/experts/service/${item?.id}`)}
-                    />
-                    <div>
-                      <div
-                        className="flex items-center gap-2 font-semibold text-base text-[#808080]"
-                        onClick={() => navigate(`/experts/service/${item?.id}`)}
-                      >
-                        <img
-                          src={item?.expert_data?.profile_img}
-                          className="h-7 w-7 rounded-full object-cover shrink-0"
-                          alt=""
-                        />
-                        <div className="line-clamp-1">
-                          {item?.expert_data?.first_name}{" "}
-                          {item?.expert_data?.last_name}
-                        </div>
-                      </div>
-                      <div
-                        className="font-bold text-lg line-clamp-2 text-ellipsis my-2 mb-[0.2vw]"
-                        onClick={() => navigate(`/experts/service/${item?.id}`)}
-                      >
-                        {item?.category?.name}
-                      </div>
-                      <div
-                        className="text-base my-1"
-                        onClick={() => navigate(`/experts/service/${item?.id}`)}
-                      >
-                        {item?.price}
-                      </div>
-                      <div
-                        className="text-xs text-gray-500 line-clamp-2 md:mb-[1vw]"
-                        onClick={() => navigate(`/experts/service/${item?.id}`)}
-                      >
-                        {item?.service_name}
-                      </div>
-                      <div className="flex items-center gap-6 text-sm mt-2">
-                        <div className="flex items-center gap-1">
-                          <GrStar />
-                          {item?.expert_data?.avg_rating}
-                        </div>
-                        <div>Reviews: {item?.service_view_count}</div>
-                        {localStorage.getItem("isExpert") === "true" ? (
-                          <></>
-                        ) : (
-                          <div className="border border-solid border-slate-400 text-[10px] rounded-full px-3 py-0.5 flex items-center cursor-pointer gap-1">
-                            {item.is_favorite ? (
-                              <div
-                                className="flex gap-2 items-center"
-                                onClick={() => remFav(item.id)}
-                              >
-                                <FaMinus />
-                                Rem from Fav
-                              </div>
-                            ) : (
-                              <div
-                                className="flex gap-2 items-center"
-                                onClick={() => addFav(item.id)}
-                              >
-                                <FaPlus /> Add to Fav
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  <HorizontalServiceCard key={item.id} item={item} />
                 ))
               )}
             </div>
