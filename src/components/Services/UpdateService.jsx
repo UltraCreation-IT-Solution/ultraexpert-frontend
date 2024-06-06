@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import axios from "../../axios";
 import { FiUpload, FiX } from "react-icons/fi";
+import Modal from "../../Modal";
+import ImageUploader from "../../ImageUploader";
 
 // slots
 import { Calendar, momentLocalizer } from "react-big-calendar";
@@ -34,25 +36,34 @@ const UpdateService = () => {
   };
   const [serviceTitle, setServiceTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [image, setImage] = useState(null);
 
+  const [myImage, setMyImage] = useState(0);
+  const [showModal, setShowModal] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
 
-  const handleFileChange = async (e) => {
+  const onSelectFile = (event) => {
     setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setImage(url);
-    setImageUrl(url);
-    setImageLoading(false);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImage(reader.result);
+        setShowModal(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
   };
-  const handleImageRemove = () => {
-    setImage("");
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(url); // Reset the image state
+    // setUserData({ ...userData, profile_img: url });
+    setCreateService({ ...createService, img: url });
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(data.service_img); // Reset the image state when modal is closed
   };
 
   const handleBack = () => {
@@ -270,7 +281,7 @@ const UpdateService = () => {
         {
           action: 1,
           service_name: serviceTitle,
-          service_img: image,
+          service_img: createService.img,
           category: selectedCategory.id,
           description: createService.desc,
           skill_name: val,
@@ -556,36 +567,17 @@ const UpdateService = () => {
                   id="imageSelector"
                   name="imageSelector"
                   accept="image/*"
-                  onChange={handleFileChange}
+                  onChange={onSelectFile}
                   className="hidden"
                 />
-                {/* {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
-                  <p>Upload Progress: {uploadProfileProgress}%</p>
-                ) : image ? (
-                  <div className="relative w-full h-full flex justify-center items-center">
-                    <img
-                      src={image}
-                      alt="Preview"
-                      className="max-h-28 max-w-44 object-cover rounded"
-                    />
-                    <button
-                      onClick={handleImageRemove}
-                      className="absolute top-2 right-2 bg-slate-400 text-white p-1 rounded hover:bg-gray-600 flex justify-center items-center"
-                    >
-                      <FiX className="w-4 h-4" />
-                    </button>
-                  </div>
-                ) : (
-                  
-                )} */}
                 {imageLoading ? (
                   <div className="flex w-full h-full items-center justify-center text-center">
                     <span>Loading...</span>
                   </div>
-                ) : image ? (
+                ) : myImage ? (
                   <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                     <img
-                      src={image}
+                      src={myImage}
                       alt="Preview"
                       className="w-auto h-40 shrink-0 object-cover object-center m-2"
                     />
@@ -597,6 +589,15 @@ const UpdateService = () => {
                   </div>
                 )}
               </div>
+              <Modal show={showModal} onClose={closeModal}>
+            <ImageUploader
+              image={myImage}
+              handleUploadImage={handleUploadImage}
+              filename="cropped_image.jpg"
+              onCropped={handleCroppedImage}
+              aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+            />
+          </Modal>
               <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
               <label htmlFor="price" className="text-lg mb-1">
                 Service Price
