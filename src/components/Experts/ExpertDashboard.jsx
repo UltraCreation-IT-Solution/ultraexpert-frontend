@@ -1093,7 +1093,7 @@ export const Dashboard = () => {
           </div>
         </div>
         <div className="flex flex-wrap gap-[2vw] xs:gap-[1.6vw] md:gap-[1vw]">
-          {expertData.skills?.map((item, index) => {
+          {expertData.skills?.skill_json?.map((item, index) => {
             return (
               <div
                 key={index}
@@ -1768,7 +1768,7 @@ export const Leaderboard = () => {
 //   );
 // };
 
-export const MyBooking = ({ id }) => {
+export const MyBooking = () => {
   const [shimmer, setShimmer] = useState(false);
   const [myBookings, setMyBookings] = useState([]);
   useEffect(() => {
@@ -1787,7 +1787,7 @@ export const MyBooking = ({ id }) => {
     setShimmer(true);
     try {
       const res = await axios.get(
-        `/experts/services/?action=4&expert_id=${5}`,
+        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -2050,7 +2050,7 @@ const ExpertDashboard = () => {
         <Chats />
         <Leaderboard />
         <SkillList />
-        <MyBooking id={expertData?.id} />
+        <MyBooking />
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />

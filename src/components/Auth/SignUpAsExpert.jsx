@@ -1439,50 +1439,52 @@ const SignUpAsExpert = () => {
                   >
                     Certificate:
                   </label>
-                  <div onClick={() =>
-                        document.querySelector("#certificateSelector").click()
-                      }
-                      className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg">
-                  <input
-                    type="file"
-                    name="certificateSelector"
-                    id="certificateSelector"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={onSelectFileCertificate}
-                  />
-                  {certificateLoading ? (
-                    <div className="flex w-full h-full items-center justify-center text-center">
-                      <span>Loading...</span>
-                    </div>
-                  ) : myImageCertificate ? (
-                    <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
-                      <img
-                        src={myImageCertificate}
-                        alt="Preview"
-                        className="w-auto h-40 shrink-0 object-cover object-center m-2"
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center w-full h-full text-gray-600">
-                      <FiUpload className="w-10 h-10" />
-                      <span className="ml-2">Upload Image</span>
-                    </div>
-                  )}
+                  <div
+                    onClick={() =>
+                      document.querySelector("#certificateSelector").click()
+                    }
+                    className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
+                  >
+                    <input
+                      type="file"
+                      name="certificateSelector"
+                      id="certificateSelector"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={onSelectFileCertificate}
+                    />
+                    {certificateLoading ? (
+                      <div className="flex w-full h-full items-center justify-center text-center">
+                        <span>Loading...</span>
+                      </div>
+                    ) : myImageCertificate ? (
+                      <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
+                        <img
+                          src={myImageCertificate}
+                          alt="Preview"
+                          className="w-auto h-40 shrink-0 object-cover object-center m-2"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center w-full h-full text-gray-600">
+                        <FiUpload className="w-10 h-10" />
+                        <span className="ml-2">Upload Image</span>
+                      </div>
+                    )}
                   </div>
                   <Modal
-                  className="w-full h-full overflow-scroll"
-                  show={showModalCertificate}
-                  onClose={closeModalCertificate}
-                >
-                  <ImageUploader
-                    image={myImageCertificate}
-                    handleUploadImage={handleUploadImage}
-                    filename="cropped_image.jpg"
-                    onCropped={handleCroppedImageCertificate}
-                    aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
-                  />
-                </Modal>
+                    className="w-full h-full overflow-scroll"
+                    show={showModalCertificate}
+                    onClose={closeModalCertificate}
+                  >
+                    <ImageUploader
+                      image={myImageCertificate}
+                      handleUploadImage={handleUploadImage}
+                      filename="cropped_image.jpg"
+                      onCropped={handleCroppedImageCertificate}
+                      aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                    />
+                  </Modal>
                 </div>
                 <div className="flex justify-center mb-4 sm:mb-6">
                   <button
