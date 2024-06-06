@@ -41,7 +41,8 @@ const ImageUploader = ({
       setUploading(false);
     }
   }, [image]);
-
+  console.log("2");
+  console.log(onCropped)
   return (
     <div className="space-y-4">
       {image && (

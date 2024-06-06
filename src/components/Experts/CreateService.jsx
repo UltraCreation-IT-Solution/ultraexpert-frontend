@@ -11,6 +11,8 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { handleUploadImage } from "../../constant";
+import Modal from "../../Modal";
+import ImageUploader from "../../ImageUploader";
 //slots
 
 const CreateService = () => {
@@ -33,25 +35,44 @@ const CreateService = () => {
   };
   const [serviceTitle, setServiceTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
+
   const [imageUrl, setImageUrl] = useState(null);
-  const [image, setImage] = useState(null);
+  // const [myImage, setMyImage] = useState(null);
 
   const [imageLoading, setImageLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleFileChange = async (e) => {
+  const onSelectFile = async (event) => {
     setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setImage(url);
-    setImageUrl(url);
-    setImageLoading(false);
+    console.log(showModal);
+    // console.log(Modal);
+    if (event.target.files && event.target.files.length > 0) {
+      // console.log("2")
+      const reader = new FileReader();
+      // console.log("1", reader);
+      reader.onload = () => {
+        // console.log("2", reader);
+        setShowModal(true);
+        setImageUrl(reader.result);
+      };
+      // console.log(showModal);
+      reader.readAsDataURL(event.target.files[0]);
+    }
+    // console.log(showModal);
+    // console.log("3");
   };
-  const handleImageRemove = () => {
-    setImage("");
+
+  const handleCroppedImage = (url) => {
+    console.log(url);
+    setShowModal(false);
+    setImageLoading(false);
+    setImageUrl(url);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setImageLoading(false);
+    setImageUrl(null);
   };
 
   const handleBack = () => {
@@ -269,7 +290,7 @@ const CreateService = () => {
         {
           action: 1,
           service_name: serviceTitle,
-          service_img: image,
+          service_img: imageUrl,
           category: selectedCategory.id,
           description: createService.desc,
           skill_name: val,
@@ -309,7 +330,8 @@ const CreateService = () => {
       console.log(error);
     }
   };
-
+  console.log(showModal);
+  console.log(ImageUploader);
   return (
     <>
       {!showSlots ? (
@@ -525,36 +547,17 @@ const CreateService = () => {
                   id="imageSelector"
                   name="imageSelector"
                   accept="image/*"
-                  onChange={handleFileChange}
+                  onChange={onSelectFile}
                   className="hidden"
                 />
-                {/* {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
-                  <p>Upload Progress: {uploadProfileProgress}%</p>
-                ) : image ? (
-                  <div className="relative w-full h-full flex justify-center items-center">
-                    <img
-                      src={image}
-                      alt="Preview"
-                      className="max-h-28 max-w-44 object-cover rounded"
-                    />
-                    <button
-                      onClick={handleImageRemove}
-                      className="absolute top-2 right-2 bg-slate-400 text-white p-1 rounded hover:bg-gray-600 flex justify-center items-center"
-                    >
-                      <FiX className="w-4 h-4" />
-                    </button>
-                  </div>
-                ) : (
-                  
-                )} */}
                 {imageLoading ? (
                   <div className="flex w-full h-full items-center justify-center text-center">
                     <span>Loading...</span>
                   </div>
-                ) : image ? (
+                ) : imageUrl ? (
                   <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                     <img
-                      src={image}
+                      src={imageUrl}
                       alt="Preview"
                       className="w-auto h-40 shrink-0 object-cover object-center m-2"
                     />
@@ -566,6 +569,20 @@ const CreateService = () => {
                   </div>
                 )}
               </div>
+              <Modal
+                className="h-auto w-auto absolute"
+                showModal={showModal}
+                onClose={closeModal}
+              >
+                <ImageUploader
+                  image={imageUrl}
+                  handleUploadImage={handleUploadImage}
+                  filename="cropped_image.jpg"
+                  onCropped={handleCroppedImage}
+                  aspectRatio={16 / 9}
+                />
+              </Modal>
+
               <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
               <label htmlFor="price" className="text-lg mb-1">
                 Service Price
