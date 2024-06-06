@@ -1280,7 +1280,7 @@ export const Dashboard = () => {
           />
         )}
         {/* Testimonials section of dashboard */}
-        {testimonials && expertAllTestimonials.length === 0 ? (
+        {testimonials && (expertAllTestimonials.length === 0 ? (
           <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
             No testimonials found
           </div>
@@ -1295,7 +1295,7 @@ export const Dashboard = () => {
               getExpertAllTestimonials={getExpertAllTestimonials}
             />
           ))
-        )}
+        ))}
         {/* Project section of dashboard */}
         {projects && <ShowMyProjects />}
       </div>
@@ -1455,7 +1455,10 @@ export const MyServices = () => {
                 className="mt-5 border border-solid border-slate-300 px-2 sm:px-5 py-2 rounded-md"
               >
                 <div className="flex items-center gap-3">
-                  <button className="flex items-center gap-2 bg-white text-sm px-3 py-1 rounded-sm text-black cursor-pointer border border-solid border-black">
+                  <button
+                    className="flex items-center gap-2 bg-white text-sm px-3 py-1 rounded-sm text-black cursor-pointer border border-solid border-black"
+                    onClick={() => navigate(`/updateservice/${service.id}`)}
+                  >
                     <MdOutlineEdit size={18} /> Edit
                   </button>
                   <button
@@ -1765,7 +1768,7 @@ export const Leaderboard = () => {
 //   );
 // };
 
-export const MyBooking = (expertData) => {
+export const MyBooking = ({ id }) => {
   const [shimmer, setShimmer] = useState(false);
   const [myBookings, setMyBookings] = useState([]);
   useEffect(() => {
@@ -1784,7 +1787,7 @@ export const MyBooking = (expertData) => {
     setShimmer(true);
     try {
       const res = await axios.get(
-        `/experts/services/?action=4&expert_id=${17}`,
+        `/experts/services/?action=4&expert_id=${5}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -1809,7 +1812,7 @@ export const MyBooking = (expertData) => {
       setShimmer(false);
     }
   };
-  console.log(expertData);
+  console.log(myBookings);
   return (
     <div className="w-full md:w-[68%]">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
@@ -2047,11 +2050,7 @@ const ExpertDashboard = () => {
         <Chats />
         <Leaderboard />
         <SkillList />
-        {/* {expertData.length!==0 && <MyBookings {...expertData} />} */}
-
-        {expertData && expertId && <MyBooking expertData={expertData} />}
-
-        {/* <MyBookings id={expertId} /> */}
+        <MyBooking id={expertData?.id} />
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />

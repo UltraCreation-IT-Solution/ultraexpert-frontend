@@ -766,13 +766,11 @@ const BlogDetails = () => {
 
         <div className="my-[3vw]">
           <div>
-            {currBlogData?.images_list?.length && (
-              <img
-                className="w-[100%] h-[45vw] object-cover shrink-0"
-                src={currBlogData?.images_list[0]}
-                alt=""
-              />
-            )}
+            <img
+              className="w-[100%] h-[45vw] object-cover shrink-0"
+              src={currBlogData?.images_list}
+              alt=""
+            />
           </div>
           <div dangerouslySetInnerHTML={{ __html: currBlogData?.content }} />
         </div>

@@ -72,6 +72,8 @@ const Login = () => {
           localStorage.setItem("isExpert", `${res.data.is_expert}`);
           localStorage.setItem("isAuthor", `${res.data.is_author}`);
           localStorage.setItem("isCustomer", `${res.data.is_customer}`);
+          localStorage.setItem("expert_id", `${res.data.expert_id}`);
+          localStorage.setItem("customer_id", `${res.data.customer_id}`);
           if (localStorage.getItem("isExpert") === "true") {
             window.location.href = "/expertdashboard";
           } else {

@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import { handleUploadImage } from "../../constant";
+import ImageUploader from "../../ImageUploader";
+import Modal from "../../Modal";
 import { FiUpload } from "react-icons/fi";
+import { GoPlus } from "react-icons/go";
 
 const CHECKOUT_STEPS = [
   { name: "Personal Details" },
@@ -15,18 +18,102 @@ const CHECKOUT_STEPS = [
 ];
 
 const SignUpAsExpert = () => {
-  const [currStep, setCurrStep] = useState(2);
+  const [currStep, setCurrStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [loading, setIsLoading] = useState(false);
+  const [showModalProfile, setShowModalProfile] = useState(false);
+  const [showModalBackground, setShowModalBackground] = useState(false);
+  const [showModalCertificate, setShowModalCertificate] = useState(false);
+  const [myImageBackground, setMyImageBackground] = useState(null);
+  const [myImageProfile, setMyImageProfile] = useState(null);
+  const [myImageCertificate, setMyImageCertificate] = useState(null);
   const [margin, setMargin] = useState({
     marginLeft: 0,
     marginRight: 0,
   });
 
+  const [certificateLoading, setCertificateLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const stepRef = useRef([]);
 
+  const onSelectFileProfile = (event) => {
+    setProfileLoading(true);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImageProfile(reader.result);
+        setShowModalProfile(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+  const onSelectFileBackground = (event) => {
+    setBannerLoading(true);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImageBackground(reader.result);
+        setShowModalBackground(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+  const onSelectFileCertificate = (event) => {
+    setCertificateLoading(true);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImageCertificate(reader.result);
+        setShowModalCertificate(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+
+  const handleCroppedImageProfile = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModalProfile(false); // Close the modal after getting the URL
+    setProfileLoading(false);
+    setMyImageProfile(url); // Reset the image state
+    setPersonalInfo({
+      ...personalInfo,
+      profile_img: url,
+    });
+  };
+  const handleCroppedImageBackground = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModalBackground(false); // Close the modal after getting the URL
+    setBannerLoading(false);
+    setMyImageBackground(url); // Reset the image state
+    setPersonalInfo({
+      ...personalInfo,
+      banner_img: url,
+    });
+  };
+  const handleCroppedImageCertificate = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModalCertificate(false); // Close the modal after getting the URL
+    setCertificateLoading(false);
+    setMyImageCertificate(url); // Reset the image state
+    setAchievementForm({
+      ...achievementForm,
+      certificate: [...achievementForm.certificate, url],
+    });
+  };
+  const closeModalProfile = () => {
+    setShowModalProfile(false);
+    setMyImageProfile(null); // Reset the image state when modal is closed
+  };
+  const closeModalBackground = () => {
+    setShowModalBackground(false);
+    setMyImageBackground(null); // Reset the image state when modal is closed
+  };
+  const closeModalCertificate = () => {
+    setShowModalCertificate(false);
+    setMyImageCertificate(null); // Reset the image state when modal is closed
+  };
   const [personalInfo, setPersonalInfo] = useState({
     gender: "Male",
     dob: "",
@@ -136,6 +223,7 @@ const SignUpAsExpert = () => {
       );
 
       const data = response.data;
+      localStorage.setItem("expert_id", `${response.data.expert_id}`);
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
         setIsLoading(false);
@@ -201,7 +289,7 @@ const SignUpAsExpert = () => {
     }
   };
 
-  const handleDeleteEducation = (index,e) => {
+  const handleDeleteEducation = (index, e) => {
     e.preventDefault();
     const newEducation = education.filter((_, i) => i !== index);
     setEducation(newEducation);
@@ -266,7 +354,7 @@ const SignUpAsExpert = () => {
     }
   };
 
-  const handleDeleteSkill = (index,e) => {
+  const handleDeleteSkill = (index, e) => {
     e.preventDefault();
     const newSkills = skills.filter((_, i) => i !== index);
     setSkills(newSkills);
@@ -337,7 +425,11 @@ const SignUpAsExpert = () => {
 
   const handleAddAchievement = (e) => {
     e.preventDefault();
-    if (achievementForm.name && achievementForm.year && achievementForm.certificate) {
+    if (
+      achievementForm.name &&
+      achievementForm.year &&
+      achievementForm.certificate
+    ) {
       setAchievements([...achievements, achievementForm]);
       setAchievementForm({
         name: "",
@@ -347,7 +439,7 @@ const SignUpAsExpert = () => {
     }
   };
 
-  const handleDeleteAchievement = (index,e) => {
+  const handleDeleteAchievement = (index, e) => {
     e.preventDefault();
     const newAchievements = achievements.filter((_, i) => i !== index);
     setAchievements(newAchievements);
@@ -367,7 +459,10 @@ const SignUpAsExpert = () => {
     setImageLoading(false);
     const updatedCertificates = [...achievementForm.certificate];
     updatedCertificates[ind] = url;
-    setAchievementForm({ ...achievementForm, certificate: updatedCertificates });
+    setAchievementForm({
+      ...achievementForm,
+      certificate: updatedCertificates,
+    });
   };
 
   const handleAchForm = async (e) => {
@@ -424,7 +519,10 @@ const SignUpAsExpert = () => {
 
   const handleChange3 = (e) => {
     const { name, value, type, checked } = e.target;
-    setExperienceForm({ ...experienceForm, [name]: type === "checkbox" ? checked : value });
+    setExperienceForm({
+      ...experienceForm,
+      [name]: type === "checkbox" ? checked : value,
+    });
   };
 
   const handleAddExperience = (e) => {
@@ -446,7 +544,7 @@ const SignUpAsExpert = () => {
     }
   };
 
-  const handleDeleteExperience = (index,e) => {
+  const handleDeleteExperience = (index, e) => {
     e.preventDefault();
     const newExperience = experience.filter((_, i) => i !== index);
     setExperience(newExperience);
@@ -501,7 +599,6 @@ const SignUpAsExpert = () => {
     account_number: "",
     ifsc_code: "",
   });
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -592,38 +689,10 @@ const SignUpAsExpert = () => {
   const [profileLoading, setProfileLoading] = useState(false);
   const [bannerLoading, setBannerLoading] = useState(false);
 
-  const handleProfileChange = async (e) => {
-    setProfileLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setSelectedProfile(url);
-    setProfileLoading(false);
-  };
-  const handleBannerChange = async (e) => {
-    setBannerLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setSelectedBanner(url);
-    setBannerLoading(false);
-  };
-
-  const handleRemoveProfile = () => {
-    setSelectedProfile(null);
-  };
-  const handleRemoveBanner = () => {
-    setSelectedBanner(null);
-  };
-
   if (!CHECKOUT_STEPS.length) return <></>;
 
   return (
-    <div className="h-screen mt-[100px] bg-white">
+    <div className="h-auto mt-[100px] bg-white">
       <div
         className={
           currStep === 2
@@ -789,17 +858,17 @@ const SignUpAsExpert = () => {
                         type="file"
                         id="profileSelector"
                         accept="image/*"
-                        onChange={handleProfileChange}
+                        onChange={onSelectFileProfile}
                         className="hidden"
                       />
                       {profileLoading ? (
                         <div className="flex w-full h-full items-center justify-center text-center">
                           <span>Loading...</span>
                         </div>
-                      ) : selectedProfile ? (
+                      ) : myImageProfile ? (
                         <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                           <img
-                            src={selectedProfile}
+                            src={myImageProfile}
                             alt="Preview"
                             className="w-auto h-40 shrink-0 object-cover object-center m-2"
                           />
@@ -811,6 +880,19 @@ const SignUpAsExpert = () => {
                         </div>
                       )}
                     </div>
+                    <Modal
+                      className="w-full h-full overflow-scroll"
+                      show={showModalProfile}
+                      onClose={closeModalProfile}
+                    >
+                      <ImageUploader
+                        image={myImageProfile}
+                        handleUploadImage={handleUploadImage}
+                        filename="cropped_image.jpg"
+                        onCropped={handleCroppedImageProfile}
+                        aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                      />
+                    </Modal>
                   </div>
                   <div className="flex flex-col w-full">
                     <label htmlFor="banner" className="text-lg mb-1">
@@ -827,17 +909,17 @@ const SignUpAsExpert = () => {
                         id="bannerSelector"
                         accept="image/*"
                         name="bannerSelector"
-                        onChange={handleBannerChange}
+                        onChange={onSelectFileBackground}
                         className="hidden"
                       />
                       {bannerLoading ? (
                         <div className="flex w-full h-full items-center justify-center text-center">
                           <span>Loading...</span>
                         </div>
-                      ) : selectedBanner ? (
+                      ) : myImageBackground ? (
                         <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                           <img
-                            src={selectedBanner}
+                            src={myImageBackground}
                             alt="Preview"
                             className="w-auto h-40 shrink-0 object-cover object-center m-2"
                           />
@@ -849,6 +931,19 @@ const SignUpAsExpert = () => {
                         </div>
                       )}
                     </div>
+                    <Modal
+                      className="w-full h-full overflow-scroll"
+                      show={showModalBackground}
+                      onClose={closeModalBackground}
+                    >
+                      <ImageUploader
+                        image={myImageBackground}
+                        handleUploadImage={handleUploadImage}
+                        filename="cropped_image.jpg"
+                        onCropped={handleCroppedImageBackground}
+                        aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                      />
+                    </Modal>
                   </div>
                 </div>
               </div>
@@ -985,260 +1080,170 @@ const SignUpAsExpert = () => {
             </form>
           )}
           {currStep === 2 && (
-            <form onSubmit={handleEducationForm} className="flex flex-col w-full">
-            <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
-                <label htmlFor="type" className="text-base md:text-lg mb-1">
-                  Degree Type:
-                </label>
-                <input
-                  type="text"
-                  name="type"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="Type"
-                  value={educationForm.type}
-                  onChange={handleChange1}
-                />
-                <label htmlFor="certificate" className="text-base md:text-lg mb-1">
-                  Course:
-                </label>
-                <input
-                  type="text"
-                  name="certificate"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="Course"
-                  value={educationForm.certificate}
-                  onChange={handleChange1}
-                />
-                <label htmlFor="institute_name" className="text-base md:text-lg mb-1">
-                  Institute Name:
-                </label>
-                <input
-                  type="text"
-                  name="institute_name"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="Institute Name"
-                  value={educationForm.institute_name}
-                  onChange={handleChange1}
-                />
-                <label htmlFor="city" className="text-base md:text-lg mb-1">
-                  City:
-                </label>
-                <input
-                  type="text"
-                  name="city"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="City"
-                  value={educationForm.city}
-                  onChange={handleChange1}
-                />
-                <label htmlFor="state_name" className="text-base md:text-lg mb-1">
-                  State:
-                </label>
-                <input
-                  type="text"
-                  name="state_name"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="State Name"
-                  value={educationForm.state_name}
-                  onChange={handleChange1}
-                />
-                <label htmlFor="country" className="text-base md:text-lg mb-1">
-                  Country:
-                </label>
-                <input
-                  type="text"
-                  name="country"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="Country"
-                  value={educationForm.country}
-                  onChange={handleChange1}
-                />
-                <label htmlFor="start_date" className="text-base md:text-lg mb-1">
-                  Start Date:
-                </label>
-                <input
-                  type="date"
-                  name="start_date"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  value={educationForm.start_date}
-                  onChange={handleChange1}
-                />
-                <label htmlFor="end_date" className="text-base md:text-lg mb-1">
-                  End Date:
-                </label>
-                <input
-                  type="date"
-                  name="end_date"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  value={educationForm.end_date}
-                  onChange={handleChange1}
-                />
-                <label htmlFor="Division" className="text-base md:text-lg mb-1">
-                  Division:
-                </label>
-                <input
-                  type="text"
-                  name="division"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="Division"
-                  value={educationForm.division}
-                  onChange={handleChange1}
-                />
-              </div>
-              <div className="flex justify-center mb-4 sm:mb-6">
-                <button
-                  className="btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
-                  onClick={handleAddEducation}
-                >
-                  + Add Education
-                </button>
-              </div>
-            </div>
-            <div className="overflow-x-auto mx-10">
-              <table className="w-full bg-white border border-solid border-gray-300 mb-5">
-                <thead>
-                  <tr>
-                    <th className="p-2 border-solid border-b border-gray-300 border-r">
-                      Type
-                    </th>
-                    <th className="p-2 border-solid border-b border-gray-300 border-r">
-                      Certificate
-                    </th>
-                    <th className="p-2 border-solid border-b border-gray-300 border-r">
-                      Institute Name
-                    </th>
-                    <th className="p-2 border-solid border-b border-gray-300 border-r">
-                      City
-                    </th>
-                    <th className="p-2 border-solid border-b border-gray-300 border-r">
-                      State
-                    </th>
-                    <th className="p-2 border-solid border-b border-gray-300 border-r">
-                      Country
-                    </th>
-                    <th className="p-2 border-solid border-b border-gray-300 border-r">
-                      Start Date
-                    </th>
-                    <th className="p-2 border-solid border-b border-gray-300 border-r">
-                      End Date
-                    </th>
-                    <th className="p-2 border-solid border-b border-gray-300 border-r">
-                      Division
-                    </th>
-                    <th className="p-2 border-solid border-b border-gray-300">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {education.map((edu, index) => (
-                    <tr key={index} className="text-wrap">
-                      <td className="p-2 border-b text-center break-words">
-                        {edu.type}
-                      </td>
-                      <td className="p-2 border-b text-center break-words">
-                        {edu.certificate}
-                      </td>
-                      <td className="p-2 border-b text-center break-words">
-                        {edu.institute_name}
-                      </td>
-                      <td className="p-2 border-b text-center break-words">
-                        {edu.city}
-                      </td>
-                      <td className="p-2 border-b text-center break-words">
-                        {edu.state_name}
-                      </td>
-                      <td className="p-2 border-b text-center break-words">
-                        {edu.country}
-                      </td>
-                      <td className="p-2 border-b text-center break-words">
-                        {edu.start_date}
-                      </td>
-                      <td className="p-2 border-b text-center break-words">
-                        {edu.end_date}
-                      </td>
-                      <td className="p-2 border-b text-center break-words">
-                        {edu.division}
-                      </td>
-                      <td className="p-2 border-b text-center break-words">
-                        <button
-                          className="bg-white border border-solid border-black text-black p-2 rounded-sm"
-                          onClick={(e) => handleDeleteEducation(index,e)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="flex justify-center md:justify-end md:mx-20 mb-8">
-              <button
-                type="submit"
-                disabled={loading}
-                onClick={() =>
-                  window.scrollTo({
-                    top: 0,
-                    behavior: "smooth", // This smooth scrolls to the top
-                  })
-                }
-                className={`${
-                  loading
-                    ? "bg-gray-600 text-white py-2 px-4 w-full sm:w-auto rounded-sm cursor-not-allowed"
-                    : "bg-inherit"
-                } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
-              >
-                Next
-              </button>
-            </div>
-          </form>
-          )}
-          {currStep === 3 && (
-            <form onSubmit={handleSkillForm} className="flex flex-col">
-            <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
-                <label htmlFor="techName" className="text-base md:text-lg mb-1">
-                  Technology:
-                </label>
-                <input
-                  type="text"
-                  id="techName"
-                  name="techName"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="Technology Name"
-                  value={technology}
-                  onChange={(e) => setTechnology(e.target.value)}
-                />
-                <label htmlFor="ratings" className="text-base md:text-lg mb-1">
-                  Rating:
-                </label>
-                <input
-                  type="number"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="Rating"
-                  value={rating}
-                  onChange={(e) => setRating(e.target.value)}
-                />
-                <div className="flex mb-4 sm:mb-2">
-                  <button
-                    className="btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
-                    onClick={addSkillForm}
+            <form
+              onSubmit={handleEducationForm}
+              className="flex flex-col w-full"
+            >
+              <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
+                  <label htmlFor="type" className="text-base md:text-lg mb-1">
+                    Degree Type:
+                  </label>
+                  <input
+                    type="text"
+                    name="type"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="Type"
+                    value={educationForm.type}
+                    onChange={handleChange1}
+                  />
+                  <label
+                    htmlFor="certificate"
+                    className="text-base md:text-lg mb-1"
                   >
-                    + Add Skill
+                    Course:
+                  </label>
+                  <input
+                    type="text"
+                    name="certificate"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="Course"
+                    value={educationForm.certificate}
+                    onChange={handleChange1}
+                  />
+                  <label
+                    htmlFor="institute_name"
+                    className="text-base md:text-lg mb-1"
+                  >
+                    Institute Name:
+                  </label>
+                  <input
+                    type="text"
+                    name="institute_name"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="Institute Name"
+                    value={educationForm.institute_name}
+                    onChange={handleChange1}
+                  />
+                  <label htmlFor="city" className="text-base md:text-lg mb-1">
+                    City:
+                  </label>
+                  <input
+                    type="text"
+                    name="city"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="City"
+                    value={educationForm.city}
+                    onChange={handleChange1}
+                  />
+                  <label
+                    htmlFor="state_name"
+                    className="text-base md:text-lg mb-1"
+                  >
+                    State:
+                  </label>
+                  <input
+                    type="text"
+                    name="state_name"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="State Name"
+                    value={educationForm.state_name}
+                    onChange={handleChange1}
+                  />
+                  <label
+                    htmlFor="country"
+                    className="text-base md:text-lg mb-1"
+                  >
+                    Country:
+                  </label>
+                  <input
+                    type="text"
+                    name="country"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="Country"
+                    value={educationForm.country}
+                    onChange={handleChange1}
+                  />
+                  <label
+                    htmlFor="start_date"
+                    className="text-base md:text-lg mb-1"
+                  >
+                    Start Date:
+                  </label>
+                  <input
+                    type="date"
+                    name="start_date"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    value={educationForm.start_date}
+                    onChange={handleChange1}
+                  />
+                  <label
+                    htmlFor="end_date"
+                    className="text-base md:text-lg mb-1"
+                  >
+                    End Date:
+                  </label>
+                  <input
+                    type="date"
+                    name="end_date"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    value={educationForm.end_date}
+                    onChange={handleChange1}
+                  />
+                  <label
+                    htmlFor="Division"
+                    className="text-base md:text-lg mb-1"
+                  >
+                    Division:
+                  </label>
+                  <input
+                    type="text"
+                    name="division"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="Division"
+                    value={educationForm.division}
+                    onChange={handleChange1}
+                  />
+                </div>
+                <div className="flex justify-center mb-4 sm:mb-6">
+                  <button
+                    className="flex items-center gap-1 btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
+                    onClick={handleAddEducation}
+                  >
+                    <GoPlus size={22} /> Add Education
                   </button>
                 </div>
               </div>
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto mx-10">
                 <table className="w-full bg-white border border-solid border-gray-300 mb-5">
                   <thead>
                     <tr>
                       <th className="p-2 border-solid border-b border-gray-300 border-r">
-                        Technology
+                        Type
                       </th>
                       <th className="p-2 border-solid border-b border-gray-300 border-r">
-                        Rating
+                        Certificate
+                      </th>
+                      <th className="p-2 border-solid border-b border-gray-300 border-r">
+                        Institute Name
+                      </th>
+                      <th className="p-2 border-solid border-b border-gray-300 border-r">
+                        City
+                      </th>
+                      <th className="p-2 border-solid border-b border-gray-300 border-r">
+                        State
+                      </th>
+                      <th className="p-2 border-solid border-b border-gray-300 border-r">
+                        Country
+                      </th>
+                      <th className="p-2 border-solid border-b border-gray-300 border-r">
+                        Start Date
+                      </th>
+                      <th className="p-2 border-solid border-b border-gray-300 border-r">
+                        End Date
+                      </th>
+                      <th className="p-2 border-solid border-b border-gray-300 border-r">
+                        Division
                       </th>
                       <th className="p-2 border-solid border-b border-gray-300">
                         Action
@@ -1246,18 +1251,39 @@ const SignUpAsExpert = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {skills.map((skill, index) => (
+                    {education.map((edu, index) => (
                       <tr key={index} className="text-wrap">
-                        <td className="p-2 border-b text-center break-words">
-                          {skill.technology_name}
+                        <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                          {edu.type}
                         </td>
-                        <td className="py-2 px-4 border-b text-center break-words">
-                          {skill.ratings}
+                        <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                          {edu.certificate}
                         </td>
-                        <td className="py-2 px-4 border-b text-center break-words">
+                        <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                          {edu.institute_name}
+                        </td>
+                        <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                          {edu.city}
+                        </td>
+                        <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                          {edu.state_name}
+                        </td>
+                        <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                          {edu.country}
+                        </td>
+                        <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                          {edu.start_date}
+                        </td>
+                        <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                          {edu.end_date}
+                        </td>
+                        <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                          {edu.division}
+                        </td>
+                        <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
                           <button
-                            className="bg-white border border-solid border-black text-black p-2"
-                            onClick={(e) => handleDeleteSkill(index,e)}
+                            className="bg-white border border-solid border-black text-black p-2 rounded-sm"
+                            onClick={(e) => handleDeleteEducation(index, e)}
                           >
                             Delete
                           </button>
@@ -1267,256 +1293,426 @@ const SignUpAsExpert = () => {
                   </tbody>
                 </table>
               </div>
-              <div className="flex justify-center mt-4 sm:mt-2">
+              <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
-                  className={
-                    loading
-                      ? `bg-gray-600 text-white py-2 px-4 w-full sm:w-auto rounded-sm cursor-not-allowed`
-                      : `btnBlack text-white py-2 px-4 w-full sm:w-auto rounded-sm`
+                  type="submit"
+                  disabled={loading}
+                  onClick={() =>
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth", // This smooth scrolls to the top
+                    })
                   }
-                  onClick={handleSkillForm}
+                  className={`${
+                    loading
+                      ? "bg-gray-600 text-white py-2 px-4 w-full sm:w-auto rounded-sm cursor-not-allowed"
+                      : "bg-inherit"
+                  } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
                 >
-                  Submit
+                  Next
                 </button>
               </div>
-            </div>
-          </form>
+            </form>
+          )}
+          {currStep === 3 && (
+            <form onSubmit={handleSkillForm} className="flex flex-col w-full">
+              <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
+                  <label
+                    htmlFor="techName"
+                    className="text-base md:text-lg mb-1"
+                  >
+                    Technology:
+                  </label>
+                  <input
+                    type="text"
+                    id="techName"
+                    name="techName"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="Technology Name"
+                    value={technology}
+                    onChange={(e) => setTechnology(e.target.value)}
+                  />
+                  <label
+                    htmlFor="ratings"
+                    className="text-base md:text-lg mb-1"
+                  >
+                    Rating:
+                  </label>
+                  <input
+                    type="number"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="Rating"
+                    value={rating}
+                    onChange={(e) => setRating(e.target.value)}
+                  />
+                  <div className="flex mb-4 sm:mb-6">
+                    <button
+                      className="flex items-center gap-1 btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
+                      onClick={addSkillForm}
+                    >
+                      <GoPlus size={22} /> Add Skill
+                    </button>
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full bg-white border border-solid border-gray-300 mb-5">
+                    <thead>
+                      <tr>
+                        <th className="p-2 border-solid border-b border-gray-300 border-r">
+                          Technology
+                        </th>
+                        <th className="p-2 border-solid border-b border-gray-300 border-r">
+                          Rating
+                        </th>
+                        <th className="p-2 border-solid border-b border-gray-300">
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {skills.map((skill, index) => (
+                        <tr key={index} className="text-wrap">
+                          <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                            {skill.technology_name}
+                          </td>
+                          <td className="py-2 px-4 border-b border-solid border-gray-300 border-r text-center break-words">
+                            {skill.ratings}
+                          </td>
+                          <td className="py-2 px-4 border-b border-solid border-gray-300 border-r text-center break-words">
+                            <button
+                              className="bg-white border border-solid border-black text-black p-2"
+                              onClick={(e) => handleDeleteSkill(index, e)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="flex justify-center md:justify-end mt-4 sm:mt-2">
+                  <button
+                    className={`${
+                      loading
+                        ? "bg-gray-600 text-white py-2 px-4 w-full sm:w-auto rounded-sm cursor-not-allowed"
+                        : "bg-inherit"
+                    } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
+                    onClick={handleSkillForm}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </form>
           )}
           {currStep === 4 && (
             <form onSubmit={handleAchForm} className="flex flex-col">
-            <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
-                <label htmlFor="name" className="text-base md:text-lg mb-1">
-                  Achievement Name:
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="Achievement Name"
-                  value={achievementForm.name}
-                  onChange={handleChange2}
-                />
-                <label htmlFor="year" className="text-base md:text-lg mb-1">
-                  Year:
-                </label>
-                <input
-                  type="text"
-                  name="year"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="Year"
-                  value={achievementForm.year}
-                  onChange={handleChange2}
-                />
-                <label htmlFor="certificate" className="text-base md:text-lg mb-1">
-                  Certificate:
-                </label>
-                <input
-                  type="file"
-                  name="certificate"
-                  className="border p-2"
-                  onChange={handleChange2}
-                />
-              </div>
-              <div className="flex justify-center mb-4 sm:mb-6">
-                <button
-                  className="btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
-                  onClick={handleAddAchievement}
+              <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
+                  <label htmlFor="name" className="text-base md:text-lg mb-1">
+                    Achievement Name:
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="Achievement Name"
+                    value={achievementForm.name}
+                    onChange={handleChange2}
+                  />
+                  <label htmlFor="year" className="text-base md:text-lg mb-1">
+                    Year:
+                  </label>
+                  <input
+                    type="text"
+                    name="year"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="Year"
+                    value={achievementForm.year}
+                    onChange={handleChange2}
+                  />
+                  <label
+                    htmlFor="certificate"
+                    className="text-base md:text-lg mb-1"
+                  >
+                    Certificate:
+                  </label>
+                  <div onClick={() =>
+                        document.querySelector("#certificateSelector").click()
+                      }
+                      className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg">
+                  <input
+                    type="file"
+                    name="certificateSelector"
+                    id="certificateSelector"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={onSelectFileCertificate}
+                  />
+                  {certificateLoading ? (
+                    <div className="flex w-full h-full items-center justify-center text-center">
+                      <span>Loading...</span>
+                    </div>
+                  ) : myImageCertificate ? (
+                    <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
+                      <img
+                        src={myImageCertificate}
+                        alt="Preview"
+                        className="w-auto h-40 shrink-0 object-cover object-center m-2"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center w-full h-full text-gray-600">
+                      <FiUpload className="w-10 h-10" />
+                      <span className="ml-2">Upload Image</span>
+                    </div>
+                  )}
+                  </div>
+                  <Modal
+                  className="w-full h-full overflow-scroll"
+                  show={showModalCertificate}
+                  onClose={closeModalCertificate}
                 >
-                  + Add Achievement
+                  <ImageUploader
+                    image={myImageCertificate}
+                    handleUploadImage={handleUploadImage}
+                    filename="cropped_image.jpg"
+                    onCropped={handleCroppedImageCertificate}
+                    aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                  />
+                </Modal>
+                </div>
+                <div className="flex justify-center mb-4 sm:mb-6">
+                  <button
+                    className="flex items-center gap-1 btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
+                    onClick={handleAddAchievement}
+                  >
+                    <GoPlus size={22} /> Add Achievement
+                  </button>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full bg-white border border-solid border-gray-300 mb-5">
+                    <thead>
+                      <tr>
+                        <th className="p-2 border-solid border-b border-gray-300 border-r">
+                          Name
+                        </th>
+                        <th className="p-2 border-solid border-b border-gray-300 border-r">
+                          Year
+                        </th>
+                        <th className="p-2 border-solid border-b border-gray-300 border-r">
+                          Certificate
+                        </th>
+                        <th className="p-2 border-solid border-b border-gray-300 ">
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {achievements.map((achievement, index) => (
+                        <tr key={index} className="text-wrap">
+                          <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                            {achievement.name}
+                          </td>
+                          <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                            {achievement.year}
+                          </td>
+                          <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                            <img
+                              src={URL.createObjectURL(achievement.certificate)}
+                              alt="Certificate"
+                              className="w-20 h-20 object-cover"
+                            />
+                          </td>
+                          <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                            <button
+                              className="bg-white text-black border border-solid border-black rounded-sm p-2"
+                              onClick={(e) => handleDeleteAchievement(index, e)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="flex justify-center md:justify-end md:mx-20 mb-8">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  onClick={() =>
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth", // This smooth scrolls to the top
+                    })
+                  }
+                  className={`${
+                    loading
+                      ? "bg-gray-600 text-white py-2 px-4 w-full sm:w-auto rounded-sm cursor-not-allowed"
+                      : "bg-inherit"
+                  } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
+                >
+                  Next
                 </button>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full bg-white border border-solid border-gray-300 mb-5">
-                  <thead>
-                    <tr>
-                      <th className="p-2 border-solid border-b border-gray-300 border-r">
-                        Name
-                      </th>
-                      <th className="p-2 border-solid border-b border-gray-300 border-r">
-                        Year
-                      </th>
-                      <th className="p-2 border-solid border-b border-gray-300 border-r">
-                        Certificate
-                      </th>
-                      <th className="p-2 border-solid border-b border-gray-300 ">
-                        Action
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {achievements.map((achievement, index) => (
-                      <tr key={index} className="text-wrap">
-                        <td className="p-2 border-b text-center break-words">
-                          {achievement.name}
-                        </td>
-                        <td className="p-2 border-b text-center break-words">
-                          {achievement.year}
-                        </td>
-                        <td className="p-2 border-b text-center break-words">
-                          <img
-                            src={URL.createObjectURL(achievement.certificate)}
-                            alt="Certificate"
-                            className="w-20 h-20 object-cover"
-                          />
-                        </td>
-                        <td className="p-2 border-b text-center break-words">
-                          <button
-                            className="bg-white text-black border border-solid border-black rounded-sm p-2"
-                            onClick={(e) => handleDeleteAchievement(index,e)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div className="flex justify-center md:justify-end md:mx-20 mb-8">
-              <button
-                type="submit"
-                disabled={loading}
-                onClick={() =>
-                  window.scrollTo({
-                    top: 0,
-                    behavior: "smooth", // This smooth scrolls to the top
-                  })
-                }
-                className={`${
-                  loading
-                    ? "bg-gray-600 text-white py-2 px-4 w-full sm:w-auto rounded-sm cursor-not-allowed"
-                    : "bg-inherit"
-                } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
-              >
-                Next
-              </button>
-            </div>
-          </form>
+            </form>
           )}
           {currStep === 5 && (
             <form onSubmit={handleExperienceForm} className="flex flex-col">
-            <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
-                <label htmlFor="type" className="text-base md:text-lg mb-1">
-                  Company Name:
-                </label>
-                <input
-                  type="text"
-                  name="company_name"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="Company Name"
-                  value={experienceForm.company_name}
-                  onChange={handleChange3}
-                />
-                <label htmlFor="type" className="text-base md:text-lg mb-1">
-                  Start Date:
-                </label>
-                <input
-                  type="date"
-                  name="start_date"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  value={experienceForm.start_date}
-                  onChange={handleChange3}
-                />
-                <div className="flex items-center">
-                  <label htmlFor="isPresent" className="text-base md:text-lg mb-1">
-                    Currently Working Here:
+              <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
+                  <label htmlFor="type" className="text-base md:text-lg mb-1">
+                    Company Name:
                   </label>
                   <input
-                    type="checkbox"
-                    name="isPresent"
-                    className="border p-2 mr-2"
-                    checked={experienceForm.isPresent}
+                    type="text"
+                    name="company_name"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="Company Name"
+                    value={experienceForm.company_name}
                     onChange={handleChange3}
                   />
-                  <label htmlFor="isPresent" className="text-base md:text-lg mb-1">Yes</label>
-                </div>
-                <div className="flex gap-2 flex-nowrap">
-                {!experienceForm.isPresent && (
-                  <>
                   <label htmlFor="type" className="text-base md:text-lg mb-1">
-                  End Date:
-                </label>
+                    Designation:
+                  </label>
+                  <input
+                    type="text"
+                    name="designation"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    placeholder="Designation"
+                    value={experienceForm.designation}
+                    onChange={handleChange3}
+                  />
+                  <label htmlFor="type" className="text-base md:text-lg mb-1">
+                    Start Date:
+                  </label>
                   <input
                     type="date"
-                    name="end_date"
-                    className="border border-solid border-slate-400 rounded-sm p-2 w-52"
-                    value={experienceForm.end_date}
+                    name="start_date"
+                    className="border border-solid border-slate-400 rounded-sm p-2"
+                    value={experienceForm.start_date}
                     onChange={handleChange3}
                   />
-                  </>
-                )}
+                  <div className="flex flex-col sm:col-span-2">
+                    <div className="flex items-center mb-4 justify-between">
+                      <label
+                        htmlFor="isPresent"
+                        className="text-base md:text-lg mb-1"
+                      >
+                        Currently Working Here:
+                      </label>
+                      <div>
+                        <input
+                          type="checkbox"
+                          name="isPresent"
+                          className="border p-2"
+                          checked={experienceForm.isPresent}
+                          onChange={handleChange3}
+                        />
+                        <label
+                          htmlFor="isPresent"
+                          className="text-base md:text-lg mb-1"
+                        >
+                          Yes
+                        </label>
+                      </div>
+                    </div>
+
+                    {!experienceForm.isPresent && (
+                      <div className="flex items-center mb-4 justify-between">
+                        <label
+                          htmlFor="type"
+                          className="text-base md:text-lg mb-1"
+                        >
+                          End Date:
+                        </label>
+                        <input
+                          type="date"
+                          name="end_date"
+                          className="border border-solid border-slate-400 rounded-sm p-2 md:w-[250px]"
+                          value={experienceForm.end_date}
+                          onChange={handleChange3}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <label htmlFor="type" className="text-base md:text-lg mb-1">
-                  Designation:
-                </label>
-                <input
-                  type="text"
-                  name="designation"
-                  className="border border-solid border-slate-400 rounded-sm p-2"
-                  placeholder="Designation"
-                  value={experienceForm.designation}
-                  onChange={handleChange3}
-                />
+                <div className="flex justify-center mb-4 sm:mb-6">
+                  <button
+                    className="flex items-center gap-1 btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
+                    onClick={handleAddExperience}
+                  >
+                    <GoPlus size={22} /> Add Experience
+                  </button>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full bg-white border border-solid border-gray-300 mb-5">
+                    <thead>
+                      <tr>
+                        <th className="p-2 border-solid border-b border-gray-300 border-r">
+                          Company Name
+                        </th>
+                        <th className="p-2 border-solid border-b border-gray-300 border-r">
+                          Start Date
+                        </th>
+                        <th className="p-2 border-solid border-b border-gray-300 border-r">
+                          End Date
+                        </th>
+                        <th className="p-2 border-solid border-b border-gray-300 border-r">
+                          Designation
+                        </th>
+                        <th className="p-2 border-solid border-b border-gray-300">
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {experience.map((exp, index) => (
+                        <tr key={index} className="text-wrap">
+                          <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                            {exp.company_name}
+                          </td>
+                          <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                            {exp.start_date}
+                          </td>
+                          <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                            {exp.isPresent ? "Present" : exp.end_date}
+                          </td>
+                          <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                            {exp.designation}
+                          </td>
+                          <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                            <button
+                              className="bg-white text-black rounded-sm border border-solid border-black p-2"
+                              onClick={(e) => handleDeleteExperience(index, e)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-              <div className="flex justify-center mb-4 sm:mb-6">
+              <div className="flex justify-center md:justify-end md:mx-20 mb-8">
                 <button
-                  className="btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
-                  onClick={handleAddExperience}
+                  type="submit"
+                  disabled={loading}
+                  className={`${
+                    loading
+                      ? "bg-gray-600 text-white py-2 px-4 w-full sm:w-auto rounded-sm cursor-not-allowed"
+                      : "bg-inherit"
+                  } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
                 >
-                  + Add Experience
+                  Next
                 </button>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full bg-white border border-solid border-gray-300 mb-5">
-                  <thead>
-                    <tr>
-                      <th className="p-2 border-solid border-b border-gray-300 border-r">Company Name</th>
-                      <th className="p-2 border-solid border-b border-gray-300 border-r">Start Date</th>
-                      <th className="p-2 border-solid border-b border-gray-300 border-r">End Date</th>
-                      <th className="p-2 border-solid border-b border-gray-300 border-r">Designation</th>
-                      <th className="p-2 border-solid border-b border-gray-300">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {experience.map((exp, index) => (
-                      <tr key={index} className="text-wrap">
-                        <td className="p-2 border-b text-center break-words">{exp.company_name}</td>
-                        <td className="p-2 border-b text-center break-words">{exp.start_date}</td>
-                        <td className="p-2 border-b text-center break-words">
-                          {exp.isPresent ? "Present" : exp.end_date}
-                        </td>
-                        <td className="p-2 border-b text-center break-words">{exp.designation}</td>
-                        <td className="p-2 border-b text-center break-words">
-                          <button
-                            className="bg-white text-black rounded-sm border border-solid border-black p-2"
-                            onClick={(e) => handleDeleteExperience(index,e)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div className="flex justify-center md:justify-end md:mx-20 mb-8">
-              <button
-                type="submit"
-                disabled={loading}
-                className={`${
-                  loading
-                    ? "bg-gray-600 text-white py-2 px-4 w-full sm:w-auto rounded-sm cursor-not-allowed"
-                    : "bg-inherit"
-                } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
-              >
-                Next
-              </button>
-            </div>
-          </form>
+            </form>
           )}
           {currStep === 6 && (
             <form onSubmit={handleSubmit} className="flex flex-col">
@@ -1597,7 +1793,9 @@ const SignUpAsExpert = () => {
                 <button
                   type="submit"
                   className={`${
-                    loading ? "cursor-not-allowed bg-gray-400 text-white" : "bg-inherit "
+                    loading
+                      ? "cursor-not-allowed bg-gray-400 text-white"
+                      : "bg-inherit "
                   }  cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 rounded-md shadow-md border border-solid border-gray-300`}
                 >
                   Submit

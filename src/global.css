@@ -134,12 +134,38 @@ input[type="number"]::-webkit-outer-spin-button {
 .rbc-header span {
   font-weight: 500;
 }
+.rbc-row .rbc-month-header{
+  border-left: 3px solid #ddd;
+}
+.rbc-day-bg + .rbc-day-bg {
+  border-left: 3px solid #ddd;
+}
+.rbc-header + .rbc-header {
+  border-left: 3px solid #ddd;
+}
+.rbc-row-bg{
+  border:0.1px solid #ddd;
+}
+
 .rbc-row-bg .rbc-today {
-  background-color: rgb(197, 221, 197);
+  background-color: rgba(108, 161, 248, 0.5);
 }
+
+.rbc-month-row + .rbc-month-row {  border-top:none;
+}
+.rbc-row-segment{
+  padding: 1px 6px 0px 7px;
+}
+
 .rbc-row-segment .rbc-event {
-  background-color: #f2fff3;
+  background-color: white;
+  padding: 0;
+  border: 1px solid #97BAEF;
+  box-shadow: 1px 1px 2px 1px #97BAEF;
+  border-radius: 2px;
+  
 }
+
 
 .rbc-event .rbc-selected,
 .rbc-day-slot .rbc-selected .rbc-background-event {

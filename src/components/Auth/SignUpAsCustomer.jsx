@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import { handleUploadImage } from "../../constant";
+import ImageUploader from "../../ImageUploader";
+import Modal from "../../Modal";
+import { FiUpload } from "react-icons/fi";
 
 const CHECKOUT_STEPS = [
   { name: "Personal Details" },
@@ -13,6 +16,8 @@ const SignUpAsCustomer = () => {
   const [currStep, setCurrStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [myImage, setMyImage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const [margin, setMargin] = useState({
     marginLeft: 0,
     marginRight: 0,
@@ -25,6 +30,28 @@ const SignUpAsCustomer = () => {
     gender: "Male",
     profile_img: "",
   });
+
+  const onSelectFile = (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImage(reader.result);
+        setShowModal(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModal(false); // Close the modal after getting the URL
+    setMyImage(url); // Reset the image state
+    setPersonalInfo({ ...personalInfo, profile_img: url });
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    setMyImage(null); // Reset the image state when modal is closed
+  };
 
   const updatePersonalInfo = async (e) => {
     e.preventDefault();
@@ -110,11 +137,11 @@ const SignUpAsCustomer = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${jsonData.access_token}`,
-            // "X-CSRF-TOKEN": ${jsonData.csrf_token},
           },
         }
       );
       const data = response.data;
+      localStorage.setItem("customer_id", `${response.data.customer_id}`);
       if (!data) {
         console.log("Something went wrong");
         setLoading(false);
@@ -239,23 +266,10 @@ const SignUpAsCustomer = () => {
     return (currStep / (CHECKOUT_STEPS.length - 1)) * 100;
   };
 
-  const [selectedProfile, setSelectedProfile] = useState(null);
+  // const [selectedProfile, setSelectedProfile] = useState(null);
   const [imageLoading, setImageLoading] = useState(false);
 
-  const handleProfileChange = async (e) => {
-    setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setSelectedProfile(url);
-    setImageLoading(false);
-  };
 
-  const handleRemoveProfile = () => {
-    setSelectedProfile(null);
-  };
 
   if (!CHECKOUT_STEPS.length) return <></>;
 
@@ -427,17 +441,17 @@ const SignUpAsCustomer = () => {
                     accept="image/*"
                     id="profileSelector"
                     name="profileSelector"
-                    onChange={handleProfileChange}
+                    onChange={onSelectFile}
                     className="hidden"
                   />
                   {imageLoading ? (
                     <div className="flex w-full h-full items-center justify-center text-center">
                       <span>Loading...</span>
                     </div>
-                  ) : selectedProfile ? (
+                  ) : myImage ? (
                     <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                       <img
-                        src={selectedProfile}
+                        src={myImage}
                         alt="Preview"
                         className="w-auto h-40 shrink-0 object-cover object-center m-2"
                       />
@@ -449,6 +463,19 @@ const SignUpAsCustomer = () => {
                     </div>
                   )}
                 </div>
+                <Modal
+                className="w-full h-full overflow-scroll"
+                show={showModal}
+                onClose={closeModal}
+              >
+                <ImageUploader
+                  image={myImage}
+                  handleUploadImage={handleUploadImage}
+                  filename="cropped_image.jpg"
+                  onCropped={handleCroppedImage}
+                  aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                />
+              </Modal>
               </div>
               <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
                 <button
