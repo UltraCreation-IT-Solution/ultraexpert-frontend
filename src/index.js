@@ -269,10 +269,6 @@ const appRouter = createBrowserRouter([
         element: <UpdateService />,
       },
       {
-        path: "/firebaseuploadtest",
-        element: <FirebaseImageUpload />,
-      },
-      {
         path: "editprofile",
         element: <Update />,
       },

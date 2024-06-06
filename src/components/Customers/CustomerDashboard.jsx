@@ -547,7 +547,7 @@ export const CustomerChats = () => {
     </div>
   );
 };
-export const CustomerBookings = ({ id }) => {
+export const CustomerBookings = () => {
   const [myBookings, setMyBookings] = useState([]);
   const [shimmer, setShimmer] = useState(false);
   const cookies = document.cookie.split("; ");
@@ -559,12 +559,11 @@ export const CustomerBookings = ({ id }) => {
   useEffect(() => {
     getMyBookings();
   }, []);
-
   const getMyBookings = async () => {
     setShimmer(true);
     try {
       const res = await axios.get(
-        `/customers/connect/?action=6&customer_id=${4}`,
+        `/customers/connect/?action=6&customer_id=${localStorage.customer_id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -888,7 +887,7 @@ const CustomerDashboard = () => {
         <CustomerProfile />
         <CustomerChats />
         <ShowBlogs />
-        <CustomerBookings id={userData?.id} />
+        <CustomerBookings />
         <CustomerRecentMeetngs />
         <CustomerTransactionHistory />
       </Outlet>
