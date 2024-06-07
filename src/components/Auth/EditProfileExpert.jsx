@@ -463,21 +463,6 @@ const PersonalDetails = () => {
     console.log(jsonData);
     setLoading(true);
     try {
-      // const response = await fetch("http://localhost:8000/experts/update/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 2,
-      //     level: personalInfo.level,
-      //     profession: personalInfo.profession,
-      //     about_me: personalInfo.about_me,
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = await response.json();
-      // console.log(json);
       const response = await axios.post(
         "/experts/update/",
         {
@@ -578,7 +563,7 @@ const PersonalDetails = () => {
             />
 
             <label htmlFor="about" className="text-lg mb-1">
-              About Me
+              About
             </label>
             <textarea
               required
@@ -592,7 +577,7 @@ const PersonalDetails = () => {
                   about_me: e.target.value,
                 });
               }}
-              className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
+              className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full min-h-20 shrink-0 mb-4"
               placeholder="I want to learn css, html, python with django"
             />
           </div>
@@ -645,8 +630,8 @@ const EducationDetails = () => {
         console.log("Something went wrong");
         return;
       }
-      console.log(response.data.data.education.education_json);
-      setEducation(response.data.data.education.education_json);
+      console.log(response.data.data.education);
+      setEducation(response.data.data.education);
       setLoading(false);
 
       setDataLoading(true);
@@ -714,13 +699,13 @@ const EducationDetails = () => {
   const handleSubmit3 = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const educationJson = { education_json: education };
+    // const educationJson = { education_json: education };
     try {
       const response = await axios.post(
         "/experts/update/",
         {
           action: 2,
-          education_json: educationJson,
+          education_json: education,
         },
         {
           headers: {
@@ -745,7 +730,7 @@ const EducationDetails = () => {
 
   return (
     <form onSubmit={handleSubmit3} className="flex flex-col w-full">
-      {dataLoading ? (
+      {!dataLoading ? (
         <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
           Data Loading...
         </div>
@@ -1035,12 +1020,12 @@ const SkillDetails = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const skillJson = { skill_json: skill };
+      // const skillJson = { skill_json: skill };
       const response = await axios.post(
         "/experts/update/",
         {
           action: 3,
-          skill_json: skillJson,
+          skill_json: skill,
         },
         {
           headers: {
@@ -1102,7 +1087,7 @@ const SkillDetails = () => {
                 className="flex items-center gap-1 btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
                 onClick={handleAddSkill}
               >
-                Add Skill
+                <GoPlus size={22}/>Add Skill
               </button>
             </div>
           </div>
@@ -1191,7 +1176,7 @@ const AchDetails = () => {
     setShowModal(false);
     setImageLoading(false);
     setMyImage(url); // Reset the image state
-    setAchievement({ ...achievement, certificate: url });
+    setAchievementForm({ ...achievementForm, certificate: url });
   };
   const closeModal = () => {
     setShowModal(false);
@@ -1230,14 +1215,15 @@ const AchDetails = () => {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, files } = e.target;
     setAchievementForm({
       ...achievementForm,
-      [name]: value,
+      [name]: type === "file" ? files[0] : value,
     });
   };
 
   const handleAddAchievement = (e) => {
+    console.log(achievementForm)
     e.preventDefault();
     if (
       achievementForm.name &&
@@ -1250,6 +1236,7 @@ const AchDetails = () => {
         year: "",
         certificate: "",
       });
+      setMyImage(0);
     }
   };
 
@@ -1262,13 +1249,13 @@ const AchDetails = () => {
   const handleSubmit4 = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const achievementJson = { achievements_json: achievement };
+    // const achievementJson = { achievements_json: achievement };
     try {
       const response = await axios.post(
         "/experts/update/",
         {
           action: 7,
-          achievements_json: achievementJson,
+          achievements_json: achievement,
         },
         {
           headers: {
@@ -1291,6 +1278,7 @@ const AchDetails = () => {
     }
   };
 
+  console.log(achievement)
   return (
     <form onSubmit={handleSubmit4} className="grow h-full flex flex-col">
       {!dataLoading ? (
@@ -1299,107 +1287,6 @@ const AchDetails = () => {
         </div>
       ) : (
         <>
-          {/* <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                addAchForm();
-              }}
-              className="underline cursor-pointer text-gray-400 bg-inherit hover:text-gray-700"
-            >
-              + Add Achievment
-            </button>
-            {achForms.map((form, ind) => (
-              <>
-                <div key={form.id} className="flex justify-between">
-                  <p className="font-bold text-lg">Achievement {ind + 1}</p>
-                  <button
-                    onClick={() => removeAchForm(form.id)}
-                    className="underline cursor-pointer text-red-400 bg-inherit hover:text-red-600"
-                  >
-                    - Remove Achievement
-                  </button>
-                </div>
-                <label htmlFor={`name${form.id}`} className="text-lg mb-1">
-                  Achievement Name
-                </label>
-                <input
-                  type="text"
-                  id={`name${form.id}`}
-                  name={`name${form.id}`}
-                  value={achInfo.name[ind]}
-                  onChange={(e) => {
-                    const updatedTechNames = [...achInfo.name];
-                    updatedTechNames[ind] = e.target.value;
-                    setAchInfo({
-                      ...achInfo,
-                      name: updatedTechNames,
-                    });
-                  }}
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  placeholder="Achievement Name"
-                />
-                <label htmlFor={`year${form.id}`} className="text-lg mb-1">
-                  Achievement Year
-                </label>
-                <input
-                  type="number"
-                  id={`year${form.id}`}
-                  name={`year${form.id}`}
-                  value={achInfo.year[ind]}
-                  onChange={(e) => {
-                    const updatedRatings = [...achInfo.year];
-                    updatedRatings[ind] = e.target.value;
-                    setAchInfo({
-                      ...achInfo,
-                      year: updatedRatings,
-                    });
-                  }}
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-full"
-                  placeholder="Enter Year"
-                />
-                <label
-                  className="text-lg mb-1 flex gap-1"
-                  htmlFor={`certificate${form.id}`}
-                >
-                  Certificate
-                </label>
-                <div
-                  className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
-                  onClick={() =>
-                    document.querySelector(`#certificate${form.id}`).click()
-                  }
-                >
-                  <input
-                    type="file"
-                    name={`certificate${form.id}`}
-                    id={`certificate${form.id}`}
-                    className="hidden"
-                    onChange={(e) => handleCertificateChange(e, ind)}
-                    aria-label="Upload certificate for achievement"
-                  />
-                  {imageLoading ? (
-                    <div className="flex w-full h-full items-center justify-center text-center">
-                      <span>Loading...</span>
-                    </div>
-                  ) : selectedCertificate[ind] ? (
-                    <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
-                      <img
-                        src={selectedCertificate[ind]}
-                        alt="Preview"
-                        className="w-auto h-40 shrink-0 object-cover object-center m-2"
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center w-full h-full text-gray-600">
-                      <FiUpload className="w-10 h-10" />
-                      <span className="ml-2">Upload Image</span>
-                    </div>
-                  )}
-                </div>
-              </>
-            ))}
-          </div> */}
           <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
               <label htmlFor="name" className="text-base md:text-lg mb-1">
@@ -1432,41 +1319,50 @@ const AchDetails = () => {
               >
                 Certificate:
               </label>
-              <input
-                type="text"
-                name="type"
-                accept="image/*"
-                className="border border-solid border-slate-400 rounded-sm p-2"
-                onChange={onSelectFile}
-              />
-              {imageLoading ? (
-                <div className="flex w-full h-full items-center justify-center text-center">
-                  <span>Loading...</span>
-                </div>
-              ) : myImage ? (
-                <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
-                  <img
-                    src={myImage}
-                    alt="Preview"
-                    className="w-auto h-40 shrink-0 object-cover object-center m-2"
-                  />
-                </div>
-              ) : (
-                <div className="flex items-center justify-center w-full h-full text-gray-600">
-                  <FiUpload className="w-10 h-10" />
-                  <span className="ml-2">Upload Image</span>
-                </div>
-              )}
+              <div
+                onClick={() =>
+                  document.querySelector("#certificateSelector").click()
+                }
+                className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
+              >
+                <input
+                  type="file"
+                  name="certificateSelector"
+                  id="certificateSelector"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={onSelectFile}
+                />
+                {imageLoading ? (
+                  <div className="flex w-full h-full items-center justify-center text-center">
+                    <span>Loading...</span>
+                  </div>
+                ) : myImage ? (
+                  <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
+                    <img
+                      src={myImage}
+                      alt="Preview"
+                      className="w-auto h-40 shrink-0 object-cover object-center m-2"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center w-full h-full text-gray-600">
+                    <FiUpload className="w-10 h-10" />
+                    <span className="ml-2">Upload Image</span>
+                  </div>
+                )}
+              </div>
+              <Modal show={showModal} onClose={closeModal}>
+                <ImageUploader
+                  image={myImage}
+                  handleUploadImage={handleUploadImage}
+                  filename="cropped_image.jpg"
+                  onCropped={handleCroppedImage}
+                  aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                />
+              </Modal>
             </div>
-            <Modal show={showModal} onClose={closeModal}>
-              <ImageUploader
-                image={myImage}
-                handleUploadImage={handleUploadImage}
-                filename="cropped_image.jpg"
-                onCropped={handleCroppedImage}
-                aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
-              />
-            </Modal>
+
             <div className="flex justify-center mb-4 sm:mb-6">
               <button
                 className="flex items-center gap-1 btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
@@ -1495,7 +1391,8 @@ const AchDetails = () => {
                 </tr>
               </thead>
               <tbody>
-                {achievement?.map((a, index) => (
+                {console.log(achievement)}
+                {achievement.length >0 &&achievement?.map((a, index) => (
                   <tr key={index} className="text-wrap">
                     <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
                       {a.name}
@@ -1504,11 +1401,21 @@ const AchDetails = () => {
                       {a.year}
                     </td>
                     <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
-                      <img
-                        src={a.certificate}
-                        alt="Certificate"
-                        className="w-20 h-20 object-cover"
-                      />
+                      {typeof a.certificate === "object" &&
+                      a.certificate instanceof Blob ? (
+                        <img
+                          src={URL.createObjectURL(a.certificate)}
+                          alt="Certificate"
+                          className="w-20 h-20 object-cover"
+                        />
+                      ) : (
+                        // Handle the case where it's a string (existing logic)
+                        <img
+                          src={a.certificate}
+                          alt="Certificate"
+                          className="w-20 h-20 object-cover"
+                        />
+                      )}
                     </td>
                     <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
                       <button
@@ -1572,26 +1479,7 @@ const ExperienceDetails = () => {
       const expData = response.data.data.experience;
       console.log(expData);
 
-      setExperienceForms(expData.map((form, index) => ({ id: index + 1 })));
-
-      const updatedCompName = [];
-      const updatedStartDate = [];
-      const updatedEndDate = [];
-      const updatedDesignation = [];
-
-      expData.forEach((form) => {
-        updatedCompName.push(form.company_name);
-        updatedStartDate.push(form.start_date);
-        updatedEndDate.push(form.is_present ? "" : form.end_date);
-        updatedDesignation.push(form.designation);
-      });
-
-      setExpInfo({
-        company_name: updatedCompName,
-        start_date: updatedStartDate,
-        end_date: updatedEndDate,
-        designation: updatedDesignation,
-      });
+      setExperience(expData);
       setDataLoading(true);
     } catch (error) {
       console.log(error);
@@ -1639,7 +1527,7 @@ const ExperienceDetails = () => {
   const handleSubmit6 = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const experienceJson = { experience_json: experience };
+    // const experienceJson = { experience_json: experience };
     try {
       // const response = await fetch("http://localhost:8000/experts/update/", {
       //   method: "POST",
@@ -1666,7 +1554,7 @@ const ExperienceDetails = () => {
         "/experts/update/",
         {
           action: 4,
-          experience_json: experienceJson,
+          experience_json: experience,
         },
         {
           headers: {
@@ -1699,133 +1587,6 @@ const ExperienceDetails = () => {
         </div>
       ) : (
         <>
-          {/* <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                addExperienceForm();
-              }}
-              className="underline cursor-pointer text-gray-400 bg-inherit hover:text-gray-700"
-            >
-              + Add Experience
-            </button>
-            {experienceForms.map((form, ind) => (
-              <>
-                <div key={form.id} className="flex justify-between">
-                  <p className="font-bold text-lg">Experience {ind + 1}</p>
-                  <button
-                    onClick={() => removeExpForm(form.id)}
-                    className="underline cursor-pointer text-red-400 bg-inherit hover:text-red-600"
-                  >
-                    - Remove Experience
-                  </button>
-                </div>
-                <label htmlFor={`company${form.id}`} className="text-lg mb-1">
-                  Company Name
-                </label>
-                <input
-                  type="text"
-                  id={`company${form.id}`}
-                  name={`company${form.id}`}
-                  value={expInfo.company_name[ind]}
-                  onChange={(e) => {
-                    const updatedCompany = [...expInfo.company_name];
-                    updatedCompany[ind] = e.target.value;
-                    setExpInfo({
-                      ...expInfo,
-                      company_name: updatedCompany,
-                    });
-                  }}
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  placeholder="Company Name"
-                />
-                <div className="flex justify-around gap-5">
-                  <div className="flex flex-col w-full">
-                    <label htmlFor={`start${form.id}`} className="text-lg mb-1">
-                      Start Year
-                    </label>
-                    <input
-                      type="date"
-                      id={`start${form.id}`}
-                      name={`start${form.id}`}
-                      value={expInfo.start_date[ind]}
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      onChange={(e) => {
-                        const selectedDate = new Date(e.target.value);
-                        const year = selectedDate.getFullYear();
-                        const month = String(
-                          selectedDate.getMonth() + 1
-                        ).padStart(2, "0");
-                        const day = String(selectedDate.getDate()).padStart(
-                          2,
-                          "0"
-                        );
-                        const formattedDate = `${year}-${month}-${day}`;
-                        const updatedStartDate = [...expInfo.start_date];
-                        updatedStartDate[ind] = formattedDate;
-                        setExpInfo({
-                          ...expInfo,
-                          start_date: updatedStartDate,
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="flex flex-col w-full">
-                    <label htmlFor={`end${form.id}`} className="text-lg mb-1">
-                      End Year
-                    </label>
-                    <input
-                      type="date"
-                      id={`end${form.id}`}
-                      name={`end${form.id}`}
-                      value={expInfo.end_date[ind]}
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      onChange={(e) => {
-                        const selectedDate = new Date(e.target.value);
-                        const year = selectedDate.getFullYear();
-                        const month = String(
-                          selectedDate.getMonth() + 1
-                        ).padStart(2, "0");
-                        const day = String(selectedDate.getDate()).padStart(
-                          2,
-                          "0"
-                        );
-                        const formattedDate = `${year}-${month}-${day}`;
-                        const updatedEndDate = [...expInfo.end_date];
-                        updatedEndDate[ind] = formattedDate;
-                        setExpInfo({
-                          ...expInfo,
-                          end_date: updatedEndDate,
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-                <label
-                  htmlFor={`designtaion${form.id}`}
-                  className="text-lg mb-1"
-                >
-                  Designation
-                </label>
-                <input
-                  type="text"
-                  id={`designtaion${form.id}`}
-                  name={`designtaion${form.id}`}
-                  value={expInfo.designation[ind]}
-                  onChange={(e) => {
-                    const updatedDesignation = [...expInfo.designation];
-                    updatedDesignation[ind] = e.target.value;
-                    setExpInfo({
-                      ...expInfo,
-                      designation: updatedDesignation,
-                    });
-                  }}
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  placeholder="Designtaion"
-                />
-              </>
-            ))}
-          </div> */}
           <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
               <label

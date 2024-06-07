@@ -796,15 +796,15 @@ export const Dashboard = () => {
   const [updateDate, setUpdateDate] = useState("");
   const [updateCount, setUpdateCount] = useState("");
 
-  const handleUpdate = () => {
-    const updatedValues = values.map((value) => {
-      if (value.date.toDateString() === updateDate) {
-        return { ...value, count: parseInt(updateCount) };
-      }
-      return value;
-    });
-    setValues(updatedValues);
-  };
+  // const handleUpdate = () => {
+  //   const updatedValues = values.map((value) => {
+  //     if (value.date.toDateString() === updateDate) {
+  //       return { ...value, count: parseInt(updateCount) };
+  //     }
+  //     return value;
+  //   });
+  //   setValues(updatedValues);
+  // };
 
   const navigate = useNavigate();
   return (
@@ -839,7 +839,7 @@ export const Dashboard = () => {
           <div className="flex gap-[1.65vw] items-center text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#515151]">
             <FaTags className="text-[4.45vw] xs:text-[2.9vw] sm:text-[2.65vw]" />
             <div className="flex ">
-              {expertData?.skills?.slice(0, 3)?.map((item, idx) => {
+              {expertData?.skills?.map((item, idx) => {
                 return (
                   <div
                     key={idx}
@@ -1093,7 +1093,7 @@ export const Dashboard = () => {
           </div>
         </div>
         <div className="flex flex-wrap gap-[2vw] xs:gap-[1.6vw] md:gap-[1vw]">
-          {expertData.skills?.map((item, index) => {
+          {expertData.skills?.skill_json?.map((item, index) => {
             return (
               <div
                 key={index}
@@ -1768,7 +1768,7 @@ export const Leaderboard = () => {
 //   );
 // };
 
-export const MyBooking = ({ id }) => {
+export const MyBooking = () => {
   const [shimmer, setShimmer] = useState(false);
   const [myBookings, setMyBookings] = useState([]);
   useEffect(() => {
@@ -1787,7 +1787,7 @@ export const MyBooking = ({ id }) => {
     setShimmer(true);
     try {
       const res = await axios.get(
-        `/experts/services/?action=4&expert_id=${5}`,
+        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -1943,12 +1943,12 @@ const ExpertDashboard = () => {
             <div className=" mt-[1.6vw] w-full text-sm text-[#525252] line-clamp-3">
               {expertData.about_me}
             </div>
-            {expertData?.skills?.length !== 0 && (
+            {expertData?.skills?.length > 0 && (
               <div className="mt-[1.25vw] flex flex-col gap-[1vw]">
                 <div className="flex gap-[1.25vw] items-center text-[1.25vw] text-[#515151]">
                   <FaTags />
                   <div className="flex">
-                    {expertData?.skills?.slice(0, 3)?.map((item, idx) => {
+                    {expertData?.skills?.map((item, idx) => {
                       return (
                         <div
                           key={idx}
@@ -2050,7 +2050,7 @@ const ExpertDashboard = () => {
         <Chats />
         <Leaderboard />
         <SkillList />
-        <MyBooking id={expertData?.id} />
+        <MyBooking />
       </Outlet>
       {showEditProfile === true && (
         <Update handleShowEditProfile={handleShowEditProfile} />

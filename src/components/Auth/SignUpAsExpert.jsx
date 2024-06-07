@@ -99,19 +99,22 @@ const SignUpAsExpert = () => {
     setMyImageCertificate(url); // Reset the image state
     setAchievementForm({
       ...achievementForm,
-      certificate: [...achievementForm.certificate, url],
+      certificate:  url,
     });
   };
   const closeModalProfile = () => {
     setShowModalProfile(false);
+    setProfileLoading(false);
     setMyImageProfile(null); // Reset the image state when modal is closed
   };
   const closeModalBackground = () => {
     setShowModalBackground(false);
+    setBannerLoading(false);
     setMyImageBackground(null); // Reset the image state when modal is closed
   };
   const closeModalCertificate = () => {
     setShowModalCertificate(false);
+    setCertificateLoading(false);
     setMyImageCertificate(null); // Reset the image state when modal is closed
   };
   const [personalInfo, setPersonalInfo] = useState({
@@ -305,8 +308,8 @@ const SignUpAsExpert = () => {
       jsonData[key] = value;
     });
 
-    const educationJson = { education_json: education };
-    console.log(educationJson);
+    // const educationJson = { education_json: education };
+    // console.log(educationJson);
 
     setIsLoading(true);
     try {
@@ -314,7 +317,7 @@ const SignUpAsExpert = () => {
         "/experts/",
         {
           action: 2,
-          education_json: educationJson,
+          education_json: education,
         },
         {
           headers: {
@@ -370,18 +373,14 @@ const SignUpAsExpert = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    const skillJson = { skill_json: skills };
-    console.log(skillJson);
+    // const skillJson = { skill_json: skills };
+    // console.log(skillJson);
     try {
-      // const skillData = skillForms.map((form, index) => ({
-      //   technology_name: skillInfo.technology_name[index],
-      //   ratings: skillInfo.ratings[index],
-      // }));
       const response = await axios.post(
         "/experts/",
         {
           action: 3,
-          skill_json: skillJson,
+          skill_json: skills,
         },
         {
           headers: {
@@ -412,7 +411,7 @@ const SignUpAsExpert = () => {
   const [achievementForm, setAchievementForm] = useState({
     name: "",
     year: "",
-    certificate: null,
+    certificate: "",
   });
 
   const handleChange2 = (e) => {
@@ -434,8 +433,9 @@ const SignUpAsExpert = () => {
       setAchievementForm({
         name: "",
         year: "",
-        certificate: null,
+        certificate: "",
       });
+      setMyImageCertificate(null);
     }
   };
 
@@ -443,26 +443,6 @@ const SignUpAsExpert = () => {
     e.preventDefault();
     const newAchievements = achievements.filter((_, i) => i !== index);
     setAchievements(newAchievements);
-  };
-
-  const [selectedCertificate, setSelectedCertificate] = useState(null);
-  const [imageLoading, setImageLoading] = useState(false);
-
-  const handleCertificateChange = async (e, ind) => {
-    setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setSelectedCertificate(url);
-    setImageLoading(false);
-    const updatedCertificates = [...achievementForm.certificate];
-    updatedCertificates[ind] = url;
-    setAchievementForm({
-      ...achievementForm,
-      certificate: updatedCertificates,
-    });
   };
 
   const handleAchForm = async (e) => {
@@ -475,14 +455,14 @@ const SignUpAsExpert = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    const achievementJson = { achievements_json: achievements };
-    console.log(achievementJson);
+    // const achievementJson = { achievements_json: achievements };
+    // console.log(achievementJson);
     try {
       const response = await axios.post(
         "/experts/",
         {
           action: 6,
-          achievements_json: achievementJson,
+          achievements_json: achievements,
         },
         {
           headers: {
@@ -498,7 +478,7 @@ const SignUpAsExpert = () => {
         return;
       }
       setIsLoading(false);
-      console.log(data, achievementForm);
+      console.log(data, achievements);
       setIsComplete(true);
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
@@ -560,14 +540,14 @@ const SignUpAsExpert = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    const experienceJson = { experience_json: experience };
-    console.log(experienceJson);
+    // const experienceJson = { experience_json: experience };
+    // console.log(experienceJson);
     try {
       const response = await axios.post(
         "/experts/",
         {
           action: 4,
-          experience_json: experienceJson,
+          experience_json: experience,
         },
         {
           headers: {
@@ -1439,50 +1419,52 @@ const SignUpAsExpert = () => {
                   >
                     Certificate:
                   </label>
-                  <div onClick={() =>
-                        document.querySelector("#certificateSelector").click()
-                      }
-                      className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg">
-                  <input
-                    type="file"
-                    name="certificateSelector"
-                    id="certificateSelector"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={onSelectFileCertificate}
-                  />
-                  {certificateLoading ? (
-                    <div className="flex w-full h-full items-center justify-center text-center">
-                      <span>Loading...</span>
-                    </div>
-                  ) : myImageCertificate ? (
-                    <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
-                      <img
-                        src={myImageCertificate}
-                        alt="Preview"
-                        className="w-auto h-40 shrink-0 object-cover object-center m-2"
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center w-full h-full text-gray-600">
-                      <FiUpload className="w-10 h-10" />
-                      <span className="ml-2">Upload Image</span>
-                    </div>
-                  )}
+                  <div
+                    onClick={() =>
+                      document.querySelector("#certificateSelector").click()
+                    }
+                    className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
+                  >
+                    <input
+                      type="file"
+                      name="certificateSelector"
+                      id="certificateSelector"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={onSelectFileCertificate}
+                    />
+                    {certificateLoading ? (
+                      <div className="flex w-full h-full items-center justify-center text-center">
+                        <span>Loading...</span>
+                      </div>
+                    ) : myImageCertificate ? (
+                      <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
+                        <img
+                          src={myImageCertificate}
+                          alt="Preview"
+                          className="w-auto h-40 shrink-0 object-cover object-center m-2"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center w-full h-full text-gray-600">
+                        <FiUpload className="w-10 h-10" />
+                        <span className="ml-2">Upload Image</span>
+                      </div>
+                    )}
                   </div>
                   <Modal
-                  className="w-full h-full overflow-scroll"
-                  show={showModalCertificate}
-                  onClose={closeModalCertificate}
-                >
-                  <ImageUploader
-                    image={myImageCertificate}
-                    handleUploadImage={handleUploadImage}
-                    filename="cropped_image.jpg"
-                    onCropped={handleCroppedImageCertificate}
-                    aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
-                  />
-                </Modal>
+                    className="w-full h-full overflow-scroll"
+                    show={showModalCertificate}
+                    onClose={closeModalCertificate}
+                  >
+                    <ImageUploader
+                      image={myImageCertificate}
+                      handleUploadImage={handleUploadImage}
+                      filename="cropped_image.jpg"
+                      onCropped={handleCroppedImageCertificate}
+                      aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                    />
+                  </Modal>
                 </div>
                 <div className="flex justify-center mb-4 sm:mb-6">
                   <button
@@ -1520,11 +1502,12 @@ const SignUpAsExpert = () => {
                             {achievement.year}
                           </td>
                           <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
-                            <img
-                              src={URL.createObjectURL(achievement.certificate)}
-                              alt="Certificate"
-                              className="w-20 h-20 object-cover"
-                            />
+                          {typeof achievement.certificate === 'object' && achievement.certificate instanceof Blob ? (
+  <img src={URL.createObjectURL(achievement.certificate)} alt="Certificate" className="w-20 h-20 object-cover" />
+) : (
+  // Handle the case where it's a string (existing logic)
+  <img src={achievement.certificate} alt="Certificate" className="w-20 h-20 object-cover" />
+)}  
                           </td>
                           <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
                             <button
@@ -1565,7 +1548,10 @@ const SignUpAsExpert = () => {
             <form onSubmit={handleExperienceForm} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
-                  <label htmlFor="company_name" className="text-base md:text-lg mb-1">
+                  <label
+                    htmlFor="company_name"
+                    className="text-base md:text-lg mb-1"
+                  >
                     Company Name:
                   </label>
                   <input
@@ -1576,7 +1562,10 @@ const SignUpAsExpert = () => {
                     value={experienceForm.company_name}
                     onChange={handleChange3}
                   />
-                  <label htmlFor="designation" className="text-base md:text-lg mb-1">
+                  <label
+                    htmlFor="designation"
+                    className="text-base md:text-lg mb-1"
+                  >
                     Designation:
                   </label>
                   <input
@@ -1587,7 +1576,10 @@ const SignUpAsExpert = () => {
                     value={experienceForm.designation}
                     onChange={handleChange3}
                   />
-                  <label htmlFor="start_date" className="text-base md:text-lg mb-1">
+                  <label
+                    htmlFor="start_date"
+                    className="text-base md:text-lg mb-1"
+                  >
                     Start Date:
                   </label>
                   <input
@@ -1633,7 +1625,7 @@ const SignUpAsExpert = () => {
                         <input
                           type="date"
                           name="end_date"
-                          className="border border-solid border-slate-400 rounded-sm p-2 md:w-[250px]"
+                          className="border border-solid border-slate-400 rounded-sm p-2 md:w-[229px]"
                           value={experienceForm.end_date}
                           onChange={handleChange3}
                         />
