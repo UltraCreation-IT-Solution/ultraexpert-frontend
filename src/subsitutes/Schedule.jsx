@@ -181,10 +181,11 @@ export const ShowSchedule = ({ id }) => {
           )}
         </div>
       </div>
-
+       {localStorage.getItem("isExpert") === "true" ? <div className="text-red-500 text-base mt-4">Only customers can book the service!</div> :<></>}
       <div className="no-underline">
         <button
           disabled={
+            localStorage.getItem("isExpert") === "true" ||
             slotData.date === "" ||
             slotData.slotStartTime === "" ||
             slotData.slotEndTime === "" ||
@@ -194,6 +195,7 @@ export const ShowSchedule = ({ id }) => {
               : false
           }
           className={`mt-6 bg-[#007AFF] text-white text-lg font-semibold text-center p-3 rounded-lg  no-underline w-full ${
+            localStorage.getItem("isExpert") === "true" ||
             slotData.date === "" ||
             slotData.slotStartTime === "" ||
             slotData.slotEndTime === "" ||
