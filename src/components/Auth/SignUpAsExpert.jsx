@@ -18,7 +18,7 @@ const CHECKOUT_STEPS = [
 ];
 
 const SignUpAsExpert = () => {
-  const [currStep, setCurrStep] = useState(0);
+  const [currStep, setCurrStep] = useState(2);
   const [isComplete, setIsComplete] = useState(false);
   const [loading, setIsLoading] = useState(false);
   const [showModalProfile, setShowModalProfile] = useState(false);
@@ -305,8 +305,8 @@ const SignUpAsExpert = () => {
       jsonData[key] = value;
     });
 
-    const educationJson = { education_json: education };
-    console.log(educationJson);
+    // const educationJson = { education_json: education };
+    // console.log(educationJson);
 
     setIsLoading(true);
     try {
@@ -314,7 +314,7 @@ const SignUpAsExpert = () => {
         "/experts/",
         {
           action: 2,
-          education_json: educationJson,
+          education_json: education,
         },
         {
           headers: {
@@ -1567,7 +1567,10 @@ const SignUpAsExpert = () => {
             <form onSubmit={handleExperienceForm} className="flex flex-col">
               <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
-                  <label htmlFor="type" className="text-base md:text-lg mb-1">
+                  <label
+                    htmlFor="company_name"
+                    className="text-base md:text-lg mb-1"
+                  >
                     Company Name:
                   </label>
                   <input
@@ -1578,7 +1581,10 @@ const SignUpAsExpert = () => {
                     value={experienceForm.company_name}
                     onChange={handleChange3}
                   />
-                  <label htmlFor="type" className="text-base md:text-lg mb-1">
+                  <label
+                    htmlFor="designation"
+                    className="text-base md:text-lg mb-1"
+                  >
                     Designation:
                   </label>
                   <input
@@ -1589,7 +1595,10 @@ const SignUpAsExpert = () => {
                     value={experienceForm.designation}
                     onChange={handleChange3}
                   />
-                  <label htmlFor="type" className="text-base md:text-lg mb-1">
+                  <label
+                    htmlFor="start_date"
+                    className="text-base md:text-lg mb-1"
+                  >
                     Start Date:
                   </label>
                   <input
@@ -1627,7 +1636,7 @@ const SignUpAsExpert = () => {
                     {!experienceForm.isPresent && (
                       <div className="flex items-center mb-4 justify-between">
                         <label
-                          htmlFor="type"
+                          htmlFor="end_date"
                           className="text-base md:text-lg mb-1"
                         >
                           End Date:

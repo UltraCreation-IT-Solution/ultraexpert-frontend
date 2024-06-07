@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import axios from "../../axios";
 import { FiUpload, FiX } from "react-icons/fi";
+import Modal from "../../Modal";
+import ImageUploader from "../../ImageUploader";
 
 // slots
 import { Calendar, momentLocalizer } from "react-big-calendar";
@@ -68,25 +70,34 @@ const UpdateService = () => {
   };
   const [serviceTitle, setServiceTitle] = useState(updateData?.service_name);
   const [errorMessage, setErrorMessage] = useState("");
-  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [image, setImage] = useState(null);
 
+  const [myImage, setMyImage] = useState(0);
+  const [showModal, setShowModal] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
 
-  const handleFileChange = async (e) => {
+  const onSelectFile = (event) => {
     setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setImage(url);
-    setImageUrl(url);
-    setImageLoading(false);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImage(reader.result);
+        setShowModal(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
   };
-  const handleImageRemove = () => {
-    setImage("");
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(url); // Reset the image state
+    // setUserData({ ...userData, profile_img: url });
+    setCreateService({ ...createService, img: url });
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(data.service_img); // Reset the image state when modal is closed
   };
 
   const handleBack = () => {
@@ -185,7 +196,7 @@ const UpdateService = () => {
       jsonData[key] = value;
     });
     try {
-      const res = await axios.get ("/inspections/test/?action=2", {
+      const res = await axios.get("/inspections/test/?action=2", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jsonData.access_token}`,
@@ -480,27 +491,25 @@ const UpdateService = () => {
                 <label htmlFor="tags" className="text-lg mb-1">
                   Tags
                 </label>
-                {selectedSkill.length>0 && (
+                {selectedSkill.length > 0 && (
                   <div className="border border-solid border-gray-300 px-2 rounded-md mb-2">
                     <div className="flex flex-wrap gap-2">
-                      
-                        {selectedSkill?.map((skill, ind) => {
-                          return (
+                      {selectedSkill?.map((skill, ind) => {
+                        return (
+                          <div
+                            key={ind}
+                            className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
+                          >
+                            {skill}
                             <div
-                              key={ind}
-                              className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
+                              className="cursor-pointer"
+                              onClick={() => handleTagRemove(skill)}
                             >
-                              {skill}
-                              <div
-                                className="cursor-pointer"
-                                onClick={() => handleTagRemove(skill)}
-                              >
-                                x
-                              </div>
+                              x
                             </div>
-                          );
-                        })}
-                      
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -550,36 +559,17 @@ const UpdateService = () => {
                   id="imageSelector"
                   name="imageSelector"
                   accept="image/*"
-                  onChange={handleFileChange}
+                  onChange={onSelectFile}
                   className="hidden"
                 />
-                {/* {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
-                  <p>Upload Progress: {uploadProfileProgress}%</p>
-                ) : image ? (
-                  <div className="relative w-full h-full flex justify-center items-center">
-                    <img
-                      src={image}
-                      alt="Preview"
-                      className="max-h-28 max-w-44 object-cover rounded"
-                    />
-                    <button
-                      onClick={handleImageRemove}
-                      className="absolute top-2 right-2 bg-slate-400 text-white p-1 rounded hover:bg-gray-600 flex justify-center items-center"
-                    >
-                      <FiX className="w-4 h-4" />
-                    </button>
-                  </div>
-                ) : (
-                  
-                )} */}
                 {imageLoading ? (
                   <div className="flex w-full h-full items-center justify-center text-center">
                     <span>Loading...</span>
                   </div>
-                ) : image ? (
+                ) : myImage ? (
                   <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                     <img
-                      src={image}
+                      src={myImage}
                       alt="Preview"
                       className="w-auto h-40 shrink-0 object-cover object-center m-2"
                     />
@@ -591,6 +581,15 @@ const UpdateService = () => {
                   </div>
                 )}
               </div>
+              <Modal show={showModal} onClose={closeModal}>
+                <ImageUploader
+                  image={myImage}
+                  handleUploadImage={handleUploadImage}
+                  filename="cropped_image.jpg"
+                  onCropped={handleCroppedImage}
+                  aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                />
+              </Modal>
               <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
               <label htmlFor="price" className="text-lg mb-1">
                 Service Price
@@ -874,162 +873,173 @@ export const MyBigCalendar = () => {
   };
   return (
     <>
-    <div className={`calendar-container ${showModal ? "blur-sm" : ""}`}>
-      <div className="flex gap-10 flex-wrap">
-        <div className="flex flex-col gap-1">
-          <label className="text-base text-gray-600">Start Date</label>
-          <input
-            type="date"
-            value={startInputDate}
-            onChange={(e) => setStartInputDate(e.target.value)}
-            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-base text-gray-600">End Date:</label>
-          <input
-            type="date"
-            value={endInputDate}
-            onChange={(e) => setEndInputDate(e.target.value)}
-            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-base text-gray-600">Start Time:</label>
-          <input
-            type="time"
-            value={startInputTime}
-            onChange={(e) => setStartInputTime(e.target.value)}
-            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-base text-gray-600">End Time:</label>
-          <input
-            type="time"
-            value={endInputTime}
-            onChange={(e) => setEndInputTime(e.target.value)}
-            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-          />
-        </div>
-      </div>
-
-      <div className="mt-10 flex gap-10">
-        <div>
-          <div className="flex items-center gap-2">
-            <label className="text-base text-gray-600">Notify Before: </label>
+      <div className={`calendar-container ${showModal ? "blur-sm" : ""}`}>
+        <div className="flex gap-10 flex-wrap">
+          <div className="flex flex-col gap-1">
+            <label className="text-base text-gray-600">Start Date</label>
             <input
-              type="checkbox"
-              name="checkbox"
-              id="checkbox"
-              onClick={() => setNotifyBefore(!notifyBefore)}
+              type="date"
+              value={startInputDate}
+              onChange={(e) => setStartInputDate(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
             />
           </div>
-
-          {notifyBefore && (
+          <div className="flex flex-col gap-1">
+            <label className="text-base text-gray-600">End Date:</label>
             <input
-              placeholder="enter time in minutes"
-              type="number"
-              name="notifyBefore"
-              id="notifyBefore"
-              onChange={(e) => setNotifyBeforeTime(e.target.value)}
-              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-5"
-            />
-          )}
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <label className="text-base text-gray-600">Notify After: </label>
-            <input
-              type="checkbox"
-              name="checkbox"
-              id="checkbox"
-              onClick={() => setNotifyAfter(!notifyAfter)}
+              type="date"
+              value={endInputDate}
+              onChange={(e) => setEndInputDate(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
             />
           </div>
-
-          {notifyAfter && (
+          <div className="flex flex-col gap-1">
+            <label className="text-base text-gray-600">Start Time:</label>
             <input
-              placeholder="enter time in minutes"
-              type="number"
-              name="notifyAfter"
-              id="notifyAfter"
-              onChange={(e) => setNotifyAfterTime(e.target.value)}
-              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-5"
+              type="time"
+              value={startInputTime}
+              onChange={(e) => setStartInputTime(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
             />
-          )}
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-base text-gray-600">End Time:</label>
+            <input
+              type="time"
+              value={endInputTime}
+              onChange={(e) => setEndInputTime(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+            />
+          </div>
         </div>
-      </div>
 
-      <div className="flex items-center gap-3 mt-10 ">
-        <label className="text-base text-gray-600">Event Title:</label>
-        <input
-          type="text"
-          value={serviceTitle}
-          onChange={(e) => setServiceTitle(e.target.value)}
-          className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-64"
+        <div className="mt-10 flex gap-10">
+          <div>
+            <div className="flex items-center gap-2">
+              <label className="text-base text-gray-600">Notify Before: </label>
+              <input
+                type="checkbox"
+                name="checkbox"
+                id="checkbox"
+                onClick={() => setNotifyBefore(!notifyBefore)}
+              />
+            </div>
+
+            {notifyBefore && (
+              <input
+                placeholder="enter time in minutes"
+                type="number"
+                name="notifyBefore"
+                id="notifyBefore"
+                onChange={(e) => setNotifyBeforeTime(e.target.value)}
+                className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-5"
+              />
+            )}
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <label className="text-base text-gray-600">Notify After: </label>
+              <input
+                type="checkbox"
+                name="checkbox"
+                id="checkbox"
+                onClick={() => setNotifyAfter(!notifyAfter)}
+              />
+            </div>
+
+            {notifyAfter && (
+              <input
+                placeholder="enter time in minutes"
+                type="number"
+                name="notifyAfter"
+                id="notifyAfter"
+                onChange={(e) => setNotifyAfterTime(e.target.value)}
+                className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-5"
+              />
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 mt-10 ">
+          <label className="text-base text-gray-600">Event Title:</label>
+          <input
+            type="text"
+            value={serviceTitle}
+            onChange={(e) => setServiceTitle(e.target.value)}
+            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-64"
+          />
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={handleCreateEvent}
+            className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
+          >
+            Create Event
+          </button>
+          <button
+            onClick={(e) => handlePostEvent(e)}
+            className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
+          >
+            Post event
+          </button>
+        </div>
+
+        <Calendar
+          className="mt-4"
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: 500 }}
+          onSelectEvent={handleSelectEvent}
         />
       </div>
-      <div className="flex gap-3">
-        <button
-          onClick={handleCreateEvent}
-          className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
-        >
-          Create Event
-        </button>
-        <button
-          onClick={(e) => handlePostEvent(e)}
-          className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
-        >
-          Post event
-        </button>
-      </div>
-      
-      <Calendar
-        className="mt-4"
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 500 }}
-        onSelectEvent={handleSelectEvent}
-      />
-    </div>
-    {showModal && (
-      <div className="modal blur-none rounded-md py-4 px-3 xs:px-5 w-[320px] md:w-[450px]">
-        <div className="flex justify-between items-center text-xl md:text-3xl font-bold text-gray-600">
-          <div>Update Event</div>
-          <RxCross2
-          onClick={() => setShowModal(false)}
-          />
+      {showModal && (
+        <div className="modal blur-none rounded-md py-4 px-3 xs:px-5 w-[320px] md:w-[450px]">
+          <div className="flex justify-between items-center text-xl md:text-3xl font-bold text-gray-600">
+            <div>Update Event</div>
+            <RxCross2 onClick={() => setShowModal(false)} />
           </div>
-          {
-            isBooked && <div className="text-sm text-red-500 mt-2">Cannot update slot is already booked!</div>
-          }
-        <div className="flex flex-col gap-1 mt-5 sm:mt-8">
-          <label className="text-base text-gray-600">Start Time:</label>
-          <input
-            type="time"
-            value={updatedStartInputTime}
-            onChange={(e) => setUpdatedStartInputTime(e.target.value)}
-            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-full "
-          />
+          {isBooked && (
+            <div className="text-sm text-red-500 mt-2">
+              Cannot update slot is already booked!
+            </div>
+          )}
+          <div className="flex flex-col gap-1 mt-5 sm:mt-8">
+            <label className="text-base text-gray-600">Start Time:</label>
+            <input
+              type="time"
+              value={updatedStartInputTime}
+              onChange={(e) => setUpdatedStartInputTime(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-full "
+            />
+          </div>
+          <div className="flex flex-col gap-1 mt-3 mb-5 sm:mb-8">
+            <label className="text-base text-gray-600">End Time:</label>
+            <input
+              type="time"
+              value={updatedEndInputTime}
+              onChange={(e) => setUpdatedEndInputTime(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-full"
+            />
+          </div>
+          <button
+            disabled={isBooked}
+            className={`ext-sm md:text-base px-4 py-2 bg-white border border-solid border-slate-400 rounded-sm text-black ${
+              isBooked ? "cursor-not-allowed " : "cursor-pointer"
+            }`}
+            onClick={handleUpdateEvent}
+          >
+            Update
+          </button>
+          <button
+            className="text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white ml-2"
+            onClick={handleDeleteEvent}
+          >
+            Delete
+          </button>
         </div>
-        <div className="flex flex-col gap-1 mt-3 mb-5 sm:mb-8">
-          <label className="text-base text-gray-600">End Time:</label>
-          <input
-            type="time"
-            value={updatedEndInputTime}
-            onChange={(e) => setUpdatedEndInputTime(e.target.value)}
-            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-full"
-          />
-        </div>
-        <button
-          disabled={isBooked}
-        className={`ext-sm md:text-base px-4 py-2 bg-white border border-solid border-slate-400 rounded-sm text-black ${isBooked ? 'cursor-not-allowed ' : 'cursor-pointer'}`} onClick={handleUpdateEvent}>Update</button>
-        <button className="text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white ml-2" onClick={handleDeleteEvent}>Delete</button>
-      </div>
-    )}
+      )}
     </>
   );
 };
