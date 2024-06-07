@@ -314,7 +314,7 @@ const CreateService = () => {
     <>
       {!showSlots ? (
         <div className="mt-[100px] flex flex-col bg-white h-auto">
-          <div className="flex w-[60%] mx-auto">
+          <div className="flex w-[90%] lg:w-[60%] mx-auto">
             <div
               onClick={() => handleBack()}
               className="flex gap-2 text-lg font-bold cursor-pointer hover:bg-[#e2e2e2] py-2 px-1 rounded-md duration-200"
@@ -323,14 +323,14 @@ const CreateService = () => {
               Add a service
             </div>
           </div>
-          <div className="w-[60%] flex flex-col border border-solid border-slate-300 mx-auto items-center justify-center rounded-lg shadow-lg">
-            <div className="text-4xl text-[#3E5676] font-bold my-4">
+          <div className="w-[90%] lg:w-[60%] flex flex-col border border-solid border-slate-300 mx-auto items-center justify-center rounded-lg shadow-lg px-5 md:px-20">
+            <div className="text-2xl md:text-3xl lg:text-4xl text-[#3E5676] font-bold my-4">
               Create a serivce
             </div>
-            <u className="border border-[#d8d8d8] border-solid w-[90%] mb-8"></u>
+            <u className="border border-[#d8d8d8] border-solid w-full mb-8"></u>
             <form
               onSubmit={(event) => event.preventDefault()}
-              className="w-[60%] flex flex-col mb-5"
+              className="w-full flex flex-col mb-5"
             >
               <label htmlFor="title" className="text-lg mb-1">
                 Service Title
@@ -603,7 +603,7 @@ const CreateService = () => {
         </div>
       ) : (
         showSlots && (
-          <div className="mt-[100px] px-[10vw] m-auto">
+          <div className="mt-[100px] px-5 lg:px-[10vw] m-auto">
             <div
               onClick={() => setShowSlots(!showSlots)}
               className="w-fit flex gap-2 text-lg font-bold cursor-pointer hover:bg-[#e2e2e2] py-2 px-1 rounded-md duration-200"
@@ -752,7 +752,7 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
 
   return (
     <div className="calendar-container ">
-      <div className="flex gap-10 flex-wrap">
+      <div className="flex gap-10 flex-wrap w-full">
         <div className="flex flex-col gap-1">
           <label className="text-base text-gray-600">Start Date</label>
           <input
@@ -839,7 +839,7 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
       </div>
 
       <div className="flex items-center gap-3 mt-10 ">
-        <label className="text-base text-gray-600">Event Title:</label>
+        <label className="text-base text-gray-600">Title:</label>
         <input
           type="text"
           value={serviceTitle}
@@ -849,16 +849,11 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
       <div className="flex gap-3">
         <button
           onClick={handleCreateEvent}
-          className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
+          className="my-10 text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
         >
-          Create Event
+          Create slots
         </button>
-        <button
-          onClick={(e) => handlePostEvent(e)}
-          className="mt-10 text-base px-4 py-2 btnBlack rounded-sm text-white"
-        >
-          Post event
-        </button>
+        
       </div>
       <Calendar
         className={`mt-4`}
@@ -868,6 +863,12 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
         endAccessor="end"
         style={{ height: 500 }}
       />
+      <button
+          onClick={(e) => handlePostEvent(e)}
+          className="my-10 text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
+        >
+          Create service
+        </button>
     </div>
   );
 };
