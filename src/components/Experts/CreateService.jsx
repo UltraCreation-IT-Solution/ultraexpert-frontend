@@ -98,7 +98,7 @@ const CreateService = () => {
   const [serviceId, setServiceId] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState({
     name: "",
-    id: "",
+    id: 84,
   });
 
   const [categoryInputValue, setCategoryInputValue] = useState("");
@@ -244,7 +244,7 @@ const CreateService = () => {
     setSelectedSkill(selectedSkill.filter((s) => s !== skill));
   };
 
-  const handleNewSkillAdd = (value) => {
+  const HandleNewTagAdd = (value) => {
     if (!selectedSkill.includes(value)) {
       setSelectedSkill([...selectedSkill, value]);
     }
@@ -406,7 +406,7 @@ const CreateService = () => {
                       {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
                     </div>
                   ))}
-                  {filterCategoriesArray.length === 0 &&
+                  {/* {filterCategoriesArray.length === 0 &&
                     categoryInputValue.trim().length > 0 && (
                       <div
                         className="btnBlack text-white rounded-sm px-4 py-2 w-fit cursor-pointer "
@@ -420,7 +420,7 @@ const CreateService = () => {
                       >
                         + Add Category
                       </div>
-                    )}
+                    )} */}
                 </div>
               )}
               <label htmlFor="skill" className="text-lg mb-1">
@@ -514,10 +514,10 @@ const CreateService = () => {
                     )
                   : inputTagValue.length > 0 && (
                       <button
-                        onClick={() => handleNewSkillAdd(inputTagValue)}
+                        onClick={() => HandleNewTagAdd(inputTagValue)}
                         className="px-4 py-2 text-sm rounded-sm focus:outline-none btnBlack text-white w-fit mt-2 mb-4"
                       >
-                        + Add Interest
+                        + Add Tag
                       </button>
                     )}
               </div>

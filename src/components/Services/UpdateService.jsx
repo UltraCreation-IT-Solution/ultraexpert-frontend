@@ -19,10 +19,11 @@ const UpdateService = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [interest, setInterest] = useState([]);
+  const [myImage, setMyImage] = useState(0);
   const [interestInput, setInterestInput] = useState("");
   const [updateData, setUpdateData] = useState({});
 
-  const [selectedSkill, setSelectedSkill] = useState([]);
+  const [selectedTags, setselectedTags] = useState([]);
 
   const [selectedCategory, setSelectedCategory] = useState({});
 
@@ -50,8 +51,9 @@ const UpdateService = () => {
       }
       const Data = res.data;
       setUpdateData(Data.data);
-      setSelectedSkill(Data.data.tags);
+      setselectedTags(Data.data.tags);
       setSelectedCategory(Data.data.category);
+      setMyImage(Data.data.service_img);
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +78,6 @@ const UpdateService = () => {
   const [serviceTitle, setServiceTitle] = useState(updateData?.service_name);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [myImage, setMyImage] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
 
@@ -208,7 +209,7 @@ const UpdateService = () => {
         },
       });
       const data = res.data.data.qualified;
-      setSelectedSkill(data);
+      setselectedTags(data);
     } catch (error) {
       console.log(error);
     }
@@ -228,7 +229,7 @@ const UpdateService = () => {
     //   }
     // })
 
-    setSelectedSkill(filteredSkills);
+    setselectedTags(filteredSkills);
   };
 
   const handleSkillChange = (e) => {
@@ -269,9 +270,9 @@ const UpdateService = () => {
 
   const handleSuggestionClick = (suggestion) => {
     // Add suggestion to selected skills
-    if (!selectedSkill.includes(suggestion.name)) {
-      setSelectedSkill([...selectedSkill, suggestion.name]);
-      console.log(selectedSkill);
+    if (!selectedTags.includes(suggestion.name)) {
+      setselectedTags([...selectedTags, suggestion.name]);
+      console.log(selectedTags);
     }
     // Clear input and suggestions
     setInputTagValue("");
@@ -279,12 +280,12 @@ const UpdateService = () => {
   };
 
   const handleTagRemove = (skill) => {
-    setSelectedSkill(selectedSkill.filter((s) => s !== skill));
+    setselectedTags(selectedTags.filter((s) => s !== skill));
   };
 
   const handleNewSkillAdd = (value) => {
-    if (!selectedSkill.includes(value)) {
-      setSelectedSkill([...selectedSkill, value]);
+    if (!selectedTags.includes(value)) {
+      setselectedTags([...selectedTags, value]);
     }
     setInputTagValue("");
   };
@@ -315,14 +316,14 @@ const UpdateService = () => {
           action: 2,
           service_id: updateData?.id,
           service_name: updateData?.service_name,
-          service_img: updateData?.service_image,
+          service_img: myImage,
           category: updateData?.category?.id,
           description: updateData?.description,
           skill_name: updateData?.skill_name,
           price: updateData?.price,
           duration: updateData?.duration,
           currency: "INR",
-          tags_list: selectedSkill,
+          tags_list: selectedTags,
         },
         {
           headers: {
@@ -499,10 +500,10 @@ const UpdateService = () => {
                 <label htmlFor="tags" className="text-lg mb-1">
                   Tags
                 </label>
-                {selectedSkill.length > 0 && (
+                {selectedTags.length > 0 && (
                   <div className="border border-solid border-gray-300 px-2 rounded-md mb-2">
                     <div className="flex flex-wrap gap-2">
-                      {selectedSkill?.map((skill, ind) => {
+                      {selectedTags?.map((skill, ind) => {
                         return (
                           <div
                             key={ind}
@@ -551,7 +552,7 @@ const UpdateService = () => {
                         onClick={() => handleNewSkillAdd(inputTagValue)}
                         className="px-4 py-2 text-sm rounded-sm focus:outline-none btnBlack text-white w-fit mt-2 mb-4"
                       >
-                        + Add Interest
+                        + Add Tag
                       </button>
                     )}
               </div>
@@ -640,7 +641,7 @@ const UpdateService = () => {
               <MdOutlineKeyboardBackspace size={25} />
               Back
             </div>
-            <MyBigCalendar />
+            <MyBigCalendar showSlots={showSlots} />
           </div>
         )
       )}
@@ -650,7 +651,7 @@ const UpdateService = () => {
 
 export default UpdateService;
 
-export const MyBigCalendar = () => {
+export const MyBigCalendar = ({ showSlots }) => {
   const params = useParams();
   const navigate = useNavigate();
   const localizer = momentLocalizer(moment);
@@ -668,7 +669,7 @@ export const MyBigCalendar = () => {
 
   useEffect(() => {
     getServiceDetails();
-  }, []);
+  }, [showSlots, events.length]);
 
   const getServiceDetails = async () => {
     const cookie = document.cookie.split("; ");
@@ -852,14 +853,7 @@ export const MyBigCalendar = () => {
     setShowModal(true);
     setIsBooked(event?.slotBooked);
   };
-  // const handleDeleteEvent = () => {
-  //   const updatedEvents = events.filter(
-  //     (event) => event.id !== selectedEvent.id
-  //   );
-  //   setEvents(updatedEvents);
-  //   setShowModal(false);
-  // };
-  const handleDeleteEvent = () => {
+  const handleDeleteEvent = async () => {
     const cookies = document.cookie.split("; ");
     const jsonData = {};
     cookies.forEach((item) => {
@@ -867,7 +861,7 @@ export const MyBigCalendar = () => {
       jsonData[key] = value;
     });
     try {
-      const res = axios.post(
+      const res = await axios.post(
         "/experts/services/",
         {
           action: 7,
@@ -883,7 +877,6 @@ export const MyBigCalendar = () => {
       const data = res.data;
       console.log(data);
       setShowModal(false);
-      getServiceDetails();
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
         return;
@@ -1019,15 +1012,20 @@ export const MyBigCalendar = () => {
             Create slots
           </button>
         </div>
-
-        <Calendar
-          localizer={localizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          style={{ height: 500 }}
-          onSelectEvent={handleSelectEvent}
-        />
+        {events.length === 0 ? (
+          <p className="text-grey-600 text-xl md:text-2xl text-center w-full">
+            Loading...
+          </p>
+        ) : (
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: 500 }}
+            onSelectEvent={handleSelectEvent}
+          />
+        )}
         <button
           onClick={(e) => handlePostEvent(e)}
           className="mt-10 text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
