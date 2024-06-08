@@ -18,7 +18,7 @@ const CHECKOUT_STEPS = [
 ];
 
 const SignUpAsExpert = () => {
-  const [currStep, setCurrStep] = useState(0);
+  const [currStep, setCurrStep] = useState(2);
   const [isComplete, setIsComplete] = useState(false);
   const [loading, setIsLoading] = useState(false);
   const [showModalProfile, setShowModalProfile] = useState(false);

@@ -125,8 +125,10 @@ input[type="number"]::-webkit-outer-spin-button {
   object-position: center;
 }
 
+
 .rbc-toolbar-label {
   font-weight: 700;
+  @apply my-4 md:my-0
 }
 .rbc-month-header .rbc-header {
   padding: 10px 3px;
