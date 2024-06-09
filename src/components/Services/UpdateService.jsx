@@ -24,6 +24,7 @@ const UpdateService = () => {
   const [updateData, setUpdateData] = useState({});
 
   const [selectedTags, setselectedTags] = useState([]);
+  const [serviceTitle, setServiceTitle] = useState("");
 
   const [selectedCategory, setSelectedCategory] = useState({});
 
@@ -52,6 +53,7 @@ const UpdateService = () => {
       const Data = res.data;
       setUpdateData(Data.data);
       setselectedTags(Data.data.tags);
+      setServiceTitle(Data.data.service_name);
       setSelectedCategory(Data.data.category);
       setMyImage(Data.data.service_img);
     } catch (error) {
@@ -75,7 +77,7 @@ const UpdateService = () => {
     updatedInterest.splice(index, 1);
     setInterest(updatedInterest);
   };
-  const [serviceTitle, setServiceTitle] = useState(updateData?.service_name);
+  
   const [errorMessage, setErrorMessage] = useState("");
 
   const [showModal, setShowModal] = useState(false);
@@ -191,54 +193,7 @@ const UpdateService = () => {
   };
 
   const [val, setVal] = useState("");
-  const [showSkill, setShowSkill] = useState([]);
   const [skill, setSkill] = useState([]);
-
-  const getSkills = async () => {
-    const cookie = document.cookie.split(";");
-    const jsonData = {};
-
-    cookie.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    try {
-      const res = await axios.get("/inspections/test/?action=2", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
-      const data = res.data.data.qualified;
-      setselectedTags(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getSkills();
-  }, []);
-
-  const allTrueSKill = () => {
-    const filteredSkills = Object.keys(showSkill).filter(
-      (key) => showSkill[key] === true
-    );
-    // Object.keys(showSkill).forEach(function (key, index) {
-    //   if (showSkill[key] === true) {
-    //     setSkill({...skill, key});
-    //   }
-    // })
-
-    setselectedTags(filteredSkills);
-  };
-
-  const handleSkillChange = (e) => {
-    const inputValue = e.target.value;
-    if (inputValue.trim() === "") {
-      setSkill([]); // Open dropdown when input field becomes empty
-    }
-  };
 
   const handleSkillSelection = (val) => {
     const capitalizedSkill = val.charAt(0).toUpperCase() + val.slice(1);
@@ -301,7 +256,6 @@ const UpdateService = () => {
 
   const handleServiceCreate = async (e) => {
     e.preventDefault();
-    setShowSlots(!showSlots);
 
     const cookie = document.cookie.split(";");
     const jsonData = {};
@@ -356,6 +310,7 @@ const UpdateService = () => {
     } catch (error) {
       console.log(error);
     }
+    setShowSlots(!showSlots);
   };
   console.log(selectedCategory);
   return (
@@ -477,8 +432,6 @@ const UpdateService = () => {
                 className={`border border-solid border-slate-300 rounded-md px-4 py-2 mb-4`}
                 placeholder="Enter Skill"
                 value={updateData?.skill_name}
-                onFocus={allTrueSKill}
-                onChange={(e) => handleSkillChange(e)}
               />
               {skill?.length > 0 && (
                 <div
@@ -741,7 +694,9 @@ export const MyBigCalendar = ({ showSlots }) => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-
+  
+    const formattedEvents = convertEventsToAPIFormat(events);
+  
     try {
       const res = await axios.post(
         "/experts/services/",
@@ -752,7 +707,7 @@ export const MyBigCalendar = ({ showSlots }) => {
           notify_before_time: notifyBeforeTime,
           notify_after: notifyAfter,
           notify_after_time: notifyAfterTime,
-          time_slots: convertEventsToAPIFormat(events),
+          time_slots: formattedEvents,
         },
         {
           headers: {
@@ -761,8 +716,8 @@ export const MyBigCalendar = ({ showSlots }) => {
           },
         }
       );
+  
       const data = res.data;
-      console.log(data);
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
         return;
@@ -772,6 +727,12 @@ export const MyBigCalendar = ({ showSlots }) => {
     } catch (error) {
       console.log(error);
     }
+  };
+  
+
+  const generateUniqueId = () => {
+    const timestamp = new Date().getTime();
+    return parseInt(`${timestamp}${Math.floor(Math.random() * 1000)}`);
   };
 
   const handleCreateEvent = () => {
@@ -795,7 +756,7 @@ export const MyBigCalendar = ({ showSlots }) => {
       let currentDate = startDate.clone();
       while (currentDate.isSameOrBefore(endDate, "day")) {
         const newEvent = {
-          id: events.length + 1,
+          id: generateUniqueId(),
           title: serviceTitle.trim(),
           start: currentDate
             .clone()
@@ -826,7 +787,7 @@ export const MyBigCalendar = ({ showSlots }) => {
   const convertEventToAPIFormat = (event) => {
     const startDate = moment(event.start);
     const endDate = moment(event.end);
-
+  
     return {
       time_slot_id: event.id,
       day: `${startDate.format("ddd DD MMM")}`,
@@ -836,7 +797,7 @@ export const MyBigCalendar = ({ showSlots }) => {
       duration: endDate.diff(startDate, "seconds"),
     };
   };
-
+  
   const convertEventsToAPIFormat = (events) => {
     return events.map((event) => convertEventToAPIFormat(event));
   };
@@ -847,64 +808,38 @@ export const MyBigCalendar = ({ showSlots }) => {
   const [updatedEndInputTime, setUpdatedEndInputTime] = useState("");
   const [isBooked, setIsBooked] = useState(false);
 
-  const handleSelectEvent = (event) => {
+  const handleEventClick = (event) => {
     setSelectedEvent(event);
     setUpdatedStartInputTime(moment(event.start).format("HH:mm"));
     setUpdatedEndInputTime(moment(event.end).format("HH:mm"));
     setShowModal(true);
     setIsBooked(event?.slotBooked);
   };
-  const handleDeleteEvent = async () => {
-    const cookies = document.cookie.split("; ");
-    const jsonData = {};
-    cookies.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    try {
-      const res = await axios.post(
-        "/experts/services/",
-        {
-          action: 7,
-          time_slot_id: selectedEvent.id,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      const data = res.data;
-      console.log(data);
-      setShowModal(false);
-      getServiceDetails();
-      if (!data || data.status === 400 || data.status === 401) {
-        console.log("Something went wrong");
-        return;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleUpdateEvent = () => {
-    const updatedStartTime = moment(selectedEvent.start)
-      .hour(moment(updatedStartInputTime, "HH:mm").hour())
-      .minute(moment(updatedStartInputTime, "HH:mm").minute())
-      .toDate();
-    const updatedEndTime = moment(selectedEvent.end)
-      .hour(moment(updatedEndInputTime, "HH:mm").hour())
-      .minute(moment(updatedEndInputTime, "HH:mm").minute())
-      .toDate();
-
-    const updatedEvents = events.map((event) =>
-      event.id === selectedEvent.id
-        ? { ...event, start: updatedStartTime, end: updatedEndTime }
-        : event
+    setEvents(
+      events.map((event) => {
+        if (event.id === selectedEvent.id) {
+          return {
+            ...event,
+            start: moment(event.start)
+              .hour(moment(updatedStartInputTime, "HH:mm").hour())
+              .minute(moment(updatedStartInputTime, "HH:mm").minute())
+              .toDate(),
+            end: moment(event.end)
+              .hour(moment(updatedEndInputTime, "HH:mm").hour())
+              .minute(moment(updatedEndInputTime, "HH:mm").minute())
+              .toDate(),
+          };
+        }
+        return event;
+      })
     );
+    setShowModal(false);
+  };
 
-    setEvents(updatedEvents);
+  const handleDeleteEvent = () => {
+    setEvents(events.filter((event) => event.id !== selectedEvent.id));
     setShowModal(false);
   };
 
@@ -1020,12 +955,13 @@ export const MyBigCalendar = ({ showSlots }) => {
           </p>
         ) : (
           <Calendar
+            className={`mt-4`}
             localizer={localizer}
             events={events}
             startAccessor="start"
             endAccessor="end"
             style={{ height: 500 }}
-            onSelectEvent={handleSelectEvent}
+            onSelectEvent={handleEventClick}
           />
         )}
         <button
@@ -1090,3 +1026,4 @@ export const MyBigCalendar = ({ showSlots }) => {
     </>
   );
 };
+

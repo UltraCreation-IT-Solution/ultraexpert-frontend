@@ -204,3 +204,14 @@ input[type="number"]::-webkit-outer-spin-button {
   border: 1px solid #ccc;
   z-index: 1000;
 }
+
+.modal h2 {
+  margin-top: 0;
+}
+.modal div {
+  margin-bottom: 10px;
+}
+.modal button {
+  margin-right: 10px;
+}
+

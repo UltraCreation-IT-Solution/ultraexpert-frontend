@@ -156,7 +156,7 @@ export const ExpertServices = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
+            // Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );
@@ -635,44 +635,15 @@ export const ExpertInfo = ({ ...expert }) => {
   const projectsArray = expert?.expert?.projects[0]?.projects;
   const blogArray = expert?.expert?.blogs;
 
-  const [expertBlogsArray, setExpertBlogsArray] = useState([]);
   function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { day: "numeric", month: "short", year: "numeric" };
     return date.toLocaleDateString("en-US", options);
   }
-  const getBlogData = async () => {
-    const cookie = document.cookie.split("; ");
-    const jsonData = {};
-
-    cookie.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    try {
-      const res = await axios.get("/blogs/?action=2", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
-      if (
-        !res.data ||
-        res.data.status === 400 ||
-        res.data.status === 401 ||
-        res.data.status === 404
-      ) {
-        return;
-      }
-      const allData = res.data.data;
-      setExpertBlogsArray(allData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
 
   useEffect(() => {
-    getBlogData();
+
     if (location.state !== null && location.state.check === true) {
       setSummary(false);
       setServices(true);
@@ -995,6 +966,36 @@ const ExpertProfile = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            // Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        console.log(res.data.message);
+        setShimmer(false);
+        return;
+      }
+      const data = res.data.data;
+      setExpertDetail(data);
+      setShimmer(false);
+    } catch (error) {
+      console.log(error);
+      setShimmer(false);
+    }
+  };
+  const getExpertDetailsWithToken = async () => {
+    setShimmer(true);
+    try {
+      const res = await axios.get(
+        `/customers/experts/?action=2&expert_id=${id} `,
+        {
+          headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
@@ -1018,7 +1019,7 @@ const ExpertProfile = () => {
     }
   };
   useEffect(() => {
-    getExpertDetails();
+    localStorage.getItem("username")?getExpertDetailsWithToken():getExpertDetails();
   }, [id]);
   useEffect(() => {
     console.log(expertDetail);
