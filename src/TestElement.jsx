@@ -1,11 +1,17 @@
-import React, { useState } from "react";
-import ImageUploader from "./ImageUploader";
-import Modal from "./Modal";
-import { handleUploadImage } from "./constant";
+import React, { useState, useEffect } from "react";
+import axios from "./axios";
+import { GoPlus } from "react-icons/go";
 
 const TestElement = () => {
-  const [image, setImage] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  const [education, setEducation] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const onSelectFile = (event) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -18,15 +24,41 @@ const TestElement = () => {
     }
   };
 
-  const handleCroppedImage = (url) => {
-    console.log("Cropped image URL:", url);
-    setShowModal(false); // Close the modal after getting the URL
-    setImage(null); // Reset the image state
+  const handleDeleteEducation = (index, e) => {
+    e.preventDefault();
+    const newEducation = education.filter((_, i) => i !== index);
+    setEducation(newEducation);
   };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setImage(null); // Reset the image state when modal is closed
+  const handleSubmit3 = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const educationJson = { education_json: education };
+    try {
+      const response = await axios.post(
+        "/experts/update/",
+        {
+          action: 2,
+          education_json: educationJson,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        alert(data.message);
+        return;
+      }
+      setLoading(false);
+      console.log(education);
+      alert("Profile Updated Successfully!");
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,11 +80,10 @@ const TestElement = () => {
           handleUploadImage={handleUploadImage}
           filename="cropped_image.jpg"
           onCropped={handleCroppedImage}
-          aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+          aspectRatio={9 / 16} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
         />
       </Modal>
     </div>
   );
 };
-
 export default TestElement;

@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import axios from "../../axios";
 import { FiUpload, FiX } from "react-icons/fi";
+import Modal from "../../Modal";
+import ImageUploader from "../../ImageUploader";
 
 // slots
 import { Calendar, momentLocalizer } from "react-big-calendar";
@@ -17,10 +19,11 @@ const UpdateService = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [interest, setInterest] = useState([]);
+  const [myImage, setMyImage] = useState(0);
   const [interestInput, setInterestInput] = useState("");
   const [updateData, setUpdateData] = useState({});
 
-  const [selectedSkill, setSelectedSkill] = useState([]);
+  const [selectedTags, setselectedTags] = useState([]);
 
   const [selectedCategory, setSelectedCategory] = useState({});
 
@@ -48,8 +51,9 @@ const UpdateService = () => {
       }
       const Data = res.data;
       setUpdateData(Data.data);
-      setSelectedSkill(Data.data.tags);
+      setselectedTags(Data.data.tags);
       setSelectedCategory(Data.data.category);
+      setMyImage(Data.data.service_img);
     } catch (error) {
       console.log(error);
     }
@@ -73,25 +77,34 @@ const UpdateService = () => {
   };
   const [serviceTitle, setServiceTitle] = useState(updateData?.service_name);
   const [errorMessage, setErrorMessage] = useState("");
-  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [image, setImage] = useState(null);
 
+  const [showModal, setShowModal] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
 
-  const handleFileChange = async (e) => {
+  const onSelectFile = (event) => {
     setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setImage(url);
-    setImageUrl(url);
-    setImageLoading(false);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImage(reader.result);
+        setShowModal(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
   };
-  const handleImageRemove = () => {
-    setImage("");
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(url); // Reset the image state
+    // setUserData({ ...userData, profile_img: url });
+    // setCreateService({ ...createService, img: url });
+    setUpdateData({ ...updateData, service_img: url });
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(data.service_img); // Reset the image state when modal is closed
   };
 
   const handleBack = () => {
@@ -197,7 +210,7 @@ const UpdateService = () => {
         },
       });
       const data = res.data.data.qualified;
-      setSelectedSkill(data);
+      setselectedTags(data);
     } catch (error) {
       console.log(error);
     }
@@ -217,7 +230,7 @@ const UpdateService = () => {
     //   }
     // })
 
-    setSelectedSkill(filteredSkills);
+    setselectedTags(filteredSkills);
   };
 
   const handleSkillChange = (e) => {
@@ -258,9 +271,9 @@ const UpdateService = () => {
 
   const handleSuggestionClick = (suggestion) => {
     // Add suggestion to selected skills
-    if (!selectedSkill.includes(suggestion.name)) {
-      setSelectedSkill([...selectedSkill, suggestion.name]);
-      console.log(selectedSkill);
+    if (!selectedTags.includes(suggestion.name)) {
+      setselectedTags([...selectedTags, suggestion.name]);
+      console.log(selectedTags);
     }
     // Clear input and suggestions
     setInputTagValue("");
@@ -268,12 +281,12 @@ const UpdateService = () => {
   };
 
   const handleTagRemove = (skill) => {
-    setSelectedSkill(selectedSkill.filter((s) => s !== skill));
+    setselectedTags(selectedTags.filter((s) => s !== skill));
   };
 
   const handleNewSkillAdd = (value) => {
-    if (!selectedSkill.includes(value)) {
-      setSelectedSkill([...selectedSkill, value]);
+    if (!selectedTags.includes(value)) {
+      setselectedTags([...selectedTags, value]);
     }
     setInputTagValue("");
   };
@@ -304,14 +317,14 @@ const UpdateService = () => {
           action: 2,
           service_id: updateData?.id,
           service_name: updateData?.service_name,
-          service_img: updateData?.service_image,
+          service_img: myImage,
           category: updateData?.category?.id,
           description: updateData?.description,
           skill_name: updateData?.skill_name,
           price: updateData?.price,
           duration: updateData?.duration,
           currency: "INR",
-          tags_list: selectedSkill,
+          tags_list: selectedTags,
         },
         {
           headers: {
@@ -488,10 +501,10 @@ const UpdateService = () => {
                 <label htmlFor="tags" className="text-lg mb-1">
                   Tags
                 </label>
-                {selectedSkill.length > 0 && (
+                {selectedTags.length > 0 && (
                   <div className="border border-solid border-gray-300 px-2 rounded-md mb-2">
                     <div className="flex flex-wrap gap-2">
-                      {selectedSkill?.map((skill, ind) => {
+                      {selectedTags?.map((skill, ind) => {
                         return (
                           <div
                             key={ind}
@@ -540,7 +553,7 @@ const UpdateService = () => {
                         onClick={() => handleNewSkillAdd(inputTagValue)}
                         className="px-4 py-2 text-sm rounded-sm focus:outline-none btnBlack text-white w-fit mt-2 mb-4"
                       >
-                        + Add Interest
+                        + Add Tag
                       </button>
                     )}
               </div>
@@ -556,36 +569,17 @@ const UpdateService = () => {
                   id="imageSelector"
                   name="imageSelector"
                   accept="image/*"
-                  onChange={handleFileChange}
+                  onChange={onSelectFile}
                   className="hidden"
                 />
-                {/* {uploadProfileProgress > 0 && uploadProfileProgress < 100 ? (
-                  <p>Upload Progress: {uploadProfileProgress}%</p>
-                ) : image ? (
-                  <div className="relative w-full h-full flex justify-center items-center">
-                    <img
-                      src={image}
-                      alt="Preview"
-                      className="max-h-28 max-w-44 object-cover rounded"
-                    />
-                    <button
-                      onClick={handleImageRemove}
-                      className="absolute top-2 right-2 bg-slate-400 text-white p-1 rounded hover:bg-gray-600 flex justify-center items-center"
-                    >
-                      <FiX className="w-4 h-4" />
-                    </button>
-                  </div>
-                ) : (
-                  
-                )} */}
                 {imageLoading ? (
                   <div className="flex w-full h-full items-center justify-center text-center">
                     <span>Loading...</span>
                   </div>
-                ) : image ? (
+                ) : myImage ? (
                   <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                     <img
-                      src={image}
+                      src={myImage}
                       alt="Preview"
                       className="w-auto h-40 shrink-0 object-cover object-center m-2"
                     />
@@ -597,6 +591,15 @@ const UpdateService = () => {
                   </div>
                 )}
               </div>
+              <Modal show={showModal} onClose={closeModal}>
+                <ImageUploader
+                  image={myImage}
+                  handleUploadImage={handleUploadImage}
+                  filename="cropped_image.jpg"
+                  onCropped={handleCroppedImage}
+                  aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                />
+              </Modal>
               <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
               <label htmlFor="price" className="text-lg mb-1">
                 Service Price
@@ -639,7 +642,7 @@ const UpdateService = () => {
               <MdOutlineKeyboardBackspace size={25} />
               Back
             </div>
-            <MyBigCalendar />
+            <MyBigCalendar showSlots={showSlots} />
           </div>
         )
       )}
@@ -649,7 +652,7 @@ const UpdateService = () => {
 
 export default UpdateService;
 
-export const MyBigCalendar = () => {
+export const MyBigCalendar = ({ showSlots }) => {
   const params = useParams();
   const navigate = useNavigate();
   const localizer = momentLocalizer(moment);
@@ -667,7 +670,7 @@ export const MyBigCalendar = () => {
 
   useEffect(() => {
     getServiceDetails();
-  }, []);
+  }, [showSlots]);
 
   const getServiceDetails = async () => {
     const cookie = document.cookie.split("; ");
@@ -851,14 +854,7 @@ export const MyBigCalendar = () => {
     setShowModal(true);
     setIsBooked(event?.slotBooked);
   };
-  // const handleDeleteEvent = () => {
-  //   const updatedEvents = events.filter(
-  //     (event) => event.id !== selectedEvent.id
-  //   );
-  //   setEvents(updatedEvents);
-  //   setShowModal(false);
-  // };
-  const handleDeleteEvent = () => {
+  const handleDeleteEvent = async () => {
     const cookies = document.cookie.split("; ");
     const jsonData = {};
     cookies.forEach((item) => {
@@ -866,18 +862,18 @@ export const MyBigCalendar = () => {
       jsonData[key] = value;
     });
     try {
-      const res = axios.post(
+      const res = await axios.post(
         "/experts/services/",
-      {
-        action: 7,
-        time_slot_id: selectedEvent.id,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
+        {
+          action: 7,
+          time_slot_id: selectedEvent.id,
         },
-      }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
       );
       const data = res.data;
       console.log(data);
@@ -887,11 +883,10 @@ export const MyBigCalendar = () => {
         console.log("Something went wrong");
         return;
       }
-      
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleUpdateEvent = () => {
     const updatedStartTime = moment(selectedEvent.start)
@@ -1019,29 +1014,39 @@ export const MyBigCalendar = () => {
             Create slots
           </button>
         </div>
-
-        <Calendar
-          localizer={localizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          style={{ height: 500 }}
-          onSelectEvent={handleSelectEvent}
-        />
+        {events.length === 0 ? (
+          <p className="text-grey-600 text-xl md:text-2xl text-center w-full">
+            Loading...
+          </p>
+        ) : (
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: 500 }}
+            onSelectEvent={handleSelectEvent}
+          />
+        )}
         <button
-            onClick={(e) => handlePostEvent(e)}
-            className="mt-10 text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
-          >
-            Update service
-          </button>
+          onClick={(e) => handlePostEvent(e)}
+          className="mt-10 text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
+        >
+          Update service
+        </button>
       </div>
       {showModal && (
         <div className="modal blur-none rounded-md py-4 px-3 xs:px-5 w-[320px] md:w-[450px] shadow-md">
           <div className="flex justify-between items-center text-xl md:text-3xl font-bold text-gray-600">
             <div>Update Event</div>
-            <RxCross2 className="border border-solid border-slate-400 rounded-sm" onClick={() => setShowModal(false)} />
+            <RxCross2
+              className="border border-solid border-slate-400 rounded-sm"
+              onClick={() => setShowModal(false)}
+            />
           </div>
-          <div className="my-5 text-gray-600 text-base sm:text-lg">Title: {selectedEvent?.title}</div>
+          <div className="my-5 text-gray-600 text-base sm:text-lg">
+            Title: {selectedEvent?.title}
+          </div>
           {isBooked && (
             <div className="text-sm text-red-500 mt-2">
               Cannot update slot is already booked!

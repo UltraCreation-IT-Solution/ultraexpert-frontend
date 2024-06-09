@@ -4,7 +4,7 @@ const Modal = ({ show, onClose, children }) => {
   if (!show) {
     return null;
   }
-
+  console.log("modal");
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-lg w-full sm:max-w-md">
