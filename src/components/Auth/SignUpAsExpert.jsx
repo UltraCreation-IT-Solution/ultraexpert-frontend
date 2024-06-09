@@ -18,7 +18,7 @@ const CHECKOUT_STEPS = [
 ];
 
 const SignUpAsExpert = () => {
-  const [currStep, setCurrStep] = useState(2);
+  const [currStep, setCurrStep] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [loading, setIsLoading] = useState(false);
   const [showModalProfile, setShowModalProfile] = useState(false);
@@ -99,7 +99,7 @@ const SignUpAsExpert = () => {
     setMyImageCertificate(url); // Reset the image state
     setAchievementForm({
       ...achievementForm,
-      certificate:  url,
+      certificate: url,
     });
   };
   const closeModalProfile = () => {
@@ -339,7 +339,7 @@ const SignUpAsExpert = () => {
       setCurrStep((prevStep) => prevStep + 1);
       setIsComplete(false);
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       setIsLoading(false);
     }
   };
@@ -1502,12 +1502,23 @@ const SignUpAsExpert = () => {
                             {achievement.year}
                           </td>
                           <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
-                          {typeof achievement.certificate === 'object' && achievement.certificate instanceof Blob ? (
-  <img src={URL.createObjectURL(achievement.certificate)} alt="Certificate" className="w-20 h-20 object-cover" />
-) : (
-  // Handle the case where it's a string (existing logic)
-  <img src={achievement.certificate} alt="Certificate" className="w-20 h-20 object-cover" />
-)}  
+                            {typeof achievement.certificate === "object" &&
+                            achievement.certificate instanceof Blob ? (
+                              <img
+                                src={URL.createObjectURL(
+                                  achievement.certificate
+                                )}
+                                alt="Certificate"
+                                className="w-20 h-20 object-cover"
+                              />
+                            ) : (
+                              // Handle the case where it's a string (existing logic)
+                              <img
+                                src={achievement.certificate}
+                                alt="Certificate"
+                                className="w-20 h-20 object-cover"
+                              />
+                            )}
                           </td>
                           <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
                             <button

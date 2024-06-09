@@ -1087,7 +1087,8 @@ const SkillDetails = () => {
                 className="flex items-center gap-1 btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
                 onClick={handleAddSkill}
               >
-                <GoPlus size={22}/>Add Skill
+                <GoPlus size={22} />
+                Add Skill
               </button>
             </div>
           </div>
@@ -1223,7 +1224,7 @@ const AchDetails = () => {
   };
 
   const handleAddAchievement = (e) => {
-    console.log(achievementForm)
+    console.log(achievementForm);
     e.preventDefault();
     if (
       achievementForm.name &&
@@ -1278,7 +1279,7 @@ const AchDetails = () => {
     }
   };
 
-  console.log(achievement)
+  console.log(achievement);
   return (
     <form onSubmit={handleSubmit4} className="grow h-full flex flex-col">
       {!dataLoading ? (
@@ -1392,41 +1393,42 @@ const AchDetails = () => {
               </thead>
               <tbody>
                 {console.log(achievement)}
-                {achievement.length >0 &&achievement?.map((a, index) => (
-                  <tr key={index} className="text-wrap">
-                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
-                      {a.name}
-                    </td>
-                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
-                      {a.year}
-                    </td>
-                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
-                      {typeof a.certificate === "object" &&
-                      a.certificate instanceof Blob ? (
-                        <img
-                          src={URL.createObjectURL(a.certificate)}
-                          alt="Certificate"
-                          className="w-20 h-20 object-cover"
-                        />
-                      ) : (
-                        // Handle the case where it's a string (existing logic)
-                        <img
-                          src={a.certificate}
-                          alt="Certificate"
-                          className="w-20 h-20 object-cover"
-                        />
-                      )}
-                    </td>
-                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
-                      <button
-                        className="bg-white border border-solid border-black text-black p-2 rounded-sm"
-                        onClick={(e) => handleDeleteAchievement(index, e)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {achievement.length > 0 &&
+                  achievement?.map((a, index) => (
+                    <tr key={index} className="text-wrap">
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        {a.name}
+                      </td>
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        {a.year}
+                      </td>
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        {typeof a.certificate === "object" &&
+                        a.certificate instanceof Blob ? (
+                          <img
+                            src={URL.createObjectURL(a.certificate)}
+                            alt="Certificate"
+                            className="w-20 h-20 object-cover"
+                          />
+                        ) : (
+                          // Handle the case where it's a string (existing logic)
+                          <img
+                            src={a.certificate}
+                            alt="Certificate"
+                            className="w-20 h-20 object-cover"
+                          />
+                        )}
+                      </td>
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        <button
+                          className="bg-white border border-solid border-black text-black p-2 rounded-sm"
+                          onClick={(e) => handleDeleteAchievement(index, e)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

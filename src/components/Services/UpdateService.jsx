@@ -670,7 +670,7 @@ export const MyBigCalendar = ({ showSlots }) => {
 
   useEffect(() => {
     getServiceDetails();
-  }, [showSlots, events.length]);
+  }, [showSlots]);
 
   const getServiceDetails = async () => {
     const cookie = document.cookie.split("; ");
@@ -878,6 +878,7 @@ export const MyBigCalendar = ({ showSlots }) => {
       const data = res.data;
       console.log(data);
       setShowModal(false);
+      getServiceDetails();
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
         return;
