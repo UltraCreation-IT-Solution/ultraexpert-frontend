@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Update from "./EditDashboardProfile";
+// import Update from "./EditDashboardProfile";
 import {
   FaEdit,
   FaTags,
@@ -796,15 +796,15 @@ export const Dashboard = () => {
   const [updateDate, setUpdateDate] = useState("");
   const [updateCount, setUpdateCount] = useState("");
 
-  const handleUpdate = () => {
-    const updatedValues = values.map((value) => {
-      if (value.date.toDateString() === updateDate) {
-        return { ...value, count: parseInt(updateCount) };
-      }
-      return value;
-    });
-    setValues(updatedValues);
-  };
+  // const handleUpdate = () => {
+  //   const updatedValues = values.map((value) => {
+  //     if (value.date.toDateString() === updateDate) {
+  //       return { ...value, count: parseInt(updateCount) };
+  //     }
+  //     return value;
+  //   });
+  //   setValues(updatedValues);
+  // };
 
   const navigate = useNavigate();
   return (
@@ -839,7 +839,7 @@ export const Dashboard = () => {
           <div className="flex gap-[1.65vw] items-center text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#515151]">
             <FaTags className="text-[4.45vw] xs:text-[2.9vw] sm:text-[2.65vw]" />
             <div className="flex ">
-              {expertData?.skills?.slice(0, 3)?.map((item, idx) => {
+              {expertData?.skills?.map((item, idx) => {
                 return (
                   <div
                     key={idx}
@@ -1086,24 +1086,30 @@ export const Dashboard = () => {
         <div className="font-bold flex justify-between text-[3.45vw] xs:text-[2.65vw] md:text-[1.8vw] lg:text-[1.45vw]">
           <div>Skills</div>
           <div
-            onClick={() => navigate("/expertdashboard/editprofile")}
-            className="text-sm underline cursor-pointer font-light"
+            onClick={() => navigate("/expertdashboard/editprofile/#skills")}
+            className="text-sm  cursor-pointer font-light text-gray-600 transition-all hover:underline"
           >
             <FaPlus size={10} /> Add Skills
           </div>
         </div>
-        <div className="flex flex-wrap gap-[2vw] xs:gap-[1.6vw] md:gap-[1vw]">
-          {expertData.skills?.skill_json?.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className="px-[3vw] md:px-[2vw] lg:px-[1.6vw] py-[1vw] md:py-[0.6vw] rounded-sm xs:rounded bg-[#ececec] mt-[1.45vw] xs:mt-[1vw] md:mt-auto text-[2.8vw] xs:text-[1.8vw] md:text-[1.18vw] lg:text-[1vw]"
-              >
-                {item.technology_name}
-              </div>
-            );
-          })}
-        </div>
+        {expertData.skills?.length === 0 ? (
+          <div className="font-bold text-base sm:text-lg text-gray-600 text-center">
+            No skills found
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-[2vw] xs:gap-[1.6vw] md:gap-[1vw]">
+            {expertData.skills?.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className="px-[3vw] md:px-[2vw] lg:px-[1.6vw] py-[1vw] md:py-[0.6vw] rounded-sm xs:rounded bg-[#ececec] mt-[1.45vw] xs:mt-[1vw] md:mt-auto text-[2.8vw] xs:text-[1.8vw] md:text-[1.18vw] lg:text-[1vw]"
+                >
+                  {item.technology_name}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
       <div className="w-full flex flex-col lg:flex-row gap-[1.5vw]">
         <div className="relative w-full lg:w-[60%] border border-[#c7c7c7] border-solid rounded-lg px-[1.8vw] pt-[3vw] xs:pt-[2vw] md:pt-[1vw]">
@@ -1280,22 +1286,23 @@ export const Dashboard = () => {
           />
         )}
         {/* Testimonials section of dashboard */}
-        {testimonials && (expertAllTestimonials.length === 0 ? (
-          <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
-            No testimonials found
-          </div>
-        ) : (
-          expertAllTestimonials?.map((item, index) => (
-            <TestimonialsCard
-              key={index}
-              item={item}
-              index={index}
-              HandleBlogs={HandleBlogs}
-              HandleTestimonials={HandleTestimonials}
-              getExpertAllTestimonials={getExpertAllTestimonials}
-            />
-          ))
-        ))}
+        {testimonials &&
+          (expertAllTestimonials.length === 0 ? (
+            <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
+              No testimonials found
+            </div>
+          ) : (
+            expertAllTestimonials?.map((item, index) => (
+              <TestimonialsCard
+                key={index}
+                item={item}
+                index={index}
+                HandleBlogs={HandleBlogs}
+                HandleTestimonials={HandleTestimonials}
+                getExpertAllTestimonials={getExpertAllTestimonials}
+              />
+            ))
+          ))}
         {/* Project section of dashboard */}
         {projects && <ShowMyProjects />}
       </div>
@@ -1761,13 +1768,6 @@ export const Leaderboard = () => {
   );
 };
 
-// export const MyBookings = ({ expertData, expertId }) => {
-
-//   return (
-
-//   );
-// };
-
 export const MyBooking = () => {
   const [shimmer, setShimmer] = useState(false);
   const [myBookings, setMyBookings] = useState([]);
@@ -1848,8 +1848,6 @@ export const MyBooking = () => {
 };
 
 const ExpertDashboard = () => {
-  const [showEditProfile, setShowEditProfile] = useState(false);
-
   const [expertData, setExpertData] = useState({});
   const [expertId, setExpertId] = useState(null);
   const cookies = document.cookie.split("; ");
@@ -1892,10 +1890,6 @@ const ExpertDashboard = () => {
 
   console.log(expertId);
 
-  const handleShowEditProfile = () => {
-    setShowEditProfile(false);
-  };
-
   const handleCopyToClipboard = () => {
     navigator.clipboard
       .writeText(expertData.refer_code)
@@ -1909,9 +1903,8 @@ const ExpertDashboard = () => {
 
   return (
     <div
-      className={`${
-        showEditProfile ? "overflow-y-hidden" : "overflow-y-auto"
-      } mt-[85px] px-[7vw] w-full h-full flex gap-[1vw]`}
+      className={`
+        "overflow-y-auto mt-[85px] px-[7vw] w-full h-full flex gap-[1vw]`}
     >
       {
         <section
@@ -1943,7 +1936,7 @@ const ExpertDashboard = () => {
             <div className=" mt-[1.6vw] w-full text-sm text-[#525252] line-clamp-3">
               {expertData.about_me}
             </div>
-            {expertData?.skills?.length !== 0 && (
+            {expertData?.skills?.length > 0 && (
               <div className="mt-[1.25vw] flex flex-col gap-[1vw]">
                 <div className="flex gap-[1.25vw] items-center text-[1.25vw] text-[#515151]">
                   <FaTags />
@@ -2027,18 +2020,6 @@ const ExpertDashboard = () => {
                 <BsFillPatchCheckFill className="text-[1.55vw]" />
                 Get Certified
               </Link>
-              {/* <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-                <BsFillPersonLinesFill className="text-[1.55vw]" />
-                Go to Experts
-              </li>
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-                <MdInsertPageBreak className="text-[1.55vw]" />
-                My Blogs
-              </li>
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-                <IoSettings className="text-[1.55vw]" />
-                Settings
-              </li> */}
             </ul>
           </div>
         </section>
@@ -2052,9 +2033,6 @@ const ExpertDashboard = () => {
         <SkillList />
         <MyBooking />
       </Outlet>
-      {showEditProfile === true && (
-        <Update handleShowEditProfile={handleShowEditProfile} />
-      )}
     </div>
   );
 };

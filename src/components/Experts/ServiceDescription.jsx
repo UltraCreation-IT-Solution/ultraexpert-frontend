@@ -774,7 +774,7 @@ const ServiceDescription = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
+            // Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );
@@ -938,6 +938,7 @@ const ServiceDescription = () => {
               <div className="text-base md:text-lg lg:text-xl font-semibold mt-[2vw]">
                 Skills
               </div>
+              {console.log(servDesc)}
               <div className="flex flex-wrap gap-[1vw] mt-[3vw] md:mt-[0.7vw]">
                 {servDesc?.tags?.map((temp, idx) => (
                   <div
