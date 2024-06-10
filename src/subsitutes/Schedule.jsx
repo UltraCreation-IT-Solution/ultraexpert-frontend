@@ -17,7 +17,7 @@ export const ShowSchedule = ({ id }) => {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${jsonData.access_token}`,
+              // Authorization: `Bearer ${jsonData.access_token}`,
             },
           }
         );
@@ -204,7 +204,7 @@ export const ShowSchedule = ({ id }) => {
               ? "cursor-not-allowed opacity-75"
               : "cursor-pointer"
           } `}
-          onClick={() => goToBooking()}
+          onClick={() =>localStorage.getItem("username")? goToBooking():navigate("/login")}
         >
           Book a slot
         </button>

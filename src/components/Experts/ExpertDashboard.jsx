@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Update from "./EditDashboardProfile";
+// import Update from "./EditDashboardProfile";
 import {
   FaEdit,
   FaTags,
@@ -1848,8 +1848,6 @@ export const MyBooking = () => {
 };
 
 const ExpertDashboard = () => {
-  const [showEditProfile, setShowEditProfile] = useState(false);
-
   const [expertData, setExpertData] = useState({});
   const [expertId, setExpertId] = useState(null);
   const cookies = document.cookie.split("; ");
@@ -1892,10 +1890,6 @@ const ExpertDashboard = () => {
 
   console.log(expertId);
 
-  const handleShowEditProfile = () => {
-    setShowEditProfile(false);
-  };
-
   const handleCopyToClipboard = () => {
     navigator.clipboard
       .writeText(expertData.refer_code)
@@ -1909,9 +1903,8 @@ const ExpertDashboard = () => {
 
   return (
     <div
-      className={`${
-        showEditProfile ? "overflow-y-hidden" : "overflow-y-auto"
-      } mt-[85px] px-[7vw] w-full h-full flex gap-[1vw]`}
+      className={`
+        "overflow-y-auto mt-[85px] px-[7vw] w-full h-full flex gap-[1vw]`}
     >
       {
         <section
@@ -2027,18 +2020,6 @@ const ExpertDashboard = () => {
                 <BsFillPatchCheckFill className="text-[1.55vw]" />
                 Get Certified
               </Link>
-              {/* <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-                <BsFillPersonLinesFill className="text-[1.55vw]" />
-                Go to Experts
-              </li>
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-                <MdInsertPageBreak className="text-[1.55vw]" />
-                My Blogs
-              </li>
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-                <IoSettings className="text-[1.55vw]" />
-                Settings
-              </li> */}
             </ul>
           </div>
         </section>
@@ -2052,9 +2033,6 @@ const ExpertDashboard = () => {
         <SkillList />
         <MyBooking />
       </Outlet>
-      {showEditProfile === true && (
-        <Update handleShowEditProfile={handleShowEditProfile} />
-      )}
     </div>
   );
 };
