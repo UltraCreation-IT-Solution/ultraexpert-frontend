@@ -80,6 +80,7 @@ export const BlogCard = ({ item }) => {
           },
         }
       );
+      console.log(res.data);
       const json = res.data;
       if (!json) {
         console.log("no data");
@@ -94,7 +95,7 @@ export const BlogCard = ({ item }) => {
   return (
     <div className="shrink-0 w-[300px] md:w-[350px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0">
       <img
-        src={item?.images[0]}
+        src={item?.images}
         className="w-full h-[200px] object-cover shrink-0 md:mb-[0.7vw]"
         alt=""
       />
@@ -310,7 +311,7 @@ export const BlogBody = ({ allBlogsArray, shimmer, itemsPerPage }) => {
                   items={item}
                   title={item.title}
                   tags={item.tags}
-                  image={item.images[0]}
+                  image={item.images}
                   date={formatDate(item.date_created.split("T")[0])}
                 />
               ))
@@ -351,7 +352,7 @@ export const SearchedBlog = ({ searchedBlogs }) => {
     </div>
   );
 };
-const Author = ({ createAuthor }) => {
+const Author = ({ createAuthor, loading }) => {
   useEffect(() => {
     console.log("author");
   }, [localStorage.getItem("isAuthor")]);
@@ -363,7 +364,11 @@ const Author = ({ createAuthor }) => {
     </div>
   ) : (
     <div
-      className="shrink-0 px-5 py-2 bg-[#2A2A2A] text-white text-xs sm:text-sm md:text-base font-semibold rounded-sm cursor-pointer w-fit"
+      className={
+        loading
+          ? `shrink-0 px-5 py-2 bg-gray-400 text-white text-xs sm:text-sm md:text-base font-semibold rounded-sm cursor-pointer w-fit`
+          : `shrink-0 px-5 py-2 bg-[#2A2A2A] text-white text-xs sm:text-sm md:text-base font-semibold rounded-sm cursor-pointer w-fit`
+      }
       onClick={(e) => createAuthor(e)}
     >
       Become an Author
@@ -642,10 +647,11 @@ const Blogs = () => {
 
   const [isAuthor, setIsAuthor] = useState(false);
   const [categoryBlogs, setCategoryBlogs] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const createAuthor = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const response = await axios.post(
         "/blogs/author/",
@@ -666,10 +672,12 @@ const Blogs = () => {
       );
       const data = response.data;
       console.log(data);
+      setLoading(false);
       setIsAuthor(true);
       localStorage.setItem("isAuthor", true);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   //api call for all blogs
@@ -822,7 +830,7 @@ const Blogs = () => {
           >
             <img
               className="absolute left-0 top-0 w-full h-full object-cover object-center brightness-50"
-              src={item?.blog_images[0]}
+              src={item?.blog_images}
               alt=""
             />
             <div className="text-xs md:text-base absolute top-2 left-2">
@@ -847,7 +855,7 @@ const Blogs = () => {
 
       <div className="my-10 flex flex-col sm:flex-row justify-center sm:justify-between sm:items-center gap-5 sm:gap-10 sm:h-14 px-[8vw] md:px-[10vw]">
         {localStorage.getItem("isExpert") === "true" ? (
-          <Author createAuthor={createAuthor} />
+          <Author createAuthor={createAuthor} loading={loading} />
         ) : null}
         <div className="flex items-center w-[50rem] h-full">
           <input
@@ -891,7 +899,7 @@ const Blogs = () => {
               <IoMdArrowRoundBack />
               Back
             </div>
-            <SearchedBlog searchedBlogs={searchedBlogs}  />
+            <SearchedBlog searchedBlogs={searchedBlogs} />
           </>
         )
       ) : (

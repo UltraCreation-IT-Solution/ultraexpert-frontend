@@ -125,8 +125,10 @@ input[type="number"]::-webkit-outer-spin-button {
   object-position: center;
 }
 
+
 .rbc-toolbar-label {
   font-weight: 700;
+  @apply my-4 md:my-0
 }
 .rbc-month-header .rbc-header {
   padding: 10px 3px;
@@ -163,7 +165,6 @@ input[type="number"]::-webkit-outer-spin-button {
   border: 1px solid #97BAEF;
   box-shadow: 1px 1px 2px 1px #97BAEF;
   border-radius: 2px;
-  
 }
 
 
@@ -192,3 +193,25 @@ input[type="number"]::-webkit-outer-spin-button {
     background-position: 200px 0;
   }
 }
+
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 1000;
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+.modal div {
+  margin-bottom: 10px;
+}
+.modal button {
+  margin-right: 10px;
+}
+

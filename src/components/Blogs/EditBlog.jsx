@@ -7,6 +7,8 @@ import DOMPurify from "dompurify";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { handleUploadImage } from "../../constant";
 import { FiUpload } from "react-icons/fi";
+import ImageUploader from "../../ImageUploader";
+import Modal from "../../Modal";
 
 const EditBlog = () => {
   const navigate = useNavigate();
@@ -18,6 +20,34 @@ const EditBlog = () => {
   const [filterCategoriesArray, setFilterCategoriesArray] = useState([]);
 
   //   console.log(value2);
+  const [myImage, setMyImage] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+
+  const onSelectFile = (event) => {
+    setImageLoading(true);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImage(reader.result);
+        setShowModal(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(url); // Reset the image state
+    // setUserData({ ...userData, profile_img: url });
+    setAllBlogData({ ...allBlogData, images_list: url });
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(allBlogData.images_list); // Reset the image state when modal is closed
+  };
 
   const interest = [
     { id: 1, name: "Python" },
@@ -64,7 +94,7 @@ const EditBlog = () => {
         number: json.blog_category.category_id,
         name: json.blog_category.category,
       });
-      setSelectedFile(json.images_list);
+      setMyImage(json.images_list);
       setSelectedSkill(json.tags_list);
     } catch (error) {
       console.log(error);
@@ -184,24 +214,7 @@ const EditBlog = () => {
   };
 
   //   const [content, setContent] = useState(allBlogData.content);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [imageLoading, setImageLoading] = useState(false);
-  const removeImage = () => {
-    setSelectedFile(null);
-    setUploadBannerProgress(0);
-    setAllBlogData({ ...allBlogData, images_list: [] });
-  };
-  const handleFileChange = async (e) => {
-    setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setSelectedFile(url);
-    setAllBlogData({ ...allBlogData, images_list: [url] });
-    setImageLoading(false);
-  };
+  
   const blogCreated = async (e) => {
     e.preventDefault();
     const cookie = document.cookie.split("; ");
@@ -395,17 +408,17 @@ const EditBlog = () => {
               type="file"
               id="imageSelector"
               accept="image/*"
-              onChange={handleFileChange}
+              onChange={onSelectFile}
               className="hidden"
             />
             {imageLoading ? (
               <div className="flex w-full h-full items-center justify-center text-center">
                 <span>Loading...</span>
               </div>
-            ) : selectedFile ? (
+            ) : myImage ? (
               <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                 <img
-                  src={selectedFile}
+                  src={myImage}
                   alt="Preview"
                   className="w-auto h-40 shrink-0 object-cover object-center m-2"
                 />
@@ -417,6 +430,15 @@ const EditBlog = () => {
               </div>
             )}
           </div>
+          <Modal show={showModal} onClose={closeModal}>
+            <ImageUploader
+              image={myImage}
+              handleUploadImage={handleUploadImage}
+              filename="cropped_image.jpg"
+              onCropped={handleCroppedImage}
+              aspectRatio={16/9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+            />
+          </Modal>
           <div className="text-gray-500 text-sm mt-1 text-center">
             Upload your blog image here
           </div>

@@ -12,7 +12,8 @@ const ImageUploader = ({
   const [uploading, setUploading] = useState(false);
   const cropperRef = useRef(null);
 
-  const getCroppedImage = async () => {
+  const getCroppedImage = async (e) => {
+    e.preventDefault();
     if (cropperRef.current) {
       const cropper = cropperRef.current.cropper;
       const croppedCanvas = cropper.getCroppedCanvas();
@@ -41,7 +42,8 @@ const ImageUploader = ({
       setUploading(false);
     }
   }, [image]);
-
+  console.log("2");
+  console.log(onCropped)
   return (
     <div className="space-y-4">
       {image && (
@@ -58,7 +60,7 @@ const ImageUploader = ({
             <button
               onClick={getCroppedImage}
               disabled={uploading}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition duration-200 text-sm"
+              className="px-4 py-2 btnBlack text-white rounded-sm shadow-md text-sm"
             >
               {uploading ? "Uploading..." : "Crop & Upload Image"}
             </button>

@@ -11,7 +11,6 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
   const [type, setType] = useState("");
   const [role, setRole] = useState("");
   const [tags, setTags] = useState([]);
@@ -35,7 +34,8 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
   const handleCroppedImage = (url) => {
     console.log("Cropped image URL:", url);
     setShowModal(false); // Close the modal after getting the URL
-    setMyImage(null); // Reset the image state
+    setMyImage(url); // Reset the image state
+    setProjects({ ...projects, image: url });
   };
 
   const closeModal = () => {
@@ -95,13 +95,16 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
     }
     // console.log(projects);
   };
+
+  const [imageLoading, setImageLoading] = useState(false);
+
   const handleAddProject = () => {
-    if (!title || !description || !image || !type) {
+    if (!title || !description || !myImage || !type) {
       alert("Please fill in all fields");
       return;
     }
 
-    const newProject = { title, description, image, type, role, tags };
+    const newProject = { title, description, image:myImage, type, role, tags };
     if (editingIndex !== null) {
       // Replace the project at the editing index
       const updatedProjects = [...projects];
@@ -116,7 +119,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
     // Reset form fields
     setTitle("");
     setDescription("");
-    setImage("");
+    setMyImage("");
     setType("");
     setRole("");
     setTags([]);
@@ -127,7 +130,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
     const projectToEdit = projects[index];
     setTitle(projectToEdit.title);
     setDescription(projectToEdit.description);
-    setImage(projectToEdit.image);
+    setMyImage(projectToEdit.image);
     setType(projectToEdit.type);
     setRole(projectToEdit.role);
     setTags(projectToEdit.tags);
@@ -142,21 +145,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
     setProjects(updatedProjects);
   };
 
-  const [imageLoading, setImageLoading] = useState(false);
-
-  const handleImageUpload = async (e) => {
-    setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setImage(url);
-    setImageLoading(false);
-  };
-  const handleImageRemove = () => {
-    setImage("");
-  };
+  
 
   const handleCancel = () => {
     // Add your code here to navigate back to the previous page
@@ -167,7 +156,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
   };
 
   const isFormEmpty =
-    !title || !description || !image || !type || (type === "group" && !role);
+    !title || !description || !myImage || !type || (type === "group" && !role);
 
   const addTag = () => {
     if (tagInput.trim() !== "") {
@@ -234,21 +223,21 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
             )}
           </div>
           <div className="flex flex-col ">
-            <div className="relative h-32 border border-slate-300 border-solid rounded overflow-hidden mb-4">
+            <div className={myImage ? `relative h-auto border border-slate-300 border-solid rounded overflow-hidden mb-4`: `relative h-32 border border-slate-300 border-solid rounded overflow-hidden mb-4`}>
               <input
                 type="file"
                 accept="image/*"
                 onChange={onSelectFile}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              {/* {imageLoading ? (
+              {imageLoading ? (
                 <div className="flex w-full h-full items-center justify-center text-center">
                   <span>Loading...</span>
                 </div>
-              ) : image ? (
+              ) : myImage ? (
                 <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                   <img
-                    src={image}
+                    src={myImage}
                     alt="Preview"
                     className="w-auto h-40 shrink-0 object-cover object-center m-2"
                   />
@@ -258,7 +247,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
                   <FiUpload className="w-10 h-10" />
                   <span className="ml-2">Upload Image</span>
                 </div>
-              )} */}
+              )}
             </div>
             <Modal show={showModal} onClose={closeModal}>
               <ImageUploader
@@ -266,7 +255,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
                 handleUploadImage={handleUploadImage}
                 filename="cropped_image.jpg"
                 onCropped={handleCroppedImage}
-                aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
               />
             </Modal>
             <select

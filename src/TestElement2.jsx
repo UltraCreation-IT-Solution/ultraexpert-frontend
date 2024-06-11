@@ -1,18 +1,18 @@
-// import  { useEffect, useState } from "react";
-// import { RxCross2 } from "react-icons/rx";
-// import { MdOutlineKeyboardBackspace } from "react-icons/md";
-// import { useNavigate, useParams } from "react-router-dom";
-// import { FaIndianRupeeSign } from "react-icons/fa6";
-// import axios from "../../axios";
-// import { FiUpload, FiX } from "react-icons/fi";
-// import Modal from "../../Modal";
-// import ImageUploader from "../../ImageUploader";
+import React, { useEffect, useState } from "react";
+import { RxCross2 } from "react-icons/rx";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
+import { useNavigate, useParams } from "react-router-dom";
+import { FaIndianRupeeSign } from "react-icons/fa6";
+import axios from "../../axios";
+import { FiUpload, FiX } from "react-icons/fi";
+import Modal from "../../Modal";
+import ImageUploader from "../../ImageUploader";
 
-// // slots
-// import { Calendar, momentLocalizer } from "react-big-calendar";
-// import moment from "moment";
-// import "react-big-calendar/lib/css/react-big-calendar.css";
-// import { handleUploadImage } from "../../constant";
+// slots
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { handleUploadImage } from "../../constant";
 //slots
 
 const UpdateService = () => {
@@ -191,12 +191,54 @@ const UpdateService = () => {
   };
 
   const [val, setVal] = useState("");
+  const [showSkill, setShowSkill] = useState([]);
   const [skill, setSkill] = useState([]);
 
+  const getSkills = async () => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
 
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get("/inspections/test/?action=2", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const data = res.data.data.qualified;
+      setselectedTags(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
+    getSkills();
+  }, []);
 
+  const allTrueSKill = () => {
+    const filteredSkills = Object.keys(showSkill).filter(
+      (key) => showSkill[key] === true
+    );
+    // Object.keys(showSkill).forEach(function (key, index) {
+    //   if (showSkill[key] === true) {
+    //     setSkill({...skill, key});
+    //   }
+    // })
 
+    setselectedTags(filteredSkills);
+  };
+
+  const handleSkillChange = (e) => {
+    const inputValue = e.target.value;
+    if (inputValue.trim() === "") {
+      setSkill([]); // Open dropdown when input field becomes empty
+    }
+  };
 
   const handleSkillSelection = (val) => {
     const capitalizedSkill = val.charAt(0).toUpperCase() + val.slice(1);
@@ -259,6 +301,7 @@ const UpdateService = () => {
 
   const handleServiceCreate = async (e) => {
     e.preventDefault();
+    setShowSlots(!showSlots);
 
     const cookie = document.cookie.split(";");
     const jsonData = {};
@@ -313,7 +356,6 @@ const UpdateService = () => {
     } catch (error) {
       console.log(error);
     }
-    setShowSlots(!showSlots);
   };
   console.log(selectedCategory);
   return (
@@ -435,6 +477,8 @@ const UpdateService = () => {
                 className={`border border-solid border-slate-300 rounded-md px-4 py-2 mb-4`}
                 placeholder="Enter Skill"
                 value={updateData?.skill_name}
+                onFocus={allTrueSKill}
+                onChange={(e) => handleSkillChange(e)}
               />
               {skill?.length > 0 && (
                 <div
@@ -606,6 +650,7 @@ const UpdateService = () => {
   );
 };
 
+export default UpdateService;
 
 export const MyBigCalendar = ({ showSlots }) => {
   const params = useParams();
@@ -696,7 +741,7 @@ export const MyBigCalendar = ({ showSlots }) => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    console.log(events)
+
     try {
       const res = await axios.post(
         "/experts/services/",
@@ -734,8 +779,7 @@ export const MyBigCalendar = ({ showSlots }) => {
     const endDate = moment(endInputDate, "YYYY-MM-DD");
     const startTime = moment(startInputTime, "HH:mm");
     const endTime = moment(endInputTime, "HH:mm");
-    let counter = 0;
-  
+
     if (
       startDate.isValid() &&
       endDate.isValid() &&
@@ -751,7 +795,7 @@ export const MyBigCalendar = ({ showSlots }) => {
       let currentDate = startDate.clone();
       while (currentDate.isSameOrBefore(endDate, "day")) {
         const newEvent = {
-          id: `${Date.now()}-${counter++}`, // Generate unique ID
+          id: events.length + 1,
           title: serviceTitle.trim(),
           start: currentDate
             .clone()
@@ -778,7 +822,6 @@ export const MyBigCalendar = ({ showSlots }) => {
       );
     }
   };
-  
 
   const convertEventToAPIFormat = (event) => {
     const startDate = moment(event.start);
@@ -1047,11 +1090,3 @@ export const MyBigCalendar = ({ showSlots }) => {
     </>
   );
 };
-
-const TestElement = () => {
-  return (
-    <div>TestElement</div>
-  )
-}
-
-export default TestElement

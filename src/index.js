@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
@@ -12,26 +12,30 @@ import Login from "./components/Auth/Login";
 import SignUp from "./components/Auth/SignUp";
 import LoginWithOTP from "./components/Auth/LoginWithOTP";
 import Landing from "./components/Landing/Landing";
-import Favourites, {
+const Favourites = lazy(() => import("./components/Favourites/Favourites.jsx"));
+import {
   AllFav,
   FavBlogs,
   FavExperts,
   FavServices,
 } from "./components/Favourites/Favourites.jsx";
-import Expert from "./components/Experts/Expert";
-import Service, { allServiceData } from "./components/Services/Service";
-import Blog from "./components/Blogs/Blogs/Blog";
-import CreateBlog from "./components/Blogs/CreateBlog.jsx";
-import EditBlog from "./components/Blogs/EditBlog.jsx";
-import ExpertProfile from "./components/Experts/ExpertProfile";
-import ServiceDescription from "./components/Experts/ServiceDescription";
-import ServiceBooking from "./components/Experts/ServiceBooking";
+const Expert = lazy(() => import("./components/Experts/Expert"));
+const Service = lazy(() => import("./components/Services/Service"));
+const Blog = lazy(() => import("./components/Blogs/Blogs/Blog"));
+const CreateBlog = lazy(() => import("./components/Blogs/CreateBlog.jsx"));
+const BlogDetails = lazy(() => import("./components/Blogs/BlogDetail.jsx"));
+const EditBlog = lazy(() => import("./components/Blogs/EditBlog.jsx"));
+const ExpertProfile = lazy(() => import("./components/Experts/ExpertProfile"));
+const ServiceDescription = lazy(() =>
+  import("./components/Experts/ServiceDescription")
+);
+const ServiceBooking = lazy(() =>
+  import("./components/Experts/ServiceBooking")
+);
 import Error from "./subsitutes/Error";
-import BlogDetails from "./components/Blogs/BlogDetail";
 import Navbar from "./components/Boundary/Navbar";
 import Footer from "./components/Boundary/Footer";
 import Test from "./components/GetCertified/Test.jsx";
-import { expertDetailsObj } from "./constant";
 import ExpertDashboard, {
   Chats,
   Dashboard,
@@ -39,14 +43,14 @@ import ExpertDashboard, {
   MyBooking,
   MyServices,
 } from "./components/Experts/ExpertDashboard";
-import About from "./components/Other_Pages/About.jsx";
-import Update from "./components/Experts/EditDashboardProfile";
+const About = lazy(() => import("./components/Other_Pages/About.jsx"));
+// import Update from "./components/Experts/EditDashboardProfile";
 import SignUpAs from "./components/Auth/SignUpAs";
 import SignUpAsExpert from "./components/Auth/SignUpAsExpert";
 import SignUpAsCustomer from "./components/Auth/SignUpAsCustomer";
 import ForgotPassword from "./components/Auth/ForgotPassword";
 import EditProfileExpert from "./components/Auth/EditProfileExpert";
-import CreateService from "./components/Experts/CreateService";
+const CreateService = lazy(() => import("./components/Experts/CreateService"));
 import CustomerDashboard, {
   CustomerProfile,
   CustomerChats,
@@ -58,6 +62,7 @@ import ShowBlogs from "./subsitutes/ShowBlogs.jsx";
 import SkillList from "./components/GetCertified/Instructions.js";
 import UpdateService from "./components/Services/UpdateService.jsx";
 import TestElement from "./TestElement.jsx";
+import ExpertProfileShimmer from "./subsitutes/Shimmers/ExpertProfileShimmer.jsx";
 
 const userId = "user123"; // Replace with actual user ID
 const amount = 1000; // Replace with actual amount
@@ -149,14 +154,22 @@ const appRouter = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <Expert />,
+            element: (
+              <Suspense>
+                <Expert />
+              </Suspense>
+            ),
           },
           {
             path: "expertprofile/:id",
             children: [
               {
                 path: "",
-                element: <ExpertProfile />,
+                element: (
+                  <Suspense fallback={ExpertProfileShimmer()} >
+                    <ExpertProfile />
+                  </Suspense>
+                ),
               },
             ],
           },
@@ -164,11 +177,20 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "experts/expertprofile/booking/:id",
-        element: <ServiceBooking />,
+
+        element: (
+          <Suspense>
+            <ServiceBooking />
+          </Suspense>
+        ),
       },
       {
         path: "experts/service/:id",
-        element: <ServiceDescription />,
+        element: (
+          <Suspense>
+            <ServiceDescription fallback={ExpertProfileShimmer()} />
+          </Suspense>
+        ),
       },
 
       {
@@ -177,15 +199,28 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/services",
-        element: <Service />,
+        element: (
+          <Suspense>
+            <Service />
+          </Suspense>
+        ),
       },
       {
         path: "expertdashboard/createService",
-        element: <CreateService />,
+        element: (
+          <Suspense>
+            <CreateService />
+          </Suspense>
+        ),
       },
       {
         path: "/favourites",
-        element: <Favourites />,
+        element: (
+          <Suspense>
+            <Favourites />
+          </Suspense>
+        ),
+
         children: [
           {
             path: "",
@@ -210,19 +245,35 @@ const appRouter = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <Blog />,
+            element: (
+              <Suspense>
+                <Blog />
+              </Suspense>
+            ),
           },
           {
             path: "createblog",
-            element: <CreateBlog />,
+            element: (
+              <Suspense>
+                <CreateBlog />
+              </Suspense>
+            ),
           },
           {
             path: "editblog/:id",
-            element: <EditBlog />,
+            element: (
+              <Suspense>
+                <EditBlog />
+              </Suspense>
+            ),
           },
           {
             path: "blogdetail/:id",
-            element: <BlogDetails />,
+            element: (
+              <Suspense>
+                <BlogDetails />
+              </Suspense>
+            ),
           },
         ],
       },
@@ -262,15 +313,15 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/about",
-        element: <About />,
+        element: (
+          <Suspense>
+            <About />
+          </Suspense>
+        ),
       },
       {
         path: "updateservice/:id",
         element: <UpdateService />,
-      },
-      {
-        path: "editprofile",
-        element: <Update />,
       },
       {
         path: "customerdashboard",

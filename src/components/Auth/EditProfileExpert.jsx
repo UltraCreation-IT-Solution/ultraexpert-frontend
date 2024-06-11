@@ -5,7 +5,10 @@ import {
   BiSolidCaretRightSquare,
 } from "react-icons/bi";
 import { handleUploadImage } from "../../constant";
+import ImageUploader from "../../ImageUploader";
+import Modal from "../../Modal";
 import { FiUpload } from "react-icons/fi";
+import { GoPlus } from "react-icons/go";
 
 const cookies = document.cookie.split("; ");
 const jsonData = {};
@@ -17,6 +20,65 @@ cookies.forEach((item) => {
 const GeneralDetails = () => {
   const [loading, setLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
+  const [showModalProfile, setShowModalProfile] = useState(false);
+  const [showModalBackground, setShowModalBackground] = useState(false);
+  const [myImageBackground, setMyImageBackground] = useState(null);
+  const [myImageProfile, setMyImageProfile] = useState(null);
+
+  const onSelectFileProfile = (event) => {
+    setProfileLoading(true);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImageProfile(reader.result);
+        setShowModalProfile(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+  const onSelectFileBackground = (event) => {
+    setBannerLoading(true);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImageBackground(reader.result);
+        setShowModalBackground(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+
+  const handleCroppedImageProfile = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModalProfile(false); // Close the modal after getting the URL
+    setProfileLoading(false);
+    setMyImageProfile(url); // Reset the image state
+    setGeneralInfo({
+      ...generalInfo,
+      profile_img: url,
+    });
+  };
+  const handleCroppedImageBackground = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModalBackground(false); // Close the modal after getting the URL
+    setBannerLoading(false);
+    setMyImageBackground(url); // Reset the image state
+    setGeneralInfo({
+      ...generalInfo,
+      banner_img: url,
+    });
+  };
+  const closeModalProfile = () => {
+    setShowModalProfile(false);
+    setProfileLoading(false);
+    setMyImageProfile(generalInfo.profile_img); // Reset the image state when modal is closed
+  };
+  const closeModalBackground = () => {
+    setShowModalBackground(false);
+    setBannerLoading(false);
+    setMyImageBackground(generalInfo.banner_img); // Reset the image state when modal is closed
+  };
+
   const getGenInfo = async () => {
     setLoading(true);
     try {
@@ -43,8 +105,8 @@ const GeneralDetails = () => {
         banner_img: response.data.data.banner_img,
         gender: response.data.data.gender,
       });
-      setSelectedProfileUrl(response.data.data.profile_img);
-      setSelectedBannerUrl(response.data.data.banner_img);
+      setMyImageProfile(response.data.data.profile_img);
+      setMyImageBackground(response.data.data.banner_img);
       setDataLoading(true);
     } catch (error) {
       console.log(error);
@@ -116,42 +178,6 @@ const GeneralDetails = () => {
 
   const [profileLoading, setProfileLoading] = useState(false);
   const [bannerLoading, setBannerLoading] = useState(false);
-
-  const handleProfileChange = async (e) => {
-    setProfileLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setSelectedProfileUrl(url);
-    setGeneralInfo({
-      ...generalInfo,
-      profile_img: url,
-    });
-    setProfileLoading(false);
-  };
-  const handleBannerChange = async (e) => {
-    setBannerLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setSelectedBannerUrl(url);
-    setGeneralInfo({
-      ...generalInfo,
-      banner_img: url,
-    });
-    setBannerLoading(false);
-  };
-
-  const handleRemoveProfile = () => {
-    setSelectedProfile(null);
-  };
-  const handleRemoveBanner = () => {
-    setSelectedBanner(null);
-  };
 
   console.log(generalInfo);
   return (
@@ -271,17 +297,17 @@ const GeneralDetails = () => {
                     accept="image/*"
                     id="profileSelector"
                     name="profileSelector"
-                    onChange={handleProfileChange}
+                    onChange={onSelectFileProfile}
                     className="hidden"
                   />
                   {profileLoading ? (
                     <div className="flex w-full h-full items-center justify-center text-center">
                       <span>Loading...</span>
                     </div>
-                  ) : selectedProfileUrl ? (
+                  ) : myImageProfile ? (
                     <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                       <img
-                        src={selectedProfileUrl}
+                        src={myImageProfile}
                         alt="Preview"
                         className="w-auto h-40 shrink-0 object-cover object-center m-2"
                       />
@@ -293,6 +319,19 @@ const GeneralDetails = () => {
                     </div>
                   )}
                 </div>
+                <Modal
+                  className="w-full h-full overflow-scroll"
+                  show={showModalProfile}
+                  onClose={closeModalProfile}
+                >
+                  <ImageUploader
+                    image={myImageProfile}
+                    handleUploadImage={handleUploadImage}
+                    filename="cropped_image.jpg"
+                    onCropped={handleCroppedImageProfile}
+                    aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                  />
+                </Modal>
               </div>
               <div className="flex flex-col w-full">
                 <label htmlFor="banner" className="text-lg mb-1">
@@ -309,17 +348,17 @@ const GeneralDetails = () => {
                     accept="image/*"
                     id="bannerSelector"
                     name="bannerSelector"
-                    onChange={handleBannerChange}
+                    onChange={onSelectFileBackground}
                     className="hidden"
                   />
                   {bannerLoading ? (
                     <div className="flex w-full h-full items-center justify-center text-center">
                       <span>Loading...</span>
                     </div>
-                  ) : selectedBannerUrl ? (
+                  ) : myImageBackground ? (
                     <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
                       <img
-                        src={selectedBannerUrl}
+                        src={myImageBackground}
                         alt="Preview"
                         className="w-auto h-40 shrink-0 object-cover object-center m-2"
                       />
@@ -331,6 +370,19 @@ const GeneralDetails = () => {
                     </div>
                   )}
                 </div>
+                <Modal
+                  className="w-full h-full overflow-scroll"
+                  show={showModalBackground}
+                  onClose={closeModalBackground}
+                >
+                  <ImageUploader
+                    image={myImageBackground}
+                    handleUploadImage={handleUploadImage}
+                    filename="cropped_image.jpg"
+                    onCropped={handleCroppedImageBackground}
+                    aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                  />
+                </Modal>
               </div>
             </div>
           </div>
@@ -411,21 +463,6 @@ const PersonalDetails = () => {
     console.log(jsonData);
     setLoading(true);
     try {
-      // const response = await fetch("http://localhost:8000/experts/update/", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     action: 2,
-      //     level: personalInfo.level,
-      //     profession: personalInfo.profession,
-      //     about_me: personalInfo.about_me,
-      //   }),
-      //   credentials: "include",
-      // });
-      // const json = await response.json();
-      // console.log(json);
       const response = await axios.post(
         "/experts/update/",
         {
@@ -526,7 +563,7 @@ const PersonalDetails = () => {
             />
 
             <label htmlFor="about" className="text-lg mb-1">
-              About Me
+              About
             </label>
             <textarea
               required
@@ -540,7 +577,7 @@ const PersonalDetails = () => {
                   about_me: e.target.value,
                 });
               }}
-              className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
+              className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full min-h-20 shrink-0 mb-4"
               placeholder="I want to learn css, html, python with django"
             />
           </div>
@@ -567,14 +604,17 @@ const PersonalDetails = () => {
 };
 
 const EducationDetails = () => {
-  const [educationForms, setEducationForms] = useState([]);
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
+  const [education, setEducation] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [dataLoading, setDataLoading] = useState(false);
-
-  const addEducationForm = () => {
-    setEducationForms([...educationForms, { id: educationForms.length + 1 }]);
-  };
 
   const getEduInfo = async () => {
     setLoading(true);
@@ -590,42 +630,10 @@ const EducationDetails = () => {
         console.log("Something went wrong");
         return;
       }
-      console.log(response.data.data);
+      console.log(response.data.data.education);
+      setEducation(response.data.data.education);
       setLoading(false);
-      const eduData = response.data.data.education;
-      console.log(eduData);
 
-      setEducationForms(eduData.map((form, index) => ({ id: index + 1 })));
-
-      const updatedTypes = [];
-      const updatedInstituteNames = [];
-      const updatedCities = [];
-      const updatedStateNames = [];
-      const updatedCountries = [];
-      const updatedPassingYears = [];
-      const updatedDivisions = [];
-
-      // Populate the arrays with data from the server
-      eduData.forEach((form) => {
-        updatedTypes.push(form.type);
-        updatedInstituteNames.push(form.institute_name);
-        updatedCities.push(form.city);
-        updatedStateNames.push(form.state_name);
-        updatedCountries.push(form.country);
-        updatedPassingYears.push(form.passing_year);
-        updatedDivisions.push(form.Division);
-      });
-
-      // Update the state once with all the arrays
-      setEduInfo({
-        type: updatedTypes,
-        institute_name: updatedInstituteNames,
-        city: updatedCities,
-        state_name: updatedStateNames,
-        country: updatedCountries,
-        passing_year: updatedPassingYears,
-        Devision: updatedDivisions,
-      });
       setDataLoading(true);
     } catch (error) {
       console.log(error);
@@ -637,34 +645,67 @@ const EducationDetails = () => {
     getEduInfo();
   }, []);
 
-  const [eduInfo, setEduInfo] = useState({
-    type: [],
-    institute_name: [],
-    city: [],
-    state_name: [],
-    country: ["India"],
-    passing_year: [],
-    Devision: ["First"],
+  const [educationForm, setEducationForm] = useState({
+    type: "",
+    certificate: "",
+    institute_name: "",
+    city: "",
+    state_name: "",
+    country: "",
+    start_date: "",
+    end_date: "",
+    division: "",
   });
+  const handleChange1 = (e) => {
+    const { name, value } = e.target;
+    setEducationForm({
+      ...educationForm,
+      [name]: value,
+    });
+  };
+  const handleAddEducation = (e) => {
+    e.preventDefault();
+    if (
+      educationForm.type &&
+      educationForm.certificate &&
+      educationForm.institute_name &&
+      educationForm.city &&
+      educationForm.state_name &&
+      educationForm.country &&
+      educationForm.start_date &&
+      educationForm.end_date &&
+      educationForm.division
+    ) {
+      setEducation([...education, educationForm]);
+      setEducationForm({
+        type: "",
+        certificate: "",
+        institute_name: "",
+        city: "",
+        state_name: "",
+        country: "",
+        start_date: "",
+        end_date: "",
+        division: "",
+      });
+    }
+  };
 
+  const handleDeleteEducation = (index, e) => {
+    e.preventDefault();
+    const newEducation = education.filter((_, i) => i !== index);
+    setEducation(newEducation);
+  };
   const handleSubmit3 = async (e) => {
     e.preventDefault();
     setLoading(true);
+    // const educationJson = { education_json: education };
     try {
-      const educationData = educationForms.map((form, index) => ({
-        type: eduInfo.type[index],
-        institute_name: eduInfo.institute_name[index],
-        city: eduInfo.city[index],
-        state_name: eduInfo.state_name[index],
-        country: eduInfo.country[index],
-        passing_year: eduInfo.passing_year[index],
-        Devision: eduInfo.Devision[index],
-      }));
       const response = await axios.post(
         "/experts/update/",
         {
           action: 2,
-          education_json: educationData,
+          education_json: education,
         },
         {
           headers: {
@@ -679,7 +720,7 @@ const EducationDetails = () => {
         return;
       }
       setLoading(false);
-      console.log(data, educationData);
+      console.log(education);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
@@ -687,602 +728,241 @@ const EducationDetails = () => {
     }
   };
 
-  const removeEducationForm = (idToRemove) => {
-    const updatedEducationForms = educationForms.filter(
-      (form) => form.id !== idToRemove
-    );
-    setEducationForms(updatedEducationForms);
-    setEduInfo((prevEduInfo) => {
-      const updatedType = [...prevEduInfo.type];
-      const updatedInstituteName = [...prevEduInfo.institute_name];
-      const updatedCity = [...prevEduInfo.city];
-      const updatedCountry = [...prevEduInfo.country];
-      const updatedPassingYear = [...prevEduInfo.passing_year];
-      const updatedDevision = [...prevEduInfo.Devision];
-
-      updatedType.splice(idToRemove - 1, 1);
-      updatedInstituteName.splice(idToRemove - 1, 1);
-      updatedCity.splice(idToRemove - 1, 1);
-      updatedCountry.splice(idToRemove - 1, 1);
-      updatedPassingYear.splice(idToRemove - 1, 1);
-      updatedDevision.splice(idToRemove - 1, 1);
-
-      return {
-        ...prevEduInfo,
-        type: updatedType,
-        institute_name: updatedInstituteName,
-        city: updatedCity,
-        country: updatedCountry,
-        passing_year: updatedPassingYear,
-        Devision: updatedDevision,
-      };
-    });
-  };
-
   return (
-    <form onSubmit={handleSubmit3} className="grow h-full flex flex-col">
-      {dataLoading ? (
-        <>
-          <div className="flex justify-center mx-auto flex-col w-[65%] my-8 ">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                addEducationForm();
-              }}
-              className="underline cursor-pointer text-gray-400 bg-inherit hover:text-gray-700"
-            >
-              + Add Education
-            </button>
-            {educationForms.map((form, ind) => (
-              <>
-                <div key={form.id} className="flex justify-between">
-                  <p className="font-bold text-lg">Education {ind + 1}</p>
-                  <button
-                    onClick={() => removeEducationForm(form.id)}
-                    className="underline cursor-pointer text-red-400 bg-inherit hover:text-red-600"
-                  >
-                    - Remove Education
-                  </button>
-                </div>
-                <label htmlFor={`institute${form.id}`} className="text-lg mb-1">
-                  Institute Name
-                </label>
-                <input
-                  type="text"
-                  id={`institute${form.id}`}
-                  name={`institute${form.id}`}
-                  value={eduInfo.institute_name[ind]}
-                  onChange={(e) => {
-                    const updatedInstituteNames = [...eduInfo.institute_name];
-                    updatedInstituteNames[ind] = e.target.value;
-                    setEduInfo({
-                      ...eduInfo,
-                      institute_name: updatedInstituteNames,
-                    });
-                  }}
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  placeholder="Institute Name"
-                />
-                <div className="flex justify-around gap-5">
-                  <div className="flex flex-col w-full">
-                    <label htmlFor={`type${form.id}`} className="text-lg mb-1">
-                      Degree Type
-                    </label>
-                    <input
-                      type="text"
-                      id={`type${form.id}`}
-                      name={`type${form.id}`}
-                      value={eduInfo.type[ind]}
-                      onChange={(e) => {
-                        const updatedType = [...eduInfo.type];
-                        updatedType[ind] = e.target.value;
-                        setEduInfo({ ...eduInfo, type: updatedType });
-                      }}
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      placeholder="Type"
-                    />
-                  </div>
-                  <div className="flex flex-col w-full">
-                    <label
-                      htmlFor={`passing${form.id}`}
-                      className="text-lg mb-1"
-                    >
-                      Passing Year
-                    </label>
-                    <input
-                      type="text"
-                      id={`passing${form.id}`}
-                      name={`passing${form.id}`}
-                      value={eduInfo.passing_year[ind]}
-                      onChange={(e) => {
-                        const updatedPassingYear = [...eduInfo.passing_year];
-                        updatedPassingYear[ind] = e.target.value;
-                        setEduInfo({
-                          ...eduInfo,
-                          passing_year: updatedPassingYear,
-                        });
-                      }}
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      placeholder="Passing Year"
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-around gap-5">
-                  <div className="flex flex-col w-full">
-                    <label htmlFor={`city${form.id}`} className="text-lg mb-1">
-                      City
-                    </label>
-                    <input
-                      type="text"
-                      id={`city${form.id}`}
-                      name={`city${form.id}`}
-                      value={eduInfo.city[ind]}
-                      onChange={(e) => {
-                        const updatedCityName = [...eduInfo.city];
-                        updatedCityName[ind] = e.target.value;
-                        setEduInfo({ ...eduInfo, city: updatedCityName });
-                      }}
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      placeholder="City"
-                    />
-                  </div>
-                  <div className="flex flex-col w-full">
-                    <label htmlFor={`state${form.id}`} className="text-lg mb-1">
-                      State
-                    </label>
-                    <input
-                      type="text"
-                      id={`state${form.id}`}
-                      name={`state${form.id}`}
-                      value={eduInfo.state_name[ind]}
-                      onChange={(e) => {
-                        const updatedStateName = [...eduInfo.state_name];
-                        updatedStateName[ind] = e.target.value;
-                        setEduInfo({
-                          ...eduInfo,
-                          state_name: updatedStateName,
-                        });
-                      }}
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      placeholder="State"
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-around gap-5">
-                  <div className="flex flex-col w-full">
-                    <label
-                      htmlFor={`country${form.id}`}
-                      className="text-lg mb-1"
-                    >
-                      Country
-                    </label>
-                    <select
-                      name={`country${form.id}`}
-                      id={`country${form.id}`}
-                      value={eduInfo.country[ind]}
-                      onChange={(e) => {
-                        const updatedCountryNames = [...eduInfo.country];
-                        updatedCountryNames[ind] = e.target.value;
-                        setEduInfo({
-                          ...eduInfo,
-                          country: updatedCountryNames,
-                        });
-                      }}
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                    >
-                      <option value="United States">United States</option>
-                      <option value="Afghanistan">Afghanistan</option>
-                      <option value="Albania">Albania</option>
-                      <option value="Algeria">Algeria</option>
-                      <option value="American Samoa">American Samoa</option>
-                      <option value="Andorra">Andorra</option>
-                      <option value="Angola">Angola</option>
-                      <option value="Anguilla">Anguilla</option>
-                      <option value="Antartica">Antarctica</option>
-                      <option value="Antigua and Barbuda">
-                        Antigua and Barbuda
-                      </option>
-                      <option value="Argentina">Argentina</option>
-                      <option value="Armenia">Armenia</option>
-                      <option value="Aruba">Aruba</option>
-                      <option value="Australia">Australia</option>
-                      <option value="Austria">Austria</option>
-                      <option value="Azerbaijan">Azerbaijan</option>
-                      <option value="Bahamas">Bahamas</option>
-                      <option value="Bahrain">Bahrain</option>
-                      <option value="Bangladesh">Bangladesh</option>
-                      <option value="Barbados">Barbados</option>
-                      <option value="Belarus">Belarus</option>
-                      <option value="Belgium">Belgium</option>
-                      <option value="Belize">Belize</option>
-                      <option value="Benin">Benin</option>
-                      <option value="Bermuda">Bermuda</option>
-                      <option value="Bhutan">Bhutan</option>
-                      <option value="Bolivia">Bolivia</option>
-                      <option value="Bosnia and Herzegowina">
-                        Bosnia and Herzegowina
-                      </option>
-                      <option value="Botswana">Botswana</option>
-                      <option value="Bouvet Island">Bouvet Island</option>
-                      <option value="Brazil">Brazil</option>
-                      <option value="British Indian Ocean Territory">
-                        British Indian Ocean Territory
-                      </option>
-                      <option value="Brunei Darussalam">
-                        Brunei Darussalam
-                      </option>
-                      <option value="Bulgaria">Bulgaria</option>
-                      <option value="Burkina Faso">Burkina Faso</option>
-                      <option value="Burundi">Burundi</option>
-                      <option value="Cambodia">Cambodia</option>
-                      <option value="Cameroon">Cameroon</option>
-                      <option value="Canada">Canada</option>
-                      <option value="Cape Verde">Cape Verde</option>
-                      <option value="Cayman Islands">Cayman Islands</option>
-                      <option value="Central African Republic">
-                        Central African Republic
-                      </option>
-                      <option value="Chad">Chad</option>
-                      <option value="Chile">Chile</option>
-                      <option value="China">China</option>
-                      <option value="Christmas Island">Christmas Island</option>
-                      <option value="Cocos Islands">
-                        Cocos (Keeling) Islands
-                      </option>
-                      <option value="Colombia">Colombia</option>
-                      <option value="Comoros">Comoros</option>
-                      <option value="Congo">Congo</option>
-                      <option value="Congo">
-                        Congo, the Democratic Republic of the
-                      </option>
-                      <option value="Cook Islands">Cook Islands</option>
-                      <option value="Costa Rica">Costa Rica</option>
-                      <option value="Cota D'Ivoire">Cote d'Ivoire</option>
-                      <option value="Croatia">Croatia (Hrvatska)</option>
-                      <option value="Cuba">Cuba</option>
-                      <option value="Cyprus">Cyprus</option>
-                      <option value="Czech Republic">Czech Republic</option>
-                      <option value="Denmark">Denmark</option>
-                      <option value="Djibouti">Djibouti</option>
-                      <option value="Dominica">Dominica</option>
-                      <option value="Dominican Republic">
-                        Dominican Republic
-                      </option>
-                      <option value="East Timor">East Timor</option>
-                      <option value="Ecuador">Ecuador</option>
-                      <option value="Egypt">Egypt</option>
-                      <option value="El Salvador">El Salvador</option>
-                      <option value="Equatorial Guinea">
-                        Equatorial Guinea
-                      </option>
-                      <option value="Eritrea">Eritrea</option>
-                      <option value="Estonia">Estonia</option>
-                      <option value="Ethiopia">Ethiopia</option>
-                      <option value="Falkland Islands">
-                        Falkland Islands (Malvinas)
-                      </option>
-                      <option value="Faroe Islands">Faroe Islands</option>
-                      <option value="Fiji">Fiji</option>
-                      <option value="Finland">Finland</option>
-                      <option value="France">France</option>
-                      <option value="France Metropolitan">
-                        France, Metropolitan
-                      </option>
-                      <option value="French Guiana">French Guiana</option>
-                      <option value="French Polynesia">French Polynesia</option>
-                      <option value="French Southern Territories">
-                        French Southern Territories
-                      </option>
-                      <option value="Gabon">Gabon</option>
-                      <option value="Gambia">Gambia</option>
-                      <option value="Georgia">Georgia</option>
-                      <option value="Germany">Germany</option>
-                      <option value="Ghana">Ghana</option>
-                      <option value="Gibraltar">Gibraltar</option>
-                      <option value="Greece">Greece</option>
-                      <option value="Greenland">Greenland</option>
-                      <option value="Grenada">Grenada</option>
-                      <option value="Guadeloupe">Guadeloupe</option>
-                      <option value="Guam">Guam</option>
-                      <option value="Guatemala">Guatemala</option>
-                      <option value="Guinea">Guinea</option>
-                      <option value="Guinea-Bissau">Guinea-Bissau</option>
-                      <option value="Guyana">Guyana</option>
-                      <option value="Haiti">Haiti</option>
-                      <option value="Heard and McDonald Islands">
-                        Heard and Mc Donald Islands
-                      </option>
-                      <option value="Holy See">
-                        Holy See (Vatican City State)
-                      </option>
-                      <option value="Honduras">Honduras</option>
-                      <option value="Hong Kong">Hong Kong</option>
-                      <option value="Hungary">Hungary</option>
-                      <option value="Iceland">Iceland</option>
-                      <option value="India">India</option>
-                      <option value="Indonesia">Indonesia</option>
-                      <option value="Iran">Iran (Islamic Republic of)</option>
-                      <option value="Iraq">Iraq</option>
-                      <option value="Ireland">Ireland</option>
-                      <option value="Israel">Israel</option>
-                      <option value="Italy">Italy</option>
-                      <option value="Jamaica">Jamaica</option>
-                      <option value="Japan">Japan</option>
-                      <option value="Jordan">Jordan</option>
-                      <option value="Kazakhstan">Kazakhstan</option>
-                      <option value="Kenya">Kenya</option>
-                      <option value="Kiribati">Kiribati</option>
-                      <option value="Democratic People's Republic of Korea">
-                        Korea, Democratic People's Republic of
-                      </option>
-                      <option value="Korea">Korea, Republic of</option>
-                      <option value="Kuwait">Kuwait</option>
-                      <option value="Kyrgyzstan">Kyrgyzstan</option>
-                      <option value="Lao">
-                        Lao People's Democratic Republic
-                      </option>
-                      <option value="Latvia">Latvia</option>
-                      <option value="Lebanon">Lebanon</option>
-                      <option value="Lesotho">Lesotho</option>
-                      <option value="Liberia">Liberia</option>
-                      <option value="Libyan Arab Jamahiriya">
-                        Libyan Arab Jamahiriya
-                      </option>
-                      <option value="Liechtenstein">Liechtenstein</option>
-                      <option value="Lithuania">Lithuania</option>
-                      <option value="Luxembourg">Luxembourg</option>
-                      <option value="Macau">Macau</option>
-                      <option value="Macedonia">
-                        Macedonia, The Former Yugoslav Republic of
-                      </option>
-                      <option value="Madagascar">Madagascar</option>
-                      <option value="Malawi">Malawi</option>
-                      <option value="Malaysia">Malaysia</option>
-                      <option value="Maldives">Maldives</option>
-                      <option value="Mali">Mali</option>
-                      <option value="Malta">Malta</option>
-                      <option value="Marshall Islands">Marshall Islands</option>
-                      <option value="Martinique">Martinique</option>
-                      <option value="Mauritania">Mauritania</option>
-                      <option value="Mauritius">Mauritius</option>
-                      <option value="Mayotte">Mayotte</option>
-                      <option value="Mexico">Mexico</option>
-                      <option value="Micronesia">
-                        Micronesia, Federated States of
-                      </option>
-                      <option value="Moldova">Moldova, Republic of</option>
-                      <option value="Monaco">Monaco</option>
-                      <option value="Mongolia">Mongolia</option>
-                      <option value="Montserrat">Montserrat</option>
-                      <option value="Morocco">Morocco</option>
-                      <option value="Mozambique">Mozambique</option>
-                      <option value="Myanmar">Myanmar</option>
-                      <option value="Namibia">Namibia</option>
-                      <option value="Nauru">Nauru</option>
-                      <option value="Nepal">Nepal</option>
-                      <option value="Netherlands">Netherlands</option>
-                      <option value="Netherlands Antilles">
-                        Netherlands Antilles
-                      </option>
-                      <option value="New Caledonia">New Caledonia</option>
-                      <option value="New Zealand">New Zealand</option>
-                      <option value="Nicaragua">Nicaragua</option>
-                      <option value="Niger">Niger</option>
-                      <option value="Nigeria">Nigeria</option>
-                      <option value="Niue">Niue</option>
-                      <option value="Norfolk Island">Norfolk Island</option>
-                      <option value="Northern Mariana Islands">
-                        Northern Mariana Islands
-                      </option>
-                      <option value="Norway">Norway</option>
-                      <option value="Oman">Oman</option>
-                      <option value="Pakistan">Pakistan</option>
-                      <option value="Palau">Palau</option>
-                      <option value="Panama">Panama</option>
-                      <option value="Papua New Guinea">Papua New Guinea</option>
-                      <option value="Paraguay">Paraguay</option>
-                      <option value="Peru">Peru</option>
-                      <option value="Philippines">Philippines</option>
-                      <option value="Pitcairn">Pitcairn</option>
-                      <option value="Poland">Poland</option>
-                      <option value="Portugal">Portugal</option>
-                      <option value="Puerto Rico">Puerto Rico</option>
-                      <option value="Qatar">Qatar</option>
-                      <option value="Reunion">Reunion</option>
-                      <option value="Romania">Romania</option>
-                      <option value="Russia">Russian Federation</option>
-                      <option value="Rwanda">Rwanda</option>
-                      <option value="Saint Kitts and Nevis">
-                        Saint Kitts and Nevis
-                      </option>
-                      <option value="Saint Lucia">Saint LUCIA</option>
-                      <option value="Saint Vincent">
-                        Saint Vincent and the Grenadines
-                      </option>
-                      <option value="Samoa">Samoa</option>
-                      <option value="San Marino">San Marino</option>
-                      <option value="Sao Tome and Principe">
-                        Sao Tome and Principe
-                      </option>
-                      <option value="Saudi Arabia">Saudi Arabia</option>
-                      <option value="Senegal">Senegal</option>
-                      <option value="Seychelles">Seychelles</option>
-                      <option value="Sierra">Sierra Leone</option>
-                      <option value="Singapore">Singapore</option>
-                      <option value="Slovakia">
-                        Slovakia (Slovak Republic)
-                      </option>
-                      <option value="Slovenia">Slovenia</option>
-                      <option value="Solomon Islands">Solomon Islands</option>
-                      <option value="Somalia">Somalia</option>
-                      <option value="South Africa">South Africa</option>
-                      <option value="South Georgia">
-                        South Georgia and the South Sandwich Islands
-                      </option>
-                      <option value="Span">Spain</option>
-                      <option value="Sri Lanka">Sri Lanka</option>
-                      <option value="St. Helena">St. Helena</option>
-                      <option value="St. Pierre and Miguelon">
-                        St. Pierre and Miquelon
-                      </option>
-                      <option value="Sudan">Sudan</option>
-                      <option value="Suriname">Suriname</option>
-                      <option value="Svalbard">
-                        Svalbard and Jan Mayen Islands
-                      </option>
-                      <option value="Swaziland">Swaziland</option>
-                      <option value="Sweden">Sweden</option>
-                      <option value="Switzerland">Switzerland</option>
-                      <option value="Syria">Syrian Arab Republic</option>
-                      <option value="Taiwan">Taiwan, Province of China</option>
-                      <option value="Tajikistan">Tajikistan</option>
-                      <option value="Tanzania">
-                        Tanzania, United Republic of
-                      </option>
-                      <option value="Thailand">Thailand</option>
-                      <option value="Togo">Togo</option>
-                      <option value="Tokelau">Tokelau</option>
-                      <option value="Tonga">Tonga</option>
-                      <option value="Trinidad and Tobago">
-                        Trinidad and Tobago
-                      </option>
-                      <option value="Tunisia">Tunisia</option>
-                      <option value="Turkey">Turkey</option>
-                      <option value="Turkmenistan">Turkmenistan</option>
-                      <option value="Turks and Caicos">
-                        Turks and Caicos Islands
-                      </option>
-                      <option value="Tuvalu">Tuvalu</option>
-                      <option value="Uganda">Uganda</option>
-                      <option value="Ukraine">Ukraine</option>
-                      <option value="United Arab Emirates">
-                        United Arab Emirates
-                      </option>
-                      <option value="United Kingdom">United Kingdom</option>
-                      <option value="United States Minor Outlying Islands">
-                        United States Minor Outlying Islands
-                      </option>
-                      <option value="Uruguay">Uruguay</option>
-                      <option value="Uzbekistan">Uzbekistan</option>
-                      <option value="Vanuatu">Vanuatu</option>
-                      <option value="Venezuela">Venezuela</option>
-                      <option value="Vietnam">Viet Nam</option>
-                      <option value="Virgin Islands (British)">
-                        Virgin Islands (British)
-                      </option>
-                      <option value="Virgin Islands (U.S)">
-                        Virgin Islands (U.S.)
-                      </option>
-                      <option value="Wallis and Futana Islands">
-                        Wallis and Futuna Islands
-                      </option>
-                      <option value="Western Sahara">Western Sahara</option>
-                      <option value="Yemen">Yemen</option>
-                      <option value="Serbia">Serbia</option>
-                      <option value="Zambia">Zambia</option>
-                      <option value="Zimbabwe">Zimbabwe</option>
-                    </select>
-                  </div>
-                  <div className="flex flex-col w-full">
-                    <label
-                      htmlFor={`division${form.id}`}
-                      className="text-lg mb-1"
-                    >
-                      Division
-                    </label>
-                    <select
-                      name={`division${form.id}`}
-                      id={`division${form.id}`}
-                      value={eduInfo.Devision[ind]}
-                      onChange={(e) => {
-                        const updatedDivisionNames = [...eduInfo.Devision];
-                        updatedDivisionNames[ind] = e.target.value;
-                        setEduInfo({
-                          ...eduInfo,
-                          Devision: updatedDivisionNames,
-                        });
-                      }}
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                    >
-                      <option value="first">First</option>
-                      <option value="second">Second</option>
-                      <option value="third">Third</option>
-                      <option value="forth">Forth</option>
-                    </select>
-                  </div>
-                </div>
-              </>
-            ))}
-          </div>
-          <div className="flex justify-end mx-20 mb-8">
-            <button
-              type="submit"
-              className={
-                loading
-                  ? `px-6 py-2 text-gray-300 rounded-md font-semibold bg-inherit`
-                  : `cursor-pointer px-6 py-2 text-lg font-semibold text-blue-500 bg-inherit border border-solid border-gray-300 rounded-md shadow-md`
-              }
-            >
-              Update
-            </button>
-          </div>
-        </>
-      ) : (
+    <form onSubmit={handleSubmit3} className="flex flex-col w-full">
+      {!dataLoading ? (
         <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">
           Data Loading...
         </div>
+      ) : (
+        <>
+          <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
+              <label htmlFor="type" className="text-base md:text-lg mb-1">
+                Degree Type:
+              </label>
+              <input
+                type="text"
+                name="type"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="Type"
+                value={educationForm.type}
+                onChange={handleChange1}
+              />
+              <label
+                htmlFor="certificate"
+                className="text-base md:text-lg mb-1"
+              >
+                Course:
+              </label>
+              <input
+                type="text"
+                name="certificate"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="Course"
+                value={educationForm.certificate}
+                onChange={handleChange1}
+              />
+              <label
+                htmlFor="institute_name"
+                className="text-base md:text-lg mb-1"
+              >
+                Institute Name:
+              </label>
+              <input
+                type="text"
+                name="institute_name"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="Institute Name"
+                value={educationForm.institute_name}
+                onChange={handleChange1}
+              />
+              <label htmlFor="city" className="text-base md:text-lg mb-1">
+                City:
+              </label>
+              <input
+                type="text"
+                name="city"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="City"
+                value={educationForm.city}
+                onChange={handleChange1}
+              />
+              <label htmlFor="state_name" className="text-base md:text-lg mb-1">
+                State:
+              </label>
+              <input
+                type="text"
+                name="state_name"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="State Name"
+                value={educationForm.state_name}
+                onChange={handleChange1}
+              />
+              <label htmlFor="country" className="text-base md:text-lg mb-1">
+                Country:
+              </label>
+              <input
+                type="text"
+                name="country"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="Country"
+                value={educationForm.country}
+                onChange={handleChange1}
+              />
+              <label htmlFor="start_date" className="text-base md:text-lg mb-1">
+                Start Date:
+              </label>
+              <input
+                type="date"
+                name="start_date"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                value={educationForm.start_date}
+                onChange={handleChange1}
+              />
+              <label htmlFor="end_date" className="text-base md:text-lg mb-1">
+                End Date:
+              </label>
+              <input
+                type="date"
+                name="end_date"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                value={educationForm.end_date}
+                onChange={handleChange1}
+              />
+              <label htmlFor="Division" className="text-base md:text-lg mb-1">
+                Division:
+              </label>
+              <input
+                type="text"
+                name="division"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="Division"
+                value={educationForm.division}
+                onChange={handleChange1}
+              />
+            </div>
+            <div className="flex justify-center mb-4 sm:mb-6">
+              <button
+                className="flex items-center gap-1 btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
+                onClick={handleAddEducation}
+              >
+                <GoPlus size={22} /> Add Education
+              </button>
+            </div>
+          </div>
+          <div className="overflow-x-auto mx-10">
+            <table className="w-full bg-white border border-solid border-gray-300 mb-5">
+              <thead>
+                <tr>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    Type
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    Certificate
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    Institute Name
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    City
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    State
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    Country
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    Start Date
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    End Date
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    Division
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {education?.map((edu, index) => (
+                  <tr key={index} className="text-wrap">
+                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                      {edu.type}
+                    </td>
+                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                      {edu.certificate}
+                    </td>
+                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                      {edu.institute_name}
+                    </td>
+                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                      {edu.city}
+                    </td>
+                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                      {edu.state_name}
+                    </td>
+                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                      {edu.country}
+                    </td>
+                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                      {edu.start_date}
+                    </td>
+                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                      {edu.end_date}
+                    </td>
+                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                      {edu.division}
+                    </td>
+                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                      <button
+                        className="bg-white border border-solid border-black text-black p-2 rounded-sm"
+                        onClick={(e) => handleDeleteEducation(index, e)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex justify-center md:justify-end md:mx-20 mb-8">
+            <button
+              type="submit"
+              disabled={loading}
+              onClick={() =>
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth", // This smooth scrolls to the top
+                })
+              }
+              className={`${
+                loading
+                  ? "bg-gray-600 text-white py-2 px-4 w-full sm:w-auto rounded-sm cursor-not-allowed"
+                  : "bg-inherit"
+              } cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-blue-500 border border-solid border-gray-300 rounded-md shadow-md`}
+            >
+              Next
+            </button>
+          </div>
+        </>
       )}
     </form>
   );
 };
 
 const SkillDetails = () => {
-  const [selectedSkill, setSelectedSkill] = useState({
-    technology_name: [],
-    ratings: [],
-  });
-
+  const [skill, setSkill] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
-  const [skillForms, setSkillForms] = useState([]);
-
-  const addSkillForm = () => {
-    setSkillForms([...skillForms, { id: skillForms.length + 1 }]);
-  };
-  const handleSubmit4 = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const skillData = skillForms.map((form, index) => ({
-        technology_name: selectedSkill.technology_name[index],
-        ratings: selectedSkill.ratings[index],
-      }));
-      const response = await axios.post(
-        "/experts/update/",
-        {
-          action: 3,
-          skill_json: skillData,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      const data = response.data;
-      setLoading(false);
-      if (!data || data.status === 400 || data.status === 401) {
-        alert(data.message);
-        return;
-      }
-      console.log(data, skillData);
-      alert("Profile Updated Successfully!");
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
+  const [skillForms, setSkillForms] = useState({
+    technology_name: "",
+    ratings: "",
+  });
 
   const getSkillInfo = async () => {
     setLoading(true);
@@ -1302,20 +982,7 @@ const SkillDetails = () => {
       console.log(response.data.data);
       const skillData = response.data.data.skills;
       console.log(skillData);
-      setSkillForms(skillData.map((form, index) => ({ id: index + 1 })));
-
-      const updatedTechNames = [];
-      const updatedRatings = [];
-
-      skillData.forEach((form) => {
-        updatedTechNames.push(form.technology_name);
-        updatedRatings.push(form.ratings);
-      });
-
-      setSelectedSkill({
-        technology_name: updatedTechNames,
-        ratings: updatedRatings,
-      });
+      setSkill(skillData);
       setDataLoading(true);
     } catch (error) {
       console.log(error);
@@ -1327,22 +994,61 @@ const SkillDetails = () => {
     getSkillInfo();
   }, []);
 
-  const removeSkillForm = (id) => {
-    const updatedSkillForms = skillForms.filter((form) => form.id !== id);
-    setSkillForms(updatedSkillForms);
-    setSelectedSkill((prevSkill) => {
-      const updatedTechNames = [...prevSkill.technology_name];
-      const updatedRatings = [...prevSkill.ratings];
-      updatedTechNames.splice(id - 1, 1);
-      updatedRatings.splice(id - 1, 1);
-      return {
-        ...prevSkill,
-        technology_name: updatedTechNames,
-        ratings: updatedRatings,
-      };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSkillForms({
+      ...skillForms,
+      [name]: value,
     });
   };
 
+  const handleAddSkill = (e) => {
+    e.preventDefault();
+    if (skillForms.technology_name && skillForms.ratings) {
+      setSkill([...skill, skillForms]);
+      setSkillForms({ technology_name: "", ratings: "" });
+    }
+  };
+
+  const handleDeleteSkill = (index, e) => {
+    e.preventDefault();
+    const newSkills = skill.filter((_, i) => i !== index);
+    setSkill(newSkills);
+  };
+
+  const handleSubmit4 = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      // const skillJson = { skill_json: skill };
+      const response = await axios.post(
+        "/experts/update/",
+        {
+          action: 3,
+          skill_json: skill,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const data = response.data;
+      setLoading(false);
+      if (!data || data.status === 400 || data.status === 401) {
+        alert(data.message);
+        return;
+      }
+      console.log(data, skill);
+      alert("Profile Updated Successfully!");
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  console.log(skill);
   return (
     <form onSubmit={handleSubmit4} className="grow h-full flex flex-col">
       {!dataLoading ? (
@@ -1352,69 +1058,76 @@ const SkillDetails = () => {
       ) : (
         <>
           <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                addSkillForm();
-              }}
-              className="underline cursor-pointer text-gray-400 bg-inherit hover:text-gray-700"
-            >
-              + Add Skill
-            </button>
-            {skillForms.map((form, ind) => (
-              <>
-                <div key={form.id} className="flex justify-between">
-                  <p className="font-bold text-lg">Skill {ind + 1}</p>
-                  <button
-                    onClick={() => removeSkillForm(form.id)}
-                    className="underline cursor-pointer text-red-400 bg-inherit hover:text-red-600"
-                  >
-                    - Remove Skill
-                  </button>
-                </div>
-                <label
-                  htmlFor={`technology${form.id}`}
-                  className="text-lg mb-1"
-                >
-                  Technology Name
-                </label>
-                <input
-                  type="text"
-                  id={`technology${form.id}`}
-                  name={`technology${form.id}`}
-                  value={selectedSkill.technology_name[ind]}
-                  onChange={(e) => {
-                    const updatedTechNames = [...selectedSkill.technology_name];
-                    updatedTechNames[ind] = e.target.value;
-                    setSelectedSkill({
-                      ...selectedSkill,
-                      technology_name: updatedTechNames,
-                    });
-                  }}
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  placeholder="Technology Name"
-                />
-                <label htmlFor={`rating${form.id}`} className="text-lg mb-1">
-                  Rating
-                </label>
-                <input
-                  type="number"
-                  id={`rating${form.id}`}
-                  name={`rating${form.id}`}
-                  value={selectedSkill.ratings[ind]}
-                  onChange={(e) => {
-                    const updatedRatings = [...selectedSkill.ratings];
-                    updatedRatings[ind] = e.target.value;
-                    setSelectedSkill({
-                      ...selectedSkill,
-                      ratings: updatedRatings,
-                    });
-                  }}
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-[50%]"
-                  placeholder="1"
-                />
-              </>
-            ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
+              <label htmlFor="techName" className="text-base md:text-lg mb-1">
+                Technology Name:
+              </label>
+              <input
+                type="text"
+                name="technology_name"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="Technology Name"
+                value={skillForms.technology_name}
+                onChange={handleChange}
+              />
+              <label htmlFor="rating" className="text-base md:text-lg mb-1">
+                Rating:
+              </label>
+              <input
+                type="number"
+                name="ratings"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="Ratings (1-5)"
+                value={skillForms.ratings}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="flex justify-center mb-4 sm:mb-6">
+              <button
+                className="flex items-center gap-1 btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
+                onClick={handleAddSkill}
+              >
+                <GoPlus size={22} />
+                Add Skill
+              </button>
+            </div>
+          </div>
+          <div className="overflow-x-auto mx-10">
+            <table className="w-full bg-white border border-solid border-gray-300 mb-5">
+              <thead>
+                <tr>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    Technology Name
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    Ratings
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {skill?.map((s, index) => (
+                  <tr key={index} className="text-wrap">
+                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                      {s.technology_name}
+                    </td>
+                    <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                      {s.ratings}
+                    </td>
+                    <td className="p-2 border-b border-solid border-gray-300 text-center break-words">
+                      <button
+                        className="bg-white border border-solid border-black text-black p-2 rounded-sm"
+                        onClick={(e) => handleDeleteSkill(index, e)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
           <div className="flex justify-end mx-20 mb-8">
             <button
@@ -1437,57 +1150,39 @@ const SkillDetails = () => {
 const AchDetails = () => {
   const [loading, setLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
-  const [achInfo, setAchInfo] = useState({
-    name: [],
-    year: [],
-    certificate: [],
+  const [achievement, setAchievement] = useState([]);
+  const [achievementForm, setAchievementForm] = useState({
+    name: "",
+    year: "",
+    certificate: "",
   });
-  const [imageUrl, setImageUrl] = useState(null);
-  const [uploadCertificateProgress, setUploadCertificateProgress] = useState(0);
-
-  const [achForms, setAchForms] = useState([]);
-
-  const addAchForm = () => {
-    setAchForms([...achForms, { id: achForms.length + 1 }]);
-    setAchInfo((prevAchInfo) => ({
-      ...prevAchInfo,
-      name: [...prevAchInfo.name, ""],
-      year: [...prevAchInfo.year, ""],
-      certificate: [...prevAchInfo.certificate, ""],
-    }));
-  };
-
-  const [selectedCertificate, setSelectedCertificate] = useState([]);
 
   const [imageLoading, setImageLoading] = useState(false);
+  const [myImage, setMyImage] = useState(0);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleCertificateChange = async (e, ind) => {
+  const onSelectFile = (event) => {
     setImageLoading(true);
-    const url = await handleUploadImage(
-      e.target.files[0],
-      e.target.files[0].name
-    );
-    console.log(url);
-    setSelectedCertificate((prevSelectedCertificates) => {
-      const updatedSelectedCertificates = [...prevSelectedCertificates];
-      updatedSelectedCertificates[ind] = url;
-      return updatedSelectedCertificates;
-    });
-    setAchInfo((prevAchInfo) => {
-      const updatedCertificates = [...prevAchInfo.certificate];
-      updatedCertificates[ind] = url;
-      return { ...prevAchInfo, certificate: updatedCertificates };
-    });
-    setImageLoading(false);
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImage(reader.result);
+        setShowModal(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
   };
-
-  const handleRemoveCertificate = (ind) => {
-    const updatedSelectedCertificates = [...selectedCertificate];
-    updatedSelectedCertificates[ind] = null;
-    setSelectedCertificate(updatedSelectedCertificates);
-    const updatedCertificates = [...achInfo.certificate];
-    updatedCertificates[ind] = null;
-    setAchInfo({ ...achInfo, certificate: updatedCertificates });
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(url); // Reset the image state
+    setAchievementForm({ ...achievementForm, certificate: url });
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    setImageLoading(false);
+    setMyImage(achievement.certificate); // Reset the image state when modal is closed
   };
 
   const getAchForm = async () => {
@@ -1508,27 +1203,7 @@ const AchDetails = () => {
       setLoading(false);
       const achData = response.data.data.achievements;
       console.log(achData);
-
-      setAchForms(achData.map((form, index) => ({ id: index + 1 })));
-
-      const updatedNames = [];
-      const updatedYears = [];
-      const updatedCertificates = [];
-
-      achData.forEach((form) => {
-        updatedNames.push(form.name);
-        updatedYears.push(form.year);
-        updatedCertificates.push(form.certificate);
-      });
-
-      setAchInfo({
-        name: updatedNames,
-        year: updatedYears,
-        certificate: updatedCertificates,
-      });
-
-      setSelectedCertificate(updatedCertificates);
-
+      setAchievement(achData);
       setDataLoading(true);
     } catch (error) {
       console.log(error);
@@ -1540,22 +1215,48 @@ const AchDetails = () => {
     getAchForm();
   }, []);
 
+  const handleChange = (e) => {
+    const { name, value, type, files } = e.target;
+    setAchievementForm({
+      ...achievementForm,
+      [name]: type === "file" ? files[0] : value,
+    });
+  };
+
+  const handleAddAchievement = (e) => {
+    console.log(achievementForm);
+    e.preventDefault();
+    if (
+      achievementForm.name &&
+      achievementForm.year &&
+      achievementForm.certificate
+    ) {
+      setAchievement([...achievement, achievementForm]);
+      setAchievementForm({
+        name: "",
+        year: "",
+        certificate: "",
+      });
+      setMyImage(0);
+    }
+  };
+
+  const handleDeleteAchievement = (index, e) => {
+    e.preventDefault();
+    const newAchievements = achievement.filter((_, i) => i !== index);
+    setAchievement(newAchievements);
+  };
+
   const handleSubmit4 = async (e) => {
-    console.log(achInfo);
-    console.log(selectedCertificate);
     e.preventDefault();
     setLoading(true);
+    // const achievementJson = { achievements_json: achievement };
     try {
-      const achData = achForms.map((form, index) => ({
-        name: achInfo.name[index],
-        year: achInfo.year[index],
-        certificate: achInfo.certificate[index],
-      }));
       const response = await axios.post(
         "/experts/update/",
         {
           action: 7,
-          achievements_json: achData,
+          achievements_json: achievement,
         },
         {
           headers: {
@@ -1570,7 +1271,7 @@ const AchDetails = () => {
         console.log(data.message);
         return;
       }
-      console.log(data, achData);
+      console.log(data, achievement);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
@@ -1578,27 +1279,7 @@ const AchDetails = () => {
     }
   };
 
-  const removeAchForm = (id) => {
-    const updatedAchForms = achForms.filter((form) => form.id !== id);
-    setAchForms(updatedAchForms);
-    setAchInfo((prevAchInfo) => {
-      const updatedNames = [...prevAchInfo.name];
-      const updatedYears = [...prevAchInfo.year];
-      const updatedCertificates = [...prevAchInfo.certificate];
-
-      updatedNames.splice(id - 1, 1);
-      updatedYears.splice(id - 1, 1);
-      updatedCertificates.splice(id - 1, 1);
-
-      return {
-        ...prevAchInfo,
-        name: updatedNames,
-        year: updatedYears,
-        certificate: updatedCertificates,
-      };
-    });
-  };
-
+  console.log(achievement);
   return (
     <form onSubmit={handleSubmit4} className="grow h-full flex flex-col">
       {!dataLoading ? (
@@ -1607,106 +1288,149 @@ const AchDetails = () => {
         </div>
       ) : (
         <>
-          <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                addAchForm();
-              }}
-              className="underline cursor-pointer text-gray-400 bg-inherit hover:text-gray-700"
-            >
-              + Add Achievment
-            </button>
-            {achForms.map((form, ind) => (
-              <>
-                <div key={form.id} className="flex justify-between">
-                  <p className="font-bold text-lg">Achievement {ind + 1}</p>
-                  <button
-                    onClick={() => removeAchForm(form.id)}
-                    className="underline cursor-pointer text-red-400 bg-inherit hover:text-red-600"
-                  >
-                    - Remove Achievement
-                  </button>
-                </div>
-                <label htmlFor={`name${form.id}`} className="text-lg mb-1">
-                  Achievement Name
-                </label>
+          <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
+              <label htmlFor="name" className="text-base md:text-lg mb-1">
+                Achievement Name:
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="Achievement Name"
+                value={achievementForm.name}
+                onChange={handleChange}
+              />
+              <label htmlFor="year" className="text-base md:text-lg mb-1">
+                Year:
+              </label>
+              <input
+                type="number"
+                name="year"
+                id="year"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="Year"
+                value={achievementForm.year}
+                onChange={handleChange}
+              />
+              <label
+                htmlFor="certificate"
+                className="text-base md:text-lg mb-1"
+              >
+                Certificate:
+              </label>
+              <div
+                onClick={() =>
+                  document.querySelector("#certificateSelector").click()
+                }
+                className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
+              >
                 <input
-                  type="text"
-                  id={`name${form.id}`}
-                  name={`name${form.id}`}
-                  value={achInfo.name[ind]}
-                  onChange={(e) => {
-                    const updatedTechNames = [...achInfo.name];
-                    updatedTechNames[ind] = e.target.value;
-                    setAchInfo({
-                      ...achInfo,
-                      name: updatedTechNames,
-                    });
-                  }}
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  placeholder="Achievement Name"
+                  type="file"
+                  name="certificateSelector"
+                  id="certificateSelector"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={onSelectFile}
                 />
-                <label htmlFor={`year${form.id}`} className="text-lg mb-1">
-                  Achievement Year
-                </label>
-                <input
-                  type="number"
-                  id={`year${form.id}`}
-                  name={`year${form.id}`}
-                  value={achInfo.year[ind]}
-                  onChange={(e) => {
-                    const updatedRatings = [...achInfo.year];
-                    updatedRatings[ind] = e.target.value;
-                    setAchInfo({
-                      ...achInfo,
-                      year: updatedRatings,
-                    });
-                  }}
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4 w-full"
-                  placeholder="Enter Year"
+                {imageLoading ? (
+                  <div className="flex w-full h-full items-center justify-center text-center">
+                    <span>Loading...</span>
+                  </div>
+                ) : myImage ? (
+                  <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
+                    <img
+                      src={myImage}
+                      alt="Preview"
+                      className="w-auto h-40 shrink-0 object-cover object-center m-2"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center w-full h-full text-gray-600">
+                    <FiUpload className="w-10 h-10" />
+                    <span className="ml-2">Upload Image</span>
+                  </div>
+                )}
+              </div>
+              <Modal show={showModal} onClose={closeModal}>
+                <ImageUploader
+                  image={myImage}
+                  handleUploadImage={handleUploadImage}
+                  filename="cropped_image.jpg"
+                  onCropped={handleCroppedImage}
+                  aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
                 />
-                <label
-                  className="text-lg mb-1 flex gap-1"
-                  htmlFor={`certificate${form.id}`}
-                >
-                  Certificate
-                </label>
-                <div
-                  className="flex flex-col justify-center items-center border border-dashed border-[#1475cf] h-[200px] w-full cursor-pointer rounded-lg"
-                  onClick={() =>
-                    document.querySelector(`#certificate${form.id}`).click()
-                  }
-                >
-                  <input
-                    type="file"
-                    name={`certificate${form.id}`}
-                    id={`certificate${form.id}`}
-                    className="hidden"
-                    onChange={(e) => handleCertificateChange(e, ind)}
-                    aria-label="Upload certificate for achievement"
-                  />
-                  {imageLoading ? (
-                    <div className="flex w-full h-full items-center justify-center text-center">
-                      <span>Loading...</span>
-                    </div>
-                  ) : selectedCertificate[ind] ? (
-                    <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
-                      <img
-                        src={selectedCertificate[ind]}
-                        alt="Preview"
-                        className="w-auto h-40 shrink-0 object-cover object-center m-2"
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center w-full h-full text-gray-600">
-                      <FiUpload className="w-10 h-10" />
-                      <span className="ml-2">Upload Image</span>
-                    </div>
-                  )}
-                </div>
-              </>
-            ))}
+              </Modal>
+            </div>
+
+            <div className="flex justify-center mb-4 sm:mb-6">
+              <button
+                className="flex items-center gap-1 btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
+                onClick={handleAddAchievement}
+              >
+                <GoPlus size={22} /> Add Achievement
+              </button>
+            </div>
+          </div>
+          <div className="overflow-x-auto mx-10">
+            <table className="w-full bg-white border border-solid border-gray-300 mb-5">
+              <thead>
+                <tr>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    Achievement Name
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    Year
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300 border-r">
+                    Certificate
+                  </th>
+                  <th className="p-2 border-solid border-b border-gray-300">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {console.log(achievement)}
+                {achievement.length > 0 &&
+                  achievement?.map((a, index) => (
+                    <tr key={index} className="text-wrap">
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        {a.name}
+                      </td>
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        {a.year}
+                      </td>
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        {typeof a.certificate === "object" &&
+                        a.certificate instanceof Blob ? (
+                          <img
+                            src={URL.createObjectURL(a.certificate)}
+                            alt="Certificate"
+                            className="w-20 h-20 object-cover"
+                          />
+                        ) : (
+                          // Handle the case where it's a string (existing logic)
+                          <img
+                            src={a.certificate}
+                            alt="Certificate"
+                            className="w-20 h-20 object-cover"
+                          />
+                        )}
+                      </td>
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        <button
+                          className="bg-white border border-solid border-black text-black p-2 rounded-sm"
+                          onClick={(e) => handleDeleteAchievement(index, e)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </div>
           <div className="flex justify-end mx-20 mb-8">
             <button
@@ -1728,24 +1452,84 @@ const AchDetails = () => {
 
 const ExperienceDetails = () => {
   const [loading, setLoading] = useState(false);
-  const [expInfo, setExpInfo] = useState({
-    company_name: [],
-    start_date: [],
-    end_date: [],
-    designation: [],
+  const [experience, setExperience] = useState([]);
+
+  const [experienceForms, setExperienceForms] = useState({
+    company_name: "",
+    start_date: "",
+    isPresent: false,
+    end_date: "",
+    designation: "",
   });
 
-  const [experienceForms, setExperienceForms] = useState([]);
+  const getExpInfo = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get("/experts/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const data = response.data;
+      setLoading(false);
+      if (!data || data.status === 400 || data.status === 401) {
+        alert(data);
+        return;
+      }
+      console.log(response.data.data);
+      const expData = response.data.data.experience;
+      console.log(expData);
 
-  const addExperienceForm = () => {
-    setExperienceForms([
-      ...experienceForms,
-      { id: experienceForms.length + 1 },
-    ]);
+      setExperience(expData);
+      setDataLoading(true);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    getExpInfo();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setExperienceForms({
+      ...experienceForms,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const handleAddExperience = (e) => {
+    e.preventDefault();
+    if (
+      experienceForms.company_name &&
+      experienceForms.start_date &&
+      experienceForms.designation &&
+      (experienceForms.isPresent || experienceForms.end_date)
+    ) {
+      setExperience([...experience, experienceForms]);
+      setExperienceForms({
+        company_name: "",
+        start_date: "",
+        isPresent: false,
+        end_date: "",
+        designation: "",
+      });
+    }
+  };
+
+  const handleDeleteExperience = (index, e) => {
+    e.preventDefault();
+    const newExperience = experience.filter((_, i) => i !== index);
+    setExperience(newExperience);
+  };
+
   const handleSubmit6 = async (e) => {
     e.preventDefault();
     setLoading(true);
+    // const experienceJson = { experience_json: experience };
     try {
       // const response = await fetch("http://localhost:8000/experts/update/", {
       //   method: "POST",
@@ -1767,17 +1551,12 @@ const ExperienceDetails = () => {
       // });
       // const json = await response.json();
       // console.log(json);
-      const experienceData = experienceForms.map((form, index) => ({
-        company_name: expInfo.company_name[index],
-        start_date: expInfo.start_date[index],
-        end_date: expInfo.end_date[index],
-        designation: expInfo.designation[index],
-      }));
+
       const response = await axios.post(
         "/experts/update/",
         {
           action: 4,
-          experience_json: experienceData,
+          experience_json: experience,
         },
         {
           headers: {
@@ -1792,85 +1571,12 @@ const ExperienceDetails = () => {
         alert(data.message);
         return;
       }
-      console.log(data, experienceData);
+      console.log(data, experience);
       alert("Profile Updated Successfully!");
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
-  };
-
-  const getExpInfo = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get("/experts/?action=1", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
-      const data = response.data;
-      setLoading(false);
-      if (!data || data.status === 400 || data.status === 401) {
-        alert(data);
-        return;
-      }
-      console.log(response.data.data);
-      const expData = response.data.data.experience;
-      console.log(expData);
-
-      setExperienceForms(expData.map((form, index) => ({ id: index + 1 })));
-
-      const updatedCompName = [];
-      const updatedStartDate = [];
-      const updatedEndDate = [];
-      const updatedDesignation = [];
-
-      expData.forEach((form) => {
-        updatedCompName.push(form.company_name);
-        updatedStartDate.push(form.start_date);
-        updatedEndDate.push(form.is_present ? "" : form.end_date);
-        updatedDesignation.push(form.designation);
-      });
-
-      setExpInfo({
-        company_name: updatedCompName,
-        start_date: updatedStartDate,
-        end_date: updatedEndDate,
-        designation: updatedDesignation,
-      });
-      setDataLoading(true);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getExpInfo();
-  }, []);
-
-  const removeExpForm = (id) => {
-    const updatedExpForms = experienceForms.filter((form) => form.id !== id);
-
-    setExperienceForms(updatedExpForms);
-    setExpInfo((prevExpInfo) => {
-      const updatedCompName = [...prevExpInfo.company_name];
-      const updatedStartDate = [...prevExpInfo.start_date];
-      const updatedEndDate = [...prevExpInfo.end_date];
-      const updatedDesignation = [...prevExpInfo.designation];
-      updatedCompName.splice(id - 1, 1);
-      updatedStartDate.splice(id - 1, 1);
-      updatedEndDate.splice(id - 1, 1);
-      updatedDesignation.splice(id - 1, 1);
-      return {
-        ...prevExpInfo,
-        company_name: updatedCompName,
-        start_date: updatedStartDate,
-        end_date: updatedEndDate,
-        designation: updatedDesignation,
-      };
-    });
   };
 
   const [dataLoading, setDataLoading] = useState(false);
@@ -1883,132 +1589,148 @@ const ExperienceDetails = () => {
         </div>
       ) : (
         <>
-          <div className="flex justify-center mx-auto flex-col w-[65%] my-8">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                addExperienceForm();
-              }}
-              className="underline cursor-pointer text-gray-400 bg-inherit hover:text-gray-700"
-            >
-              + Add Experience
-            </button>
-            {experienceForms.map((form, ind) => (
-              <>
-                <div key={form.id} className="flex justify-between">
-                  <p className="font-bold text-lg">Experience {ind + 1}</p>
-                  <button
-                    onClick={() => removeExpForm(form.id)}
-                    className="underline cursor-pointer text-red-400 bg-inherit hover:text-red-600"
+          <div className="flex justify-center mx-auto flex-col w-[90%] md:w-[75%] lg:w-[65%] mb-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:my-6">
+              <label
+                htmlFor="company_name"
+                className="text-base md:text-lg mb-1"
+              >
+                Company Name:
+              </label>
+              <input
+                type="text"
+                name="company_name"
+                id="company_name"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="Company Name"
+                value={experienceForms.company_name}
+                onChange={handleChange}
+              />
+              <label
+                htmlFor="designation"
+                className="text-base md:text-lg mb-1"
+              >
+                Designation:
+              </label>
+              <input
+                type="text"
+                name="designation"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                placeholder="Designation"
+                value={experienceForms.designation}
+                onChange={handleChange}
+              />
+              <label htmlFor="start_date" className="text-base md:text-lg mb-1">
+                Start Date:
+              </label>
+              <input
+                type="date"
+                name="start_date"
+                className="border border-solid border-slate-400 rounded-sm p-2"
+                value={experienceForms.start_date}
+                onChange={handleChange}
+              />
+              <div className="flex flex-col sm:col-span-2">
+                <div className="flex items-center mb-4 justify-between">
+                  <label
+                    htmlFor="isPresent"
+                    className="text-base md:text-lg mb-1"
                   >
-                    - Remove Experience
-                  </button>
+                    Currently Working Here:
+                  </label>
+                  <div>
+                    <input
+                      type="checkbox"
+                      name="isPresent"
+                      className="border p-2"
+                      checked={experienceForms.isPresent}
+                      onChange={handleChange}
+                    />
+                    <label
+                      htmlFor="isPresent"
+                      className="text-base md:text-lg mb-1"
+                    >
+                      Yes
+                    </label>
+                  </div>
                 </div>
-                <label htmlFor={`company${form.id}`} className="text-lg mb-1">
-                  Company Name
-                </label>
-                <input
-                  type="text"
-                  id={`company${form.id}`}
-                  name={`company${form.id}`}
-                  value={expInfo.company_name[ind]}
-                  onChange={(e) => {
-                    const updatedCompany = [...expInfo.company_name];
-                    updatedCompany[ind] = e.target.value;
-                    setExpInfo({
-                      ...expInfo,
-                      company_name: updatedCompany,
-                    });
-                  }}
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  placeholder="Company Name"
-                />
-                <div className="flex justify-around gap-5">
-                  <div className="flex flex-col w-full">
-                    <label htmlFor={`start${form.id}`} className="text-lg mb-1">
-                      Start Year
+
+                {!experienceForms.isPresent && (
+                  <div className="flex items-center mb-4 justify-between">
+                    <label
+                      htmlFor="end_date"
+                      className="text-base md:text-lg mb-1"
+                    >
+                      End Date:
                     </label>
                     <input
                       type="date"
-                      id={`start${form.id}`}
-                      name={`start${form.id}`}
-                      value={expInfo.start_date[ind]}
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      onChange={(e) => {
-                        const selectedDate = new Date(e.target.value);
-                        const year = selectedDate.getFullYear();
-                        const month = String(
-                          selectedDate.getMonth() + 1
-                        ).padStart(2, "0");
-                        const day = String(selectedDate.getDate()).padStart(
-                          2,
-                          "0"
-                        );
-                        const formattedDate = `${year}-${month}-${day}`;
-                        const updatedStartDate = [...expInfo.start_date];
-                        updatedStartDate[ind] = formattedDate;
-                        setExpInfo({
-                          ...expInfo,
-                          start_date: updatedStartDate,
-                        });
-                      }}
+                      name="end_date"
+                      className="border border-solid border-slate-400 rounded-sm p-2 md:w-[250px]"
+                      value={experienceForms.end_date}
+                      onChange={handleChange}
                     />
                   </div>
-                  <div className="flex flex-col w-full">
-                    <label htmlFor={`end${form.id}`} className="text-lg mb-1">
-                      End Year
-                    </label>
-                    <input
-                      type="date"
-                      id={`end${form.id}`}
-                      name={`end${form.id}`}
-                      value={expInfo.end_date[ind]}
-                      className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                      onChange={(e) => {
-                        const selectedDate = new Date(e.target.value);
-                        const year = selectedDate.getFullYear();
-                        const month = String(
-                          selectedDate.getMonth() + 1
-                        ).padStart(2, "0");
-                        const day = String(selectedDate.getDate()).padStart(
-                          2,
-                          "0"
-                        );
-                        const formattedDate = `${year}-${month}-${day}`;
-                        const updatedEndDate = [...expInfo.end_date];
-                        updatedEndDate[ind] = formattedDate;
-                        setExpInfo({
-                          ...expInfo,
-                          end_date: updatedEndDate,
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-                <label
-                  htmlFor={`designtaion${form.id}`}
-                  className="text-lg mb-1"
-                >
-                  Designation
-                </label>
-                <input
-                  type="text"
-                  id={`designtaion${form.id}`}
-                  name={`designtaion${form.id}`}
-                  value={expInfo.designation[ind]}
-                  onChange={(e) => {
-                    const updatedDesignation = [...expInfo.designation];
-                    updatedDesignation[ind] = e.target.value;
-                    setExpInfo({
-                      ...expInfo,
-                      designation: updatedDesignation,
-                    });
-                  }}
-                  className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
-                  placeholder="Designtaion"
-                />
-              </>
-            ))}
+                )}
+              </div>
+            </div>
+            <div className="flex justify-center mb-4 sm:mb-6">
+              <button
+                className="flex items-center gap-1 btnBlack text-white p-2 w-full sm:w-auto rounded-sm"
+                onClick={handleAddExperience}
+              >
+                <GoPlus size={22} /> Add Experience
+              </button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full bg-white border border-solid border-gray-300 mb-5">
+                <thead>
+                  <tr>
+                    <th className="p-2 border-solid border-b border-gray-300 border-r">
+                      Company Name
+                    </th>
+                    <th className="p-2 border-solid border-b border-gray-300 border-r">
+                      Start Date
+                    </th>
+                    <th className="p-2 border-solid border-b border-gray-300 border-r">
+                      End Date
+                    </th>
+                    <th className="p-2 border-solid border-b border-gray-300 border-r">
+                      Designation
+                    </th>
+                    <th className="p-2 border-solid border-b border-gray-300">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {experience.map((exp, index) => (
+                    <tr key={index} className="text-wrap">
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        {exp.company_name}
+                      </td>
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        {exp.start_date}
+                      </td>
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        {exp.isPresent ? "Present" : exp.end_date}
+                      </td>
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        {exp.designation}
+                      </td>
+                      <td className="p-2 border-b border-solid border-gray-300 border-r text-center break-words">
+                        <button
+                          className="bg-white text-black rounded-sm border border-solid border-black p-2"
+                          onClick={(e) => handleDeleteExperience(index, e)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
           <div className="flex justify-end mx-20 mb-8">
             <button

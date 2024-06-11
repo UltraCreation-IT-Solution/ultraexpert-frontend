@@ -3,7 +3,7 @@ import { IoBookmarksSharp } from "react-icons/io5";
 import { MdVideoChat } from "react-icons/md";
 import { FaHistory, FaWallet, FaUserAlt } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp, IoMdMenu } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BsFillChatSquareTextFill } from "react-icons/bs";
 import { Link, Outlet } from "react-router-dom";
@@ -547,7 +547,7 @@ export const CustomerChats = () => {
     </div>
   );
 };
-export const CustomerBookings = ({ id }) => {
+export const CustomerBookings = () => {
   const [myBookings, setMyBookings] = useState([]);
   const [shimmer, setShimmer] = useState(false);
   const cookies = document.cookie.split("; ");
@@ -559,12 +559,11 @@ export const CustomerBookings = ({ id }) => {
   useEffect(() => {
     getMyBookings();
   }, []);
-
   const getMyBookings = async () => {
     setShimmer(true);
     try {
       const res = await axios.get(
-        `/customers/connect/?action=6&customer_id=${4}`,
+        `/customers/connect/?action=6&customer_id=${localStorage.customer_id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -732,6 +731,7 @@ export const CustomerTransactionHistory = () => {
   );
 };
 const CustomerDashboard = () => {
+  const [menu, setMenu] = useState(false);
   const [userData, setUserData] = useState({});
   const cookies = document.cookie.split("; ");
   const jsonData = {};
@@ -833,7 +833,7 @@ const CustomerDashboard = () => {
             <div className="text-base lg:text-xl font-bold mt-4">
               {userData?.first_name} {userData?.last_name}
             </div>
-            <div className="text-sm text-justify line-clamp-3">
+            <div className="text-sm text-balance line-clamp-3">
               {userData?.about_me}
             </div>
           </div>
@@ -884,11 +884,33 @@ const CustomerDashboard = () => {
           </div>
         </div>
       </div>
+      <div className="block md:hidden">
+        <div
+          className="flex items-center gap-3 relative z-[100000]"
+          onClick={() => setMenu(!menu)}
+        >
+          <IoMdMenu className="text-2xl" />
+          <div>Naman Paliwal</div>
+          {menu && (
+            <div
+              className="absolute top-0 left-0 bg-white z-[100000] overflow-visible
+          "
+            >
+              <div>Profile</div>
+              <div>Chat</div>
+              <div>My Bookings</div>
+              <div>Recent Meetings</div>
+              <div>Transaction History</div>
+              <div>Wallet</div>
+            </div>
+          )}
+        </div>
+      </div>
       <Outlet>
         <CustomerProfile />
         <CustomerChats />
         <ShowBlogs />
-        <CustomerBookings id={userData?.id} />
+        <CustomerBookings />
         <CustomerRecentMeetngs />
         <CustomerTransactionHistory />
       </Outlet>
