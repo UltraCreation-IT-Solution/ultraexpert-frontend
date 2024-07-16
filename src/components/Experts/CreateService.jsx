@@ -261,7 +261,7 @@ const CreateService = () => {
   });
 
   const handleServiceCreate = async (e) => {
-    e.preventDefault();
+   e.preventDefault();
     setShowSlots(!showSlots);
 
     const cookie = document.cookie.split(";");
@@ -316,9 +316,7 @@ const CreateService = () => {
     } catch (error) {
       console.log(error);
     }
-  };
-  console.log(showModal);
-  console.log(ImageUploader);
+  };6
   return (
     <>
       {!showSlots ? (
@@ -596,8 +594,15 @@ const CreateService = () => {
               <div className="flex justify-center mb-4">
                 <button
                   type="submit"
-                  onClick={(e) => handleServiceCreate(e)}
-                  className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white btnBlack rounded-sm"
+                  disabled={
+                    serviceTitle==="" || createService.price === "" || val==="" || selectedCategory.name === "" || createService.desc === "" || !myImage
+                  }
+                  onClick={(e) => (handleServiceCreate(e))}
+                  className={`px-6 py-2 text-base md:text-lg font-semibold text-white rounded-sm ${
+                    serviceTitle==="" || createService.price === "" || val==="" || selectedCategory.name === "" || createService.desc === "" || !myImage 
+                      ? "cursor-not-allowed bg-black/70"
+                      : "btnBlack"
+                  }`}
                 >
                   Create time slots
                 </button>
@@ -643,8 +648,6 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
   const [endInputTime, setEndInputTime] = useState("");
 
   const [loading, setLoading] = useState(false);
-
-  console.log(serviceId);
   const handlePostEvent = async (e) => {
     e.preventDefault();
     const cookies = document.cookie.split("; ");

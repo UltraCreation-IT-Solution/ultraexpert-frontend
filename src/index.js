@@ -32,6 +32,7 @@ const ServiceDescription = lazy(() =>
 const ServiceBooking = lazy(() =>
   import("./components/Experts/ServiceBooking")
 );
+import Feedback from "./components/Other_Pages/Feedback.jsx";
 import Error from "./subsitutes/Error";
 import Navbar from "./components/Boundary/Navbar";
 import Footer from "./components/Boundary/Footer";
@@ -64,6 +65,8 @@ import UpdateService from "./components/Services/UpdateService.jsx";
 import TestElement from "./TestElement.jsx";
 import ExpertProfileShimmer from "./subsitutes/Shimmers/ExpertProfileShimmer.jsx";
 import CreateMeeting from "./components/Jitsi/CreateMeeting.jsx";
+// import Docs from "./components/UltraXpert_docs/Docs.jsx";
+// import TestNavbar from "./TestNavbar.jsx";
 
 const userId = "user123"; // Replace with actual user ID
 const amount = 1000; // Replace with actual amount
@@ -96,6 +99,10 @@ const appRouter = createBrowserRouter([
     path: "/",
     element: <Layout />,
     children: [
+      // {
+      //   path: "/docs",
+      //   element: <Docs />,
+      // },
       {
         path: "/",
         element: <Landing />,
@@ -141,6 +148,10 @@ const appRouter = createBrowserRouter([
         path: "/forgotPassword",
         element: <ForgotPassword />,
       },
+      // {
+      //   path: "/TestNavbar",
+      //   element: <TestNavbar />,
+      // },
 
       {
         path: "/loginiwthotp",
@@ -197,10 +208,13 @@ const appRouter = createBrowserRouter([
           </Suspense>
         ),
       },
-
       {
         path: "/test/:skill_Name",
         element: <Test />,
+      },
+      {
+        path: "/feedback",
+        element: <Feedback />,
       },
       {
         path: "/services",

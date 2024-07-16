@@ -15,8 +15,14 @@ const About = () => {
   });
   const [loading, setLoading] = useState(false);
   const [writeTestimonial, setWriteTestimonial] = useState("");
-  console.log(writeTestimonial);
   const handleTestimonialSubmit = async () => {
+    const trimmedStr = writeTestimonial.trim();
+    const wordsArray = trimmedStr.split(/\s+/);
+    const filteredWordsArray = wordsArray.filter(word => word.length > 0);
+    if(filteredWordsArray.length>40) {
+      alert("Word limit exceeded, Please enter less than 40 words");
+      return ; 
+    }
     setLoading(true);
     try {
       const response = await axios.post(
@@ -209,6 +215,7 @@ const About = () => {
           </div>
         </div>
         <div className="md:w-[60%] mt-10 md:mt-0">
+          <label htmlFor="textarea" className="text-red-600 font-sm">max words: 40</label>
           <textarea
             name=""
             id=""
