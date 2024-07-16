@@ -107,3 +107,27 @@ const JoinMeeting = () => {
 };
 
 export default JoinMeeting;
+
+const startMeeting = (room, endTime) => {
+  const jitsiUrl = `https://meet.ultraxpert.in/${room}`;
+  const win = window.open(jitsiUrl, "_blank");
+
+  if (win) {
+    win.addEventListener("beforeunload", () => {
+      // This will execute when the user closes the Jitsi Meet tab/window
+      window.location.href = "https://ultraxpert.in"; // Redirect to your app's home route
+    });
+  }
+  if (endTime) {
+    const endTimeDate = new Date(
+      `${item.time_slot_day} ${convertTo24HourFormat(endTime)}`
+    );
+    const now = new Date();
+    const timeUntilEnd = endTimeDate - now;
+
+    setTimeout(() => {
+      win.close();
+      window.location.href = "https://ultraxpert.in";
+    }, timeUntilEnd);
+  }
+};

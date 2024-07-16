@@ -261,7 +261,7 @@ const CreateService = () => {
   });
 
   const handleServiceCreate = async (e) => {
-   e.preventDefault();
+    e.preventDefault();
     setShowSlots(!showSlots);
 
     const cookie = document.cookie.split(";");
@@ -316,7 +316,8 @@ const CreateService = () => {
     } catch (error) {
       console.log(error);
     }
-  };6
+  };
+  6;
   return (
     <>
       {!showSlots ? (
@@ -595,11 +596,21 @@ const CreateService = () => {
                 <button
                   type="submit"
                   disabled={
-                    serviceTitle==="" || createService.price === "" || val==="" || selectedCategory.name === "" || createService.desc === "" || !myImage
+                    serviceTitle === "" ||
+                    createService.price === "" ||
+                    val === "" ||
+                    selectedCategory.name === "" ||
+                    createService.desc === "" ||
+                    !myImage
                   }
-                  onClick={(e) => (handleServiceCreate(e))}
+                  onClick={(e) => handleServiceCreate(e)}
                   className={`px-6 py-2 text-base md:text-lg font-semibold text-white rounded-sm ${
-                    serviceTitle==="" || createService.price === "" || val==="" || selectedCategory.name === "" || createService.desc === "" || !myImage 
+                    serviceTitle === "" ||
+                    createService.price === "" ||
+                    val === "" ||
+                    selectedCategory.name === "" ||
+                    createService.desc === "" ||
+                    !myImage
                       ? "cursor-not-allowed bg-black/70"
                       : "btnBlack"
                   }`}
@@ -752,7 +763,7 @@ export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
     const endDate = moment(event.end);
 
     return {
-      day: `${startDate.format("ddd DD MMM")}`, // Include day of the week (e.g., "Mon 29 Jan")
+      day: `${startDate.format("ddd DD MMM yyyy")}`, // Include day of the week (e.g., "Mon 29 Jan")
       start_time: startDate.format("h:mm A"), // Format the start time as "h:mm A" (e.g., "9:00 AM")
       end_time: endDate.format("h:mm A"), // Format the end time as "h:mm A" (e.g., "1:00 PM")
       timezone: "IST", // Assuming the timezone is always IST
