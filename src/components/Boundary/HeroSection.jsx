@@ -105,9 +105,6 @@ const HeroSection = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          {/* <div className="w-[8vw] bg-[#ECECEC] xs:text-sm  sm:text-base md:text-lg rounded-md flex justify-center items-center py-[0.8rem]">
-            <FaSearch />
-          </div> */}
         </div>
       </div>
       <div className="w-[100vw] mt-8 md:mt-12 h-auto overflow-hidden">

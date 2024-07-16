@@ -1,70 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { RxCross2 } from "react-icons/rx";
+import { BsUpload, BsX } from "react-icons/bs";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import axios from "../../axios";
-import { FiUpload, FiX } from "react-icons/fi";
-import Modal from "../../Modal";
+import { FiUpload } from "react-icons/fi";
 import ImageUploader from "../../ImageUploader";
+import Modal from "../../Modal";
+import { handleUploadImage } from "../../constant";
 
 // slots
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { handleUploadImage } from "../../constant";
+// import { handleUploadImage } from "../../constant";
 //slots
 
-const UpdateService = () => {
+const CreateService = () => {
   const navigate = useNavigate();
-  const params = useParams();
+
   const [interest, setInterest] = useState([]);
-  const [myImage, setMyImage] = useState(0);
   const [interestInput, setInterestInput] = useState("");
-  const [updateData, setUpdateData] = useState({});
-
-  const [selectedTags, setselectedTags] = useState([]);
-  const [serviceTitle, setServiceTitle] = useState("");
-
-  const [selectedCategory, setSelectedCategory] = useState({});
-
-  const getServiceDetails = async () => {
-    const cookie = document.cookie.split("; ");
-    const jsonData = {};
-
-    cookie.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    try {
-      const res = await axios.get(
-        `/customers/services/?action=2&service_id=${params.id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      if (!res.data || res.data.status === 400 || res.data.status === 401) {
-        console.log("Something went wrong");
-        return;
-      }
-      const Data = res.data;
-      setUpdateData(Data.data);
-      setselectedTags(Data.data.tags);
-      setServiceTitle(Data.data.service_name);
-      setSelectedCategory(Data.data.category);
-      setMyImage(Data.data.service_img);
-    } catch (error) {
-      console.log(error);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [myImage, setMyImage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const onSelectFile = (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImage(reader.result);
+        setShowModal(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
     }
   };
-  useEffect(() => {
-    getServiceDetails();
-  }, []);
-  console.log(updateData);
 
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModal(false); // Close the modal after getting the URL
+    setMyImage(url); // Reset the image state
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    setMyImage(null); // Reset the image state when modal is closed
+  };
   const addInterest = () => {
     if (interestInput.trim() !== "") {
       setInterest([...interest, interestInput.trim()]);
@@ -77,37 +56,10 @@ const UpdateService = () => {
     updatedInterest.splice(index, 1);
     setInterest(updatedInterest);
   };
-
+  const [serviceTitle, setServiceTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  const [showModal, setShowModal] = useState(false);
-  const [imageLoading, setImageLoading] = useState(false);
-
-  const onSelectFile = (event) => {
-    setImageLoading(true);
-    if (event.target.files && event.target.files.length > 0) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setMyImage(reader.result);
-        setShowModal(true); // Show the modal when an image is selected
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  };
-  const handleCroppedImage = (url) => {
-    console.log("Cropped image URL:", url);
-    setShowModal(false);
-    setImageLoading(false);
-    setMyImage(url); // Reset the image state
-    // setUserData({ ...userData, profile_img: url });
-    // setCreateService({ ...createService, img: url });
-    setUpdateData({ ...updateData, service_img: url });
-  };
-  const closeModal = () => {
-    setShowModal(false);
-    setImageLoading(false);
-    setMyImage(data.service_img); // Reset the image state when modal is closed
-  };
+  const [imageUrl, setImageUrl] = useState(null);
+  // const [myImage, setMyImage] = useState(null);
 
   const handleBack = () => {
     navigate("/expertdashboard");
@@ -143,7 +95,11 @@ const UpdateService = () => {
       console.log(error);
     }
   };
-  // const [serviceId, setServiceId] = useState(data?.id);
+  const [serviceId, setServiceId] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState({
+    name: "",
+    id: 84,
+  });
 
   const [categoryInputValue, setCategoryInputValue] = useState("");
 
@@ -193,7 +149,55 @@ const UpdateService = () => {
   };
 
   const [val, setVal] = useState("");
+  const [showSkill, setShowSkill] = useState([]);
+
+  const getSkills = async () => {
+    const cookie = document.cookie.split(";");
+    const jsonData = {};
+
+    cookie.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.get("/inspections/test/?action=2", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const data = res.data.data.qualified;
+      setShowSkill(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getSkills();
+  }, []);
+
   const [skill, setSkill] = useState([]);
+
+  const allTrueSKill = () => {
+    const filteredSkills = Object.keys(showSkill).filter(
+      (key) => showSkill[key] === true
+    );
+    // Object.keys(showSkill).forEach(function (key, index) {
+    //   if (showSkill[key] === true) {
+    //     setSkill({...skill, key});
+    //   }
+    // })
+
+    setSkill(filteredSkills);
+  };
+
+  const handleSkillChange = (e) => {
+    const inputValue = e.target.value;
+    if (inputValue.trim() === "") {
+      setSkill([]); // Open dropdown when input field becomes empty
+    }
+  };
 
   const handleSkillSelection = (val) => {
     const capitalizedSkill = val.charAt(0).toUpperCase() + val.slice(1);
@@ -211,6 +215,7 @@ const UpdateService = () => {
     { id: 7, name: "React JS" },
   ];
 
+  const [selectedSkill, setSelectedSkill] = useState([]);
   const [inputTagValue, setInputTagValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
@@ -226,9 +231,9 @@ const UpdateService = () => {
 
   const handleSuggestionClick = (suggestion) => {
     // Add suggestion to selected skills
-    if (!selectedTags.includes(suggestion.name)) {
-      setselectedTags([...selectedTags, suggestion.name]);
-      console.log(selectedTags);
+    if (!selectedSkill.includes(suggestion.name)) {
+      setSelectedSkill([...selectedSkill, suggestion.name]);
+      console.log(selectedSkill);
     }
     // Clear input and suggestions
     setInputTagValue("");
@@ -236,12 +241,12 @@ const UpdateService = () => {
   };
 
   const handleTagRemove = (skill) => {
-    setselectedTags(selectedTags.filter((s) => s !== skill));
+    setSelectedSkill(selectedSkill.filter((s) => s !== skill));
   };
 
-  const handleNewSkillAdd = (value) => {
-    if (!selectedTags.includes(value)) {
-      setselectedTags([...selectedTags, value]);
+  const HandleNewTagAdd = (value) => {
+    if (!selectedSkill.includes(value)) {
+      setSelectedSkill([...selectedSkill, value]);
     }
     setInputTagValue("");
   };
@@ -256,6 +261,7 @@ const UpdateService = () => {
 
   const handleServiceCreate = async (e) => {
     e.preventDefault();
+    setShowSlots(!showSlots);
 
     const cookie = document.cookie.split(";");
     const jsonData = {};
@@ -268,17 +274,16 @@ const UpdateService = () => {
       const res = await axios.post(
         "/experts/services/",
         {
-          action: 2,
-          service_id: updateData?.id,
-          service_name: updateData?.service_name,
+          action: 1,
+          service_name: serviceTitle,
           service_img: myImage,
-          category: updateData?.category?.id,
-          description: updateData?.description,
-          skill_name: updateData?.skill_name,
-          price: updateData?.price,
-          duration: updateData?.duration,
-          currency: "INR",
-          tags_list: selectedTags,
+          category: selectedCategory.id,
+          description: createService.desc,
+          skill_name: val,
+          price: createService.price,
+          duration: createService.duration,
+          currency: createService.currency,
+          tags_list: selectedSkill,
         },
         {
           headers: {
@@ -302,7 +307,7 @@ const UpdateService = () => {
         });
         const data = res.data.data;
         console.log(res.data.data[0].id);
-        // setServiceId(res.data.data[0].id);
+        setServiceId(res.data.data[0].id);
       } catch (error) {
         console.log(error);
       }
@@ -310,9 +315,9 @@ const UpdateService = () => {
     } catch (error) {
       console.log(error);
     }
-    setShowSlots(!showSlots);
   };
-  console.log(selectedCategory);
+  console.log(showModal);
+  console.log(ImageUploader);
   return (
     <>
       {!showSlots ? (
@@ -328,7 +333,7 @@ const UpdateService = () => {
           </div>
           <div className="w-[90%] lg:w-[60%] flex flex-col border border-solid border-slate-300 mx-auto items-center justify-center rounded-lg shadow-lg px-5 md:px-20">
             <div className="text-2xl md:text-3xl lg:text-4xl text-[#3E5676] font-bold my-4">
-              Update your service
+              Create a serivce
             </div>
             <u className="border border-[#d8d8d8] border-solid w-full mb-8"></u>
             <form
@@ -340,10 +345,8 @@ const UpdateService = () => {
               </label>
               <input
                 placeholder="Service Title"
-                value={updateData?.service_name}
-                onChange={(e) =>
-                  setUpdateData({ ...updateData, service_name: e.target.value })
-                }
+                value={serviceTitle}
+                onChange={(e) => setServiceTitle(e.target.value)}
                 type="text"
                 id="title"
                 name="title"
@@ -356,9 +359,9 @@ const UpdateService = () => {
                 placeholder="Service Description"
                 name="desc"
                 id="desc"
-                value={updateData?.description}
+                value={createService.desc}
                 onChange={(e) =>
-                  setUpdateData({ ...updateData, description: e.target.value })
+                  setCreateService({ ...createService, desc: e.target.value })
                 }
                 className="border border-solid resize-none h-32 border-slate-300 rounded-md px-4 py-2 mb-4"
               />
@@ -369,10 +372,9 @@ const UpdateService = () => {
                 type="text"
                 id="category"
                 name="category"
-                disabled={true}
                 className="border border-solid border-slate-300 rounded-md px-4 py-2 mb-4"
                 placeholder="Enter Category"
-                value={updateData?.category?.name}
+                value={selectedCategory.name}
                 onFocus={() => getServiceCategory()}
                 onChange={(e) => {
                   handleCategoryChange(e);
@@ -404,7 +406,7 @@ const UpdateService = () => {
                       {item.name.charAt(0).toUpperCase() + item.name.slice(1)}
                     </div>
                   ))}
-                  {filterCategoriesArray.length === 0 &&
+                  {/* {filterCategoriesArray.length === 0 &&
                     categoryInputValue.trim().length > 0 && (
                       <div
                         className="btnBlack text-white rounded-sm px-4 py-2 w-fit cursor-pointer "
@@ -418,7 +420,7 @@ const UpdateService = () => {
                       >
                         + Add Category
                       </div>
-                    )}
+                    )} */}
                 </div>
               )}
               <label htmlFor="skill" className="text-lg mb-1">
@@ -428,10 +430,11 @@ const UpdateService = () => {
                 type="text"
                 id="skill"
                 name="skill"
-                disabled={true}
                 className={`border border-solid border-slate-300 rounded-md px-4 py-2 mb-4`}
                 placeholder="Enter Skill"
-                value={updateData?.skill_name}
+                value={val}
+                onFocus={allTrueSKill}
+                onChange={(e) => handleSkillChange(e)}
               />
               {skill?.length > 0 && (
                 <div
@@ -451,30 +454,38 @@ const UpdateService = () => {
                 </div>
               )}
               <div className="flex justify-center mx-auto flex-col w-full mb-4">
-                <label htmlFor="tags" className="text-lg mb-1">
+                <label htmlFor="tags" className="text-lg mb-1 font-bold">
                   Tags
                 </label>
-                {selectedTags.length > 0 && (
+                {selectedSkill.length > 0 ? (
                   <div className="border border-solid border-gray-300 px-2 rounded-md mb-2">
                     <div className="flex flex-wrap gap-2">
-                      {selectedTags?.map((skill, ind) => {
-                        return (
-                          <div
-                            key={ind}
-                            className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
-                          >
-                            {skill}
+                      {selectedSkill.length > 0 ? (
+                        selectedSkill.map((skill, ind) => {
+                          return (
                             <div
-                              className="cursor-pointer"
-                              onClick={() => handleTagRemove(skill)}
+                              key={ind}
+                              className="flex gap-2 px-4 py-1 text-sm rounded-full bg-inherit border border-solid border-black my-2"
                             >
-                              x
+                              {skill}
+                              <div
+                                className="cursor-pointer"
+                                onClick={() => handleTagRemove(skill)}
+                              >
+                                x
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })
+                      ) : (
+                        <p className="text-gray-300 text-sm">
+                          Select skills of your interest from below.
+                        </p>
+                      )}
                     </div>
                   </div>
+                ) : (
+                  <></>
                 )}
                 <input
                   type="text"
@@ -503,7 +514,7 @@ const UpdateService = () => {
                     )
                   : inputTagValue.length > 0 && (
                       <button
-                        onClick={() => handleNewSkillAdd(inputTagValue)}
+                        onClick={() => HandleNewTagAdd(inputTagValue)}
                         className="px-4 py-2 text-sm rounded-sm focus:outline-none btnBlack text-white w-fit mt-2 mb-4"
                       >
                         + Add Tag
@@ -544,15 +555,20 @@ const UpdateService = () => {
                   </div>
                 )}
               </div>
-              <Modal show={showModal} onClose={closeModal}>
+              <Modal
+                className="w-full h-full overflow-scroll"
+                show={showModal}
+                onClose={closeModal}
+              >
                 <ImageUploader
                   image={myImage}
                   handleUploadImage={handleUploadImage}
                   filename="cropped_image.jpg"
                   onCropped={handleCroppedImage}
-                  aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                  aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
                 />
               </Modal>
+
               <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
               <label htmlFor="price" className="text-lg mb-1">
                 Service Price
@@ -566,9 +582,12 @@ const UpdateService = () => {
                   type="number"
                   id="price"
                   name="price"
-                  value={updateData?.price}
+                  value={createService.price}
                   onChange={(e) => {
-                    setUpdateData({ ...updateData, price: e.target.value });
+                    setCreateService({
+                      ...createService,
+                      price: e.target.value,
+                    });
                   }}
                   className="border border-solid border-slate-300 rounded-e-md px-4 py-2 mb-4 w-full"
                 />
@@ -579,7 +598,7 @@ const UpdateService = () => {
                   onClick={(e) => handleServiceCreate(e)}
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white btnBlack rounded-sm"
                 >
-                  Edit time slots
+                  Create time slots
                 </button>
               </div>
             </form>
@@ -595,7 +614,11 @@ const UpdateService = () => {
               <MdOutlineKeyboardBackspace size={25} />
               Back
             </div>
-            <MyBigCalendar showSlots={showSlots} />
+            <MyBigCalendar
+              serviceId={serviceId}
+              serviceTitle={serviceTitle}
+              setServiceTitle={setServiceTitle}
+            />
           </div>
         )
       )}
@@ -603,10 +626,9 @@ const UpdateService = () => {
   );
 };
 
-export default UpdateService;
+export default CreateService;
 
-export const MyBigCalendar = ({ showSlots }) => {
-  const params = useParams();
+export const MyBigCalendar = ({ serviceId, serviceTitle, setServiceTitle }) => {
   const navigate = useNavigate();
   const localizer = momentLocalizer(moment);
   const [notifyBefore, setNotifyBefore] = useState(false);
@@ -618,75 +640,10 @@ export const MyBigCalendar = ({ showSlots }) => {
   const [startInputTime, setStartInputTime] = useState("");
   const [endInputDate, setEndInputDate] = useState("");
   const [endInputTime, setEndInputTime] = useState("");
-  const [updateData, setUpdateData] = useState({});
-  const [serviceTitle, setServiceTitle] = useState("");
-  const [temp, setTemp] = useState(0);
 
-  useEffect(() => {
-    getServiceDetails();
-  }, [showSlots, temp]);
-
-  const getServiceDetails = async () => {
-    const cookie = document.cookie.split("; ");
-    const jsonData = {};
-    cookie.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    try {
-      const res = await axios.get(
-        `/customers/services/?action=2&service_id=${params.id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      if (!res.data || res.data.status === 400 || res.data.status === 401) {
-        console.log("Something went wrong");
-        return;
-      }
-      const Data = res.data;
-      const serviceData = Data.data;
-      setUpdateData(serviceData);
-      setServiceTitle(Data.data.service_name);
-      setEvents(processServiceData(serviceData.availability));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const processServiceData = (availability) => {
-    const events = [];
-    for (const [date, slots] of Object.entries(availability)) {
-      slots.forEach((slot) => {
-        const startDate = moment(
-          `${date} ${slot.slot_start_time}`,
-          "ddd DD MMM h:mm A"
-        );
-        const endDate = moment(
-          `${date} ${slot.slot_end_time}`,
-          "ddd DD MMM h:mm A"
-        );
-        events.push({
-          id: slot.slot_id,
-          title: serviceTitle,
-          start: startDate.toDate(),
-          end: endDate.toDate(),
-          notifyBefore: slot.notify_before,
-          notifyBeforeTime: slot.notify_before_time,
-          notifyAfter: slot.notify_after,
-          notifyAfterTime: slot.notify_after_time,
-          slotBooked: slot.slot_booked,
-          slotDisabled: slot.slot_disabled,
-        });
-      });
-    }
-    return events;
-  };
-  console.log(events);
   const [loading, setLoading] = useState(false);
+
+  console.log(serviceId);
   const handlePostEvent = async (e) => {
     e.preventDefault();
     const cookies = document.cookie.split("; ");
@@ -695,20 +652,18 @@ export const MyBigCalendar = ({ showSlots }) => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-
-    const formattedEvents = convertEventsToAPIFormat(events);
-    console.log(notifyAfter, notifyAfterTime, notifyBefore, notifyBeforeTime);
+    setLoading(true);
     try {
       const res = await axios.post(
         "/experts/services/",
         {
-          action: 6,
-          service_id: updateData?.id,
+          action: 5,
+          service_id: serviceId,
           notify_before: notifyBefore,
-          notify_before_time: notifyBeforeTime.toString(),
+          notify_before_time: notifyBeforeTime,
           notify_after: notifyAfter,
-          notify_after_time: notifyAfterTime.toString(),
-          time_slots: formattedEvents,
+          notify_after_time: notifyAfterTime,
+          time_slots: convertEventsToAPIFormat(events), // Convert events to API format
         },
         {
           headers: {
@@ -717,8 +672,9 @@ export const MyBigCalendar = ({ showSlots }) => {
           },
         }
       );
-
       const data = res.data;
+      console.log(data);
+      setLoading(false);
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
         return;
@@ -727,12 +683,8 @@ export const MyBigCalendar = ({ showSlots }) => {
       navigate("/expertdashboard/myservices");
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
-  };
-
-  const generateUniqueId = () => {
-    const timestamp = new Date().getTime();
-    return parseInt(`${timestamp}${Math.floor(Math.random() * 1000)}`);
   };
 
   const handleCreateEvent = () => {
@@ -756,7 +708,7 @@ export const MyBigCalendar = ({ showSlots }) => {
       let currentDate = startDate.clone();
       while (currentDate.isSameOrBefore(endDate, "day")) {
         const newEvent = {
-          id: generateUniqueId(),
+          id: events.length + 1,
           title: serviceTitle.trim(),
           start: currentDate
             .clone()
@@ -789,265 +741,139 @@ export const MyBigCalendar = ({ showSlots }) => {
     const endDate = moment(event.end);
 
     return {
-      time_slot_id: event.id,
-      day: `${startDate.format("ddd DD MMM")}`,
-      start_time: startDate.format("h:mm A"),
-      end_time: endDate.format("h:mm A"),
-      timezone: "IST",
-      duration: endDate.diff(startDate, "seconds"),
+      day: `${startDate.format("ddd DD MMM")}`, // Include day of the week (e.g., "Mon 29 Jan")
+      start_time: startDate.format("h:mm A"), // Format the start time as "h:mm A" (e.g., "9:00 AM")
+      end_time: endDate.format("h:mm A"), // Format the end time as "h:mm A" (e.g., "1:00 PM")
+      timezone: "IST", // Assuming the timezone is always IST
+      duration: endDate.diff(startDate, "seconds"), // Calculate the duration in seconds
     };
   };
 
   const convertEventsToAPIFormat = (events) => {
     return events.map((event) => convertEventToAPIFormat(event));
   };
-
-  const [showModal, setShowModal] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [updatedStartInputTime, setUpdatedStartInputTime] = useState("");
-  const [updatedEndInputTime, setUpdatedEndInputTime] = useState("");
-  const [isBooked, setIsBooked] = useState(false);
-
-  const handleEventClick = (event) => {
-    setSelectedEvent(event);
-    setUpdatedStartInputTime(moment(event.start).format("HH:mm"));
-    setUpdatedEndInputTime(moment(event.end).format("HH:mm"));
-    setShowModal(true);
-    setIsBooked(event?.slotBooked);
-  };
-
-  const handleUpdateEvent = () => {
-    setEvents(
-      events.map((event) => {
-        if (event.id === selectedEvent.id) {
-          return {
-            ...event,
-            start: moment(event.start)
-              .hour(moment(updatedStartInputTime, "HH:mm").hour())
-              .minute(moment(updatedStartInputTime, "HH:mm").minute())
-              .toDate(),
-            end: moment(event.end)
-              .hour(moment(updatedEndInputTime, "HH:mm").hour())
-              .minute(moment(updatedEndInputTime, "HH:mm").minute())
-              .toDate(),
-          };
-        }
-        return event;
-      })
-    );
-    setShowModal(false);
-  };
-
-  const handleDeleteEvent = async () => {
-    const cookies = document.cookie.split("; ");
-    const jsonData = {};
-    cookies.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    try {
-      const res = await axios.post(
-        "/experts/services/",
-        {
-          action: 7,
-          time_slot_id: selectedEvent.id,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      console.log(res);
-      setTemp(temp + 1);
-    } catch (error) {
-      console.log(error);
-    }
-    // setEvents(events.filter((event) => event.id !== selectedEvent.id));
-    setShowModal(false);
-  };
+  const myEvents = convertEventsToAPIFormat(events);
+  console.log(events);
+  console.log(myEvents);
 
   return (
-    <>
-      <div className={`calendar-container ${showModal ? "blur-sm" : ""}`}>
-        <div className="flex gap-10 flex-wrap w-full">
-          <div className="flex flex-col gap-1 ">
-            <label className="text-base text-gray-600">Start Date</label>
-            <input
-              type="date"
-              value={startInputDate}
-              onChange={(e) => setStartInputDate(e.target.value)}
-              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-base text-gray-600">End Date:</label>
-            <input
-              type="date"
-              value={endInputDate}
-              onChange={(e) => setEndInputDate(e.target.value)}
-              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-base text-gray-600">Start Time:</label>
-            <input
-              type="time"
-              value={startInputTime}
-              onChange={(e) => setStartInputTime(e.target.value)}
-              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-base text-gray-600">End Time:</label>
-            <input
-              type="time"
-              value={endInputTime}
-              onChange={(e) => setEndInputTime(e.target.value)}
-              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-            />
-          </div>
-        </div>
-
-        <div className="mt-10 flex gap-10">
-          <div>
-            <div className="flex items-center gap-2">
-              <label className="text-base text-gray-600">Notify Before: </label>
-              <input
-                type="checkbox"
-                name="checkbox"
-                id="checkbox"
-                onClick={() => setNotifyBefore(!notifyBefore)}
-              />
-            </div>
-
-            {notifyBefore && (
-              <input
-                placeholder="enter time in minutes"
-                type="number"
-                name="notifyBefore"
-                id="notifyBefore"
-                onChange={(e) => setNotifyBeforeTime(e.target.value)}
-                className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-5"
-              />
-            )}
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <label className="text-base text-gray-600">Notify After: </label>
-              <input
-                type="checkbox"
-                name="checkbox"
-                id="checkbox"
-                onClick={() => setNotifyAfter(!notifyAfter)}
-              />
-            </div>
-
-            {notifyAfter && (
-              <input
-                placeholder="enter time in minutes"
-                type="number"
-                name="notifyAfter"
-                id="notifyAfter"
-                onChange={(e) => setNotifyAfterTime(e.target.value)}
-                className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-5"
-              />
-            )}
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 mt-10 ">
-          <label className="text-base text-gray-600">Title:</label>
+    <div className="calendar-container ">
+      <div className="flex gap-10 flex-wrap w-full">
+        <div className="flex flex-col gap-1">
+          <label className="text-base text-gray-600">Start Date</label>
           <input
-            type="text"
-            value={serviceTitle}
-            onChange={(e) => setServiceTitle(e.target.value)}
-            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-64"
+            type="date"
+            value={startInputDate}
+            onChange={(e) => setStartInputDate(e.target.value)}
+            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
           />
         </div>
-        <div className="flex gap-3">
-          <button
-            onClick={handleCreateEvent}
-            className="my-10 text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white ml-2"
-          >
-            Create slots
-          </button>
-        </div>
-        {events.length === 0 ? (
-          <p className="text-grey-600 text-xl md:text-2xl text-center w-full">
-            Loading...
-          </p>
-        ) : (
-          <Calendar
-            className={`mt-4`}
-            localizer={localizer}
-            events={events}
-            startAccessor="start"
-            endAccessor="end"
-            style={{ height: 500 }}
-            onSelectEvent={handleEventClick}
+        <div className="flex flex-col gap-1">
+          <label className="text-base text-gray-600">End Date:</label>
+          <input
+            type="date"
+            value={endInputDate}
+            onChange={(e) => setEndInputDate(e.target.value)}
+            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
           />
-        )}
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-base text-gray-600">Start Time:</label>
+          <input
+            type="time"
+            value={startInputTime}
+            onChange={(e) => setStartInputTime(e.target.value)}
+            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-base text-gray-600">End Time:</label>
+          <input
+            type="time"
+            value={endInputTime}
+            onChange={(e) => setEndInputTime(e.target.value)}
+            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+          />
+        </div>
+      </div>
+
+      <div className="mt-10 flex gap-10">
+        <div>
+          <div className="flex items-center gap-2">
+            <label className="text-base text-gray-600">Notify Before: </label>
+            <input
+              type="checkbox"
+              name="checkbox"
+              id="checkbox"
+              onClick={() => setNotifyBefore(!notifyBefore)}
+            />
+          </div>
+
+          {notifyBefore && (
+            <input
+              placeholder="enter time in minutes"
+              type="number"
+              name="notifyBefore"
+              id="notifyBefore"
+              onChange={(e) => setNotifyBeforeTime(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-5"
+            />
+          )}
+        </div>
+        <div>
+          <div className="flex items-center gap-2">
+            <label className="text-base text-gray-600">Notify After: </label>
+            <input
+              type="checkbox"
+              name="checkbox"
+              id="checkbox"
+              onClick={() => setNotifyAfter(!notifyAfter)}
+            />
+          </div>
+
+          {notifyAfter && (
+            <input
+              placeholder="enter time in minutes"
+              type="number"
+              name="notifyAfter"
+              id="notifyAfter"
+              onChange={(e) => setNotifyAfterTime(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-5"
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3 mt-10 ">
+        <label className="text-base text-gray-600">Title:</label>
+        <input
+          type="text"
+          value={serviceTitle}
+          className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-64"
+        />
+      </div>
+      <div className="flex gap-3">
         <button
-          onClick={(e) => handlePostEvent(e)}
-          className="mt-10 text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
+          onClick={handleCreateEvent}
+          className="my-10 text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
         >
-          Update service
+          Create slots
         </button>
       </div>
-      {showModal && (
-        <div className="modal blur-none rounded-md py-4 px-3 xs:px-5 w-[320px] md:w-[450px] shadow-md">
-          <div className="flex justify-between items-center text-xl md:text-3xl font-bold text-gray-600">
-            <div>Update Event</div>
-            <RxCross2
-              className="border border-solid border-slate-400 rounded-sm"
-              onClick={() => setShowModal(false)}
-            />
-          </div>
-          <div className="my-5 text-gray-600 text-base sm:text-lg">
-            Title: {selectedEvent?.title}
-          </div>
-          {isBooked && (
-            <div className="text-sm text-red-500 mt-2">
-              Cannot update slot is already booked!
-            </div>
-          )}
-          <div className="flex flex-col gap-1 mt-3 sm:mt-5">
-            <label className="text-base text-gray-600">Start Time:</label>
-            <input
-              type="time"
-              value={updatedStartInputTime}
-              onChange={(e) => setUpdatedStartInputTime(e.target.value)}
-              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-full "
-            />
-          </div>
-          <div className="flex flex-col gap-1 mt-3 mb-5 sm:mb-8">
-            <label className="text-base text-gray-600">End Time:</label>
-            <input
-              type="time"
-              value={updatedEndInputTime}
-              onChange={(e) => setUpdatedEndInputTime(e.target.value)}
-              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-full"
-            />
-          </div>
-          <button
-            disabled={isBooked}
-            className={`ext-sm md:text-base px-4 py-2 bg-white border border-solid border-slate-400 rounded-sm text-black ${
-              isBooked ? "cursor-not-allowed " : "cursor-pointer"
-            }`}
-            onClick={handleUpdateEvent}
-          >
-            Update
-          </button>
-          <button
-            className="text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white ml-2"
-            onClick={handleDeleteEvent}
-          >
-            Delete
-          </button>
-        </div>
-      )}
-    </>
+      <Calendar
+        className={`mt-4`}
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: 500 }}
+      />
+      <button
+        onClick={(e) => handlePostEvent(e)}
+        className="my-10 text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
+      >
+        Create service
+      </button>
+    </div>
   );
 };
