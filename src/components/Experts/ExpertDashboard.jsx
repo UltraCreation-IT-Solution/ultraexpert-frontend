@@ -297,6 +297,13 @@ export const TestimonialsCard = ({
   const [comment, setComment] = useState(item?.content);
   const [readOnly, setReadOnly] = useState(true);
   const [editTestimonial, setEditTestimonial] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const handleupdates = () => {
+    HandleBlogs();
+    HandleTestimonials();
+    getExpertAllTestimonials();
+  };
   const handleComment = (e) => {
     setComment(e.target.value);
   };
@@ -346,17 +353,7 @@ export const TestimonialsCard = ({
     }
   };
 
-  const handleupdates = () => {
-    HandleBlogs();
-    getExpertAllTestimonials();
-    HandleTestimonials();
-  };
-
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [loading, setLoading] = useState(false);
-
   const handleDeleteTestimonial = async (id) => {
-    console.log(id);
     setLoading(true);
     try {
       const response = await axios.post(
@@ -372,88 +369,94 @@ export const TestimonialsCard = ({
           },
         }
       );
-      console.log(response);
-      setLoading(false);
       handleupdates();
       setIsDeleting(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
       setIsDeleting(false);
     }
   };
-  return isDeleting ? (
-    <div className="absolute">
-      <div className="fixed z-50 bg-gray-300 bg-opacity-75 px-4 md:px-8 w-full inset-0 flex items-center justify-center">
-        <div className="relative w-full max-w-md shadow-lg rounded-sm bg-white p-6 md:p-8">
-          <div className="text-center text-xl font-bold mb-6">
-            Are you sure?
-          </div>
-          <div className="text-gray-600 mb-6 text-center">
-            Do you want to delete this testimonial?
-          </div>
-          <div className="flex justify-end space-x-4 mt-6">
-            <button
-              type="button"
-              className="inline-flex items-center px-4 py-2 bg-white text-black rounded-sm border border-solid border-black"
-              onClick={() => setIsDeleting(false)}
-            >
-              No
-            </button>
-            <button
-              type="button"
-              className={
-                loading
-                  ? `inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-sm`
-                  : `inline-flex items-center px-4 py-2 btnBlack text-white rounded-sm`
-              }
-              onClick={() => handleDeleteTestimonial(item.id)}
-            >
-              Yes
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  ) : (
-    <div
-      className={`px-14 py-4 my-5 rounded-md relative ${
-        index % 2 == 0 ? "bg-[#ececec]" : "border border-solid border-[#c7c7c7]"
-      }`}
-    >
-      <div className="flex items-center justify-between text-sm font-semibold">
-        <div className="text-sm ">{item?.date_created?.split("T")[0]}</div>
-        <div className="flex items-center gap-3">
-          <FaEdit
-            title="Edit"
-            className="text-xl text-black"
-            onClick={handleEdit}
-          />
-          <FaRegTrashAlt
-            title="Delete"
-            onClick={() => setIsDeleting(true)}
-            className="text-xl text-black"
-          />
-        </div>
-      </div>
-      <textarea
-        readOnly={readOnly}
-        value={comment}
-        onChange={handleComment}
-        rows="5"
-        className={`bg-inherit min-w-[100%] max-w-[100%] line-clamp-3 text-sm mt-4 focus:outline-none rounded-md ${
-          editTestimonial ? "border border-solid border-[#c7c7c7] p-1" : ""
+  return (
+    <>
+      <div
+        className={`px-14 py-4 my-5 rounded-md relative ${
+          index % 2 == 0
+            ? "bg-[#ececec]"
+            : "border border-solid border-[#c7c7c7]"
         }`}
-      />
-      {editTestimonial && (
-        <div
-          className="px-3 py-2 mt-4 rounded-sm bg-green-500 text-white w-fit cursor-pointer"
-          onClick={(e) => handleSubmitEditedTestimonial(e, item.id)}
-        >
-          Submit
+      >
+        <div className="flex items-center justify-between text-sm font-semibold">
+          <div className="text-sm ">{item?.date_created?.split("T")[0]}</div>
+          <div className="flex items-center gap-3">
+            <FaEdit
+              title="Edit"
+              className="text-xl text-black"
+              onClick={handleEdit}
+            />
+            <FaRegTrashAlt
+              title="Delete"
+              onClick={() => setIsDeleting(true)}
+              className="text-xl text-black"
+            />
+          </div>
+        </div>
+        <textarea
+          readOnly={readOnly}
+          value={comment}
+          onChange={handleComment}
+          rows="5"
+          className={`bg-inherit min-w-[100%] max-w-[100%] line-clamp-3 text-sm mt-4 focus:outline-none rounded-md ${
+            editTestimonial ? "border border-solid border-[#c7c7c7] p-1" : ""
+          }`}
+        />
+        {editTestimonial && (
+          <div
+            className="px-3 py-2 mt-4 rounded-sm bg-green-500 text-white w-fit cursor-pointer"
+            onClick={(e) => handleSubmitEditedTestimonial(e, item.id)}
+          >
+            Submit
+          </div>
+        )}
+      </div>
+      {isDeleting && (
+        <div className="absolute">
+          <div className="fixed z-50 bg-gray-300 bg-opacity-75 px-4 md:px-8 w-full inset-0 flex items-center justify-center">
+            <div className="relative w-full max-w-md shadow-lg rounded-sm bg-white p-6 md:p-8">
+              <div className="text-center text-xl font-bold mb-6">
+                Are you sure?
+              </div>
+              <div className="text-gray-600 mb-6 text-center">
+                Do you want to delete this testimonial?
+              </div>
+              <div className="flex justify-end space-x-4 mt-6">
+                <button
+                  type="button"
+                  className="inline-flex items-center px-4 py-2 bg-white text-black rounded-sm border border-solid border-black"
+                  onClick={() => setIsDeleting(false)}
+                >
+                  No
+                </button>
+                <button
+                  type="button"
+                  className={
+                    loading
+                      ? `inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-sm`
+                      : `inline-flex items-center px-4 py-2 btnBlack text-white rounded-sm`
+                  }
+                  onClick={() => (
+                    handleDeleteTestimonial(item.id)
+                  )}
+                >
+                  Yes
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
@@ -805,6 +808,16 @@ export const Dashboard = () => {
   //   });
   //   setValues(updatedValues);
   // };
+  const handleCopyToClipboard = () => {
+    navigator.clipboard
+      .writeText(expertData.refer_code)
+      .then(() => {
+        alert("Referral code copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  };
 
   const navigate = useNavigate();
   return (
@@ -835,7 +848,7 @@ export const Dashboard = () => {
         <div className="mt-[4vw] xs:mt-[2.25vw] w-full text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#525252] line-clamp-3">
           {expertData.about_me}
         </div>
-        <div className="mt-[3.65vw] xs:mt-[2vw] flex flex-col gap-[2.25vw] xs:gap-[1.65vw]">
+       {expertData?.skills?.length > 0 && <div className="mt-[3.65vw] xs:mt-[2vw] flex flex-col gap-[2.25vw] xs:gap-[1.65vw]">
           <div className="flex gap-[1.65vw] items-center text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#515151]">
             <FaTags className="text-[4.45vw] xs:text-[2.9vw] sm:text-[2.65vw]" />
             <div className="flex ">
@@ -851,7 +864,16 @@ export const Dashboard = () => {
               })}
             </div>
           </div>
-        </div>
+        </div>}
+        <div className="flex mt-[1.25vw] gap-2 items-center">
+              <div className="font-bold text-sm">Referal code: </div>
+              <span className="text-sm">{expertData.refer_code}</span>
+              <MdOutlineContentCopy
+                className="cursor-pointer"
+                onClick={handleCopyToClipboard}
+              />
+              <IoMdShareAlt />
+            </div>
       </div>
       <div className="w-full h-[36vw] xs:h-[28vw] md:h-[18vw] lg:h-[20vw]  text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] border border-[#c7c7c7] border-solid rounded-lg py-[3vw] xs:py-[2vw] md:py-[1vw] flex justify-between">
         <div className="w-[72%] h-full px-2">
@@ -1355,6 +1377,7 @@ export const MyServices = () => {
       }
     }
   };
+  console.log(myServices);
   const deleteService = async (id) => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
@@ -1402,7 +1425,7 @@ export const MyServices = () => {
       <div className="flex justify-between border-b border-solid border-slate-200 pb-3">
         <div className="text-xl font-bold">My services</div>
         <div
-          className="text-base cursor-pointer btnBlack px-4 py-2 rounded-sm text-white"
+          className="text-xs sm:text-base cursor-pointer btnBlack px-3 sm:px-4 py-2 rounded-sm text-white"
           onClick={() => {
             navigate("/expertdashboard/createservice");
           }}
@@ -1848,6 +1871,7 @@ export const MyBooking = () => {
 };
 
 const ExpertDashboard = () => {
+  const navigate = useNavigate();
   const [expertData, setExpertData] = useState({});
   const [expertId, setExpertId] = useState(null);
   const cookies = document.cookie.split("; ");
@@ -1899,6 +1923,48 @@ const ExpertDashboard = () => {
       .catch((err) => {
         console.error("Failed to copy: ", err);
       });
+  };
+  function determineNavigation(qualified) {
+    // Convert the values of the qualified object to an array
+    const skillValues = Object.values(qualified);
+
+    // Check if all skills are false
+    const allSkillsFalse = skillValues.every((skill) => skill === false);
+
+    // Navigate based on the skill values
+    if (allSkillsFalse) {
+      navigate("/expertdashboard/getcertified");
+    } else {
+      navigate("/expertdashboard/createservice");
+    }
+  }
+  const getAllQualifiedSkills = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const response = await axios.get("/inspections/test/?action=2", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      if (
+        !response.data ||
+        response.data.status === 400 ||
+        response.data.status === 401
+      ) {
+        console.log(response.data.message);
+        return;
+      }
+      console.log(response.data.data);
+      determineNavigation(response.data.data.qualified);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -1957,7 +2023,7 @@ const ExpertDashboard = () => {
             )}
             <div className="flex mt-[1.25vw] gap-2 items-center">
               <div className="font-bold text-sm">Referal code: </div>
-              <span className="text-sm">{expertData.refer_code}</span>
+              <span className="text-sm shrink-0">{expertData.refer_code}</span>
               <MdOutlineContentCopy
                 className="cursor-pointer"
                 onClick={handleCopyToClipboard}
@@ -1991,12 +2057,16 @@ const ExpertDashboard = () => {
                   Bookings
                 </li>
               </Link>
-              <Link to="createservice" className="no-underline">
-                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+
+              <li
+                className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]"
+                onClick={() => getAllQualifiedSkills()}
+              >
+                <div className="no-underline">
                   <RiCustomerService2Fill className="text-[1.65vw]" />
                   Create service
-                </li>
-              </Link>
+                </div>
+              </li>
               <Link to="myservices" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <FaChalkboardTeacher className="text-[1.65vw]" />

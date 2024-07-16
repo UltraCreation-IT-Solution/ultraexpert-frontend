@@ -77,7 +77,7 @@ const UpdateService = () => {
     updatedInterest.splice(index, 1);
     setInterest(updatedInterest);
   };
-  
+
   const [errorMessage, setErrorMessage] = useState("");
 
   const [showModal, setShowModal] = useState(false);
@@ -620,10 +620,11 @@ export const MyBigCalendar = ({ showSlots }) => {
   const [endInputTime, setEndInputTime] = useState("");
   const [updateData, setUpdateData] = useState({});
   const [serviceTitle, setServiceTitle] = useState("");
+  const [temp, setTemp] = useState(0);
 
   useEffect(() => {
     getServiceDetails();
-  }, [showSlots]);
+  }, [showSlots, temp]);
 
   const getServiceDetails = async () => {
     const cookie = document.cookie.split("; ");
@@ -685,7 +686,7 @@ export const MyBigCalendar = ({ showSlots }) => {
     return events;
   };
   console.log(events);
-
+  const [loading, setLoading] = useState(false);
   const handlePostEvent = async (e) => {
     e.preventDefault();
     const cookies = document.cookie.split("; ");
@@ -694,9 +695,9 @@ export const MyBigCalendar = ({ showSlots }) => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-  
+
     const formattedEvents = convertEventsToAPIFormat(events);
-  
+    console.log(notifyAfter, notifyAfterTime, notifyBefore, notifyBeforeTime);
     try {
       const res = await axios.post(
         "/experts/services/",
@@ -704,9 +705,9 @@ export const MyBigCalendar = ({ showSlots }) => {
           action: 6,
           service_id: updateData?.id,
           notify_before: notifyBefore,
-          notify_before_time: notifyBeforeTime,
+          notify_before_time: notifyBeforeTime.toString(),
           notify_after: notifyAfter,
-          notify_after_time: notifyAfterTime,
+          notify_after_time: notifyAfterTime.toString(),
           time_slots: formattedEvents,
         },
         {
@@ -716,7 +717,7 @@ export const MyBigCalendar = ({ showSlots }) => {
           },
         }
       );
-  
+
       const data = res.data;
       if (!data || data.status === 400 || data.status === 401) {
         console.log("Something went wrong");
@@ -728,7 +729,6 @@ export const MyBigCalendar = ({ showSlots }) => {
       console.log(error);
     }
   };
-  
 
   const generateUniqueId = () => {
     const timestamp = new Date().getTime();
@@ -787,7 +787,7 @@ export const MyBigCalendar = ({ showSlots }) => {
   const convertEventToAPIFormat = (event) => {
     const startDate = moment(event.start);
     const endDate = moment(event.end);
-  
+
     return {
       time_slot_id: event.id,
       day: `${startDate.format("ddd DD MMM")}`,
@@ -797,7 +797,7 @@ export const MyBigCalendar = ({ showSlots }) => {
       duration: endDate.diff(startDate, "seconds"),
     };
   };
-  
+
   const convertEventsToAPIFormat = (events) => {
     return events.map((event) => convertEventToAPIFormat(event));
   };
@@ -838,8 +838,33 @@ export const MyBigCalendar = ({ showSlots }) => {
     setShowModal(false);
   };
 
-  const handleDeleteEvent = () => {
-    setEvents(events.filter((event) => event.id !== selectedEvent.id));
+  const handleDeleteEvent = async () => {
+    const cookies = document.cookie.split("; ");
+    const jsonData = {};
+    cookies.forEach((item) => {
+      const [key, value] = item.split("=");
+      jsonData[key] = value;
+    });
+    try {
+      const res = await axios.post(
+        "/experts/services/",
+        {
+          action: 7,
+          time_slot_id: selectedEvent.id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      console.log(res);
+      setTemp(temp + 1);
+    } catch (error) {
+      console.log(error);
+    }
+    // setEvents(events.filter((event) => event.id !== selectedEvent.id));
     setShowModal(false);
   };
 
@@ -1026,4 +1051,3 @@ export const MyBigCalendar = ({ showSlots }) => {
     </>
   );
 };
-

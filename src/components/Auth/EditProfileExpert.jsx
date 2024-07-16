@@ -1943,11 +1943,11 @@ const EditProfileExpert = () => {
   };
 
   return (
-    <div className="h-auto bg-white w-[68%]">
+    <div className="h-auto bg-white w-full md:w-[68%]">
       <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
         Update Profile
       </div>
-      <div className=" w-full flex md:flex-col border border-solid border-slate-300 mx-auto rounded-sm mt-5">
+      <div className=" w-full border border-solid border-slate-300 mx-auto rounded-sm mt-5">
         <div className="flex h-full justify-between w-full items-center px-2">
           <BiSolidCaretLeftSquare
             className=" shrink-0 border border-slate-300 border-solid mx-2"
