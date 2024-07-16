@@ -808,6 +808,16 @@ export const Dashboard = () => {
   //   });
   //   setValues(updatedValues);
   // };
+  const handleCopyToClipboard = () => {
+    navigator.clipboard
+      .writeText(expertData.refer_code)
+      .then(() => {
+        alert("Referral code copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  };
 
   const navigate = useNavigate();
   return (
@@ -838,7 +848,7 @@ export const Dashboard = () => {
         <div className="mt-[4vw] xs:mt-[2.25vw] w-full text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#525252] line-clamp-3">
           {expertData.about_me}
         </div>
-        <div className="mt-[3.65vw] xs:mt-[2vw] flex flex-col gap-[2.25vw] xs:gap-[1.65vw]">
+       {expertData?.skills?.length > 0 && <div className="mt-[3.65vw] xs:mt-[2vw] flex flex-col gap-[2.25vw] xs:gap-[1.65vw]">
           <div className="flex gap-[1.65vw] items-center text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#515151]">
             <FaTags className="text-[4.45vw] xs:text-[2.9vw] sm:text-[2.65vw]" />
             <div className="flex ">
@@ -854,7 +864,16 @@ export const Dashboard = () => {
               })}
             </div>
           </div>
-        </div>
+        </div>}
+        <div className="flex mt-[1.25vw] gap-2 items-center">
+              <div className="font-bold text-sm">Referal code: </div>
+              <span className="text-sm">{expertData.refer_code}</span>
+              <MdOutlineContentCopy
+                className="cursor-pointer"
+                onClick={handleCopyToClipboard}
+              />
+              <IoMdShareAlt />
+            </div>
       </div>
       <div className="w-full h-[36vw] xs:h-[28vw] md:h-[18vw] lg:h-[20vw]  text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] border border-[#c7c7c7] border-solid rounded-lg py-[3vw] xs:py-[2vw] md:py-[1vw] flex justify-between">
         <div className="w-[72%] h-full px-2">
@@ -2004,7 +2023,7 @@ const ExpertDashboard = () => {
             )}
             <div className="flex mt-[1.25vw] gap-2 items-center">
               <div className="font-bold text-sm">Referal code: </div>
-              <span className="text-sm">{expertData.refer_code}</span>
+              <span className="text-sm shrink-0">{expertData.refer_code}</span>
               <MdOutlineContentCopy
                 className="cursor-pointer"
                 onClick={handleCopyToClipboard}
