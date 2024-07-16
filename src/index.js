@@ -63,6 +63,7 @@ import SkillList from "./components/GetCertified/Instructions.js";
 import UpdateService from "./components/Services/UpdateService.jsx";
 import TestElement from "./TestElement.jsx";
 import ExpertProfileShimmer from "./subsitutes/Shimmers/ExpertProfileShimmer.jsx";
+import CreateMeeting from "./components/Jitsi/CreateMeeting.jsx";
 
 const userId = "user123"; // Replace with actual user ID
 const amount = 1000; // Replace with actual amount
@@ -102,6 +103,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/testelement",
         element: <TestElement />,
+      },
+      {
+        path: "/createMeeting",
+        element: <CreateMeeting />,
       },
       {
         path: "/login",
@@ -166,7 +171,7 @@ const appRouter = createBrowserRouter([
               {
                 path: "",
                 element: (
-                  <Suspense fallback={ExpertProfileShimmer()} >
+                  <Suspense fallback={ExpertProfileShimmer()}>
                     <ExpertProfile />
                   </Suspense>
                 ),

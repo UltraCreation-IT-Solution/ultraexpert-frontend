@@ -1,40 +1,14 @@
 import React, { useState } from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "../../axios";
 const ServiceBooking = () => {
   const location = useLocation();
   console.log(location);
   const serviceData = location.state;
   const params = useParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  // const handleBookService = async () => {
-
-  //   try {
-  //     const res = await axios.post(
-  //       "/booking/",
-  //       {
-  //         action:1,
-  //         expert_id: serviceData?.servDesc?.expert_data?.id,
-  //         service_id: serviceData?.servDesc?.id,
-  //         slot_id: serviceData?.slotData?.slotId
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${jsonData.access_token}`,
-  //         },
-  //       }
-  //     );
-  //     const json = res.data;
-  //     if (!json) {
-  //       console.log("no data")
-  //       return;
-  //     }
-  //     console.log(json)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
   const cookie = document.cookie.split(";");
   const jsonData = {};
 
@@ -43,14 +17,40 @@ const ServiceBooking = () => {
     jsonData[key.trim()] = value;
   });
 
-  const [amount, setAmount] = useState(500);
-  const [serviceId, setServiceId] = useState("");
-  const [slotId, setSlotId] = useState("");
-  const [expertId, setExpertId] = useState("");
+  const handleScheduleMeeting = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "/meetings/meeting/",
+        {
+          action: "1",
+          time_slot_id: serviceData?.slotData?.slotId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      const data = response.data;
+      if (!data || data.status === 400 || data.status === 401) {
+        console.log("Something went wrong");
+        return;
+      }
+      console.log(response.data);
+      setLoading(false);
+      navigate("/customerdashboard/mybookings");
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
 
   // complete order
-  const complete_order = (paymentID, orderID, signature) => {
+  const complete_order = async (paymentID, orderID, signature) => {
     console.log(signature);
+    const scheduledRoomId = Math.random().toString(36).substring(7);
     axios({
       method: "post",
       headers: {
@@ -65,10 +65,16 @@ const ServiceBooking = () => {
         expert_id: serviceData?.servDesc?.expert_data?.id,
         service_id: serviceData?.servDesc?.id,
         slot_id: serviceData?.slotData?.slotId,
+        room_id: scheduledRoomId,
       },
     })
       .then((response) => {
+        // on successful payment call
         console.log(response.data);
+
+        // create the meeting room
+        handleScheduleMeeting();
+        // put everything in api for records
       })
       .catch((error) => {
         console.log(error.response.data);
@@ -217,12 +223,12 @@ const ServiceBooking = () => {
             </div>
           </div>
 
-            <div className="mt-[2vw] border-b border-gray-300 border-solid text-gray-600">
-                <div className="flex justify-between text-xs sm:text-base md:text-lg my-2">
-                  <span>Expert Charge</span>
-                  <span>₹{serviceData?.servDesc?.price} </span>
-                </div>
-                {/* <div className="flex justify-between text-xs sm:text-base md:text-lg mt-2">
+          <div className="mt-[2vw] border-b border-gray-300 border-solid text-gray-600">
+            <div className="flex justify-between text-xs sm:text-base md:text-lg my-2">
+              <span>Expert Charge</span>
+              <span>₹{serviceData?.servDesc?.price} </span>
+            </div>
+            {/* <div className="flex justify-between text-xs sm:text-base md:text-lg mt-2">
                   <span>Platform Charge</span>
                   <span>100/-</span>
                 </div>
@@ -230,20 +236,20 @@ const ServiceBooking = () => {
                   <span>Tax</span>
                   <span>10/- </span>
                 </div> */}
-              </div>
-            
-            <div className="flex justify-between mt-[1.5vw] text-xs sm:text-base md:text-lg font-semibold">
-              <span>Total:</span>
-              <span>₹{serviceData?.servDesc?.price}</span>
-            </div>
-            <div className="flex justify-center">
-              <button 
-              onClick={()=> razorPay()}
-              className="text-white text-sm md:text-base bg-[#2A2A2A] mt-[2.5vw] px-[2.7vw] py-[1.5vw] md:px-[2vw] md:py-[0.6vw] rounded-sm md:rounded-md w-[50%]">
-                Proceed to Pay
-              </button>
-            </div>
-          
+          </div>
+
+          <div className="flex justify-between mt-[1.5vw] text-xs sm:text-base md:text-lg font-semibold">
+            <span>Total:</span>
+            <span>₹{serviceData?.servDesc?.price}</span>
+          </div>
+          <div className="flex justify-center">
+            <button
+              onClick={() => razorPay()}
+              className="text-white text-sm md:text-base bg-[#2A2A2A] mt-[2.5vw] px-[2.7vw] py-[1.5vw] md:px-[2vw] md:py-[0.6vw] rounded-sm md:rounded-md w-[50%]"
+            >
+              Proceed to Pay
+            </button>
+          </div>
         </div>
       </div>
     </div>
