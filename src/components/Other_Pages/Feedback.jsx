@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { MdStar } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import axios from "../../axios";
 
 const Feedback = () => {
+  const navigate = useNavigate();
   const [availabilityRating, setAvailabilityRating] = useState(-1);
   const [skillsRating, setSkillsRating] = useState(-1);
   const [cooperationRating, setCooperationRating] = useState(-1);
@@ -9,40 +12,39 @@ const Feedback = () => {
   const [qualityRating, setQualityRating] = useState(-1);
   const [communicationRating, setCommunicationRating] = useState(-1);
   const [comment, setComment] = useState("");
+  const cookie = document.cookie.split(";");
+  const jsonData = {};
 
-  const handleSubmit = () => {
-    const feedback = {
-      availability: availabilityRating,
-      skills: skillsRating,
-      cooperation: cooperationRating,
-      deadline: deadlineRating,
-      quality: qualityRating,
-      communication: communicationRating,
-      feedback: comment,
-    };
-    // Send the feedback to your backend API
-    console.log("Feedback submitted:", feedback);
-
-    // Example: axios.post('/api/feedback', feedback)
-  };
-  const reset = () => {
-    setAvailabilityRating(-1);
-    setSkillsRating(-1);
-    setCooperationRating(-1);
-    setDeadlineRating(-1);
-    setQualityRating(-1);
-    setCommunicationRating(-1);
-    setComment("");
-    console.log(
-      "Feedback submitted:",
-      availabilityRating,
-      skillsRating,
-      cooperationRating,
-      deadlineRating,
-      qualityRating,
-      communicationRating,
-      comment
-    );
+  cookie.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key.trim()] = value;
+  });
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        "/customers/rating/",
+        {
+          action: 1,
+          expert_id: 44,
+          availability: availabilityRating,
+          deadline: deadlineRating,
+          skills: skillsRating,
+          quality: qualityRating,
+          cooperation: cooperationRating,
+          communication: communicationRating,
+          review: comment,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      navigate("/customerdashboard")
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -95,16 +97,24 @@ const Feedback = () => {
           onChange={(e) => setComment(e.target.value)}
           className="min-w-full min-h-[150px] border border-solid border-slate-400 p-3 text-base outline-none text-gray-600 rounded-md"
         ></textarea>
-        <div className="flex flex-col xs:flex-row gap-4 mt-10">
-          <button
-            onClick={reset}
-            className="text-sm md:text-base px-4 py-2 rounded-sm text-black bg-white border border-solid border-slate-400 hover:bg-slate-100"
+        <div className="mt-3">
+          <button className="text-sm md:text-base px-4 py-2 rounded-sm border border-solid border-slate-400 bg-white cursor-pointer"
+          onClick={() => navigate("/customerdashboard")}
           >
-            Reset
+            Skip
           </button>
           <button
             onClick={handleSubmit}
-            className="text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
+            disabled={
+              availabilityRating === -1 ||
+              skillsRating === -1 ||
+              cooperationRating === -1 ||
+              deadlineRating === -1 ||
+              qualityRating === -1 ||
+              communicationRating === -1 ||
+              comment === ""
+            }
+            className={`${availabilityRating === -1 || skillsRating === -1 || cooperationRating === -1 || deadlineRating === -1 || qualityRating === -1 || communicationRating === -1 || comment === "" ? "cursor-not-allowed bg-black/60" : "btnBlack cursor-pointer"} ml-3 text-sm md:text-base px-4 py-2 rounded-sm text-white`}
           >
             Submit Feedback
           </button>
