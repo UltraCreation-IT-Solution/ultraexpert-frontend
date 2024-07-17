@@ -6,11 +6,11 @@ import { handleUploadImage } from "../../constant";
 import ImageUploader from "../../ImageUploader";
 import Modal from "../../Modal";
 
+
 const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
   const [projects, setProjects] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
   const [type, setType] = useState("");
   const [role, setRole] = useState("");
   const [tags, setTags] = useState([]);
@@ -18,38 +18,16 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
   const [tagInput, setTagInput] = useState("");
   const [myImage, setMyImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [uploadProfileProgress, setUploadProfileProgress] = useState(0);
-
-  const onSelectFile = (event) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setMyImage(reader.result);
-        setShowModal(true); // Show the modal when an image is selected
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  };
-
-  const handleCroppedImage = (url) => {
-    console.log("Cropped image URL:", url);
-    setShowModal(false); // Close the modal after getting the URL
-    setMyImage(url); // Reset the image state
-    setProjects({ ...projects, image: url });
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setMyImage(null); // Reset the image state when modal is closed
-  };
-
-  const cookies = document.cookie.split("; ");
+  const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+  const cookie = document.cookie.split(";");
   const jsonData = {};
 
-  cookies.forEach((item) => {
+  cookie.forEach((item) => {
     const [key, value] = item.split("=");
-    jsonData[key] = value;
+    jsonData[key.trim()] = value;
   });
+  // Fetch projects from API
   const fetchProjects = async () => {
     try {
       const response = await axios.get("/experts/?action=1", {
@@ -58,16 +36,16 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
           Authorization: `Bearer ${jsonData.access_token}`,
         },
       });
-      console.log(response.data.data.projects);
-      setProjects(response.data.data.projects);
+      setProjects(response.data.data.projects || []);
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching projects:", error);
       setProjects([]);
     }
   };
+
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, []); // Run once on component mount
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -91,12 +69,31 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
       setAddProjectOpen(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      console.log("Error submitting projects:", error);
     }
-    // console.log(projects);
   };
 
-  const [imageLoading, setImageLoading] = useState(false);
+  const onSelectFile = (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setMyImage(reader.result);
+        setShowModal(true); // Show the modal when an image is selected
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+
+  const handleCroppedImage = (url) => {
+    console.log("Cropped image URL:", url);
+    setShowModal(false); // Close the modal after getting the URL
+    setMyImage(url); // Set the cropped image URL
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setMyImage(null); // Reset the image state when modal is closed
+  };
 
   const handleAddProject = () => {
     if (!title || !description || !myImage || !type) {
@@ -104,7 +101,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
       return;
     }
 
-    const newProject = { title, description, image:myImage, type, role, tags };
+    const newProject = { title, description, image: myImage, type, role, tags };
     if (editingIndex !== null) {
       // Replace the project at the editing index
       const updatedProjects = [...projects];
@@ -119,7 +116,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
     // Reset form fields
     setTitle("");
     setDescription("");
-    setMyImage("");
+    setMyImage(null);
     setType("");
     setRole("");
     setTags([]);
@@ -137,7 +134,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
     setEditingIndex(index);
 
     // Scroll to the top of the page
-    window.scrollTo({ top: `${getBackWidth}`, behavior: "smooth" });
+    window.scrollTo({ top: getBackWidth, behavior: "smooth" });
   };
 
   const handleDeleteProject = (index) => {
@@ -145,18 +142,10 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
     setProjects(updatedProjects);
   };
 
-  
-
   const handleCancel = () => {
-    // Add your code here to navigate back to the previous page
-    // For simplicity, let's just log a message
-    console.log("Cancelled");
     setEditingIndex(null); // Reset editing index
     setAddProjectOpen(false);
   };
-
-  const isFormEmpty =
-    !title || !description || !myImage || !type || (type === "group" && !role);
 
   const addTag = () => {
     if (tagInput.trim() !== "") {
@@ -171,7 +160,8 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
     setTags(updatedTags);
   };
 
-  const [loading, setLoading] = useState(false);
+  const isFormEmpty =
+    !title || !description || !myImage || !type || (type === "group" && !role);
 
   return (
     <div className="max-w-3xl mx-auto mt-2 px-4 border border-gray-500 rounded-lg shadow-lg">
@@ -186,13 +176,12 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
           </button>
           <button
             onClick={handleSubmit}
-            className={
-              loading
-                ? `bg-gray-600 text-white px-6 py-2 rounded-sm`
-                : `btnBlack text-white px-6 py-2 rounded-sm`
-            }
+            className={`btnBlack text-white px-6 py-2 rounded-sm ${
+              loading ? "bg-gray-600" : ""
+            }`}
+            disabled={loading}
           >
-            Submit Projects
+            {loading ? "Submitting..." : "Submit Projects"}
           </button>
         </div>
       </div>
@@ -222,8 +211,8 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
               />
             )}
           </div>
-          <div className="flex flex-col ">
-            <div className={myImage ? `relative h-auto border border-slate-300 border-solid rounded overflow-hidden mb-4`: `relative h-32 border border-slate-300 border-solid rounded overflow-hidden mb-4`}>
+          <div className="flex flex-col">
+            <div className="relative h-32 border border-slate-300 border-solid rounded overflow-hidden mb-4">
               <input
                 type="file"
                 accept="image/*"
@@ -235,11 +224,11 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
                   <span>Loading...</span>
                 </div>
               ) : myImage ? (
-                <div className="w-full max-w-sm mx-auto shrink-0 p-2 py-4 flex justify-center items-center">
+                <div className="w-full max-w-sm mx-auto p-2 py-4 flex justify-center items-center">
                   <img
                     src={myImage}
                     alt="Preview"
-                    className="w-auto h-40 shrink-0 object-cover object-center m-2"
+                    className="w-auto h-40 object-cover object-center m-2"
                   />
                 </div>
               ) : (
@@ -269,7 +258,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
             </select>
           </div>
         </div>
-        <div className="flex flex-wrap border border-slate-300 rounded px-2 py-2 ">
+        <div className="flex flex-wrap border border-slate-300 rounded px-2 py-2">
           {tags.map((tag, index) => (
             <div
               key={index}
@@ -313,63 +302,60 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
           <div className="text-xl font-semibold">Your Projects</div>
         )}
         <div className="">
-          {projects.length > 0 &&
-            projects.map((project, index) => (
-              <div
-                key={index}
-                className="mb-8 p-6 bg-white rounded shadow-md border border-gray-200"
-              >
-                <h3 className="text-xl font-semibold mb-4">{project.title}</h3>
-                <p className="text-gray-700 mb-4">{project.description}</p>
-                <div className="flex gap-10">
-                  {project.image && (
-                    <img
-                      src={project.image}
-                      alt="Project"
-                      className="mb-4 h-44 w-60 object-cover rounded"
-                    />
-                  )}
-                  <div>
+          {projects.map((project, index) => (
+            <div
+              key={index}
+              className="mb-8 p-6 bg-white rounded shadow-md border border-gray-200"
+            >
+              <h3 className="text-xl font-semibold mb-4">{project.title}</h3>
+              <p className="text-gray-700 mb-4">{project.description}</p>
+              <div className="flex gap-10">
+                {project.image && (
+                  <img
+                    src={project.image}
+                    alt="Project"
+                    className="mb-4 h-44 w-60 object-cover rounded"
+                  />
+                )}
+                <div>
+                  <p className="text-sm font-medium">
+                    <span className="font-extrabold">Type: </span>
+                    {project.type === "group" ? "Group Project" : "Indie Project"}
+                  </p>
+                  {project.type === "group" && (
                     <p className="text-sm font-medium">
-                      <span className="font-extrabold">Type: </span>
-                      {project.type === "group"
-                        ? "Group Project"
-                        : "Indie Project"}
+                      <span className="font-extrabold">Role: </span>
+                      {project.role}
                     </p>
-                    {project.type === "group" && (
-                      <p className="text-sm font-medium">
-                        <span className="font-extrabold">Role: </span>
-                        {project.role}
-                      </p>
-                    )}
-                    <div className="flex flex-wrap mt-2">
-                      {project.tags.map((tag, tagIndex) => (
-                        <span
-                          key={tagIndex}
-                          className="flex gap-1 items-center bg-inherit text-black pl-4 pr-2 py-1 rounded-md text-sm mr-2 mb-2 border border-solid border-gray-300"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex mt-2">
-                      <button
-                        onClick={() => handleEditProject(index)}
-                        className="bg-white text-black px-4 py-2 rounded-sm mr-2 border border-black border-solid"
+                  )}
+                  <div className="flex flex-wrap mt-2">
+                    {project.tags.map((tag, tagIndex) => (
+                      <span
+                        key={tagIndex}
+                        className="flex gap-1 items-center bg-inherit text-black pl-4 pr-2 py-1 rounded-md text-sm mr-2 mb-2 border border-solid border-gray-300"
                       >
-                        <FiEdit /> Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteProject(index)}
-                        className="btnBlack text-white px-4 py-2 rounded-sm"
-                      >
-                        <RiDeleteBin6Line /> Delete
-                      </button>
-                    </div>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex mt-2">
+                    <button
+                      onClick={() => handleEditProject(index)}
+                      className="bg-white text-black px-4 py-2 rounded-sm mr-2 border border-black border-solid"
+                    >
+                      <FiEdit /> Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteProject(index)}
+                      className="btnBlack text-white px-4 py-2 rounded-sm"
+                    >
+                      <RiDeleteBin6Line /> Delete
+                    </button>
                   </div>
                 </div>
               </div>
-            ))}
+            </div>
+          ))}
         </div>
       </div>
     </div>

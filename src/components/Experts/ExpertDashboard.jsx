@@ -287,43 +287,45 @@ const Contributioncard = ({
     </div>
   );
 };
-export const TestimonialsCard = ({
+const TestimonialsCard = ({
   item,
   index,
   HandleBlogs,
   HandleTestimonials,
-  getExpertAllTestimonials,
+  removeTestimonialFromState,
 }) => {
   const [comment, setComment] = useState(item?.content);
   const [readOnly, setReadOnly] = useState(true);
   const [editTestimonial, setEditTestimonial] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const handleupdates = () => {
     HandleBlogs();
     HandleTestimonials();
-    getExpertAllTestimonials();
   };
+
   const handleComment = (e) => {
     setComment(e.target.value);
   };
+
   const handleEdit = () => {
     setReadOnly(false);
     setEditTestimonial(true);
   };
-  const cookies = document.cookie.split("; ");
-  const jsonData = {};
 
+  const cookies = document.cookie.split('; ');
+  const jsonData = {};
   cookies.forEach((item) => {
-    const [key, value] = item.split("=");
+    const [key, value] = item.split('=');
     jsonData[key] = value;
   });
+
   const handleSubmitEditedTestimonial = async (e, id) => {
     e.preventDefault();
-    console.log(id);
     try {
       const response = await axios.post(
-        "/testimonial/",
+        '/testimonial/',
         {
           action: 2,
           id: id,
@@ -331,23 +333,18 @@ export const TestimonialsCard = ({
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );
-      if (
-        !response.data ||
-        response.data.status === 400 ||
-        response.data.status === 401
-      ) {
+      if (!response.data || response.data.status === 400 || response.data.status === 401) {
         console.log(response.data.message);
         return;
       }
       setEditTestimonial(false);
       handleupdates();
       setReadOnly(true);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -356,39 +353,39 @@ export const TestimonialsCard = ({
   const handleDeleteTestimonial = async (id) => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        "/testimonial/",
+      await axios.post(
+        '/testimonial/',
         {
           action: 3,
           testimonial_id: id,
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${jsonData.access_token}`,
           },
         }
       );
+      removeTestimonialFromState(id);  // Remove testimonial from state immediately
       handleupdates();
-      setIsDeleting(false);
       setLoading(false);
+      setIsDeleting(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
       setIsDeleting(false);
     }
   };
+
   return (
     <>
       <div
         className={`px-14 py-4 my-5 rounded-md relative ${
-          index % 2 == 0
-            ? "bg-[#ececec]"
-            : "border border-solid border-[#c7c7c7]"
+          index % 2 === 0 ? 'bg-[#ececec]' : 'border border-solid border-[#c7c7c7]'
         }`}
       >
         <div className="flex items-center justify-between text-sm font-semibold">
-          <div className="text-sm ">{item?.date_created?.split("T")[0]}</div>
+          <div className="text-sm">{item?.date_created?.split('T')[0]}</div>
           <div className="flex items-center gap-3">
             <FaEdit
               title="Edit"
@@ -408,7 +405,7 @@ export const TestimonialsCard = ({
           onChange={handleComment}
           rows="5"
           className={`bg-inherit min-w-[100%] max-w-[100%] line-clamp-3 text-sm mt-4 focus:outline-none rounded-md ${
-            editTestimonial ? "border border-solid border-[#c7c7c7] p-1" : ""
+            editTestimonial ? 'border border-solid border-[#c7c7c7] p-1' : ''
           }`}
         />
         {editTestimonial && (
@@ -442,12 +439,10 @@ export const TestimonialsCard = ({
                   type="button"
                   className={
                     loading
-                      ? `inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-sm`
-                      : `inline-flex items-center px-4 py-2 btnBlack text-white rounded-sm`
+                      ? 'inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-sm'
+                      : 'inline-flex items-center px-4 py-2 btnBlack text-white rounded-sm'
                   }
-                  onClick={() => (
-                    handleDeleteTestimonial(item.id)
-                  )}
+                  onClick={() => handleDeleteTestimonial(item.id)}
                 >
                   Yes
                 </button>
@@ -459,6 +454,7 @@ export const TestimonialsCard = ({
     </>
   );
 };
+
 
 const ShowMyProjects = () => {
   const [addProjectOpen, setAddProjectOpen] = useState(false);
@@ -679,9 +675,19 @@ export const Dashboard = () => {
     getExpertStatistics();
     getCurrentExpert();
   }, []);
+  
 
   // API integration for testimonials of expert start--->>>
   const [expertAllTestimonials, setExpertAllTestimonials] = useState([]);
+  
+ 
+
+  const removeTestimonialFromState = (id) => {
+    setExpertAllTestimonials((prevTestimonials) =>
+      prevTestimonials.filter((testimonial) => testimonial.id !== id)
+    );
+  };
+
   const getExpertAllTestimonials = async () => {
     setLoading(true);
     try {
@@ -709,6 +715,9 @@ export const Dashboard = () => {
       setExpertAllTestimonials([]);
     }
   };
+  useEffect(() => {
+    getExpertAllTestimonials();
+  }, []);
   // API integration for testimonials of expert end--->>>
 
   const [meetings, setMeetings] = useState(true);
@@ -1316,13 +1325,13 @@ export const Dashboard = () => {
           ) : (
             expertAllTestimonials?.map((item, index) => (
               <TestimonialsCard
-                key={index}
-                item={item}
-                index={index}
-                HandleBlogs={HandleBlogs}
-                HandleTestimonials={HandleTestimonials}
-                getExpertAllTestimonials={getExpertAllTestimonials}
-              />
+              key={item.id}
+              item={item}
+              index={index}
+              HandleBlogs={HandleBlogs}
+              HandleTestimonials={HandleTestimonials}
+              removeTestimonialFromState={removeTestimonialFromState}
+            />
             ))
           ))}
         {/* Project section of dashboard */}
@@ -1334,17 +1343,18 @@ export const Dashboard = () => {
 
 export const MyServices = () => {
   const navigate = useNavigate();
-  const services = Array.from({ length: 3 });
   const [shimmer, setShimmer] = useState(false);
   const [myServices, setMyServices] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [serviceToDelete, setServiceToDelete] = useState(null);
 
   const getMyServices = async () => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
     cookie.forEach((item) => {
       const [key, value] = item.split("=");
-      jsonData[key] = value;
+      jsonData[key.trim()] = value;
     });
     setShimmer(true);
     try {
@@ -1367,7 +1377,6 @@ export const MyServices = () => {
       const json = res.data;
       setMyServices(json.data);
       setShimmer(false);
-      console.log(myServices);
     } catch (error) {
       setShimmer(false);
       if (error.response.status === 404) {
@@ -1377,13 +1386,13 @@ export const MyServices = () => {
       }
     }
   };
-  console.log(myServices);
+
   const deleteService = async (id) => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
     cookie.forEach((item) => {
       const [key, value] = item.split("=");
-      jsonData[key] = value;
+      jsonData[key.trim()] = value;
     });
     setLoading(true);
     try {
@@ -1400,13 +1409,13 @@ export const MyServices = () => {
           },
         }
       );
-      console.log(res);
       setLoading(false);
       if (!res.data || res.data.status === 400 || res.data.status === 401) {
         console.log(res.data);
         return;
       } else {
         setIsDeleting(false);
+        setServiceToDelete(null);
         getMyServices();
       }
     } catch (error) {
@@ -1414,14 +1423,24 @@ export const MyServices = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getMyServices();
   }, []);
 
-  const [isDeleting, setIsDeleting] = useState(false);
+  const handleDeleteClick = (serviceId) => {
+    setIsDeleting(true);
+    setServiceToDelete(serviceId);
+  };
+
+  const handleConfirmDelete = () => {
+    if (serviceToDelete) {
+      deleteService(serviceToDelete);
+    }
+  };
 
   return (
-    <div className="w-full md:w-[68%] ">
+    <div className="w-full md:w-[68%]">
       <div className="flex justify-between border-b border-solid border-slate-200 pb-3">
         <div className="text-xl font-bold">My services</div>
         <div
@@ -1458,7 +1477,7 @@ export const MyServices = () => {
                       ? `inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-sm`
                       : `inline-flex items-center px-4 py-2 btnBlack text-white rounded-sm`
                   }
-                  onClick={() => deleteService(myServices[0].id)}
+                  onClick={handleConfirmDelete}
                 >
                   Yes
                 </button>
@@ -1492,7 +1511,7 @@ export const MyServices = () => {
                     <MdOutlineEdit size={18} /> Edit
                   </button>
                   <button
-                    onClick={() => setIsDeleting(true)}
+                    onClick={() => handleDeleteClick(service.id)}
                     className="flex gap-2 items-center btnBlack text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
                   >
                     <RiDeleteBin6Fill size={15} /> Delete
@@ -1512,8 +1531,7 @@ export const MyServices = () => {
                     <MdOutlineVisibility /> {service.service_view_count} views
                   </div>
                   <div className="flex items-center gap-1">
-                    <IoStar /> {service.ratings && service.ratings.length}{" "}
-                    rating
+                    <IoStar /> {service.ratings && service.ratings.length} rating
                   </div>
                 </div>
               </div>
