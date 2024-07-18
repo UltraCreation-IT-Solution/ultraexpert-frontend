@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 import axios from "../axios";
 
 const BookingCard = ({ item }) => {
@@ -9,21 +10,42 @@ const BookingCard = ({ item }) => {
   const [otp, setOtp] = useState("");
   const [meetingActive, setMeetingActive] = useState(false);
   const [meetingUrl, setMeetingUrl] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleUnload = (event) => {
-      if (meetingActive) {
-        event.preventDefault();
-        event.returnValue = "";
-        window.location.href = "/feedback";
-      }
+    const handleMeetingEnd = () => {
+      setMeetingActive(false);
+      localStorage.getItem("isExpert") === "true"
+        ? navigate("/expertdashboard")
+        : navigate("/feedback");
     };
 
-    window.addEventListener("beforeunload", handleUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleUnload);
-    };
-  }, [meetingActive]);
+    if (meetingActive) {
+      const domain = "meet.ultraxpert.in";
+      const options = {
+        roomName: item.room_id,
+        width: "100%",
+        height: "100%",
+        parentNode: document.querySelector("#jitsi-container"),
+        userInfo: {
+          displayName:
+            localStorage.getItem("username") === null
+              ? localStorage.getItem("isExpert") === "true"
+                ? "Expert"
+                : "Customer"
+              : localStorage.getItem("username"),
+        },
+      };
+      const api = new window.JitsiMeetExternalAPI(domain, options);
+
+      api.addEventListener("videoConferenceLeft", handleMeetingEnd);
+
+      return () => {
+        api.removeEventListener("videoConferenceLeft", handleMeetingEnd);
+        api.dispose();
+      };
+    }
+  }, [meetingActive, item.room_id, navigate]);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -40,7 +62,7 @@ const BookingCard = ({ item }) => {
       console.log(item.order_id);
       const res = await axios.post(`/meetings/meetingOtp/`, {
         action: 1,
-        customer_id: Number(localStorage.getItem("customer_id")),
+        customer_id: localStorage.getItem("customer_id"),
         otp: otp,
         order_id: item.order_id,
         room_id: room,
@@ -58,7 +80,9 @@ const BookingCard = ({ item }) => {
   const sendOTP = async (room) => {
     try {
       const res = await axios.get(
-        `/meetings/meetingOtp/?action=1&customer_id=${localStorage.customer_id}&order_id=${room}`
+        `/meetings/meetingOtp/?action=1&customer_id=${localStorage.getItem(
+          "customer_id"
+        )}&order_id=${item.order_id}&room_id=${room}`
       );
       console.log(res);
     } catch (error) {
@@ -102,7 +126,7 @@ const BookingCard = ({ item }) => {
 
     setTimeout(() => {
       setMeetingActive(false);
-      window.location.href = "/feedback"; // Redirect to feedback route
+      navigate("/feedback");
     }, timeUntilEnd);
   };
 
@@ -204,12 +228,11 @@ const BookingCard = ({ item }) => {
         </div>
       )}
       {meetingActive && (
-        <div className="fixed top-0 left-0 w-full h-full bg-white z-50 flex items-center justify-center">
-          <iframe
-            src={meetingUrl}
-            allow="camera; microphone; fullscreen; display-capture"
-            style={{ width: "100%", height: "100%", border: "none" }}
-          />
+        <div className="fixed inset-0 flex items-center justify-center bg-white z-[5555555555555555555550]">
+          <div
+            id="jitsi-container"
+            style={{ width: "100%", height: "100%" }}
+          ></div>
         </div>
       )}
     </>
