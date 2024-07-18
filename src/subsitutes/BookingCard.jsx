@@ -11,13 +11,13 @@ const BookingCard = ({ item }) => {
   const [meetingActive, setMeetingActive] = useState(false);
   const [meetingUrl, setMeetingUrl] = useState("");
   const navigate = useNavigate();
-
+  const expid = item.expert_id || null;
   useEffect(() => {
     const handleMeetingEnd = () => {
       setMeetingActive(false);
       localStorage.getItem("isExpert") === "true"
         ? navigate("/expertdashboard")
-        : navigate("/feedback");
+        : navigate("/feedback", { state: { expid } });
     };
 
     if (meetingActive) {
@@ -97,7 +97,7 @@ const BookingCard = ({ item }) => {
     );
     console.log(now, "==>", meetingStartTime);
 
-    if (now > meetingStartTime) {
+    if (now < meetingStartTime) {
       alert(
         `The meeting is scheduled for ${meetingStartTime.toLocaleString()}. Please wait until the meeting starts.`
       );
