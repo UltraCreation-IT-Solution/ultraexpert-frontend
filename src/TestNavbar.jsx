@@ -1,379 +1,219 @@
-import React, { useEffect, useState } from "react";
-import logo from "./assets/images/logo.svg";
-import ultraXpert from "./assets/images/ultraXpert.svg";
-import { Link, useLocation } from "react-router-dom";
-import { FaBars, FaTimes, FaRegHeart } from "react-icons/fa";
-import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
-import { MdClose } from "react-icons/md";
-import { IoIosNotificationsOutline } from "react-icons/io";
-import axios from "./axios";
+import React, { useState, useEffect } from "react";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import axios from "../axios";
 
-const cookies = document.cookie.split("; ");
-const jsonData = {};
-
-cookies.forEach((item) => {
-  const [key, value] = item.split("=");
-  jsonData[key] = value;
-});
-const handleLogout = () => {
-  localStorage.clear();
-  window.location.href = "/";
-  document.cookie =
-    "access_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
-  document.cookie =
-    "refresh_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
-};
-
-const TestNavbar = () => {
-  const location = useLocation().pathname;
-  const [showLogo, setshowLogo] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+const BookingCard = ({ item }) => {
+  const [open, setOpen] = useState(false);
+  const [otpopen, setOtpopen] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [meetingActive, setMeetingActive] = useState(false);
+  const [meetingUrl, setMeetingUrl] = useState("");
 
   useEffect(() => {
-    setshowLogo(false);
-  }, [location]);
+    const handleUnload = (event) => {
+      if (meetingActive) {
+        event.preventDefault();
+        event.returnValue = "";
+        window.location.href = "/feedback";
+      }
+    };
 
-  const notifications = [
-    "Welcome to UltraXpert!",
-    "Read the updated terms and conditions",
-    "update your profile to earn more rewards and points",
-    "your meeeting was scheduled! click here to check details",
-    "you may have new notifications",
-    "subscribe to our newslatter to get daily updates",
-    "you have successfully created an account!",
-  ];
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, [meetingActive]);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { day: "numeric", month: "short", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  }
+
+  const authenticateCustomer = async (room) => {
+    if (otp.length === 0) {
+      alert("Please enter OTP");
+      return;
+    }
+    try {
+      console.log(item.order_id);
+      const res = await axios.post(`/meetings/meetingOtp/`, {
+        action: 1,
+        customer_id: Number(localStorage.getItem("customer_id")),
+        otp: otp,
+        order_id: item.order_id,
+        room_id: room,
+      });
+      console.log(res);
+      startMeeting(
+        room,
+        `${item.time_slot_day} ${convertTo24HourFormat(item.time_slot_end)}`
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const sendOTP = async (room) => {
+    try {
+      const res = await axios.get(
+        `/meetings/meetingOtp/?action=1&customer_id=${localStorage.customer_id}&order_id=${room}`
+      );
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleJoin = (room) => {
+    const now = new Date();
+    const meetingStartTime = new Date(
+      `${item.time_slot_day} ${convertTo24HourFormat(item.time_slot_start)}`
+    );
+    console.log(now, "==>", meetingStartTime);
+
+    if (now > meetingStartTime) {
+      alert(
+        `The meeting is scheduled for ${meetingStartTime.toLocaleString()}. Please wait until the meeting starts.`
+      );
+    } else {
+      // verify the user if they are a customer and let expert in directly
+      if (localStorage.getItem("isExpert") === "true") {
+        startMeeting(
+          room,
+          `${item.time_slot_day} ${convertTo24HourFormat(item.time_slot_end)}`
+        );
+      } else {
+        setOtpopen(true);
+        sendOTP(room);
+      }
+    }
+  };
+
+  const startMeeting = (room, endTime) => {
+    const jitsiUrl = `https://meet.ultraxpert.in/${room}`;
+    setMeetingUrl(jitsiUrl);
+    setMeetingActive(true);
+
+    const endTimeDate = new Date(endTime);
+    const now = new Date();
+    const timeUntilEnd = endTimeDate - now;
+
+    setTimeout(() => {
+      setMeetingActive(false);
+      window.location.href = "/feedback"; // Redirect to feedback route
+    }, timeUntilEnd);
+  };
+
+  const convertTo24HourFormat = (time) => {
+    const [hour, minute, period] = time
+      .match(/(\d+):(\d+)\s?(AM|PM)/i)
+      .slice(1);
+    let hour24 = parseInt(hour, 10);
+    if (period.toUpperCase() === "PM" && hour24 !== 12) {
+      hour24 += 12;
+    } else if (period.toUpperCase() === "AM" && hour24 === 12) {
+      hour24 = 0;
+    }
+    return `${hour24.toString().padStart(2, "0")}:${minute}:00`;
   };
 
   return (
-    <nav className="shadow-sm bg-white ">
-      <div className="mx-5 flex justify-between items-center">
-        <div className="">
-          <Link
-            to={"/"}
-            className={`${
-              showLogo ? "mt-6" : null
-            } flex gap-5 md:mt-0 decoration-transparent `}
-          >
+    <>
+      <div className="text-sm flex items-center justify-between border-t border-solid border-slate-300 my-5 py-3 overflow-x-scroll">
+        <div className="flex items-center xs:gap-[4vw] text-sm">
+          <div className="flex items-center gap-2 w-[200px] ">
             <img
-              src={logo}
-              className="block sm:hidden w-[80px] h-[60px] "
-              alt="logo"
+              src={
+                localStorage.getItem("isExpert") === "true"
+                  ? item?.customer_profile_img
+                  : item?.expert_profile_img
+              }
+              className="h-9 w-9 rounded-full shrink-0 object-cover"
+              alt=""
             />
-            <img src={ultraXpert} className="hidden sm:block" alt="" />
-          </Link>
-        </div>
-        <div className=" flex items-center gap-10 md:gap-5">
-          <div className="flex flex-col items-center">
-            <IoIosNotificationsOutline
-              className="text-xl"
-              onClick={() => setShowNotifications(!showNotifications)}
-            />
-            {notifications.length > 0 && (
-              <div className="absolute -mt-2 ml-3 shrink-0 text-xs rounded-full text-center bg-red-500 text-white h-4 w-4 ">
-                {notifications.length}{" "}
-              </div>
-            )}
-
-            {showNotifications && (
-              <div className="right-5 md:right-72 w-[300px] md:w-[400px] max-h-[400px] overflow-scroll absolute top-16 z-[1000] shrink-0 flex flex-col gap-4 px-5 py-3 rounded-md bg-white shadow-lg drop-shadow-lg">
-                {notifications.length === 0 ? (
-                  <div className="text-gray-800 text-sm text-center">
-                    No new notifications
-                  </div>
-                ) : (
-                  notifications.map((item, index) => (
-                    <div
-                      key={index}
-                      className="text-gray-800 text-sm border-b border-solid border-slate-300 pb-3 shrink-0 flex gap-3"
-                    >
-                      <div className="mr-auto">{item}</div>
-                      <div className="shrink-0 ml-auto text-xs">
-                        {"2 days ago"}
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            )}
-          </div>
-          <div className="hidden md:flex items-center gap-5">
-            <Link
-              to={"/experts"}
-              className={`${
-                location === "/experts"
-                  ? "font-extrabold"
-                  : "font-medium hover:underline hover:scale-105"
-              } relative no-underline text-black`}
-            >
-              Experts
-            </Link>
-            <Link
-              to={"/services"}
-              className={`${
-                location === "/services"
-                  ? "font-extrabold"
-                  : "font-medium hover:underline hover:scale-105"
-              } relative no-underline text-black`}
-            >
-              Services
-            </Link>
-            <Link
-              to={"/blog"}
-              className={`${
-                location === "/blog"
-                  ? "font-extrabold"
-                  : "font-medium hover:underline hover:scale-105"
-              } relative no-underline text-black`}
-            >
-              Blog
-            </Link>
-            <Link
-              to={"/about"}
-              className={`${
-                location === "/about"
-                  ? "font-extrabold"
-                  : "font-medium hover:underline hover:scale-105"
-              } relative no-underline text-black`}
-            >
-              About us
-            </Link>
-            <div className="">
-              {localStorage.getItem("isExpert") ? (
-                <div className=" cursor-pointer" onClick={toggleDropdown}>
-                  <div className="flex gap-2 justify-center items-center">
-                    <span className="font-bold">{`Hii! ${localStorage.getItem(
-                      "username"
-                    )}`}</span>
-                    <img
-                      src={localStorage.getItem("profile")}
-                      alt="profile"
-                      className="w-10 h-10 rounded-full object-cover object-center"
-                    />
-                  </div>
-                  {isDropdownOpen && (
-                    <div className="absolute right-10 bg-white text-black rounded-sm shadow-2xl border border-solid border-slate-300 z-20 flex flex-col gap-3 w-[200px] mt-3">
-                      <Link
-                        to={"/"}
-                        className="no-underline text-black text-center py-2 pb-2 border-b border-solid border-slate-300"
-                      >
-                        Home
-                      </Link>
-                      <Link
-                        to={
-                          localStorage.getItem("isExpert") === "true"
-                            ? "/expertdashboard"
-                            : "/customerdashboard"
-                        }
-                        className={`${
-                          location === "/expertdashboard" ||
-                          location === "/customerdashboard"
-                            ? "font-extrabold"
-                            : "font-medium hover:underline hover:scale-105"
-                        } relative no-underline text-black text-center py-2 pb-2 border-b border-solid border-slate-300`}
-                      >
-                        Dashboard
-                      </Link>
-                      {localStorage.getItem("isExpert") === "true" ? (
-                        <></>
-                      ) : (
-                        <Link
-                          to="/favourites"
-                          className="no-underline text-black text-center justify-center py-2 flex items-center gap-2 pb-2 border-b border-solid border-slate-300"
-                        >
-                          Favourites <FaRegHeart />
-                        </Link>
-                      )}
-                      {!jsonData.access_token || !jsonData.refresh_token ? (
-                        <Link
-                          to={"/login"}
-                          className="relative w-full text-center bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
-                        >
-                          Sign In
-                        </Link>
-                      ) : (
-                        <Link
-                          onClick={handleLogout}
-                          className="relative w-full text-center bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
-                        >
-                          Logout
-                        </Link>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <Link
-                  to={"/login"}
-                  className="relative text-center bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
-                >
-                  Sign In
-                </Link>
-              )}
+            <div>
+              {localStorage.getItem("isExpert") === "true"
+                ? item?.customer_first_name
+                : item?.expert_first_name}{" "}
+              {localStorage.getItem("isExpert") === "true"
+                ? item?.customer_last_name
+                : item?.expert_last_name}
             </div>
           </div>
-
-          <div className="block md:hidden">
-            <button onClick={toggleMenu} className="focus:outline-none">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                ></path>
-              </svg>
-            </button>
+          <div className="hidden sm:block w-[120px]">
+            {item?.time_slot_day}{" "}
+          </div>
+          <div className="w-[60px] flex items-center justify-center shrink-0">
+            <FaRegTrashAlt className="shrink-0" />
           </div>
         </div>
-        {isMenuOpen && (
-          <div className="fixed inset-0 flex justify-end z-30">
-            <div className="w-60 shadow-md bg-white p-4 space-y-4 h-full">
-              <MdClose
-                className="text-3xl bg-gray-300/40 rounded-sm"
-                onClick={toggleMenu}
-              />
-              <div className="flex flex-col gap-4">
-                {localStorage.getItem("isExpert") ? (
-                  <div className=" cursor-pointer" onClick={toggleDropdown}>
-                    <div className="flex items-center justify-between pb-2 border-b border-solid border-slate-300">
-                      <div className="flex gap-2 justify-center items-center">
-                        <span className="font-bold">{`Hii! ${localStorage.getItem(
-                          "username"
-                        )}`}</span>
-                        <img
-                          src={localStorage.getItem("profile")}
-                          alt="profile"
-                          className="w-10 h-10 rounded-full object-cover object-center"
-                        />
-                      </div>
-                      {!isDropdownOpen ? (
-                        <RiArrowDropDownLine className="text-4xl" />
-                      ) : (
-                        <RiArrowDropUpLine className="text-4xl" />
-                      )}
-                    </div>
-                    {isDropdownOpen && (
-                      <div className="my-2 text-black flex flex-col ml-3 items-start">
-                        <Link
-                          to={"/"}
-                          className="no-underline text-black text-center py-2 "
-                        >
-                          Home
-                        </Link>
-                        <Link
-                          to={
-                            localStorage.getItem("isExpert") === "true"
-                              ? "/expertdashboard"
-                              : "/customerdashboard"
-                          }
-                          className={`${
-                            location === "/expertdashboard" ||
-                            location === "/customerdashboard"
-                              ? "font-extrabold"
-                              : "font-medium hover:underline hover:scale-105"
-                          } relative no-underline text-black  text-center py-2`}
-                        >
-                          Dashboard
-                        </Link>
-                        {localStorage.getItem("isExpert") === "true" ? (
-                          <></>
-                        ) : (
-                          <Link
-                            to="/favourites"
-                            className="no-underline text-black text-center justify-center py-2 flex items-center gap-2"
-                          >
-                            Favourites <FaRegHeart />
-                          </Link>
-                        )}
-                        {!jsonData.access_token || !jsonData.refresh_token ? (
-                          <Link
-                            to={"/login"}
-                            className="relative w-fit md:w-full text-center  bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
-                          >
-                            Sign In
-                          </Link>
-                        ) : (
-                          <Link
-                            onClick={handleLogout}
-                            className="w-fit relative md:w-full text-center bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
-                          >
-                            Logout
-                          </Link>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <Link
-                    to={"/login"}
-                    className="relative text-center bg-[#2A2A2A] px-5 rounded-sm py-2 font-medium no-underline text-white"
-                  >
-                    Sign In
-                  </Link>
-                )}
-                <Link
-                  to={"/experts"}
-                  className={`${
-                    location === "/experts"
-                      ? "font-extrabold"
-                      : "font-medium hover:underline hover:scale-105"
-                  } relative no-underline text-black pb-2 border-b border-solid border-slate-300`}
-                >
-                  Experts
-                </Link>
-                <Link
-                  to={"/services"}
-                  className={`${
-                    location === "/services"
-                      ? "font-extrabold"
-                      : "font-medium hover:underline hover:scale-105"
-                  } relative  no-underline text-black pb-2 border-b border-solid border-slate-300`}
-                >
-                  Services
-                </Link>
-                <Link
-                  to={"/blog"}
-                  className={`${
-                    location === "/blog"
-                      ? "font-extrabold"
-                      : "font-medium hover:underline hover:scale-105"
-                  } relative no-underline text-black pb-2 border-b border-solid border-slate-300`}
-                >
-                  Blog
-                </Link>
-                <Link
-                  to={"/about"}
-                  className={`${
-                    location === "/about"
-                      ? "font-extrabold"
-                      : "font-medium hover:underline hover:scale-105"
-                  } relative no-underline text-black pb-2 border-b border-solid border-slate-300`}
-                >
-                  About us
-                </Link>
-              </div>
-            </div>
-          </div>
+        {open ? (
+          <IoIosArrowUp
+            className="shrink-0 text-xl "
+            onClick={() => (open ? setOpen(false) : setOpen(true))}
+          />
+        ) : (
+          <IoIosArrowDown
+            className="shrink-0 text-xl "
+            onClick={() => (open ? setOpen(false) : setOpen(true))}
+          />
         )}
       </div>
-    </nav>
+      {open && (
+        <div>
+          <div className="text-sm line-clamp-2">
+            Service Title: {item?.service_name}
+          </div>
+          <div className="text-sm mt-2">
+            Booking Date: {formatDate(item?.updated_on)}
+          </div>
+          <div className="text-sm mt-2">
+            Start Time: {item?.time_slot_start}
+          </div>
+          <div className="text-sm mt-2">End Time: {item?.time_slot_end}</div>
+          <div className="flex items-center gap-3">
+            <button className="text-sm mt-2 btnBlack text-white cursor-pointer px-3 py-1">
+              Disable service
+            </button>
+            <button
+              className="text-sm mt-2 text-black bg-white border border-solid border-black cursor-pointer px-3 py-1"
+              onClick={() => handleJoin(item.room_id)}
+            >
+              Join meeting
+            </button>
+          </div>
+          {otpopen === true && (
+            <div className="flex items-center gap-3 mt-4">
+              <input
+                type="text"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                placeholder="Enter OTP"
+                className="text-sm mt-2 border border-solid border-black px-3 py-1 rounded"
+              />
+              <button
+                className="text-sm mt-2 btnBlack text-white cursor-pointer px-3 py-1"
+                onClick={() => authenticateCustomer(item.room_id)}
+              >
+                Verify OTP
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+      {meetingActive && (
+        <div className="fixed top-0 left-0 w-full h-full bg-white z-50 flex items-center justify-center">
+          <iframe
+            src={meetingUrl}
+            allow="camera; microphone; fullscreen; display-capture"
+            style={{ width: "100%", height: "100%", border: "none" }}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
-export default TestNavbar;
+export default BookingCard;

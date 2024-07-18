@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import axios from "../axios";
@@ -7,25 +7,65 @@ const BookingCard = ({ item }) => {
   const [open, setOpen] = useState(false);
   const [otpopen, setOtpopen] = useState(false);
   const [otp, setOtp] = useState("");
+  const [meetingActive, setMeetingActive] = useState(false);
+  const [meetingUrl, setMeetingUrl] = useState("");
+
+  useEffect(() => {
+    const handleUnload = (event) => {
+      if (meetingActive) {
+        event.preventDefault();
+        event.returnValue = "";
+        window.location.href = "/feedback";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, [meetingActive]);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { day: "numeric", month: "short", year: "numeric" };
     return date.toLocaleDateString("en-US", options);
   }
-  const aunthentCustomer = async (room) => {
-    const res = await axios.post(`/meetings/meetingOtp/`, {
-      action: 2,
-      otp: otp,
-    });
-    console.log(res);
+
+  const authenticateCustomer = async (room) => {
+    if (otp.length === 0) {
+      alert("Please enter OTP");
+      return;
+    }
+    try {
+      console.log(item.order_id);
+      const res = await axios.post(`/meetings/meetingOtp/`, {
+        action: 1,
+        customer_id: Number(localStorage.getItem("customer_id")),
+        otp: otp,
+        order_id: item.order_id,
+        room_id: room,
+      });
+      console.log(res);
+      startMeeting(
+        room,
+        `${item.time_slot_day} ${convertTo24HourFormat(item.time_slot_end)}`
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   const sendOTP = async (room) => {
-    const res = await axios.get(
-      `/meetings/meetingOtp/?action=1&customer_id=${localStorage.customer_id}&order_id=${room}`
-    );
-    console.log(res);
+    try {
+      const res = await axios.get(
+        `/meetings/meetingOtp/?action=1&customer_id=${localStorage.customer_id}&order_id=${room}`
+      );
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   const handleJoin = (room) => {
     const now = new Date();
     const meetingStartTime = new Date(
@@ -33,12 +73,12 @@ const BookingCard = ({ item }) => {
     );
     console.log(now, "==>", meetingStartTime);
 
-    if (now < meetingStartTime) {
+    if (now > meetingStartTime) {
       alert(
         `The meeting is scheduled for ${meetingStartTime.toLocaleString()}. Please wait until the meeting starts.`
       );
     } else {
-      // verify the user if he is customer and let expert in directly
+      // verify the user if they are a customer and let expert in directly
       if (localStorage.getItem("isExpert") === "true") {
         startMeeting(
           room,
@@ -53,23 +93,17 @@ const BookingCard = ({ item }) => {
 
   const startMeeting = (room, endTime) => {
     const jitsiUrl = `https://meet.ultraxpert.in/${room}`;
-    const win = window.open(jitsiUrl, "_blank");
+    setMeetingUrl(jitsiUrl);
+    setMeetingActive(true);
 
-    if (win) {
-      const redirectOnClose = () => {
-        window.location.href = "https://ultraxpert.in";
-      };
-      win.addEventListener("beforeunload", redirectOnClose);
+    const endTimeDate = new Date(endTime);
+    const now = new Date();
+    const timeUntilEnd = endTimeDate - now;
 
-      const endTimeDate = new Date(endTime);
-      const now = new Date();
-      const timeUntilEnd = endTimeDate - now;
-
-      setTimeout(() => {
-        win.close();
-        redirectOnClose();
-      }, timeUntilEnd);
-    }
+    setTimeout(() => {
+      setMeetingActive(false);
+      window.location.href = "/feedback"; // Redirect to feedback route
+    }, timeUntilEnd);
   };
 
   const convertTo24HourFormat = (time) => {
@@ -151,21 +185,31 @@ const BookingCard = ({ item }) => {
             </button>
           </div>
           {otpopen === true && (
-            <div>
+            <div className="flex items-center gap-3 mt-4">
               <input
                 type="text"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 placeholder="Enter OTP"
+                className="text-sm mt-2 border border-solid border-black px-3 py-1 rounded"
               />
               <button
                 className="text-sm mt-2 btnBlack text-white cursor-pointer px-3 py-1"
-                onClick={aunthentCustomer}
+                onClick={() => authenticateCustomer(item.room_id)}
               >
                 Verify OTP
               </button>
             </div>
           )}
+        </div>
+      )}
+      {meetingActive && (
+        <div className="fixed top-0 left-0 w-full h-full bg-white z-50 flex items-center justify-center">
+          <iframe
+            src={meetingUrl}
+            allow="camera; microphone; fullscreen; display-capture"
+            style={{ width: "100%", height: "100%", border: "none" }}
+          />
         </div>
       )}
     </>
