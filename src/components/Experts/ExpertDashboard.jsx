@@ -80,132 +80,7 @@ const generateRandomData = () => {
 
   return values;
 };
-//linegrapgh data
-const userProfileData = [
-  {
-    name: "Jan",
-    views: 4000,
-    followers: 2400,
-    blogs: 2400,
-  },
-  {
-    name: "Feb",
-    views: 4000,
-    followers: 2400,
-    blogs: 2400,
-  },
-  {
-    name: "Mar",
-    views: 4000,
-    followers: 2400,
-    blogs: 2400,
-  },
-  {
-    name: "Apr",
-    views: 4000,
-    followers: 2400,
-    blogs: 2400,
-  },
-  {
-    name: "May",
-    views: 4000,
-    followers: 2400,
-    blogs: 2400,
-  },
-  {
-    name: "Jun",
-    views: 4000,
-    followers: 2400,
-    blogs: 2400,
-  },
-  {
-    name: "Jul",
-    views: 4000,
-    followers: 2400,
-    blogs: 2400,
-  },
-  {
-    name: "Aug",
-    views: 4000,
-    followers: 2400,
-    blogs: 2400,
-  },
-  {
-    name: "Sep",
-    views: 4000,
-    followers: 2400,
-    blogs: 2400,
-  },
-  {
-    name: "Oct",
-    views: 4000,
-    followers: 2400,
-    blogs: 2400,
-  },
-  {
-    name: "Nov",
-    views: 4000,
-    followers: 2400,
-    blogs: 2400,
-  },
-  {
-    name: "Dec",
-    views: 4000,
-    followers: 2400,
-    blogs: 2400,
-  },
-];
 
-const data = [
-  {
-    name: "JAN",
-    avgRating: 2,
-  },
-  {
-    name: "FEB",
-    avgRating: 4.5,
-  },
-  {
-    name: "MAR",
-    avgRating: 5,
-  },
-  {
-    name: "APR",
-    avgRating: 4.2,
-  },
-  {
-    name: "MAY",
-    avgRating: 3,
-  },
-  {
-    name: "JUN",
-    avgRating: 3,
-  },
-  {
-    name: "JUL",
-    avgRating: 4.2,
-  },
-  {
-    name: "AUG",
-    avgRating: 2,
-  },
-  {
-    name: "SEP",
-    avgRating: 4.8,
-  },
-  {
-    name: "OCT",
-    avgRating: 5,
-  },
-  {
-    name: "NOV",
-    avgRating: 4.2,
-  },
-  {
-    name: "DEC",
-    avgRating: 3.6,
-  },
-];
 const dataPie = [
   { name: "Contributions", value: 120 },
   { name: "Meetings", value: 80 },
@@ -287,40 +162,42 @@ const Contributioncard = ({
     </div>
   );
 };
-export const TestimonialsCard = ({
+const TestimonialsCard = ({
   item,
   index,
   HandleBlogs,
   HandleTestimonials,
-  getExpertAllTestimonials,
+  removeTestimonialFromState,
 }) => {
   const [comment, setComment] = useState(item?.content);
   const [readOnly, setReadOnly] = useState(true);
   const [editTestimonial, setEditTestimonial] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const handleupdates = () => {
     HandleBlogs();
     HandleTestimonials();
-    getExpertAllTestimonials();
   };
+
   const handleComment = (e) => {
     setComment(e.target.value);
   };
+
   const handleEdit = () => {
     setReadOnly(false);
     setEditTestimonial(true);
   };
+
   const cookies = document.cookie.split("; ");
   const jsonData = {};
-
   cookies.forEach((item) => {
     const [key, value] = item.split("=");
     jsonData[key] = value;
   });
+
   const handleSubmitEditedTestimonial = async (e, id) => {
     e.preventDefault();
-    console.log(id);
     try {
       const response = await axios.post(
         "/testimonial/",
@@ -347,7 +224,6 @@ export const TestimonialsCard = ({
       setEditTestimonial(false);
       handleupdates();
       setReadOnly(true);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -356,7 +232,7 @@ export const TestimonialsCard = ({
   const handleDeleteTestimonial = async (id) => {
     setLoading(true);
     try {
-      const response = await axios.post(
+      await axios.post(
         "/testimonial/",
         {
           action: 3,
@@ -369,26 +245,28 @@ export const TestimonialsCard = ({
           },
         }
       );
+      removeTestimonialFromState(id); // Remove testimonial from state immediately
       handleupdates();
-      setIsDeleting(false);
       setLoading(false);
+      setIsDeleting(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
       setIsDeleting(false);
     }
   };
+
   return (
     <>
       <div
         className={`px-14 py-4 my-5 rounded-md relative ${
-          index % 2 == 0
+          index % 2 === 0
             ? "bg-[#ececec]"
             : "border border-solid border-[#c7c7c7]"
         }`}
       >
         <div className="flex items-center justify-between text-sm font-semibold">
-          <div className="text-sm ">{item?.date_created?.split("T")[0]}</div>
+          <div className="text-sm">{item?.date_created?.split("T")[0]}</div>
           <div className="flex items-center gap-3">
             <FaEdit
               title="Edit"
@@ -442,12 +320,10 @@ export const TestimonialsCard = ({
                   type="button"
                   className={
                     loading
-                      ? `inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-sm`
-                      : `inline-flex items-center px-4 py-2 btnBlack text-white rounded-sm`
+                      ? "inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-sm"
+                      : "inline-flex items-center px-4 py-2 btnBlack text-white rounded-sm"
                   }
-                  onClick={() => (
-                    handleDeleteTestimonial(item.id)
-                  )}
+                  onClick={() => handleDeleteTestimonial(item.id)}
                 >
                   Yes
                 </button>
@@ -682,6 +558,13 @@ export const Dashboard = () => {
 
   // API integration for testimonials of expert start--->>>
   const [expertAllTestimonials, setExpertAllTestimonials] = useState([]);
+
+  const removeTestimonialFromState = (id) => {
+    setExpertAllTestimonials((prevTestimonials) =>
+      prevTestimonials.filter((testimonial) => testimonial.id !== id)
+    );
+  };
+
   const getExpertAllTestimonials = async () => {
     setLoading(true);
     try {
@@ -709,6 +592,9 @@ export const Dashboard = () => {
       setExpertAllTestimonials([]);
     }
   };
+  useEffect(() => {
+    getExpertAllTestimonials();
+  }, []);
   // API integration for testimonials of expert end--->>>
 
   const [meetings, setMeetings] = useState(true);
@@ -848,36 +734,38 @@ export const Dashboard = () => {
         <div className="mt-[4vw] xs:mt-[2.25vw] w-full text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#525252] line-clamp-3">
           {expertData.about_me}
         </div>
-       {expertData?.skills?.length > 0 && <div className="mt-[3.65vw] xs:mt-[2vw] flex flex-col gap-[2.25vw] xs:gap-[1.65vw]">
-          <div className="flex gap-[1.65vw] items-center text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#515151]">
-            <FaTags className="text-[4.45vw] xs:text-[2.9vw] sm:text-[2.65vw]" />
-            <div className="flex ">
-              {expertData?.skills?.map((item, idx) => {
-                return (
-                  <div
-                    key={idx}
-                    className="px-[3vw] xs:px-[2.2vw] sm:px-[2.4vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] border border-[#cdcdcd] border-solid"
-                  >
-                    {item.technology_name}
-                  </div>
-                );
-              })}
+        {expertData?.skills?.length > 0 && (
+          <div className="mt-[3.65vw] xs:mt-[2vw] flex flex-col gap-[2.25vw] xs:gap-[1.65vw]">
+            <div className="flex gap-[1.65vw] items-center text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#515151]">
+              <FaTags className="text-[4.45vw] xs:text-[2.9vw] sm:text-[2.65vw]" />
+              <div className="flex ">
+                {expertData?.skills?.map((item, idx) => {
+                  return (
+                    <div
+                      key={idx}
+                      className="px-[3vw] xs:px-[2.2vw] sm:px-[2.4vw] py-[0.8vw] xs:py-[0.4vw] sm:py-[0.2vw] border border-[#cdcdcd] border-solid"
+                    >
+                      {item.technology_name}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>}
+        )}
         <div className="flex mt-[1.25vw] gap-2 items-center">
-              <div className="font-bold text-sm">Referal code: </div>
-              <span className="text-sm">{expertData.refer_code}</span>
-              <MdOutlineContentCopy
-                className="cursor-pointer"
-                onClick={handleCopyToClipboard}
-              />
-              <IoMdShareAlt />
-            </div>
+          <div className="font-bold text-sm">Referal code: </div>
+          <span className="text-sm">{expertData.refer_code}</span>
+          <MdOutlineContentCopy
+            className="cursor-pointer"
+            onClick={handleCopyToClipboard}
+          />
+          <IoMdShareAlt />
+        </div>
       </div>
-      <div className="w-full h-[36vw] xs:h-[28vw] md:h-[18vw] lg:h-[20vw]  text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] border border-[#c7c7c7] border-solid rounded-lg py-[3vw] xs:py-[2vw] md:py-[1vw] flex justify-between">
-        <div className="w-[72%] h-full px-2">
-          <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-4 mb-4 text-sm md:text-base overflow-x-scroll px-2">
+      <div className="w-full h-[66vw] xs:h-[44vw] sm:h-[40vw] md:h-[26vw] lg:h-[20vw]  text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] border border-[#c7c7c7] border-solid rounded-lg py-[3vw] xs:py-[2vw] md:py-[1vw] flex flex-col lg:flex-row justify-between">
+        <div className="w-full lg:w-[72%]  px-2 overflow-hidden">
+          <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-3 text-sm md:text-base overflow-x-scroll px-2">
             <div
               className={
                 loading
@@ -904,96 +792,85 @@ export const Dashboard = () => {
             </div>
           </div>
           {basicStats && (
-            <ResponsiveContainer
-              className="-ml-[2vw] mb-[1vw] overflow-hidden"
-              width="110%"
-              height="70%"
-            >
-              <LineChart
-                className="overflow-hidden"
-                data={expertStatistics}
-                margin={{
-                  top: 20,
-                  right: 50,
-                  left: 2,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                  dataKey="month"
-                  interval={0}
-                />
-                <YAxis
-                  className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
-                  dataKey="profile_view_count"
-                  interval={0}
-                />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="profile_view_count"
-                  stroke="#8884d8"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="service_view_count"
-                  stroke="#82ca9d"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="blog_views_count"
-                  stroke="#f2e426"
-                />
-              </LineChart>
-            </ResponsiveContainer>
+            <div className="w-[106%] xs:w-full h-[42vw] xs:h-[25.4vw] sm:h-[23vw] md:h-[14.2vw] lg:h-[12vw] mt-[1.4vw]  overflow-hidden">
+              <ResponsiveContainer className="ml-[-8vw] xs:ml-[-4.8vw] sm:ml-[-4.2vw] md:-ml-[3vw] lg:-ml-[2vw] mb-[1vw]">
+                <LineChart className="overflow-hidden" data={expertStatistics}>
+                  <CartesianGrid strokeDasharray="4 4" />
+                  <XAxis
+                    className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                    dataKey="month"
+                    interval={0}
+                  />
+                  <YAxis
+                    className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                    dataKey="profile_view_count"
+                    interval={0}
+                  />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="profile_view_count"
+                    stroke="#8884d8"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="service_view_count"
+                    stroke="#82ca9d"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="blog_views_count"
+                    stroke="#f2e426"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           )}
           {extraStats && (
-            <ResponsiveContainer width="105%" height="70%">
-              <BarChart
-                width={500}
-                height={300}
-                data={expertStatistics}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: -20,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" interval={0} />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar
-                  dataKey="followers_count"
-                  fill="#8884d8"
-                  activeBar={<Rectangle fill="pink" stroke="blue" />}
-                />
-                <Bar
-                  dataKey="avg_score"
-                  fill="#82ca9d"
-                  activeBar={<Rectangle fill="gold" stroke="purple" />}
-                />
-                <Bar
-                  dataKey="service_count"
-                  fill="#822a9d"
-                  activeBar={<Rectangle fill="red" stroke="purple" />}
-                />
-                <Bar
-                  dataKey="rating_count"
-                  fill="#82fa9d"
-                  activeBar={<Rectangle fill="blue" stroke="purple" />}
-                />
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="w-[106%] xs:w-full h-[42vw] xs:h-[25.4vw] sm:h-[23vw] md:h-[14.2vw] lg:h-[12vw] mt-[1.4vw]  overflow-hidden ml-[-9vw] xs:ml-[-5.8vw] sm:ml-[-5.2vw] md:-ml-[4vw] lg:-ml-[2vw] mb-[1vw]">
+              <ResponsiveContainer>
+                <BarChart className="overflow-hidden" data={expertStatistics}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                    dataKey="month"
+                    interval={0}
+                  />
+                  <YAxis
+                    className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                    // dataKey="profile_view_count"
+                    interval={0}
+                  />
+                  <Tooltip />
+                  <Legend />
+                  <Bar
+                    dataKey="followers_count"
+                    fill="#B54CA8"
+                    activeBar={<Rectangle fill="pink" stroke="blue" />}
+                  />
+                  <Bar
+                    dataKey="avg_score"
+                    fill="#248AA8"
+                    activeBar={<Rectangle fill="gold" stroke="purple" />}
+                  />
+                  <Bar
+                    dataKey="service_count"
+                    fill="#822a9d"
+                    activeBar={<Rectangle fill="red" stroke="purple" />}
+                  />
+                  <Bar
+                    dataKey="rating_count"
+                    fill="#82fa9d"
+                    activeBar={<Rectangle fill="blue" stroke="purple" />}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           )}
         </div>
-        <div className="w-[28%] h-full md:border-l border-[#2e2e2e] border-solid">
-          <div className="flex md:flex-col justify-between md:justify-around h-[80%] mt-[1.4vw] md:mt-[1vw] lg:mt-[0.2vw] text-[#575757] text-[2.65vw] xs:text-[1.8vw] md:text-[1.2vw] lg:text-[1vw] mb-[1vw] md:mb-[0.4vw] lg:mb-0 px-[2vw]">
+        <div className="w-full lg:w-[28%] h-auto lg:border-l border-[#2e2e2e] border-solid">
+          <div className="flex flex-row lg:flex-col justify-between lg:justify-around h-[80%] mt-[1.4vw] md:mt-[1vw] lg:mt-[0.2vw] text-[#575757] text-[2.65vw] xs:text-[1.8vw] md:text-[1.2vw] lg:text-[1vw] mb-[1vw] md:mb-[0.2vw] lg:mb-0 px-[2vw] shrink-0 overflow-hidden">
             <div className="flex items-center gap-[1.2vw] ">
               <IoEyeSharp className="text-[#FF5E18] text-[3.65vw] xs:text-[2.65vw] md:text-[1.65vw] lg:text-[1.45vw]" />{" "}
               Views <span>{expertData.profile_view_count}</span>
@@ -1010,7 +887,7 @@ export const Dashboard = () => {
         </div>
       </div>
       <div className="w-full flex flex-col lg:flex-row border border-[#c7c7c7] border-solid rounded-lg py-[3vw] xs:py-[2vw] md:py-[1vw] shadow-md">
-        <div className=" w-[108%] xs:w-[100%]  overflow-hidden">
+        <div className=" w-[108%] xs:w-[100%]  overflow-y-hidden">
           <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-4 mb-4 text-sm md:text-base overflow-x-scroll px-2">
             <div
               className={`px-3 py-2 cursor-pointer font-semibold shrink-0 ${
@@ -1030,21 +907,21 @@ export const Dashboard = () => {
             </div> */}
           </div>
           {avgRating && (
-            <div className="flex justify-between px-[1vw]">
-              <div className="w-[110%] h-[38vw] xs:h-[28vw] md:h-[16vw] lg:h-[14vw] ml-[-10vw] xs:ml-[-7.65vw] sm:ml-[-6vw] md:ml-[-3.4vw] lg:ml-[-2.6vw] mt-[2vw] md:mt-[0.8vw] mb-[-1vw] text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] overflow-hidden">
+            <div className="max-w-[100%] flex justify-between px-[1vw] overflow-hidden overflow-x-scroll">
+              <div className=" overflow-x-scroll overflow-hidden w-[103%] xs:w-[110%] h-[38vw] xs:h-[28vw] md:h-[16vw] lg:h-[14vw] ml-[-10vw] xs:ml-[-7.65vw] sm:ml-[-6vw] md:ml-[-3.4vw] lg:ml-[-2.6vw] mt-[2vw] md:mt-[0.8vw] mb-[-1vw] text-[2.65vw] xs:text-[1.8vw] sm:text-[1.6vw] md:text-[1vw] ">
                 <ResponsiveContainer>
                   <ComposedChart
                     data={expertStatistics}
-                    className="overflow-hidden"
+                    className="overflow-x-scroll"
                   >
                     <CartesianGrid stroke="#629BF0" />
                     <XAxis
-                      className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                      className="text-[2.1vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
                       dataKey="month"
                       interval={0}
                     />
                     <YAxis
-                      className="text-[2vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
+                      className="text-[2.1vw] xs:text-[1.35vw] md:text-[1vw] lg:text-[0.8vw]"
                       dataKey={"avg_rating"}
                       interval={0}
                     />
@@ -1316,12 +1193,12 @@ export const Dashboard = () => {
           ) : (
             expertAllTestimonials?.map((item, index) => (
               <TestimonialsCard
-                key={index}
+                key={item.id}
                 item={item}
                 index={index}
                 HandleBlogs={HandleBlogs}
                 HandleTestimonials={HandleTestimonials}
-                getExpertAllTestimonials={getExpertAllTestimonials}
+                removeTestimonialFromState={removeTestimonialFromState}
               />
             ))
           ))}
@@ -1334,17 +1211,18 @@ export const Dashboard = () => {
 
 export const MyServices = () => {
   const navigate = useNavigate();
-  const services = Array.from({ length: 3 });
   const [shimmer, setShimmer] = useState(false);
   const [myServices, setMyServices] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [serviceToDelete, setServiceToDelete] = useState(null);
 
   const getMyServices = async () => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
     cookie.forEach((item) => {
       const [key, value] = item.split("=");
-      jsonData[key] = value;
+      jsonData[key.trim()] = value;
     });
     setShimmer(true);
     try {
@@ -1367,7 +1245,6 @@ export const MyServices = () => {
       const json = res.data;
       setMyServices(json.data);
       setShimmer(false);
-      console.log(myServices);
     } catch (error) {
       setShimmer(false);
       if (error.response.status === 404) {
@@ -1377,13 +1254,13 @@ export const MyServices = () => {
       }
     }
   };
-  console.log(myServices);
+
   const deleteService = async (id) => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
     cookie.forEach((item) => {
       const [key, value] = item.split("=");
-      jsonData[key] = value;
+      jsonData[key.trim()] = value;
     });
     setLoading(true);
     try {
@@ -1400,13 +1277,13 @@ export const MyServices = () => {
           },
         }
       );
-      console.log(res);
       setLoading(false);
       if (!res.data || res.data.status === 400 || res.data.status === 401) {
         console.log(res.data);
         return;
       } else {
         setIsDeleting(false);
+        setServiceToDelete(null);
         getMyServices();
       }
     } catch (error) {
@@ -1414,14 +1291,24 @@ export const MyServices = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getMyServices();
   }, []);
 
-  const [isDeleting, setIsDeleting] = useState(false);
+  const handleDeleteClick = (serviceId) => {
+    setIsDeleting(true);
+    setServiceToDelete(serviceId);
+  };
+
+  const handleConfirmDelete = () => {
+    if (serviceToDelete) {
+      deleteService(serviceToDelete);
+    }
+  };
 
   return (
-    <div className="w-full md:w-[68%] ">
+    <div className="w-full md:w-[68%]">
       <div className="flex justify-between border-b border-solid border-slate-200 pb-3">
         <div className="text-xl font-bold">My services</div>
         <div
@@ -1458,7 +1345,7 @@ export const MyServices = () => {
                       ? `inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-sm`
                       : `inline-flex items-center px-4 py-2 btnBlack text-white rounded-sm`
                   }
-                  onClick={() => deleteService(myServices[0].id)}
+                  onClick={handleConfirmDelete}
                 >
                   Yes
                 </button>
@@ -1492,7 +1379,7 @@ export const MyServices = () => {
                     <MdOutlineEdit size={18} /> Edit
                   </button>
                   <button
-                    onClick={() => setIsDeleting(true)}
+                    onClick={() => handleDeleteClick(service.id)}
                     className="flex gap-2 items-center btnBlack text-sm px-3 py-1 rounded-sm text-white cursor-pointer"
                   >
                     <RiDeleteBin6Fill size={15} /> Delete

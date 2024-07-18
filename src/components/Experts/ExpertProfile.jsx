@@ -246,9 +246,10 @@ export const RatingCard = ({ temp }) => {
 export const ExpertRatings = ({ expert }) => {
   return (
     <div className="px-1 xs:px-5 mb-10 lg:mb-0">
+      {console.log(expert)}
       <div className="border-b border-solid border-slate-300 pb-10">
         <div className="text-xl md:text-2xl font-semibold mt-6 md:mt-0">
-          50 reviews
+          {expert?.customer_ratings?.length} reviews
         </div>
         <div className="mt-6 text-base md:text-lg">Rating Breakdown</div>
         <div className="flex items-center gap-[4vw]">
@@ -257,14 +258,14 @@ export const ExpertRatings = ({ expert }) => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Availability</div>
                 <div>
-                  <MdStar /> {expert?.expert?.avg_availability}
+                  <MdStar /> {Math.round(expert?.avg_availability*10)/10}
                 </div>
               </div>
               <div className=" bg-red-100 rounded-full">
                 <div
                   className="border-[3px] border-solid border-red-500 rounded-full"
                   style={{
-                    width: `${(expert?.expert?.avg_availability / 5) * 100}%`,
+                    width: `${((Math.round(expert?.avg_availability*10)/10)/ 5) * 100}%`,
                   }}
                 ></div>
               </div>
@@ -273,30 +274,30 @@ export const ExpertRatings = ({ expert }) => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Skills</div>
                 <div>
-                  <MdStar /> {expert?.expert?.avg_skills}
+                  <MdStar /> {Math.round(expert?.avg_skills*10)/10}
                 </div>
               </div>
               <div className=" bg-blue-100 rounded-full">
                 <div
                   className="border-[3px] border-solid border-blue-500 rounded-full"
                   style={{
-                    width: `${(expert?.expert?.avg_skills / 5) * 100}%`,
+                    width: `${(expert?.avg_skills / 5) * 100}%`,
                   }}
                 ></div>
               </div>
             </div>
             <div className="my-4 flex flex-col ">
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
-                <div>Coorporation</div>
+                <div>Cooperation</div>
                 <div>
-                  <MdStar /> {expert?.expert?.avg_cooperation}
+                  <MdStar /> {Math.round(expert?.avg_cooperation*10)/10}
                 </div>
               </div>
               <div className=" bg-purple-100 rounded-full">
                 <div
                   className="border-[3px] border-solid border-purple-500 rounded-full"
                   style={{
-                    width: `${(expert?.expert?.avg_cooperation / 5) * 100}%`,
+                    width: `${(expert?.avg_cooperation / 5) * 100}%`,
                   }}
                 ></div>
               </div>
@@ -307,14 +308,14 @@ export const ExpertRatings = ({ expert }) => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Deadline</div>
                 <div>
-                  <MdStar /> {expert?.expert?.avg_deadline}
+                  <MdStar /> {Math.round(expert?.avg_deadline*10)/10}
                 </div>
               </div>
               <div className=" bg-red-100 rounded-full">
                 <div
                   className="border-[3px] border-solid border-red-500 rounded-full"
                   style={{
-                    width: `${(expert?.expert?.avg_deadline / 5) * 100}%`,
+                    width: `${(expert?.avg_deadline / 5) * 100}%`,
                   }}
                 ></div>
               </div>
@@ -323,14 +324,14 @@ export const ExpertRatings = ({ expert }) => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Quality</div>
                 <div>
-                  <MdStar /> {expert?.expert?.avg_quality}
+                  <MdStar /> {Math.round(expert?.avg_quality*10)/10}
                 </div>
               </div>
               <div className=" bg-blue-100 rounded-full">
                 <div
                   className="border-[3px] border-solid border-blue-500 rounded-full"
                   style={{
-                    width: `${(expert?.expert?.avg_quality / 5) * 100}%`,
+                    width: `${(expert?.avg_quality / 5) * 100}%`,
                   }}
                 ></div>
               </div>
@@ -339,14 +340,14 @@ export const ExpertRatings = ({ expert }) => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Communication</div>
                 <div>
-                  <MdStar /> {expert?.expert?.avg_communication}
+                  <MdStar /> {Math.round(expert?.avg_communication * 10) / 10}
                 </div>
               </div>
               <div className=" bg-purple-100 rounded-full">
                 <div
                   className="border-[3px] border-solid border-purple-500 rounded-full"
                   style={{
-                    width: `${(expert?.expert?.avg_communication / 5) * 100}%`,
+                    width: `${(expert?.avg_communication / 5) * 100}%`,
                   }}
                 ></div>
               </div>
@@ -354,29 +355,20 @@ export const ExpertRatings = ({ expert }) => {
           </div>
         </div>
       </div>
-      <div>
-        <div className="mt-8 mb-12 flex items-center justify-between">
-          <div className="text-xl md:text-2xl font-semibold ">Top Reviews</div>
-          <select
-            name="Sort by"
-            id=""
-            className="px-4 py-2 text-sm md:text-lg border border-solid border-slate-300 outline-none"
-          >
-            <option value="newest" className="text-xs md:text-sm px-4 py-2">
-              Newest
-            </option>
-            <option value="oldest" className="text-xs md:text-sm px-4 py-2">
-              Oldest
-            </option>
-          </select>
-        </div>
-        {/* {expertDetailsObj.ratings.map((temp, idx) => (
-          <RatingCard key={idx} {...temp} />
-        ))} */}
+      <div className="my-5">
+        <div className="font-semibold text-xl sm:text-2xl mt-5">Top reviews</div>
+        {
+          expert?.customer_ratings?.map((item,index)=>
+            <div key={index} className="my-6 border-b border-solid border-slate-300 pb-2">
+              <div className="flex gap-4 items-center">
+                <img className="h-11 w-11 sm:h-12 sm:w-12 shrink-0 object-cover rounded-full" src={item?.customer_profile_img} alt="profile" />
+                <div className="text-lg sm:text-xl font-semibold">{item?.customer_first_name} {item?.customer_last_name}</div>
+              </div>
+              <div className="text-xs sm:text-base font-montserrat mt-3 pl-3">{item?.review}</div>
+            </div>
+          )
+        }
       </div>
-      <button className="bg-white px-[1.5vw] py-[0.2vw] text-sm md:text-base text-black font-semibold border rounded-sm sm:rounded-md">
-        Show more
-      </button>
     </div>
   );
 };
@@ -723,7 +715,7 @@ export const ExpertInfo = ({ ...expert }) => {
             />
           )}
           {services && <ExpertServices />}
-          {ratings && <ExpertRatings />}
+          {ratings && <ExpertRatings expert={expert?.expert} />}
           {blogs &&
             (blogArray?.length === 0 ? (
               <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600 ">

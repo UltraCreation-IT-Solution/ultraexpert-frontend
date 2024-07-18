@@ -4,25 +4,25 @@ import { FaStar, FaHeart, FaRegHeart, FaBookmark } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 import axios from "../../axios";
 
-export const FavExpertCard = ({ item, getFavExpData }) => {
-  const [FavExpert, setFavExpert] = useState(true);
+const getCookieData = () => {
   const cookie = document.cookie.split(";");
   const jsonData = {};
-
   cookie.forEach((item) => {
     const [key, value] = item.split("=");
-    jsonData[key] = value;
+    jsonData[key.trim()] = value;
   });
-  console.log(item);
+  return jsonData;
+};
+
+export const FavExpertCard = ({ item, handleRemoveFav }) => {
+  const [isFav, setIsFav] = useState(true);
+  const jsonData = getCookieData();
+
   const addFav = async () => {
-    console.log(item.expert.id);
     try {
       const res = await axios.post(
         "/customers/connect/",
-        {
-          action: 3,
-          expert_id: item.id,
-        },
+        { action: 3, expert_id: item.id },
         {
           headers: {
             "Content-Type": "application/json",
@@ -36,19 +36,17 @@ export const FavExpertCard = ({ item, getFavExpData }) => {
         return;
       }
       console.log(json);
-      setFavExpert(true);
+      setIsFav(true);
     } catch (error) {
       console.log(error);
     }
   };
+
   const remFav = async () => {
     try {
       const res = await axios.post(
         "/customers/connect/",
-        {
-          action: 4,
-          expert_id: item.id,
-        },
+        { action: 4, expert_id: item.id },
         {
           headers: {
             "Content-Type": "application/json",
@@ -62,12 +60,13 @@ export const FavExpertCard = ({ item, getFavExpData }) => {
         return;
       }
       console.log(json);
-      setFavExpert(false);
-      getFavExpData();
+      // setIsFav(false);
+      handleRemoveFav(item.id);
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <div className="relative min-w-[250px] h-[250px] md:min-w-[310px] md:h-[300px] flex flex-col shadow-lg border border-[#dbdbdb] border-solid rounded-lg">
       <img
@@ -76,13 +75,8 @@ export const FavExpertCard = ({ item, getFavExpData }) => {
         alt=""
       />
       <div className="absolute top-1 right-2 z-10 text-white text-2xl md:text-3xl py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  ">
-        {FavExpert ? (
-          <FaHeart onClick={() => remFav()} />
-        ) : (
-          <FaRegHeart onClick={() => addFav()} />
-        )}
+        {isFav ? <FaHeart onClick={remFav} /> : <FaRegHeart onClick={addFav} />}
       </div>
-      <div className="absolute top-[0.6vw] right-[0.3vw] z-10 text-white text-[6vw] xs:text-[4.5vw] sm:text-[2.4vw] md:text-[2.2vw] lg:text-[2vw] py-[0.4vw] px-[0.4vw] drop-shadow-md flex items-center border-solid  "></div>
       <img
         src={item?.user?.banner_img}
         className="h-[5rem] md:h-[6rem] object-cover shrink-0"
@@ -93,11 +87,11 @@ export const FavExpertCard = ({ item, getFavExpData }) => {
           {item?.user?.first_name} {item?.user?.last_name}
         </div>
         <div className="text-gray-500 text-sm md:text-base">
-          {item?.profession}{" "}
+          {item?.profession}
         </div>
         <div className="mt-2 text-sm md:text-base flex items-center justify-center gap-1 ">
           <FaStar />
-          <div>{item?.expert_rating} </div>
+          <div>{item?.expert_rating}</div>
         </div>
         <Link
           to={`/experts/expertprofile/${item?.id}`}
@@ -242,7 +236,7 @@ export const FavBlogsCard = ({ item, getFavBlog }) => {
   return (
     <div className=" relative shrink-0 w-[250px] md:w-[310px] rounded-md bg-white border-[0.6px] border-[#bebebe] border-solid shadow-lg md:mb-0">
       <img
-        src={item.images[0]}
+        src={item.images}
         className="w-full h-[150px] md:h-[180px] object-cover  shrink-0 md:mb-[0.7vw]"
         alt=""
       />
@@ -280,13 +274,18 @@ export const AllFav = () => {
   const [allFavBlog, setAllFavBlog] = useState([]);
   const [allFavServ, setAllFavServ] = useState([]);
 
-  const getFavServ = async () => {
+  const getCookieData = () => {
     const cookie = document.cookie.split(";");
     const jsonData = {};
     cookie.forEach((item) => {
       const [key, value] = item.split("=");
-      jsonData[key] = value;
+      jsonData[key.trim()] = value;
     });
+    return jsonData;
+  };
+
+  const getFavServ = async () => {
+    const jsonData = getCookieData();
     try {
       const res = await axios.get("/customers/connect/?action=3", {
         headers: {
@@ -305,13 +304,9 @@ export const AllFav = () => {
       console.log(error);
     }
   };
+
   const getFavBlog = async () => {
-    const cookie = document.cookie.split(";");
-    const jsonData = {};
-    cookie.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
+    const jsonData = getCookieData();
     try {
       const res = await axios.get("/blogs/?action=5", {
         headers: {
@@ -330,13 +325,9 @@ export const AllFav = () => {
       console.log(error);
     }
   };
+
   const getFavExp = async () => {
-    const cookie = document.cookie.split(";");
-    const jsonData = {};
-    cookie.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
+    const jsonData = getCookieData();
     try {
       const res = await axios.get("/customers/connect/?action=1", {
         headers: {
@@ -364,55 +355,30 @@ export const AllFav = () => {
 
   return (
     <div>
-      {/* Favourate Experts */}
-      <FavExperts getFavExp={getFavExp} />
-      {/* Favourate services */}
+      {/* Favorite Experts */}
+      <FavExperts allFavExp={allFavExp} setAllFavExp={setAllFavExp} />
+      {/* Favorite Services */}
       <FavServices />
-      {/* Favourate Blogs */}
+      {/* Favorite Blogs */}
       <FavBlogs />
     </div>
   );
 };
 
-export const FavExperts = ({ getFavExp }) => {
-  const [favExpertsData, setFavExpertsData] = useState([]);
-  const getFavExpData = async () => {
-    const cookie = document.cookie.split(";");
-    const jsonData = {};
-    cookie.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    try {
-      const res = await axios.get("/customers/connect/?action=1", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
-      const json = res.data.data;
-      if (!json) {
-        console.log("no data");
-        return;
-      }
-      console.log(json);
-      setFavExpertsData(json);
-    } catch (error) {
-      console.log(error);
-    }
+export const FavExperts = ({ allFavExp, setAllFavExp }) => {
+  const handleRemoveFav = (id) => {
+    setAllFavExp(allFavExp.filter((item) => item.id !== id));
   };
-  useEffect(() => {
-    getFavExpData();
-  }, []);
+
   return (
     <div className="mt-10">
-      <div className="font-bold text-xl md:text-3xl ">Experts</div>
+      <div className="font-bold text-xl md:text-3xl">Experts</div>
       <div className="flex items-center overflow-x-scroll gap-5 mt-5">
-        {favExpertsData.map((item, index) => (
+        {allFavExp.map((item, index) => (
           <FavExpertCard
             key={index}
             item={item}
-            getFavExpData={getFavExpData}
+            handleRemoveFav={handleRemoveFav}
           />
         ))}
       </div>
