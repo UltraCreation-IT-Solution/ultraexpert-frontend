@@ -662,6 +662,7 @@ const MyBigCalendar = ({ showSlots }) => {
       setUpdateData(serviceData);
       setServiceTitle(serviceData.service_name);
       setEvents(processServiceData(serviceData.availability));
+      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -948,7 +949,7 @@ const MyBigCalendar = ({ showSlots }) => {
       <div className="text-center text-2xl font-bold mb-4">
         Set Availability
       </div>
-      <div className="bg-white rounded-lg shadow-md p-6 mb-4 border-[0.25px] border-slate-400 border-solid">
+      <div className="bg-white rounded-lg shadow-md p-6 mb-4 border-[0.25px] border-slate-200 border-solid">
         <form>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
@@ -999,7 +1000,7 @@ const MyBigCalendar = ({ showSlots }) => {
             Add Time Slot
           </button>
           <button
-            onClick={() => handlePostEvent()}
+            onClick={(e) => handlePostEvent(e)}
             className="btnBlack text-white font-bold py-2 px-2 xs:px-6 text-sm md:text-lg rounded-sm"
           >
             Update Slots

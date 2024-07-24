@@ -681,12 +681,12 @@ const SignUpAsExpert = () => {
         }
       >
         <>
-          <div className="relative flex justify-between items-center my-5 lg:mx-20">
+          <div className="mx-5 relative overflow-x-scroll flex justify-between items-center gap-5 my-5 lg:mx-20">
             {CHECKOUT_STEPS.map((step, index) => (
               <div
                 key={step.name}
                 ref={(el) => (stepRef.current[index] = el)}
-                className="flex flex-col items-center relative"
+                className="flex flex-col shrink-0 items-center relative"
               >
                 <div
                   className={`w-5 h-5 md:w-7 md:h-7 rounded-full bg-white flex items-center text-xs md:text-sm justify-center mb-1 z-10 border border-solid ${
@@ -698,7 +698,7 @@ const SignUpAsExpert = () => {
                   {currStep > index || isComplete ? "✔" : index + 1}
                 </div>
                 <div
-                  className={`text-xs  ${
+                  className={`text-xs  shrink ${
                     currStep >= index ? "text-[#3E5676]" : "text-gray-400"
                   }`}
                 >
@@ -706,21 +706,6 @@ const SignUpAsExpert = () => {
                 </div>
               </div>
             ))}
-            <div
-              className="absolute top-1/4 left-0 h-[1px] bg-gray-400"
-              style={{
-                width: `calc(100% - ${
-                  margin.marginLeft + margin.marginRight
-                }px)`,
-                marginLeft: `${margin.marginLeft}px`,
-                marginRight: `${margin.marginRight}px`,
-              }}
-            >
-              <div
-                className="h-full bg-[#3E5676] transition-all duration-500 ease-in"
-                style={{ width: `${calculateProgressBarWidth()}%` }}
-              ></div>
-            </div>
           </div>
           <div className="h-[1px] w-full bg-gray-400 my-2"></div>
           {currStep === 0 && (
