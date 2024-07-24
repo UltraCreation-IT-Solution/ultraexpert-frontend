@@ -141,6 +141,7 @@ export const ShowSchedule = ({ id }) => {
             })}
         </div>
       </div>
+      {console.log(servDesc)}
       <div>
         <div>Available Slots for {selectedDay}</div>
         <div className="flex gap-3 overflow-x-auto pt-3">
@@ -181,7 +182,13 @@ export const ShowSchedule = ({ id }) => {
           )}
         </div>
       </div>
-       {localStorage.getItem("isExpert") === "true" ? <div className="text-red-500 text-base mt-4">Only customers can book the service!</div> :<></>}
+      {localStorage.getItem("isExpert") === "true" ? (
+        <div className="text-red-500 text-base mt-4">
+          Only customers can book the service!
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="no-underline">
         <button
           disabled={
@@ -204,7 +211,11 @@ export const ShowSchedule = ({ id }) => {
               ? "cursor-not-allowed opacity-75"
               : "cursor-pointer"
           } `}
-          onClick={() =>localStorage.getItem("username")? goToBooking():navigate("/login")}
+          onClick={() =>
+            localStorage.getItem("username")
+              ? goToBooking()
+              : navigate("/login")
+          }
         >
           Book a slot
         </button>

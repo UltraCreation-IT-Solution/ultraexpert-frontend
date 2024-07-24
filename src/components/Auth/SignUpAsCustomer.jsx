@@ -280,7 +280,7 @@ const SignUpAsCustomer = () => {
           <div className="relative flex justify-between items-center my-5 mx-12 lg:mx-40">
             {CHECKOUT_STEPS.map((step, index) => (
               <div
-                key={step.name}
+                key={step.name}x
                 ref={(el) => (stepRef.current[index] = el)}
                 className="flex flex-col items-center relative"
               >
