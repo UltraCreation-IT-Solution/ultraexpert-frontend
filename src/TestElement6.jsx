@@ -614,7 +614,6 @@ export const MyBigCalendar = ({ showSlots }) => {
   const [notifyBeforeTime, setNotifyBeforeTime] = useState(0);
   const [notifyAfterTime, setNotifyAfterTime] = useState(0);
   const [events, setEvents] = useState([]);
-  const [newEvents, setNewEvents] = useState([]); // State for new events
   const [startInputDate, setStartInputDate] = useState("");
   const [startInputTime, setStartInputTime] = useState("");
   const [endInputDate, setEndInputDate] = useState("");
@@ -622,6 +621,10 @@ export const MyBigCalendar = ({ showSlots }) => {
   const [updateData, setUpdateData] = useState({});
   const [serviceTitle, setServiceTitle] = useState("");
   const [temp, setTemp] = useState(0);
+
+  useEffect(() => {
+    getServiceDetails();
+  }, [showSlots, temp]);
 
   const getServiceDetails = async () => {
     const cookie = document.cookie.split("; ");
@@ -649,7 +652,6 @@ export const MyBigCalendar = ({ showSlots }) => {
       setUpdateData(serviceData);
       setServiceTitle(Data.data.service_name);
       setEvents(processServiceData(serviceData.availability));
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -683,7 +685,8 @@ export const MyBigCalendar = ({ showSlots }) => {
     }
     return events;
   };
-
+  console.log(events);
+  const [loading, setLoading] = useState(false);
   const handlePostEvent = async (e) => {
     e.preventDefault();
     const cookies = document.cookie.split("; ");
@@ -749,7 +752,7 @@ export const MyBigCalendar = ({ showSlots }) => {
         alert("Start time and end time for an event should not be the same.");
         return;
       }
-      const newEventsArray = [];
+      const newEvents = [];
       let currentDate = startDate.clone();
       while (currentDate.isSameOrBefore(endDate, "day")) {
         const newEvent = {
@@ -766,11 +769,10 @@ export const MyBigCalendar = ({ showSlots }) => {
             .minute(endTime.minute())
             .toDate(),
         };
-        newEventsArray.push(newEvent);
+        newEvents.push(newEvent);
         currentDate.add(1, "day");
       }
-      setNewEvents([...newEvents, ...newEventsArray]);
-      console.log("New Events Array:", newEventsArray); // Log the new events array
+      setEvents([...events, ...newEvents]);
       setStartInputDate("");
       setStartInputTime("");
       setEndInputDate("");
@@ -788,7 +790,7 @@ export const MyBigCalendar = ({ showSlots }) => {
 
     return {
       time_slot_id: event.id,
-      day: `${startDate.format("ddd DD MMM YYYY")}`,
+      day: `${startDate.format("ddd DD MMM")}`,
       start_time: startDate.format("h:mm A"),
       end_time: endDate.format("h:mm A"),
       timezone: "IST",
@@ -857,187 +859,144 @@ export const MyBigCalendar = ({ showSlots }) => {
           },
         }
       );
-
-      const data = res.data;
-      console.log(data);
-      if (!data || data.status === 400 || data.status === 401) {
-        console.log("Something went wrong");
-        return;
-      }
-      setEvents(events.filter((event) => event.id !== selectedEvent.id));
-      setShowModal(false);
+      console.log(res);
+      setTemp(temp + 1);
     } catch (error) {
       console.log(error);
     }
+    // setEvents(events.filter((event) => event.id !== selectedEvent.id));
+    setShowModal(false);
   };
 
-  const handleSaveAndLogEvents = async () => {
-    const cookies = document.cookie.split("; ");
-    const jsonData = {};
-    cookies.forEach((item) => {
-      const [key, value] = item.split("=");
-      jsonData[key] = value;
-    });
-    try {
-      const allEvents = [...newEvents];
-      console.log("All Events:", allEvents);
-
-      // Make API call to save events
-      const res = await axios.post(
-        "/experts/services/",
-        {
-          action: 5,
-          service_id: updateData?.id,
-          notify_before: notifyBefore,
-          notify_before_time: notifyBeforeTime.toString(),
-          notify_after: notifyAfter,
-          notify_after_time: notifyAfterTime.toString(),
-          time_slots: convertEventsToAPIFormat(newEvents), // Convert events to API format
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-
-      console.log(res);
-      if (res.status === 200) {
-        // Update events state to re-render the calendar
-        setEvents(allEvents);
-        setNewEvents([]);
-        setTemp(temp + 1);
-        alert("Events saved successfully");
-        setTemp(temp + 1);
-        getServiceDetails();
-      }
-    } catch (error) {
-      console.log("Error saving events:", error);
-    }
-  };
-  useEffect(() => {
-    getServiceDetails();
-  }, [showSlots, temp]);
   return (
-    <div>
-      <div className="flex gap-10 flex-wrap w-full">
-        <div className="flex flex-col gap-1 ">
-          <label className="text-base text-gray-600">Start Date</label>
-          <input
-            type="date" 
-            value={startInputDate}
-            onChange={(e) => setStartInputDate(e.target.value)}
-            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-base text-gray-600">End Date:</label>
-          <input
-            type="date"
-            value={endInputDate}
-            onChange={(e) => setEndInputDate(e.target.value)}
-            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-base text-gray-600">Start Time:</label>
-          <input
-            type="time"
-            value={startInputTime}
-            onChange={(e) => setStartInputTime(e.target.value)}
-            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-base text-gray-600">End Time:</label>
-          <input
-            type="time"
-            value={endInputTime}
-            onChange={(e) => setEndInputTime(e.target.value)}
-            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col xs:flex-row gap-3 sm:gap-5 my-10">
-        <button
-          className="w-fit text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
-          onClick={handleCreateEvent}
-        >
-          Create Event
-        </button>
-        <button
-          className="w-fit text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
-          onClick={handleSaveAndLogEvents}
-        >
-          Save and Log Events
-        </button>
-      </div>
-      <div>
-        <form onSubmit={handlePostEvent} >
-
+    <>
+      <div className={`calendar-container ${showModal ? "blur-sm" : ""}`}>
+        <div className="flex gap-10 flex-wrap w-full">
+          <div className="flex flex-col gap-1 ">
+            <label className="text-base text-gray-600">Start Date</label>
+            <input
+              type="date"
+              value={startInputDate}
+              onChange={(e) => setStartInputDate(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+            />
+          </div>
           <div className="flex flex-col gap-1">
-            <label className="text-base text-gray-600">
-              Notify Before:
+            <label className="text-base text-gray-600">End Date:</label>
+            <input
+              type="date"
+              value={endInputDate}
+              onChange={(e) => setEndInputDate(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-base text-gray-600">Start Time:</label>
+            <input
+              type="time"
+              value={startInputTime}
+              onChange={(e) => setStartInputTime(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-base text-gray-600">End Time:</label>
+            <input
+              type="time"
+              value={endInputTime}
+              onChange={(e) => setEndInputTime(e.target.value)}
+              className="border border-solid border-slate-300 rounded-md px-2 py-1 text-xs outline-none w-56"
+            />
+          </div>
+        </div>
+
+        <div className="mt-10 flex gap-10">
+          <div>
+            <div className="flex items-center gap-2">
+              <label className="text-base text-gray-600">Notify Before: </label>
               <input
                 type="checkbox"
-                checked={notifyBefore}
-                onChange={(e) => setNotifyBefore(e.target.checked)}
+                name="checkbox"
+                id="checkbox"
+                onClick={() => setNotifyBefore(!notifyBefore)}
               />
-            </label>
+            </div>
+
             {notifyBefore && (
-              <label>
-                Notify Before Time (minutes):
-                <input
-                  type="number"
-                  value={notifyBeforeTime}
-                  onChange={(e) => setNotifyBeforeTime(e.target.value)}
-                  className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-2"
-                />
-              </label>
+              <input
+                placeholder="enter time in minutes"
+                type="number"
+                name="notifyBefore"
+                id="notifyBefore"
+                onChange={(e) => setNotifyBeforeTime(e.target.value)}
+                className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-5"
+              />
             )}
           </div>
-          <div className="mt-3 flex flex-col gap-1">
-            <label className="text-base text-gray-600">
-              Notify After:
+          <div>
+            <div className="flex items-center gap-2">
+              <label className="text-base text-gray-600">Notify After: </label>
               <input
                 type="checkbox"
-                checked={notifyAfter}
-                onChange={(e) => setNotifyAfter(e.target.checked)}
+                name="checkbox"
+                id="checkbox"
+                onClick={() => setNotifyAfter(!notifyAfter)}
               />
-            </label>
+            </div>
 
             {notifyAfter && (
-              <label>
-                Notify After Time (minutes):
-                <input
-                  type="number"
-                  value={notifyAfterTime}
-                  onChange={(e) => setNotifyAfterTime(e.target.value)}
-                  className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-2"
-                />
-              </label>
+              <input
+                placeholder="enter time in minutes"
+                type="number"
+                name="notifyAfter"
+                id="notifyAfter"
+                onChange={(e) => setNotifyAfterTime(e.target.value)}
+                className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-56 mt-5"
+              />
             )}
           </div>
-          <button
-            type="submit"
-            className="my-5 w-fit text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
-          >
-            Submit
-          </button>
-        </form>
-      </div>
-      <MyCalenderComponent  events={[...events, ...newEvents]} handleEventClick={handleEventClick} />
-      {/* <Calendar
-        localizer={localizer}
-        events={[...events, ...newEvents]} // Combine old and new events
-        startAccessor="start"
-        endAccessor="end"
-        onSelectEvent={handleEventClick}
-        style={{ height: 500 }}
-      /> */}
+        </div>
 
-       {showModal && (
+        <div className="flex items-center gap-3 mt-10 ">
+          <label className="text-base text-gray-600">Title:</label>
+          <input
+            type="text"
+            value={serviceTitle}
+            onChange={(e) => setServiceTitle(e.target.value)}
+            className="border border-solid border-slate-300 rounded-md px-2 py-1 text-sm outline-none w-64"
+          />
+        </div>
+        <div className="flex gap-3">
+          <button
+            onClick={handleCreateEvent}
+            className="my-10 text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white ml-2"
+          >
+            Create slots
+          </button>
+        </div>
+        {events.length === 0 ? (
+          <p className="text-grey-600 text-xl md:text-2xl text-center w-full">
+            Loading...
+          </p>
+        ) : (
+          <Calendar
+            className={`mt-4`}
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: 500 }}
+            onSelectEvent={handleEventClick}
+          />
+        )}
+        <button
+          onClick={(e) => handlePostEvent(e)}
+          className="mt-10 text-sm md:text-base px-4 py-2 btnBlack rounded-sm text-white"
+        >
+          Update service
+        </button>
+      </div>
+      {showModal && (
         <div className="modal blur-none rounded-md py-4 px-3 xs:px-5 w-[320px] md:w-[450px] shadow-md">
           <div className="flex justify-between items-center text-xl md:text-3xl font-bold text-gray-600">
             <div>Update Event</div>
@@ -1089,21 +1048,6 @@ export const MyBigCalendar = ({ showSlots }) => {
           </button>
         </div>
       )}
-    </div>
-  );
-};
-
-
-const MyCalenderComponent = ({ events, handleEventClick }) => {
-  const localizer = momentLocalizer(moment);
-  return (
-    <Calendar
-      localizer={localizer}
-      events={events}
-      startAccessor="start"
-      endAccessor="end"
-      onSelectEvent={handleEventClick}
-      style={{ height: 500 }}
-    />
+    </>
   );
 };
