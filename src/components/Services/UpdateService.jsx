@@ -577,7 +577,13 @@ const UpdateService = () => {
               <div className="flex justify-center mb-4">
                 <button
                   type="submit"
-                  onClick={(e) => handleServiceCreate(e)}
+                  onClick={(e) => {
+                    handleServiceCreate(e);
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth", // This className= scrolls to the top
+                    });
+                  }}
                   className="cursor-pointer px-6 py-2 text-base md:text-lg font-semibold text-white btnBlack rounded-sm"
                 >
                   Edit time slots
@@ -659,50 +665,8 @@ const MyBigCalendar = ({ showSlots }) => {
     } catch (error) {
       console.log(error);
     }
-    // setTemp(temp + 1);
   };
 
-  // const processServiceData = (availability) => {
-  //   const events = [];
-  //   if (!availability) return events;
-
-  //   for (const [date, slots] of Object.entries(availability)) {
-  //     slots.forEach((slot) => {
-  //       console.log(
-  //         `Original date: ${date}, start time: ${slot.slot_start_time}, end time: ${slot.slot_end_time}`
-  //       );
-  //       const startDate = moment(
-  //         `${date} ${slot.slot_start_time}`,
-  //         "ddd:DD:MM:YYYY h:mm A"
-  //       );
-  //       const endDate = moment(
-  //         `${date} ${slot.slot_end_time}`,
-  //         "ddd:DD:MM:YYYY h:mm A"
-  //       );
-  //       console.log(
-  //         `Parsed start date: ${startDate.format()}, end date: ${endDate.format()}`
-  //       );
-
-  //       if (startDate.isValid() && endDate.isValid()) {
-  //         events.push({
-  //           id: slot.slot_id,
-  //           title: serviceTitle,
-  //           start: startDate.toDate(),
-  //           end: endDate.toDate(),
-  //           notifyBefore: slot.notify_before,
-  //           notifyBeforeTime: slot.notify_before_time,
-  //           notifyAfter: slot.notify_after,
-  //           notifyAfterTime: slot.notify_after_time,
-  //           slotBooked: slot.slot_booked,
-  //           slotDisabled: slot.slot_disabled,
-  //         });
-  //       } else {
-  //         console.error(`Invalid date/time for slot: ${slot.slot_id}`);
-  //       }
-  //     });
-  //   }
-  //   return events;
-  // };
   const processServiceData = (availability) => {
     setTemp(temp + 1);
 
@@ -980,10 +944,12 @@ const MyBigCalendar = ({ showSlots }) => {
     console.log("updated");
   }, temp);
   return (
-    <div className="container mx-auto p-4">
-      <h3 className="text-center text-2xl font-bold mb-4">Set Availability</h3>
-      <div className="bg-white rounded-lg shadow-md p-6 mb-4">
-        <form onSubmit={handlePostEvent}>
+    <div className="container mx-auto">
+      <div className="text-center text-2xl font-bold mb-4">
+        Set Availability
+      </div>
+      <div className="bg-white rounded-lg shadow-md p-6 mb-4 border-[0.25px] border-slate-400 border-solid">
+        <form>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label className="block font-medium mb-1">Notify Before:</label>
@@ -1024,17 +990,23 @@ const MyBigCalendar = ({ showSlots }) => {
               />
             </div>
           </div>
-          <div className="flex justify-center mt-4">
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Save Slots
-            </button>
-          </div>
         </form>
+        <div className="flex gap-2 justify-between mt-6 ">
+          <button
+            className="bg-white text-black border-[0.25px] border-slate-500 border-solid font-bold py-2 px-2 xs:px-6 text-sm md:text-lg rounded-sm"
+            onClick={() => setShowSlotModal(true)}
+          >
+            Add Time Slot
+          </button>
+          <button
+            onClick={() => handlePostEvent()}
+            className="btnBlack text-white font-bold py-2 px-2 xs:px-6 text-sm md:text-lg rounded-sm"
+          >
+            Update Slots
+          </button>
+        </div>
       </div>
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md py-6">
         <Calendar
           localizer={localizer}
           events={[...events, ...newEvents]}
@@ -1111,30 +1083,30 @@ const MyBigCalendar = ({ showSlots }) => {
                   </div>
                 </div>
               </div>
-              <div className="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <div className="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse justify-between">
                 <button
                   type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 sm:ml-3 sm:w-auto sm:text-sm"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-6 py-2 btnBlack text-base font-medium text-white  sm:ml-3 sm:w-auto sm:text-sm"
                   onClick={handleUpdateEvent}
                 >
                   Update
                 </button>
-                <button
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:w-auto sm:text-sm"
-                  onClick={() => setShowModal(false)}
-                >
-                  Cancel
-                </button>
                 {!isBooked && (
                   <button
                     type="button"
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-red-300 shadow-sm px-4 py-2 bg-red-500 text-base font-medium text-white hover:bg-red-700 sm:mt-0 sm:w-auto sm:text-sm"
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-red-300 shadow-sm px-6 py-2 bg-red-500 text-base font-medium text-white hover:bg-red-700 sm:mt-0 sm:w-auto sm:text-sm"
                     onClick={handleDeleteEvent}
                   >
                     Delete
                   </button>
                 )}
+                <button
+                  type="button"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-6 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:w-auto sm:text-sm"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
@@ -1201,7 +1173,7 @@ const MyBigCalendar = ({ showSlots }) => {
               <div className="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                 <button
                   type="button"
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-700 sm:ml-3 sm:w-auto sm:text-sm"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 btnBlack text-base font-medium text-white hover:bg-blue-700 sm:ml-3 sm:w-auto sm:text-sm"
                   onClick={handleCreateEvent}
                 >
                   Add Slot
@@ -1218,15 +1190,6 @@ const MyBigCalendar = ({ showSlots }) => {
           </div>
         </div>
       )}
-
-      <div className="flex justify-center mt-4">
-        <button
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => setShowSlotModal(true)}
-        >
-          Add Time Slot
-        </button>
-      </div>
     </div>
   );
 };
