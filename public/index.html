@@ -11,6 +11,31 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script>
+        // Replace 'your-domain' with your Jitsi Meet domain
+        const domain = 'meet.ultraxpert.in';
+        const options = {
+            roomName: 'room',
+            width: '100%',
+            height: '100%',
+            parentNode: document.querySelector('#meet')
+        };
+
+        const api = new JitsiMeetExternalAPI(domain, options);
+
+          api.addEventListener('videoConferenceLeft', () => {
+            window.parent.postMessage('meetingEnded', '*');
+          });
+
+          api.addEventListener('videoConferenceTerminated', () => {
+            window.parent.postMessage('meetingEnded', '*');
+          });
+          // Inside the meeting service script (Jitsi or similar)
+            window.addEventListener('beforeunload', () => {
+              window.parent.postMessage('meetingEnded', '*');
+            });
+
+    </script>
     <div id="root"></div>
   </body>
 </html>

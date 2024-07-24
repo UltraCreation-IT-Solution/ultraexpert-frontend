@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MdStar } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../../axios";
 
 const Feedback = () => {
@@ -11,6 +11,8 @@ const Feedback = () => {
   const [deadlineRating, setDeadlineRating] = useState(-1);
   const [qualityRating, setQualityRating] = useState(-1);
   const [communicationRating, setCommunicationRating] = useState(-1);
+  const location = useLocation();
+  const { expid } = location.state || {};
   const [comment, setComment] = useState("");
   const cookie = document.cookie.split(";");
   const jsonData = {};
@@ -25,7 +27,7 @@ const Feedback = () => {
         "/customers/rating/",
         {
           action: 1,
-          expert_id: 44,
+          expert_id: expid,
           availability: availabilityRating,
           deadline: deadlineRating,
           skills: skillsRating,
@@ -41,7 +43,7 @@ const Feedback = () => {
           },
         }
       );
-      navigate("/customerdashboard")
+      navigate("/customerdashboard");
     } catch (error) {
       console.log(error);
     }
@@ -98,8 +100,9 @@ const Feedback = () => {
           className="min-w-full min-h-[150px] border border-solid border-slate-400 p-3 text-base outline-none text-gray-600 rounded-md"
         ></textarea>
         <div className="mt-3">
-          <button className="text-sm md:text-base px-4 py-2 rounded-sm border border-solid border-slate-400 bg-white cursor-pointer"
-          onClick={() => navigate("/customerdashboard")}
+          <button
+            className="text-sm md:text-base px-4 py-2 rounded-sm border border-solid border-slate-400 bg-white cursor-pointer"
+            onClick={() => navigate("/customerdashboard")}
           >
             Skip
           </button>
@@ -114,7 +117,17 @@ const Feedback = () => {
               communicationRating === -1 ||
               comment === ""
             }
-            className={`${availabilityRating === -1 || skillsRating === -1 || cooperationRating === -1 || deadlineRating === -1 || qualityRating === -1 || communicationRating === -1 || comment === "" ? "cursor-not-allowed bg-black/60" : "btnBlack cursor-pointer"} ml-3 text-sm md:text-base px-4 py-2 rounded-sm text-white`}
+            className={`${
+              availabilityRating === -1 ||
+              skillsRating === -1 ||
+              cooperationRating === -1 ||
+              deadlineRating === -1 ||
+              qualityRating === -1 ||
+              communicationRating === -1 ||
+              comment === ""
+                ? "cursor-not-allowed bg-black/60"
+                : "btnBlack cursor-pointer"
+            } ml-3 text-sm md:text-base px-4 py-2 rounded-sm text-white`}
           >
             Submit Feedback
           </button>
