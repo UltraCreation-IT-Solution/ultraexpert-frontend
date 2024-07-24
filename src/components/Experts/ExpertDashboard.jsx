@@ -1946,7 +1946,7 @@ const ExpertDashboard = () => {
               </Link>
 
               <li
-                className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]"
+                className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw] cursor-pointer"
                 onClick={() => getAllQualifiedSkills()}
               >
                 <div className="no-underline">
