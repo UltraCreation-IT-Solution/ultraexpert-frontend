@@ -18,7 +18,7 @@ const ThoughtProcess = () => {
       });
       try {
         const response = await axios.get(
-          "/inspections/test/?action=1&skill_name=reacthvhgvghchg",
+          "/inspections/test/?action=1&skill_name=thought_process",
           {
             headers: {
               "Content-Type": "application/json",
