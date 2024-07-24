@@ -269,8 +269,6 @@ const SignUpAsCustomer = () => {
   // const [selectedProfile, setSelectedProfile] = useState(null);
   const [imageLoading, setImageLoading] = useState(false);
 
-
-
   if (!CHECKOUT_STEPS.length) return <></>;
 
   return (
@@ -280,7 +278,8 @@ const SignUpAsCustomer = () => {
           <div className="relative flex justify-between items-center my-5 mx-12 lg:mx-40">
             {CHECKOUT_STEPS.map((step, index) => (
               <div
-                key={step.name}x
+                key={step.name}
+                x
                 ref={(el) => (stepRef.current[index] = el)}
                 className="flex flex-col items-center relative"
               >
@@ -359,17 +358,26 @@ const SignUpAsCustomer = () => {
                   value={personalInfo.dob}
                   onChange={(e) => {
                     const selectedDate = new Date(e.target.value);
-                    const year = selectedDate.getFullYear();
-                    const month = String(selectedDate.getMonth() + 1).padStart(
-                      2,
-                      "0"
-                    );
-                    const day = String(selectedDate.getDate()).padStart(2, "0");
-                    const formattedDate = `${year}-${month}-${day}`;
-                    setPersonalInfo({
-                      ...personalInfo,
-                      dob: formattedDate,
-                    });
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // Reset today's time to midnight
+
+                    if (selectedDate > today) {
+                      alert(
+                        "Please enter a date that is not greater than today."
+                      );
+                      setPersonalInfo({ ...personalInfo, dob: "" }); // Reset the date input
+                    } else {
+                      const year = selectedDate.getFullYear();
+                      const month = String(
+                        selectedDate.getMonth() + 1
+                      ).padStart(2, "0");
+                      const day = String(selectedDate.getDate()).padStart(
+                        2,
+                        "0"
+                      );
+                      const formattedDate = `${year}-${month}-${day}`;
+                      setPersonalInfo({ ...personalInfo, dob: formattedDate });
+                    }
                   }}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                 />
@@ -464,18 +472,18 @@ const SignUpAsCustomer = () => {
                   )}
                 </div>
                 <Modal
-                className="w-full h-full overflow-scroll"
-                show={showModal}
-                onClose={closeModal}
-              >
-                <ImageUploader
-                  image={myImage}
-                  handleUploadImage={handleUploadImage}
-                  filename="cropped_image.jpg"
-                  onCropped={handleCroppedImage}
-                  aspectRatio={1} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
-                />
-              </Modal>
+                  className="w-full h-full overflow-scroll"
+                  show={showModal}
+                  onClose={closeModal}
+                >
+                  <ImageUploader
+                    image={myImage}
+                    handleUploadImage={handleUploadImage}
+                    filename="cropped_image.jpg"
+                    onCropped={handleCroppedImage}
+                    aspectRatio={9 / 16} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+                  />
+                </Modal>
               </div>
               <div className="flex justify-center gap-4 md:justify-end md:mx-20 mb-8">
                 <button

@@ -85,15 +85,13 @@ const SignUp = () => {
     });
   };
 
-  const onVerifyEmailHandler = async (e) => {
-    e.preventDefault();
+  const onVerifyEmailHandler = async () => {
+    // e.preventDefault();
     if (validateEmail()) {
       setLoading(true);
       try {
         console.log(secondStep.email);
-        const response = await axios.get(
-          `/verify/?action=1&email=${secondStep.email}`
-        );
+        const response = await axios.get(`/login/?email=${secondStep.email}`);
         const data = response.data;
         if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid Email");
@@ -137,17 +135,19 @@ const SignUp = () => {
     if (validateOTP()) {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `/verify/?action=2&email=${secondStep.email}&otp=${thirdStep.otp}`
-        );
+        const response = await axios.get(`/login/`, {
+          email: secondStep.email,
+          otp: thirdStep.otp,
+        });
         const data = response.data;
+        console.log(response);
         if (!data || data.status === 400 || data.status === 401) {
           window.alert("Invalid OTP");
           setLoading(false);
           return;
         }
         setLoading(false);
-        nextStep();
+        navigate("/signUpAs");
       } catch (error) {
         console.log(error.message);
         alert("Invalid OTP");
@@ -237,7 +237,8 @@ const SignUp = () => {
             setLoading(false);
             window.alert("Registration Successful");
             localStorage.setItem("token", res.data.access_token);
-            navigate("/signUpAs");
+            onVerifyEmailHandler();
+            nextStep();
           } catch (error) {
             console.error(error);
             alert(error.message);
@@ -457,7 +458,7 @@ const SignUp = () => {
               <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">
                 Sign Up
               </h1>
-              <form className="h-auto" onSubmit={onVerifyEmailHandler}>
+              <form className="h-auto">
                 <label
                   htmlFor="email"
                   className="block mb-1 font-semibold text-base md:text-lg"
@@ -490,69 +491,17 @@ const SignUp = () => {
                 </button>
                 <button
                   disabled={loading}
-                  type="submit"
+                  onClick={() => nextStep()}
                   className={`${
                     loading ? "bg-gray-300 cursor-not-allowed" : "bg-[#272727]"
                   } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
                 >
-                  Verify Email
+                  Next
                 </button>
               </form>
             </>
           )}
           {step === 3 && (
-            <>
-              <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">
-                Verify Email
-              </h1>
-              <form onSubmit={handleOTPVerification}>
-                <label
-                  htmlFor="otp"
-                  className="block mb-1 font-semibold text-base md:text-lg"
-                >
-                  OTP:
-                </label>
-                <input
-                  type="text"
-                  name="otp"
-                  id="otp"
-                  placeholder="Enter OTP"
-                  className="border rounded-sm p-2 w-full mb-3"
-                  value={thirdStep.otp}
-                  onChange={handleChange3}
-                />
-                <div className="text-red-500 text-sm mb-1">{errors.otp}</div>
-                <div className="flex justify-between">
-                  <p
-                    onClick={handleGoogleLink}
-                    className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline"
-                  >
-                    Sign Up with Google?
-                  </p>
-                  <p className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline">
-                    Resend OTP?
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={prevStep}
-                  className="bg-gray-500 text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 mb-2 rounded-md w-full"
-                >
-                  Previous
-                </button>
-                <button
-                  disabled={loading}
-                  type="submit"
-                  className={`${
-                    loading ? "bg-gray-300 cursor-not-allowed" : "bg-[#272727]"
-                  } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
-                >
-                  Verify OTP
-                </button>
-              </form>
-            </>
-          )}
-          {step === 4 && (
             <>
               <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">
                 Complete Successful
@@ -602,6 +551,65 @@ const SignUp = () => {
                   } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
                 >
                   Complete SignUp
+                </button>
+                <button
+                  type="button"
+                  onClick={prevStep}
+                  className="bg-gray-500 text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 mb-2 rounded-md w-full"
+                >
+                  Previous
+                </button>
+              </form>
+            </>
+          )}
+          {step === 4 && (
+            <>
+              <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">
+                Verify Email
+              </h1>
+              <form onSubmit={handleOTPVerification}>
+                <label
+                  htmlFor="otp"
+                  className="block mb-1 font-semibold text-base md:text-lg"
+                >
+                  OTP:
+                </label>
+                <input
+                  type="text"
+                  name="otp"
+                  id="otp"
+                  placeholder="Enter OTP"
+                  className="border rounded-sm p-2 w-full mb-3"
+                  value={thirdStep.otp}
+                  onChange={handleChange3}
+                />
+                <div className="text-red-500 text-sm mb-1">{errors.otp}</div>
+                <div className="flex justify-between">
+                  <p
+                    onClick={handleGoogleLink}
+                    className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline"
+                  >
+                    Sign Up with Google?
+                  </p>
+                  <p className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline">
+                    Resend OTP?
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={prevStep}
+                  className="bg-gray-500 text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 mb-2 rounded-md w-full"
+                >
+                  Previous
+                </button>
+                <button
+                  disabled={loading}
+                  type="submit"
+                  className={`${
+                    loading ? "bg-gray-300 cursor-not-allowed" : "bg-[#272727]"
+                  } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
+                >
+                  Verify OTP
                 </button>
               </form>
             </>
