@@ -51,10 +51,12 @@ export const ExpertSummary = ({ experienceArray, projectsArray }) => {
                         <div className="block md:hidden"> - </div>
                       </>
                     ) : (
-                      <>
-                        <div>{formatDate(item?.end_date)}</div>
-                        <div className="block md:hidden"> - </div>
-                      </>
+                      !item?.end_date.length === 0 && (
+                        <>
+                          <div>{formatDate(item?.end_date)}</div>
+                          <div className="block md:hidden"> - </div>
+                        </>
+                      )
                     )}
                     <div>{formatDate(item?.start_date)}</div>
                   </div>
