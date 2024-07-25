@@ -30,7 +30,7 @@ export const ExpertSummary = ({ experienceArray, projectsArray }) => {
       {console.log(experienceArray?.length)}
 
       <div className="border border-solid border-slate-300 rounded-md p-4 mb-6">
-        <div className="text-xl md:text-2xl font-semibold ">Carrer Journey</div>
+        <div className="text-xl md:text-2xl font-semibold ">Career Journey</div>
         <div className="mt-6">
           {experienceArray?.length === 0 ? (
             <div className="text-center font-bold text-lg md:text-2xl text-gray-600 my-10 md:my-15">
@@ -51,10 +51,12 @@ export const ExpertSummary = ({ experienceArray, projectsArray }) => {
                         <div className="block md:hidden"> - </div>
                       </>
                     ) : (
-                      <>
-                        <div>{formatDate(item?.end_date)}</div>
-                        <div className="block md:hidden"> - </div>
-                      </>
+                      !item?.end_date.length === 0 && (
+                        <>
+                          <div>{formatDate(item?.end_date)}</div>
+                          <div className="block md:hidden"> - </div>
+                        </>
+                      )
                     )}
                     <div>{formatDate(item?.start_date)}</div>
                   </div>
@@ -258,14 +260,16 @@ export const ExpertRatings = ({ expert }) => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Availability</div>
                 <div>
-                  <MdStar /> {Math.round(expert?.avg_availability*10)/10}
+                  <MdStar /> {Math.round(expert?.avg_availability * 10) / 10}
                 </div>
               </div>
               <div className=" bg-red-100 rounded-full">
                 <div
                   className="border-[3px] border-solid border-red-500 rounded-full"
                   style={{
-                    width: `${((Math.round(expert?.avg_availability*10)/10)/ 5) * 100}%`,
+                    width: `${
+                      (Math.round(expert?.avg_availability * 10) / 10 / 5) * 100
+                    }%`,
                   }}
                 ></div>
               </div>
@@ -274,7 +278,7 @@ export const ExpertRatings = ({ expert }) => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Skills</div>
                 <div>
-                  <MdStar /> {Math.round(expert?.avg_skills*10)/10}
+                  <MdStar /> {Math.round(expert?.avg_skills * 10) / 10}
                 </div>
               </div>
               <div className=" bg-blue-100 rounded-full">
@@ -290,7 +294,7 @@ export const ExpertRatings = ({ expert }) => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Cooperation</div>
                 <div>
-                  <MdStar /> {Math.round(expert?.avg_cooperation*10)/10}
+                  <MdStar /> {Math.round(expert?.avg_cooperation * 10) / 10}
                 </div>
               </div>
               <div className=" bg-purple-100 rounded-full">
@@ -308,7 +312,7 @@ export const ExpertRatings = ({ expert }) => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Deadline</div>
                 <div>
-                  <MdStar /> {Math.round(expert?.avg_deadline*10)/10}
+                  <MdStar /> {Math.round(expert?.avg_deadline * 10) / 10}
                 </div>
               </div>
               <div className=" bg-red-100 rounded-full">
@@ -324,7 +328,7 @@ export const ExpertRatings = ({ expert }) => {
               <div className="flex justify-between text-xs xs:text-sm md:text-base">
                 <div>Quality</div>
                 <div>
-                  <MdStar /> {Math.round(expert?.avg_quality*10)/10}
+                  <MdStar /> {Math.round(expert?.avg_quality * 10) / 10}
                 </div>
               </div>
               <div className=" bg-blue-100 rounded-full">
@@ -356,18 +360,29 @@ export const ExpertRatings = ({ expert }) => {
         </div>
       </div>
       <div className="my-5">
-        <div className="font-semibold text-xl sm:text-2xl mt-5">Top reviews</div>
-        {
-          expert?.customer_ratings?.map((item,index)=>
-            <div key={index} className="my-6 border-b border-solid border-slate-300 pb-2">
-              <div className="flex gap-4 items-center">
-                <img className="h-11 w-11 sm:h-12 sm:w-12 shrink-0 object-cover rounded-full" src={item?.customer_profile_img} alt="profile" />
-                <div className="text-lg sm:text-xl font-semibold">{item?.customer_first_name} {item?.customer_last_name}</div>
+        <div className="font-semibold text-xl sm:text-2xl mt-5">
+          Top reviews
+        </div>
+        {expert?.customer_ratings?.map((item, index) => (
+          <div
+            key={index}
+            className="my-6 border-b border-solid border-slate-300 pb-2"
+          >
+            <div className="flex gap-4 items-center">
+              <img
+                className="h-11 w-11 sm:h-12 sm:w-12 shrink-0 object-cover rounded-full"
+                src={item?.customer_profile_img}
+                alt="profile"
+              />
+              <div className="text-lg sm:text-xl font-semibold">
+                {item?.customer_first_name} {item?.customer_last_name}
               </div>
-              <div className="text-xs sm:text-base font-montserrat mt-3 pl-3">{item?.review}</div>
             </div>
-          )
-        }
+            <div className="text-xs sm:text-base font-montserrat mt-3 pl-3">
+              {item?.review}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -632,10 +647,8 @@ export const ExpertInfo = ({ ...expert }) => {
     const options = { day: "numeric", month: "short", year: "numeric" };
     return date.toLocaleDateString("en-US", options);
   }
-  
 
   useEffect(() => {
-
     if (location.state !== null && location.state.check === true) {
       setSummary(false);
       setServices(true);
@@ -1011,7 +1024,9 @@ const ExpertProfile = () => {
     }
   };
   useEffect(() => {
-    localStorage.getItem("username")?getExpertDetailsWithToken():getExpertDetails();
+    localStorage.getItem("username")
+      ? getExpertDetailsWithToken()
+      : getExpertDetails();
   }, [id]);
   useEffect(() => {
     console.log(expertDetail);
