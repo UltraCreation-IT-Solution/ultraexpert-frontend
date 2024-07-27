@@ -160,12 +160,12 @@ const Login = () => {
               >
                 Login with OTP ?
               </p>
-              <p
+              {/* <p
                 onClick={handleGoogleLink}
                 className="text-xs text-[#272727] hover:text-blue-500 cursor pointer underline"
               >
                 Login with Google ?
-              </p>
+              </p> */}
             </div>
             <button
               disabled={loading}

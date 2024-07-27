@@ -449,7 +449,11 @@ const Landing = () => {
     if (!refresh_token) {
       //clear local storage and go back to login
       localStorage.clear();
-      navigate("/login");
+      window.location.reload();
+      document.cookie =
+        "access_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
+      document.cookie =
+        "refresh_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
     } else {
       try {
         const res = await axios.post(

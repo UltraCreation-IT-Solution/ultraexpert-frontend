@@ -563,7 +563,7 @@ export const CustomerBookings = () => {
     setShimmer(true);
     try {
       const res = await axios.get(
-        `/customers/connect/?action=6&customer_id=${localStorage.customer_id}`,
+        `/customers/connect/?action=6&customer_id=${localStorage.customer_id}&status=scheduled`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -878,7 +878,7 @@ const CustomerDashboard = () => {
           </div>
         </div>
       </div>
-      
+
       <Outlet>
         <CustomerProfile />
         <CustomerChats />

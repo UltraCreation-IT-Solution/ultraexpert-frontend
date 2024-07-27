@@ -167,10 +167,12 @@ export const FavServiceCard = ({ item, getFavServ }) => {
             className="h-7 w-7 md:h-9 md:w-9 rounded-full "
             alt=""
           /> */}
-            <div className="text-base md:text-lg">{item?.service_name}</div>
+            <div className="text-base md:text-lg line-clamp-1 text-ellipsis">
+              {item?.service_name}
+            </div>
           </div>
           <div className="flex flex-wrap gap-2 my-2 mb-[0.2vw]">
-            {item?.tags?.map((tag, ind) => {
+            {item?.tags?.slice(0, 2)?.map((tag, ind) => {
               return (
                 <div
                   className="border border-solid border-slate-500 text-gray-500 px-2 py-1 text-sm rounded-lg"
@@ -250,7 +252,7 @@ export const FavBlogsCard = ({ item, getFavBlog }) => {
         <div className="font-bold text-sm md:text-base line-clamp-1 text-ellipsis my-2 mb-[0.2vw]">
           {item.title}
         </div>
-        <div className="line-clamp-2 text-sm">{item.content}</div>
+        {/* <div className="line-clamp-2 text-sm">{item.content}</div> */}
         <div className="w-full flex text-white justify-between items-center my-2">
           <Link
             to={`/blog/blogdetail/${item.id}`}
@@ -356,7 +358,7 @@ export const AllFav = () => {
   return (
     <div>
       {/* Favorite Experts */}
-      <FavExperts allFavExp={allFavExp} setAllFavExp={setAllFavExp} />
+      <FavExperts />
       {/* Favorite Services */}
       <FavServices />
       {/* Favorite Blogs */}
@@ -365,22 +367,47 @@ export const AllFav = () => {
   );
 };
 
-export const FavExperts = ({ allFavExp, setAllFavExp }) => {
+export const FavExperts = () => {
+  const [allFavExp, setAllFavExp] = useState([]);
+  const getFavExp = async () => {
+    const jsonData = getCookieData();
+    try {
+      const res = await axios.get("/customers/connect/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const json = res.data.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      setAllFavExp(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleRemoveFav = (id) => {
     setAllFavExp(allFavExp.filter((item) => item.id !== id));
   };
+  useEffect(() => {
+    getFavExp();
+  }, []);
 
   return (
     <div className="mt-10">
       <div className="font-bold text-xl md:text-3xl">Experts</div>
       <div className="flex items-center overflow-x-scroll gap-5 mt-5">
-        {allFavExp.map((item, index) => (
-          <FavExpertCard
-            key={index}
-            item={item}
-            handleRemoveFav={handleRemoveFav}
-          />
-        ))}
+        {allFavExp &&
+          allFavExp?.map((item, index) => (
+            <FavExpertCard
+              key={index}
+              item={item}
+              handleRemoveFav={handleRemoveFav}
+            />
+          ))}
       </div>
       <Link to="/experts">
         <div className="text-center font-semibold text-gray-600 text-sm md:text-xl mt-10 flex gap-2 items-center justify-center">
@@ -488,6 +515,30 @@ export const FavBlogs = () => {
 };
 
 const Favourites = () => {
+  const [allFavExp, setAllFavExp] = useState([]);
+  const getFavExp = async () => {
+    const jsonData = getCookieData();
+    try {
+      const res = await axios.get("/customers/connect/?action=1", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      const json = res.data.data;
+      if (!json) {
+        console.log("no data");
+        return;
+      }
+      console.log(json);
+      setAllFavExp(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getFavExp();
+  }, []);
   const location = useLocation().pathname;
   console.log(location);
   return (
