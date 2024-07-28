@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "../../axios";
 import ReactQuiz from "./ReactQuiz";
@@ -6,7 +6,13 @@ import ReactQuiz from "./ReactQuiz";
 const ThoughtProcess = () => {
   const [test_id, setTest_id] = useState("");
   const [thoughtProcess, setThoughtProcess] = useState([]);
-  const [repord_id, setRepord_id] = useState("");
+  const [report_id, setReport_id] = useState("");
+  const [questionsFetched, setQuestionsFetched] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes timer
+  const [isTimeOver, setIsTimeOver] = useState(false);
+  const navigate = useNavigate();
+  const timerRef = useRef(null);
+
   useEffect(() => {
     const fetchQuestions = async () => {
       const cookies = document.cookie.split("; ");
@@ -26,40 +32,40 @@ const ThoughtProcess = () => {
             },
           }
         );
+        console.log(
+          "fetched",
+          response.data.data.test_id,
+          response.data.data.report_id
+        );
         setTest_id(response.data.data.test_id);
         setThoughtProcess(response.data.data.thought_process);
-        setRepord_id(response.data.data.report_id);
-        console.log(response);
+        setReport_id(response.data.data.report_id);
+        setQuestionsFetched(true);
+
+        // Start the timer after questions are fetched
+        timerRef.current = setInterval(() => {
+          setTimeLeft((prevTime) => {
+            if (prevTime === 0) {
+              clearInterval(timerRef.current);
+              setIsTimeOver(true);
+              return 0;
+            }
+            return prevTime - 1;
+          });
+        }, 1000);
       } catch (error) {
         console.log(error);
       }
     };
     fetchQuestions();
-  }, []);
 
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes timer
-  const [isTimeOver, setIsTimeOver] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        if (prevTime === 0) {
-          clearInterval(timer);
-          setIsTimeOver(true);
-          return 0;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
+    // Clear interval on component unmount
+    return () => clearInterval(timerRef.current);
   }, []);
 
   useEffect(() => {
     if (isTimeOver) {
       // Handle time over action, e.g., show popup
-      // You can add custom logic here
       console.log("Time is over");
     }
   }, [isTimeOver]);
@@ -88,9 +94,14 @@ const ThoughtProcess = () => {
       const [key, value] = item.split("=");
       jsonData[key] = value;
     });
-    // console.log(`'${thoughtProcess}'`);
+
+    if (!questionsFetched) {
+      console.log("Questions not fetched yet.");
+      return;
+    }
+
     const arrayString =
-      '"[' + thoughtProcess.map((item) => "'" + item + "'").join(", ") + ']"';
+      "[" + thoughtProcess.map((item) => "'" + item + "'").join(", ") + "]";
     console.log(arrayString);
     try {
       const response = await axios.post(
@@ -98,7 +109,7 @@ const ThoughtProcess = () => {
         {
           action: 1,
           answer: arrayString,
-          report_id: repord_id,
+          report_id: Number(report_id),
           test_id: test_id,
         },
         {
@@ -109,15 +120,29 @@ const ThoughtProcess = () => {
         }
       );
       console.log(response);
-      navigate("/expertdashboard");
+      try {
+        const res = await axios.get(
+          `/inspections/test/?action=2&skill_name=thought_process&test_id=${test_id}&report=${report_id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${jsonData.access_token}`,
+            },
+          }
+        );
+        console.log(res);
+        navigate("/expertdashboard");
+      } catch (error) {
+        console.log(error);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleCancel = () => {
-    // Handle cancel action, e.g., navigate back to previous route
-    // You can use react-router-dom or any routing library for this
+    clearInterval(timerRef.current);
+    navigate("/expertdashboard/getcertified");
     console.log("Cancelled the test");
   };
 
@@ -125,6 +150,7 @@ const ThoughtProcess = () => {
   const formattedTimeLeft = new Date(timeLeft * 1000)
     .toISOString()
     .substr(14, 5);
+
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center items-center">
       <div className="container mx-auto px-4 py-8 bg-white rounded-lg shadow-md mb-8 border border-blue-500">
@@ -206,6 +232,7 @@ const ThoughtProcess = () => {
     </div>
   );
 };
+
 function TestElement() {
   const params = useParams();
   console.log(params);

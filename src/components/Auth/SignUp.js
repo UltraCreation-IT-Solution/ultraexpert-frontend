@@ -102,7 +102,7 @@ const SignUp = () => {
         nextStep();
       } catch (error) {
         console.log(error.message);
-        alert("Already Registered Email!");
+
         setLoading(false);
       }
     }
@@ -135,8 +135,9 @@ const SignUp = () => {
     if (validateOTP()) {
       setLoading(true);
       try {
-        const response = await axios.get(`/login/`, {
+        const response = await axios.post(`/login/`, {
           email: secondStep.email,
+          password: forthStep.password,
           otp: thirdStep.otp,
         });
         const data = response.data;
@@ -433,12 +434,12 @@ const SignUp = () => {
                   </>
                 )}
 
-                <p
+                {/* <p
                   onClick={handleGoogleLink}
                   className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline"
                 >
                   Sign Up with Google?
-                </p>
+                </p> */}
 
                 <button
                   disabled={loading}
@@ -476,19 +477,13 @@ const SignUp = () => {
                 />
                 <div className="text-red-500 mb-1 text-sm">{errors.email}</div>
 
-                <p
+                {/* <p
                   onClick={handleGoogleLink}
                   className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline"
                 >
                   Sign Up with Google?
-                </p>
-                <button
-                  type="button"
-                  onClick={prevStep}
-                  className="bg-gray-500 text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 mb-2 rounded-md w-full"
-                >
-                  Previous
-                </button>
+                </p> */}
+
                 <button
                   disabled={loading}
                   onClick={() => nextStep()}
@@ -497,6 +492,13 @@ const SignUp = () => {
                   } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
                 >
                   Next
+                </button>
+                <button
+                  type="button"
+                  onClick={prevStep}
+                  className="bg-gray-500 text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 mb-2 rounded-md w-full"
+                >
+                  Previous
                 </button>
               </form>
             </>

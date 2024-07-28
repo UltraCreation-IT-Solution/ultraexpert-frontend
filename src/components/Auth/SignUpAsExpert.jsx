@@ -748,17 +748,29 @@ const SignUpAsExpert = () => {
                   value={personalInfo.dob}
                   onChange={(e) => {
                     const selectedDate = new Date(e.target.value);
-                    const year = selectedDate.getFullYear();
-                    const month = String(selectedDate.getMonth() + 1).padStart(
-                      2,
-                      "0"
-                    );
-                    const day = String(selectedDate.getDate()).padStart(2, "0");
-                    const formattedDate = `${year}-${month}-${day}`;
-                    setPersonalInfo({
-                      ...personalInfo,
-                      dob: formattedDate,
-                    });
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); // Reset today's time to midnight
+
+                    if (selectedDate > today) {
+                      alert(
+                        "Please enter a date that is not greater than today."
+                      );
+                      setPersonalInfo({ ...personalInfo, dob: "" }); // Reset the date input
+                    } else {
+                      const year = selectedDate.getFullYear();
+                      const month = String(
+                        selectedDate.getMonth() + 1
+                      ).padStart(2, "0");
+                      const day = String(selectedDate.getDate()).padStart(
+                        2,
+                        "0"
+                      );
+                      const formattedDate = `${year}-${month}-${day}`;
+                      setPersonalInfo({
+                        ...personalInfo,
+                        dob: formattedDate,
+                      });
+                    }
                   }}
                   className="border border-solid border-gray-300 px-2 py-2 rounded-md mb-4"
                 />
@@ -790,19 +802,32 @@ const SignUpAsExpert = () => {
                       value={personalInfo.anniversary_date}
                       onChange={(e) => {
                         const selectedDate = new Date(e.target.value);
-                        const year = selectedDate.getFullYear();
-                        const month = String(
-                          selectedDate.getMonth() + 1
-                        ).padStart(2, "0");
-                        const day = String(selectedDate.getDate()).padStart(
-                          2,
-                          "0"
-                        );
-                        const formattedDate = `${year}-${month}-${day}`;
-                        setPersonalInfo({
-                          ...personalInfo,
-                          anniversary_date: formattedDate,
-                        });
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0); // Reset today's time to midnight
+
+                        if (selectedDate > today) {
+                          alert(
+                            "Please enter a date that is not greater than today."
+                          );
+                          setPersonalInfo({
+                            ...personalInfo,
+                            anniversary_date: "",
+                          }); // Reset the date input
+                        } else {
+                          const year = selectedDate.getFullYear();
+                          const month = String(
+                            selectedDate.getMonth() + 1
+                          ).padStart(2, "0");
+                          const day = String(selectedDate.getDate()).padStart(
+                            2,
+                            "0"
+                          );
+                          const formattedDate = `${year}-${month}-${day}`;
+                          setPersonalInfo({
+                            ...personalInfo,
+                            anniversary_date: formattedDate,
+                          });
+                        }
                       }}
                       className="border border-solid border-gray-300 px-2 py-2 rounded-md w-full mb-4"
                     />

@@ -10,7 +10,6 @@ import {
   FaChalkboardTeacher,
   FaPlus,
 } from "react-icons/fa";
-import { AiOutlineLike } from "react-icons/ai";
 import { IoMdShareAlt } from "react-icons/io";
 import {
   MdSpaceDashboard,
@@ -452,7 +451,11 @@ export const Dashboard = () => {
     if (!refresh_token) {
       //clear local storage and go back to login
       localStorage.clear();
-      navigate("/login");
+      window.location.reload();
+      document.cookie =
+        "access_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
+      document.cookie =
+        "refresh_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;";
     } else {
       try {
         const res = await axios.post(
@@ -528,7 +531,7 @@ export const Dashboard = () => {
   const getExpertStatistics = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("/experts/?action=3", {
+      const response = await axios.get("/experts/?action=3&end_date=2024-07", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jsonData.access_token}`,
@@ -708,7 +711,7 @@ export const Dashboard = () => {
   const navigate = useNavigate();
   return (
     <section className="w-full md:w-[68%] h-full flex flex-col gap-[4.5vw] xs:gap-[3vw] md:gap-[2vw]">
-      <div className="block md:hidden w-full h-auto px-[0.8vw] py-[4.5vw] xs:py-[3vw] border-b-[0.01px] border-[#dcdcdc] border-solid">
+      <div className="block bg-[#e7e7e7] md:hidden w-full h-auto px-[1.2vw] py-[4.5vw] xs:py-[3vw]  rounded">
         <div className="flex justify-between">
           <div className="flex gap-[2.65vw] xs:gap-[2.25vw]">
             <img
@@ -1679,10 +1682,38 @@ export const Leaderboard = () => {
 };
 
 export const MyBooking = () => {
-  const [shimmer, setShimmer] = useState(false);
+  const [scheduled, setscheduled] = useState(true);
+  const [done, setdone] = useState(false);
+  const [notDone, setNotDone] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const HandleScheduled = () => {
+    setLoading(true);
+    setscheduled(true);
+    setdone(false);
+    setNotDone(false);
+    getScheduledBookings();
+    setLoading(false);
+  };
+  const HandleDone = () => {
+    setLoading(true);
+    setscheduled(false);
+    setdone(true);
+    setNotDone(false);
+    getDoneBookings();
+    setLoading(false);
+  };
+  const HandleNotDone = () => {
+    setLoading(true);
+    setscheduled(false);
+    setdone(false);
+    setNotDone(true);
+    getNotDoneBookings();
+    setLoading(false);
+  };
+
   const [myBookings, setMyBookings] = useState([]);
   useEffect(() => {
-    getMyBookings();
+    if (scheduled) getScheduledBookings();
   }, []);
 
   const cookies = document.cookie.split("; ");
@@ -1693,11 +1724,12 @@ export const MyBooking = () => {
     jsonData[key] = value;
   });
 
-  const getMyBookings = async () => {
-    setShimmer(true);
+  const getScheduledBookings = async () => {
+    setMyBookings([]);
+    setLoading(true);
     try {
       const res = await axios.get(
-        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}`,
+        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}&status=scheduled`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -1712,23 +1744,139 @@ export const MyBooking = () => {
         res.data.status === 404
       ) {
         console.log(res.data.message);
-        setShimmer(false);
+        setLoading(false);
+        return;
+      }
+      const currentTime = new Date();
+      const filteredBookings = res.data.data.filter((booking) => {
+        // Construct the date and time string from the booking data
+        const dateTimeString = `${booking.time_slot_day} ${booking.time_slot_start}`;
+        // Parse the date and time string to a Date object
+        const bookingDate = new Date(dateTimeString);
+
+        // Compare with current date and time
+        return bookingDate > currentTime;
+      });
+      setMyBookings(filteredBookings);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  const getDoneBookings = async () => {
+    setLoading(true);
+    setMyBookings([]);
+    try {
+      const res = await axios.get(
+        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}&status=done`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        console.log(res.data.message);
+        setLoading(false);
         return;
       }
       setMyBookings(res.data.data);
-      setShimmer(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
-      setShimmer(false);
+      setLoading(false);
+    }
+  };
+  const getNotDoneBookings = async () => {
+    setMyBookings([]);
+    setLoading(true);
+    try {
+      const res = await axios.get(
+        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}&status=scheduled`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        console.log(res.data.message);
+        setLoading(false);
+        return;
+      }
+      const currentTime = new Date();
+      const filteredBookings = res.data.data.filter((booking) => {
+        // Construct the date and time string from the booking data
+        const dateTimeString = `${booking.time_slot_day} ${booking.time_slot_start}`;
+        // Parse the date and time string to a Date object
+        const bookingDate = new Date(dateTimeString);
+
+        // Compare with current date and time
+        return bookingDate < currentTime;
+      });
+      setMyBookings(filteredBookings);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
     }
   };
   console.log(myBookings);
+
   return (
-    <div className="w-full md:w-[68%]">
-      <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
-        Active Bookings
+    <div className="flex flex-col gap-5 w-full md:w-[68%]">
+      <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-3 text-sm md:text-base overflow-x-scroll px-2">
+        <div
+          className={
+            loading
+              ? `text-gray-300`
+              : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+                  scheduled && `bg-[#ececec] rounded-sm`
+                }`
+          }
+          onClick={() => HandleScheduled()}
+        >
+          Scheduled
+        </div>
+        <div
+          className={
+            loading
+              ? `text-gray-300`
+              : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+                  done && `bg-[#ececec] rounded-sm`
+                }`
+          }
+          onClick={() => HandleDone()}
+        >
+          Done
+        </div>
+        <div
+          className={
+            loading
+              ? `text-gray-300`
+              : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+                  notDone && `bg-[#ececec] rounded-sm`
+                }`
+          }
+          onClick={() => HandleNotDone()}
+        >
+          Sceduled & Not Done
+        </div>
       </div>
-      {shimmer ? (
+      {loading ? (
         <div className="w-full flex flex-col items-center gap-10 mt-5">
           {Array.from({ length: 4 }).map((item, index) => (
             <TextShimmer key={index} />
@@ -1863,7 +2011,7 @@ const ExpertDashboard = () => {
         <section
           className={`w-[32%] hidden md:flex h-fit border border-[#c7c7c7] border-solid flex-col rounded-lg`}
         >
-          <div className="w-full h-auto px-[0.8vw] py-[2vw] border-b-[0.01px] border-[#dcdcdc] border-solid">
+          <div className="w-full bg-[#e7e7e7] h-auto px-[0.8vw] py-[2vw] border-b-[0.01px] border-[#bebebe] border-solid">
             <div className="flex justify-between">
               <div className="flex gap-[0.75vw]">
                 <img
@@ -1918,35 +2066,35 @@ const ExpertDashboard = () => {
               <IoMdShareAlt />
             </div>
           </div>
-          <div>
+          <div className="bg-[#e7e7e7]">
             <ul className="p-0 mt-0 mb-0">
               <Link to="editprofile" className="no-underline">
-                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#bebebe] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <FaUser className="text-[1.65vw]" />
                   Update Profile
                 </li>
               </Link>
               <Link to="" className="no-underline">
-                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#bebebe] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <MdSpaceDashboard className="text-[1.65vw]" />
                   Dashboard
                 </li>
               </Link>
               <Link to="leaderboard" className="no-underline">
-                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#bebebe] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <FaMedal className="text-[1.65vw]" />
                   Leaderboard
                 </li>
               </Link>
               <Link to="myBookings" className="no-underline">
-                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#bebebe] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <IoBookmarksSharp className="text-[1.65vw]" />
                   Bookings
                 </li>
               </Link>
 
               <li
-                className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw] cursor-pointer"
+                className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#bebebe] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw] cursor-pointer"
                 onClick={() => getAllQualifiedSkills()}
               >
                 <div className="no-underline">
@@ -1955,24 +2103,24 @@ const ExpertDashboard = () => {
                 </div>
               </li>
               <Link to="myservices" className="no-underline">
-                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#bebebe] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <FaChalkboardTeacher className="text-[1.65vw]" />
                   My services
                 </li>
               </Link>
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#bebebe] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                 <FaWallet className="text-[1.55vw]" />
                 Wallet
               </li>
               <Link to="chats" className="no-underline">
-                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#bebebe] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <BsFillChatSquareTextFill className="text-[1.55vw]" />
                   Chat
                 </li>
               </Link>
               <Link
                 to={"getcertified"}
-                className="cursor-pointer flex gap-[1.25vw] items-center border-b-[0.01px] border-[#dcdcdc] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]"
+                className="cursor-pointer flex gap-[1.25vw] items-center border-b-[0.01px] border-[#bebebe] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]"
               >
                 <BsFillPatchCheckFill className="text-[1.55vw]" />
                 Get Certified

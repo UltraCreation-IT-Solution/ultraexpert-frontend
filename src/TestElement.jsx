@@ -1,633 +1,259 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import userImage from "../src/assets/images/image.png";
-import axios from "./axios";
-const SignUp = () => {
-  const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
+// import React, { useEffect, useState } from "react";
+// import axios from "../../axios";
+// import PropTypes from "prop-types";
+// import { FcAlarmClock } from "react-icons/fc";
+// import { useParams, useNavigate } from "react-router-dom";
 
-  const navigate = useNavigate();
+// function Question({
+//   question,
+//   options,
+//   selectedOption,
+//   onOptionSelect,
+//   skill_Name,
+// }) {
+//   return (
+//     <div className="container mx-auto px-4 py-8 bg-white rounded-lg shadow-md mb-8 border border-blue-500">
+//       <h2 className="text-2xl font-semibold mb-4">{skill_Name} Quiz</h2>
+//       {typeof question === "object" ? (
+//         <div className="bg-gray-100 px-4 py-2 rounded-md mb-4">
+//           <code>{question.code}</code>
+//         </div>
+//       ) : (
+//         <p className="text-gray-800 mb-4">{question}</p>
+//       )}
+//       <div className="grid grid-cols-1 gap-4">
+//         {options.map(({ option, text }) => (
+//           <button
+//             key={option}
+//             className={`bg-white text-gray-800 border border-gray-300 px-4 py-2 rounded-md hover:bg-blue-100 focus:outline-none ${
+//               selectedOption === option
+//                 ? "bg-slate-500 text-black"
+//                 : "bg-slate-300"
+//             }`}
+//             onClick={() => onOptionSelect(option)}
+//           >
+//             {text}
+//           </button>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
 
-  const [errors, setErrors] = useState({
-    firstName: "",
-    lastName: "",
-    mobileNumber: "",
-    refBy: "",
-    email: "",
-    otp: "",
-    password: "",
-    confirmPassword: "",
-  });
+// Question.propTypes = {
+//   question: PropTypes.oneOfType([
+//     PropTypes.string,
+//     PropTypes.shape({
+//       code: PropTypes.string.isRequired,
+//     }),
+//   ]).isRequired,
+//   options: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       option: PropTypes.string.isRequired,
+//       text: PropTypes.string.isRequired,
+//     })
+//   ).isRequired,
+//   selectedOption: PropTypes.string,
+//   onOptionSelect: PropTypes.func.isRequired,
+// };
 
-  const [firstStep, setFirstStep] = useState({
-    firstName: "",
-    lastName: "",
-    mobileNumber: "",
-    refBy: "",
-  });
-  const [secondStep, setSecondStep] = useState({
-    email: "",
-  });
+// function ReactQuiz() {
+//   const params = useParams();
+//   const navigate = useNavigate();
+//   const [currentQuestion, setCurrentQuestion] = useState(0);
+//   const [selectedOption, setSelectedOption] = useState(null);
+//   const [questions, setQuestions] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [timer, setTimer] = useState(60);
+//   const [allSetData, setAllSetData] = useState({});
+//   const [test_id, setTest_id] = useState("");
+//   const [repord_id, setRepord_id] = useState("");
+//   const [question_id, setQuestion_id] = useState("");
 
-  const [thirdStep, setThirdStep] = useState({
-    email: "",
-    otp: "",
-  });
-  const [forthStep, setForthStep] = useState({
-    password: "",
-    confirmPassword: "",
-  });
+//   const cookies = document.cookie.split(";");
+//   const jsonData = {};
+//   cookies.forEach((item) => {
+//     const [key, value] = item.split("=");
+//     jsonData[key.trim()] = value;
+//   });
 
-  const handleFirstSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm1()) {
-      console.log(firstStep);
-      nextStep();
-    }
-  };
+//   useEffect(() => {
+//     const fetchData = async (retryCount = 0) => {
+//       try {
+//         const response = await axios.get(
+//           `/inspections/test/?action=1&skill_name=${params.skill_Name}`,
+//           {
+//             headers: {
+//               "Content-Type": "application/json",
+//               Authorization: `Bearer ${jsonData.access_token}`,
+//             },
+//           }
+//         );
+//         if (
+//           !response.data?.data ||
+//           response.data?.status === 400 ||
+//           response.data?.status === 401
+//         ) {
+//           throw new Error("Data not fetched");
+//         }
+//         setAllSetData(response.data?.data);
+//         setTest_id(response.data?.data?.test_id);
+//         setRepord_id(response.data?.data?.report_id);
+//         setQuestions(response.data?.data?.questions || []);
+//         setLoading(false); // Stop loading only when data is fetched
+//       } catch (error) {
+//         if (retryCount < 3) {
+//           console.log(`Retrying... Attempt ${retryCount + 1}`);
+//           fetchData(retryCount + 1);
+//         } else {
+//           setError("Error fetching data after 3 attempts");
+//           setLoading(false);
+//         }
+//       }
+//     };
 
-  const validateForm1 = () => {
-    let isValid = true;
-    const newErrors = {
-      firstName: "",
-      lastName: "",
-      mobileNumber: "",
-      refCode: "",
-    };
+//     fetchData();
+//   }, [params.skill_Name]);
 
-    if (!firstStep.firstName.trim() || !nameRegex.test(firstStep.firstName)) {
-      newErrors.firstName = "Please enter a valid first name";
-      isValid = false;
-    }
+//   useEffect(() => {
+//     let timerId;
+//     if (!loading && questions.length > 0) {
+//       timerId = setInterval(() => {
+//         setTimer((prevTimer) => {
+//           if (prevTimer <= 0) {
+//             setCurrentQuestion((prevQuestion) => prevQuestion + 1);
+//             return 60; // Reset timer for the next question
+//           } else {
+//             return prevTimer - 1;
+//           }
+//         });
+//       }, 1000);
+//     }
 
-    if (!firstStep.lastName.trim() || !nameRegex.test(firstStep.lastName)) {
-      newErrors.lastName = "Please enter a valid last name";
-      isValid = false;
-    }
+//     // Cleanup function
+//     return () => clearInterval(timerId);
+//   }, [loading, questions]);
 
-    if (
-      !firstStep.mobileNumber.trim() ||
-      !mobileRegex.test(firstStep.mobileNumber)
-    ) {
-      newErrors.mobileNumber = "Please enter a valid mobile number";
-      isValid = false;
-    }
+//   useEffect(() => {
+//     // Reset timer when current question changes
+//     setTimer(60);
+//   }, [currentQuestion]);
 
-    setErrors(newErrors);
-    return isValid;
-  };
+//   const handleOptionSelect = (option) => {
+//     setSelectedOption(option);
+//   };
 
-  const handleChange1 = (e) => {
-    const { name, value } = e.target;
-    setFirstStep({
-      ...firstStep,
-      [name]: value,
-    });
-  };
+//   const handleNextQuestion = async () => {
+//     const selectedOptionText =
+//       questions[currentQuestion].options[selectedOption];
+//     console.log(`Selected Option: ${selectedOptionText}`);
+//     try {
+//       const response = await axios.post(
+//         "/inspections/test/",
+//         {
+//           action: 1,
+//           question_id: allSetData?.questions[currentQuestion]?.question_id,
+//           report_id: repord_id,
+//           answer: selectedOptionText,
+//           test_id: test_id,
+//         },
+//         {
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${jsonData.access_token}`,
+//           },
+//         }
+//       );
+//       console.log(response);
+//     } catch (error) {
+//       console.log(error);
+//     }
 
-  const onVerifyEmailHandler = async () => {
-    // e.preventDefault();
-    if (validateEmail()) {
-      setLoading(true);
-      try {
-        console.log(secondStep.email);
-        const response = await axios.get(`/login/?email=${secondStep.email}`);
-        const data = response.data;
-        if (!data || data.status === 400 || data.status === 401) {
-          window.alert("Invalid Email");
-          setLoading(false);
-          return;
-        }
-        setLoading(false);
-        nextStep();
-      } catch (error) {
-        console.log(error.message);
-        alert("Already Registered Email!");
-        setLoading(false);
-      }
-    }
-  };
+//     setSelectedOption(null);
+//     setCurrentQuestion((prevQuestion) => prevQuestion + 1);
+//   };
 
-  const validateEmail = () => {
-    let isValid = true;
-    const newErrors = {
-      email: "",
-    };
-    if (!secondStep.email.trim() || !emailRegex.test(secondStep.email)) {
-      newErrors.email = "Please enter a valid email";
-      isValid = false;
-    }
-    setErrors(newErrors);
-    return isValid;
-  };
+//   const handleFinishQuiz = async () => {
+//     // Handle finish quiz action, e.g., submit score to server
 
-  const handleChange2 = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    setSecondStep({
-      ...secondStep,
-      [name]: value,
-    });
-  };
+//     console.log("Quiz finished. Score:");
+//     try {
+//       const res = await axios.get(
+//         `/inspections/test/?action=2&skill_name=${params.skill_Name}&test_id=${test_id}&report=${repord_id}`,
+//         {
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${jsonData.access_token}`,
+//           },
+//         }
+//       );
+//       console.log(res);
+//       navigate("/expertdashboard");
+//     } catch (error) {
+//       console.log(error);
+//     }
+//     navigate("/expertdashboard");
+//   };
 
-  const handleOTPVerification = async (e) => {
-    e.preventDefault();
-    if (validateOTP()) {
-      setLoading(true);
-      try {
-        const response = await axios.get(`/login/`, {
-          email: secondStep.email,
-          otp: thirdStep.otp,
-        });
-        const data = response.data;
-        console.log(response);
-        if (!data || data.status === 400 || data.status === 401) {
-          window.alert("Invalid OTP");
-          setLoading(false);
-          return;
-        }
-        setLoading(false);
-        navigate("/signUpAs");
-      } catch (error) {
-        console.log(error.message);
-        alert("Invalid OTP");
-        setLoading(false);
-      }
-    }
-  };
+//   if (loading) {
+//     return <div>Loading...</div>;
+//   }
 
-  const validateOTP = () => {
-    let isValid = true;
-    const newErrors = {
-      otp: "",
-    };
+//   if (error) {
+//     return <div>Error: {error}</div>;
+//   }
 
-    if (!thirdStep.otp.trim() || !otpRegex.test(thirdStep.otp)) {
-      newErrors.otp = "Please enter a valid OTP";
-      isValid = false;
-    }
-    setErrors(newErrors);
-    return isValid;
-  };
+//   if (currentQuestion >= questions.length) {
+//     handleFinishQuiz();
+//     return null; // Return null to prevent rendering anything further
+//   }
 
-  const handleChange3 = (e) => {
-    const { name, value } = e.target;
-    setThirdStep({
-      ...thirdStep,
-      [name]: value,
-    });
-  };
+//   const currentQuestionData = questions[currentQuestion];
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // console.log(e);
-    if (validatePassword()) {
-      setLoading(true);
-      try {
-        const response = await axios.post("/register/", {
-          first_name: firstStep.firstName,
-          last_name: firstStep.lastName,
-          mobile: firstStep.mobileNumber,
-          reffered_by: firstStep.refCode,
-          email: secondStep.email,
-          password1: forthStep.password,
-          password2: forthStep.confirmPassword,
-        });
-        const data = response.data;
-        if (!data || data.status === 400 || data.status === 401) {
-          window.alert("Invalid Registration");
-          console.log("Invalid Registration");
-          setLoading(false);
-          return;
-        } else {
-          console.log(response);
-          try {
-            const res = await axios.post("/login/", {
-              email: secondStep.email,
-              password: forthStep.password,
-            });
-            // const json = await res.json();
-            const data = res.data;
-            const expirationDateforAccess = new Date();
-            const expirationDateforRefresh = new Date();
-            expirationDateforAccess.setDate(
-              expirationDateforAccess.getDate() + 7
-            );
-            expirationDateforRefresh.setDate(
-              expirationDateforRefresh.getDate() + 8
-            );
-            document.cookie = `access_token=${
-              res.data.access_token
-            };expires=${expirationDateforAccess.toUTCString()};  SameSite=Lax;`;
-            document.cookie = `refresh_token=${
-              res.data.refresh_token
-            };expires=${expirationDateforRefresh.toUTCString()};  SameSite=Lax;`;
+//   return (
+//     <div className="min-h-screen bg-white flex flex-col justify-center items-center">
+//       <div className="mx-auto container">
+//         <div className="flex justify-between items-center w-full p-4 bg-slate-300 rounded">
+//           <button
+//             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+//             // onClick={handleCancelTest}
+//           >
+//             Cancel Test
+//           </button>
+//           <div className="flex items-center border-slate-400 border border-solid p-2 rounded">
+//             <FcAlarmClock />
+//             <span className="font-bold ml-2"> Time Left: </span>
+//             <span className="ml-2">{timer} seconds</span>
+//           </div>
+//         </div>
+//       </div>
+//       {currentQuestionData?.question_id && (
+//         <Question
+//           question={currentQuestionData?.question}
+//           options={Object.entries(currentQuestionData?.options)?.map(
+//             ([option, text]) => ({
+//               option,
+//               text,
+//             })
+//           )}
+//           selectedOption={selectedOption}
+//           onOptionSelect={handleOptionSelect}
+//           skill_Name={params.skill_Name}
+//         />
+//       )}
 
-            // localStorage.setItem("userId", `${res.data.id}`);
-            localStorage.setItem("username", `${res.data.first_name}`);
-            localStorage.setItem("profile", `${res.data.profile_img}`);
-            localStorage.setItem("isExpert", `${res.data.is_expert}`);
-            localStorage.setItem("isAuthor", `${res.data.is_author}`);
-            localStorage.setItem("isCustomer", `${res.data.is_customer}`);
-            if (!data || data.status === 400 || data.status === 401) {
-              window.alert("Invalid Credentials");
-              setLoading(false);
-              return;
-            }
-            setLoading(false);
-            window.alert("Registration Successful");
-            localStorage.setItem("token", res.data.access_token);
-            onVerifyEmailHandler();
-            nextStep();
-          } catch (error) {
-            console.error(error);
-            alert(error.message);
-            setLoading(false);
-          }
-        }
-      } catch (error) {
-        console.error(error);
-        setLoading(false);
-      }
-    }
-  };
+//       <button
+//         className={`bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mr-4 ${
+//           timer <= 0 ? "pointer-events-none" : ""
+//         }`}
+//         onClick={handleNextQuestion}
+//         disabled={timer <= 0 || selectedOption === null}
+//       >
+//         Next Question
+//       </button>
+//     </div>
+//   );
+// }
 
-  const validatePassword = () => {
-    let isValid = true;
-    const newErrors = {
-      password: "",
-      confirmPassword: "",
-    };
-    if (
-      !forthStep.password ||
-      !forthStep.confirmPassword ||
-      !passwordRegex.test(forthStep.password)
-    ) {
-      newErrors.password = "Please enter a valid password";
-      isValid = false;
-    }
-    if (forthStep.password !== forthStep.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-      isValid = false;
-    }
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const handleChange4 = (e) => {
-    const { name, value } = e.target;
-    setForthStep({
-      ...forthStep,
-      [name]: value,
-    });
-  };
-
-  const nextStep = () => {
-    setStep(step + 1);
-  };
-
-  const prevStep = () => {
-    setStep(step - 1);
-  };
-
-  const handleLogin = () => {
-    navigate("/login");
-  };
-
-  const handleGoogleLink = () => {
-    console.log("User want to sign up with google!");
-  };
-
-  const nameRegex = /^[a-zA-Z]+$/;
-  const mobileRegex = /^\+?\d{10,13}$/;
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const otpRegex = /^\d{6}$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}$/;
-
-  const [checked, setChecked] = useState({
-    checkbox1: false,
-    checkbox2: false,
-  });
-
-  const handleChange = (checkbox) => {
-    if (checkbox === "checkbox1") {
-      setChecked({ checkbox1: true, checkbox2: false });
-    } else {
-      setChecked({ checkbox1: false, checkbox2: true });
-    }
-  };
-
-  return (
-    <div className="md:h-screen mt-[80px] bg-white">
-      <div className="lg:w-[60%] md:w-[75%] sm:w-[85%] w-[95%] flex md:flex-row flex-col mx-auto bg-white px-8 pb-8 rounded-xl shadow-md border border-solid border-[#a3a3a3]">
-        <div className="flex flex-col md:w-[50%] w-full">
-          {step === 1 && (
-            <>
-              <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">
-                Sign Up
-              </h1>
-              <form className="h-auto" onSubmit={handleFirstSubmit}>
-                <label
-                  htmlFor="firstName"
-                  className="block mb-1 font-semibold text-base md:text-lg"
-                >
-                  First Name:
-                </label>
-                <input
-                  type="text"
-                  name="firstName"
-                  id="firstName"
-                  placeholder="Enter your first name"
-                  className="border rounded-sm p-2 w-full mb-3"
-                  value={firstStep.firstName}
-                  onChange={handleChange1}
-                />
-                <div className="text-red-500 mb-1 text-sm">
-                  {errors.firstName}
-                </div>
-
-                <label
-                  htmlFor="lastName"
-                  className="block mb-1 font-semibold text-base md:text-lg"
-                >
-                  Last Name:
-                </label>
-                <input
-                  type="text"
-                  name="lastName"
-                  id="lastName"
-                  placeholder="Enter your last name"
-                  className="border rounded-sm p-2 w-full mb-3"
-                  value={firstStep.lastName}
-                  onChange={handleChange1}
-                />
-                <div className="text-red-500 mb-1 text-sm">
-                  {errors.lastName}
-                </div>
-
-                <label
-                  htmlFor="mobileNumber"
-                  className="block mb-1 font-semibold text-base md:text-lg"
-                >
-                  Mobile Number:
-                </label>
-                <input
-                  type="text"
-                  name="mobileNumber"
-                  id="mobileNumber"
-                  placeholder="Enter your mobile number"
-                  className="border rounded-sm p-2 w-full mb-3"
-                  value={firstStep.mobileNumber}
-                  onChange={handleChange1}
-                />
-                <div className="text-red-500 mb-1 text-sm">
-                  {errors.mobileNumber}
-                </div>
-
-                <div className="text-base md:text-lg font-semibold mb-1">
-                  Do you have a refferal code?
-                </div>
-                <input
-                  className="mb-3"
-                  type="checkbox"
-                  id="yes"
-                  name="yes"
-                  value="Yes"
-                  checked={checked.checkbox1}
-                  onClick={() => handleChange("checkbox1")}
-                />
-                <label className="mr-2 font-medium text-lg" htmlFor="yes">
-                  Yes
-                </label>
-                <input
-                  type="checkbox"
-                  id="no"
-                  name="no"
-                  value="No"
-                  checked={checked.checkbox2}
-                  onClick={() => handleChange("checkbox2")}
-                />
-                <label htmlFor="no" className="mr-2 font-medium text-lg">
-                  No
-                </label>
-                {checked.checkbox1 && (
-                  <>
-                    <label
-                      htmlFor="refBy"
-                      className="block mb-1 font-semibold text-base md:text-lg"
-                    >
-                      Refferal Code:
-                    </label>
-                    <input
-                      type="text"
-                      name="refBy"
-                      id="refBy"
-                      placeholder="Enter Refferal Code"
-                      className="border rounded-sm p-2 w-full mb-3"
-                      value={firstStep.refBy}
-                      onChange={handleChange1}
-                    />
-                    <div className="text-red-500 mb-1 text-sm">
-                      {errors.refBy}
-                    </div>
-                  </>
-                )}
-
-                <p
-                  onClick={handleGoogleLink}
-                  className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline"
-                >
-                  Sign Up with Google?
-                </p>
-
-                <button
-                  disabled={loading}
-                  type="submit"
-                  className={`${
-                    loading ? "bg-gray-300 cursor-not-allowed" : "bg-[#272727]"
-                  } text-base md:text-lg text-white cursor-pointer font-semibold mb-[1vw] py-2 px-4 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
-                >
-                  Next
-                </button>
-              </form>
-            </>
-          )}
-
-          {step === 2 && (
-            <>
-              <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">
-                Sign Up
-              </h1>
-              <form className="h-auto">
-                <label
-                  htmlFor="email"
-                  className="block mb-1 font-semibold text-base md:text-lg"
-                >
-                  Email:
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Enter your email"
-                  className="border rounded-sm p-2 w-full mb-3"
-                  value={secondStep.email}
-                  onChange={handleChange2}
-                />
-                <div className="text-red-500 mb-1 text-sm">{errors.email}</div>
-
-                <p
-                  onClick={handleGoogleLink}
-                  className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline"
-                >
-                  Sign Up with Google?
-                </p>
-                <button
-                  type="button"
-                  onClick={prevStep}
-                  className="bg-gray-500 text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 mb-2 rounded-md w-full"
-                >
-                  Previous
-                </button>
-                <button
-                  disabled={loading}
-                  onClick={() => nextStep()}
-                  className={`${
-                    loading ? "bg-gray-300 cursor-not-allowed" : "bg-[#272727]"
-                  } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
-                >
-                  Next
-                </button>
-              </form>
-            </>
-          )}
-          {step === 3 && (
-            <>
-              <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">
-                Complete Successful
-              </h1>
-              <form onSubmit={handleSubmit}>
-                <label
-                  htmlFor="password"
-                  className="block mb-1 font-semibold text-base md:text-lg"
-                >
-                  Password:
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Enter your password"
-                  className="border rounded-sm p-2 w-full mb-3"
-                  value={forthStep.password}
-                  onChange={handleChange4}
-                />
-                <div className="text-red-500 text-sm mb-1">
-                  {errors.password}
-                </div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="block mb-1 font-semibold md:text-lg text-base"
-                >
-                  Confirm Password:
-                </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  id="confirmPassword"
-                  placeholder="Enter your password"
-                  className="border rounded-sm p-2 w-full mb-3"
-                  value={forthStep.confirmPassword}
-                  onChange={handleChange4}
-                />
-                <div className="text-red-500 text-sm mb-1">
-                  {errors.confirmPassword}
-                </div>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className={`${
-                    loading ? "bg-gray-300 cursor-not-allowed" : "bg-[#272727]"
-                  } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
-                >
-                  Complete SignUp
-                </button>
-                <button
-                  type="button"
-                  onClick={prevStep}
-                  className="bg-gray-500 text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 mb-2 rounded-md w-full"
-                >
-                  Previous
-                </button>
-              </form>
-            </>
-          )}
-          {step === 4 && (
-            <>
-              <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">
-                Verify Email
-              </h1>
-              <form onSubmit={handleOTPVerification}>
-                <label
-                  htmlFor="otp"
-                  className="block mb-1 font-semibold text-base md:text-lg"
-                >
-                  OTP:
-                </label>
-                <input
-                  type="text"
-                  name="otp"
-                  id="otp"
-                  placeholder="Enter OTP"
-                  className="border rounded-sm p-2 w-full mb-3"
-                  value={thirdStep.otp}
-                  onChange={handleChange3}
-                />
-                <div className="text-red-500 text-sm mb-1">{errors.otp}</div>
-                <div className="flex justify-between">
-                  <p
-                    onClick={handleGoogleLink}
-                    className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline"
-                  >
-                    Sign Up with Google?
-                  </p>
-                  <p className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline">
-                    Resend OTP?
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={prevStep}
-                  className="bg-gray-500 text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 mb-2 rounded-md w-full"
-                >
-                  Previous
-                </button>
-                <button
-                  disabled={loading}
-                  type="submit"
-                  className={`${
-                    loading ? "bg-gray-300 cursor-not-allowed" : "bg-[#272727]"
-                  } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
-                >
-                  Verify OTP
-                </button>
-              </form>
-            </>
-          )}
-          <p className="text-xs underline">Already have an account?</p>
-          <button
-            onClick={handleLogin}
-            className="bg-white text-[#272727] w-full text-base md:text-lg font-semibold px-4 py-2 cursor-pointer rounded-md border border-solid border-[#272727]"
-          >
-            Login
-          </button>
-        </div>
-        <div className="md:w-[50%] w-full flex items-center justify-center">
-          <img src={userImage} alt="userImage" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default SignUp;
+// export default ReactQuiz;
