@@ -26,7 +26,9 @@ function Question({
           <button
             key={option}
             className={`bg-white text-gray-800 border border-gray-300 px-4 py-2 rounded-md hover:bg-blue-100 focus:outline-none ${
-              selectedOption === option ? "bg-slate-500" : "bg-white"
+              selectedOption === option
+                ? "bg-slate-500 text-black"
+                : "bg-slate-300"
             }`}
             onClick={() => onOptionSelect(option)}
           >
@@ -73,11 +75,11 @@ function ReactQuiz() {
   const jsonData = {};
   cookies.forEach((item) => {
     const [key, value] = item.split("=");
-    jsonData[key] = value;
+    jsonData[key.trim()] = value;
   });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (retryCount = 0) => {
       try {
         const response = await axios.get(
           `/inspections/test/?action=1&skill_name=${params.skill_Name}`,
@@ -93,39 +95,45 @@ function ReactQuiz() {
           response.data?.status === 400 ||
           response.data?.status === 401
         ) {
-          console.log("data not fetched");
-          return;
+          throw new Error("Data not fetched");
         }
-        console.log(response);
         setAllSetData(response.data?.data);
         setTest_id(response.data?.data?.test_id);
         setRepord_id(response.data?.data?.report_id);
         setQuestions(response.data?.data?.questions || []);
+        setLoading(false); // Stop loading only when data is fetched
       } catch (error) {
-        setError("Error fetching data");
-      } finally {
-        setLoading(false);
+        if (retryCount < 3) {
+          console.log(`Retrying... Attempt ${retryCount + 1}`);
+          fetchData(retryCount + 1);
+        } else {
+          setError("Error fetching data after 3 attempts");
+          setLoading(false);
+        }
       }
     };
 
     fetchData();
-  }, []);
+  }, [params.skill_Name]);
 
   useEffect(() => {
-    const timerId = setInterval(() => {
-      setTimer((prevTimer) => {
-        if (prevTimer <= 0) {
-          setCurrentQuestion((prevQuestion) => prevQuestion + 1);
-          return 60; // Reset timer for the next question
-        } else {
-          return prevTimer - 1;
-        }
-      });
-    }, 1000);
+    let timerId;
+    if (!loading && questions.length > 0) {
+      timerId = setInterval(() => {
+        setTimer((prevTimer) => {
+          if (prevTimer <= 0) {
+            setCurrentQuestion((prevQuestion) => prevQuestion + 1);
+            return 60; // Reset timer for the next question
+          } else {
+            return prevTimer - 1;
+          }
+        });
+      }, 1000);
+    }
 
     // Cleanup function
     return () => clearInterval(timerId);
-  }, [currentQuestion]);
+  }, [loading, questions]);
 
   useEffect(() => {
     // Reset timer when current question changes
@@ -198,6 +206,7 @@ function ReactQuiz() {
 
   if (currentQuestion >= questions.length) {
     handleFinishQuiz();
+    return null; // Return null to prevent rendering anything further
   }
 
   const currentQuestionData = questions[currentQuestion];
@@ -205,7 +214,7 @@ function ReactQuiz() {
   return (
     <div className="min-h-screen bg-white flex flex-col justify-center items-center">
       <div className="mx-auto container">
-        <div className="flex justify-between items-center w-full p-4  bg-slate-300 rounded">
+        <div className="flex justify-between items-center w-full p-4 bg-slate-300 rounded">
           <button
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
             // onClick={handleCancelTest}
@@ -215,7 +224,7 @@ function ReactQuiz() {
           <div className="flex items-center border-slate-400 border border-solid p-2 rounded">
             <FcAlarmClock />
             <span className="font-bold ml-2"> Time Left: </span>
-            <span className=" ml-2">{timer} seconds</span>
+            <span className="ml-2">{timer} seconds</span>
           </div>
         </div>
       </div>
@@ -239,7 +248,7 @@ function ReactQuiz() {
           timer <= 0 ? "pointer-events-none" : ""
         }`}
         onClick={handleNextQuestion}
-        disabled={timer <= 0}
+        disabled={timer <= 0 || selectedOption === null}
       >
         Next Question
       </button>

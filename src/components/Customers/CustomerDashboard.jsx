@@ -15,7 +15,8 @@ import { handleUploadImage } from "../../constant";
 import { FiUpload } from "react-icons/fi";
 import ImageUploader from "../../ImageUploader";
 import Modal from "../../Modal";
-
+import { IoMdShareAlt } from "react-icons/io";
+import { MdOutlineContentCopy } from "react-icons/md";
 export const CustomerProfile = () => {
   const [userData, setUserData] = useState({});
   const [myImage, setMyImage] = useState(0);
@@ -958,6 +959,16 @@ const CustomerDashboard = () => {
       }
     }
   };
+  const handleCopyToClipboard = () => {
+    navigator.clipboard
+      .writeText(expertData.refer_code)
+      .then(() => {
+        alert("Referral code copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+      });
+  };
   useEffect(() => {
     const isAuthChecked = sessionStorage.getItem("isAuthChecked");
     if (!isAuthChecked) {
@@ -969,9 +980,9 @@ const CustomerDashboard = () => {
   }, []);
   return (
     <div className="mt-[100px] px-[7vw] md:flex gap-[1vw]">
-      <div className="hidden md:block w-[32%] ">
-        <div className=" flex flex-col h-fit border border-[rgb(199,199,199)] border-solid rounded-lg ">
-          <div className="flex flex-col items-center justify-center px-[2vw] pb-5 border-b border-solid border-slate-300 ">
+      <div className="hidden md:block w-[32%]">
+        <div className=" flex flex-col h-fit border bg-[#e7e7e7] border-[#bebebe] border-solid rounded-lg ">
+          <div className="flex flex-col items-center justify-center px-[2vw] pb-5 border-b border-solid border-[#bebebe] ">
             <img
               src={userData?.profile_img}
               className="mt-12 object-cover object-top shrink-0 rounded-lg h-20 w-20 lg:h-28 lg:w-28 border-2 border-solid border-white"
@@ -983,35 +994,44 @@ const CustomerDashboard = () => {
             <div className="text-sm text-balance line-clamp-3">
               {userData?.about_me}
             </div>
+            <div className="flex mt-[1.25vw] gap-2 items-center">
+              <div className="font-bold text-sm">Referal code: </div>
+              <span className="text-sm">{userData?.refer_code}</span>
+              <MdOutlineContentCopy
+                className="cursor-pointer"
+                onClick={handleCopyToClipboard}
+              />
+              <IoMdShareAlt />
+            </div>
           </div>
           <div>
             <ul className="p-0  ">
               <Link className="no-underline">
-                <li className="flex gap-[1.25vw] items-center  font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <li className="flex gap-[1.25vw] border-b-[0.5px] border-solid border-[#bebebe] items-center  font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <FaUserAlt className="text-[1.55vw]" />
                   Profile
                 </li>
               </Link>
               <Link to="chats" className="no-underline">
-                <li className="flex gap-[1.25vw] items-center  font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <li className="flex gap-[1.25vw] border-b-[0.5px] border-solid border-[#bebebe] items-center  font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <BsFillChatSquareTextFill className="text-[1.55vw]" />
                   Chat
                 </li>
               </Link>
               <Link to="mybookings" className="no-underline">
-                <li className="flex gap-[1.25vw] items-center font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <li className="flex gap-[1.25vw] border-b-[0.5px] border-solid border-[#bebebe] items-center font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <IoBookmarksSharp className="text-[1.55vw]" />
                   My Bookings
                 </li>
               </Link>
               <Link to="recentmeetings" className="no-underline">
-                <li className="flex gap-[1.25vw] items-center font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <li className="flex gap-[1.25vw] border-b-[0.5px] border-solid border-[#bebebe] items-center font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <MdVideoChat className="text-[1.55vw]" />
                   Recent Meetings
                 </li>
               </Link>
               <Link to="transactionhistory" className="no-underline">
-                <li className="flex gap-[1.25vw] items-center font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                <li className="flex gap-[1.25vw] border-b-[0.5px] border-solid border-[#bebebe] items-center font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <FaHistory className="text-[1.55vw]" />
                   Transaction History
                 </li>
