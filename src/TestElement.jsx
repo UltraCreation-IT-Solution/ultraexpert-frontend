@@ -1,227 +1,259 @@
-import React, { useState, useEffect } from "react";
-import axios from "./axios";
-import BookingCard from "./subsitutes/BookingCard";
-import TextShimmer from "./subsitutes/Shimmers/TextShimmer";
+// import React, { useEffect, useState } from "react";
+// import axios from "../../axios";
+// import PropTypes from "prop-types";
+// import { FcAlarmClock } from "react-icons/fc";
+// import { useParams, useNavigate } from "react-router-dom";
 
-const TestElement = () => {
-  const [scheduled, setscheduled] = useState(true);
-  const [done, setdone] = useState(false);
-  const [notDone, setNotDone] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const HandleScheduled = () => {
-    setLoading(true);
-    setscheduled(true);
-    setdone(false);
-    setNotDone(false);
-    getScheduledBookings();
-    setLoading(false);
-  };
-  const HandleDone = () => {
-    setLoading(true);
-    setscheduled(false);
-    setdone(true);
-    setNotDone(false);
-    getDoneBookings();
-    setLoading(false);
-  };
-  const HandleNotDone = () => {
-    setLoading(true);
-    setscheduled(false);
-    setdone(false);
-    setNotDone(true);
-    getNotDoneBookings();
-    setLoading(false);
-  };
+// function Question({
+//   question,
+//   options,
+//   selectedOption,
+//   onOptionSelect,
+//   skill_Name,
+// }) {
+//   return (
+//     <div className="container mx-auto px-4 py-8 bg-white rounded-lg shadow-md mb-8 border border-blue-500">
+//       <h2 className="text-2xl font-semibold mb-4">{skill_Name} Quiz</h2>
+//       {typeof question === "object" ? (
+//         <div className="bg-gray-100 px-4 py-2 rounded-md mb-4">
+//           <code>{question.code}</code>
+//         </div>
+//       ) : (
+//         <p className="text-gray-800 mb-4">{question}</p>
+//       )}
+//       <div className="grid grid-cols-1 gap-4">
+//         {options.map(({ option, text }) => (
+//           <button
+//             key={option}
+//             className={`bg-white text-gray-800 border border-gray-300 px-4 py-2 rounded-md hover:bg-blue-100 focus:outline-none ${
+//               selectedOption === option
+//                 ? "bg-slate-500 text-black"
+//                 : "bg-slate-300"
+//             }`}
+//             onClick={() => onOptionSelect(option)}
+//           >
+//             {text}
+//           </button>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
 
-  const [myBookings, setMyBookings] = useState([]);
-  useEffect(() => {
-    if (scheduled) getScheduledBookings();
-  }, []);
+// Question.propTypes = {
+//   question: PropTypes.oneOfType([
+//     PropTypes.string,
+//     PropTypes.shape({
+//       code: PropTypes.string.isRequired,
+//     }),
+//   ]).isRequired,
+//   options: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       option: PropTypes.string.isRequired,
+//       text: PropTypes.string.isRequired,
+//     })
+//   ).isRequired,
+//   selectedOption: PropTypes.string,
+//   onOptionSelect: PropTypes.func.isRequired,
+// };
 
-  const cookies = document.cookie.split("; ");
-  const jsonData = {};
+// function ReactQuiz() {
+//   const params = useParams();
+//   const navigate = useNavigate();
+//   const [currentQuestion, setCurrentQuestion] = useState(0);
+//   const [selectedOption, setSelectedOption] = useState(null);
+//   const [questions, setQuestions] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const [timer, setTimer] = useState(60);
+//   const [allSetData, setAllSetData] = useState({});
+//   const [test_id, setTest_id] = useState("");
+//   const [repord_id, setRepord_id] = useState("");
+//   const [question_id, setQuestion_id] = useState("");
 
-  cookies.forEach((item) => {
-    const [key, value] = item.split("=");
-    jsonData[key] = value;
-  });
+//   const cookies = document.cookie.split(";");
+//   const jsonData = {};
+//   cookies.forEach((item) => {
+//     const [key, value] = item.split("=");
+//     jsonData[key.trim()] = value;
+//   });
 
-  const getScheduledBookings = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(
-        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}&status=scheduled`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      if (
-        !res.data ||
-        res.data.status === 400 ||
-        res.data.status === 401 ||
-        res.data.status === 404
-      ) {
-        console.log(res.data.message);
-        setLoading(false);
-        return;
-      }
-      const currentTime = new Date();
-      const filteredBookings = res.data.data.filter((booking) => {
-        // Construct the date and time string from the booking data
-        const dateTimeString = `${booking.time_slot_day} ${booking.time_slot_start}`;
-        // Parse the date and time string to a Date object
-        const bookingDate = new Date(dateTimeString);
+//   useEffect(() => {
+//     const fetchData = async (retryCount = 0) => {
+//       try {
+//         const response = await axios.get(
+//           `/inspections/test/?action=1&skill_name=${params.skill_Name}`,
+//           {
+//             headers: {
+//               "Content-Type": "application/json",
+//               Authorization: `Bearer ${jsonData.access_token}`,
+//             },
+//           }
+//         );
+//         if (
+//           !response.data?.data ||
+//           response.data?.status === 400 ||
+//           response.data?.status === 401
+//         ) {
+//           throw new Error("Data not fetched");
+//         }
+//         setAllSetData(response.data?.data);
+//         setTest_id(response.data?.data?.test_id);
+//         setRepord_id(response.data?.data?.report_id);
+//         setQuestions(response.data?.data?.questions || []);
+//         setLoading(false); // Stop loading only when data is fetched
+//       } catch (error) {
+//         if (retryCount < 3) {
+//           console.log(`Retrying... Attempt ${retryCount + 1}`);
+//           fetchData(retryCount + 1);
+//         } else {
+//           setError("Error fetching data after 3 attempts");
+//           setLoading(false);
+//         }
+//       }
+//     };
 
-        // Compare with current date and time
-        return bookingDate > currentTime;
-      });
-      setMyBookings(filteredBookings);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-  const getDoneBookings = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(
-        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}&status=done`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      if (
-        !res.data ||
-        res.data.status === 400 ||
-        res.data.status === 401 ||
-        res.data.status === 404
-      ) {
-        console.log(res.data.message);
-        setLoading(false);
-        return;
-      }
-      setMyBookings(res.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-  const getNotDoneBookings = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(
-        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}&status=scheduled`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        }
-      );
-      if (
-        !res.data ||
-        res.data.status === 400 ||
-        res.data.status === 401 ||
-        res.data.status === 404
-      ) {
-        console.log(res.data.message);
-        setLoading(false);
-        return;
-      }
-      const currentTime = new Date();
-      const filteredBookings = res.data.data.filter((booking) => {
-        // Construct the date and time string from the booking data
-        const dateTimeString = `${booking.time_slot_day} ${booking.time_slot_start}`;
-        // Parse the date and time string to a Date object
-        const bookingDate = new Date(dateTimeString);
+//     fetchData();
+//   }, [params.skill_Name]);
 
-        // Compare with current date and time
-        return bookingDate < currentTime;
-      });
-      setMyBookings(filteredBookings);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-  console.log(myBookings);
+//   useEffect(() => {
+//     let timerId;
+//     if (!loading && questions.length > 0) {
+//       timerId = setInterval(() => {
+//         setTimer((prevTimer) => {
+//           if (prevTimer <= 0) {
+//             setCurrentQuestion((prevQuestion) => prevQuestion + 1);
+//             return 60; // Reset timer for the next question
+//           } else {
+//             return prevTimer - 1;
+//           }
+//         });
+//       }, 1000);
+//     }
 
-  return (
-    <>
-      <div className="flex gap-3  mt-20 border-b border-solid border-[#c7c7c7] pb-3 text-sm md:text-base overflow-x-scroll px-2">
-        <div
-          className={
-            loading
-              ? `text-gray-300`
-              : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
-                  scheduled && `bg-[#ececec] rounded-sm`
-                }`
-          }
-          onClick={() => HandleScheduled()}
-        >
-          Scheduled
-        </div>
-        <div
-          className={
-            loading
-              ? `text-gray-300`
-              : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
-                  done && `bg-[#ececec] rounded-sm`
-                }`
-          }
-          onClick={() => HandleDone()}
-        >
-          Done
-        </div>
-        <div
-          className={
-            loading
-              ? `text-gray-300`
-              : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
-                  notDone && `bg-[#ececec] rounded-sm`
-                }`
-          }
-          onClick={() => HandleNotDone()}
-        >
-          Sceduled & Not Done
-        </div>
-      </div>
-      {loading ? (
-        <div className="w-full flex flex-col items-center gap-10 mt-5">
-          {Array.from({ length: 4 }).map((item, index) => (
-            <TextShimmer key={index} />
-          ))}
-        </div>
-      ) : myBookings.length === 0 ? (
-        <div className="text-lg sm:text-2xl font-semibold sm:font-bold text-center my-10 text-gray-600">
-          No Active Bookings
-        </div>
-      ) : (
-        <>
-          <div className="flex items-center justify-between text-sm bg-[#ECECEC] text-black font-bold overflow-x-scroll rounded-md px-4">
-            <div className="flex items-center xs:gap-[4vw] shrink-0 my-5">
-              <div className="w-[200px]">Client Name</div>
-              <div className="hidden sm:block w-[120px] ">Scheduled Date</div>
-              <div className="shrink-0 w-[60px]">Action</div>
-            </div>
-            <div className="shrink-0 text-right w-[60px] "></div>
-          </div>
-          {myBookings?.map((item, index) => (
-            <BookingCard item={item} key={index} />
-          ))}
-        </>
-      )}
-    </>
-  );
-};
+//     // Cleanup function
+//     return () => clearInterval(timerId);
+//   }, [loading, questions]);
 
-export default TestElement;
+//   useEffect(() => {
+//     // Reset timer when current question changes
+//     setTimer(60);
+//   }, [currentQuestion]);
+
+//   const handleOptionSelect = (option) => {
+//     setSelectedOption(option);
+//   };
+
+//   const handleNextQuestion = async () => {
+//     const selectedOptionText =
+//       questions[currentQuestion].options[selectedOption];
+//     console.log(`Selected Option: ${selectedOptionText}`);
+//     try {
+//       const response = await axios.post(
+//         "/inspections/test/",
+//         {
+//           action: 1,
+//           question_id: allSetData?.questions[currentQuestion]?.question_id,
+//           report_id: repord_id,
+//           answer: selectedOptionText,
+//           test_id: test_id,
+//         },
+//         {
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${jsonData.access_token}`,
+//           },
+//         }
+//       );
+//       console.log(response);
+//     } catch (error) {
+//       console.log(error);
+//     }
+
+//     setSelectedOption(null);
+//     setCurrentQuestion((prevQuestion) => prevQuestion + 1);
+//   };
+
+//   const handleFinishQuiz = async () => {
+//     // Handle finish quiz action, e.g., submit score to server
+
+//     console.log("Quiz finished. Score:");
+//     try {
+//       const res = await axios.get(
+//         `/inspections/test/?action=2&skill_name=${params.skill_Name}&test_id=${test_id}&report=${repord_id}`,
+//         {
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${jsonData.access_token}`,
+//           },
+//         }
+//       );
+//       console.log(res);
+//       navigate("/expertdashboard");
+//     } catch (error) {
+//       console.log(error);
+//     }
+//     navigate("/expertdashboard");
+//   };
+
+//   if (loading) {
+//     return <div>Loading...</div>;
+//   }
+
+//   if (error) {
+//     return <div>Error: {error}</div>;
+//   }
+
+//   if (currentQuestion >= questions.length) {
+//     handleFinishQuiz();
+//     return null; // Return null to prevent rendering anything further
+//   }
+
+//   const currentQuestionData = questions[currentQuestion];
+
+//   return (
+//     <div className="min-h-screen bg-white flex flex-col justify-center items-center">
+//       <div className="mx-auto container">
+//         <div className="flex justify-between items-center w-full p-4 bg-slate-300 rounded">
+//           <button
+//             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+//             // onClick={handleCancelTest}
+//           >
+//             Cancel Test
+//           </button>
+//           <div className="flex items-center border-slate-400 border border-solid p-2 rounded">
+//             <FcAlarmClock />
+//             <span className="font-bold ml-2"> Time Left: </span>
+//             <span className="ml-2">{timer} seconds</span>
+//           </div>
+//         </div>
+//       </div>
+//       {currentQuestionData?.question_id && (
+//         <Question
+//           question={currentQuestionData?.question}
+//           options={Object.entries(currentQuestionData?.options)?.map(
+//             ([option, text]) => ({
+//               option,
+//               text,
+//             })
+//           )}
+//           selectedOption={selectedOption}
+//           onOptionSelect={handleOptionSelect}
+//           skill_Name={params.skill_Name}
+//         />
+//       )}
+
+//       <button
+//         className={`bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 mr-4 ${
+//           timer <= 0 ? "pointer-events-none" : ""
+//         }`}
+//         onClick={handleNextQuestion}
+//         disabled={timer <= 0 || selectedOption === null}
+//       >
+//         Next Question
+//       </button>
+//     </div>
+//   );
+// }
+
+// export default ReactQuiz;

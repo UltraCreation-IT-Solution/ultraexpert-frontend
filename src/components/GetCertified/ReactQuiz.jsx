@@ -69,7 +69,6 @@ function ReactQuiz() {
   const [allSetData, setAllSetData] = useState({});
   const [test_id, setTest_id] = useState("");
   const [repord_id, setRepord_id] = useState("");
-  const [question_id, setQuestion_id] = useState("");
 
   const cookies = document.cookie.split(";");
   const jsonData = {};
@@ -145,6 +144,8 @@ function ReactQuiz() {
   };
 
   const handleNextQuestion = async () => {
+    if (selectedOption === null) return;
+
     const selectedOptionText =
       questions[currentQuestion].options[selectedOption];
     console.log(`Selected Option: ${selectedOptionText}`);
@@ -153,7 +154,7 @@ function ReactQuiz() {
         "/inspections/test/",
         {
           action: 1,
-          question_id: allSetData?.questions[currentQuestion]?.question_id,
+          question_id: questions[currentQuestion]?.question_id,
           report_id: repord_id,
           answer: selectedOptionText,
           test_id: test_id,
@@ -171,13 +172,15 @@ function ReactQuiz() {
     }
 
     setSelectedOption(null);
-    setCurrentQuestion((prevQuestion) => prevQuestion + 1);
+    if (currentQuestion + 1 < questions.length) {
+      setCurrentQuestion((prevQuestion) => prevQuestion + 1);
+    } else {
+      handleFinishQuiz();
+    }
   };
 
   const handleFinishQuiz = async () => {
-    // Handle finish quiz action, e.g., submit score to server
-
-    console.log("Quiz finished. Score:");
+    console.log("Quiz finished. Submitting score...");
     try {
       const res = await axios.get(
         `/inspections/test/?action=2&skill_name=${params.skill_Name}&test_id=${test_id}&report=${repord_id}`,
@@ -189,7 +192,6 @@ function ReactQuiz() {
         }
       );
       console.log(res);
-      navigate("/expertdashboard");
     } catch (error) {
       console.log(error);
     }
@@ -204,11 +206,6 @@ function ReactQuiz() {
     return <div>Error: {error}</div>;
   }
 
-  if (currentQuestion >= questions.length) {
-    handleFinishQuiz();
-    return null; // Return null to prevent rendering anything further
-  }
-
   const currentQuestionData = questions[currentQuestion];
 
   return (
@@ -217,7 +214,7 @@ function ReactQuiz() {
         <div className="flex justify-between items-center w-full p-4 bg-slate-300 rounded">
           <button
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            // onClick={handleCancelTest}
+            onClick={() => navigate("/expertdashboard")}
           >
             Cancel Test
           </button>
