@@ -1683,10 +1683,38 @@ export const Leaderboard = () => {
 };
 
 export const MyBooking = () => {
-  const [shimmer, setShimmer] = useState(false);
+  const [scheduled, setscheduled] = useState(true);
+  const [done, setdone] = useState(false);
+  const [notDone, setNotDone] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const HandleScheduled = () => {
+    setLoading(true);
+    setscheduled(true);
+    setdone(false);
+    setNotDone(false);
+    getScheduledBookings();
+    setLoading(false);
+  };
+  const HandleDone = () => {
+    setLoading(true);
+    setscheduled(false);
+    setdone(true);
+    setNotDone(false);
+    getDoneBookings();
+    setLoading(false);
+  };
+  const HandleNotDone = () => {
+    setLoading(true);
+    setscheduled(false);
+    setdone(false);
+    setNotDone(true);
+    getNotDoneBookings();
+    setLoading(false);
+  };
+
   const [myBookings, setMyBookings] = useState([]);
   useEffect(() => {
-    getMyBookings();
+    if (scheduled) getScheduledBookings();
   }, []);
 
   const cookies = document.cookie.split("; ");
@@ -1697,11 +1725,12 @@ export const MyBooking = () => {
     jsonData[key] = value;
   });
 
-  const getMyBookings = async () => {
-    setShimmer(true);
+  const getScheduledBookings = async () => {
+    setMyBookings([]);
+    setLoading(true);
     try {
       const res = await axios.get(
-        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}`,
+        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}&status=scheduled`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -1716,23 +1745,139 @@ export const MyBooking = () => {
         res.data.status === 404
       ) {
         console.log(res.data.message);
-        setShimmer(false);
+        setLoading(false);
+        return;
+      }
+      const currentTime = new Date();
+      const filteredBookings = res.data.data.filter((booking) => {
+        // Construct the date and time string from the booking data
+        const dateTimeString = `${booking.time_slot_day} ${booking.time_slot_start}`;
+        // Parse the date and time string to a Date object
+        const bookingDate = new Date(dateTimeString);
+
+        // Compare with current date and time
+        return bookingDate > currentTime;
+      });
+      setMyBookings(filteredBookings);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  const getDoneBookings = async () => {
+    setLoading(true);
+    setMyBookings([]);
+    try {
+      const res = await axios.get(
+        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}&status=done`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        console.log(res.data.message);
+        setLoading(false);
         return;
       }
       setMyBookings(res.data.data);
-      setShimmer(false);
+      setLoading(false);
     } catch (error) {
       console.log(error);
-      setShimmer(false);
+      setLoading(false);
+    }
+  };
+  const getNotDoneBookings = async () => {
+    setMyBookings([]);
+    setLoading(true);
+    try {
+      const res = await axios.get(
+        `/experts/services/?action=4&expert_id=${localStorage?.expert_id}&status=scheduled`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      if (
+        !res.data ||
+        res.data.status === 400 ||
+        res.data.status === 401 ||
+        res.data.status === 404
+      ) {
+        console.log(res.data.message);
+        setLoading(false);
+        return;
+      }
+      const currentTime = new Date();
+      const filteredBookings = res.data.data.filter((booking) => {
+        // Construct the date and time string from the booking data
+        const dateTimeString = `${booking.time_slot_day} ${booking.time_slot_start}`;
+        // Parse the date and time string to a Date object
+        const bookingDate = new Date(dateTimeString);
+
+        // Compare with current date and time
+        return bookingDate < currentTime;
+      });
+      setMyBookings(filteredBookings);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
     }
   };
   console.log(myBookings);
+
   return (
-    <div className="w-full md:w-[68%]">
-      <div className="text-xl font-bold border-b border-solid border-slate-200 pb-3">
-        Active Bookings
+    <div className="flex flex-col gap-5 w-full md:w-[68%]">
+      <div className="flex gap-3 border-b border-solid border-[#c7c7c7] pb-3 text-sm md:text-base overflow-x-scroll px-2">
+        <div
+          className={
+            loading
+              ? `text-gray-300`
+              : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+                  scheduled && `bg-[#ececec] rounded-sm`
+                }`
+          }
+          onClick={() => HandleScheduled()}
+        >
+          Scheduled
+        </div>
+        <div
+          className={
+            loading
+              ? `text-gray-300`
+              : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+                  done && `bg-[#ececec] rounded-sm`
+                }`
+          }
+          onClick={() => HandleDone()}
+        >
+          Done
+        </div>
+        <div
+          className={
+            loading
+              ? `text-gray-300`
+              : `px-3 py-2 cursor-pointer font-semibold shrink-0 ${
+                  notDone && `bg-[#ececec] rounded-sm`
+                }`
+          }
+          onClick={() => HandleNotDone()}
+        >
+          Sceduled & Not Done
+        </div>
       </div>
-      {shimmer ? (
+      {loading ? (
         <div className="w-full flex flex-col items-center gap-10 mt-5">
           {Array.from({ length: 4 }).map((item, index) => (
             <TextShimmer key={index} />

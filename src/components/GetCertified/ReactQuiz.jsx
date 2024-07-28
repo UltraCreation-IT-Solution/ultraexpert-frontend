@@ -166,10 +166,25 @@ function ReactQuiz() {
     setCurrentQuestion((prevQuestion) => prevQuestion + 1);
   };
 
-  const handleFinishQuiz = () => {
+  const handleFinishQuiz = async () => {
     // Handle finish quiz action, e.g., submit score to server
 
     console.log("Quiz finished. Score:");
+    try {
+      const res = await axios.get(
+        `/inspections/test/?action=2&skill_name=${params.skill_Name}&test_id=${test_id}&report=${repord_id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      console.log(res);
+      navigate("/expertdashboard");
+    } catch (error) {
+      console.log(error);
+    }
     navigate("/expertdashboard");
   };
 

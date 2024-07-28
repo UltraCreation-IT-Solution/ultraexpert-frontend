@@ -145,7 +145,7 @@ const BookingCard = ({ item }) => {
 
   return (
     <>
-      <div className="text-sm flex items-center justify-between border-t border-solid border-slate-300 my-5 py-3 overflow-x-scroll">
+      <div className="text-sm flex items-center justify-between border-b border-solid border-slate-300  py-3 overflow-x-scroll">
         <div className="flex items-center xs:gap-[4vw] text-sm">
           <div className="flex items-center gap-2 w-[200px] ">
             <img
@@ -154,7 +154,7 @@ const BookingCard = ({ item }) => {
                   ? item?.customer_profile_img
                   : item?.expert_profile_img
               }
-              className="h-9 w-9 rounded-full shrink-0 object-cover"
+              className="h-9 w-9 rounded-full shrink-0 object-cover object-top"
               alt=""
             />
             <div>
