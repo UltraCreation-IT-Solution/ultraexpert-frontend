@@ -64,6 +64,7 @@ import SkillList from "./components/GetCertified/Instructions.js";
 import UpdateService from "./components/Services/UpdateService.jsx";
 import TestElement from "./TestElement.jsx";
 import ExpertProfileShimmer from "./subsitutes/Shimmers/ExpertProfileShimmer.jsx";
+import WalletPage from "./components/Experts/WalletPage.jsx";
 // import CreateMeeting from "./components/Jitsi/CreateMeeting.jsx";
 // import Docs from "./components/UltraXpert_docs/Docs.jsx";
 // import TestNavbar from "./TestNavbar.jsx";
@@ -323,6 +324,10 @@ const appRouter = createBrowserRouter([
           {
             path: "myBookings",
             element: <MyBooking />,
+          },
+          {
+            path: "expertwallet",
+            element: <WalletPage />,
           },
           {
             path: "getcertified",
