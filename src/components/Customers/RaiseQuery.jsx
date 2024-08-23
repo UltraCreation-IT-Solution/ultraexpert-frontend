@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../../axios";
 
-function RaiseQuery() {
+function RaiseQuery({ setRaiseQuery }) {
   const [queryData, setQueryData] = useState({
+    action: 1,
     subject: "",
     technology_name: "",
     topic: "",
     description: "",
-    resolved: false,
-    reply: [],
+    // resolved: false,
+    // reply: [],
   });
 
   const handleInputChange = (e) => {
@@ -16,19 +17,33 @@ function RaiseQuery() {
     setQueryData({ ...queryData, [name]: value });
   };
 
+  const cookies = document.cookie.split("; ");
+  const jsonData = {};
+
+  cookies.forEach((item) => {
+    const [key, value] = item.split("=");
+    jsonData[key] = value;
+  });
   const handleSubmit = async () => {
     try {
       // Make API call to submit the query
-      await axios.post("/api/queries", queryData);
+      const res = await axios.post("/customers/query/", queryData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jsonData.access_token}`,
+        },
+      });
+      console.log(res);
       alert("Query raised successfully");
+      setRaiseQuery(false);
       // Reset form if needed
     } catch (error) {
-      console.error("Error raising query", error);
+      console.log("Error raising query", error);
     }
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-md">
+    <div className="container mx-auto p-4 h-full bg-slate-600 rounded">
       <h2 className="text-2xl font-semibold mb-4">Raise a Query</h2>
       <input
         type="text"
@@ -61,12 +76,20 @@ function RaiseQuery() {
         onChange={handleInputChange}
         className="mb-4 p-2 w-full border rounded"
       ></textarea>
-      <button
-        onClick={handleSubmit}
-        className="bg-blue-500 text-white p-2 rounded w-full hover:bg-blue-600"
-      >
-        Submit Query
-      </button>
+      <div className="flex justify-between">
+        <button
+          onClick={() => setRaiseQuery(false)}
+          className=" rounded  py-2 px-4 bg-red-500 text-white hover:bg-red-600"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-500 text-white py-2 px-4 rounded  hover:bg-blue-600"
+        >
+          Submit Query
+        </button>
+      </div>
     </div>
   );
 }

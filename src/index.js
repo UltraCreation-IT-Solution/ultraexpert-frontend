@@ -65,6 +65,8 @@ import UpdateService from "./components/Services/UpdateService.jsx";
 import TestElement from "./TestElement.jsx";
 import ExpertProfileShimmer from "./subsitutes/Shimmers/ExpertProfileShimmer.jsx";
 import WalletPage from "./components/Experts/WalletPage.jsx";
+import MyQueries from "./components/Customers/MyQueries.jsx";
+import QueriesPage from "./components/Experts/Queries.jsx";
 // import CreateMeeting from "./components/Jitsi/CreateMeeting.jsx";
 // import Docs from "./components/UltraXpert_docs/Docs.jsx";
 // import TestNavbar from "./TestNavbar.jsx";
@@ -165,6 +167,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/editprofileexpert",
         element: <EditProfileExpert />,
+      },
+      {
+        path: "/queries",
+        element: <QueriesPage />,
       },
       {
         path: "/experts",
@@ -366,6 +372,10 @@ const appRouter = createBrowserRouter([
           {
             path: "mybookings",
             element: <CustomerBookings />,
+          },
+          {
+            path: "myqueries",
+            element: <MyQueries />,
           },
           {
             path: "recentmeetings",

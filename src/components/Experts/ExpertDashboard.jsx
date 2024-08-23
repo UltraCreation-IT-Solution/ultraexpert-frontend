@@ -529,14 +529,21 @@ export const Dashboard = () => {
     }
   };
   const getExpertStatistics = async () => {
+    const today = new Date();
+    console.log(today.getFullYear(), today.getMonth() + 1, today.getDate());
     setLoading(true);
     try {
-      const response = await axios.get("/experts/?action=3&end_date=2024-07", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jsonData.access_token}`,
-        },
-      });
+      const response = await axios.get(
+        `/experts/?action=3&end_date=${today.getFullYear()}-${
+          today.getMonth() + 1
+        }`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
       if (
         response.data.status === 401 ||
         response.data.status === 400 ||
@@ -742,7 +749,7 @@ export const Dashboard = () => {
             <div className="flex gap-[1.65vw] items-center text-[3.25vw] xs:text-[2.25vw] sm:text-[2vw] text-[#515151]">
               <FaTags className="text-[4.45vw] xs:text-[2.9vw] sm:text-[2.65vw]" />
               <div className="flex ">
-                {expertData?.skills?.map((item, idx) => {
+                {expertData?.skills?.splice(0, 3)?.map((item, idx) => {
                   return (
                     <div
                       key={idx}
