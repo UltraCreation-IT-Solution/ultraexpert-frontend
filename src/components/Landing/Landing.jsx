@@ -42,7 +42,7 @@ const TestimonialCard = ({ expert_id, id, user, content, date_created }) => {
           onClick={() => navigate(`/experts/expertprofile/${expert_id}`)}
         >
           <img
-            className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
+            className="shrink-0 w-[10vw] h-[10vw] xs:w-[9.5vw] xs:h-[9.5vw] sm:h-[4.5vw] sm:w-[4.5vw] rounded-full object-top object-cover border-white border-solid border-[0.15vw] sm:border-[0.2vw]"
             src={user?.profile_img}
             alt=""
           />

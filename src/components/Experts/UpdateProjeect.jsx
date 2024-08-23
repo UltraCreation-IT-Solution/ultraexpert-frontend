@@ -6,7 +6,6 @@ import { handleUploadImage } from "../../constant";
 import ImageUploader from "../../ImageUploader";
 import Modal from "../../Modal";
 
-
 const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
   const [projects, setProjects] = useState([]);
   const [title, setTitle] = useState("");
@@ -162,7 +161,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
 
   const isFormEmpty =
     !title || !description || !myImage || !type || (type === "group" && !role);
-
+  console.log(projects);
   return (
     <div className="max-w-3xl mx-auto mt-2 px-4 border border-gray-500 rounded-lg shadow-lg">
       <div className="flex justify-between items-center bg-[#ebebeb] border border-slate-300 border-solid px-6 py-3 rounded-t-lg">
@@ -259,7 +258,7 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
           </div>
         </div>
         <div className="flex flex-wrap border border-slate-300 rounded px-2 py-2">
-          {tags.map((tag, index) => (
+          {tags?.map((tag, index) => (
             <div
               key={index}
               className="flex gap-1 items-center bg-white text-black pl-4 pr-2 py-1 rounded-lg text-sm mr-2 mb-2 border border-solid border-gray-300"
@@ -302,60 +301,63 @@ const UpdateProject = ({ setAddProjectOpen, getBackWidth }) => {
           <div className="text-xl font-semibold">Your Projects</div>
         )}
         <div className="">
-          {projects.map((project, index) => (
-            <div
-              key={index}
-              className="mb-8 p-6 bg-white rounded shadow-md border border-gray-200"
-            >
-              <h3 className="text-xl font-semibold mb-4">{project.title}</h3>
-              <p className="text-gray-700 mb-4">{project.description}</p>
-              <div className="flex gap-10">
-                {project.image && (
-                  <img
-                    src={project.image}
-                    alt="Project"
-                    className="mb-4 h-44 w-60 object-cover rounded"
-                  />
-                )}
-                <div>
-                  <p className="text-sm font-medium">
-                    <span className="font-extrabold">Type: </span>
-                    {project.type === "group" ? "Group Project" : "Indie Project"}
-                  </p>
-                  {project.type === "group" && (
-                    <p className="text-sm font-medium">
-                      <span className="font-extrabold">Role: </span>
-                      {project.role}
-                    </p>
+          {projects.length > 0 &&
+            projects?.map((project, index) => (
+              <div
+                key={index}
+                className="mb-8 p-6 bg-white rounded shadow-md border border-gray-200"
+              >
+                <h3 className="text-xl font-semibold mb-4">{project.title}</h3>
+                <p className="text-gray-700 mb-4">{project.description}</p>
+                <div className="flex gap-10">
+                  {project.image && (
+                    <img
+                      src={project.image}
+                      alt="Project"
+                      className="mb-4 h-44 w-60 object-cover rounded"
+                    />
                   )}
-                  <div className="flex flex-wrap mt-2">
-                    {project.tags.map((tag, tagIndex) => (
-                      <span
-                        key={tagIndex}
-                        className="flex gap-1 items-center bg-inherit text-black pl-4 pr-2 py-1 rounded-md text-sm mr-2 mb-2 border border-solid border-gray-300"
+                  <div>
+                    <p className="text-sm font-medium">
+                      <span className="font-extrabold">Type: </span>
+                      {project.type === "group"
+                        ? "Group Project"
+                        : "Indie Project"}
+                    </p>
+                    {project.type === "group" && (
+                      <p className="text-sm font-medium">
+                        <span className="font-extrabold">Role: </span>
+                        {project.role}
+                      </p>
+                    )}
+                    <div className="flex flex-wrap mt-2">
+                      {project?.tags?.map((tag, tagIndex) => (
+                        <span
+                          key={tagIndex}
+                          className="flex gap-1 items-center bg-inherit text-black pl-4 pr-2 py-1 rounded-md text-sm mr-2 mb-2 border border-solid border-gray-300"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex mt-2">
+                      <button
+                        onClick={() => handleEditProject(index)}
+                        className="bg-white text-black px-4 py-2 rounded-sm mr-2 border border-black border-solid"
                       >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex mt-2">
-                    <button
-                      onClick={() => handleEditProject(index)}
-                      className="bg-white text-black px-4 py-2 rounded-sm mr-2 border border-black border-solid"
-                    >
-                      <FiEdit /> Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteProject(index)}
-                      className="btnBlack text-white px-4 py-2 rounded-sm"
-                    >
-                      <RiDeleteBin6Line /> Delete
-                    </button>
+                        <FiEdit /> Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProject(index)}
+                        className="btnBlack text-white px-4 py-2 rounded-sm"
+                      >
+                        <RiDeleteBin6Line /> Delete
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>
