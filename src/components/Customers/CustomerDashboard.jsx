@@ -1012,6 +1012,12 @@ const CustomerDashboard = () => {
                   Profile
                 </li>
               </Link>
+              <Link to="myqueries" className="no-underline">
+                <li className="flex gap-[1.25vw] border-b-[0.5px] border-solid border-[#bebebe] items-center  font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                  <FaUserAlt className="text-[1.55vw]" />
+                  My Queries
+                </li>
+              </Link>
               <Link to="chats" className="no-underline">
                 <li className="flex gap-[1.25vw] border-b-[0.5px] border-solid border-[#bebebe] items-center  font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <BsFillChatSquareTextFill className="text-[1.55vw]" />

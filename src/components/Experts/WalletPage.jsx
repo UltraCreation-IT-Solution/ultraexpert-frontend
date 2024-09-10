@@ -64,7 +64,7 @@ const WalletPage = () => {
               : `px-6 py-3 font-semibold shrink-0 bg-[#ececec] rounded-sm text-base lg:text-lg`
           }
         >
-          Basic Stats
+          Your Wallet
         </div>
       </div>
       <div className="container mx-auto pt-8 font-montserrat ">

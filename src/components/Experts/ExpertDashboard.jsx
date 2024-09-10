@@ -2115,10 +2115,12 @@ const ExpertDashboard = () => {
                   My services
                 </li>
               </Link>
-              <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#bebebe] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
-                <FaWallet className="text-[1.55vw]" />
-                Wallet
-              </li>
+              <Link to="expertwallet" className="no-underline">
+                <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#bebebe] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
+                  <FaWallet className="text-[1.55vw]" />
+                  Wallet
+                </li>
+              </Link>
               <Link to="chats" className="no-underline">
                 <li className="flex gap-[1.25vw] items-center border-b-[0.01px] border-[#bebebe] border-solid font-semibold text-[1.25vw] text-[#575757] py-[1.8vw] pl-[1vw]">
                   <BsFillChatSquareTextFill className="text-[1.55vw]" />

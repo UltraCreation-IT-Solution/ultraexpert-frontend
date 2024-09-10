@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../axios";
-import Subheader from "../../utilities/Subheader";
-import TestElement2 from "../../TestElement2";
+import axios from "./axios";
+import Subheader from "../src/utilities/Subheader";
 
 function QueryDescriptionModal({ query, setOpenQueryModel, handleReply }) {
   const [reply, setReply] = useState("");
@@ -106,14 +105,13 @@ function QueryDescriptionModal({ query, setOpenQueryModel, handleReply }) {
     </div>
   );
 }
-
 const QueriesPage = () => {
   const [queries, setQueries] = useState([]);
   const [selectedQuery, setSelectedQuery] = useState(null);
   const [openQueryModel, setOpenQueryModel] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [searchFilter, setSearchFilter] = useState("technology_name"); // Filter selection state
-  const [startDate, setStartDate] = useState(""); // Date filter state
+  const [searchFilter, setSearchFilter] = useState("technology_name"); // New state for filter selection
+  const [startDate, setStartDate] = useState(""); // New state for date filter
   const cookies = document.cookie.split("; ");
   const jsonData = {};
 
@@ -140,7 +138,7 @@ const QueriesPage = () => {
     fetchQueries();
   }, []);
 
-  // Filter queries based on search text, selected filter, and start date
+  // Function to filter queries based on search text, selected filter, and start date
   const filteredQueries = queries.filter((query) => {
     const queryDate = new Date(query.date_created);
     const isAfterStartDate = startDate
@@ -153,13 +151,6 @@ const QueriesPage = () => {
 
     return isAfterStartDate && searchMatch;
   });
-
-  // Clear all filters
-  const clearFilters = () => {
-    setSearchText("");
-    setSearchFilter("technology_name");
-    setStartDate("");
-  };
 
   const handleReply = async (queryId, reply) => {
     try {
@@ -176,12 +167,12 @@ const QueriesPage = () => {
         <Subheader heading={"Raised Queries"} />
       </div>
       <div className="mx-auto mt-10 px-[7vw] md:px-[10vw]">
-        <div className="flex flex-wrap justify-between items-center gap-4">
-          <div className="text-xl lg:text-2xl font-bold mb-4">
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl lg:text-2xl font-bold mb-4">
             Unresolved Queries
-          </div>
+          </h2>
 
-          <div className="flex flex-wrap md:flex-nowrap items-center gap-2">
+          <div className="flex items-center space-x-2">
             <select
               className="p-2 mb-4 border rounded"
               value={searchFilter}
@@ -206,13 +197,6 @@ const QueriesPage = () => {
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
-
-            <button
-              onClick={clearFilters}
-              className="px-4 py-2 mb-4 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded"
-            >
-              Clear
-            </button>
           </div>
         </div>
 
@@ -285,13 +269,5 @@ const QueriesPage = () => {
     </div>
   );
 };
-
-// const QueriesPage = () => {
-//   return (
-//     <div>
-//       <TestElement2 />
-//     </div>
-//   );
-// };
 
 export default QueriesPage;
