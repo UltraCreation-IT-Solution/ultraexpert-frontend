@@ -1,117 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "./axios";
-import Subheader from "../src/utilities/Subheader";
+import { Link } from "react-router-dom";
 
-function QueryDescriptionModal({ query, setOpenQueryModel, handleReply }) {
-  const [reply, setReply] = useState("");
+function QueryDetailsModal({ queryId, onClose }) {
+  const [queryDetails, setQueryDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleReplySubmit = () => {
-    if (reply.trim()) {
-      handleReply(query.id, reply);
-      setReply("");
-      setOpenQueryModel(false);
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-slate-800 bg-opacity-60 flex items-center justify-center z-50 min-h-screen">
-      <div className="bg-white rounded-lg shadow-lg max-w-xl w-full p-6 my-20 relative max-h-[600px] xs:max-h-[600px]">
-        <button
-          onClick={() => {
-            setOpenQueryModel(false);
-            // scrollTo(0, 0);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-          className="absolute top-2 right-2 bg-black text-white text-xl px-2 rounded hover:text-gray-300 transition duration-200"
-        >
-          &times;
-        </button>
-
-        <div className="flex items-center space-x-4">
-          <img
-            src={query?.customer?.user?.profile_img}
-            alt={`${query.first_name} ${query.last_name}`}
-            className="w-20 h-20 rounded shadow-md object-cover object-top"
-          />
-          <div>
-            <h2 className="text-2xl font-semibold text-gray-900">
-              {query?.customer?.user?.first_name}{" "}
-              {query?.customer?.user?.last_name}
-            </h2>
-            <p className="text-sm text-gray-600">
-              {query?.customer?.profession}
-            </p>
-          </div>
-        </div>
-        <div className="p-2 px-4 border border-slate-400 rounded border-solid max-h-[280px] xs:max-h-[240px] overflow-y-scroll my-4">
-          <div className="space-y-3 mb-6 text-base">
-            <p className="text-gray-800">
-              <strong>About Me:</strong>{" "}
-              <span className="line-clamp-3 text-ellipsis">
-                {query?.customer?.about_me}
-              </span>
-            </p>
-            <p className="text-gray-800">
-              <strong>Gender:</strong> {query?.customer?.user?.gender}
-            </p>
-            <p className="text-gray-800">
-              <strong>Date Created:</strong> {query.date_created}
-            </p>
-            <p className="text-gray-800">
-              <strong>Subject:</strong> {query.subject}
-            </p>
-            <p className="text-gray-800">
-              <strong>Technology:</strong> {query.technology_name}
-            </p>
-            <p className="text-gray-800">
-              <strong>Topic:</strong> {query.topic}
-            </p>
-            <p className="text-gray-800">
-              <strong>Description:</strong> {query.description}
-            </p>
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <textarea
-            id="reply"
-            value={reply}
-            onChange={(e) => setReply(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none"
-            rows="4"
-            placeholder="Enter your reply..."
-          ></textarea>
-        </div>
-
-        <div className="flex justify-between items-center">
-          <button
-            onClick={() => {
-              setOpenQueryModel(false);
-              // scrollTo(0, 0);
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            className="text-gray-700 bg-transparent border border-slate-500 px-4 py-2 rounded hover:bg-gray-300 transition duration-200"
-          >
-            Close Modal
-          </button>
-          <button
-            onClick={handleReplySubmit}
-            className="bg-black text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
-          >
-            Submit Reply
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-const QueriesPage = () => {
-  const [queries, setQueries] = useState([]);
-  const [selectedQuery, setSelectedQuery] = useState(null);
-  const [openQueryModel, setOpenQueryModel] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  const [searchFilter, setSearchFilter] = useState("technology_name"); // New state for filter selection
-  const [startDate, setStartDate] = useState(""); // New state for date filter
   const cookies = document.cookie.split("; ");
   const jsonData = {};
 
@@ -121,153 +15,138 @@ const QueriesPage = () => {
   });
 
   useEffect(() => {
-    const fetchQueries = async () => {
+    const fetchQueryDetails = async () => {
       try {
-        const res = await axios.get("/experts/query/?action=2", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jsonData.access_token}`,
-          },
-        });
-        setQueries(res.data.data);
-        console.log(res.data.data);
+        const response = await axios.get(
+          `/customers/query/?action=2&query_id=${queryId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${jsonData.access_token}`,
+            },
+          }
+        );
+        console.log(response);
+        setQueryDetails(response.data.data);
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching queries:", error);
+        console.error("Error fetching query details", error);
+        setLoading(false);
       }
     };
-    fetchQueries();
-  }, []);
+    fetchQueryDetails();
+  }, [queryId]);
 
-  // Function to filter queries based on search text, selected filter, and start date
-  const filteredQueries = queries.filter((query) => {
-    const queryDate = new Date(query.date_created);
-    const isAfterStartDate = startDate
-      ? queryDate >= new Date(startDate)
-      : true;
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        Loading...
+      </div>
+    );
+  }
 
-    const searchMatch = query[searchFilter]
-      .toLowerCase()
-      .includes(searchText.toLowerCase());
-
-    return isAfterStartDate && searchMatch;
-  });
-
-  const handleReply = async (queryId, reply) => {
-    try {
-      await axios.post(`/api/queries/${queryId}/reply`, { reply });
-      alert("Reply submitted successfully!");
-    } catch (error) {
-      console.error("Error submitting reply:", error);
-    }
-  };
+  if (!queryDetails) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        No details available
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full relative">
-      <div className="mt-[80px] mb-5 md:mb-10 px-[7vw] md:px-[10vw]">
-        <Subheader heading={"Raised Queries"} />
-      </div>
-      <div className="mx-auto mt-10 px-[7vw] md:px-[10vw]">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl lg:text-2xl font-bold mb-4">
-            Unresolved Queries
-          </h2>
+    <div className="fixed inset-0  z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm overflow-hidden">
+      <div className="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl h-[80vh] overflow-y-auto">
+        {/* Close Button */}
+        <button
+          className="absolute top-3 right-3 text-white bg-[#2A2A2A] hover:scale-105 w-8 h-8 text-3xl flex justify-center items-center rounded"
+          onClick={() => {
+            onClose();
+            //scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        >
+          &times;
+        </button>
 
-          <div className="flex items-center space-x-2">
-            <select
-              className="p-2 mb-4 border rounded"
-              value={searchFilter}
-              onChange={(e) => setSearchFilter(e.target.value)}
-            >
-              <option value="technology_name">Technology Name</option>
-              <option value="topic">Topic</option>
-              <option value="description">Description</option>
-            </select>
+        {/* Modal Content */}
+        <h3 className="text-3xl font-bold mb-4">{queryDetails.topic}</h3>
+        <p className="text-lg mb-2">
+          <strong>Technology:</strong> {queryDetails.technology_name}
+        </p>
+        <p className="text-lg mb-2">
+          <strong>Description:</strong> {queryDetails.description}
+        </p>
+        <p className="text-lg mb-4">
+          <strong>Date Created:</strong> {queryDetails.date_created}
+        </p>
 
-            <input
-              type="text"
-              placeholder="Search"
-              className="p-2 mb-4 border rounded"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-
-            <input
-              type="date"
-              className="p-2 mb-4 border rounded"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <div className="w-full flex justify-between flex-wrap gap-4 ">
-          {filteredQueries.length > 0 ? (
-            filteredQueries.map((query) =>
-              !openQueryModel ? (
+        {/* Expert Responses Section */}
+        <div className="mt-6">
+          <h4 className="text-2xl font-semibold mb-4">Experts Response:</h4>
+          <div className="space-y-6">
+            {queryDetails.expert_responses.length > 0 ? (
+              queryDetails.expert_responses.map((response, index) => (
                 <div
-                  key={query.id}
-                  className="mb-4 py-2 px-4 border border-slate-300 border-solid rounded shadow w-full md:w-[48%] bg-[#fbfbfb]"
+                  key={index}
+                  className="bg-white border border-slate-300 border-solid p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
                 >
-                  <div className="flex items-center space-x-4 ">
+                  <div className="flex items-center gap-4 mb-4">
                     <img
-                      src={query?.customer?.user?.profile_img}
-                      alt={`${query.first_name} ${query.last_name}`}
-                      className="w-20 h-20 rounded shadow-md object-cover object-top"
+                      src={response.profile}
+                      alt="Expert"
+                      className="w-16 h-16 rounded-full object-cover shadow-md"
                     />
                     <div>
-                      <h2 className="text-2xl font-semibold text-gray-900">
-                        {query?.customer?.user?.first_name}{" "}
-                        {query?.customer?.user?.last_name}
-                      </h2>
-                      <p className="text-sm text-gray-600">
-                        {query?.customer?.profession}
+                      <p className="text-xl font-medium text-gray-800">
+                        {response.first_name} {response.last_name}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Date: {response.date} | Time: {response.time}
                       </p>
                     </div>
                   </div>
-                  <h3 className="text-xl font-semibold text-ellipsis line-clamp-2">
-                    {query.topic}
-                  </h3>
-                  <p className="text-gray-600 text-ellipsis line-clamp-2">
-                    {query.description}
+                  <p className="text-gray-700 mb-4">
+                    <strong>Response: </strong>Please visit the service with
+                    service ID <b>{response.response}</b>
                   </p>
-                  <div className="flex justify-end items-center text-gray-600 font-semibold">
-                    <span>{query.date_created}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <p className="text-gray-600 font-bold">
-                      {query.technology_name.charAt(0).toUpperCase() +
-                        query.technology_name.slice(1)}
-                    </p>
-                    <button
-                      onClick={() => {
-                        setSelectedQuery(query);
-                        setOpenQueryModel(true);
-                      }}
-                      className="btnBlack text-white rounded text-sm py-2 px-4 mt-4"
+                  <div className="flex space-x-4">
+                    <Link
+                      to={`/experts/expertprofile/${response.expert_id}`}
+                      className="bg-white text-[#2A2A2A] border border-solid border-slate-400 px-4 py-2 rounded no-underline hover:underline"
                     >
-                      View Details
-                    </button>
+                      View Expert Profile
+                    </Link>
+                    <Link
+                      to={`/experts/service/:${response.service_id}`}
+                      className="bg-[#2A2A2A] text-white px-4 py-2 rounded no-underline hover:underline"
+                    >
+                      View Service
+                    </Link>
                   </div>
                 </div>
-              ) : (
-                <div>
-                  <QueryDescriptionModal
-                    query={selectedQuery}
-                    setOpenQueryModel={setOpenQueryModel}
-                    handleReply={handleReply}
-                  />
-                </div>
-              )
-            )
-          ) : (
-            <p className="text-gray-600 text-center w-full">
-              No queries found matching your search criteria.
-            </p>
-          )}
+              ))
+            ) : (
+              <p className="text-gray-500 font-bold">No responses yet.</p>
+            )}
+          </div>
+        </div>
+
+        {/* Close Button */}
+        <div className="mt-6 flex justify-end">
+          <button
+            className="bg-[#2A2A2A] hover:scale-105 text-white px-6 py-2 rounded-lg shadow-md transition-transform transform"
+            onClick={() => {
+              onClose();
+              //scroll to top smoothly
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default QueriesPage;
+export default QueryDetailsModal;

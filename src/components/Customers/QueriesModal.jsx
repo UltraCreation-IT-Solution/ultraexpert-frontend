@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../axios";
+import { Link } from "react-router-dom";
 
 function QueryDetailsModal({ queryId, onClose }) {
   const [queryDetails, setQueryDetails] = useState(null);
@@ -25,7 +26,11 @@ function QueryDetailsModal({ queryId, onClose }) {
             },
           }
         );
+        console.log(response);
         setQueryDetails(response.data.data);
+        //get the reply of the query
+
+        //set the reply of the query
         setLoading(false);
       } catch (error) {
         console.error("Error fetching query details", error);
@@ -52,59 +57,110 @@ function QueryDetailsModal({ queryId, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg relative">
+    <div className="fixed inset-0  z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm overflow-hidden">
+      <div className="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl h-[80vh] overflow-y-auto">
+        {/* Close Button */}
         <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-          onClick={onClose}
+          className="absolute top-3 right-3 text-white bg-[#2A2A2A] hover:scale-105 w-8 h-8 text-3xl flex justify-center items-center rounded"
+          onClick={() => {
+            onClose();
+            //scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
         >
           &times;
         </button>
-        <h3 className="text-xl font-semibold mb-4">{queryDetails.topic}</h3>
-        <p className="mb-2">
+
+        {/* Modal Content */}
+        <h3 className="text-3xl font-bold mb-4">{queryDetails.topic}</h3>
+        <p className="text-lg mb-2">
           <strong>Technology:</strong> {queryDetails.technology_name}
         </p>
-        <p className="mb-2">
+        <p className="text-lg mb-2">
           <strong>Description:</strong> {queryDetails.description}
         </p>
-        <p className="mb-4">
+        <p className="text-lg mb-4">
           <strong>Date Created:</strong> {queryDetails.date_created}
         </p>
-        {queryDetails.expert_responses.map((response, index) => (
-          <div key={index} className="border-t pt-4 mt-4">
-            <p>
-              <strong>Expert:</strong> {response.first_name}{" "}
-              {response.last_name}
-            </p>
-            <p>
-              <strong>Response:</strong> {response.response}
-            </p>
-            <p>
-              <strong>Date:</strong> {response.date}
-            </p>
-            <p>
-              <strong>Time:</strong> {response.time}
-            </p>
-            <a
-              href={`#`}
-              className="text-blue-500 hover:underline mt-2 inline-block"
-            >
-              View Expert Profile
-            </a>
-            <a
-              href={`#`}
-              className="text-blue-500 hover:underline ml-4 mt-2 inline-block"
-            >
-              View Service
-            </a>
+
+        {/* Expert Responses Section */}
+        <div className="mt-6">
+          <h4 className="text-2xl font-semibold mb-4">Experts Response:</h4>
+          <div className="space-y-6">
+            {queryDetails.expert_responses.length > 0 ? (
+              queryDetails.expert_responses.map((response, index) => (
+                <div
+                  key={index}
+                  className="bg-white border border-slate-300 border-solid p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <Link to={`/experts/expertprofile/${response.expert_id}`}>
+                      <img
+                        src={response.profile}
+                        alt="Expert"
+                        className="w-16 h-16 rounded-full object-cover shadow-md"
+                      />
+                    </Link>
+                    <div>
+                      <Link
+                        to={`/experts/expertprofile/${response.expert_id}`}
+                        className="no-underline"
+                      >
+                        <p className="text-xl font-medium text-gray-800 ">
+                          {response.first_name} {response.last_name}
+                        </p>
+                      </Link>
+                      <p className="text-sm text-gray-500">
+                        Date: {response.date} | Time: {response.time}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-gray-700 mb-4">
+                    <strong>Response: </strong>Please visit the service with
+                    service ID{" "}
+                    <b>
+                      {response.response.substring(
+                        response.response.lastIndexOf("/") + 1
+                      )}
+                    </b>
+                  </p>
+                  <div className="flex space-x-4">
+                    <Link
+                      to={`/experts/expertprofile/${response.expert_id}`}
+                      className="bg-white text-[#2A2A2A] border border-solid border-slate-400 px-4 py-2 rounded no-underline hover:underline"
+                    >
+                      View Expert Profile
+                    </Link>
+                    <Link
+                      to={`/experts/service/${response.response.substring(
+                        response.response.lastIndexOf("/") + 1
+                      )}`}
+                      className="bg-[#2A2A2A] text-white px-4 py-2 rounded no-underline hover:underline"
+                    >
+                      View Service
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 font-bold">No responses yet.</p>
+            )}
           </div>
-        ))}
-        <button
-          className="mt-6 bg-red-500 text-white px-4 py-2 rounded"
-          onClick={onClose}
-        >
-          Close
-        </button>
+        </div>
+
+        {/* Close Button */}
+        <div className="mt-6 flex justify-end">
+          <button
+            className="bg-[#2A2A2A] hover:scale-105 text-white px-6 py-2 rounded-lg shadow-md transition-transform transform"
+            onClick={() => {
+              onClose();
+              //scroll to top smoothly
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );

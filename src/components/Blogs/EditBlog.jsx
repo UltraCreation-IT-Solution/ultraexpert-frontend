@@ -214,7 +214,7 @@ const EditBlog = () => {
   };
 
   //   const [content, setContent] = useState(allBlogData.content);
-  
+
   const blogCreated = async (e) => {
     e.preventDefault();
     const cookie = document.cookie.split("; ");
@@ -436,7 +436,7 @@ const EditBlog = () => {
               handleUploadImage={handleUploadImage}
               filename="cropped_image.jpg"
               onCropped={handleCroppedImage}
-              aspectRatio={16/9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+              aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
             />
           </Modal>
           <div className="text-gray-500 text-sm mt-1 text-center">

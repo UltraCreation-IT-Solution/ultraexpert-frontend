@@ -7,6 +7,9 @@ function QueryDescriptionModal({ query, setOpenQueryModel, handleReply }) {
   const [reply, setReply] = useState("");
 
   const handleReplySubmit = () => {
+    if (!reply.trim()) {
+      return;
+    }
     if (reply.trim()) {
       handleReply(query.id, reply);
       setReply("");
@@ -78,7 +81,7 @@ function QueryDescriptionModal({ query, setOpenQueryModel, handleReply }) {
             id="reply"
             value={reply}
             onChange={(e) => setReply(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none   focus:border-slate-400 resize-none"
             rows="4"
             placeholder="Enter your reply..."
           ></textarea>
@@ -163,7 +166,17 @@ const QueriesPage = () => {
 
   const handleReply = async (queryId, reply) => {
     try {
-      await axios.post(`/api/queries/${queryId}/reply`, { reply });
+      const response = await axios.post(
+        `/experts/query/`,
+        { action: 1, query_id: queryId, response: reply },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jsonData.access_token}`,
+          },
+        }
+      );
+      console.log(response.data);
       alert("Reply submitted successfully!");
     } catch (error) {
       console.error("Error submitting reply:", error);
