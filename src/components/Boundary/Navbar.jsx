@@ -509,6 +509,7 @@ const Navbar = () => {
                       (location === "/customerdashboard" ||
                         location === "/customerdashboard/chats" ||
                         location === "/customerdashboard/mybookings" ||
+                        location === "/customerdashboard/myqueries" ||
                         location === "/customerdashboard/recentmeetings" ||
                         location ===
                           "/customerdashboard/transactionhistory") && (
@@ -522,6 +523,15 @@ const Navbar = () => {
                               <li className="flex gap-3 items-center font-semibold text-[#575757] pb-2 border-b border-solid border-slate-300">
                                 <FaUserAlt className="" />
                                 Profile
+                              </li>
+                            </Link>
+                            <Link
+                              to="customerdashboard/myqueries"
+                              className="no-underline"
+                            >
+                              <li className="flex gap-3 items-center font-semibold text-[#575757] pb-2 border-b border-solid border-slate-300">
+                                <FaUserAlt className="" />
+                                My Queries
                               </li>
                             </Link>
                             <Link
