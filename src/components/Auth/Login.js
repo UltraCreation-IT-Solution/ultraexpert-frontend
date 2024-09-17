@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import userImage from "../../assets/images/image.png";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
+import { auth, provider } from "../Firebase/config";
+import { signInWithPopup } from "firebase/auth";
 
 const Login = () => {
   const [userData, setUserData] = useState({
@@ -39,7 +41,7 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e?.preventDefault();
 
     if (validateForm()) {
       setLoading(true);
@@ -112,6 +114,37 @@ const Login = () => {
     navigate("/forgotPassword");
   };
 
+  const generatePassword = (firstName, lastName, email) => {
+    const firstThreeFirstName = firstName.slice(0, 3).toLowerCase();
+    const lastThreeLastName = lastName.slice(-3).toLowerCase();
+    const firstThreeEmail = email.slice(0, 3).toLowerCase();
+
+    // Combine the segments into a password (you can add a number or constant suffix for complexity)
+    const password = `884${firstThreeFirstName}@${lastThreeLastName}$${firstThreeEmail}#185`; // Example: johnsmithjoh123
+    return password;
+  };
+  const handleLogininWithGoogle = () => {
+    signInWithPopup(auth, provider).then((result) => {
+      console.log("signin with google", result);
+      const nameParts = result.user.displayName.split(" ");
+
+      const email = result.user.email;
+
+      // Call the function to generate a password based on the user info
+      const password = generatePassword(
+        nameParts[0],
+        nameParts.length > 1 ? nameParts.slice(1).join(" ") : "xyz",
+        email
+      );
+      setUserData({
+        ...userData,
+        email: email,
+        password: password,
+      });
+      //login call
+      handleSubmit();
+    });
+  };
   return (
     <div className="md:h-screen mt-[100px] bg-white">
       <div className="lg:w-[60%] md:w-[75%] sm:w-[85%] w-[95%] flex md:flex-row flex-col mx-auto bg-white px-8 pb-8 rounded-xl shadow-md border border-solid border-[#a3a3a3]">
@@ -160,12 +193,12 @@ const Login = () => {
               >
                 Login with OTP ?
               </p>
-              {/* <p
-                onClick={handleGoogleLink}
+              <p
+                onClick={handleLogininWithGoogle}
                 className="text-xs text-[#272727] hover:text-blue-500 cursor pointer underline"
               >
                 Login with Google ?
-              </p> */}
+              </p>
             </div>
             <button
               disabled={loading}

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userImage from "../../assets/images/image.png";
 import axios from "../../axios";
+import { auth, provider } from "../Firebase/config";
+import { signInWithPopup } from "firebase/auth";
 const SignUp = () => {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
