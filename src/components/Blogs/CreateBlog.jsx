@@ -55,8 +55,7 @@ const CreateBlog = () => {
     setShowModal(false);
     setMyImage(null); // Reset the image state when modal is closed
   };
- 
-  
+
   // code for uploading image for blog ends
 
   const [categoriesArray, setCategoriesArray] = useState([]);
@@ -424,14 +423,14 @@ const CreateBlog = () => {
             )}
           </div>
           <Modal show={showModal} onClose={closeModal}>
-              <ImageUploader
-                image={myImage}
-                handleUploadImage={handleUploadImage}
-                filename="cropped_image.jpg"
-                onCropped={handleCroppedImage}
-                aspectRatio={16/9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
-              />
-            </Modal>
+            <ImageUploader
+              image={myImage}
+              handleUploadImage={handleUploadImage}
+              filename="cropped_image.jpg"
+              onCropped={handleCroppedImage}
+              aspectRatio={16 / 9} // Change this to 1 for square, 16/9 for landscape, or 9/16 for portrait
+            />
+          </Modal>
           <div className="text-gray-500 text-sm mt-1 text-center">
             Upload your blog image here
           </div>

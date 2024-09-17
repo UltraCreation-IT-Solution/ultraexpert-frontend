@@ -233,6 +233,14 @@ const Navbar = () => {
                       >
                         Home
                       </Link>
+                      {localStorage.getItem("isExpert") === "true" && (
+                        <Link
+                          className="no-underline text-black text-center py-2 pb-2 border-b border-solid border-slate-300"
+                          to={"/queries"}
+                        >
+                          Customers Queries
+                        </Link>
+                      )}
                       <Link
                         to={
                           localStorage.getItem("isExpert") === "true"
@@ -310,7 +318,7 @@ const Navbar = () => {
           <div className="fixed inset-0 flex justify-end z-30">
             <div className="w-60 shadow-md bg-[#f3f3f3] p-4 space-y-4 h-full">
               <MdClose
-                className="text-3xl bg-gray-300/40 rounded-sm"
+                className="text-3xl p-1 bg-[#2A2A2A] text-white rounded-sm"
                 onClick={toggleMenu}
               />
               <div className="flex flex-col gap-4">
@@ -342,6 +350,14 @@ const Navbar = () => {
                         >
                           Home
                         </Link>
+                        {localStorage.getItem("isExpert") === "true" && (
+                          <Link
+                            className="no-underline text-[#575757] text-center font-semibold"
+                            to={"/queries"}
+                          >
+                            Customers Queries
+                          </Link>
+                        )}
                         <Link
                           to={
                             localStorage.getItem("isExpert") === "true"
@@ -493,6 +509,7 @@ const Navbar = () => {
                       (location === "/customerdashboard" ||
                         location === "/customerdashboard/chats" ||
                         location === "/customerdashboard/mybookings" ||
+                        location === "/customerdashboard/myqueries" ||
                         location === "/customerdashboard/recentmeetings" ||
                         location ===
                           "/customerdashboard/transactionhistory") && (
@@ -506,6 +523,15 @@ const Navbar = () => {
                               <li className="flex gap-3 items-center font-semibold text-[#575757] pb-2 border-b border-solid border-slate-300">
                                 <FaUserAlt className="" />
                                 Profile
+                              </li>
+                            </Link>
+                            <Link
+                              to="customerdashboard/myqueries"
+                              className="no-underline"
+                            >
+                              <li className="flex gap-3 items-center font-semibold text-[#575757] pb-2 border-b border-solid border-slate-300">
+                                <FaUserAlt className="" />
+                                My Queries
                               </li>
                             </Link>
                             <Link

@@ -11,9 +11,10 @@ import ShowSchedule from "../../subsitutes/Schedule";
 import ExpertProfileShimmer from "../../subsitutes/Shimmers/ExpertProfileShimmer";
 
 export const ServiceProfileCard = ({ item }) => {
-
   const navigate = useNavigate();
-  const [isFollowing, setIsFollowing] = useState(item?.expert_data?.is_following_expert || false);
+  const [isFollowing, setIsFollowing] = useState(
+    item?.expert_data?.is_following_expert || false
+  );
   const cookie = document.cookie.split(";");
   const jsonData = {};
   cookie.forEach((item) => {
@@ -73,6 +74,13 @@ export const ServiceProfileCard = ({ item }) => {
       console.log(error);
     }
   };
+  const shareService = () => {
+    console.log("share service");
+    // copy the ulr
+    navigator.clipboard.writeText(window.location.href);
+    console.log(window.location.href);
+    alert("Link copied to clipboard");
+  };
   return (
     <div
       className={`w-full px-3 py-5 bg-[#EDEDED] flex flex-col md:flex-row justify-between md:items-center shadow-sm drop-shadow-md rounded-md`}
@@ -94,19 +102,22 @@ export const ServiceProfileCard = ({ item }) => {
           </div>
         </Link>
         <div className="block md:hidden">
-          {localStorage.getItem("isExpert") === "false" && (isFollowing ? (
-            <button className="bg-white px-4 sm:px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-xs sm:text-sm text-black font-semibold border rounded-sm sm:rounded-md"
-            onClick={() => unfollowExpert(item?.expert_data?.id)}
-            >
-              unfollow
-            </button>
-          ) : (
-            <button className="bg-white px-4 sm:px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-xs sm:text-sm text-black font-semibold border rounded-sm sm:rounded-md"
-            onClick={() => followExpert(item?.expert_data?.id)}
-            >
-              Follow
-            </button>
-          ))}
+          {localStorage.getItem("isExpert") === "false" &&
+            (isFollowing ? (
+              <button
+                className="bg-white px-4 sm:px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-xs sm:text-sm text-black font-semibold border rounded-sm sm:rounded-md"
+                onClick={() => unfollowExpert(item?.expert_data?.id)}
+              >
+                unfollow
+              </button>
+            ) : (
+              <button
+                className="bg-white px-4 sm:px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-xs sm:text-sm text-black font-semibold border rounded-sm sm:rounded-md"
+                onClick={() => followExpert(item?.expert_data?.id)}
+              >
+                Follow
+              </button>
+            ))}
         </div>
       </div>
 
@@ -132,21 +143,29 @@ export const ServiceProfileCard = ({ item }) => {
             Reviews
           </div>
         </a>
+        <div
+          onClick={() => shareService()}
+          className="text-sm md:text-base text-gray-600 cursor-pointer shrink-0"
+        >
+          Share
+        </div>
         <div className="hidden md:block">
-          {localStorage.getItem("isExpert") === "false" &&  (isFollowing ? (
-            <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md"
-            onClick={() => unfollowExpert(item?.expert_data?.id)}
-            
-            >
-              Unfollow
-            </button>
-          ) : (
-            <button className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md"
-            onClick={() => followExpert(item?.expert_data?.id)}
-            >
-              Follow
-            </button>
-          ))}
+          {localStorage.getItem("isExpert") === "false" &&
+            (isFollowing ? (
+              <button
+                className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md"
+                onClick={() => unfollowExpert(item?.expert_data?.id)}
+              >
+                Unfollow
+              </button>
+            ) : (
+              <button
+                className="bg-white px-6 py-1 md:px-[1.5vw] md:py-[0.2vw] text-sm text-black font-semibold border rounded-sm sm:rounded-md"
+                onClick={() => followExpert(item?.expert_data?.id)}
+              >
+                Follow
+              </button>
+            ))}
         </div>
       </div>
     </div>
