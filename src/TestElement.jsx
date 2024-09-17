@@ -288,7 +288,11 @@ const SignUp = () => {
   };
 
   const nextStep = () => {
-    setStep(step + 1);
+    if (step != 5) {
+      setStep(step + 1);
+    } else {
+      setStep(4);
+    }
   };
 
   const prevStep = () => {
@@ -298,19 +302,58 @@ const SignUp = () => {
   const handleLogin = () => {
     navigate("/login");
   };
-  const handlesignin = () => {
+
+  const generatePassword = (firstName, lastName, email) => {
+    const firstThreeFirstName = firstName.slice(0, 3).toLowerCase();
+    const lastThreeLastName = lastName.slice(-3).toLowerCase();
+    const firstThreeEmail = email.slice(0, 3).toLowerCase();
+
+    // Combine the segments into a password (you can add a number or constant suffix for complexity)
+    const password = `884${firstThreeFirstName}@${lastThreeLastName}$${firstThreeEmail}#185`; // Example: johnsmithjoh123
+    return password;
+  };
+  const handleSigninWithGoogle = () => {
     signInWithPopup(auth, provider).then((result) => {
-      console.log(result);
+      console.log("signin with google", result);
       const nameParts = result.user.displayName.split(" ");
+      setFirstStep({
+        ...firstStep,
+        firstName: nameParts[0],
+        lastName: nameParts.length > 1 ? nameParts.slice(1).join(" ") : "xyz",
+      });
+      const email = result.user.email;
 
-      // Extract first name and last name
-      const firstName = nameParts[0];
+      // Call the function to generate a password based on the user info
+      const password = generatePassword(
+        firstStep.firstName,
+        firstStep.lastName,
+        email
+      );
+      const confirmPassword = password;
 
-      // Store first name and last name separately in localStorage
-      localStorage.setItem("username", firstName);
-      // call for send otp and verify it
-      //then have fresh set of refresh token and access token and save them in cookie
-      setStep(4);
+      setSecondStep({
+        ...secondStep,
+        email: email,
+      });
+      setForthStep({
+        ...forthStep,
+        password: password,
+        confirmPassword: confirmPassword,
+      });
+
+      // get the mobile no from google
+      setFirstStep({
+        ...firstStep,
+        mobileNumber: result.user.phoneNumber,
+      });
+      //if mobile no of user not present or null then ask it from user
+      if (
+        !result.user.phoneNumber ||
+        result.user.phoneNumber === null ||
+        result.user.phoneNumber.length === 0
+      ) {
+        setStep(5);
+      }
       // window.location.href = "/";
     });
   };
@@ -422,7 +465,7 @@ const SignUp = () => {
                   name="no"
                   value="No"
                   checked={checked.checkbox2}
-                  onClick={() => handleChange("checkbox2")}
+                  onChange={() => handleChange("checkbox2")}
                 />
                 <label htmlFor="no" className="mr-2 font-medium text-lg">
                   No
@@ -451,7 +494,7 @@ const SignUp = () => {
                 )}
 
                 <p
-                  onClick={handlesignin}
+                  onClick={handleSigninWithGoogle}
                   className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline"
                 >
                   Sign Up with Google?
@@ -494,7 +537,7 @@ const SignUp = () => {
                 <div className="text-red-500 mb-1 text-sm">{errors.email}</div>
 
                 <p
-                  onClick={handlesignin}
+                  onClick={handleSigninWithGoogle}
                   className="cursor-pointer text-xs text-[#272727] hover:text-blue-500 underline"
                 >
                   Sign Up with Google?
@@ -622,6 +665,59 @@ const SignUp = () => {
                   } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
                 >
                   Verify OTP
+                </button>
+              </form>
+            </>
+          )}
+          {step === 5 && (
+            <>
+              <h1 className="text-3xl md:text-4xl font-bold mb-5 md:mb-8 text-[#3E5676]">
+                Contact Details
+              </h1>
+              <form onSubmit={handleSubmit}>
+                <label
+                  htmlFor="mobileNumber"
+                  className="block mb-1 font-semibold text-base md:text-lg"
+                >
+                  Mobile Number:
+                </label>
+                <input
+                  type="text"
+                  name="mobileNumber"
+                  id="mobileNumber"
+                  placeholder="Enter your mobile number"
+                  className="border rounded-sm p-2 w-full mb-3"
+                  value={firstStep.mobileNumber}
+                  onChange={handleChange1}
+                />
+                <div className="text-red-500 mb-1 text-sm">
+                  {errors.mobileNumber}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStep(1);
+                    setFirstStep({
+                      ...firstStep,
+                      firstName: "",
+                      lastName: "",
+                      mobileNumber: "",
+                    });
+                  }}
+                  className="bg-gray-500 text-base md:text-lg text-white cursor-pointer font-semibold py-2 px-4 mb-2 rounded-md w-full"
+                >
+                  Previous
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  // onClick={() => setStep(4)}
+                  className={`${
+                    loading ? "bg-gray-300 cursor-not-allowed" : "bg-[#272727]"
+                  } text-base md:text-lg mb-[1vw] text-white font-semibold py-2 px-4 rounded-md cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed w-full`}
+                >
+                  Next
                 </button>
               </form>
             </>
